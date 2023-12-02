@@ -58,7 +58,7 @@ public class Loader : MonoBehaviour {
 
         Loader.AddHaxModules<SprintMod>();
         Loader.AddHaxModules<ScanMod>();
-        Loader.AddHaxModules<StunMod>();
+        // Loader.AddHaxModules<StunMod>();
         Loader.AddHaxModules<ShovelMod>();
         Loader.AddHaxModules<NightVisionMod>();
     }
