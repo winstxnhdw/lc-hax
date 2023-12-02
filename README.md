@@ -16,6 +16,10 @@ Execute `launch.bat` when you have launched the game.
 
 ## Commands
 
-| Command | Description     |
-| ------- | --------------- |
-| `/god`  | Toggle God mode |
+| Action                    | Command                 |
+| ------------------------- | ----------------------- |
+| Modify shovel damage      | `/shovel <force>`       |
+| Teleport to a player      | `/tp <player>`          |
+| Teleport to a location    | `/tp <x> <y> <z>`       |
+| Teleport player to player | `/tp <player> <player>` |
+| Toggle God mode           | `/god`                  |
