@@ -1,5 +1,3 @@
-using System.Linq;
-using GameNetcodeStuff;
 using HarmonyLib;
 
 namespace Hax;
@@ -18,35 +16,7 @@ public class HUDManagerPatch {
             return true;
         }
 
-        string[] args = hudManager.chatTextField.text.Split(' ');
-        Terminal.Print("USER", hudManager.chatTextField.text);
-
-        if (args[0] is "/god") {
-            Settings.EnableGodMode = !Settings.EnableGodMode;
-            Terminal.Print("SYSTEM", $"God mode: {(Settings.EnableGodMode ? "enabled" : "disabled")}");
-        }
-
-        else if (args[0] is "/tp") {
-            PlayerControllerB[]? players = HaxObjects.Instance?.Players.Objects;
-
-            if (players == null) {
-                return true;
-            }
-
-            PlayerControllerB chosenPlayer = players.FirstOrDefault(players => players.playerUsername == args[1]);
-
-            if (chosenPlayer == null) {
-                Terminal.Print("SYSTEM", "Player not found!");
-                return true;
-            }
-
-            hudManager.localPlayer.TeleportPlayer(chosenPlayer.transform.position);
-        }
-
-        else if (args[0] is "/shovel") {
-            Settings.ShovelHitForce = int.TryParse(args[1], out int shovelHitForce) ? shovelHitForce : Settings.ShovelHitForce;
-        }
-
+        Terminal.ExecuteCommand(hudManager.chatTextField.text);
         return true;
     }
 }
