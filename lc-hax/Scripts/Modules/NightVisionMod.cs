@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Hax;
 
-public class HealthMod : MonoBehaviour {
+public class NightVisionMod : MonoBehaviour {
     void Update() {
         PlayerControllerB? player = HaxObjects.Instance?.GameNetworkManager.Object?.localPlayerController;
 
@@ -11,6 +11,6 @@ public class HealthMod : MonoBehaviour {
             return;
         }
 
-        player.health = 100;
+        player.nightVision.enabled = true;
     }
 }

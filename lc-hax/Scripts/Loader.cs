@@ -57,10 +57,10 @@ public class Loader : MonoBehaviour {
         DontDestroyOnLoad(Loader.HaxModules);
 
         Loader.AddHaxModules<SprintMod>();
-        Loader.AddHaxModules<HealthMod>();
         Loader.AddHaxModules<ScanMod>();
         Loader.AddHaxModules<StunMod>();
         Loader.AddHaxModules<ShovelMod>();
+        Loader.AddHaxModules<NightVisionMod>();
     }
 
     public static void Unload() {
