@@ -1,3 +1,4 @@
+using System.Linq;
 using GameNetcodeStuff;
 using UnityEngine;
 
@@ -17,12 +18,6 @@ public class ShovelMod : MonoBehaviour {
             return;
         }
 
-        foreach (Shovel shovel in shovels) {
-            if (shovel.playerHeldBy.playerClientId != player.playerClientId) {
-                continue;
-            }
-
-            shovel.shovelHitForce = 3;
-        }
+        shovels.First(shovel => shovel.playerHeldBy.playerClientId == player.playerClientId).shovelHitForce = Settings.ShovelHitForce;
     }
 }
