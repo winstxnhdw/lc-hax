@@ -1,6 +1,6 @@
 # lc-hax
 
-Internal cheats for [Lethal Company](https://en.wikipedia.org/wiki/Lethal_Company).
+A portable Windows CLI-only internal cheat for [Lethal Company](https://en.wikipedia.org/wiki/Lethal_Company).
 
 ## Installation
 
