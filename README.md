@@ -1,7 +1,7 @@
 # lc-hax
 
 [![main.yml](https://github.com/winstxnhdw/lc-hax/actions/workflows/main.yml/badge.svg)](https://github.com/winstxnhdw/lc-hax/actions/workflows/main.yml)
-[![auto-merge.yml](https://github.com/winstxnhdw/lc-hax/actions/workflows/auto-merge.yml/badge.svg)](https://github.com/winstxnhdw/lc-hax/actions/workflows/auto-merge.yml)
+[![dependabot.yml](https://github.com/winstxnhdw/lc-hax/actions/workflows/dependabot.yml/badge.svg)](https://github.com/winstxnhdw/lc-hax/actions/workflows/dependabot.yml)
 
 A portable Windows CLI-only internal cheat for [Lethal Company](https://en.wikipedia.org/wiki/Lethal_Company).
 
