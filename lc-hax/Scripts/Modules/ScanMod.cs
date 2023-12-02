@@ -12,6 +12,6 @@ public class ScanMod : MonoBehaviour {
 
         scanNodeProperties.requiresLineOfSight = false;
         scanNodeProperties.maxRange = 10000;
-        scanNodeProperties.minRange = 1;
+        scanNodeProperties.minRange = 0;
     }
 }
