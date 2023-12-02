@@ -1,0 +1,4 @@
+[submodule "submodules/SharpMonoInjectorCore"]
+	path = submodules/SharpMonoInjectorCore
+	url = https://github.com/winstxnhdw/SharpMonoInjectorCore.git
+	shallow = true
