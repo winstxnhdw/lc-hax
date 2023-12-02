@@ -1,3 +1,4 @@
+using System.Linq;
 using GameNetcodeStuff;
 using UnityEngine;
 
@@ -11,11 +12,10 @@ public class StunMod : MonoBehaviour {
             return;
         }
 
-        Collider[] colliders = Physics.OverlapSphere(player.transform.position, 1000f, 524288);
-
-        foreach (Collider collider in colliders) {
-            EnemyAICollisionDetect enemy = collider.GetComponent<EnemyAICollisionDetect>();
-            enemy?.mainScript.SetEnemyStunned(true, 10.0f, null);
-        }
+        Physics.OverlapSphere(player.transform.position, 1000f, 524288)
+               .Select(collider => collider.GetComponent<EnemyAICollisionDetect>())
+               .Where(enemy => enemy != null)
+               .ToList()
+               .ForEach(enemy => enemy.mainScript.SetEnemyStunned(true));
     }
 }
