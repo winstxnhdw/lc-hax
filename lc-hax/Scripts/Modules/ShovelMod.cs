@@ -22,7 +22,7 @@ public class ShovelMod : MonoBehaviour {
                 continue;
             }
 
-            shovel.shovelHitForce = 1000;
+            shovel.shovelHitForce = 3;
         }
     }
 }
