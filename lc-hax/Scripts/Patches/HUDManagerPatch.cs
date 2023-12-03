@@ -8,11 +8,7 @@ public class HUDManagerPatch {
     static bool Prefix() {
         HUDManager? hudManager = HaxObjects.Instance?.HUDManager.Object;
 
-        if (hudManager == null) {
-            return true;
-        }
-
-        if (!hudManager.chatTextField.text.StartsWith("/")) {
+        if (hudManager == null || !hudManager.chatTextField.text.StartsWith("/")) {
             return true;
         }
 
