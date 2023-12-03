@@ -7,7 +7,7 @@ namespace Hax;
 public class MultiObjectPool<T> where T : UnityObject {
     public T[]? Objects { get; private set; }
 
-    public MultiObjectPool(MonoBehaviour self, float renewInterval = 5.0f) {
+    public MultiObjectPool(MonoBehaviour self, float renewInterval = 1.0f) {
         _ = self.StartCoroutine(this.RenewObjects(renewInterval));
     }
 

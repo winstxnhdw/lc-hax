@@ -1,4 +1,3 @@
-using System;
 using HarmonyLib;
 
 namespace Hax;
@@ -13,15 +12,7 @@ public class ConsolePatch {
             return true;
         }
 
-        try {
-            Console.ExecuteCommand(hudManager.chatTextField.text);
-        }
-
-        catch (Exception exception) {
-            hudManager.chatTextField.text = "";
-            Logger.Write(exception.Message);
-        }
-
-        return true;
+        Console.ExecuteCommand(hudManager.chatTextField.text);
+        return false;
     }
 }
