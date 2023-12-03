@@ -4,7 +4,7 @@ namespace Hax;
 public class ShovelCommand : ICommand {
     public void Execute(string[] args) {
         if (args.Length < 1) {
-            Terminal.Print("SYSTEM", "Usage: /shovel <force>");
+            Console.Print("SYSTEM", "Usage: /shovel <force>");
             return;
         }
 

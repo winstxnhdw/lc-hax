@@ -1,10 +1,11 @@
+using System;
 using HarmonyLib;
 
 namespace Hax;
 
 [HarmonyPatch(typeof(HUDManager))]
 [HarmonyPatch("SubmitChat_performed")]
-public class HUDManagerPatch {
+public class ConsolePatch {
     static bool Prefix() {
         HUDManager? hudManager = HaxObjects.Instance?.HUDManager.Object;
 
@@ -12,7 +13,15 @@ public class HUDManagerPatch {
             return true;
         }
 
-        Terminal.ExecuteCommand(hudManager.chatTextField.text);
+        try {
+            Console.ExecuteCommand(hudManager.chatTextField.text);
+        }
+
+        catch (Exception exception) {
+            hudManager.chatTextField.text = "";
+            Logger.Write(exception.Message);
+        }
+
         return true;
     }
 }
