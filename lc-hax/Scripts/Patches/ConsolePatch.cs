@@ -1,3 +1,4 @@
+using System;
 using HarmonyLib;
 
 namespace Hax;
@@ -8,11 +9,25 @@ public class ConsolePatch {
     static bool Prefix() {
         HUDManager? hudManager = HaxObjects.Instance?.HUDManager.Object;
 
-        if (hudManager == null || !hudManager.chatTextField.text.StartsWith("/")) {
+        if (hudManager == null) {
             return true;
         }
 
-        Console.ExecuteCommand(hudManager.chatTextField.text);
+        string command = hudManager.chatTextField.text[..];
+
+        if (!command.StartsWith("/")) {
+            return true;
+        }
+
+        try {
+            Console.ExecuteCommand(command);
+        }
+
+        catch (Exception exception) {
+            Logger.Write(exception.ToString());
+        }
+
+        Logger.Write($"Command executed: {command}");
         return false;
     }
 }

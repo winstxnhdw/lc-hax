@@ -10,21 +10,13 @@ public static class Console {
         { "/tp", new TeleportCommand() },
         { "/money", new MoneyCommand() },
         { "/unlock", new UnlockCommand() },
-        { "/kill", new KillCommand() }
+        { "/kill", new KillCommand() },
+        { "/players", new PlayersCommand() }
     };
 
-    static HUDManager? HUDManager { get; } = HaxObjects.Instance?.HUDManager.Object;
+    static HUDManager? HUDManager => HaxObjects.Instance?.HUDManager.Object;
 
-    static Reflector? hudManagerReflector = Console.HUDManager == null ? null : Reflector.Target(Console.HUDManager);
-
-    static Reflector? HUDManagerReflector {
-        get {
-            if (Console.HUDManager == null) return null;
-
-            hudManagerReflector ??= Reflector.Target(Console.HUDManager);
-            return hudManagerReflector;
-        }
-    }
+    static Reflector? HUDManagerReflector => Console.HUDManager == null ? null : Reflector.Target(Console.HUDManager);
 
     public static void Print(string name, string? message) {
         if (string.IsNullOrWhiteSpace(message)) return;
