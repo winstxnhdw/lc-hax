@@ -7,7 +7,12 @@ public static class Logger {
 
     public static void Write(string message) {
         lock (Logger.LockObject) {
-            File.AppendAllText(logFileName, $"{message}{Environment.NewLine}");
+            string timeNow = DateTime.Now.ToString("dd-MM-yy HH:mm:ss");
+
+            File.AppendAllText(
+                logFileName,
+                $"[{timeNow}] {message}{Environment.NewLine}"
+            );
         }
     }
 }
