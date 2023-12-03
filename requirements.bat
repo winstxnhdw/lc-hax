@@ -1,5 +1,4 @@
 @echo off
 
-set project_name=lc-hax
-dotnet build %project_name%
+dotnet build lc-hax
 dotnet publish submodules/SharpMonoInjectorCore
