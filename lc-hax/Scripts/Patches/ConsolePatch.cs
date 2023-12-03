@@ -27,7 +27,6 @@ public class ConsolePatch {
             Logger.Write(exception.ToString());
         }
 
-        Logger.Write($"Command executed: {command}");
         return false;
     }
 }

@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using UnityEngine.EventSystems;
 
 namespace Hax;
 
@@ -18,6 +19,11 @@ public static class Console {
 
     static Reflector? HUDManagerReflector => Console.HUDManager == null ? null : Reflector.Target(Console.HUDManager);
 
+    public static void Open() {
+        Console.HUDManager?.chatTextField.Select();
+        Console.HUDManager?.PingHUDElement(Console.HUDManager.Chat, 0.1f, 1.0f, 1.0f);
+    }
+
     public static void Print(string name, string? message) {
         if (string.IsNullOrWhiteSpace(message)) return;
         if (Console.HUDManager == null) return;
@@ -28,6 +34,8 @@ public static class Console {
             Console.HUDManager.localPlayer.isTypingChat = false;
             Console.HUDManager.typingIndicator.enabled = false;
             Console.HUDManager.chatTextField.text = "";
+            Console.HUDManager.PingHUDElement(Console.HUDManager.Chat, 1.0f, 1.0f, 0.2f);
+            EventSystem.current.SetSelectedGameObject(null);
         }
     }
 
