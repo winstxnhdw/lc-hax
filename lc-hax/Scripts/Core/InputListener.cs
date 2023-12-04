@@ -1,13 +1,14 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 namespace Hax;
 
 public class InputListener : MonoBehaviour {
 
     Dictionary<Func<bool>, Action> keyActionsDict = new() {
-        {() => Input.GetKeyDown(KeyCode.BackQuote),   () => Console.Open()},
+        { () => Keyboard.current[Key.Backquote].wasPressedThisFrame, Console.Open },
     };
 
     void Update() {
