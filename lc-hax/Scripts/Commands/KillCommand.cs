@@ -7,7 +7,10 @@ namespace Hax;
 public class KillCommand : ICommand {
     PlayerControllerB[]? Players => HaxObjects.Instance?.Players.Objects;
 
-    PlayerControllerB? GetPlayer(string name) => this.Players?.FirstOrDefault(player => player.playerUsername == name);
+    PlayerControllerB? GetPlayer(string playerNameOrId) {
+        return this.Players?.FirstOrDefault(player => player.playerUsername == playerNameOrId) ??
+              (this.Players?.FirstOrDefault(player => player.playerClientId.ToString() == playerNameOrId));
+    }
 
     public void Execute(string[] args) {
         if (args.Length < 1) {
@@ -18,6 +21,8 @@ public class KillCommand : ICommand {
         if (args[0] is "all") {
             this.Players.ToList()
                         .ForEach(player => player.DamagePlayerFromOtherClientServerRpc(1000, Vector3.zero, -1));
+
+            Console.Print("SYSTEM", "Attempting to kill all players!");
         }
 
         else {
