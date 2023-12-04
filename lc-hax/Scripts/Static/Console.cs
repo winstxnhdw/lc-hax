@@ -12,7 +12,9 @@ public static class Console {
         { "/money", new MoneyCommand() },
         { "/unlock", new UnlockCommand() },
         { "/kill", new KillCommand() },
-        { "/players", new PlayersCommand() }
+        { "/players", new PlayersCommand() },
+        { "/home", new HomeCommand() },
+        { "/end", new EndCommand() }
     };
 
     static HUDManager? HUDManager => HaxObjects.Instance?.HUDManager.Object;
