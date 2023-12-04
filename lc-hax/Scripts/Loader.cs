@@ -51,6 +51,7 @@ public class Loader : MonoBehaviour {
         DontDestroyOnLoad(Loader.HaxGameObject);
 
         Loader.AddHaxGameObject<HaxObjects>();
+        Loader.AddHaxGameObject<InputListener>();
     }
 
     static void LoadHaxModules() {
@@ -59,7 +60,7 @@ public class Loader : MonoBehaviour {
         Loader.AddHaxModules<SprintMod>();
         // Loader.AddHaxModules<StunMod>();
         Loader.AddHaxModules<ShovelMod>();
-        Loader.AddHaxModules<NightVisionMod>();
+        // Loader.AddHaxModules<NightVisionMod>();
         Loader.AddHaxModules<WeightMod>();
     }
 
