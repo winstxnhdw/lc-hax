@@ -2,7 +2,7 @@
 namespace Hax;
 
 public class MoneyCommand : ICommand {
-    Terminal? Terminal => HaxObjects.Instance?.Terminal.Object;
+    HUDManager? HUDManager => HaxObjects.Instance?.HUDManager?.Object;
 
     public void Execute(string[] args) {
         if (args.Length < 1) {
@@ -10,7 +10,12 @@ public class MoneyCommand : ICommand {
             return;
         }
 
-        Terminal? terminal = this.Terminal;
+        if (this.HUDManager == null) {
+            Console.Print("SYSTEM", "HUDManager not found!");
+            return;
+        }
+
+        Terminal? terminal = Reflector.Target(this.HUDManager).GetInternalField<Terminal>("terminalScript");
 
         if (terminal == null) {
             Console.Print("SYSTEM", "Terminal not found!");
