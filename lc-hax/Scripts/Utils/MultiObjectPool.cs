@@ -11,9 +11,13 @@ public class MultiObjectPool<T> where T : UnityObject {
         _ = self.StartCoroutine(this.RenewObjects(renewInterval));
     }
 
+    public void Renew() {
+        this.Objects = UnityObject.FindObjectsOfType<T>();
+    }
+
     IEnumerator RenewObjects(float renewInterval) {
         while (true) {
-            this.Objects = UnityObject.FindObjectsOfType<T>();
+            this.Renew();
             yield return new WaitForSeconds(renewInterval);
         }
     }

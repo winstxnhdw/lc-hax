@@ -14,7 +14,10 @@ public static class Console {
         { "/kill", new KillCommand() },
         { "/players", new PlayersCommand() },
         { "/home", new HomeCommand() },
-        { "/end", new EndCommand() }
+        { "/end", new EndCommand() },
+        { "/explode", new ExplodeCommand() },
+        { "/noise", new NoiseCommand() },
+        { "/random", new RandomCommand() }
     };
 
     static HUDManager? HUDManager => HaxObjects.Instance?.HUDManager.Object;

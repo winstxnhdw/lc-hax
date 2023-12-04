@@ -1,0 +1,14 @@
+public enum Items {
+    WALKIE_TALKIE = 7,
+    FLASHLIGHT = 6,
+    SHOVEL = 7,
+    LOCKPICKER = 8,
+    PRO_FLASHLIGHT = 1,
+    STUN_GRENADE = 12,
+    BOOMBOX = 9,
+    TZP_INHALANT = 15,
+    ZAP_GUN = 5,
+    JETPACK = 13,
+    EXTENSION_LADDER = 17,
+    RADAR_BOOSTER = 16,
+}
