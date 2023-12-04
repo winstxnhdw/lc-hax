@@ -5,7 +5,7 @@ namespace Hax;
 
 public class SprintMod : MonoBehaviour {
     void Update() {
-        PlayerControllerB? player = HaxObjects.Instance?.GameNetworkManager.Object?.localPlayerController;
+        PlayerControllerB? player = GameNetworkManager.Instance.localPlayerController;
 
         if (player == null) {
             return;

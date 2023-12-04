@@ -6,7 +6,7 @@ namespace Hax;
 
 public class ShovelMod : MonoBehaviour {
     void Update() {
-        PlayerControllerB? localPlayer = HaxObjects.Instance?.GameNetworkManager.Object?.localPlayerController;
+        PlayerControllerB? localPlayer = GameNetworkManager.Instance.localPlayerController;
         Shovel? localPlayerShovel =
             HaxObjects.Instance?
                       .Shovels
