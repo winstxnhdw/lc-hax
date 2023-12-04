@@ -21,8 +21,14 @@ Execute `launch.bat` when you have launched the game.
 
 | Action                    | Command                 |
 | ------------------------- | ----------------------- |
-| Modify shovel damage      | `/shovel <force>`       |
-| Teleport to a player      | `/tp <player>`          |
+| Modify shovel damage      | `/shovel <force=1>`     |
+| List all players          | `/players`              |
+| Teleport to a player      | `/tp <username>`        |
+| Teleport to a player      | `/tp <player index>`    |
 | Teleport to a location    | `/tp <x> <y> <z>`       |
 | Teleport player to player | `/tp <player> <player>` |
+| Teleport back to ship     | `/home`                 |
+| End the game              | `/end`                  |
 | Toggle God mode           | `/god`                  |
+| Give or take money        | `/money <amount>`       |
+| Unlock all doors          | `/unlock`               |
