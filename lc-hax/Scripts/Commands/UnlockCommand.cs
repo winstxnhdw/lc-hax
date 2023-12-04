@@ -7,7 +7,6 @@ namespace Hax;
 public class UnlockCommand : ICommand {
     public void Execute(string[] args) {
         Object.FindObjectsOfType<DoorLock>().ToList().ForEach(door => {
-            door.UnlockDoor();
             door.UnlockDoorSyncWithServer();
 
             InteractTrigger? doorTrigger = Reflector.Target(door).GetInternalField<InteractTrigger>("doorTrigger");
