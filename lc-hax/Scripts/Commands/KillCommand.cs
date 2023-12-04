@@ -5,7 +5,7 @@ using UnityEngine;
 namespace Hax;
 
 public class KillCommand : ICommand {
-    PlayerControllerB[]? Players => HaxObjects.Instance?.Players.Objects;
+    PlayerControllerB[]? Players => StartOfRound.Instance.allPlayerScripts;
 
     PlayerControllerB? GetPlayer(string playerNameOrId) {
         return this.Players?.FirstOrDefault(player => player.playerUsername == playerNameOrId) ??

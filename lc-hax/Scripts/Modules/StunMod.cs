@@ -6,7 +6,7 @@ namespace Hax;
 
 public class StunMod : MonoBehaviour {
     void Update() {
-        PlayerControllerB? player = HaxObjects.Instance?.GameNetworkManager.Object?.localPlayerController;
+        PlayerControllerB? player = GameNetworkManager.Instance.localPlayerController;
 
         if (player == null) {
             return;
