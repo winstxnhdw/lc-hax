@@ -45,7 +45,9 @@
       <HintPath>$(ReferencePath)/Unity.Netcode.Runtime.dll</HintPath>
     </Reference>
 
-    <PackageReference Include="Lib.Harmony" Version="2.2.2" />
+    <PackageReference Include="Lib.Harmony" Version="2.2.2">
+      <NoWarn>NU1701</NoWarn>
+    </PackageReference>
 
     <EmbeddedResource Include="$(ReferencePath)/NuGet/lib.harmony/2.2.2/lib/net48/0Harmony.dll" />
 
