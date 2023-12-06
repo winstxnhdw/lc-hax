@@ -20,9 +20,7 @@ public class KillCommand : ICommand {
         }
 
         else {
-            PlayerControllerB? targetPlayer = Helpers.GetPlayer(args[0]);
-
-            if (targetPlayer == null) {
+            if (Helpers.Extant(Helpers.GetPlayer(args[0]), out PlayerControllerB targetPlayer)) {
                 Console.Print("SYSTEM", "Player not found!");
                 return;
             }

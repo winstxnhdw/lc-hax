@@ -9,9 +9,7 @@ public class UnlockCommand : ICommand {
         Object.FindObjectsOfType<DoorLock>().ToList().ForEach(door => {
             door.UnlockDoorSyncWithServer();
 
-            InteractTrigger? doorTrigger = Reflector.Target(door).GetInternalField<InteractTrigger>("doorTrigger");
-
-            if (doorTrigger == null) {
+            if (!Helpers.Extant(Reflector.Target(door).GetInternalField<InteractTrigger>("doorTrigger"), out InteractTrigger doorTrigger)) {
                 return;
             }
 

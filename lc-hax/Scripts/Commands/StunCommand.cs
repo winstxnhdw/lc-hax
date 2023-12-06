@@ -6,16 +6,12 @@ namespace Hax;
 
 public class StunCommand : ICommand {
     public void Execute(string[] args) {
-        bool isValidFloat = float.TryParse(args[0], out float stunDuration);
-
-        if (!isValidFloat) {
+        if (!float.TryParse(args[0], out float stunDuration)) {
             Console.Print("SYSTEM", "Usage: /stun <duration>");
             return;
         }
 
-        PlayerControllerB? player = Helpers.LocalPlayer;
-
-        if (player == null) {
+        if (!Helpers.Extant(Helpers.LocalPlayer, out PlayerControllerB player)) {
             Console.Print("SYSTEM", "Could not find the player!");
             return;
         }

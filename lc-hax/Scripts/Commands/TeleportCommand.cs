@@ -1,12 +1,9 @@
-using System.Linq;
 using UnityEngine;
 using GameNetcodeStuff;
 
 namespace Hax;
 
 public class TeleportCommand : ICommand {
-    PlayerControllerB? CurrentPlayer => GameNetworkManager.Instance.localPlayerController;
-
     Vector3? GetCoordinates(string[] args) {
         bool isValidX = float.TryParse(args[0], out float x);
         bool isValidY = float.TryParse(args[1], out float y);
@@ -18,7 +15,7 @@ public class TeleportCommand : ICommand {
     Result TeleportToPlayer(string[] args) {
         string targetPlayerNameOrId = args[0];
         PlayerControllerB? targetPlayer = Helpers.GetPlayer(targetPlayerNameOrId);
-        PlayerControllerB? currentPlayer = this.CurrentPlayer;
+        PlayerControllerB? currentPlayer = Helpers.LocalPlayer;
 
         if (targetPlayer == null || currentPlayer == null) {
             return new Result(message: "Player not found!");
@@ -29,9 +26,7 @@ public class TeleportCommand : ICommand {
     }
 
     Result TeleportToPosition(string[] args) {
-        PlayerControllerB? currentPlayer = this.CurrentPlayer;
-
-        if (currentPlayer == null) {
+        if (!Helpers.Extant(Helpers.LocalPlayer, out PlayerControllerB currentPlayer)) {
             return new Result(message: "Player not found!");
         }
 
@@ -47,13 +42,9 @@ public class TeleportCommand : ICommand {
 
     Result TeleportPlayerToPosition(PlayerControllerB player, Vector3 position) {
         Helpers.BuyUnlockable(Unlockables.TELEPORTER);
-        Helpers.ShipTeleporters?.Renew();
+        HaxObjects.Instance?.ShipTeleporters.Renew();
 
-        ShipTeleporter? teleporter = Helpers.ShipTeleporters?.Objects.FirstOrDefault(
-            teleporter => !teleporter.isInverseTeleporter
-        );
-
-        if (teleporter == null) {
+        if (!Helpers.Extant(Helpers.Teleporter, out ShipTeleporter teleporter)) {
             return new Result(message: "ShipTeleporter not found!");
         }
 
@@ -76,10 +67,7 @@ public class TeleportCommand : ICommand {
     }
 
     Result TeleportPlayerToPosition(string[] args) {
-        string playerNameOrId = args[0];
-        PlayerControllerB? player = Helpers.GetPlayer(playerNameOrId);
-
-        if (player == null) {
+        if (!Helpers.Extant(Helpers.GetPlayer(args[0]), out PlayerControllerB player)) {
             return new Result(message: "Player not found!");
         }
 

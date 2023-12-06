@@ -1,22 +1,17 @@
-using System.Linq;
 using GameNetcodeStuff;
 
 namespace Hax;
 
 public class HomeCommand : ICommand {
     Result TeleportPlayerToBase(string[] args) {
-        string sourcePlayerName = args[0];
-        PlayerControllerB? sourcePlayer = Helpers.GetPlayer(sourcePlayerName);
-
-        if (sourcePlayer == null) {
+        if (!Helpers.Extant(Helpers.GetPlayer(args[0]), out PlayerControllerB sourcePlayer)) {
             return new Result(message: "Player not found!");
         }
 
         Helpers.BuyUnlockable(Unlockables.TELEPORTER);
-        Helpers.ShipTeleporters?.Renew();
-        ShipTeleporter? teleporter = Helpers.ShipTeleporters?.Objects.FirstOrDefault(teleporter => !teleporter.isInverseTeleporter);
+        HaxObjects.Instance?.ShipTeleporters.Renew();
 
-        if (teleporter == null) {
+        if (!Helpers.Extant(Helpers.Teleporter, out ShipTeleporter teleporter)) {
             return new Result(message: "ShipTeleporter not found!");
         }
 
