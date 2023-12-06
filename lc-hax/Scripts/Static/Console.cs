@@ -17,7 +17,8 @@ public static class Console {
         { "/end", new EndCommand() },
         { "/explode", new ExplodeCommand() },
         { "/noise", new NoiseCommand() },
-        { "/random", new RandomCommand() }
+        { "/random", new RandomCommand() },
+        { "/stun", new StunCommand() }
     };
 
     static HUDManager? HUDManager => HaxObjects.Instance?.HUDManager.Object;
