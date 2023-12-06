@@ -5,7 +5,7 @@ using UnityEngine;
 namespace Hax;
 
 public class UnlockCommand : ICommand {
-    public void Execute(string[] args) {
+    public void Execute(string[] _) {
         Object.FindObjectsOfType<DoorLock>().ToList().ForEach(door => {
             door.UnlockDoorSyncWithServer();
 
