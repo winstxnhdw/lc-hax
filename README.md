@@ -40,3 +40,4 @@ Execute `launch.bat` when you have launched the game.
 | Toggle God mode            | `/god`                  |
 | Unlock all doors           | `/unlock`               |
 | Stun enemies               | `/stun`                 |
+| Explode all mines          | `/explode`              |
