@@ -24,6 +24,7 @@ public class HomeCommand : ICommand {
             return new Result(message: "ShipTeleporter not found!");
         }
 
+        StartOfRound.Instance.mapScreen.SwitchRadarTargetServerRpc((int)sourcePlayer.playerClientId);
         teleporter.PressTeleportButtonServerRpc();
         return new Result(true);
     }
