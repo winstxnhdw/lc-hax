@@ -18,29 +18,30 @@ public static class Console {
         { "/explode", new ExplodeCommand() },
         { "/noise", new NoiseCommand() },
         { "/random", new RandomCommand() },
-        { "/stun", new StunCommand() }
+        { "/stun", new StunCommand() },
     };
 
-    static HUDManager? HUDManager => HaxObjects.Instance?.HUDManager.Object;
-
-    static Reflector? HUDManagerReflector => Console.HUDManager == null ? null : Reflector.Target(Console.HUDManager);
+    static Reflector? HUDManagerReflector => Helpers.HUDManager == null ? null : Reflector.Target(Helpers.HUDManager);
 
     public static void Open() {
-        Console.HUDManager?.chatTextField.Select();
-        Console.HUDManager?.PingHUDElement(Console.HUDManager.Chat, 0.1f, 1.0f, 1.0f);
+        if (Helpers.HUDManager == null) return;
+
+        Helpers.HUDManager.enabled = true;
+        Helpers.HUDManager.chatTextField.Select();
+        Helpers.HUDManager.PingHUDElement(Helpers.HUDManager.Chat, 0.1f, 1.0f, 1.0f);
     }
 
     public static void Print(string name, string? message) {
         if (string.IsNullOrWhiteSpace(message)) return;
-        if (Console.HUDManager == null) return;
+        if (Helpers.HUDManager == null) return;
 
         _ = Console.HUDManagerReflector?.InvokeInternalMethod("AddChatMessage", message, name);
 
-        if (Console.HUDManager.localPlayer.isTypingChat) {
-            Console.HUDManager.localPlayer.isTypingChat = false;
-            Console.HUDManager.typingIndicator.enabled = false;
-            Console.HUDManager.chatTextField.text = "";
-            Console.HUDManager.PingHUDElement(Console.HUDManager.Chat, 1.0f, 1.0f, 0.2f);
+        if (Helpers.HUDManager.localPlayer.isTypingChat) {
+            Helpers.HUDManager.localPlayer.isTypingChat = false;
+            Helpers.HUDManager.typingIndicator.enabled = false;
+            Helpers.HUDManager.chatTextField.text = "";
+            Helpers.HUDManager.PingHUDElement(Helpers.HUDManager.Chat, 1.0f, 1.0f, 0.2f);
             EventSystem.current.SetSelectedGameObject(null);
         }
     }
