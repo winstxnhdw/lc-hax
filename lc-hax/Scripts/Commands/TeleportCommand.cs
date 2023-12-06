@@ -60,15 +60,20 @@ public class TeleportCommand : ICommand {
             return new Result(message: "ShipTeleporter not found!");
         }
 
-        Vector3 currentTeleporterPosition = teleporter.transform.position;
-        Vector3 previousTeleporterPosition = new(currentTeleporterPosition.x, currentTeleporterPosition.y, currentTeleporterPosition.z);
+        GameObject previousTransform = new();
+        previousTransform.transform.position = player.transform.position;
+        previousTransform.transform.eulerAngles = player.transform.eulerAngles;
+
+        GameObject newTransform = new();
+        newTransform.transform.position = position;
+        newTransform.transform.eulerAngles = player.transform.eulerAngles;
 
         StartOfRound.Instance.mapScreen.SwitchRadarTargetServerRpc((int)player.playerClientId);
         teleporter.PressTeleportButtonServerRpc();
 
         _ = new GameObject().AddComponent<TransientObject>()
-                            .Init(Helpers.PlaceObjectAtPosition(position, teleporter), 6.0f)
-                            .Dispose(() => currentTeleporterPosition = previousTeleporterPosition);
+                            .Init(Helpers.PlaceObjectAtTransform(newTransform.transform, teleporter), 6.0f)
+                            .Dispose(() => Helpers.PlaceObjectAtTransform(previousTransform.transform, teleporter).Invoke(0));
 
         return new Result(true);
     }
