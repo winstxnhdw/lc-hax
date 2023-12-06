@@ -5,13 +5,17 @@
 
 A portable Windows CLI-only internal cheat for [Lethal Company](https://en.wikipedia.org/wiki/Lethal_Company).
 
+## Requirements
+
+- [Microsoft .NET 8.0 SDK](https://dotnet.microsoft.com/en-us/download)
+
 ## Installation
 
 ```bash
 git clone --recursive https://github.com/winstxnhdw/lc-hax.git
 ```
 
-You can now build and install the dependencies by executing `requirements.bat`
+You can now build and install the dependencies by executing `requirements.bat`.
 
 ## Usage
 
@@ -19,16 +23,20 @@ Execute `launch.bat` when you have launched the game.
 
 ## Commands
 
-| Action                    | Command                 |
-| ------------------------- | ----------------------- |
-| Modify shovel damage      | `/shovel <force=1>`     |
-| List all players          | `/players`              |
-| Teleport to a player      | `/tp <username>`        |
-| Teleport to a player      | `/tp <player index>`    |
-| Teleport to a location    | `/tp <x> <y> <z>`       |
-| Teleport player to player | `/tp <player> <player>` |
-| Teleport back to ship     | `/home`                 |
-| End the game              | `/end`                  |
-| Toggle God mode           | `/god`                  |
-| Give or take money        | `/money <amount>`       |
-| Unlock all doors          | `/unlock`               |
+| Action                     | Command                 |
+| -------------------------- | ----------------------- |
+| Modify shovel damage       | `/shovel <force=1>`     |
+| Teleport to a player       | `/tp <player>`          |
+| Teleport to a location     | `/tp <x> <y> <z>`       |
+| Teleport player to player  | `/tp <player> <player>` |
+| Teleport back to ship      | `/home <player?>`       |
+| Give or take money         | `/money <amount>`       |
+| Inverse transport a player | `/random <player>`      |
+| Play noise on player       | `/noise <player>`       |
+| Kill player                | `/kill <player>`        |
+| Kill all players           | `/kill all`             |
+| List all players           | `/players`              |
+| End the game               | `/end`                  |
+| Toggle God mode            | `/god`                  |
+| Unlock all doors           | `/unlock`               |
+| Stun enemies               | `/stun`                 |
