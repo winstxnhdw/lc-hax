@@ -5,9 +5,7 @@ namespace Hax;
 
 public class WeightMod : MonoBehaviour {
     void Update() {
-        PlayerControllerB? player = GameNetworkManager.Instance.localPlayerController;
-
-        if (player == null) {
+        if (!Helpers.Extant(Helpers.LocalPlayer, out PlayerControllerB player)) {
             return;
         }
 

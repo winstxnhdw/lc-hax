@@ -4,19 +4,13 @@ using UnityEngine;
 namespace Hax;
 
 public class NoiseCommand : ICommand {
-
     public void Execute(string[] args) {
         if (args.Length < 1) {
             Console.Print("SYSTEM", "Usage: /noise <player>");
             return;
         }
 
-        if (!Helpers.Extant(Helpers.HUDManager, out HUDManager hudManager)) {
-            Console.Print("SYSTEM", "HUDManager not found!");
-            return;
-        }
-
-        if (!Helpers.Extant(Reflector.Target(hudManager).GetInternalField<Terminal>("terminalScript"), out Terminal terminal)) {
+        if (!Helpers.Extant(Helpers.Terminal, out Terminal terminal)) {
             Console.Print("SYSTEM", "Terminal not found!");
             return;
         }

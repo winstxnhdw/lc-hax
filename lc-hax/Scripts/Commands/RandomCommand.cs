@@ -6,24 +6,22 @@ namespace Hax;
 
 public class RandomCommand : ICommand {
     Result TeleportPlayerToRandom(string[] args) {
-        PlayerControllerB? targetPlayer = Helpers.GetPlayer(args[0]);
-
-        if (targetPlayer == null) {
+        if (!Helpers.Extant(Helpers.GetPlayer(args[0]), out PlayerControllerB targetPlayer)) {
             return new Result(message: "Player not found!");
         }
 
         Helpers.BuyUnlockable(Unlockables.INVERSE_TELEPORTER);
         HaxObjects.Instance?.ShipTeleporters.Renew();
-        ShipTeleporter? inverseTeleporter =
-            HaxObjects.Instance?.ShipTeleporters.Objects.FirstOrDefault(teleporter => teleporter.isInverseTeleporter);
 
-        if (inverseTeleporter == null) {
+        if (!Helpers.Extant(Helpers.InverseTeleporter, out ShipTeleporter inverseTeleporter)) {
             return new Result(message: "ShipTeleporter not found!");
         }
 
         inverseTeleporter.PressTeleportButtonServerRpc();
 
-        PlaceableShipObject? cupboard = Object.FindObjectsOfType<PlaceableShipObject>().FirstOrDefault(placeableObject => placeableObject.unlockableID == (int)Unlockables.CUPBOARD);
+        PlaceableShipObject? cupboard =
+            Object.FindObjectsOfType<PlaceableShipObject>()
+                  .FirstOrDefault(placeableObject => placeableObject.unlockableID == (int)Unlockables.CUPBOARD);
 
         if (cupboard == null) {
             return new Result(message: "Cupboard not found!");

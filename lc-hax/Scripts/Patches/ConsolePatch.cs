@@ -5,11 +5,9 @@ namespace Hax;
 
 [HarmonyPatch(typeof(HUDManager))]
 [HarmonyPatch("SubmitChat_performed")]
-public class ConsolePatch {
+class ConsolePatch {
     static bool Prefix() {
-        HUDManager? hudManager = HaxObjects.Instance?.HUDManager.Object;
-
-        if (hudManager == null) {
+        if (!Helpers.Extant(Helpers.HUDManager, out HUDManager hudManager)) {
             return true;
         }
 
