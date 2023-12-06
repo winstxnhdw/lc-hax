@@ -5,10 +5,7 @@ using GameNetcodeStuff;
 namespace Hax;
 
 public class TeleportCommand : ICommand {
-
     PlayerControllerB? CurrentPlayer => GameNetworkManager.Instance.localPlayerController;
-
-    MultiObjectPool<ShipTeleporter>? ShipTeleporters => HaxObjects.Instance?.ShipTeleporters;
 
     Vector3? GetCoordinates(string[] args) {
         bool isValidX = float.TryParse(args[0], out float x);
@@ -50,9 +47,9 @@ public class TeleportCommand : ICommand {
 
     Result TeleportPlayerToPosition(PlayerControllerB player, Vector3 position) {
         Helpers.BuyUnlockable(Unlockables.TELEPORTER);
-        this.ShipTeleporters?.Renew();
+        Helpers.ShipTeleporters?.Renew();
 
-        ShipTeleporter? teleporter = this.ShipTeleporters?.Objects.FirstOrDefault(
+        ShipTeleporter? teleporter = Helpers.ShipTeleporters?.Objects.FirstOrDefault(
             teleporter => !teleporter.isInverseTeleporter
         );
 

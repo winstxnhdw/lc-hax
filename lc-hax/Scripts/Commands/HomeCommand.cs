@@ -4,21 +4,17 @@ using GameNetcodeStuff;
 namespace Hax;
 
 public class HomeCommand : ICommand {
-    PlayerControllerB? GetPlayer(string name) => StartOfRound.Instance.allPlayerScripts.FirstOrDefault(player => player.playerUsername == name);
-
-    MultiObjectPool<ShipTeleporter>? ShipTeleporters => HaxObjects.Instance?.ShipTeleporters;
-
     Result TeleportPlayerToBase(string[] args) {
         string sourcePlayerName = args[0];
-        PlayerControllerB? sourcePlayer = this.GetPlayer(sourcePlayerName);
+        PlayerControllerB? sourcePlayer = Helpers.GetPlayer(sourcePlayerName);
 
         if (sourcePlayer == null) {
             return new Result(message: "Player not found!");
         }
 
         Helpers.BuyUnlockable(Unlockables.TELEPORTER);
-        this.ShipTeleporters?.Renew();
-        ShipTeleporter? teleporter = this.ShipTeleporters?.Objects.FirstOrDefault(teleporter => !teleporter.isInverseTeleporter);
+        Helpers.ShipTeleporters?.Renew();
+        ShipTeleporter? teleporter = Helpers.ShipTeleporters?.Objects.FirstOrDefault(teleporter => !teleporter.isInverseTeleporter);
 
         if (teleporter == null) {
             return new Result(message: "ShipTeleporter not found!");

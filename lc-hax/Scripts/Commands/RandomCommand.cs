@@ -5,10 +5,8 @@ using GameNetcodeStuff;
 namespace Hax;
 
 public class RandomCommand : ICommand {
-    PlayerControllerB? GetPlayer(string name) => StartOfRound.Instance.allPlayerScripts.FirstOrDefault(player => player.playerUsername == name);
-
     Result TeleportPlayerToRandom(string[] args) {
-        PlayerControllerB? targetPlayer = this.GetPlayer(args[0]);
+        PlayerControllerB? targetPlayer = Helpers.GetPlayer(args[0]);
 
         if (targetPlayer == null) {
             return new Result(message: "Player not found!");
