@@ -5,24 +5,24 @@ using Unity.Netcode;
 
 namespace Hax;
 
-public static class AntiDisconnectPatch {
+class AntiDisconnectPatch {
     [HarmonyPatch(typeof(GameNetworkManager), "Disconnect")]
     [HarmonyPrefix]
-    static bool Disconnect() => true;
+    static bool Disconnect() => false;
 
     [HarmonyPatch(typeof(GameNetworkManager), "Singleton_OnClientDisconnectCallback")]
     [HarmonyPrefix]
-    static bool Singleton_OnClientDisconnectCallback() => true;
+    static bool Singleton_OnClientDisconnectCallback() => false;
 
     [HarmonyPatch(typeof(NetworkConnectionManager), "OnClientDisconnectFromServer")]
     [HarmonyPrefix]
-    static bool OnClientDisconnectFromServer() => true;
+    static bool OnClientDisconnectFromServer() => false;
 
     [HarmonyPatch(typeof(NetworkConnectionManager), "DisconnectEventHandler")]
     [HarmonyPrefix]
-    static bool DisconnectEventHandler() => true;
+    static bool DisconnectEventHandler() => false;
 
     [HarmonyPatch(typeof(StartOfRound), "OnPlayerDC")]
     [HarmonyPrefix]
-    static bool OnPlayerDC() => true;
+    static bool OnPlayerDC() => false;
 }
