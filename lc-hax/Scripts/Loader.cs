@@ -60,8 +60,8 @@ public class Loader : MonoBehaviour {
         Loader.AddHaxModules<SprintMod>();
         // Loader.AddHaxModules<StunMod>();
         Loader.AddHaxModules<ShovelMod>();
-        // Loader.AddHaxModules<NightVisionMod>();
         Loader.AddHaxModules<WeightMod>();
+        // Loader.AddHaxModules<NightVisionMod>();
     }
 
     public static void Unload() {
