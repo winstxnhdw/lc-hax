@@ -9,14 +9,9 @@ public class HealCommand : ICommand {
             return;
         }
 
-        if (!Helpers.Extant(Helpers.HUDManager, out HUDManager hudManager)) {
-            Console.Print("SYSTEM", "HUDManager not found");
-            return;
-        }
-
         localPlayer.health = 100;
         localPlayer.bleedingHeavily = false;
         localPlayer.criticallyInjured = false;
-        hudManager.UpdateHealthUI(localPlayer.health, false);
+        Helpers.HUDManager?.UpdateHealthUI(localPlayer.health, false);
     }
 }
