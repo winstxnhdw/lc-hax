@@ -10,22 +10,12 @@ public class NoiseCommand : ICommand {
             return;
         }
 
-        if (!Helpers.Extant(Helpers.Terminal, out Terminal terminal)) {
-            Console.Print("SYSTEM", "Terminal not found!");
-            return;
-        }
-
-        if (!Helpers.Extant(Reflector.Target(terminal).GetInternalField<RoundManager>("roundManager"), out RoundManager roundManager)) {
-            Console.Print("SYSTEM", "RoundManager not found!");
-            return;
-        }
-
         if (!Helpers.Extant(Helpers.GetPlayer(args[0]), out PlayerControllerB player)) {
             Console.Print("SYSTEM", "Player not found!");
             return;
         }
 
         _ = new GameObject().AddComponent<TransientObject>()
-                            .Init((_) => roundManager.PlayAudibleNoise(player.transform.position, 1000.0f, 1.0f, 10, false), 60.0f);
+                            .Init((_) => RoundManager.Instance.PlayAudibleNoise(player.transform.position, 10000.0f, 10000.0f, 10, false), 60.0f);
     }
 }
