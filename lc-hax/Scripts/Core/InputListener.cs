@@ -6,7 +6,6 @@ using UnityEngine.InputSystem;
 namespace Hax;
 
 public class InputListener : MonoBehaviour {
-
     Dictionary<Func<bool>, Action> keyActionsDict = new() {
         { () => Keyboard.current[Key.Backquote].wasPressedThisFrame, Console.Open },
     };
