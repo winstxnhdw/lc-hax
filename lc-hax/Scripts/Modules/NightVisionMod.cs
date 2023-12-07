@@ -5,12 +5,12 @@ namespace Hax;
 
 public class NightVisionMod : MonoBehaviour {
     void Update() {
-        PlayerControllerB? player = HaxObjects.Instance?.GameNetworkManager.Object?.localPlayerController;
+        // PlayerControllerB? player = HaxObjects.Instance?.GameNetworkManager.Object?.localPlayerController;
 
-        if (player == null) {
-            return;
-        }
+        // if (player == null) {
+        //     return;
+        // }
 
-        player.nightVision.enabled = true;
+        // player.nightVision.enabled = true;
     }
 }
