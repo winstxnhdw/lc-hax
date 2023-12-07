@@ -60,7 +60,7 @@ public class TeleportCommand : ICommand {
         Vector3 positionOffset = new(0.0f, 1.5f, 0.0f);
 
         _ = new GameObject().AddComponent<TransientObject>()
-                            .Init(Helpers.PlaceObjectAtPosition(newTransform.transform, teleporter, rotationOffset: rotationOffset), 6.0f)
+                            .Init(Helpers.PlaceObjectAtPosition(newTransform.transform, teleporter, positionOffset, rotationOffset), 6.0f)
                             .Dispose(() => Helpers.PlaceObjectAtPosition(previousTransform.transform, teleporter, positionOffset, rotationOffset).Invoke(0));
 
         return new Result(true);
