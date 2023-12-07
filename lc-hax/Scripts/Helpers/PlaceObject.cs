@@ -49,11 +49,10 @@ public static partial class Helpers {
         };
     }
 
-
     public static Action<float> PlaceObjectAtPosition<M>(
         M gameObject,
-        Vector3 position = new(),
-        Vector3 rotation = new()
+        Vector3 position,
+        Vector3 rotation
     ) where M : MonoBehaviour {
         return (_) => {
             NetworkObject networkObject =
@@ -61,7 +60,7 @@ public static partial class Helpers {
                           .parentObject
                           .GetComponent<NetworkObject>();
 
-            HaxObjects.Instance?.ShipBuildModeManager.Object?.PlaceShipObjectServerRpc(
+            Helpers.ShipBuildModeManager?.PlaceShipObjectServerRpc(
                 position,
                 rotation,
                 networkObject,
