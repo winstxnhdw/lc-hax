@@ -11,7 +11,7 @@ public class PumpkinCommand : ICommand {
     private EnemyAI[] enemyAIs;
     private float instanceTimer = 0;
     private Transform latestEnemy = null;
-    private Vector3 latestEnemyPos = Vector3.zero;
+    private Vector3 toOutwardsPos = Vector3.zero;
 
     Result TeleportPlayerToRandom(string[] args) {
         if (!Helpers.Extant(Helpers.GetPlayer(args[0]), out PlayerControllerB targetPlayer)) {
@@ -32,17 +32,29 @@ public class PumpkinCommand : ICommand {
 
         float timer = 0;
         Vector3 bobbing = Vector3.zero;
+        Vector3 toPlayerPos = targetPlayer.transform.position +
+                    (targetPlayer.transform.forward * 2 +
+                    targetPlayer.transform.right * 1) +
+                    Vector3.up * 2f;
+        float pingpongValue = 0;
+        float toEnemyMaxDist = 5;
         GameObject countDown = new();
         _ = countDown.AddComponent<TransientObject>().Init(
             (timeDelta) => {
+                toPlayerPos = targetPlayer.transform.position +
+                    (targetPlayer.transform.forward * 2 +
+                    targetPlayer.transform.right * 1) +
+                    Vector3.up * 2f;
+
                 this.instanceTimer -= timeDelta;
                 timer += timeDelta;
                 bobbing = Vector3.up * 0.25f * Mathf.Sin(timer * 2);
+                pingpongValue = Mathf.PingPong(timer, 1);
                 this.GetClosestEnemy(targetPlayer);
-                this.latestEnemyPos = targetPlayer.transform.position + targetPlayer.transform.forward;
+                this.toOutwardsPos = toPlayerPos;
                 if (this.latestEnemy == null) return;
 
-                this.latestEnemyPos = this.latestEnemy.position;
+                this.toOutwardsPos = toPlayerPos + (this.latestEnemy.position - toPlayerPos).normalized * toEnemyMaxDist;
 
             }, DURATION);
 
@@ -51,11 +63,8 @@ public class PumpkinCommand : ICommand {
             (x) => {
                 Helpers.PlaceObjectAtPosition(
                     jack,
-                    targetPlayer.transform.position +
-                    (targetPlayer.transform.forward * 2 +
-                    targetPlayer.transform.right * 1) +
-                    Vector3.up * 2f + bobbing,
-                    Quaternion.LookRotation(this.latestEnemyPos - jack.transform.position).eulerAngles + new Vector3(230, -90, 0)).Invoke(x);
+                    Vector3.Lerp(toPlayerPos, this.toOutwardsPos, pingpongValue) + bobbing,
+                    Quaternion.LookRotation(targetPlayer.transform.position - jack.transform.position, Vector3.up).eulerAngles + new Vector3(220, -90, 0)).Invoke(x);
             }, DURATION);
 
         return new Result(true);
