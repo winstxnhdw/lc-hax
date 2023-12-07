@@ -22,7 +22,7 @@ public class TransientObject : MonoBehaviour {
     }
 
     void Update() {
-        if (this.Timer > this.ExpireTime) {
+        if (this.Timer >= this.ExpireTime) {
             this.DisposeAction?.Invoke();
             Destroy(this.gameObject);
             return;
