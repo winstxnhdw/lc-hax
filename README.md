@@ -41,3 +41,4 @@ Execute `launch.bat` when you have launched the game.
 | Unlock all doors           | `/unlock`               |
 | Stun enemies               | `/stun`                 |
 | Explode all mines          | `/explode`              |
+| Heal player                | `/heal`                 |
