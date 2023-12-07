@@ -5,6 +5,8 @@ using UnityEngine;
 namespace Hax;
 
 public static partial class Helpers {
+    static ShipBuildModeManager? ShipBuildModeManager => ShipBuildModeManager.Instance;
+
     public static Action<float> PlaceObjectAtTransform<T, M>(
         T targetObject,
         M gameObject,
@@ -17,7 +19,7 @@ public static partial class Helpers {
                           .parentObject
                           .GetComponent<NetworkObject>();
 
-            ShipBuildModeManager.Instance.PlaceShipObjectServerRpc(
+            Helpers.ShipBuildModeManager?.PlaceShipObjectServerRpc(
                 targetObject.position + positionOffset,
                 targetObject.eulerAngles + rotationOffset,
                 networkObject,
@@ -38,7 +40,7 @@ public static partial class Helpers {
                           .parentObject
                           .GetComponent<NetworkObject>();
 
-            ShipBuildModeManager.Instance.PlaceShipObjectServerRpc(
+            Helpers.ShipBuildModeManager?.PlaceShipObjectServerRpc(
                 targetObject.position + positionOffset,
                 rotationOffset,
                 networkObject,
