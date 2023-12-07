@@ -58,9 +58,9 @@ public class Loader : MonoBehaviour {
         DontDestroyOnLoad(Loader.HaxModules);
 
         Loader.AddHaxModules<SprintMod>();
-        // Loader.AddHaxModules<StunMod>();
         Loader.AddHaxModules<ShovelMod>();
         Loader.AddHaxModules<WeightMod>();
+        Loader.AddHaxModules<SaneMod>();
         // Loader.AddHaxModules<NightVisionMod>();
     }
 
