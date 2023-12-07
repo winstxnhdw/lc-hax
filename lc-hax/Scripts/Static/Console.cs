@@ -23,7 +23,8 @@ public static class Console {
         { "/heal", new HealCommand() },
         { "/scrap", new ScrapCommand() },
         { "/revive", new ReviveCommand() },
-        { "/chibaku", new ChibakuTenseiCommand() }
+        { "/chibaku", new ChibakuTenseiCommand() },
+        { "/pumpkin", new PumpkinCommand()},
     };
 
     static Reflector? HUDManagerReflector => Helpers.HUDManager == null ? null : Reflector.Target(Helpers.HUDManager);
