@@ -48,4 +48,25 @@ public static partial class Helpers {
             );
         };
     }
+
+
+    public static Action<float> PlaceObjectAtPosition<M>(
+        M gameObject,
+        Vector3 position = new(),
+        Vector3 rotation = new()
+    ) where M : MonoBehaviour {
+        return (_) => {
+            NetworkObject networkObject =
+                gameObject.GetComponentInChildren<PlaceableShipObject>()
+                          .parentObject
+                          .GetComponent<NetworkObject>();
+
+            HaxObjects.Instance?.ShipBuildModeManager.Object?.PlaceShipObjectServerRpc(
+                position,
+                rotation,
+                networkObject,
+                -1
+            );
+        };
+    }
 }
