@@ -13,8 +13,7 @@ public class TeleportCommand : ICommand {
     }
 
     Result TeleportToPlayer(string[] args) {
-        string targetPlayerNameOrId = args[0];
-        PlayerControllerB? targetPlayer = Helpers.GetPlayer(targetPlayerNameOrId);
+        PlayerControllerB? targetPlayer = Helpers.GetPlayer(args[0]);
         PlayerControllerB? currentPlayer = Helpers.LocalPlayer;
 
         if (targetPlayer == null || currentPlayer == null) {
@@ -53,7 +52,7 @@ public class TeleportCommand : ICommand {
         newTransform.transform.position = position;
         newTransform.transform.eulerAngles = player.transform.eulerAngles;
 
-        StartOfRound.Instance.mapScreen.SwitchRadarTargetServerRpc((int)player.playerClientId);
+        Helpers.SwitchRadarTarget(player);
         teleporter.PressTeleportButtonServerRpc();
 
         Vector3 rotationOffset = new(-90.0f, 0.0f, 0.0f);
@@ -79,10 +78,8 @@ public class TeleportCommand : ICommand {
     }
 
     Result TeleportPlayerToPlayer(string[] args) {
-        string sourcePlayerNameOrId = args[0];
-        string targetPlayerNameOrId = args[1];
-        PlayerControllerB? sourcePlayer = Helpers.GetPlayer(sourcePlayerNameOrId);
-        PlayerControllerB? targetPlayer = Helpers.GetPlayer(targetPlayerNameOrId);
+        PlayerControllerB? sourcePlayer = Helpers.GetPlayer(args[0]);
+        PlayerControllerB? targetPlayer = Helpers.GetPlayer(args[1]);
 
         return sourcePlayer == null || targetPlayer == null
             ? new Result(message: "Player not found!")
