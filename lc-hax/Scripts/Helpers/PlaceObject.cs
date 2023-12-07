@@ -17,7 +17,7 @@ public static partial class Helpers {
                           .parentObject
                           .GetComponent<NetworkObject>();
 
-            HaxObjects.Instance?.ShipBuildModeManager.Object?.PlaceShipObjectServerRpc(
+            ShipBuildModeManager.Instance.PlaceShipObjectServerRpc(
                 targetObject.position + positionOffset,
                 targetObject.eulerAngles + rotationOffset,
                 networkObject,
@@ -38,7 +38,7 @@ public static partial class Helpers {
                           .parentObject
                           .GetComponent<NetworkObject>();
 
-            HaxObjects.Instance?.ShipBuildModeManager.Object?.PlaceShipObjectServerRpc(
+            ShipBuildModeManager.Instance.PlaceShipObjectServerRpc(
                 targetObject.position + positionOffset,
                 rotationOffset,
                 networkObject,
