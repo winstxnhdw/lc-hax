@@ -39,7 +39,7 @@ public class PumpkinCommand : ICommand {
         float pingpongValue = 0;
         float toEnemyMaxDist = 5;
         GameObject countDown = new();
-        _ = countDown.AddComponent<TransientObject>().Init(
+        _ = countDown.AddComponent<TransientBehaviour>().Init(
             (timeDelta) => {
                 toPlayerPos = targetPlayer.transform.position +
                     (targetPlayer.transform.forward * 2 +
@@ -59,7 +59,7 @@ public class PumpkinCommand : ICommand {
             }, DURATION);
 
         GameObject g1 = new();
-        _ = g1.AddComponent<TransientObject>().Init(
+        _ = g1.AddComponent<TransientBehaviour>().Init(
             (x) => {
                 Helpers.PlaceObjectAtPosition(
                     jack,
