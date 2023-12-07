@@ -16,6 +16,10 @@ public class UnlockCommand : ICommand {
             doorTrigger.timeToHold = 0.0f;
         });
 
+        Object.FindObjectsOfType<TerminalAccessibleObject>()
+              .ToList()
+              .ForEach(terminalAccessibleObject => terminalAccessibleObject.SetDoorOpenServerRpc(true));
+
         Console.Print("SYSTEM", "All doors unlocked!");
     }
 }
