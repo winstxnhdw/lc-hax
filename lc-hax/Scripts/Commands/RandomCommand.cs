@@ -27,20 +27,14 @@ public class RandomCommand : ICommand {
             return new Result(message: "Cupboard not found!");
         }
 
-        GameObject previousTeleporterTransform = new();
-        previousTeleporterTransform.transform.position = inverseTeleporter.transform.position;
-        previousTeleporterTransform.transform.eulerAngles = inverseTeleporter.transform.eulerAngles;
-        GameObject previousCupboardTransform = new();
-        previousCupboardTransform.transform.position = cupboard.transform.position;
-        previousCupboardTransform.transform.eulerAngles = cupboard.transform.eulerAngles;
+        GameObject previousTeleporterTransform = Helpers.Copy(inverseTeleporter.transform);
+        GameObject previousCupboardTransform = Helpers.Copy(cupboard.transform);
 
-        GameObject gameObject = new();
-
-        _ = gameObject.AddComponent<TransientObject>()
+        _ = new GameObject().AddComponent<TransientObject>()
                       .Init(Helpers.PlaceObjectAtTransform(targetPlayer.transform, inverseTeleporter, new Vector3(0.0f, 1.5f, 0.0f), new Vector3(-90.0f, 0.0f, 0.0f)), 6.0f)
                       .Dispose(() => Helpers.PlaceObjectAtTransform(previousTeleporterTransform.transform, inverseTeleporter).Invoke(0));
 
-        _ = gameObject.AddComponent<TransientObject>()
+        _ = new GameObject().AddComponent<TransientObject>()
                       .Init(Helpers.PlaceObjectAtPosition(targetPlayer.transform, cupboard, new Vector3(0.0f, 1.75f, 0.0f), new Vector3(90.0f, 0.0f, 0.0f)), 6.0f)
                       .Dispose(() => Helpers.PlaceObjectAtTransform(previousCupboardTransform.transform, cupboard).Invoke(0));
 
