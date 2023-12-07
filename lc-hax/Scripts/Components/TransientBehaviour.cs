@@ -3,20 +3,20 @@ using UnityEngine;
 
 namespace Hax;
 
-public class TransientObject : MonoBehaviour {
+public class TransientBehaviour : MonoBehaviour {
     Action<float>? Action { get; set; }
     Action? DisposeAction { get; set; }
     float ExpireTime { get; set; } = 0.0f;
     float Timer { get; set; } = 0.0f;
 
-    public TransientObject Init(Action<float> action, float expireTime) {
+    public TransientBehaviour Init(Action<float> action, float expireTime) {
         this.Action = action;
         this.ExpireTime = expireTime;
 
         return this;
     }
 
-    public TransientObject Dispose(Action disposeAction) {
+    public TransientBehaviour Dispose(Action disposeAction) {
         this.DisposeAction = disposeAction;
         return this;
     }

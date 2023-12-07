@@ -59,7 +59,7 @@ public class ChibakuTenseiCommand : ICommand {
         Vector3 finalClosingIn = Vector3.forward * 1.25f;
         Vector3 closingInDirection = Vector3.forward;
         GameObject countDown = new();
-        _ = countDown.AddComponent<TransientObject>().Init(
+        _ = countDown.AddComponent<TransientBehaviour>().Init(
             (timeDelta) => {
                 distanceFromPlayerMultiplier = System.Math.Clamp(distanceFromPlayerMultiplier - timeDelta * 3, 1, 5);
                 closingInDirection = finalClosingIn * distanceFromPlayerMultiplier;
@@ -69,37 +69,37 @@ public class ChibakuTenseiCommand : ICommand {
 
 
         GameObject g2 = new();
-        _ = g2.AddComponent<TransientObject>().Init(
+        _ = g2.AddComponent<TransientBehaviour>().Init(
             (x) => {
                 Helpers.PlaceObjectAtTransform(targetPlayer.transform, terminal, changingTargetPlayerOffset).Invoke(x);
             }, DURATION);
 
         GameObject g3 = new();
-        _ = g3.AddComponent<TransientObject>().Init(
+        _ = g3.AddComponent<TransientBehaviour>().Init(
             (x) => {
                 Helpers.PlaceObjectAtTransform(targetPlayer.transform, jack, changingTargetPlayerOffset + Vector3.up * 4f).Invoke(x);
             }, DURATION);
 
         GameObject g1 = new();
-        _ = g1.AddComponent<TransientObject>().Init(
+        _ = g1.AddComponent<TransientBehaviour>().Init(
             (x) => {
                 Helpers.PlaceObjectAtTransform(targetPlayer.transform, romatic, changingTargetPlayerOffset + Quaternion.Euler(0, increasingSpiral, 0) * closingInDirection + this.SPINNING_Y, Vector3.zero).Invoke(x);
             }, DURATION);
 
         GameObject g4 = new();
-        _ = g4.AddComponent<TransientObject>().Init(
+        _ = g4.AddComponent<TransientBehaviour>().Init(
             (x) => {
                 Helpers.PlaceObjectAtTransform(targetPlayer.transform, cabinet, changingTargetPlayerOffset + Quaternion.Euler(0, increasingSpiral + 90, 0) * closingInDirection + this.SPINNING_Y, new Vector3(90, 0, 0)).Invoke(x);
             }, DURATION);
 
         GameObject g5 = new();
-        _ = g5.AddComponent<TransientObject>().Init(
+        _ = g5.AddComponent<TransientBehaviour>().Init(
             (x) => {
                 Helpers.PlaceObjectAtTransform(targetPlayer.transform, table, changingTargetPlayerOffset + Quaternion.Euler(0, increasingSpiral + 180, 0) * closingInDirection + this.SPINNING_Y, Vector3.zero).Invoke(x);
             }, DURATION);
 
         GameObject g6 = new();
-        _ = g6.AddComponent<TransientObject>().Init(
+        _ = g6.AddComponent<TransientBehaviour>().Init(
             (x) => {
                 Helpers.PlaceObjectAtTransform(
                     targetPlayer.transform,
