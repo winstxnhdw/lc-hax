@@ -15,6 +15,8 @@ public class HealCommand : ICommand {
         }
 
         localPlayer.health = 100;
+        localPlayer.bleedingHeavily = false;
+        localPlayer.criticallyInjured = false;
         hudManager.UpdateHealthUI(localPlayer.health, false);
     }
 }
