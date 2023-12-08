@@ -20,7 +20,6 @@ public static class Console {
         { "/random", new RandomCommand() },
         { "/stun", new StunCommand() },
         { "/heal", new HealCommand() },
-        { "/scrap", new ScrapCommand() },
         { "/chibaku", new ChibakuTenseiCommand() },
         { "/pumpkin", new PumpkinCommand() },
     };
