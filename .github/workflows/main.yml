@@ -5,7 +5,7 @@ on:
   push:
     paths:
       - .github/workflows/main.yml
-      - valheim-hax/**
+      - lc-hax/**
 
 jobs:
   build:
