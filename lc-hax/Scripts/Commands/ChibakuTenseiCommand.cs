@@ -4,8 +4,7 @@ using GameNetcodeStuff;
 namespace Hax;
 
 public class ChibakuTenseiCommand : ICommand {
-    private const int duration = 8;
-    private Vector3 spinningY = new(0, 2, 0);
+    Vector3 spinningY = new(0, 2, 0);
 
     Result TeleportPlayerToRandom(string[] args) {
         if (!Helpers.Extant(Helpers.GetPlayer(args[0]), out PlayerControllerB targetPlayer)) {
@@ -41,6 +40,7 @@ public class ChibakuTenseiCommand : ICommand {
             return new Result(message: "Cupboard not found!");
         }
 
+        const int duration = 8;
         float increasingSpiral = 0;
         float spiralPerSecond = 720;
         float distanceFromPlayerMultiplier = 5;
