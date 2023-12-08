@@ -44,3 +44,4 @@ Execute `launch.bat` when you have launched the game.
 | Heal self                  | `/heal`                 |
 | Explode all mines          | `/explode`              |
 | Explode all jetpacks       | `/explode jet`          |
+| Chibaku Tensei             | `/ct`                   |

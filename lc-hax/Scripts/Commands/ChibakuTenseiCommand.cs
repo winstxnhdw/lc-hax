@@ -97,7 +97,7 @@ public class ChibakuTenseiCommand : ICommand {
 
     public void Execute(string[] args) {
         if (args.Length < 1) {
-            Console.Print("SYSTEM", "Usage: /chibaku <player>");
+            Console.Print("SYSTEM", "Usage: /ct <player>");
             return;
         }
 
