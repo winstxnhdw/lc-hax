@@ -1,17 +1,27 @@
+using System.Collections;
 using GameNetcodeStuff;
 using UnityEngine;
 
 namespace Hax;
 
 public class SaneMod : MonoBehaviour {
-    void Update() {
-        if (!Helpers.Extant(Helpers.LocalPlayer, out PlayerControllerB localPlayer)) {
-            return;
-        }
+    IEnumerator SetSanity() {
+        while (true) {
+            if (!Helpers.Extant(Helpers.LocalPlayer, out PlayerControllerB localPlayer)) {
+                yield return new WaitForEndOfFrame();
+                continue;
+            }
 
-        localPlayer.playersManager.fearLevel = 0.0f;
-        localPlayer.playersManager.fearLevelIncreasing = false;
-        localPlayer.insanityLevel = 0.0f;
-        localPlayer.insanitySpeedMultiplier = 0.0f;
+            localPlayer.playersManager.fearLevel = 0.0f;
+            localPlayer.playersManager.fearLevelIncreasing = false;
+            localPlayer.insanityLevel = 0.0f;
+            localPlayer.insanitySpeedMultiplier = 0.0f;
+
+            yield return new WaitForSeconds(2.0f);
+        }
+    }
+
+    void Start() {
+        _ = this.StartCoroutine(this.SetSanity());
     }
 }
