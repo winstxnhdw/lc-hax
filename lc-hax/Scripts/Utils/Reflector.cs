@@ -4,24 +4,14 @@ using System.Reflection;
 namespace Hax;
 
 public class Reflector {
-    const BindingFlags @internal = BindingFlags.NonPublic | BindingFlags.Instance;
-    const BindingFlags @public = BindingFlags.Public | BindingFlags.Instance;
+    const BindingFlags privateOrInternal = BindingFlags.NonPublic | BindingFlags.Instance;
     const BindingFlags internalStatic = BindingFlags.NonPublic | BindingFlags.Static;
-    const BindingFlags publicStatic = BindingFlags.Public | BindingFlags.Static;
-
-    static BindingFlags InternalField => Reflector.@internal | BindingFlags.GetField;
-    static BindingFlags InternalProperty => Reflector.@internal | BindingFlags.GetProperty;
-    static BindingFlags InternalMethod => Reflector.@internal | BindingFlags.InvokeMethod;
-    static BindingFlags InternalStaticField => Reflector.internalStatic | BindingFlags.GetField;
-    static BindingFlags InternalStaticProperty => Reflector.internalStatic | BindingFlags.GetProperty;
-    static BindingFlags InternalStaticMethod => Reflector.internalStatic | BindingFlags.InvokeMethod;
-
-    static BindingFlags PublicField => Reflector.@public | BindingFlags.GetField;
-    static BindingFlags PublicProperty => Reflector.@public | BindingFlags.GetProperty;
-    static BindingFlags PublicMethod => Reflector.@public | BindingFlags.InvokeMethod;
-    static BindingFlags PublicStaticField => Reflector.publicStatic | BindingFlags.GetField;
-    static BindingFlags PublicStaticProperty => Reflector.publicStatic | BindingFlags.GetProperty;
-    static BindingFlags PublicStaticMethod => Reflector.publicStatic | BindingFlags.InvokeMethod;
+    const BindingFlags internalField = Reflector.privateOrInternal | BindingFlags.GetField;
+    const BindingFlags internalProperty = Reflector.privateOrInternal | BindingFlags.GetProperty;
+    const BindingFlags internalMethod = Reflector.privateOrInternal | BindingFlags.InvokeMethod;
+    const BindingFlags internalStaticField = Reflector.internalStatic | BindingFlags.GetField;
+    const BindingFlags internalStaticProperty = Reflector.internalStatic | BindingFlags.GetProperty;
+    const BindingFlags internalStaticMethod = Reflector.internalStatic | BindingFlags.InvokeMethod;
 
     object Obj { get; }
     Type ObjType { get; }
@@ -85,13 +75,9 @@ public class Reflector {
         }
     }
 
-    public T? GetInternalField<T>(string variableName) => this.GetField<T>(variableName, Reflector.InternalField);
+    public T? GetInternalField<T>(string variableName) => this.GetField<T>(variableName, Reflector.internalField);
 
-    public T? GetInternalStaticField<T>(string variableName) => this.GetField<T>(variableName, Reflector.InternalStaticField);
-
-    public T? GetPublicField<T>(string variableName) => this.GetField<T>(variableName, Reflector.PublicField);
-
-    public T? GetPublicStaticField<T>(string variableName) => this.GetField<T>(variableName, Reflector.PublicStaticField);
+    public T? GetInternalStaticField<T>(string variableName) => this.GetField<T>(variableName, Reflector.internalStaticField);
 
     public Reflector? GetInternalField(string variableName) {
         object? type = this.GetInternalField(variableName);
@@ -103,50 +89,18 @@ public class Reflector {
         return type == null ? null : new(type);
     }
 
-    public Reflector? GetPublicField(string variableName) {
-        object? type = this.GetPublicField(variableName);
-        return type == null ? null : new(type);
-    }
+    public Reflector? SetInternalField(string variableName, object value) => this.SetField(variableName, value, Reflector.internalField);
 
-    public Reflector? GetPublicStaticField(string variableName) {
-        object? obj = this.GetPublicStaticField(variableName);
-        return obj == null ? null : new(obj);
-    }
+    public Reflector? SetInternalStaticField(string variableName, object value) => this.SetField(variableName, value, Reflector.internalStaticField);
 
-    public Reflector? SetInternalField(string variableName, object value) => this.SetField(variableName, value, Reflector.InternalField);
+    public Reflector? GetInternalProperty(string propertyName) => this.GetProperty(propertyName, Reflector.internalProperty);
 
-    public Reflector? SetInternalStaticField(string variableName, object value) => this.SetField(variableName, value, Reflector.InternalStaticField);
+    public Reflector? SetInternalProperty(string propertyName, object value) => this.SetProperty(propertyName, value, Reflector.internalProperty);
 
-    public Reflector? SetPublicField(string variableName, object value) => this.SetField(variableName, value, Reflector.PublicField);
-
-    public Reflector? SetPublicStaticField(string variableName, object value) => this.SetField(variableName, value, Reflector.PublicStaticField);
-
-    public Reflector? GetInternalProperty(string propertyName) => this.GetProperty(propertyName, Reflector.InternalProperty);
-
-    public Reflector? GetPublicProperty(string propertyName) => this.GetProperty(propertyName, Reflector.PublicProperty);
-
-    public Reflector? SetInternalProperty(string propertyName, object value) => this.SetProperty(propertyName, value, Reflector.InternalProperty);
-
-    public Reflector? SetPublicProperty(string propertyName, object value) => this.SetProperty(propertyName, value, Reflector.PublicProperty);
-
-    public T? InvokeInternalMethod<T>(string methodName, params object[] args) => this.InvokeMethod<T>(methodName, Reflector.InternalMethod, args);
-
-    public T? InvokePublicMethod<T>(string methodName, params object[] args) => this.InvokeMethod<T>(methodName, Reflector.PublicMethod, args);
-
-    public T? InvokePublicStaticMethod<T>(string methodName, params object[] args) => this.InvokeMethod<T>(methodName, Reflector.PublicStaticMethod, args);
+    public T? InvokeInternalMethod<T>(string methodName, params object[] args) => this.InvokeMethod<T>(methodName, Reflector.internalMethod, args);
 
     public Reflector? InvokeInternalMethod(string methodName, params object[] args) {
         object? obj = this.InvokeInternalMethod<object>(methodName, args);
-        return obj == null ? null : new Reflector(obj);
-    }
-
-    public Reflector? InvokePublicMethod(string methodName, params object[] args) {
-        object? obj = this.InvokePublicMethod<object>(methodName, args);
-        return obj == null ? null : new Reflector(obj);
-    }
-
-    public Reflector? InvokePublicStaticMethod(string methodName, params object[] args) {
-        object? obj = this.InvokePublicStaticMethod<object>(methodName, args);
         return obj == null ? null : new Reflector(obj);
     }
 
