@@ -4,7 +4,7 @@ using GameNetcodeStuff;
 
 namespace Hax;
 
-public class ToggleGhostMod : MonoBehaviour {
+public class PhantomMod : MonoBehaviour {
 
     Camera? camera = null;
     bool toggleOn = false;
