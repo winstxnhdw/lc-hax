@@ -14,8 +14,8 @@ public class ChibakuTenseiCommand : ICommand {
 
         Helpers.BuyUnlockable(Unlockables.JACK_O_LANTERN);
         Helpers.BuyUnlockable(Unlockables.ROMANTIC_TABLE);
-        Helpers.BuyUnlockable(Unlockables.TABLE);
         Helpers.BuyUnlockable(Unlockables.RECORD_PLAYER);
+        Helpers.BuyUnlockable(Unlockables.TABLE);
 
         if (!Helpers.Extant(Helpers.GetUnlockable(Unlockables.CUPBOARD), out PlaceableShipObject cupboard)) {
             return new Result(message: "Cupboard not found!");
