@@ -1,13 +1,10 @@
-using System;
-using GameNetcodeStuff;
-using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using UnityEngine.UI;
+using GameNetcodeStuff;
 
 namespace Hax;
 
-public class SphereBeamForwardMod : MonoBehaviour {
+public class RemoteExplosiveMod : MonoBehaviour {
 
     PlayerControllerB? player = null;
     Camera? camera = null;

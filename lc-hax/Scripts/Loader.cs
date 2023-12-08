@@ -51,7 +51,6 @@ public class Loader : MonoBehaviour {
         DontDestroyOnLoad(Loader.HaxGameObject);
 
         Loader.AddHaxGameObject<HaxObjects>();
-        Loader.AddHaxGameObject<InputListener>();
     }
 
     static void LoadHaxModules() {
@@ -63,8 +62,8 @@ public class Loader : MonoBehaviour {
         Loader.AddHaxModules<SaneMod>();
         Loader.AddHaxModules<ClearVisionMod>();
         Loader.AddHaxModules<ChatMod>();
-        Loader.AddHaxModules<ToggleGhostMod>();
-        Loader.AddHaxModules<SphereBeamForwardMod>();
+        Loader.AddHaxModules<PhantomMod>();
+        Loader.AddHaxModules<RemoteExplosiveMod>();
     }
 
     public static void Unload() {
