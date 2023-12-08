@@ -63,6 +63,7 @@ public class Loader : MonoBehaviour {
         Loader.AddHaxModules<SaneMod>();
         Loader.AddHaxModules<ClearVisionMod>();
         Loader.AddHaxModules<ChatMod>();
+        Loader.AddHaxModules<ToggleGhostMod>();
     }
 
     public static void Unload() {
