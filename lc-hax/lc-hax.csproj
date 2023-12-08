@@ -41,6 +41,14 @@
       <HintPath>$(ReferencePath)/Unity.TextMeshPro.dll</HintPath>
     </Reference>
 
+    <Reference Include="Unity.Rendering.Volume">
+      <HintPath>$(ReferencePath)/Unity.RenderPipelines.Core.Runtime.dll</HintPath>
+    </Reference>
+
+        <Reference Include="Unity.Rendering.HighDefinition">
+      <HintPath>$(ReferencePath)/Unity.RenderPipelines.HighDefinition.Runtime.dll</HintPath>
+    </Reference>
+
     <Reference Include="Unity.Netcode.Runtime">
       <HintPath>$(ReferencePath)/Unity.Netcode.Runtime.dll</HintPath>
     </Reference>
