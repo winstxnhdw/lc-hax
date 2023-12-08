@@ -1,8 +1,6 @@
-using System;
-using GameNetcodeStuff;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using UnityEngine.UI;
+using GameNetcodeStuff;
 
 namespace Hax;
 
