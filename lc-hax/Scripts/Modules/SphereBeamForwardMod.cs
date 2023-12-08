@@ -13,14 +13,9 @@ public class SphereBeamForwardMod : MonoBehaviour {
     Camera? camera = null;
 
     void Update() {
-        Keyboard keyboard = Keyboard.current;
-        if (!keyboard.ctrlKey.isPressed) {
-            return;
-        }
-
         Mouse mouse = Mouse.current;
 
-        if (mouse.leftButton.isPressed) {
+        if (mouse.middleButton.isPressed) {
             this.Fire();
         }
     }

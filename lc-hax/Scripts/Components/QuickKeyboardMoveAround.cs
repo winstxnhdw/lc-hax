@@ -16,27 +16,34 @@ public class QuickKeyboardMoveAround : MonoBehaviour {
         direction.z -= keyboard.sKey.ReadValue();
         direction.x += keyboard.dKey.ReadValue();
         direction.x -= keyboard.aKey.ReadValue();
+        direction.y += keyboard.spaceKey.ReadValue();
+        direction.y -= keyboard.ctrlKey.ReadValue();
 
         this.SprintMultiplier = keyboard.shiftKey.IsPressed() ? this.SprintMultiplier + (5 * Time.deltaTime) : 1;
 
         if (this.OnlyXZPlaneMovement) {
-            Vector3 forward = Camera.main.transform.forward;
-            Vector3 right = Camera.main.transform.right;
+            Vector3 forward = this.transform.forward;
+            Vector3 right = this.transform.right;
+            Vector3 up = this.transform.up;
 
             forward.y = 0;
             right.y = 0;
+
             forward = forward.normalized;
             right = right.normalized;
+            up = up.normalized;
 
             this.transform.position +=
                 (forward * direction.z * Time.deltaTime * this.SpeedMultiplier * this.SprintMultiplier) +
-                (right * direction.x * Time.deltaTime * this.SpeedMultiplier * this.SprintMultiplier);
+                (right * direction.x * Time.deltaTime * this.SpeedMultiplier * this.SprintMultiplier) +
+                (up * direction.y * Time.deltaTime * this.SpeedMultiplier * this.SprintMultiplier);
         }
 
         else {
             this.transform.position +=
                 (this.transform.forward * direction.z * Time.deltaTime * this.SpeedMultiplier * this.SprintMultiplier) +
-                (this.transform.right * direction.x * Time.deltaTime * this.SpeedMultiplier * this.SprintMultiplier);
+                (this.transform.right * direction.x * Time.deltaTime * this.SpeedMultiplier * this.SprintMultiplier) +
+                (this.transform.up * direction.y * Time.deltaTime * this.SpeedMultiplier * this.SprintMultiplier);
         }
     }
 }
