@@ -24,6 +24,13 @@ public class ToggleGhostMod : MonoBehaviour {
 
     void Toggle() {
         this.Log("GHOST", $"Toggling");
+        this.camera = Helpers.GetCurrentCamera();
+
+        if (this.camera == null
+            || !this.camera.enabled) {
+            return;
+        }
+
         PlayerControllerB? player = this.player;
         if (player == null || this.ogParent == null) {
             this.player = Helpers.LocalPlayer;
@@ -31,15 +38,10 @@ public class ToggleGhostMod : MonoBehaviour {
 
             if (player == null) return;
 
-            this.camera = player.gameplayCamera;
-
-            if (this.camera == null) {
-                return;
-            }
-
             this.ogParent = this.camera.transform.parent;
             return;
         }
+
         this.toggleOn = !this.toggleOn;
 
         this.Log("GHOST", $"{this.toggleOn} cam={this.camera}");
