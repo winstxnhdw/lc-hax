@@ -30,13 +30,18 @@ public class RandomCommand : ICommand {
         GameObject previousTeleporterTransform = Helpers.Copy(inverseTeleporter.transform);
         GameObject previousCupboardTransform = Helpers.Copy(cupboard.transform);
 
-        _ = new GameObject().AddComponent<TransientBehaviour>()
-                      .Init(Helpers.PlaceObjectAtTransform(targetPlayer.transform, inverseTeleporter, new Vector3(0.0f, 1.5f, 0.0f), new Vector3(-90.0f, 0.0f, 0.0f)), 6.0f)
-                      .Dispose(() => Helpers.PlaceObjectAtTransform(previousTeleporterTransform.transform, inverseTeleporter).Invoke(0));
+        Vector3 teleporterPositionOffset = new(0.0f, 1.5f, 0.0f);
+        Vector3 teleporterRotationOffset = new(-90.0f, 0.0f, 0.0f);
 
-        _ = new GameObject().AddComponent<TransientBehaviour>()
-                            .Init(Helpers.PlaceObjectAtPosition(targetPlayer.transform, cupboard, new Vector3(0.0f, 1.75f, 0.0f), new Vector3(90.0f, 0.0f, 0.0f)), 6.0f)
-                            .Dispose(() => Helpers.PlaceObjectAtTransform(previousCupboardTransform.transform, cupboard).Invoke(0));
+        _ = new GameObject()
+            .AddComponent<TransientBehaviour>()
+            .Init(Helpers.PlaceObjectAtTransform(targetPlayer.transform, inverseTeleporter, teleporterPositionOffset, teleporterRotationOffset), 6.0f)
+            .Dispose(() => Helpers.PlaceObjectAtTransform(previousTeleporterTransform.transform, inverseTeleporter, teleporterPositionOffset, teleporterRotationOffset).Invoke(0));
+
+        _ = new GameObject()
+            .AddComponent<TransientBehaviour>()
+            .Init(Helpers.PlaceObjectAtPosition(targetPlayer.transform, cupboard, new Vector3(0.0f, 1.75f, 0.0f), new Vector3(90.0f, 0.0f, 0.0f)), 6.0f)
+            .Dispose(() => Helpers.PlaceObjectAtTransform(previousCupboardTransform.transform, cupboard).Invoke(0));
 
         return new Result(true);
     }
