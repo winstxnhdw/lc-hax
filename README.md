@@ -35,7 +35,8 @@ Execute `launch.bat` when you have launched the game.
 | Inverse transport a player | `/random <player>`      |
 | Play noise on player       | `/noise <player>`       |
 | Kill player                | `/kill <player>`        |
-| Kill all players           | `/kill`                 |
+| Kill all players           | `/kill --all`           |
+| Kill self                  | `/kill`                 |
 | List all players           | `/players`              |
 | End the game               | `/end`                  |
 | Toggle God mode            | `/god`                  |
