@@ -61,7 +61,7 @@ public class Loader : MonoBehaviour {
         Loader.AddHaxModules<ShovelMod>();
         Loader.AddHaxModules<WeightMod>();
         Loader.AddHaxModules<SaneMod>();
-        Loader.AddHaxModules<NightVisionMod>();
+        Loader.AddHaxModules<ClearVisionMod>();
         Loader.AddHaxModules<AlwaysChatMod>();
     }
 
