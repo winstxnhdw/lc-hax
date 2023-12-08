@@ -48,46 +48,40 @@ public class ChibakuTenseiCommand : ICommand {
         Vector3 finalClosingIn = Vector3.forward * 1.25f;
         Vector3 closingInDirection = Vector3.forward;
 
-        _ = new GameObject().AddComponent<TransientBehaviour>().Init(
-            (timeDelta) => {
+        _ = Helpers.CreateComponent<TransientBehaviour>()
+            .Init((timeDelta) => {
                 distanceFromPlayerMultiplier = Mathf.Clamp(distanceFromPlayerMultiplier - (timeDelta * 3), 1, 5);
                 closingInDirection = finalClosingIn * distanceFromPlayerMultiplier;
                 changingTargetPlayerOffset.y += timeDelta * 0.1f;
                 increasingSpiral += spiralPerSecond * timeDelta;
             }, duration - 3);
 
-        _ = new GameObject()
-            .AddComponent<TransientBehaviour>()
+        _ = Helpers.CreateComponent<TransientBehaviour>()
             .Init((_) => {
                 Helpers.PlaceObjectAtTransform(targetPlayer.transform, cupboard, changingTargetPlayerOffset).Invoke(_);
             }, duration);
 
-        _ = new GameObject()
-            .AddComponent<TransientBehaviour>()
+        _ = Helpers.CreateComponent<TransientBehaviour>()
             .Init((_) => {
                 Helpers.PlaceObjectAtTransform(targetPlayer.transform, jackOLantern, changingTargetPlayerOffset + (Vector3.up * 4f)).Invoke(_);
             }, duration);
 
-        _ = new GameObject()
-            .AddComponent<TransientBehaviour>()
+        _ = Helpers.CreateComponent<TransientBehaviour>()
             .Init((_) => {
                 Helpers.PlaceObjectAtTransform(targetPlayer.transform, romanticTable, changingTargetPlayerOffset + (Quaternion.Euler(0, increasingSpiral, 0) * closingInDirection) + this.spinningY, Vector3.zero).Invoke(_);
             }, duration);
 
-        _ = new GameObject()
-            .AddComponent<TransientBehaviour>()
+        _ = Helpers.CreateComponent<TransientBehaviour>()
             .Init((_) => {
                 Helpers.PlaceObjectAtTransform(targetPlayer.transform, fileCabinet, changingTargetPlayerOffset + (Quaternion.Euler(0, increasingSpiral + 90, 0) * closingInDirection) + this.spinningY, new Vector3(90, 0, 0)).Invoke(_);
             }, duration);
 
-        _ = new GameObject()
-            .AddComponent<TransientBehaviour>()
+        _ = Helpers.CreateComponent<TransientBehaviour>()
             .Init((_) => {
                 Helpers.PlaceObjectAtTransform(targetPlayer.transform, table, changingTargetPlayerOffset + (Quaternion.Euler(0, increasingSpiral + 180, 0) * closingInDirection) + this.spinningY, Vector3.zero).Invoke(_);
             }, duration);
 
-        _ = new GameObject()
-            .AddComponent<TransientBehaviour>()
+        _ = Helpers.CreateComponent<TransientBehaviour>()
             .Init((_) => {
                 Helpers.PlaceObjectAtTransform(targetPlayer.transform, recordPlayer, changingTargetPlayerOffset + (Quaternion.Euler(0, increasingSpiral + 270, 0) * closingInDirection) + this.spinningY).Invoke(_);
             }, duration);

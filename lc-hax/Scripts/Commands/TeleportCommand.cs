@@ -58,9 +58,9 @@ public class TeleportCommand : ICommand {
         Vector3 rotationOffset = new(-90.0f, 0.0f, 0.0f);
         Vector3 positionOffset = new(0.0f, 1.5f, 0.0f);
 
-        _ = new GameObject().AddComponent<TransientBehaviour>()
-                            .Init(Helpers.PlaceObjectAtPosition(newTransform.transform, teleporter, positionOffset, rotationOffset), 6.0f)
-                            .Dispose(() => Helpers.PlaceObjectAtPosition(previousTransform.transform, teleporter, positionOffset, rotationOffset).Invoke(0));
+        _ = Helpers.CreateComponent<TransientBehaviour>()
+                   .Init(Helpers.PlaceObjectAtPosition(newTransform.transform, teleporter, positionOffset, rotationOffset), 6.0f)
+                   .Dispose(() => Helpers.PlaceObjectAtPosition(previousTransform.transform, teleporter, positionOffset, rotationOffset).Invoke(0));
 
         return new Result(true);
     }
