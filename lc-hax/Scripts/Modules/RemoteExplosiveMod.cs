@@ -51,14 +51,4 @@ public class RemoteExplosiveMod : MonoBehaviour {
             }
         }
     }
-
-    private void Log(string tag, string msg) {
-        try {
-            Console.Print(tag, msg);
-
-        }
-        catch {
-
-        }
-    }
 }
