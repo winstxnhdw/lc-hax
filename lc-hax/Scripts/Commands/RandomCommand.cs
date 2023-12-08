@@ -28,13 +28,11 @@ public class RandomCommand : ICommand {
 
         inverseTeleporter.PressTeleportButtonServerRpc();
 
-        _ = new GameObject()
-            .AddComponent<TransientBehaviour>()
+        _ = Helpers.CreateComponent<TransientBehaviour>()
             .Init(Helpers.PlaceObjectAtTransform(targetPlayer.transform, inverseTeleporter, teleporterPositionOffset, teleporterRotationOffset), 6.0f)
             .Dispose(() => Helpers.PlaceObjectAtTransform(previousTeleporterTransform.transform, inverseTeleporter, teleporterPositionOffset, teleporterRotationOffset).Invoke(0));
 
-        _ = new GameObject()
-            .AddComponent<TransientBehaviour>()
+        _ = Helpers.CreateComponent<TransientBehaviour>()
             .Init(Helpers.PlaceObjectAtPosition(targetPlayer.transform, cupboard, new Vector3(0.0f, 1.75f, 0.0f), new Vector3(90.0f, 0.0f, 0.0f)), 6.0f)
             .Dispose(() => Helpers.PlaceObjectAtTransform(previousCupboardTransform.transform, cupboard).Invoke(0));
 

@@ -15,7 +15,7 @@ public class NoiseCommand : ICommand {
             return;
         }
 
-        _ = new GameObject().AddComponent<TransientBehaviour>()
-                            .Init((_) => RoundManager.Instance.PlayAudibleNoise(player.transform.position, 10000.0f, 10000.0f, 10, false), 60.0f);
+        _ = Helpers.CreateComponent<TransientBehaviour>()
+                   .Init((_) => RoundManager.Instance.PlayAudibleNoise(player.transform.position, 10000.0f, 10000.0f, 10, false), 60.0f);
     }
 }
