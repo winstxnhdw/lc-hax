@@ -1,3 +1,6 @@
+using System.Linq;
+using UnityEngine;
+
 namespace Hax;
 
 public static partial class Helpers {
@@ -9,4 +12,11 @@ public static partial class Helpers {
 
         StartOfRound.Instance.BuyShipUnlockableServerRpc((int)unlockable, terminal.groupCredits);
     }
+
+    public static PlaceableShipObject? GetUnlockable(Unlockables unlockable) =>
+        Object.FindObjectsOfType<PlaceableShipObject>()
+              .FirstOrDefault(
+                placeableObject => placeableObject.unlockableID == (int)unlockable
+            );
+
 }

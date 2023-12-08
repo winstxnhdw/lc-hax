@@ -1,4 +1,3 @@
-using System.Linq;
 using UnityEngine;
 using GameNetcodeStuff;
 
@@ -17,13 +16,7 @@ public class RandomCommand : ICommand {
             return new Result(message: "ShipTeleporter not found!");
         }
 
-        inverseTeleporter.PressTeleportButtonServerRpc();
-
-        PlaceableShipObject? cupboard =
-            Object.FindObjectsOfType<PlaceableShipObject>()
-                  .FirstOrDefault(placeableObject => placeableObject.unlockableID == (int)Unlockables.CUPBOARD);
-
-        if (cupboard == null) {
+        if (!Helpers.Extant(Helpers.GetUnlockable(Unlockables.CUPBOARD), out PlaceableShipObject cupboard)) {
             return new Result(message: "Cupboard not found!");
         }
 
@@ -32,6 +25,8 @@ public class RandomCommand : ICommand {
 
         Vector3 teleporterPositionOffset = new(0.0f, 1.5f, 0.0f);
         Vector3 teleporterRotationOffset = new(-90.0f, 0.0f, 0.0f);
+
+        inverseTeleporter.PressTeleportButtonServerRpc();
 
         _ = new GameObject()
             .AddComponent<TransientBehaviour>()
