@@ -1,35 +1,25 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 
+namespace Hax;
+
 public class QuickKeyboardMoveAround : MonoBehaviour {
-    public float speedMultiplier = 20;
-    public bool onlyXZPlaneMovement = false;
-    Vector3 direction;
+    public float SpeedMultiplier { get; private set; } = 20;
+    public bool OnlyXZPlaneMovement { get; private set; } = false;
+    float SprintMultiplier { get; set; } = 1;
 
-    float sprintMultiplier = 1;
-
-    // Update is called once per frame
     void Update() {
-        this.direction = Vector3.zero;
+        if (!Helpers.Extant(Keyboard.current, out Keyboard keyboard)) return;
 
-        var keyboard = Keyboard.current;
+        Vector3 direction = Vector3.zero;
+        direction.z += keyboard.wKey.ReadValue();
+        direction.z -= keyboard.sKey.ReadValue();
+        direction.x += keyboard.dKey.ReadValue();
+        direction.x -= keyboard.aKey.ReadValue();
 
-        if (keyboard == null) return;
+        this.SprintMultiplier = keyboard.shiftKey.IsPressed() ? this.SprintMultiplier + (5 * Time.deltaTime) : 1;
 
-        if (keyboard.shiftKey.IsPressed()) {
-            this.sprintMultiplier += 5 * Time.deltaTime;
-        }
-        else {
-            this.sprintMultiplier = 1;
-        }
-
-        this.direction.z += keyboard.wKey.ReadValue();
-        this.direction.z -= keyboard.sKey.ReadValue();
-        this.direction.x += keyboard.dKey.ReadValue();
-        this.direction.x -= keyboard.aKey.ReadValue();
-
-        if (this.onlyXZPlaneMovement) {
-            //ref:https://www.youtube.com/watch?v=7kGCrq1cJew
+        if (this.OnlyXZPlaneMovement) {
             Vector3 forward = Camera.main.transform.forward;
             Vector3 right = Camera.main.transform.right;
 
@@ -39,13 +29,14 @@ public class QuickKeyboardMoveAround : MonoBehaviour {
             right = right.normalized;
 
             this.transform.position +=
-                forward * this.direction.z * Time.deltaTime * this.speedMultiplier * this.sprintMultiplier
-                + right * this.direction.x * Time.deltaTime * this.speedMultiplier * this.sprintMultiplier;
+                (forward * direction.z * Time.deltaTime * this.SpeedMultiplier * this.SprintMultiplier) +
+                (right * direction.x * Time.deltaTime * this.SpeedMultiplier * this.SprintMultiplier);
         }
+
         else {
             this.transform.position +=
-                this.transform.forward * this.direction.z * Time.deltaTime * this.speedMultiplier * this.sprintMultiplier
-                + this.transform.right * this.direction.x * Time.deltaTime * this.speedMultiplier * this.sprintMultiplier;
+                (this.transform.forward * direction.z * Time.deltaTime * this.SpeedMultiplier * this.SprintMultiplier) +
+                (this.transform.right * direction.x * Time.deltaTime * this.SpeedMultiplier * this.SprintMultiplier);
         }
     }
 }
