@@ -29,17 +29,6 @@ public static class Console {
 
     static Reflector? HUDManagerReflector => Helpers.HUDManager == null ? null : Reflector.Target(Helpers.HUDManager);
 
-    public static void Open() {
-        if (Helpers.HUDManager == null || Helpers.LocalPlayer == null) return;
-
-        RectTransform hudTransform = Helpers.HUDManager.GetComponent<RectTransform>();
-        hudTransform.anchoredPosition = new Vector2(hudTransform.anchoredPosition.x, 0.0f);
-
-        Helpers.LocalPlayer.isPlayerDead = !Helpers.LocalPlayer.isPlayerDead;
-        Helpers.HUDManager.chatTextField.Select();
-        Helpers.HUDManager.PingHUDElement(Helpers.HUDManager.Chat, 0.1f, 1.0f, 1.0f);
-    }
-
     public static void Print(string name, string? message) {
         if (Helpers.HUDManager == null || string.IsNullOrWhiteSpace(message)) return;
 
