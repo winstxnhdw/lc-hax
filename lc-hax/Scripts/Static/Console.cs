@@ -1,6 +1,5 @@
-using System.Collections.Generic;
 using System.Linq;
-using UnityEngine;
+using System.Collections.Generic;
 using UnityEngine.EventSystems;
 
 namespace Hax;
@@ -24,7 +23,7 @@ public static class Console {
         { "/scrap", new ScrapCommand() },
         { "/revive", new ReviveCommand() },
         { "/chibaku", new ChibakuTenseiCommand() },
-        { "/pumpkin", new PumpkinCommand()},
+        { "/pumpkin", new PumpkinCommand() },
     };
 
     static Reflector? HUDManagerReflector => Helpers.HUDManager == null ? null : Reflector.Target(Helpers.HUDManager);

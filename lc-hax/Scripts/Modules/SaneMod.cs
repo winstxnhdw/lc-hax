@@ -17,7 +17,7 @@ public class SaneMod : MonoBehaviour {
             localPlayer.insanityLevel = 0.0f;
             localPlayer.insanitySpeedMultiplier = 0.0f;
 
-            yield return new WaitForSeconds(2.0f);
+            yield return new WaitForEndOfFrame();
         }
     }
 

@@ -7,7 +7,7 @@ public class ChatMod : MonoBehaviour {
     IEnumerator ShowHUD() {
         while (true) {
             Helpers.HUDManager?.HideHUD(false);
-            yield return new WaitForSeconds(1.0f);
+            yield return new WaitForEndOfFrame();
         }
     }
 
