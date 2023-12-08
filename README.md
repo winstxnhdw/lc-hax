@@ -3,7 +3,7 @@
 [![main.yml](https://github.com/winstxnhdw/lc-hax/actions/workflows/main.yml/badge.svg)](https://github.com/winstxnhdw/lc-hax/actions/workflows/main.yml)
 [![dependabot.yml](https://github.com/winstxnhdw/lc-hax/actions/workflows/dependabot.yml/badge.svg)](https://github.com/winstxnhdw/lc-hax/actions/workflows/dependabot.yml)
 
-Probably the most creative portable Windows CLI-only internal cheat for [Lethal Company](https://en.wikipedia.org/wiki/Lethal_Company).
+Probably the most creative portable Windows CLI-only internal cheat for [Lethal Company](https://en.wikipedia.org/wiki/Lethal_Company). No features in this mod require host privileges.
 
 ## Requirements
 
@@ -26,7 +26,6 @@ Execute `launch.bat` when you have launched the game.
 | Action                     | Command                 |
 | -------------------------- | ----------------------- |
 | Modify shovel damage       | `/shovel <force=1>`     |
-| Increase scrap value       | `/scrap <value=-1>`     |
 | Teleport to a player       | `/tp <player>`          |
 | Teleport to a location     | `/tp <x> <y> <z>`       |
 | Teleport player to player  | `/tp <player> <player>` |
@@ -42,6 +41,6 @@ Execute `launch.bat` when you have launched the game.
 | Toggle God mode            | `/god`                  |
 | Unlock all doors           | `/unlock`               |
 | Stun enemies               | `/stun`                 |
-| Heal player                | `/heal`                 |
+| Heal self                  | `/heal`                 |
 | Explode all mines          | `/explode`              |
 | Explode all jetpacks       | `/explode jet`          |
