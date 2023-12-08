@@ -21,7 +21,6 @@ public static class Console {
         { "/stun", new StunCommand() },
         { "/heal", new HealCommand() },
         { "/scrap", new ScrapCommand() },
-        { "/revive", new ReviveCommand() },
         { "/chibaku", new ChibakuTenseiCommand() },
         { "/pumpkin", new PumpkinCommand() },
     };
