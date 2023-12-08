@@ -62,7 +62,7 @@ public class Loader : MonoBehaviour {
         Loader.AddHaxModules<WeightMod>();
         Loader.AddHaxModules<SaneMod>();
         Loader.AddHaxModules<ClearVisionMod>();
-        Loader.AddHaxModules<AlwaysChatMod>();
+        Loader.AddHaxModules<ChatMod>();
     }
 
     public static void Unload() {
