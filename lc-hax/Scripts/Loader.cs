@@ -8,8 +8,8 @@ using HarmonyLib;
 namespace Hax;
 
 public class Loader : MonoBehaviour {
-    static GameObject HaxGameObjects { get; } = new GameObject();
-    static GameObject HaxModules { get; } = new GameObject();
+    static GameObject HaxGameObjects { get; } = new();
+    static GameObject HaxModules { get; } = new();
     static Harmony Harmony { get; } = new("winstxnhdw.lc-hax");
 
     static void AddHaxModules<T>() where T : Component => Loader.HaxModules.AddComponent<T>();
