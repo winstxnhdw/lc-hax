@@ -4,19 +4,20 @@ using UnityEngine;
 namespace Hax;
 
 public static partial class Helpers {
-    public static void BuyUnlockable(Unlockables unlockable) {
+    public static void BuyUnlockable(Unlockable unlockable) {
         if (!Helpers.Extant(Helpers.Terminal, out Terminal terminal)) {
             Console.Print("SYSTEM", "Terminal not found!");
             return;
         }
 
-        StartOfRound.Instance.BuyShipUnlockableServerRpc((int)unlockable, terminal.groupCredits);
+        Helpers.StartOfRound?.BuyShipUnlockableServerRpc(
+            (int)unlockable,
+            terminal.groupCredits
+        );
     }
 
-    public static PlaceableShipObject? GetUnlockable(Unlockables unlockable) =>
+    public static PlaceableShipObject? GetUnlockable(Unlockable unlockable) =>
         Object.FindObjectsOfType<PlaceableShipObject>()
-              .FirstOrDefault(
-                placeableObject => placeableObject.unlockableID == (int)unlockable
-            );
+              .FirstOrDefault(placeableObject => unlockable.Is(placeableObject.unlockableID));
 
 }

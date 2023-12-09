@@ -1,4 +1,4 @@
-public enum Unlockables {
+public enum Unlockable {
     ORANGE_SUIT = 0,
     GREEN_SUIT = 1,
     HAZARD_SUIT = 2,
@@ -19,5 +19,11 @@ public enum Unlockables {
     SIGNAL_TRANSMITTER = 17,
     LOUD_HORN = 18,
     INVERSE_TELEPORTER = 19,
-    JACK_O_LANTERN = 20,
+    JACK_O_LANTERN = 20
+}
+
+public static class UnlockableExtension {
+    public static bool Is(this Unlockable unlockable, int unlockableId) {
+        return unlockableId == (int)unlockable;
+    }
 }

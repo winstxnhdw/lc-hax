@@ -40,7 +40,7 @@ public class TeleportCommand : ICommand {
     }
 
     Result TeleportPlayerToPosition(PlayerControllerB player, Vector3 position) {
-        Helpers.BuyUnlockable(Unlockables.TELEPORTER);
+        Helpers.BuyUnlockable(Unlockable.TELEPORTER);
         HaxObjects.Instance?.ShipTeleporters.Renew();
 
         if (!Helpers.Extant(Helpers.Teleporter, out ShipTeleporter teleporter)) {

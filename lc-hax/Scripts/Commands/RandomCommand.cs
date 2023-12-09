@@ -9,14 +9,14 @@ public class RandomCommand : ICommand {
             return new Result(message: "Player not found!");
         }
 
-        Helpers.BuyUnlockable(Unlockables.INVERSE_TELEPORTER);
+        Helpers.BuyUnlockable(Unlockable.INVERSE_TELEPORTER);
         HaxObjects.Instance?.ShipTeleporters.Renew();
 
         if (!Helpers.Extant(Helpers.InverseTeleporter, out ShipTeleporter inverseTeleporter)) {
             return new Result(message: "ShipTeleporter not found!");
         }
 
-        if (!Helpers.Extant(Helpers.GetUnlockable(Unlockables.CUPBOARD), out PlaceableShipObject cupboard)) {
+        if (!Helpers.Extant(Helpers.GetUnlockable(Unlockable.CUPBOARD), out PlaceableShipObject cupboard)) {
             return new Result(message: "Cupboard not found!");
         }
 
