@@ -1,14 +1,13 @@
 using System;
 using System.Linq;
 using GameNetcodeStuff;
-using UnityEngine;
 
 namespace Hax;
 
 public static partial class Helpers {
     public static PlayerControllerB? LocalPlayer => GameNetworkManager.Instance.localPlayerController;
 
-    public static PlayerControllerB[]? Players => StartOfRound.Instance.allPlayerScripts;
+    public static PlayerControllerB[]? Players => Helpers.StartOfRound?.allPlayerScripts;
 
     public static PlayerControllerB GetPlayer(string playerNameOrId) {
         PlayerControllerB[]? players = Helpers.Players;

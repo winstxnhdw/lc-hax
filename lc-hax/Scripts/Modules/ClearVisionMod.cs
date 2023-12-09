@@ -14,7 +14,7 @@ public class ClearVisionMod : MonoBehaviour {
                 continue;
             }
 
-            if (!Helpers.Extant(StartOfRound.Instance, out StartOfRound startOfRound)) {
+            if (!Helpers.Extant(Helpers.StartOfRound, out StartOfRound startOfRound)) {
                 yield return new WaitForEndOfFrame();
                 continue;
             }
