@@ -17,5 +17,5 @@ public static partial class Helper {
               throw new Exception("Player not found!");
     }
 
-
+    public static PlayerControllerB GetPlayer(int playerId) => Helper.GetPlayer(playerId.ToString());
 }
