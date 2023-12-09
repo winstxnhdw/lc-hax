@@ -18,11 +18,11 @@ public class PumpkinCommand : ICommand {
             return new Result(message: "Player not found!");
         }
 
-        Helpers.BuyUnlockable(Unlockables.JACK_O_LANTERN);
+        Helpers.BuyUnlockable(Unlockable.JACK_O_LANTERN);
 
         PlaceableShipObject? jack =
             Object.FindObjectsOfType<PlaceableShipObject>()
-                  .FirstOrDefault(placeableObject => placeableObject.unlockableID == (int)Unlockables.JACK_O_LANTERN);
+                  .FirstOrDefault(placeableObject => placeableObject.unlockableID == (int)Unlockable.JACK_O_LANTERN);
 
         if (jack == null) {
             return new Result(message: "jack not found!");

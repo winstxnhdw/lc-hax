@@ -8,7 +8,7 @@ public class HomeCommand : ICommand {
             return new Result(message: "Player not found!");
         }
 
-        Helpers.BuyUnlockable(Unlockables.TELEPORTER);
+        Helpers.BuyUnlockable(Unlockable.TELEPORTER);
         HaxObjects.Instance?.ShipTeleporters.Renew();
 
         if (!Helpers.Extant(Helpers.Teleporter, out ShipTeleporter teleporter)) {
@@ -22,7 +22,7 @@ public class HomeCommand : ICommand {
 
     public void Execute(string[] args) {
         if (args.Length < 1) {
-            StartOfRound.Instance.ForcePlayerIntoShip();
+            Helpers.StartOfRound?.ForcePlayerIntoShip();
             return;
         }
 
