@@ -26,6 +26,7 @@ Execute `launch.bat` when you have launched the game.
 | Action                     | Command                 |
 | -------------------------- | ----------------------- |
 | Modify shovel damage       | `/shovel <force=1>`     |
+| Chibaku Tensei             | `/ct <player>`          |
 | Teleport to a player       | `/tp <player>`          |
 | Teleport to a location     | `/tp <x> <y> <z>`       |
 | Teleport player to player  | `/tp <player> <player>` |
@@ -44,4 +45,3 @@ Execute `launch.bat` when you have launched the game.
 | Heal self                  | `/heal`                 |
 | Explode all mines          | `/explode`              |
 | Explode all jetpacks       | `/explode jet`          |
-| Chibaku Tensei             | `/ct`                   |
