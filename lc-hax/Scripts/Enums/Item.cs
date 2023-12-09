@@ -1,4 +1,4 @@
-public enum Items {
+public enum Item {
     PRO_FLASHLIGHT = 1,
     ZAP_GUN = 5,
     FLASHLIGHT = 6,

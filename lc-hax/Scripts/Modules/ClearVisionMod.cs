@@ -9,12 +9,12 @@ public class ClearVisionMod : MonoBehaviour {
         HDAdditionalLightData? lightData = null;
 
         while (true) {
-            if (!Helpers.Extant(TimeOfDay.Instance, out TimeOfDay timeOfDay)) {
+            if (!Helper.Extant(TimeOfDay.Instance, out TimeOfDay timeOfDay)) {
                 yield return new WaitForEndOfFrame();
                 continue;
             }
 
-            if (!Helpers.Extant(Helpers.StartOfRound, out StartOfRound startOfRound)) {
+            if (!Helper.Extant(Helper.StartOfRound, out StartOfRound startOfRound)) {
                 yield return new WaitForEndOfFrame();
                 continue;
             }

@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Hax;
 
-public static partial class Helpers {
+public static partial class Helper {
     static ShipBuildModeManager? ShipBuildModeManager => ShipBuildModeManager.Instance;
 
     public static Action<float> PlaceObjectAtTransform<T, M>(
@@ -19,7 +19,7 @@ public static partial class Helpers {
                           .parentObject
                           .GetComponent<NetworkObject>();
 
-            Helpers.ShipBuildModeManager?.PlaceShipObjectServerRpc(
+            Helper.ShipBuildModeManager?.PlaceShipObjectServerRpc(
                 targetObject.position + positionOffset,
                 targetObject.eulerAngles + rotationOffset,
                 networkObject,
@@ -40,7 +40,7 @@ public static partial class Helpers {
                           .parentObject
                           .GetComponent<NetworkObject>();
 
-            Helpers.ShipBuildModeManager?.PlaceShipObjectServerRpc(
+            Helper.ShipBuildModeManager?.PlaceShipObjectServerRpc(
                 targetObject.position + positionOffset,
                 rotationOffset,
                 networkObject,
@@ -60,7 +60,7 @@ public static partial class Helpers {
                           .parentObject
                           .GetComponent<NetworkObject>();
 
-            Helpers.ShipBuildModeManager?.PlaceShipObjectServerRpc(
+            Helper.ShipBuildModeManager?.PlaceShipObjectServerRpc(
                 position,
                 rotation,
                 networkObject,

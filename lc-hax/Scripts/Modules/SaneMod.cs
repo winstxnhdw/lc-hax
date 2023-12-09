@@ -7,7 +7,7 @@ namespace Hax;
 public class SaneMod : MonoBehaviour {
     IEnumerator SetSanity() {
         while (true) {
-            if (!Helpers.Extant(Helpers.LocalPlayer, out PlayerControllerB localPlayer)) {
+            if (!Helper.Extant(Helper.LocalPlayer, out PlayerControllerB localPlayer)) {
                 yield return new WaitForEndOfFrame();
                 continue;
             }

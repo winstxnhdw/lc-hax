@@ -8,7 +8,7 @@ public class MoneyCommand : ICommand {
             return;
         }
 
-        if (!Helpers.Extant(Helpers.Terminal, out Terminal terminal)) {
+        if (!Helper.Extant(Helper.Terminal, out Terminal terminal)) {
             Console.Print("SYSTEM", "Terminal not found!");
             return;
         }

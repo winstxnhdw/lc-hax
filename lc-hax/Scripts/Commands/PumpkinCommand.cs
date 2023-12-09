@@ -14,11 +14,11 @@ public class PumpkinCommand : ICommand {
     private Vector3 toOutwardsPos = Vector3.zero;
 
     Result TeleportPlayerToRandom(string[] args) {
-        if (!Helpers.Extant(Helpers.GetPlayer(args[0]), out PlayerControllerB targetPlayer)) {
+        if (!Helper.Extant(Helper.GetPlayer(args[0]), out PlayerControllerB targetPlayer)) {
             return new Result(message: "Player not found!");
         }
 
-        Helpers.BuyUnlockable(Unlockable.JACK_O_LANTERN);
+        Helper.BuyUnlockable(Unlockable.JACK_O_LANTERN);
 
         PlaceableShipObject? jack =
             Object.FindObjectsOfType<PlaceableShipObject>()
@@ -61,7 +61,7 @@ public class PumpkinCommand : ICommand {
         GameObject g1 = new();
         _ = g1.AddComponent<TransientBehaviour>().Init(
             (x) => {
-                Helpers.PlaceObjectAtPosition(
+                Helper.PlaceObjectAtPosition(
                     jack,
                     Vector3.Lerp(toPlayerPos, this.toOutwardsPos, pingpongValue) + bobbing,
                     Quaternion.LookRotation(targetPlayer.transform.position - jack.transform.position, Vector3.up).eulerAngles + new Vector3(220, -90, 0)).Invoke(x);

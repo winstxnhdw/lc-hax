@@ -8,7 +8,7 @@ public class QuickMouseCameraLookAround : MonoBehaviour {
     public float Pitch { get; private set; } = 0;
 
     void Update() {
-        if (!Helpers.Extant(Mouse.current, out Mouse mouse)) {
+        if (!Helper.Extant(Mouse.current, out Mouse mouse)) {
             return;
         }
 
