@@ -24,18 +24,18 @@ public static class Console {
         { "/pumpkin", new PumpkinCommand() },
     };
 
-    static Reflector? HUDManagerReflector => Helpers.HUDManager == null ? null : Reflector.Target(Helpers.HUDManager);
+    static Reflector? HUDManagerReflector => Helper.HUDManager == null ? null : Reflector.Target(Helper.HUDManager);
 
     public static void Print(string name, string? message) {
-        if (Helpers.HUDManager == null || string.IsNullOrWhiteSpace(message)) return;
+        if (Helper.HUDManager == null || string.IsNullOrWhiteSpace(message)) return;
 
         _ = Console.HUDManagerReflector?.InvokeInternalMethod("AddChatMessage", message, name);
 
-        if (Helpers.HUDManager.localPlayer.isTypingChat) {
-            Helpers.HUDManager.localPlayer.isTypingChat = false;
-            Helpers.HUDManager.typingIndicator.enabled = false;
-            Helpers.HUDManager.chatTextField.text = "";
-            Helpers.HUDManager.PingHUDElement(Helpers.HUDManager.Chat, 1.0f, 1.0f, 0.2f);
+        if (Helper.HUDManager.localPlayer.isTypingChat) {
+            Helper.HUDManager.localPlayer.isTypingChat = false;
+            Helper.HUDManager.typingIndicator.enabled = false;
+            Helper.HUDManager.chatTextField.text = "";
+            Helper.HUDManager.PingHUDElement(Helper.HUDManager.Chat, 1.0f, 1.0f, 0.2f);
             EventSystem.current.SetSelectedGameObject(null);
         }
     }

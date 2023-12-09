@@ -22,7 +22,7 @@ public class PhantomMod : MonoBehaviour {
 
     void Toggle() {
         this.Log("GHOST", $"Toggling");
-        this.camera = Helpers.GetCurrentCamera();
+        this.camera = Helper.GetCurrentCamera();
 
         if (this.camera == null
             || !this.camera.enabled) {
@@ -31,7 +31,7 @@ public class PhantomMod : MonoBehaviour {
 
         PlayerControllerB? player = this.player;
         if (player == null || this.ogParent == null) {
-            this.player = Helpers.LocalPlayer;
+            this.player = Helper.LocalPlayer;
             this.Log("GHOST", $"trying to grab player");
 
             if (player == null) return;

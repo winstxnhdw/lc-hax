@@ -1,5 +1,5 @@
 namespace Hax;
 
-public static partial class Helpers {
-    public static Terminal? Terminal => Helpers.HUDManager == null ? null : Reflector.Target(Helpers.HUDManager).GetInternalField<Terminal>("terminalScript");
+public static partial class Helper {
+    public static Terminal? Terminal => Helper.HUDManager == null ? null : Reflector.Target(Helper.HUDManager).GetInternalField<Terminal>("terminalScript");
 }

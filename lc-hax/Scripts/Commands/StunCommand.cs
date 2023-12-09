@@ -11,7 +11,7 @@ public class StunCommand : ICommand {
             return;
         }
 
-        if (!Helpers.Extant(Helpers.LocalPlayer, out PlayerControllerB player)) {
+        if (!Helper.Extant(Helper.LocalPlayer, out PlayerControllerB player)) {
             Console.Print("SYSTEM", "Could not find the player!");
             return;
         }

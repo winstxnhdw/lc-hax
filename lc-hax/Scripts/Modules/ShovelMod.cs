@@ -8,11 +8,11 @@ public class ShovelMod : MonoBehaviour {
     IEnumerator SetShovelForce() {
         while (true) {
             Shovel? localPlayerShovel =
-                HaxObjects.Instance?
+                HaxObject.Instance?
                           .Shovels
                           .Objects?
                           .FirstOrDefault(shovel =>
-                shovel.playerHeldBy.playerClientId == Helpers.LocalPlayer?.playerClientId
+                shovel.playerHeldBy.playerClientId == Helper.LocalPlayer?.playerClientId
             );
 
             if (localPlayerShovel == null) {

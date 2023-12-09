@@ -2,10 +2,10 @@ using UnityEngine;
 
 namespace Hax;
 
-public static partial class Helpers {
+public static partial class Helper {
     public static Camera? GetCurrentCamera() =>
-        Helpers.LocalPlayer?.gameplayCamera != null &&
-        Helpers.LocalPlayer.gameplayCamera.enabled
+        Helper.LocalPlayer?.gameplayCamera != null &&
+        Helper.LocalPlayer.gameplayCamera.enabled
             ? LocalPlayer.gameplayCamera
-            : Helpers.StartOfRound?.spectateCamera;
+            : Helper.StartOfRound?.spectateCamera;
 }

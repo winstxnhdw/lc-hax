@@ -7,7 +7,7 @@ namespace Hax;
 public class KillCommand : ICommand {
     public void Execute(string[] args) {
         if (args.Length < 1) {
-            if (!Helpers.Extant(Helpers.LocalPlayer, out PlayerControllerB localPlayer)) {
+            if (!Helper.Extant(Helper.LocalPlayer, out PlayerControllerB localPlayer)) {
                 Console.Print("SYSTEM", "Player not found!");
                 return;
             }
@@ -17,7 +17,7 @@ public class KillCommand : ICommand {
         }
 
         if (args[0] is "--all") {
-            Helpers.Players
+            Helper.Players
                    .ToList()
                    .ForEach(player => player.DamagePlayerFromOtherClientServerRpc(int.MaxValue, Vector3.zero, -1));
 
@@ -25,7 +25,7 @@ public class KillCommand : ICommand {
             return;
         }
 
-        if (!Helpers.Extant(Helpers.GetPlayer(args[0]), out PlayerControllerB targetPlayer)) {
+        if (!Helper.Extant(Helper.GetPlayer(args[0]), out PlayerControllerB targetPlayer)) {
             Console.Print("SYSTEM", "Player not found!");
             return;
         }

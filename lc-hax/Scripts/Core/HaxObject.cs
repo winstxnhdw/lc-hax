@@ -4,8 +4,8 @@ using UnityEngine;
 
 namespace Hax;
 
-public class HaxObjects : MonoBehaviour {
-    public static HaxObjects? Instance { get; private set; }
+public class HaxObject : MonoBehaviour {
+    public static HaxObject? Instance { get; private set; }
 
     public MultiObjectPool<Shovel> Shovels { get; private set; }
     public MultiObjectPool<ShipTeleporter> ShipTeleporters { get; private set; }
@@ -14,6 +14,6 @@ public class HaxObjects : MonoBehaviour {
         this.Shovels = new(this);
         this.ShipTeleporters = new(this);
 
-        HaxObjects.Instance = this;
+        HaxObject.Instance = this;
     }
 }

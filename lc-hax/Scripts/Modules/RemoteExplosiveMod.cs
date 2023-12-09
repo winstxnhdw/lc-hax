@@ -19,13 +19,13 @@ public class RemoteExplosiveMod : MonoBehaviour {
 
     void Fire() {
         if (this.player == null) {
-            this.player = Helpers.LocalPlayer;
+            this.player = Helper.LocalPlayer;
             return;
         }
 
         if (this.camera == null
             || !this.camera.enabled) {
-            this.camera = Helpers.GetCurrentCamera();
+            this.camera = Helper.GetCurrentCamera();
             return;
         }
 

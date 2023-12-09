@@ -6,7 +6,7 @@ namespace Hax;
 public class ChatMod : MonoBehaviour {
     IEnumerator ShowHUD() {
         while (true) {
-            Helpers.HUDManager?.HideHUD(false);
+            Helper.HUDManager?.HideHUD(false);
             yield return new WaitForEndOfFrame();
         }
     }

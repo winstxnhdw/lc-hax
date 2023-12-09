@@ -4,7 +4,7 @@ namespace Hax;
 
 public class HealCommand : ICommand {
     public void Execute(string[] _) {
-        if (!Helpers.Extant(Helpers.LocalPlayer, out PlayerControllerB localPlayer)) {
+        if (!Helper.Extant(Helper.LocalPlayer, out PlayerControllerB localPlayer)) {
             Console.Print("SYSTEM", "Player not found");
             return;
         }
@@ -12,6 +12,6 @@ public class HealCommand : ICommand {
         localPlayer.health = 100;
         localPlayer.bleedingHeavily = false;
         localPlayer.criticallyInjured = false;
-        Helpers.HUDManager?.UpdateHealthUI(localPlayer.health, false);
+        Helper.HUDManager?.UpdateHealthUI(localPlayer.health, false);
     }
 }

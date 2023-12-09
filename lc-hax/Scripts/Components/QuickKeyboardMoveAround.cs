@@ -9,7 +9,7 @@ public class QuickKeyboardMoveAround : MonoBehaviour {
     float SprintMultiplier { get; set; } = 1;
 
     void Update() {
-        if (!Helpers.Extant(Keyboard.current, out Keyboard keyboard)) return;
+        if (!Helper.Extant(Keyboard.current, out Keyboard keyboard)) return;
 
         Vector3 direction = Vector3.zero;
         direction.z += keyboard.wKey.ReadValue();

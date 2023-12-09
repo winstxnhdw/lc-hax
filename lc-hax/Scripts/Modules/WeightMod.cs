@@ -7,7 +7,7 @@ namespace Hax;
 public class WeightMod : MonoBehaviour {
     IEnumerator SetWeight() {
         while (true) {
-            if (!Helpers.Extant(Helpers.LocalPlayer, out PlayerControllerB player)) {
+            if (!Helper.Extant(Helper.LocalPlayer, out PlayerControllerB player)) {
                 yield return new WaitForEndOfFrame();
                 continue;
             }

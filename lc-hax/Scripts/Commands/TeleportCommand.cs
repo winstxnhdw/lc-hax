@@ -13,8 +13,8 @@ public class TeleportCommand : ICommand {
     }
 
     Result TeleportToPlayer(string[] args) {
-        PlayerControllerB? targetPlayer = Helpers.GetPlayer(args[0]);
-        PlayerControllerB? currentPlayer = Helpers.LocalPlayer;
+        PlayerControllerB? targetPlayer = Helper.GetPlayer(args[0]);
+        PlayerControllerB? currentPlayer = Helper.LocalPlayer;
 
         if (targetPlayer == null || currentPlayer == null) {
             return new Result(message: "Player not found!");
@@ -25,7 +25,7 @@ public class TeleportCommand : ICommand {
     }
 
     Result TeleportToPosition(string[] args) {
-        if (!Helpers.Extant(Helpers.LocalPlayer, out PlayerControllerB currentPlayer)) {
+        if (!Helper.Extant(Helper.LocalPlayer, out PlayerControllerB currentPlayer)) {
             return new Result(message: "Player not found!");
         }
 
@@ -40,33 +40,33 @@ public class TeleportCommand : ICommand {
     }
 
     Result TeleportPlayerToPosition(PlayerControllerB player, Vector3 position) {
-        Helpers.BuyUnlockable(Unlockable.TELEPORTER);
-        HaxObjects.Instance?.ShipTeleporters.Renew();
+        Helper.BuyUnlockable(Unlockable.TELEPORTER);
+        HaxObject.Instance?.ShipTeleporters.Renew();
 
-        if (!Helpers.Extant(Helpers.Teleporter, out ShipTeleporter teleporter)) {
+        if (!Helper.Extant(Helper.Teleporter, out ShipTeleporter teleporter)) {
             return new Result(message: "ShipTeleporter not found!");
         }
 
-        GameObject previousTransform = Helpers.Copy(teleporter.transform);
+        GameObject previousTransform = Helper.Copy(teleporter.transform);
         GameObject newTransform = new();
         newTransform.transform.position = position;
         newTransform.transform.eulerAngles = player.transform.eulerAngles;
 
-        Helpers.SwitchRadarTarget(player);
+        Helper.SwitchRadarTarget(player);
         teleporter.PressTeleportButtonServerRpc();
 
         Vector3 rotationOffset = new(-90.0f, 0.0f, 0.0f);
         Vector3 positionOffset = new(0.0f, 1.5f, 0.0f);
 
-        _ = Helpers.CreateComponent<TransientBehaviour>()
-                   .Init(Helpers.PlaceObjectAtPosition(newTransform.transform, teleporter, positionOffset, rotationOffset), 6.0f)
-                   .Dispose(() => Helpers.PlaceObjectAtPosition(previousTransform.transform, teleporter, positionOffset, rotationOffset).Invoke(0));
+        _ = Helper.CreateComponent<TransientBehaviour>()
+                   .Init(Helper.PlaceObjectAtPosition(newTransform.transform, teleporter, positionOffset, rotationOffset), 6.0f)
+                   .Dispose(() => Helper.PlaceObjectAtPosition(previousTransform.transform, teleporter, positionOffset, rotationOffset).Invoke(0));
 
         return new Result(true);
     }
 
     Result TeleportPlayerToPosition(string[] args) {
-        if (!Helpers.Extant(Helpers.GetPlayer(args[0]), out PlayerControllerB player)) {
+        if (!Helper.Extant(Helper.GetPlayer(args[0]), out PlayerControllerB player)) {
             return new Result(message: "Player not found!");
         }
 
@@ -78,8 +78,8 @@ public class TeleportCommand : ICommand {
     }
 
     Result TeleportPlayerToPlayer(string[] args) {
-        PlayerControllerB? sourcePlayer = Helpers.GetPlayer(args[0]);
-        PlayerControllerB? targetPlayer = Helpers.GetPlayer(args[1]);
+        PlayerControllerB? sourcePlayer = Helper.GetPlayer(args[0]);
+        PlayerControllerB? targetPlayer = Helper.GetPlayer(args[1]);
 
         return sourcePlayer == null || targetPlayer == null
             ? new Result(message: "Player not found!")

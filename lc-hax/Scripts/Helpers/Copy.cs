@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace Hax;
 
-public static partial class Helpers {
+public static partial class Helper {
     public static Vector3 Copy(Vector3 vector) {
         return new Vector3(
             vector.x,
@@ -13,8 +13,8 @@ public static partial class Helpers {
 
     public static GameObject Copy(Transform transform) {
         GameObject gameObject = new();
-        gameObject.transform.position = Helpers.Copy(transform.position);
-        gameObject.transform.eulerAngles = Helpers.Copy(transform.eulerAngles);
+        gameObject.transform.position = Helper.Copy(transform.position);
+        gameObject.transform.eulerAngles = Helper.Copy(transform.eulerAngles);
 
         return gameObject;
     }

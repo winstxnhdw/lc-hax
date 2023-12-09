@@ -2,10 +2,10 @@ using System.Linq;
 
 namespace Hax;
 
-public static partial class Helpers {
-    static ShipTeleporter[]? ShipTeleporters => HaxObjects.Instance?.ShipTeleporters.Objects;
+public static partial class Helper {
+    static ShipTeleporter[]? ShipTeleporters => HaxObject.Instance?.ShipTeleporters.Objects;
 
-    public static ShipTeleporter? InverseTeleporter => Helpers.ShipTeleporters?.FirstOrDefault(teleporter => teleporter.isInverseTeleporter);
+    public static ShipTeleporter? InverseTeleporter => Helper.ShipTeleporters?.FirstOrDefault(teleporter => teleporter.isInverseTeleporter);
 
-    public static ShipTeleporter? Teleporter => Helpers.ShipTeleporters?.FirstOrDefault(teleporter => !teleporter.isInverseTeleporter);
+    public static ShipTeleporter? Teleporter => Helper.ShipTeleporters?.FirstOrDefault(teleporter => !teleporter.isInverseTeleporter);
 }
