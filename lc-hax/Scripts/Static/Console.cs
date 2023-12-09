@@ -12,6 +12,7 @@ public static class Console {
         { "/money", new MoneyCommand() },
         { "/unlock", new UnlockCommand() },
         { "/kill", new KillCommand() },
+        { "/lock", new LockCommand() },
         { "/players", new PlayersCommand() },
         { "/home", new HomeCommand() },
         { "/end", new EndCommand() },
@@ -21,7 +22,7 @@ public static class Console {
         { "/stun", new StunCommand() },
         { "/heal", new HealCommand() },
         { "/ct", new ChibakuTenseiCommand() },
-        { "/pumpkin", new PumpkinCommand() },
+        { "/pumpkin", new PumpkinCommand() }
     };
 
     static Reflector? HUDManagerReflector => Helper.HUDManager == null ? null : Reflector.Target(Helper.HUDManager);
