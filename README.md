@@ -41,6 +41,7 @@ Execute `launch.bat` when you have launched the game.
 | End the game               | `/end`                  |
 | Toggle God mode            | `/god`                  |
 | Unlock all doors           | `/unlock`               |
+| Lock all gates             | `/lock`                 |
 | Stun enemies               | `/stun`                 |
 | Heal self                  | `/heal`                 |
 | Explode all mines          | `/explode`              |
