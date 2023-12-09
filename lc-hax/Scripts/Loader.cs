@@ -9,7 +9,8 @@ namespace Hax;
 
 public class Loader : MonoBehaviour {
     static GameObject HaxGameObjects { get; } = new GameObject();
-    public static GameObject HaxModules { get; } = new GameObject();
+    static GameObject HaxModules { get; } = new GameObject();
+    static Harmony Harmony { get; } = new("winstxnhdw.lc-hax");
 
     static void AddHaxModules<T>() where T : Component => Loader.HaxModules.AddComponent<T>();
     static void AddHaxGameObject<T>() where T : Component => Loader.HaxGameObjects.AddComponent<T>();
@@ -39,7 +40,7 @@ public class Loader : MonoBehaviour {
 
     static void LoadHarmonyPatches() {
         try {
-            new Harmony("winstxnhdw.lc-hax").PatchAll();
+            Loader.Harmony.PatchAll();
         }
 
         catch (HarmonyException exception) {
@@ -56,18 +57,19 @@ public class Loader : MonoBehaviour {
     static void LoadHaxModules() {
         DontDestroyOnLoad(Loader.HaxModules);
 
+        Loader.AddHaxModules<SaneMod>();
+        Loader.AddHaxModules<ChatMod>();
         Loader.AddHaxModules<SprintMod>();
         Loader.AddHaxModules<ShovelMod>();
         Loader.AddHaxModules<WeightMod>();
-        Loader.AddHaxModules<SaneMod>();
-        Loader.AddHaxModules<ClearVisionMod>();
-        Loader.AddHaxModules<ChatMod>();
         Loader.AddHaxModules<PhantomMod>();
+        Loader.AddHaxModules<ClearVisionMod>();
         Loader.AddHaxModules<RemoteExplosiveMod>();
     }
 
     public static void Unload() {
         Destroy(Loader.HaxModules);
         Destroy(Loader.HaxGameObjects);
+        Loader.Harmony.UnpatchAll();
     }
 }
