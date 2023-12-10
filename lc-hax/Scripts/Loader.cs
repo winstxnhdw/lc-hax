@@ -10,7 +10,6 @@ namespace Hax;
 public class Loader : MonoBehaviour {
     static GameObject HaxGameObjects { get; } = new();
     static GameObject HaxModules { get; } = new();
-    static Harmony Harmony { get; } = new("winstxnhdw.lc-hax");
 
     static void AddHaxModules<T>() where T : Component => Loader.HaxModules.AddComponent<T>();
     static void AddHaxGameObject<T>() where T : Component => Loader.HaxGameObjects.AddComponent<T>();
@@ -40,7 +39,7 @@ public class Loader : MonoBehaviour {
 
     static void LoadHarmonyPatches() {
         try {
-            Loader.Harmony.PatchAll();
+            new Harmony("winstxnhdw.lc-hax").PatchAll();
         }
 
         catch (HarmonyException exception) {
@@ -70,6 +69,5 @@ public class Loader : MonoBehaviour {
     public static void Unload() {
         Destroy(Loader.HaxModules);
         Destroy(Loader.HaxGameObjects);
-        Loader.Harmony.UnpatchAll();
     }
 }
