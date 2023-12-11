@@ -14,6 +14,7 @@ public static class Console {
         { "/kill", new KillCommand() },
         { "/lock", new LockCommand() },
         { "/players", new PlayersCommand() },
+        { "/xyz", new LocationCommand() },
         { "/home", new HomeCommand() },
         { "/end", new EndCommand() },
         { "/explode", new ExplodeCommand() },
