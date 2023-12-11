@@ -6,12 +6,12 @@ namespace Hax;
 public class NoiseCommand : ICommand {
     public void Execute(string[] args) {
         if (args.Length < 1) {
-            Console.Print("SYSTEM", "Usage: /noise <player>");
+            Helper.PrintSystem("Usage: /noise <player>");
             return;
         }
 
         if (!Helper.Extant(Helper.GetPlayer(args[0]), out PlayerControllerB player)) {
-            Console.Print("SYSTEM", "Player not found!");
+            Helper.PrintSystem("Player not found!");
             return;
         }
 
