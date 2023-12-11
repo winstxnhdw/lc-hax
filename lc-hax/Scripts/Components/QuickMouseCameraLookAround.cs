@@ -8,9 +8,7 @@ public class QuickMouseCameraLookAround : MonoBehaviour {
     public float Pitch { get; private set; } = 0;
 
     void Update() {
-        if (!Helper.Extant(Mouse.current, out Mouse mouse)) {
-            return;
-        }
+        if (!Helper.Extant(Mouse.current, out Mouse mouse)) return;
 
         this.Yaw += mouse.delta.x.ReadValue() * this.MouseSensitivity;
         this.Yaw = this.Yaw >= 360 ? this.Yaw - 360 : this.Yaw <= -360 ? this.Yaw + 360 : this.Yaw;

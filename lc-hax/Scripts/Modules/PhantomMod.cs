@@ -6,11 +6,7 @@ namespace Hax;
 
 public class PhantomMod : MonoBehaviour {
 
-    Camera? camera = null;
     bool toggleOn = false;
-
-    PlayerControllerB? player = null;
-
     bool ghostCamMode = false;
 
     QuickKeyboardMoveAround? kInstance = null;
@@ -21,52 +17,43 @@ public class PhantomMod : MonoBehaviour {
     Transform? ogParent;
 
     void Toggle() {
-        this.Log("GHOST", $"Toggling");
-        this.camera = Helper.GetCurrentCamera();
+        if (!Helper.Extant(Helper.CurrentCamera, out Camera camera)) return;
+        if (!camera.enabled) return;
+        if (!Helper.Extant(Helper.LocalPlayer, out PlayerControllerB player)) return;
 
-        if (this.camera == null
-            || !this.camera.enabled) {
-            return;
-        }
-
-        PlayerControllerB? player = this.player;
-        if (player == null || this.ogParent == null) {
-            this.player = Helper.LocalPlayer;
-            this.Log("GHOST", $"trying to grab player");
-
-            if (player == null) return;
-
-            this.ogParent = this.camera.transform.parent;
+        if (this.ogParent == null) {
+            this.ogParent = camera.transform.parent;
             return;
         }
 
         this.toggleOn = !this.toggleOn;
 
-        this.Log("GHOST", $"{this.toggleOn} cam={this.camera}");
+        this.Log("GHOST", $"{this.toggleOn} cam={camera}");
 
         if (this.toggleOn) {
             if (this.ghostCamMode) return;
 
             this.Log("GHOST", $"Enable cam");
             player.enabled = false;
-            this.ogLocalPos = this.camera.transform.localPosition;
-            this.ogLocalRot = this.camera.transform.localRotation;
-            this.camera.transform.SetParent(null, true);
-            this.kInstance = this.camera.gameObject.AddComponent<QuickKeyboardMoveAround>();
-            this.mInstance = this.camera.gameObject.AddComponent<QuickMouseCameraLookAround>();
+            this.ogLocalPos = camera.transform.localPosition;
+            this.ogLocalRot = camera.transform.localRotation;
+            camera.transform.SetParent(null, true);
+            this.kInstance = camera.gameObject.AddComponent<QuickKeyboardMoveAround>();
+            this.mInstance = camera.gameObject.AddComponent<QuickMouseCameraLookAround>();
 
             this.ghostCamMode = true;
 
         }
+
         else {
             if (!this.ghostCamMode) return;
-            this.Log("GHOST", $"Disable cam");
+
             Destroy(this.kInstance);
             Destroy(this.mInstance);
 
-            this.camera.transform.SetParent(this.ogParent, false);
-            this.camera.transform.localPosition = this.ogLocalPos;
-            this.camera.transform.localRotation = this.ogLocalRot;
+            camera.transform.SetParent(this.ogParent, false);
+            camera.transform.localPosition = this.ogLocalPos;
+            camera.transform.localRotation = this.ogLocalRot;
 
             player.enabled = true;
             this.ghostCamMode = false;
@@ -74,11 +61,8 @@ public class PhantomMod : MonoBehaviour {
     }
 
     void Update() {
-        Keyboard keyboard = Keyboard.current;
-
-        if (keyboard.equalsKey.wasPressedThisFrame) {
-            this.Toggle();
-        }
+        if (!Keyboard.current.equalsKey.wasPressedThisFrame) return;
+        this.Toggle();
     }
 
     private void Log(string tag, string msg) {

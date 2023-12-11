@@ -1,54 +1,37 @@
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using GameNetcodeStuff;
 
 namespace Hax;
 
 public class RemoteExplosiveMod : MonoBehaviour {
-
-    PlayerControllerB? player = null;
-    Camera? camera = null;
-
     void Update() {
-        Mouse mouse = Mouse.current;
-
-        if (mouse.middleButton.isPressed) {
-            this.Fire();
-        }
+        if (!Mouse.current.middleButton.isPressed) return;
+        this.Fire();
     }
 
     void Fire() {
-        if (this.player == null) {
-            this.player = Helper.LocalPlayer;
-            return;
-        }
+        if (!Helper.Extant(Helper.CurrentCamera, out Camera camera)) return;
+        if (!camera.enabled) return;
 
-        if (this.camera == null
-            || !this.camera.enabled) {
-            this.camera = Helper.GetCurrentCamera();
-            return;
-        }
-
-        RaycastHit[] hits = Physics.SphereCastAll(
-            this.camera.transform.position,
+        List<RaycastHit> raycastHits = [.. Physics.SphereCastAll(
+            camera.transform.position,
             1f,
-            this.camera.transform.forward,
-            float.MaxValue);
+            camera.transform.forward,
+            float.MaxValue
+        )];
 
-        for (int i = 0; i < hits.Length; i++) {
+        raycastHits.ForEach(raycastHit => {
+            GameObject gameObject = raycastHit.collider.gameObject;
 
-            GameObject hitGO = hits[i].collider.gameObject;
-            Landmine landmine = hitGO.GetComponentInChildren<Landmine>();
-            if (landmine != null) {
+            if (Helper.Extant(gameObject.GetComponentInParent<Landmine>(), out Landmine landmine)) {
                 _ = Reflector.Target(landmine).InvokeInternalMethod("TriggerMineOnLocalClientByExiting");
-                continue;
+                return;
             }
 
-            JetpackItem jetpack = hitGO.GetComponent<JetpackItem>();
-            if (jetpack != null) {
+            if (Helper.Extant(gameObject.GetComponent<JetpackItem>(), out JetpackItem jetpack)) {
                 jetpack.ExplodeJetpackServerRpc();
-                continue;
             }
-        }
+        });
     }
 }
