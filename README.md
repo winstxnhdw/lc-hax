@@ -60,3 +60,10 @@ No features in this mod require host privileges.
 | Heal self                     | `/heal`                    |
 | Explode all mines             | `/explode`                 |
 | Explode all jetpacks          | `/explode jet`             |
+
+## Binds
+
+| Action                      | Key(s) |
+| --------------------------  | ------ |
+| Detonate a jetpack/landmine | `M3`   |
+| Toggle Phantom              | `=`    |
