@@ -21,6 +21,16 @@ You can now build and install the dependencies by executing `requirements.bat`.
 
 Execute `launch.bat` when you have launched the game.
 
+## Features
+
+- Infinite stamina
+- Always sane
+- Clear vision
+- Always lightweight
+- Remotely detonate individual jetpacks/landmines
+- No hidden HUD
+- Phantom
+
 ## Commands
 
 | Action                        | Command                    |
