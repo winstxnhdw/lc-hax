@@ -1,11 +1,9 @@
 using UnityEngine;
-using UnityEngine.InputSystem;
 using GameNetcodeStuff;
 
 namespace Hax;
 
 public class PhantomMod : MonoBehaviour {
-
     bool toggleOn = false;
     bool ghostCamMode = false;
 
@@ -16,7 +14,15 @@ public class PhantomMod : MonoBehaviour {
     Quaternion ogLocalRot;
     Transform? ogParent;
 
-    void Toggle() {
+    void OnEnable() {
+        InputListener.onEqualsPress += this.TogglePhantom;
+    }
+
+    void OnDisable() {
+        InputListener.onEqualsPress -= this.TogglePhantom;
+    }
+
+    void TogglePhantom() {
         if (!Helper.Extant(Helper.CurrentCamera, out Camera camera)) return;
         if (!camera.enabled) return;
         if (!Helper.Extant(Helper.LocalPlayer, out PlayerControllerB player)) return;
@@ -42,7 +48,6 @@ public class PhantomMod : MonoBehaviour {
             this.mInstance = camera.gameObject.AddComponent<QuickMouseCameraLookAround>();
 
             this.ghostCamMode = true;
-
         }
 
         else {
@@ -58,11 +63,6 @@ public class PhantomMod : MonoBehaviour {
             player.enabled = true;
             this.ghostCamMode = false;
         }
-    }
-
-    void Update() {
-        if (!Keyboard.current.equalsKey.wasPressedThisFrame) return;
-        this.Toggle();
     }
 
     private void Log(string tag, string msg) {
