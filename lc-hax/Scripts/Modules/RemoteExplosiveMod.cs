@@ -1,13 +1,15 @@
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.InputSystem;
 
 namespace Hax;
 
 public class RemoteExplosiveMod : MonoBehaviour {
-    void Update() {
-        if (!Mouse.current.middleButton.isPressed) return;
-        this.Fire();
+    void OnEnable() {
+        InputListener.onMiddleButtonPress += this.Fire;
+    }
+
+    void OnDisable() {
+        InputListener.onMiddleButtonPress -= this.Fire;
     }
 
     void Fire() {
