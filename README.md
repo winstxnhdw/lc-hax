@@ -30,23 +30,24 @@ Execute `launch.bat` when you have launched the game.
 - Remotely detonate individual jetpacks/landmines
 - No hidden HUD
 - Phantom
+- [Commands](#commands)
 
 ## Commands
 
 | Action                        | Command                    |
 | ----------------------------- | -------------------------- |
-| Modify shovel damage          | `/shovel <force=1>`        |
+| Inverse transport a player    | `/random <player>`         |
+| Play noise on player          | `/noise <player>`          |
 | Chibaku Tensei                | `/ct <player>`             |
 | Teleport to a player          | `/tp <player>`             |
 | Teleport to a location        | `/tp <x> <y> <z>`          |
 | Teleport player to player     | `/tp <player> <player>`    |
 | Teleport player to a location | `/tp <player> <x> <y> <z>` |
 | Teleport back to ship         | `/home <player?>`          |
-| Give or take money            | `/money <amount>`          |
-| Inverse transport a player    | `/random <player>`         |
-| Play noise on player          | `/noise <player>`          |
 | Kill player                   | `/kill <player?>`          |
 | Kill all players              | `/kill --all`              |
+| Modify shovel damage          | `/shovel <force=1>`        |
+| Give or take money            | `/money <amount>`          |
 | List all players              | `/players`                 |
 | Get coordinates               | `/xyz`                     |
 | End the game                  | `/end`                     |
