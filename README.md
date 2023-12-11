@@ -23,25 +23,27 @@ Execute `launch.bat` when you have launched the game.
 
 ## Commands
 
-| Action                     | Command                 |
-| -------------------------- | ----------------------- |
-| Modify shovel damage       | `/shovel <force=1>`     |
-| Chibaku Tensei             | `/ct <player>`          |
-| Teleport to a player       | `/tp <player>`          |
-| Teleport to a location     | `/tp <x> <y> <z>`       |
-| Teleport player to player  | `/tp <player> <player>` |
-| Teleport back to ship      | `/home <player?>`       |
-| Give or take money         | `/money <amount>`       |
-| Inverse transport a player | `/random <player>`      |
-| Play noise on player       | `/noise <player>`       |
-| Kill player                | `/kill <player?>`       |
-| Kill all players           | `/kill --all`           |
-| List all players           | `/players`              |
-| End the game               | `/end`                  |
-| Toggle God mode            | `/god`                  |
-| Unlock all doors           | `/unlock`               |
-| Lock all gates             | `/lock`                 |
-| Stun enemies               | `/stun`                 |
-| Heal self                  | `/heal`                 |
-| Explode all mines          | `/explode`              |
-| Explode all jetpacks       | `/explode jet`          |
+| Action                        | Command                    |
+| ----------------------------- | -------------------------- |
+| Modify shovel damage          | `/shovel <force=1>`        |
+| Chibaku Tensei                | `/ct <player>`             |
+| Teleport to a player          | `/tp <player>`             |
+| Teleport to a location        | `/tp <x> <y> <z>`          |
+| Teleport player to player     | `/tp <player> <player>`    |
+| Teleport player to a location | `/tp <player> <x> <y> <z>` |
+| Teleport back to ship         | `/home <player?>`          |
+| Give or take money            | `/money <amount>`          |
+| Inverse transport a player    | `/random <player>`         |
+| Play noise on player          | `/noise <player>`          |
+| Kill player                   | `/kill <player?>`          |
+| Kill all players              | `/kill --all`              |
+| List all players              | `/players`                 |
+| Get coordinates               | `/xyz`                     |
+| End the game                  | `/end`                     |
+| Toggle God mode               | `/god`                     |
+| Unlock all doors              | `/unlock`                  |
+| Lock all gates                | `/lock`                    |
+| Stun enemies                  | `/stun`                    |
+| Heal self                     | `/heal`                    |
+| Explode all mines             | `/explode`                 |
+| Explode all jetpacks          | `/explode jet`             |
