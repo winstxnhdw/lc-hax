@@ -33,7 +33,7 @@ public class RandomCommand : ICommand {
             .Dispose(() => Helper.PlaceObjectAtTransform(previousTeleporterTransform.transform, inverseTeleporter, teleporterPositionOffset, teleporterRotationOffset).Invoke(0));
 
         _ = Helper.CreateComponent<TransientBehaviour>()
-            .Init(Helper.PlaceObjectAtPosition(targetPlayer.transform, cupboard, new Vector3(0.0f, 1.75f, 0.0f), new Vector3(90.0f, 0.0f, 0.0f)), 6.0f)
+            .Init(Helper.PlaceObjectAtPosition(targetPlayer.transform, cupboard, new Vector3(0.0f, 1.75f, 0.0f), new Vector3(-90.0f, 0.0f, 0.0f)), 6.0f)
             .Dispose(() => Helper.PlaceObjectAtTransform(previousCupboardTransform.transform, cupboard).Invoke(0));
 
         return new Result(true);
