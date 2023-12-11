@@ -48,12 +48,12 @@ public static class Console {
 
     public static void ExecuteCommand(string[] args) {
         if (args.Length < 1) {
-            Console.Print("SYSTEM", "Usage: /<command> <args>");
+            Helper.PrintSystem("Usage: /<command> <args>");
             return;
         }
 
         if (!Console.Commands.ContainsKey(args[0])) {
-            Console.Print("SYSTEM", "Command not found!");
+            Helper.PrintSystem("Command not found!");
             return;
         }
 

@@ -41,14 +41,14 @@ public class RandomCommand : ICommand {
 
     public void Execute(string[] args) {
         if (args.Length < 1) {
-            Console.Print("SYSTEM", "Usage: /random <player>");
+            Helper.PrintSystem("Usage: /random <player>");
             return;
         }
 
         Result result = this.TeleportPlayerToRandom(args);
 
         if (!result.Success) {
-            Console.Print("SYSTEM", result.Message);
+            Helper.PrintSystem(result.Message);
         }
     }
 }

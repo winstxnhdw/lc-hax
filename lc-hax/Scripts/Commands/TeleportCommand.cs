@@ -88,7 +88,7 @@ public class TeleportCommand : ICommand {
 
     public void Execute(string[] args) {
         if (args.Length < 1) {
-            Console.Print("SYSTEM", "Usage: /tp <player> | /tp <player> <player> | /tp <x> <y> <z>");
+            Helper.PrintSystem("Usage: /tp <player> | /tp <player> <player> | /tp <x> <y> <z>");
             return;
         }
 
@@ -111,7 +111,7 @@ public class TeleportCommand : ICommand {
         }
 
         if (!result.Success) {
-            Console.Print("SYSTEM", result.Message);
+            Helper.PrintSystem(result.Message);
         }
     }
 }

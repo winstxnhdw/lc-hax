@@ -8,7 +8,7 @@ public class KillCommand : ICommand {
     public void Execute(string[] args) {
         if (args.Length < 1) {
             if (!Helper.Extant(Helper.LocalPlayer, out PlayerControllerB localPlayer)) {
-                Console.Print("SYSTEM", "Player not found!");
+                Helper.PrintSystem("Player not found!");
                 return;
             }
 
@@ -21,16 +21,16 @@ public class KillCommand : ICommand {
                    .ToList()
                    .ForEach(player => player.DamagePlayerFromOtherClientServerRpc(int.MaxValue, Vector3.zero, -1));
 
-            Console.Print("SYSTEM", "Attempting to kill all players!");
+            Helper.PrintSystem("Attempting to kill all players!");
             return;
         }
 
         if (!Helper.Extant(Helper.GetPlayer(args[0]), out PlayerControllerB targetPlayer)) {
-            Console.Print("SYSTEM", "Player not found!");
+            Helper.PrintSystem("Player not found!");
             return;
         }
 
         targetPlayer.DamagePlayerFromOtherClientServerRpc(int.MaxValue, Vector3.zero, -1);
-        Console.Print("SYSTEM", $"Attempting to kill {targetPlayer.playerUsername}!");
+        Helper.PrintSystem($"Attempting to kill {targetPlayer.playerUsername}!");
     }
 }

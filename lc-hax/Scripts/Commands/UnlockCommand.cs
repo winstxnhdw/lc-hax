@@ -20,6 +20,6 @@ public class UnlockCommand : ICommand {
               .ToList()
               .ForEach(terminalAccessibleObject => terminalAccessibleObject.SetDoorOpenServerRpc(true));
 
-        Console.Print("SYSTEM", "All doors unlocked!");
+        Helper.PrintSystem("All doors unlocked!");
     }
 }

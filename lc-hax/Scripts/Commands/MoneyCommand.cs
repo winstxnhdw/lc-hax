@@ -4,17 +4,17 @@ namespace Hax;
 public class MoneyCommand : ICommand {
     public void Execute(string[] args) {
         if (args.Length < 1) {
-            Console.Print("SYSTEM", "Usage: /money <amount>");
+            Helper.PrintSystem("Usage: /money <amount>");
             return;
         }
 
         if (!Helper.Extant(Helper.Terminal, out Terminal terminal)) {
-            Console.Print("SYSTEM", "Terminal not found!");
+            Helper.PrintSystem("Terminal not found!");
             return;
         }
 
         if (!int.TryParse(args[0], out int amount)) {
-            Console.Print("SYSTEM", "Invalid amount!");
+            Helper.PrintSystem("Invalid amount!");
             return;
         }
 
