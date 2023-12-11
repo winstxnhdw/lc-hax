@@ -8,6 +8,6 @@ public class ShovelCommand : ICommand {
             return;
         }
 
-        Settings.ShovelHitForce = int.TryParse(args[1], out int shovelHitForce) ? shovelHitForce : Settings.ShovelHitForce;
+        Settings.ShovelHitForce = int.TryParse(args[0], out int shovelHitForce) ? shovelHitForce : Settings.ShovelHitForce;
     }
 }
