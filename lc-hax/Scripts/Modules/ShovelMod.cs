@@ -21,7 +21,7 @@ public class ShovelMod : MonoBehaviour {
             }
 
             localPlayerShovel.shovelHitForce = Settings.ShovelHitForce;
-            yield return new WaitForSeconds(1.0f);
+            yield return new WaitForEndOfFrame();
         }
     }
 
