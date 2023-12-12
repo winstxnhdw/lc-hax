@@ -63,7 +63,7 @@ No features in this mod require host privileges.
 
 ## Binds
 
-| Action                      | Key(s) |
+| Action                      | Input  |
 | --------------------------  | ------ |
 | Detonate a jetpack/landmine | `M3`   |
 | Toggle Phantom              | `=`    |
