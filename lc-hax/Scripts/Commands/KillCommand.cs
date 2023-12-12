@@ -12,14 +12,14 @@ public class KillCommand : ICommand {
                 return;
             }
 
-            localPlayer.DamagePlayerFromOtherClientServerRpc(int.MaxValue, Vector3.zero, -1);
+            localPlayer.DamagePlayerFromOtherClientServerRpc(1000, Vector3.zero, -1);
             return;
         }
 
         if (args[0] is "--all") {
             Helper.Players
                    .ToList()
-                   .ForEach(player => player.DamagePlayerFromOtherClientServerRpc(int.MaxValue, Vector3.zero, -1));
+                   .ForEach(player => player.DamagePlayerFromOtherClientServerRpc(1000, Vector3.zero, -1));
 
             Helper.PrintSystem("Attempting to kill all players!");
             return;
@@ -30,7 +30,7 @@ public class KillCommand : ICommand {
             return;
         }
 
-        targetPlayer.DamagePlayerFromOtherClientServerRpc(int.MaxValue, Vector3.zero, -1);
+        targetPlayer.DamagePlayerFromOtherClientServerRpc(1000, Vector3.zero, -1);
         Helper.PrintSystem($"Attempting to kill {targetPlayer.playerUsername}!");
     }
 }
