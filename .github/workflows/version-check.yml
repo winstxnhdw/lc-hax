@@ -1,0 +1,30 @@
+name: Latest
+
+on:
+  push:
+    paths: .github/workflows/version-check.yml
+  schedule:
+    #       ┌──────────────── minute (0 - 59)
+    #       │ ┌────────────── hour (0 - 23)
+    #       │ │ ┌──────────── day of the month (1 - 31)
+    #       │ │ │ ┌────────── month (1 - 12 or JAN-DEC)
+    #       │ │ │ │ ┌──────── day of the week (0 - 6 or SUN-SAT)
+    #       │ │ │ │ │
+    #       │ │ │ │ │
+    #       │ │ │ │ │
+    #       * * * * *
+    - cron: 0 0 * * *
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Install steamctl
+        run: pip install steamctl
+
+      - name: Check for new version
+        env:
+          SUPPORTED_VERSION: 1606324770
+        run: |
+          [ "$(steamctl --anonymous apps product_info 1966720 | jq -r .depots.branches.public.buildid)" = "$SUPPORTED_VERSION" ]
