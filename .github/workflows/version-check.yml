@@ -25,6 +25,6 @@ jobs:
 
       - name: Check for new version
         env:
-          SUPPORTED_VERSION: 1606324770
+          SUPPORTED_VERSION: 12922815
         run: |
-          [ "$(steamctl --anonymous apps product_info 1966720 | jq -r .depots.branches.public.buildid)" = "$SUPPORTED_VERSION" ]
+          [ "$(steamctl --anonymous apps product_info 1966720 --skip-licenses | jq -r .depots.branches.public.buildid)" = "$SUPPORTED_VERSION" ]
