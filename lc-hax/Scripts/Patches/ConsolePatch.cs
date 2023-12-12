@@ -11,7 +11,7 @@ class ConsolePatch {
             return true;
         }
 
-        string command = hudManager.chatTextField.text[..];
+        string command = hudManager.chatTextField.text;
 
         if (!command.StartsWith("/")) {
             return true;
