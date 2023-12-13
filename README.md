@@ -53,6 +53,7 @@ No features in this mod require host privileges.
 | Modify shovel damage          | `/shovel <force=1>`        |
 | Give or take money            | `/money <amount>`          |
 | Stun enemies                  | `/stun <duration>`         |
+| Toggle stun on click          | `/stunclick`               |
 | List all players              | `/players`                 |
 | Get coordinates               | `/xyz`                     |
 | End the game                  | `/end`                     |

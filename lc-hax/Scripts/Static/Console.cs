@@ -22,9 +22,10 @@ public static class Console {
         { "/noise", new NoiseCommand() },
         { "/random", new RandomCommand() },
         { "/stun", new StunCommand() },
+        { "/stunclick", new StunOnClickCommand() },
         { "/heal", new HealCommand() },
         { "/ct", new ChibakuTenseiCommand() },
-        { "/pumpkin", new PumpkinCommand() }
+        { "/pumpkin", new PumpkinCommand() },
     };
 
     static Reflector? HUDManagerReflector => Helper.HUDManager == null ? null : Reflector.Target(Helper.HUDManager);
