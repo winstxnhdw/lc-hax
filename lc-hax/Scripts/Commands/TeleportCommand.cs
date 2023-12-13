@@ -47,10 +47,8 @@ public class TeleportCommand : ICommand {
             return new Result(message: "ShipTeleporter not found!");
         }
 
-        GameObject previousTransform = teleporter.transform.Copy();
-        GameObject newTransform = new();
+        GameObject newTransform = player.transform.Copy();
         newTransform.transform.position = position;
-        newTransform.transform.eulerAngles = player.transform.eulerAngles;
 
         Helper.SwitchRadarTarget(player);
         teleporter.PressTeleportButtonServerRpc();
@@ -58,9 +56,23 @@ public class TeleportCommand : ICommand {
         Vector3 rotationOffset = new(-90.0f, 0.0f, 0.0f);
         Vector3 positionOffset = new(0.0f, 1.5f, 0.0f);
 
+        ObjectPlacement<Transform, ShipTeleporter> teleporterPlacement = new(
+            newTransform.transform,
+            teleporter,
+            positionOffset,
+            rotationOffset
+        );
+
+        ObjectPlacement<Transform, ShipTeleporter> previousTeleporterPlacement = new(
+            teleporter.transform.Copy().transform,
+            teleporter,
+            positionOffset,
+            rotationOffset
+        );
+
         Helper.CreateComponent<TransientBehaviour>()
-              .Init(Helper.PlaceObjectAtPosition(newTransform.transform, teleporter, positionOffset, rotationOffset), 6.0f)
-              .Dispose(() => Helper.PlaceObjectAtPosition(previousTransform.transform, teleporter, positionOffset, rotationOffset).Invoke(0));
+              .Init(Helper.PlaceObjectAtPosition(teleporterPlacement), 6.0f)
+              .Dispose(() => Helper.PlaceObjectAtPosition(previousTeleporterPlacement).Invoke(0));
 
         return new Result(true);
     }
@@ -88,7 +100,10 @@ public class TeleportCommand : ICommand {
 
     public void Execute(string[] args) {
         if (args.Length is 0) {
-            Helper.PrintSystem("Usage: /tp <player> | /tp <player> <player> | /tp <x> <y> <z>");
+            Helper.PrintSystem("Usage: /tp <player>");
+            Helper.PrintSystem("Usage: /tp <x> <y> <z>");
+            Helper.PrintSystem("Usage: /tp <player> <x> <y> <z>");
+            Helper.PrintSystem("Usage: /tp <player> <player>");
             return;
         }
 
