@@ -12,7 +12,7 @@ public class ShovelMod : MonoBehaviour {
                           .Shovels
                           .Objects?
                           .FirstOrDefault(shovel =>
-                shovel.playerHeldBy.playerClientId == Helper.LocalPlayer?.playerClientId
+                shovel.playerHeldBy?.playerClientId == Helper.LocalPlayer?.playerClientId
             );
 
             if (localPlayerShovel == null) {
