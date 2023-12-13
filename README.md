@@ -33,6 +33,7 @@ No features in this mod require host privileges.
 - Remotely detonate individual jetpacks/landmines
 - No hidden HUD
 - Phantom
+- Stun on left-click
 - [Commands](#commands)
 
 ## Commands
@@ -51,13 +52,13 @@ No features in this mod require host privileges.
 | Kill all players              | `/kill --all`              |
 | Modify shovel damage          | `/shovel <force=1>`        |
 | Give or take money            | `/money <amount>`          |
+| Stun enemies                  | `/stun <duration>`         |
 | List all players              | `/players`                 |
 | Get coordinates               | `/xyz`                     |
 | End the game                  | `/end`                     |
 | Toggle God mode               | `/god`                     |
 | Unlock all doors              | `/unlock`                  |
 | Lock all gates                | `/lock`                    |
-| Stun enemies                  | `/stun`                    |
 | Heal self                     | `/heal`                    |
 | Explode all mines             | `/explode`                 |
 | Explode all jetpacks          | `/explode jet`             |
