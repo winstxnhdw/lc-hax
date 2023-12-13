@@ -5,22 +5,18 @@ using UnityEngine;
 namespace Hax;
 
 public class ShovelMod : MonoBehaviour {
+    bool IsLocalPlayerShovel(Shovel shovel) => shovel.playerHeldBy?.playerClientId == Helper.LocalPlayer?.playerClientId;
+
+    Shovel? LocalPlayerShovel => HaxObject.Instance?.Shovels.Objects?.FirstOrDefault(this.IsLocalPlayerShovel);
+
     IEnumerator SetShovelForce() {
         while (true) {
-            Shovel? localPlayerShovel =
-                HaxObject.Instance?
-                          .Shovels
-                          .Objects?
-                          .FirstOrDefault(shovel =>
-                shovel.playerHeldBy?.playerClientId == Helper.LocalPlayer?.playerClientId
-            );
-
-            if (localPlayerShovel == null) {
+            if (!Helper.Extant(this.LocalPlayerShovel, out Shovel shovel)) {
                 yield return new WaitForEndOfFrame();
                 continue;
             }
 
-            localPlayerShovel.shovelHitForce = Settings.ShovelHitForce;
+            shovel.shovelHitForce = Settings.ShovelHitForce;
             yield return new WaitForEndOfFrame();
         }
     }
