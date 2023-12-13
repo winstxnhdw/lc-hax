@@ -19,5 +19,4 @@ public static partial class Helper {
     public static PlaceableShipObject? GetUnlockable(Unlockable unlockable) =>
         Object.FindObjectsOfType<PlaceableShipObject>()
               .FirstOrDefault(placeableObject => unlockable.Is(placeableObject.unlockableID));
-
 }
