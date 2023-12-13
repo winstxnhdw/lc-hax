@@ -65,7 +65,7 @@ public class Loader : MonoBehaviour {
         Loader.AddHaxModules<WeightMod>();
         Loader.AddHaxModules<PhantomMod>();
         Loader.AddHaxModules<ClearVisionMod>();
-        Loader.AddHaxModules<RemoteTriggerNodeMod>();
+        Loader.AddHaxModules<TriggerNodeMod>();
     }
 
     public static void Unload() {
