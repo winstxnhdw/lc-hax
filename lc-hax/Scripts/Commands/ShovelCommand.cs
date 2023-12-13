@@ -3,7 +3,7 @@ namespace Hax;
 
 public class ShovelCommand : ICommand {
     public void Execute(string[] args) {
-        if (args.Length < 1) {
+        if (args.Length is 0) {
             Helper.PrintSystem("Usage: /shovel <force=1>");
             return;
         }

@@ -37,7 +37,7 @@ public class PhantomMod : MonoBehaviour {
 
     void GoToPlayer(int indexChange) {
         if (!this.ghostCamMode) return;
-        if (!Helper.Extant(Helper.CurrentCamera, out Camera camera)) return;
+        if (!Helper.CurrentCamera.IsNotNull(out Camera camera)) return;
 
         int currentPlayerCount = Helper.Players?.Length ?? 0;
 
@@ -76,9 +76,9 @@ public class PhantomMod : MonoBehaviour {
     }
 
     void TogglePhantom() {
-        if (!Helper.Extant(Helper.CurrentCamera, out Camera camera)) return;
+        if (!Helper.LocalPlayer.IsNotNull(out PlayerControllerB player)) return;
+        if (!Helper.CurrentCamera.IsNotNull(out Camera camera)) return;
         if (!camera.enabled) return;
-        if (!Helper.Extant(Helper.LocalPlayer, out PlayerControllerB player)) return;
 
         if (this.ogParent == null) {
             this.ogParent = camera.transform.parent;

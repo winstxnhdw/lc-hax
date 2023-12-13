@@ -7,7 +7,7 @@ namespace Hax;
 public class StaminaMod : MonoBehaviour {
     IEnumerator SetSprint() {
         while (true) {
-            if (!Helper.Extant(Helper.LocalPlayer, out PlayerControllerB player)) {
+            if (!Helper.LocalPlayer.IsNotNull(out PlayerControllerB player)) {
                 yield return new WaitForEndOfFrame();
                 continue;
             }

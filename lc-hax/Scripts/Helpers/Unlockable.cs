@@ -4,8 +4,10 @@ using UnityEngine;
 namespace Hax;
 
 public static partial class Helper {
+    public static bool Is(this Unlockable unlockable, int unlockableId) => unlockableId == (int)unlockable;
+
     public static void BuyUnlockable(Unlockable unlockable) {
-        if (!Helper.Extant(Helper.Terminal, out Terminal terminal)) {
+        if (!Helper.Terminal.IsNotNull(out Terminal terminal)) {
             Helper.PrintSystem("Terminal not found!");
             return;
         }

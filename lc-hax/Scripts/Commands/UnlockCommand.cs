@@ -9,7 +9,7 @@ public class UnlockCommand : ICommand {
         Reflector.Target(door).GetInternalField<InteractTrigger>("doorTrigger");
 
     void UnlockDoor(DoorLock door) {
-        if (!Helper.Extant(this.GetDoorTrigger(door), out InteractTrigger doorTrigger)) return;
+        if (!this.GetDoorTrigger(door).IsNotNull(out InteractTrigger doorTrigger)) return;
 
         door.UnlockDoorSyncWithServer();
         doorTrigger.timeToHold = 0.0f;

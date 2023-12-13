@@ -9,7 +9,7 @@ public class KillCommand : ICommand {
         player.DamagePlayerFromOtherClientServerRpc(1000, Vector3.zero, -1);
 
     Result KillSelf() {
-        if (!Helper.Extant(Helper.LocalPlayer, out PlayerControllerB localPlayer)) {
+        if (!Helper.LocalPlayer.IsNotNull(out PlayerControllerB localPlayer)) {
             return new Result(message: "Player not found!");
         }
 
@@ -18,7 +18,7 @@ public class KillCommand : ICommand {
     }
 
     Result KillTargetPlayer(string[] args) {
-        if (!Helper.Extant(Helper.GetPlayer(args[0]), out PlayerControllerB targetPlayer)) {
+        if (!Helper.GetPlayer(args[0]).IsNotNull(out PlayerControllerB targetPlayer)) {
             return new Result(message: "Player not found!");
         }
 

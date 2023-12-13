@@ -7,7 +7,7 @@ namespace Hax;
 [HarmonyPatch("SubmitChat_performed")]
 class ConsolePatch {
     static bool Prefix() {
-        if (!Helper.Extant(Helper.HUDManager, out HUDManager hudManager)) {
+        if (!Helper.HUDManager.IsNotNull(out HUDManager hudManager)) {
             return true;
         }
 

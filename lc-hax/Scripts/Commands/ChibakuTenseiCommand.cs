@@ -7,7 +7,7 @@ public class ChibakuTenseiCommand : ICommand {
     Vector3 spinningY = new(0, 2, 0);
 
     Result TeleportPlayerToRandom(string[] args) {
-        if (!Helper.Extant(Helper.GetPlayer(args[0]), out PlayerControllerB targetPlayer)) {
+        if (!Helper.GetPlayer(args[0]).IsNotNull(out PlayerControllerB targetPlayer)) {
             return new Result(message: "Player not found!");
         }
 
@@ -16,27 +16,27 @@ public class ChibakuTenseiCommand : ICommand {
         Helper.BuyUnlockable(Unlockable.RECORD_PLAYER);
         Helper.BuyUnlockable(Unlockable.TABLE);
 
-        if (!Helper.Extant(Helper.GetUnlockable(Unlockable.CUPBOARD), out PlaceableShipObject cupboard)) {
+        if (!Helper.GetUnlockable(Unlockable.CUPBOARD).IsNotNull(out PlaceableShipObject cupboard)) {
             return new Result(message: "Cupboard not found!");
         }
 
-        if (!Helper.Extant(Helper.GetUnlockable(Unlockable.ROMANTIC_TABLE), out PlaceableShipObject romanticTable)) {
+        if (!Helper.GetUnlockable(Unlockable.ROMANTIC_TABLE).IsNotNull(out PlaceableShipObject romanticTable)) {
             return new Result(message: "Romantic table not found!");
         }
 
-        if (!Helper.Extant(Helper.GetUnlockable(Unlockable.JACK_O_LANTERN), out PlaceableShipObject jackOLantern)) {
+        if (!Helper.GetUnlockable(Unlockable.JACK_O_LANTERN).IsNotNull(out PlaceableShipObject jackOLantern)) {
             return new Result(message: "Jack O' Lantern not found!");
         }
 
-        if (!Helper.Extant(Helper.GetUnlockable(Unlockable.FILE_CABINET), out PlaceableShipObject fileCabinet)) {
+        if (!Helper.GetUnlockable(Unlockable.FILE_CABINET).IsNotNull(out PlaceableShipObject fileCabinet)) {
             return new Result(message: "File cabinet not found!");
         }
 
-        if (!Helper.Extant(Helper.GetUnlockable(Unlockable.TABLE), out PlaceableShipObject table)) {
+        if (!Helper.GetUnlockable(Unlockable.TABLE).IsNotNull(out PlaceableShipObject table)) {
             return new Result(message: "Table not found!");
         }
 
-        if (!Helper.Extant(Helper.GetUnlockable(Unlockable.RECORD_PLAYER), out PlaceableShipObject recordPlayer)) {
+        if (!Helper.GetUnlockable(Unlockable.RECORD_PLAYER).IsNotNull(out PlaceableShipObject recordPlayer)) {
             return new Result(message: "Cupboard not found!");
         }
 
@@ -90,7 +90,7 @@ public class ChibakuTenseiCommand : ICommand {
     }
 
     public void Execute(string[] args) {
-        if (args.Length < 1) {
+        if (args.Length is 0) {
             Helper.PrintSystem("Usage: /ct <player>");
             return;
         }
