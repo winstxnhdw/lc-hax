@@ -1,4 +1,6 @@
 using System.Collections.Generic;
+using System.Net;
+using GameNetcodeStuff;
 using UnityEngine;
 
 namespace Hax;
@@ -47,6 +49,31 @@ public class LookRayShortcutsMod : MonoBehaviour {
                 bool isDoorOpen = Reflector.Target(tao).GetInternalField<bool>("isDoorOpen");
                 tao.SetDoorOpenServerRpc(!isDoorOpen);
             }
+
+            if (Helper.Extant(gameObject.GetComponent<PlayerControllerB>(), out PlayerControllerB player)) {
+                this.Log($"found {player.playerUsername}");
+                if (!Helper.Extant(RoundManager.Instance, out RoundManager roundManager) ||
+                    !Helper.Extant(roundManager.SpawnedEnemies, out List<EnemyAI> allEnemies) ||
+                    !Helper.Extant(Helper.LocalPlayer, out PlayerControllerB localPlayer) ||
+                    player == localPlayer)
+                    return;
+
+                allEnemies.ForEach((e) => {
+                    e.ChangeEnemyOwnerServerRpc(localPlayer.actualClientId);
+                    e.SetMovingTowardsTargetPlayer(player);
+                });
+
+                this.Log($"sending enemies to {player.playerUsername}");
+            }
         });
+    }
+    private void Log(string msg) {
+        try {
+            Console.Print("RAY", msg);
+
+        }
+        catch {
+
+        }
     }
 }
