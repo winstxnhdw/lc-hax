@@ -92,7 +92,7 @@ public class TeleportCommand : ICommand {
             return;
         }
 
-        Result result = new(false, "Invalid arguments!");
+        Result result = new(message: "Invalid arguments!");
 
         if (args.Length is 1) {
             result = this.TeleportToPlayer(args);
