@@ -19,17 +19,7 @@ public class ClearVisionMod : MonoBehaviour {
                 continue;
             }
 
-            if (timeOfDay.sunIndirect == null) {
-                yield return new WaitForEndOfFrame();
-                continue;
-            }
-
-            if (lightData == null) {
-                lightData = timeOfDay.sunIndirect.GetComponent<HDAdditionalLightData>();
-                yield return new WaitForEndOfFrame();
-                continue;
-            }
-
+            lightData ??= timeOfDay.sunIndirect.GetComponent<HDAdditionalLightData>();
             lightData.lightDimmer = float.MaxValue;
             lightData.distance = float.MaxValue;
             timeOfDay.insideLighting = false;
