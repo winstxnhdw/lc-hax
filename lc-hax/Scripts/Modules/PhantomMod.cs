@@ -63,7 +63,7 @@ public class PhantomMod : MonoBehaviour {
             currentIndex;
 
         PlayerControllerB? targetPlayer = Helper.Players?[currentIndex];
-        if (targetPlayer == null) {
+        if (targetPlayer is null) {
             this.Log($"Player is somehow null");
             return;
         }
@@ -80,7 +80,7 @@ public class PhantomMod : MonoBehaviour {
         if (!Helper.CurrentCamera.IsNotNull(out Camera camera)) return;
         if (!camera.enabled) return;
 
-        if (this.ogParent == null) {
+        if (this.ogParent is null) {
             this.ogParent = camera.transform.parent;
             return;
         }

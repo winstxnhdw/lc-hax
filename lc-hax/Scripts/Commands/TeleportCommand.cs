@@ -16,7 +16,7 @@ public class TeleportCommand : ICommand {
         PlayerControllerB? targetPlayer = Helper.GetPlayer(args[0]);
         PlayerControllerB? currentPlayer = Helper.LocalPlayer;
 
-        if (targetPlayer == null || currentPlayer == null) {
+        if (targetPlayer is null || currentPlayer is null) {
             return new Result(message: "Player not found!");
         }
 
