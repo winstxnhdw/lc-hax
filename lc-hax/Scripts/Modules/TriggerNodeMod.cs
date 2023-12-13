@@ -4,7 +4,7 @@ using GameNetcodeStuff;
 
 namespace Hax;
 
-public class RemoteTriggerNodeMod : MonoBehaviour {
+public class TriggerNodeMod : MonoBehaviour {
     void OnEnable() {
         InputListener.onMiddleButtonPress += this.Fire;
     }
