@@ -67,5 +67,6 @@ No features in this mod require host privileges.
 
 | Action                      | Input  |
 | --------------------------  | ------ |
-| Detonate a jetpack/landmine | `M3`   |
+| Stun enemies nearby         | `M1`   |
+| Trigger nodes               | `M3`   |
 | Toggle Phantom              | `=`    |
