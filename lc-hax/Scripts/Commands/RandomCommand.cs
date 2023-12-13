@@ -5,7 +5,6 @@ namespace Hax;
 
 public class RandomCommand : ICommand {
     ObjectPlacements<Transform, ShipTeleporter>? GetInverseTeleporterPlacements(Component target) {
-        Helper.BuyUnlockable(Unlockable.INVERSE_TELEPORTER);
         HaxObject.Instance?.ShipTeleporters.Renew();
 
         if (!Helper.InverseTeleporter.IsNotNull(out ShipTeleporter inverseTeleporter)) {
@@ -36,11 +35,7 @@ public class RandomCommand : ICommand {
     }
 
     ObjectPlacements<Transform, PlaceableShipObject>? GetCupboardPlacements(Component target) {
-        Helper.BuyUnlockable(Unlockable.CUPBOARD);
-
-        if (!Helper.GetUnlockable(Unlockable.CUPBOARD).IsNotNull(out PlaceableShipObject cupboard)) {
-            return null;
-        }
+        if (!Helper.GetUnlockable(Unlockable.CUPBOARD).IsNotNull(out PlaceableShipObject cupboard)) return null;
 
         Vector3 positionOffset = new(0.0f, 1.75f, 0.0f);
         Vector3 rotationOffset = new(-90.0f, 0.0f, 0.0f);
@@ -65,15 +60,17 @@ public class RandomCommand : ICommand {
         );
     }
 
-    Result TeleportPlayerToRandom(string[] args) {
+    void TeleportPlayerToRandomNextFrame(string[] args) {
         if (!Helper.GetPlayer(args[0]).IsNotNull(out PlayerControllerB targetPlayer)) {
-            return new Result(message: "Player not found!");
+            Helper.PrintSystem("Player not found!");
+            return;
         }
 
         ObjectPlacements<Transform, ShipTeleporter>? teleporterPlacements = this.GetInverseTeleporterPlacements(targetPlayer);
 
         if (teleporterPlacements is null) {
-            return new Result(message: "Inverse Teleporter not found!");
+            Helper.PrintSystem("Inverse Teleporter not found!");
+            return;
         }
 
         Helper.CreateComponent<TransientBehaviour>()
@@ -83,7 +80,8 @@ public class RandomCommand : ICommand {
         ObjectPlacements<Transform, PlaceableShipObject>? cupboardPlacements = this.GetCupboardPlacements(targetPlayer);
 
         if (cupboardPlacements is null) {
-            return new Result(message: "Cupboard not found!");
+            Helper.PrintSystem("Cupboard not found!");
+            return;
         }
 
         Helper.CreateComponent<TransientBehaviour>()
@@ -91,7 +89,14 @@ public class RandomCommand : ICommand {
               .Dispose(() => Helper.PlaceObjectAtTransform(cupboardPlacements.Value.Placement).Invoke(0));
 
         teleporterPlacements.Value.Placement.GameObject.PressTeleportButtonServerRpc();
-        return new Result(true);
+    }
+
+    void TeleportPlayerToRandom(string[] args) {
+        Helper.BuyUnlockable(Unlockable.CUPBOARD);
+        Helper.BuyUnlockable(Unlockable.INVERSE_TELEPORTER);
+
+        Helper.CreateComponent<WaitForNextFrame>()
+              .Init(() => this.TeleportPlayerToRandomNextFrame(args));
     }
 
     public void Execute(string[] args) {
@@ -100,10 +105,6 @@ public class RandomCommand : ICommand {
             return;
         }
 
-        Result result = this.TeleportPlayerToRandom(args);
-
-        if (!result.Success) {
-            Helper.PrintSystem(result.Message);
-        }
+        this.TeleportPlayerToRandom(args);
     }
 }
