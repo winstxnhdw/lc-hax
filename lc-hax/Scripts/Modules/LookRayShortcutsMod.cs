@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Hax;
 
-public class RemoteExplosiveMod : MonoBehaviour {
+public class LookRayShortcutsMod : MonoBehaviour {
     void OnEnable() {
         InputListener.onMiddleButtonPress += this.Fire;
     }
@@ -33,6 +33,19 @@ public class RemoteExplosiveMod : MonoBehaviour {
 
             if (Helper.Extant(gameObject.GetComponent<JetpackItem>(), out JetpackItem jetpack)) {
                 jetpack.ExplodeJetpackServerRpc();
+            }
+
+            if (Helper.Extant(gameObject.GetComponent<Turret>(), out Turret turret)) {
+                turret.EnterBerserkModeServerRpc(-1);
+            }
+
+            if (Helper.Extant(gameObject.GetComponent<DoorLock>(), out DoorLock doorLock)) {
+                doorLock.UnlockDoorSyncWithServer();
+            }
+
+            if (Helper.Extant(gameObject.GetComponent<TerminalAccessibleObject>(), out TerminalAccessibleObject tao)) {
+                bool isDoorOpen = Reflector.Target(tao).GetInternalField<bool>("isDoorOpen");
+                tao.SetDoorOpenServerRpc(!isDoorOpen);
             }
         });
     }
