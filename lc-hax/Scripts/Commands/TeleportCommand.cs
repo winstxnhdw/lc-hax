@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using GameNetcodeStuff;
 
@@ -39,12 +40,12 @@ public class TeleportCommand : ICommand {
         return new Result(true);
     }
 
-    Result TeleportPlayerToPosition(PlayerControllerB player, Vector3 position) {
-        Helper.BuyUnlockable(Unlockable.TELEPORTER);
+    Action TeleportPlayerToPositionNextFrame(PlayerControllerB player, Vector3 position) => () => {
         HaxObject.Instance?.ShipTeleporters.Renew();
 
         if (!Helper.Teleporter.IsNotNull(out ShipTeleporter teleporter)) {
-            return new Result(message: "ShipTeleporter not found!");
+            Helper.PrintSystem("ShipTeleporter not found!");
+            return;
         }
 
         GameObject newTransform = player.transform.Copy();
@@ -73,6 +74,12 @@ public class TeleportCommand : ICommand {
         Helper.CreateComponent<TransientBehaviour>()
               .Init(Helper.PlaceObjectAtPosition(teleporterPlacement), 6.0f)
               .Dispose(() => Helper.PlaceObjectAtPosition(previousTeleporterPlacement).Invoke(0));
+    };
+
+    Result TeleportPlayerToPosition(PlayerControllerB player, Vector3 position) {
+        Helper.BuyUnlockable(Unlockable.TELEPORTER);
+        Helper.CreateComponent<WaitForNextFrame>()
+              .Init(this.TeleportPlayerToPositionNextFrame(player, position));
 
         return new Result(true);
     }
