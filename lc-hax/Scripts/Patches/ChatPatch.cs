@@ -6,30 +6,27 @@ using HarmonyLib;
 namespace Hax;
 
 [HarmonyPatch(typeof(HUDManager))]
-class ChatPatch {
-    [HarmonyPrefix]
-    [HarmonyPatch("EnableChat_performed")]
-    static void EnableChatPrefix(ref PlayerControllerB ___localPlayer, ref bool __state) {
+[HarmonyPatch("EnableChat_performed")]
+class EnableChatPatch {
+    static void Prefix(ref PlayerControllerB ___localPlayer, ref bool __state) {
         __state = ___localPlayer.isPlayerDead;
         ___localPlayer.isPlayerDead = false;
     }
 
-    [HarmonyPostfix]
-    [HarmonyPatch("EnableChat_performed")]
-    static void EnableChatPostfix(ref PlayerControllerB ___localPlayer, bool __state) {
+    static void Postfix(ref PlayerControllerB ___localPlayer, bool __state) {
         ___localPlayer.isPlayerDead = __state;
     }
+}
 
-    [HarmonyPrefix]
-    [HarmonyPatch("SubmitChat_performed")]
-    static void SubmitChatPrefix(ref PlayerControllerB ___localPlayer, ref bool __state) {
+[HarmonyPatch(typeof(HUDManager))]
+[HarmonyPatch("SubmitChat_performed")]
+class SubmitChatPatch {
+    static void Prefix(ref PlayerControllerB ___localPlayer, ref bool __state) {
         __state = ___localPlayer.isPlayerDead;
         ___localPlayer.isPlayerDead = false;
     }
 
-    [HarmonyPostfix]
-    [HarmonyPatch("SubmitChat_performed")]
-    static void SubmitChatPostfix(ref PlayerControllerB ___localPlayer, bool __state) {
+    static void Postfix(ref PlayerControllerB ___localPlayer, bool __state) {
         ___localPlayer.isPlayerDead = __state;
     }
 }
