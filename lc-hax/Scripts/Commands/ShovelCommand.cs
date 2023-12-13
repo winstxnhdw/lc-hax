@@ -8,6 +8,12 @@ public class ShovelCommand : ICommand {
             return;
         }
 
-        Settings.ShovelHitForce = int.TryParse(args[0], out int shovelHitForce) ? shovelHitForce : Settings.ShovelHitForce;
+        if (!int.TryParse(args[0], out int shovelHitForce)) {
+            Helper.PrintSystem("Invalid valuer!");
+            return;
+        }
+
+        Settings.ShovelHitForce = shovelHitForce;
+        Helper.PrintSystem($"Shovel hit force is now set to {shovelHitForce}!");
     }
 }
