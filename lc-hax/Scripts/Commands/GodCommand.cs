@@ -1,4 +1,3 @@
-
 namespace Hax;
 
 public class GodCommand : ICommand {
