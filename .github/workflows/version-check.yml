@@ -16,7 +16,7 @@ on:
     - cron: 0 0 * * *
 
 jobs:
-  lint:
+  check-version:
     runs-on: ubuntu-latest
 
     steps:
