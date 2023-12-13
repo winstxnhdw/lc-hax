@@ -29,15 +29,12 @@ public static partial class Helper {
 
     public static Action<float> PlaceObjectAtTransform<T, M>(
         ObjectPlacement<T, M> placement
-    ) where T : Transform where M : MonoBehaviour => (_) => {
-        NetworkObject networkObject = Helper.GetNetworkObject(placement.GameObject);
-        Helper.ShipBuildModeManager?.PlaceShipObjectServerRpc(
-            placement.TargetObject.position + placement.PositionOffset,
-            placement.TargetObject.eulerAngles + placement.RotationOffset,
-            networkObject,
-            -1
-        );
-    };
+    ) where T : Transform where M : MonoBehaviour => Helper.PlaceObjectAtTransform(
+        placement.TargetObject,
+        placement.GameObject,
+        placement.PositionOffset,
+        placement.RotationOffset
+    );
 
     public static Action<float> PlaceObjectAtPosition<T, M>(
         T targetObject,
@@ -70,13 +67,10 @@ public static partial class Helper {
 
     public static Action<float> PlaceObjectAtPosition<T, M>(
         ObjectPlacement<T, M> placement
-    ) where T : Transform where M : MonoBehaviour => (_) => {
-        NetworkObject networkObject = Helper.GetNetworkObject(placement.GameObject);
-        Helper.ShipBuildModeManager?.PlaceShipObjectServerRpc(
-            placement.TargetObject.position + placement.PositionOffset,
-            placement.RotationOffset,
-            networkObject,
-            -1
-        );
-    };
+    ) where T : Transform where M : MonoBehaviour => Helper.PlaceObjectAtPosition(
+        placement.TargetObject,
+        placement.GameObject,
+        placement.PositionOffset,
+        placement.RotationOffset
+    );
 }
