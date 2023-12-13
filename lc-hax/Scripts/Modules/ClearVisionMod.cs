@@ -7,6 +7,7 @@ namespace Hax;
 public class ClearVisionMod : MonoBehaviour {
     IEnumerator SetClearVision() {
         HDAdditionalLightData? lightData = null;
+
         while (true) {
             if (!Helper.Extant(Helper.StartOfRound, out StartOfRound startOfRound) ||
                 !Helper.Extant(TimeOfDay.Instance, out TimeOfDay timeOfDay) ||
