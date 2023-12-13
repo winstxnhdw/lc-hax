@@ -17,7 +17,7 @@ public static class Console {
         { "/xyz", new LocationCommand() },
         { "/home", new HomeCommand() },
         { "/end", new EndCommand() },
-        { "/timescale", new TimeScaleCommand()},
+        { "/timescale", new TimescaleCommand() },
         { "/explode", new ExplodeCommand() },
         { "/noise", new NoiseCommand() },
         { "/random", new RandomCommand() },
