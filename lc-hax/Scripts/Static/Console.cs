@@ -1,4 +1,3 @@
-using System.Linq;
 using System.Collections.Generic;
 using UnityEngine.EventSystems;
 
@@ -28,18 +27,17 @@ public static class Console {
         { "/pumpkin", new PumpkinCommand() },
     };
 
-    static Reflector? HUDManagerReflector => Helper.HUDManager == null ? null : Reflector.Target(Helper.HUDManager);
-
     public static void Print(string name, string? message) {
-        if (Helper.HUDManager is null || string.IsNullOrWhiteSpace(message)) return;
+        if (string.IsNullOrWhiteSpace(message) || !Helper.HUDManager.IsNotNull(out HUDManager hudManager)) return;
 
-        _ = Console.HUDManagerReflector?.InvokeInternalMethod("AddChatMessage", message, name);
+        _ = Reflector.Target(hudManager)?
+                     .InvokeInternalMethod("AddChatMessage", message, name);
 
-        if (Helper.HUDManager.localPlayer.isTypingChat) {
-            Helper.HUDManager.localPlayer.isTypingChat = false;
-            Helper.HUDManager.typingIndicator.enabled = false;
-            Helper.HUDManager.chatTextField.text = "";
-            Helper.HUDManager.PingHUDElement(Helper.HUDManager.Chat, 1.0f, 1.0f, 0.2f);
+        if (hudManager.localPlayer.isTypingChat) {
+            hudManager.localPlayer.isTypingChat = false;
+            hudManager.typingIndicator.enabled = false;
+            hudManager.chatTextField.text = "";
+            hudManager.PingHUDElement(hudManager.Chat, 1.0f, 1.0f, 0.2f);
             EventSystem.current.SetSelectedGameObject(null);
         }
     }
