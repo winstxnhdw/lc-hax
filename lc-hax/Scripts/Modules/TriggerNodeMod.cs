@@ -14,7 +14,7 @@ public class TriggerNodeMod : MonoBehaviour {
     }
 
     void Fire() {
-        if (!Helper.Extant(Helper.CurrentCamera, out Camera camera)) return;
+        if (!Helper.CurrentCamera.IsNotNull(out Camera camera)) return;
         if (!camera.enabled) return;
 
         List<RaycastHit> raycastHits = [.. Physics.SphereCastAll(
@@ -27,33 +27,33 @@ public class TriggerNodeMod : MonoBehaviour {
         raycastHits.ForEach(raycastHit => {
             GameObject gameObject = raycastHit.collider.gameObject;
 
-            if (Helper.Extant(gameObject.GetComponentInParent<Landmine>(), out Landmine landmine)) {
+            if (gameObject.GetComponentInParent<Landmine>().IsNotNull(out Landmine landmine)) {
                 _ = Reflector.Target(landmine).InvokeInternalMethod("TriggerMineOnLocalClientByExiting");
                 return;
             }
 
-            if (Helper.Extant(gameObject.GetComponent<JetpackItem>(), out JetpackItem jetpack)) {
+            if (gameObject.GetComponent<JetpackItem>().IsNotNull(out JetpackItem jetpack)) {
                 jetpack.ExplodeJetpackServerRpc();
             }
 
-            if (Helper.Extant(gameObject.GetComponent<Turret>(), out Turret turret)) {
+            if (gameObject.GetComponent<Turret>().IsNotNull(out Turret turret)) {
                 turret.EnterBerserkModeServerRpc(-1);
             }
 
-            if (Helper.Extant(gameObject.GetComponent<DoorLock>(), out DoorLock doorLock)) {
+            if (gameObject.GetComponent<DoorLock>().IsNotNull(out DoorLock doorLock)) {
                 doorLock.UnlockDoorSyncWithServer();
             }
 
-            if (Helper.Extant(gameObject.GetComponent<TerminalAccessibleObject>(), out TerminalAccessibleObject terminalObject)) {
+            if (gameObject.GetComponent<TerminalAccessibleObject>().IsNotNull(out TerminalAccessibleObject terminalObject)) {
                 bool isDoorOpen = Reflector.Target(terminalObject).GetInternalField<bool>("isDoorOpen");
                 terminalObject.SetDoorOpenServerRpc(!isDoorOpen);
             }
 
-            if (Helper.Extant(gameObject.GetComponent<PlayerControllerB>(), out PlayerControllerB player)) {
+            if (gameObject.GetComponent<PlayerControllerB>().IsNotNull(out PlayerControllerB player)) {
                 this.Log($"found {player.playerUsername}");
-                if (!Helper.Extant(RoundManager.Instance, out RoundManager roundManager) ||
-                    !Helper.Extant(roundManager.SpawnedEnemies, out List<EnemyAI> allEnemies) ||
-                    !Helper.Extant(Helper.LocalPlayer, out PlayerControllerB localPlayer) ||
+                if (!Helper.IsNotNull(RoundManager.Instance, out RoundManager roundManager) ||
+                    !Helper.IsNotNull(roundManager.SpawnedEnemies, out List<EnemyAI> allEnemies) ||
+                    !Helper.IsNotNull(Helper.LocalPlayer, out PlayerControllerB localPlayer) ||
                     player == localPlayer)
                     return;
 

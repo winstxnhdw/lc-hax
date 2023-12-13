@@ -25,13 +25,13 @@ public class TeleportCommand : ICommand {
     }
 
     Result TeleportToPosition(string[] args) {
-        if (!Helper.Extant(Helper.LocalPlayer, out PlayerControllerB currentPlayer)) {
+        if (!Helper.LocalPlayer.IsNotNull(out PlayerControllerB currentPlayer)) {
             return new Result(message: "Player not found!");
         }
 
         Vector3? coordinates = this.GetCoordinates(args);
 
-        if (coordinates == null) {
+        if (coordinates is null) {
             return new Result(message: "Invalid coordinates!");
         }
 
@@ -43,11 +43,11 @@ public class TeleportCommand : ICommand {
         Helper.BuyUnlockable(Unlockable.TELEPORTER);
         HaxObject.Instance?.ShipTeleporters.Renew();
 
-        if (!Helper.Extant(Helper.Teleporter, out ShipTeleporter teleporter)) {
+        if (!Helper.Teleporter.IsNotNull(out ShipTeleporter teleporter)) {
             return new Result(message: "ShipTeleporter not found!");
         }
 
-        GameObject previousTransform = Helper.Copy(teleporter.transform);
+        GameObject previousTransform = teleporter.transform.Copy();
         GameObject newTransform = new();
         newTransform.transform.position = position;
         newTransform.transform.eulerAngles = player.transform.eulerAngles;
@@ -58,36 +58,36 @@ public class TeleportCommand : ICommand {
         Vector3 rotationOffset = new(-90.0f, 0.0f, 0.0f);
         Vector3 positionOffset = new(0.0f, 1.5f, 0.0f);
 
-        _ = Helper.CreateComponent<TransientBehaviour>()
-                   .Init(Helper.PlaceObjectAtPosition(newTransform.transform, teleporter, positionOffset, rotationOffset), 6.0f)
-                   .Dispose(() => Helper.PlaceObjectAtPosition(previousTransform.transform, teleporter, positionOffset, rotationOffset).Invoke(0));
+        Helper.CreateComponent<TransientBehaviour>()
+              .Init(Helper.PlaceObjectAtPosition(newTransform.transform, teleporter, positionOffset, rotationOffset), 6.0f)
+              .Dispose(() => Helper.PlaceObjectAtPosition(previousTransform.transform, teleporter, positionOffset, rotationOffset).Invoke(0));
 
         return new Result(true);
     }
 
     Result TeleportPlayerToPosition(string[] args) {
-        if (!Helper.Extant(Helper.GetPlayer(args[0]), out PlayerControllerB player)) {
+        if (!Helper.GetPlayer(args[0]).IsNotNull(out PlayerControllerB player)) {
             return new Result(message: "Player not found!");
         }
 
         Vector3? coordinates = this.GetCoordinates(args[1..]);
 
-        return coordinates == null
-                            ? new Result(message: "Invalid coordinates!")
-                            : this.TeleportPlayerToPosition(player, coordinates.Value);
+        return coordinates is null
+            ? new Result(message: "Invalid coordinates!")
+            : this.TeleportPlayerToPosition(player, coordinates.Value);
     }
 
     Result TeleportPlayerToPlayer(string[] args) {
         PlayerControllerB? sourcePlayer = Helper.GetPlayer(args[0]);
         PlayerControllerB? targetPlayer = Helper.GetPlayer(args[1]);
 
-        return sourcePlayer == null || targetPlayer == null
+        return sourcePlayer is null || targetPlayer is null
             ? new Result(message: "Player not found!")
             : this.TeleportPlayerToPosition(sourcePlayer, targetPlayer.transform.position);
     }
 
     public void Execute(string[] args) {
-        if (args.Length < 1) {
+        if (args.Length is 0) {
             Helper.PrintSystem("Usage: /tp <player> | /tp <player> <player> | /tp <x> <y> <z>");
             return;
         }

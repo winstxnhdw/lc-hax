@@ -81,12 +81,12 @@ public class Reflector {
 
     public Reflector? GetInternalField(string variableName) {
         object? type = this.GetInternalField(variableName);
-        return type == null ? null : new(type);
+        return type is null ? null : new(type);
     }
 
     public Reflector? GetInternalStaticField(string variableName) {
         object? type = this.GetInternalStaticField(variableName);
-        return type == null ? null : new(type);
+        return type is null ? null : new(type);
     }
 
     public Reflector? SetInternalField(string variableName, object value) => this.SetField(variableName, value, Reflector.internalField);
@@ -101,7 +101,7 @@ public class Reflector {
 
     public Reflector? InvokeInternalMethod(string methodName, params object[] args) {
         object? obj = this.InvokeInternalMethod<object>(methodName, args);
-        return obj == null ? null : new Reflector(obj);
+        return obj is null ? null : new Reflector(obj);
     }
 
     public static Reflector Target(object obj) => new(obj);

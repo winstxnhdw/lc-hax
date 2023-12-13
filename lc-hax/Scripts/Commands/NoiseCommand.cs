@@ -9,12 +9,12 @@ public class NoiseCommand : ICommand {
         RoundManager.Instance.PlayAudibleNoise(position, float.MaxValue, float.MaxValue, 10, false);
 
     public void Execute(string[] args) {
-        if (args.Length < 1) {
+        if (args.Length is 0) {
             Helper.PrintSystem("Usage: /noise <player>");
             return;
         }
 
-        if (!Helper.Extant(Helper.GetPlayer(args[0]), out PlayerControllerB player)) {
+        if (!Helper.GetPlayer(args[0]).IsNotNull(out PlayerControllerB player)) {
             Helper.PrintSystem("Player not found!");
             return;
         }

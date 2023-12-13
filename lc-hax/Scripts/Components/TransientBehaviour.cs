@@ -20,9 +20,8 @@ public class TransientBehaviour : MonoBehaviour {
         return this;
     }
 
-    public TransientBehaviour Dispose(Action disposeAction) {
+    public void Dispose(Action disposeAction) {
         this.DisposeAction = disposeAction;
-        return this;
     }
 
     IEnumerator TransientCoroutine() {

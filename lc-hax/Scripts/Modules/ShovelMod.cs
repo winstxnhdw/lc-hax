@@ -11,7 +11,7 @@ public class ShovelMod : MonoBehaviour {
 
     IEnumerator SetShovelForce() {
         while (true) {
-            if (!Helper.Extant(this.LocalPlayerShovel, out Shovel shovel)) {
+            if (!this.LocalPlayerShovel.IsNotNull(out Shovel shovel)) {
                 yield return new WaitForEndOfFrame();
                 continue;
             }

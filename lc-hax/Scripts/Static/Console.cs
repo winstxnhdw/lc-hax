@@ -31,7 +31,7 @@ public static class Console {
     static Reflector? HUDManagerReflector => Helper.HUDManager == null ? null : Reflector.Target(Helper.HUDManager);
 
     public static void Print(string name, string? message) {
-        if (Helper.HUDManager == null || string.IsNullOrWhiteSpace(message)) return;
+        if (Helper.HUDManager is null || string.IsNullOrWhiteSpace(message)) return;
 
         _ = Console.HUDManagerReflector?.InvokeInternalMethod("AddChatMessage", message, name);
 
@@ -50,7 +50,7 @@ public static class Console {
     }
 
     public static void ExecuteCommand(string[] args) {
-        if (args.Length < 1) {
+        if (args.Length is 0) {
             Helper.PrintSystem("Usage: /<command> <args>");
             return;
         }
@@ -60,7 +60,7 @@ public static class Console {
             return;
         }
 
-        Console.Commands[args[0]].Execute(args.Skip(1).ToArray());
+        Console.Commands[args[0]].Execute(args[1..]);
     }
 }
 

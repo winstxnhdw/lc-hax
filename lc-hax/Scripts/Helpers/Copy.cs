@@ -3,7 +3,7 @@ using UnityEngine;
 namespace Hax;
 
 public static partial class Helper {
-    public static Vector3 Copy(Vector3 vector) {
+    public static Vector3 Copy(this Vector3 vector) {
         return new Vector3(
             vector.x,
             vector.y,
@@ -11,10 +11,10 @@ public static partial class Helper {
         );
     }
 
-    public static GameObject Copy(Transform transform) {
+    public static GameObject Copy(this Transform transform) {
         GameObject gameObject = new();
-        gameObject.transform.position = Helper.Copy(transform.position);
-        gameObject.transform.eulerAngles = Helper.Copy(transform.eulerAngles);
+        gameObject.transform.position = transform.position.Copy();
+        gameObject.transform.eulerAngles = transform.eulerAngles.Copy();
 
         return gameObject;
     }

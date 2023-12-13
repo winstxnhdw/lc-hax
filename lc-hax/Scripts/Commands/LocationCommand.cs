@@ -5,7 +5,7 @@ namespace Hax;
 
 public class LocationCommand : ICommand {
     public void Execute(string[] _) {
-        if (!Helper.Extant(Helper.LocalPlayer, out PlayerControllerB player)) {
+        if (!Helper.LocalPlayer.IsNotNull(out PlayerControllerB player)) {
             Helper.PrintSystem("Player not found!");
             return;
         }

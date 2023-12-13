@@ -21,7 +21,7 @@ class ScanRangePatch {
 
     [HarmonyPatch("MeetsScanNodeRequirements")]
     static bool Prefix(ScanNodeProperties node, ref bool __result) {
-        if (node == null) return true;
+        if (node is null) return true;
 
         __result = true;
         return false;

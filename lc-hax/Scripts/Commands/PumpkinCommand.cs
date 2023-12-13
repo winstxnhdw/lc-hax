@@ -14,7 +14,7 @@ public class PumpkinCommand : ICommand {
     private Vector3 toOutwardsPos = Vector3.zero;
 
     Result TeleportPlayerToRandom(string[] args) {
-        if (!Helper.Extant(Helper.GetPlayer(args[0]), out PlayerControllerB targetPlayer)) {
+        if (!Helper.IsNotNull(Helper.GetPlayer(args[0]), out PlayerControllerB targetPlayer)) {
             return new Result(message: "Player not found!");
         }
 
