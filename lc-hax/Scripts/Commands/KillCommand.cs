@@ -5,32 +5,41 @@ using UnityEngine;
 namespace Hax;
 
 public class KillCommand : ICommand {
-    public void Execute(string[] args) {
-        if (args.Length < 1) {
-            if (!Helper.Extant(Helper.LocalPlayer, out PlayerControllerB localPlayer)) {
-                Helper.PrintSystem("Player not found!");
-                return;
-            }
+    void KillPlayer(PlayerControllerB player) =>
+        player.DamagePlayerFromOtherClientServerRpc(1000, Vector3.zero, -1);
 
-            localPlayer.DamagePlayerFromOtherClientServerRpc(1000, Vector3.zero, -1);
-            return;
+    Result KillSelf() {
+        if (!Helper.Extant(Helper.LocalPlayer, out PlayerControllerB localPlayer)) {
+            return new Result(message: "Player not found!");
         }
 
-        if (args[0] is "--all") {
-            Helper.Players
-                   .ToList()
-                   .ForEach(player => player.DamagePlayerFromOtherClientServerRpc(1000, Vector3.zero, -1));
+        this.KillPlayer(localPlayer);
+        return new Result(true);
+    }
 
-            Helper.PrintSystem("Attempting to kill all players!");
-            return;
-        }
-
+    Result KillTargetPlayer(string[] args) {
         if (!Helper.Extant(Helper.GetPlayer(args[0]), out PlayerControllerB targetPlayer)) {
-            Helper.PrintSystem("Player not found!");
-            return;
+            return new Result(message: "Player not found!");
         }
 
-        targetPlayer.DamagePlayerFromOtherClientServerRpc(1000, Vector3.zero, -1);
-        Helper.PrintSystem($"Attempting to kill {targetPlayer.playerUsername}!");
+        this.KillPlayer(targetPlayer);
+        return new Result(true);
+    }
+
+    Result KillAllPlayers() {
+        Helper.Players.ToList().ForEach(this.KillPlayer);
+        return new Result(true);
+    }
+
+    public void Execute(string[] args) {
+        Result result = args.Length is 0
+                      ? this.KillSelf()
+                      : args[0] is "--all"
+                      ? this.KillAllPlayers()
+                      : this.KillTargetPlayer(args);
+
+        if (!result.Success) {
+            Helper.PrintSystem(result.Message);
+        }
     }
 }
