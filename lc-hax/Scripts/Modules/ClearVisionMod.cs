@@ -8,9 +8,10 @@ public class ClearVisionMod : MonoBehaviour {
     IEnumerator SetClearVision() {
         HDAdditionalLightData? lightData = null;
         while (true) {
-            if (!Helper.Extant(TimeOfDay.Instance, out TimeOfDay timeOfDay)
-                || !Helper.Extant(timeOfDay.sunIndirect, out Light sunIndirect)
-                || !Helper.Extant(Helper.StartOfRound, out StartOfRound startOfRound)) {
+            if (!Helper.Extant(Helper.StartOfRound, out StartOfRound startOfRound) ||
+                !Helper.Extant(TimeOfDay.Instance, out TimeOfDay timeOfDay) ||
+                !Helper.Extant(timeOfDay.sunIndirect, out Light sunIndirect)
+            ) {
                 yield return new WaitForEndOfFrame();
                 continue;
             }
