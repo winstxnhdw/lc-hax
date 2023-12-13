@@ -16,7 +16,7 @@ public class StunCommand : ICommand {
             return;
         }
 
-        Physics.OverlapSphere(player.transform.position, 1000.0f, 524288)
+        Physics.OverlapSphere(player.transform.position, float.MaxValue, 524288)
                .Select(collider => collider.GetComponent<EnemyAICollisionDetect>())
                .Where(enemy => enemy != null)
                .ToList()
