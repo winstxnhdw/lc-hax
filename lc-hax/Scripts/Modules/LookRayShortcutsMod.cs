@@ -1,11 +1,10 @@
 using System.Collections.Generic;
-using System.Net;
-using GameNetcodeStuff;
 using UnityEngine;
+using GameNetcodeStuff;
 
 namespace Hax;
 
-public class LookRayShortcutsMod : MonoBehaviour {
+public class RemoteTriggerNodeMod : MonoBehaviour {
     void OnEnable() {
         InputListener.onMiddleButtonPress += this.Fire;
     }
@@ -45,9 +44,9 @@ public class LookRayShortcutsMod : MonoBehaviour {
                 doorLock.UnlockDoorSyncWithServer();
             }
 
-            if (Helper.Extant(gameObject.GetComponent<TerminalAccessibleObject>(), out TerminalAccessibleObject tao)) {
-                bool isDoorOpen = Reflector.Target(tao).GetInternalField<bool>("isDoorOpen");
-                tao.SetDoorOpenServerRpc(!isDoorOpen);
+            if (Helper.Extant(gameObject.GetComponent<TerminalAccessibleObject>(), out TerminalAccessibleObject terminalObject)) {
+                bool isDoorOpen = Reflector.Target(terminalObject).GetInternalField<bool>("isDoorOpen");
+                terminalObject.SetDoorOpenServerRpc(!isDoorOpen);
             }
 
             if (Helper.Extant(gameObject.GetComponent<PlayerControllerB>(), out PlayerControllerB player)) {
