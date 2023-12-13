@@ -14,9 +14,10 @@ public class StunMod : MonoBehaviour {
     }
 
     void Stun() {
+        if (!Settings.EnableStunOnLeftClick) return;
         if (!Helper.Extant(Helper.LocalPlayer, out PlayerControllerB player)) return;
 
-        Physics.OverlapSphere(player.transform.position, 25.0f, 524288)
+        Physics.OverlapSphere(player.transform.position, 5.0f, 524288)
                .Select(collider => collider.GetComponent<EnemyAICollisionDetect>())
                .Where(enemy => enemy != null)
                .ToList()
