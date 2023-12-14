@@ -46,7 +46,6 @@ public class HateCommand : ICommand {
                 return;
 
             enemyNames += $"{e.name},\n";
-            Log($"{e.name}. a");
 
             e.ChangeEnemyOwnerServerRpc(localPlayer.actualClientId);
             e.targetPlayer = player;
@@ -119,6 +118,8 @@ public class HateCommand : ICommand {
                 return;
             }
         });
+
+        Log($"Prompting enemies:\n{enemyNames}");
     }
 
     private static void Log(string msg) {
