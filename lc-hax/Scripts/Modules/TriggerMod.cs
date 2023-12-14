@@ -58,8 +58,8 @@ public class TriggerMod : MonoBehaviour {
             // }
 
             if (gameObject.GetComponent<PlayerControllerB>().IsNotNull(out PlayerControllerB player)) {
-                if (player.playerClientId == Helper.LocalPlayer?.playerClientId) return;
-                HateCommand.PromptEnemiesToTarget(player);
+                Helper.PromptEnemiesToTarget(player)
+                      .ForEach(enemy => Helper.PrintSystem($"{enemy} prompted!"));
             }
         });
     }
