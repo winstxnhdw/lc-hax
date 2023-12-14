@@ -5,6 +5,7 @@ namespace Hax;
 
 public static class Console {
     static Dictionary<string, ICommand> Commands { get; } = new() {
+        { "/hate", new HateCommand() },
         { "/god", new GodCommand() },
         { "/shovel", new ShovelCommand() },
         { "/tp", new TeleportCommand() },

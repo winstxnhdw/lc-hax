@@ -34,14 +34,17 @@ public class TriggerNodeMod : MonoBehaviour {
 
             if (gameObject.GetComponent<JetpackItem>().IsNotNull(out JetpackItem jetpack)) {
                 jetpack.ExplodeJetpackServerRpc();
+                return;
             }
 
             if (gameObject.GetComponent<Turret>().IsNotNull(out Turret turret)) {
                 turret.EnterBerserkModeServerRpc(-1);
+                return;
             }
 
             if (gameObject.GetComponent<DoorLock>().IsNotNull(out DoorLock doorLock)) {
                 doorLock.UnlockDoorSyncWithServer();
+                return;
             }
 
             if (gameObject.GetComponent<TerminalAccessibleObject>().IsNotNull(out TerminalAccessibleObject terminalObject)) {
@@ -50,19 +53,9 @@ public class TriggerNodeMod : MonoBehaviour {
             }
 
             if (gameObject.GetComponent<PlayerControllerB>().IsNotNull(out PlayerControllerB player)) {
-                this.Log($"found {player.playerUsername}");
-                if (!Helper.IsNotNull(RoundManager.Instance, out RoundManager roundManager) ||
-                    !Helper.IsNotNull(roundManager.SpawnedEnemies, out List<EnemyAI> allEnemies) ||
-                    !Helper.IsNotNull(Helper.LocalPlayer, out PlayerControllerB localPlayer) ||
-                    player == localPlayer)
-                    return;
+                if (player == Helper.LocalPlayer) return;
 
-                allEnemies.ForEach((e) => {
-                    e.ChangeEnemyOwnerServerRpc(localPlayer.actualClientId);
-                    e.SetMovingTowardsTargetPlayer(player);
-                });
-
-                this.Log($"sending enemies to {player.playerUsername}");
+                HateCommand.PromptEnemiesToTarget(player);
             }
         });
     }
