@@ -86,7 +86,7 @@ public class RandomCommand : ICommand {
 
         Helper.CreateComponent<TransientBehaviour>()
               .Init(Helper.PlaceObjectAtPosition(cupboardPlacements.Value.Placement), 6.0f)
-              .Dispose(() => Helper.PlaceObjectAtTransform(cupboardPlacements.Value.Placement).Invoke(0));
+              .Dispose(() => Helper.PlaceObjectAtTransform(cupboardPlacements.Value.PreviousPlacement).Invoke(0));
 
         teleporterPlacements.Value.Placement.GameObject.PressTeleportButtonServerRpc();
     }
