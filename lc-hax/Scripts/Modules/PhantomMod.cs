@@ -1,130 +1,72 @@
 using UnityEngine;
 using GameNetcodeStuff;
-using System;
 
 namespace Hax;
 
 public class PhantomMod : MonoBehaviour {
-    bool toggleOn = false;
-    bool ghostCamMode = false;
+    bool EnablePhantom { get; set; } = false;
+    int CurrentSpectatorIndex { get; set; } = 0;
 
-    QuickKeyboardMoveAround? kInstance = null;
-    QuickMouseCameraLookAround? mInstance = null;
-
-    Vector3 ogLocalPos;
-    Quaternion ogLocalRot;
-    Transform? ogParent;
-
-    int currentPlayerToTeleportToIndex = 0;
-
-    Action? goNextPlayerFunc = null;
-    Action? goPrevPlayerFunc = null;
+    Transform? OriginalCameraParent { get; set; }
+    Vector3 OriginalCameraLocalPosition { get; set; }
+    Quaternion OriginalCameraLocalRotation { get; set; }
+    QuickKeyboardMoveAround? KeyboardControls { get; set; }
+    QuickMouseCameraLookAround? MouseControls { get; set; }
 
     void OnEnable() {
-        this.goNextPlayerFunc = () => { this.GoToPlayer(1); };
-        this.goPrevPlayerFunc = () => { this.GoToPlayer(-1); };
-
         InputListener.onEqualsPress += this.TogglePhantom;
-        InputListener.onRightArrowKeyPress += this.goNextPlayerFunc;
-        InputListener.onLeftArrowKeyPress += this.goPrevPlayerFunc;
+        InputListener.onRightArrowKeyPress += () => this.LookAtPlayer(1);
+        InputListener.onLeftArrowKeyPress += () => this.LookAtPlayer(-1);
     }
 
     void OnDisable() {
         InputListener.onEqualsPress -= this.TogglePhantom;
-        InputListener.onRightArrowKeyPress -= this.goNextPlayerFunc;
-        InputListener.onLeftArrowKeyPress -= this.goPrevPlayerFunc;
+        InputListener.onRightArrowKeyPress -= () => this.LookAtPlayer(1);
+        InputListener.onLeftArrowKeyPress -= () => this.LookAtPlayer(-1);
     }
 
-    void GoToPlayer(int indexChange) {
-        if (!this.ghostCamMode) return;
-        if (!Helper.CurrentCamera.IsNotNull(out Camera camera)) return;
+    void LookAtPlayer(int indexChange) {
+        if (!this.EnablePhantom || !Helper.CurrentCamera.IsNotNull(out Camera camera)) return;
 
-        int currentPlayerCount = Helper.Players?.Length ?? 0;
+        int playerCount = Helper.Players?.Length ?? 0;
+        this.CurrentSpectatorIndex = (this.CurrentSpectatorIndex + indexChange) % playerCount;
 
-        if (currentPlayerCount <= 0) {
-            this.currentPlayerToTeleportToIndex = -1;
+        if (!Helper.GetPlayer(this.CurrentSpectatorIndex).IsNotNull(out PlayerControllerB targetPlayer)) {
+            Helper.PrintSystem("Player not found!");
             return;
         }
 
-        int currentIndex = this.currentPlayerToTeleportToIndex;
-        currentIndex += indexChange;
-
-        currentIndex =
-        //if more than playercount, loop back to 0
-        currentIndex >= currentPlayerCount
-        ?
-        0
-        :
-        //if less than 0, loop forward
-            currentIndex < 0
-            ?
-            currentPlayerCount - 1
-            :
-            currentIndex;
-
-        PlayerControllerB? targetPlayer = Helper.Players?[currentIndex];
-        if (targetPlayer is null) {
-            this.Log($"Player is somehow null");
-            return;
-        }
-
-        this.Log($"Teleporting to {targetPlayer.playerUsername}, index={currentIndex}");
         camera.transform.position = targetPlayer.playerEye.position;
-
-        this.currentPlayerToTeleportToIndex = currentIndex;
-
+        Helper.PrintSystem($"Spectating {targetPlayer.playerUsername}");
     }
 
     void TogglePhantom() {
         if (!Helper.LocalPlayer.IsNotNull(out PlayerControllerB player)) return;
-        if (!Helper.CurrentCamera.IsNotNull(out Camera camera)) return;
-        if (!camera.enabled) return;
-
-        if (this.ogParent is null) {
-            this.ogParent = camera.transform.parent;
+        if (!Helper.CurrentCamera.IsNotNull(out Camera camera) || !camera.enabled) return;
+        if (this.OriginalCameraParent is null) {
+            this.OriginalCameraParent = camera.transform.parent;
             return;
         }
 
-        this.toggleOn = !this.toggleOn;
+        this.EnablePhantom = !this.EnablePhantom;
+        player.enabled = !this.EnablePhantom;
 
-        this.Log($"{this.toggleOn} cam={camera}");
+        if (this.EnablePhantom) {
+            this.KeyboardControls = camera.gameObject.AddComponent<QuickKeyboardMoveAround>();
+            this.MouseControls = camera.gameObject.AddComponent<QuickMouseCameraLookAround>();
 
-        if (this.toggleOn) {
-            if (this.ghostCamMode) return;
-
-            this.Log($"Enable cam");
-            player.enabled = false;
-            this.ogLocalPos = camera.transform.localPosition;
-            this.ogLocalRot = camera.transform.localRotation;
+            this.OriginalCameraLocalPosition = camera.transform.localPosition.Copy();
+            this.OriginalCameraLocalRotation = camera.transform.localRotation.Copy();
             camera.transform.SetParent(null, true);
-            this.kInstance = camera.gameObject.AddComponent<QuickKeyboardMoveAround>();
-            this.mInstance = camera.gameObject.AddComponent<QuickMouseCameraLookAround>();
-
-            this.ghostCamMode = true;
         }
 
         else {
-            if (!this.ghostCamMode) return;
+            camera.transform.SetParent(this.OriginalCameraParent, false);
+            camera.transform.localPosition = this.OriginalCameraLocalPosition;
+            camera.transform.localRotation = this.OriginalCameraLocalRotation;
 
-            Destroy(this.kInstance);
-            Destroy(this.mInstance);
-
-            camera.transform.SetParent(this.ogParent, false);
-            camera.transform.localPosition = this.ogLocalPos;
-            camera.transform.localRotation = this.ogLocalRot;
-
-            player.enabled = true;
-            this.ghostCamMode = false;
-        }
-    }
-
-    private void Log(string msg) {
-        try {
-            Console.Print("GHOST", msg);
-
-        }
-        catch {
-
+            Destroy(this.KeyboardControls);
+            Destroy(this.MouseControls);
         }
     }
 }
