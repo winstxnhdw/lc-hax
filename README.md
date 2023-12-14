@@ -30,11 +30,10 @@ No features in this mod require host privileges.
 - Always sane
 - Clear vision
 - Always lightweight
-- Remotely detonate individual jetpacks/landmines
 - No hidden HUD
-- Phantom
 - Stun on left-click
 - [Commands](#commands)
+- [Binds](#binds)
 
 ## Commands
 
@@ -69,6 +68,5 @@ No features in this mod require host privileges.
 
 | Action                      | Input  |
 | --------------------------  | ------ |
-| Stun enemies nearby         | `M1`   |
-| Trigger nodes               | `M3`   |
+| Trigger various objects     | `M3`   |
 | Toggle Phantom              | `=`    |
