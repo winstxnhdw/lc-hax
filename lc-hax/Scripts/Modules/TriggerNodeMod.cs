@@ -52,6 +52,11 @@ public class TriggerNodeMod : MonoBehaviour {
                 terminalObject.SetDoorOpenServerRpc(!isDoorOpen);
             }
 
+            //untested code, uncomment and test this thanks.
+            // if (gameObject.GetComponent<DepositItemsDesk>().IsNotNull(out DepositItemsDesk deposit)) {
+            //     deposit.AttackPlayersServerRpc();
+            // }
+
             if (gameObject.GetComponent<PlayerControllerB>().IsNotNull(out PlayerControllerB player)) {
                 if (player == Helper.LocalPlayer) return;
 
