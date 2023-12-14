@@ -10,8 +10,8 @@ public class PhantomMod : MonoBehaviour {
     Transform? OriginalCameraParent { get; set; }
     Vector3 OriginalCameraLocalPosition { get; set; }
     Quaternion OriginalCameraLocalRotation { get; set; }
-    QuickKeyboardMoveAround? KeyboardControls { get; set; }
-    QuickMouseCameraLookAround? MouseControls { get; set; }
+    KeyboardMovement? KeyboardControls { get; set; }
+    MousePan? MouseControls { get; set; }
 
     void OnEnable() {
         InputListener.onEqualsPress += this.TogglePhantom;
@@ -52,8 +52,8 @@ public class PhantomMod : MonoBehaviour {
         player.enabled = !this.EnablePhantom;
 
         if (this.EnablePhantom) {
-            this.KeyboardControls = camera.gameObject.AddComponent<QuickKeyboardMoveAround>();
-            this.MouseControls = camera.gameObject.AddComponent<QuickMouseCameraLookAround>();
+            this.KeyboardControls = camera.gameObject.AddComponent<KeyboardMovement>();
+            this.MouseControls = camera.gameObject.AddComponent<MousePan>();
 
             this.OriginalCameraLocalPosition = camera.transform.localPosition.Copy();
             this.OriginalCameraLocalRotation = camera.transform.localRotation.Copy();
