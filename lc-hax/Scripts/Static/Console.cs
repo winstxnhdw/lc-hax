@@ -5,34 +5,32 @@ namespace Hax;
 
 public static class Console {
     static Dictionary<string, ICommand> Commands { get; } = new() {
-        { "/hate", new HateCommand() },
         { "/god", new GodCommand() },
-        { "/shovel", new ShovelCommand() },
-        { "/tp", new TeleportCommand() },
-        { "/money", new MoneyCommand() },
-        { "/unlock", new UnlockCommand() },
+        { "/end", new EndCommand() },
+        { "/hate", new HateCommand() },
         { "/kill", new KillCommand() },
         { "/lock", new LockCommand() },
-        { "/players", new PlayersCommand() },
-        { "/xyz", new LocationCommand() },
         { "/home", new HomeCommand() },
-        { "/end", new EndCommand() },
-        { "/timescale", new TimescaleCommand() },
-        { "/explode", new ExplodeCommand() },
-        { "/noise", new NoiseCommand() },
-        { "/random", new RandomCommand() },
         { "/stun", new StunCommand() },
-        { "/stunclick", new StunOnClickCommand() },
         { "/heal", new HealCommand() },
-        { "/ct", new ChibakuTenseiCommand() },
+        { "/tp", new TeleportCommand() },
+        { "/noise", new NoiseCommand() },
+        { "/money", new MoneyCommand() },
+        { "/xyz", new LocationCommand() },
+        { "/shovel", new ShovelCommand() },
+        { "/unlock", new UnlockCommand() },
+        { "/random", new RandomCommand() },
         { "/pumpkin", new PumpkinCommand() },
+        { "/players", new PlayersCommand() },
+        { "/explode", new ExplodeCommand() },
+        { "/ct", new ChibakuTenseiCommand() },
+        { "/timescale", new TimescaleCommand() },
+        { "/stunclick", new StunOnClickCommand() },
     };
 
     public static void Print(string name, string? message) {
         if (string.IsNullOrWhiteSpace(message) || !Helper.HUDManager.IsNotNull(out HUDManager hudManager)) return;
-
-        _ = Reflector.Target(hudManager)?
-                     .InvokeInternalMethod("AddChatMessage", message, name);
+        _ = Reflector.Target(hudManager)?.InvokeInternalMethod("AddChatMessage", message, name);
 
         if (hudManager.localPlayer.isTypingChat) {
             hudManager.localPlayer.isTypingChat = false;
