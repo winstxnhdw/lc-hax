@@ -6,7 +6,7 @@ namespace Hax;
 
 public class NoiseCommand : ICommand {
     Action<float> PlayNoise(Vector3 position) => (_) =>
-        RoundManager.Instance.PlayAudibleNoise(position, float.MaxValue, float.MaxValue, 10, false);
+        Helper.RoundManager?.PlayAudibleNoise(position, float.MaxValue, float.MaxValue, 10, false);
 
     public void Execute(string[] args) {
         if (args.Length is 0) {
