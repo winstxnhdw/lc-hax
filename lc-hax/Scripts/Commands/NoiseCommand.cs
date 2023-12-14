@@ -20,6 +20,6 @@ public class NoiseCommand : ICommand {
         }
 
         _ = Helper.CreateComponent<TransientBehaviour>()
-                  .Init(this.PlayNoise(player.transform.position), 60.0f);
+                  .Init(this.PlayNoise(player.transform.position), 30.0f);
     }
 }
