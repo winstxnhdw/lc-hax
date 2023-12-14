@@ -4,7 +4,7 @@ using GameNetcodeStuff;
 
 namespace Hax;
 
-public class TriggerNodeMod : MonoBehaviour {
+public class TriggerMod : MonoBehaviour {
     void OnEnable() {
         InputListener.onMiddleButtonPress += this.Fire;
     }
@@ -48,8 +48,8 @@ public class TriggerNodeMod : MonoBehaviour {
             }
 
             if (gameObject.GetComponent<TerminalAccessibleObject>().IsNotNull(out TerminalAccessibleObject terminalObject)) {
-                bool isDoorOpen = Reflector.Target(terminalObject).GetInternalField<bool>("isDoorOpen");
-                terminalObject.SetDoorOpenServerRpc(!isDoorOpen);
+                terminalObject.SetDoorOpenServerRpc(!Reflector.Target(terminalObject).GetInternalField<bool>("isDoorOpen"));
+                return;
             }
 
             //untested code, uncomment and test this thanks.
@@ -58,19 +58,9 @@ public class TriggerNodeMod : MonoBehaviour {
             // }
 
             if (gameObject.GetComponent<PlayerControllerB>().IsNotNull(out PlayerControllerB player)) {
-                if (player == Helper.LocalPlayer) return;
-
+                if (player.playerClientId == Helper.LocalPlayer?.playerClientId) return;
                 HateCommand.PromptEnemiesToTarget(player);
             }
         });
-    }
-    private void Log(string msg) {
-        try {
-            Console.Print("RAY", msg);
-
-        }
-        catch {
-
-        }
     }
 }
