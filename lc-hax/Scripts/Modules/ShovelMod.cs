@@ -1,11 +1,14 @@
 using System.Collections;
 using System.Linq;
+using GameNetcodeStuff;
 using UnityEngine;
 
 namespace Hax;
 
 public class ShovelMod : MonoBehaviour {
-    bool IsLocalPlayerShovel(Shovel shovel) => shovel.playerHeldBy?.playerClientId == Helper.LocalPlayer?.playerClientId;
+    PlayerControllerB? ShovelOwner(Shovel shovel) => shovel.playerHeldBy;
+
+    bool IsLocalPlayerShovel(Shovel shovel) => this.ShovelOwner(shovel)?.actualClientId == Helper.LocalPlayer?.actualClientId;
 
     Shovel? LocalPlayerShovel => HaxObject.Instance?.Shovels.Objects?.FirstOrDefault(this.IsLocalPlayerShovel);
 
@@ -17,7 +20,7 @@ public class ShovelMod : MonoBehaviour {
             }
 
             shovel.shovelHitForce = Settings.ShovelHitForce;
-            yield return new WaitForEndOfFrame();
+            yield return new WaitForSeconds(1.0f);
         }
     }
 
