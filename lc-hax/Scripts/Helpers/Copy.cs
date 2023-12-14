@@ -11,6 +11,15 @@ public static partial class Helper {
         );
     }
 
+    public static Quaternion Copy(this Quaternion quaternion) {
+        return new Quaternion(
+            quaternion.x,
+            quaternion.y,
+            quaternion.z,
+            quaternion.w
+        );
+    }
+
     public static GameObject Copy(this Transform transform) {
         GameObject gameObject = new();
         gameObject.transform.position = transform.position.Copy();
