@@ -4,16 +4,22 @@ using UnityEngine;
 
 namespace Hax;
 
-public class WaitForNextFrame : MonoBehaviour {
+public class WaitFor : MonoBehaviour {
     Action? Action { get; set; }
+    Func<bool>? Predicate { get; set; }
 
-    public void Init(Action action) {
+    public void Init(Func<bool> predicate, Action action) {
+        this.Predicate = predicate;
         this.Action = action;
-        _ = this.StartCoroutine(this.WaitForNextFrameCoroutine());
+        _ = this.StartCoroutine(this.WaitForCoroutine());
     }
 
-    IEnumerator WaitForNextFrameCoroutine() {
-        yield return new WaitForEndOfFrame();
+    IEnumerator WaitForCoroutine() {
+        while (true) {
+            if (this.Predicate is not null && this.Predicate()) break;
+            yield return new WaitForEndOfFrame();
+        }
+
         this.Action?.Invoke();
         Destroy(this.gameObject);
     }
