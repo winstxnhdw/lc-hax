@@ -49,6 +49,7 @@ No features in this mod require host privileges.
 | Teleport player to a location | `/tp <player> <x> <y> <z>` |
 | Teleport back to ship         | `/home <player?>`          |
 | Kill player                   | `/kill <player?>`          |
+| Lure enemies to player        | `/hate <player>`           |
 | Kill all players              | `/kill --all`              |
 | Modify shovel damage          | `/shovel <force=1>`        |
 | Give or take money            | `/money <amount>`          |
