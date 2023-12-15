@@ -28,17 +28,21 @@ public static class Console {
         { "/stunclick", new StunOnClickCommand() },
     };
 
-    public static void Print(string name, string? message) {
+    public static void Print(string name, string? message, bool isSystem = false) {
         if (string.IsNullOrWhiteSpace(message) || !Helper.HUDManager.IsNotNull(out HUDManager hudManager)) return;
         _ = Reflector.Target(hudManager)?.InvokeInternalMethod("AddChatMessage", message, name);
 
-        if (hudManager.localPlayer.isTypingChat) {
+        if (!isSystem && hudManager.localPlayer.isTypingChat) {
             hudManager.localPlayer.isTypingChat = false;
             hudManager.typingIndicator.enabled = false;
             hudManager.chatTextField.text = "";
             hudManager.PingHUDElement(hudManager.Chat, 1.0f, 1.0f, 0.2f);
             EventSystem.current.SetSelectedGameObject(null);
         }
+    }
+
+    public static void Print(string? message) {
+        Console.Print("SYSTEM", message, true);
     }
 
     public static void ExecuteCommand(string command) {
@@ -48,12 +52,12 @@ public static class Console {
 
     public static void ExecuteCommand(string[] args) {
         if (args.Length is 0) {
-            Helper.PrintSystem("Usage: /<command> <args>");
+            Console.Print("Usage: /<command> <args>");
             return;
         }
 
         if (!Console.Commands.ContainsKey(args[0])) {
-            Helper.PrintSystem("Command not found!");
+            Console.Print("Command not found!");
             return;
         }
 

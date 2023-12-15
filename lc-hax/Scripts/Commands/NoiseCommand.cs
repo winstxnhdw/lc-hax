@@ -10,12 +10,12 @@ public class NoiseCommand : ICommand {
 
     public void Execute(string[] args) {
         if (args.Length is 0) {
-            Helper.PrintSystem("Usage: /noise <player>");
+            Console.Print("Usage: /noise <player>");
             return;
         }
 
         if (!Helper.GetPlayer(args[0]).IsNotNull(out PlayerControllerB player)) {
-            Helper.PrintSystem("Player not found!");
+            Console.Print("Player not found!");
             return;
         }
 

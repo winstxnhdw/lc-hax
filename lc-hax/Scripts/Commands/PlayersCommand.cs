@@ -6,7 +6,7 @@ namespace Hax;
 public class PlayersCommand : ICommand {
     public void Execute(string[] args) {
         Helper.StartOfRound?.allPlayerScripts.ToList().ForEach(player =>
-            Helper.PrintSystem($"{player.playerUsername} ({player.playerClientId})")
+            Console.Print($"{player.playerUsername} ({player.playerClientId})")
         );
     }
 }

@@ -49,7 +49,7 @@ public class TeleportCommand : ICommand {
         HaxObject.Instance?.ShipTeleporters.Renew();
 
         if (!Helper.Teleporter.IsNotNull(out ShipTeleporter teleporter)) {
-            Helper.PrintSystem("ShipTeleporter not found!");
+            Console.Print("ShipTeleporter not found!");
             return;
         }
 
@@ -113,10 +113,10 @@ public class TeleportCommand : ICommand {
 
     public void Execute(string[] args) {
         if (args.Length is 0) {
-            Helper.PrintSystem("Usage: /tp <player>");
-            Helper.PrintSystem("Usage: /tp <x> <y> <z>");
-            Helper.PrintSystem("Usage: /tp <player> <x> <y> <z>");
-            Helper.PrintSystem("Usage: /tp <player> <player>");
+            Console.Print("Usage: /tp <player>");
+            Console.Print("Usage: /tp <x> <y> <z>");
+            Console.Print("Usage: /tp <player> <x> <y> <z>");
+            Console.Print("Usage: /tp <player> <player>");
             return;
         }
 
@@ -139,7 +139,7 @@ public class TeleportCommand : ICommand {
         }
 
         if (!result.Success) {
-            Helper.PrintSystem(result.Message);
+            Console.Print(result.Message);
         }
     }
 }

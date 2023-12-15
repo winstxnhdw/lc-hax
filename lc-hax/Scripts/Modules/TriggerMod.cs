@@ -50,7 +50,7 @@ public class TriggerMod : MonoBehaviour {
 
             if (gameObject.GetComponent<PlayerControllerB>().IsNotNull(out PlayerControllerB player)) {
                 Helper.PromptEnemiesToTarget(player)
-                      .ForEach(enemy => Helper.PrintSystem($"{enemy} prompted!"));
+                      .ForEach(enemy => Console.Print($"{enemy} prompted!"));
             }
         });
     }
