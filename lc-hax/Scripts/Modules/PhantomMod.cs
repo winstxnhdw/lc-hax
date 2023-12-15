@@ -55,15 +55,13 @@ public class PhantomMod : MonoBehaviour {
             this.KeyboardControls = camera.gameObject.AddComponent<KeyboardMovement>();
             this.MouseControls = camera.gameObject.AddComponent<MousePan>();
 
-            this.OriginalCameraLocalPosition = camera.transform.localPosition.Copy();
-            this.OriginalCameraLocalRotation = camera.transform.localRotation.Copy();
             camera.transform.SetParent(null, true);
         }
 
         else {
             camera.transform.SetParent(this.OriginalCameraParent, false);
-            camera.transform.localPosition = this.OriginalCameraLocalPosition;
-            camera.transform.localRotation = this.OriginalCameraLocalRotation;
+            camera.transform.localPosition = Vector3.zero;
+            camera.transform.localRotation = Quaternion.identity;
 
             Destroy(this.KeyboardControls);
             Destroy(this.MouseControls);
