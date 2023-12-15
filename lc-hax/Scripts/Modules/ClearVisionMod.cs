@@ -17,6 +17,9 @@ public class ClearVisionMod : MonoBehaviour {
                 continue;
             }
 
+            timeOfDay.sunAnimator.enabled = false;
+            sunIndirect.transform.eulerAngles = new Vector3(90, 0, 0);
+            timeOfDay.sunDirect.transform.eulerAngles = new Vector3(90, 0, 0);
             lightData ??= sunIndirect.GetComponent<HDAdditionalLightData>();
             lightData.lightDimmer = float.MaxValue;
             lightData.distance = float.MaxValue;
