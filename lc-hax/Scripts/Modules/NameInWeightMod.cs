@@ -15,6 +15,7 @@ public class NameInWeightMod : MonoBehaviour {
                 return;
             }
 
+            hudManager.weightCounter.enableWordWrapping = false;
             hudManager.weightCounter.text = $"#{player.playerClientId} {player.playerUsername}";
         });
     }
