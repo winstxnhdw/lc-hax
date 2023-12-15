@@ -12,12 +12,12 @@ public class ClearVisionMod : MonoBehaviour {
                 continue;
             }
 
-            if (!TimeOfDay.Instance.IsNotNull(out TimeOfDay timeOfDay)) {
+            if (!Helper.CurrentCamera.IsNotNull(out Camera cam)) {
                 yield return new WaitForEndOfFrame();
                 continue;
             }
 
-            if (!timeOfDay.sunIndirect.IsNotNull(out Light sunIndirect)) {
+            if (!TimeOfDay.Instance.IsNotNull(out TimeOfDay timeOfDay)) {
                 yield return new WaitForEndOfFrame();
                 continue;
             }
@@ -32,20 +32,12 @@ public class ClearVisionMod : MonoBehaviour {
                 continue;
             }
 
-            if (!Helper.CurrentCamera.IsNotNull(out Camera cam)) {
+            if (!timeOfDay.sunIndirect.IsNotNull(out Light sunIndirect)) {
                 yield return new WaitForEndOfFrame();
                 continue;
             }
 
-            HDAdditionalLightData? lightData = null;
-
-            try {
-                lightData = sunIndirect.GetComponent<HDAdditionalLightData?>();
-            }
-
-            catch { }
-
-            if (lightData == null) {
+            if (!Helper.Try(sunIndirect.GetComponent<HDAdditionalLightData>).IsNotNull(out HDAdditionalLightData lightData)) {
                 yield return new WaitForEndOfFrame();
                 continue;
             }
