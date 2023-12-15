@@ -8,11 +8,11 @@ public static partial class Helper {
     public static List<string> PromptEnemiesToTarget(PlayerControllerB player) {
         List<string> enemyNames = [];
 
-        if (Helper.RoundManager.IsNotNull(out RoundManager roundManager)) {
+        if (!Helper.RoundManager.IsNotNull(out RoundManager roundManager)) {
             return enemyNames;
         }
 
-        if (Helper.LocalPlayer.IsNotNull(out PlayerControllerB localPlayer)) {
+        if (!Helper.LocalPlayer.IsNotNull(out PlayerControllerB localPlayer)) {
             return enemyNames;
         }
 
