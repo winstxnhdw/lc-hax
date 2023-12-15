@@ -78,6 +78,17 @@ public class PhantomMod : MonoBehaviour {
             if (cameraGameObject.GetComponent<MousePan>().IsNotNull(out MousePan mouse)) {
                 mouse.enabled = false;
             }
+
+            if (!player.gameplayCamera.IsNotNull(out Camera gameplayCam))
+                return;
+
+            if (gameplayCam.GetComponent<KeyboardMovement>().IsNotNull(out KeyboardMovement gKeyboard)) {
+                gKeyboard.enabled = false;
+            }
+
+            if (gameplayCam.GetComponent<MousePan>().IsNotNull(out MousePan gMouse)) {
+                gMouse.enabled = false;
+            }
         }
     }
 }
