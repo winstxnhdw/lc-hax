@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using UnityEngine;
 using GameNetcodeStuff;
 
@@ -16,21 +15,12 @@ public class TriggerMod : MonoBehaviour {
     }
 
     void Fire() {
-        if (!Helper.CurrentCamera.IsNotNull(out Camera camera)) return;
-        if (!camera.enabled) return;
         if (this.DepositItemsDesk.IsNotNull(out DepositItemsDesk deposit)) {
             deposit.AttackPlayersServerRpc();
             return;
         }
 
-        List<RaycastHit> raycastHits = [.. Physics.SphereCastAll(
-            camera.transform.position,
-            1f,
-            camera.transform.forward,
-            float.MaxValue
-        )];
-
-        raycastHits.ForEach(raycastHit => {
+        Helper.RaycastForward.ForEach(raycastHit => {
             GameObject gameObject = raycastHit.collider.gameObject;
 
             if (gameObject.GetComponent<Landmine>().IsNotNull(out Landmine landmine)) {
