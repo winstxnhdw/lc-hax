@@ -6,8 +6,6 @@ namespace Hax;
 
 public class ClearVisionMod : MonoBehaviour {
     IEnumerator SetClearVision() {
-        Transform? cloneSunIndirect = null;
-
         while (true) {
             if (!Helper.StartOfRound.IsNotNull(out StartOfRound startOfRound)) {
                 yield return new WaitForEndOfFrame();
@@ -34,6 +32,11 @@ public class ClearVisionMod : MonoBehaviour {
                 continue;
             }
 
+            if (!Helper.CurrentCamera.IsNotNull(out Camera cam)) {
+                yield return new WaitForEndOfFrame();
+                continue;
+            }
+
             HDAdditionalLightData? lightData = null;
 
             try {
@@ -49,21 +52,16 @@ public class ClearVisionMod : MonoBehaviour {
 
             sunAnimator.enabled = false;
             sunIndirect.transform.eulerAngles = new Vector3(90, 0, 0);
+            sunIndirect.transform.position = cam.transform.position;
+            sunIndirect.color = Color.white;
+            sunIndirect.intensity = 10;
+            sunIndirect.enabled = true;
             sunDirect.transform.eulerAngles = new Vector3(90, 0, 0);
+            sunDirect.enabled = true;
             lightData.lightDimmer = float.MaxValue;
             lightData.distance = float.MaxValue;
             timeOfDay.insideLighting = false;
             startOfRound.blackSkyVolume.weight = 0;
-
-            if (!cloneSunIndirect.IsNotNull(out Transform _)) {
-                cloneSunIndirect = Instantiate(sunIndirect).transform;
-            }
-
-            if (Helper.CurrentCamera.IsNotNull(out Camera cam)
-                && cloneSunIndirect.IsNotNull(out Transform newSunIndirect)) {
-                newSunIndirect.SetParent(cam.transform);
-                newSunIndirect.localPosition = Vector3.zero;
-            }
 
             yield return new WaitForEndOfFrame();
         }
