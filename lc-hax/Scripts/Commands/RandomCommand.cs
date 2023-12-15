@@ -98,8 +98,9 @@ public class RandomCommand : ICommand {
         Helper.BuyUnlockable(Unlockable.CUPBOARD);
         Helper.BuyUnlockable(Unlockable.INVERSE_TELEPORTER);
 
-        Helper.CreateComponent<WaitFor>()
-              .Init(this.InverseTeleporterExists, this.TeleportPlayerToRandomLater(args));
+        Helper.CreateComponent<WaitForPredicate>()
+              .SetPredicate(this.InverseTeleporterExists)
+              .Init(this.TeleportPlayerToRandomLater(args));
     }
 
     public void Execute(string[] args) {
