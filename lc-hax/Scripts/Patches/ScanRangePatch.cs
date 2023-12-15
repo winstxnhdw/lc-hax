@@ -10,9 +10,16 @@ namespace Hax;
 class ScanRangePatch {
     [HarmonyPatch("AssignNewNodes")]
     static IEnumerable<CodeInstruction> Transpiler(IEnumerable<CodeInstruction> instructions) {
+        bool foundMaxDistance = false;
+
         foreach (CodeInstruction instruction in instructions) {
             if (instruction.opcode == OpCodes.Ldc_R4 && instruction.operand.Equals(20.0f)) {
-                instruction.operand = 500.0f;
+                instruction.operand = 50.0f;
+            }
+
+            else if (!foundMaxDistance && instruction.opcode == OpCodes.Ldc_R4 && instruction.operand.Equals(80.0f)) {
+                foundMaxDistance = true;
+                instruction.operand = float.MaxValue;
             }
 
             yield return instruction;
