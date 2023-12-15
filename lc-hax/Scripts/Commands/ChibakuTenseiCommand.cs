@@ -91,14 +91,14 @@ public class ChibakuTenseiCommand : ICommand {
 
     public void Execute(string[] args) {
         if (args.Length is 0) {
-            Helper.PrintSystem("Usage: /ct <player>");
+            Console.Print("Usage: /ct <player>");
             return;
         }
 
         Result result = this.TeleportPlayerToRandom(args);
 
         if (!result.Success) {
-            Helper.PrintSystem(result.Message);
+            Console.Print(result.Message);
         }
     }
 }

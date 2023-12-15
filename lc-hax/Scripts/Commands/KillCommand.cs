@@ -39,7 +39,7 @@ public class KillCommand : ICommand {
                       : this.KillTargetPlayer(args);
 
         if (!result.Success) {
-            Helper.PrintSystem(result.Message);
+            Console.Print(result.Message);
         }
     }
 }

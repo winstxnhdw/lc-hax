@@ -91,14 +91,14 @@ public class PumpkinCommand : ICommand {
 
     public void Execute(string[] args) {
         if (args.Length < 1) {
-            Helper.PrintSystem("Usage: /pumpkin <player>");
+            Console.Print("Usage: /pumpkin <player>");
             return;
         }
 
         Result result = this.TeleportPlayerToRandom(args);
 
         if (!result.Success) {
-            Helper.PrintSystem(result.Message);
+            Console.Print(result.Message);
         }
     }
 }

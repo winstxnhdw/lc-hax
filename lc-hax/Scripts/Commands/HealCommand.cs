@@ -5,7 +5,7 @@ namespace Hax;
 public class HealCommand : ICommand {
     public void Execute(string[] _) {
         if (!Helper.LocalPlayer.IsNotNull(out PlayerControllerB localPlayer)) {
-            Helper.PrintSystem("Player not found");
+            Console.Print("Player not found");
             return;
         }
 

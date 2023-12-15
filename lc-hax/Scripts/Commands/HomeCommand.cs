@@ -29,7 +29,7 @@ public class HomeCommand : ICommand {
         Result result = this.TeleportPlayerToBase(args);
 
         if (!result.Success) {
-            Helper.PrintSystem(result.Message);
+            Console.Print(result.Message);
         }
     }
 }

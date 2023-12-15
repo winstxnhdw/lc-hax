@@ -21,6 +21,6 @@ public class UnlockCommand : ICommand {
               .ToList()
               .ForEach(terminalAccessibleObject => terminalAccessibleObject.SetDoorOpenServerRpc(true));
 
-        Helper.PrintSystem("All doors unlocked!");
+        Console.Print("All doors unlocked!");
     }
 }

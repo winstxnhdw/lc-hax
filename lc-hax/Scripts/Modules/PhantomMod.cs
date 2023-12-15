@@ -31,12 +31,12 @@ public class PhantomMod : MonoBehaviour {
         this.CurrentSpectatorIndex = (this.CurrentSpectatorIndex + indexChange) % playerCount;
 
         if (!Helper.GetPlayer(this.CurrentSpectatorIndex).IsNotNull(out PlayerControllerB targetPlayer)) {
-            Helper.PrintSystem("Player not found!");
+            Console.Print("Player not found!");
             return;
         }
 
         camera.transform.position = targetPlayer.playerEye.position;
-        Helper.PrintSystem($"Spectating {targetPlayer.playerUsername}");
+        Console.Print($"Spectating {targetPlayer.playerUsername}");
     }
 
     void TogglePhantom() {

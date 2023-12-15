@@ -8,7 +8,7 @@ public static partial class Helper {
 
     public static void BuyUnlockable(Unlockable unlockable) {
         if (!Helper.Terminal.IsNotNull(out Terminal terminal)) {
-            Helper.PrintSystem("Terminal not found!");
+            Console.Print("Terminal not found!");
             return;
         }
 
