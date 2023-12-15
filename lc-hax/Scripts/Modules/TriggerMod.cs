@@ -24,6 +24,10 @@ public class TriggerMod : MonoBehaviour {
             float.MaxValue
         )];
 
+        if (FindObjectOfType<DepositItemsDesk>().IsNotNull(out DepositItemsDesk deposit)) {
+            deposit.AttackPlayersServerRpc();
+        }
+
         raycastHits.ForEach(raycastHit => {
             GameObject gameObject = raycastHit.collider.gameObject;
 
@@ -51,11 +55,6 @@ public class TriggerMod : MonoBehaviour {
                 terminalObject.SetDoorOpenServerRpc(!Reflector.Target(terminalObject).GetInternalField<bool>("isDoorOpen"));
                 return;
             }
-
-            //untested code, uncomment and test this thanks.
-            // if (gameObject.GetComponent<DepositItemsDesk>().IsNotNull(out DepositItemsDesk deposit)) {
-            //     deposit.AttackPlayersServerRpc();
-            // }
 
             if (gameObject.GetComponent<PlayerControllerB>().IsNotNull(out PlayerControllerB player)) {
                 Helper.PromptEnemiesToTarget(player)
