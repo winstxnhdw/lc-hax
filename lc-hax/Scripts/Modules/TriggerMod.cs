@@ -24,7 +24,7 @@ public class TriggerMod : MonoBehaviour {
             GameObject gameObject = raycastHit.collider.gameObject;
 
             if (gameObject.GetComponent<Landmine>().IsNotNull(out Landmine landmine)) {
-                _ = Reflector.Target(landmine).InvokeInternalMethod("TriggerMineOnLocalClientByExiting");
+                landmine.TriggerMine();
                 return;
             }
 
