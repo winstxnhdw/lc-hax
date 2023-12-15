@@ -1,16 +1,15 @@
 using UnityEngine;
-using GameNetcodeStuff;
 
 namespace Hax;
 
 public class LocationCommand : ICommand {
     public void Execute(string[] _) {
-        if (!Helper.LocalPlayer.IsNotNull(out PlayerControllerB player)) {
+        if (!Helper.CurrentCamera.IsNotNull(out Camera camera)) {
             Helper.PrintSystem("Player not found!");
             return;
         }
 
-        Vector3 currentPostion = player.transform.position;
-        Helper.PrintSystem($"{currentPostion.x:0}, {currentPostion.y:0}, {currentPostion.z:0}");
+        Vector3 currentPostion = camera.transform.position;
+        Helper.PrintSystem($"{currentPostion.x:0} {currentPostion.y:0} {currentPostion.z:0}");
     }
 }
