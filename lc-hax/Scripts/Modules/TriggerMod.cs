@@ -5,6 +5,8 @@ using GameNetcodeStuff;
 namespace Hax;
 
 public class TriggerMod : MonoBehaviour {
+    DepositItemsDesk? DepositItemsDesk => HaxObject.Instance?.DepositItemsDesk.Object;
+
     void OnEnable() {
         InputListener.onMiddleButtonPress += this.Fire;
     }
@@ -16,6 +18,10 @@ public class TriggerMod : MonoBehaviour {
     void Fire() {
         if (!Helper.CurrentCamera.IsNotNull(out Camera camera)) return;
         if (!camera.enabled) return;
+        if (this.DepositItemsDesk.IsNotNull(out DepositItemsDesk deposit)) {
+            deposit.AttackPlayersServerRpc();
+            return;
+        }
 
         List<RaycastHit> raycastHits = [.. Physics.SphereCastAll(
             camera.transform.position,
@@ -24,14 +30,10 @@ public class TriggerMod : MonoBehaviour {
             float.MaxValue
         )];
 
-        if (FindObjectOfType<DepositItemsDesk>().IsNotNull(out DepositItemsDesk deposit)) {
-            deposit.AttackPlayersServerRpc();
-        }
-
         raycastHits.ForEach(raycastHit => {
             GameObject gameObject = raycastHit.collider.gameObject;
 
-            if (gameObject.GetComponentInParent<Landmine>().IsNotNull(out Landmine landmine)) {
+            if (gameObject.GetComponent<Landmine>().IsNotNull(out Landmine landmine)) {
                 _ = Reflector.Target(landmine).InvokeInternalMethod("TriggerMineOnLocalClientByExiting");
                 return;
             }

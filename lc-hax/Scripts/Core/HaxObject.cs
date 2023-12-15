@@ -7,10 +7,12 @@ namespace Hax;
 public class HaxObject : MonoBehaviour {
     public static HaxObject? Instance { get; private set; }
 
+    public SingleObjectPool<DepositItemsDesk> DepositItemsDesk { get; private set; }
     public MultiObjectPool<Shovel> Shovels { get; private set; }
     public MultiObjectPool<ShipTeleporter> ShipTeleporters { get; private set; }
 
     void Awake() {
+        this.DepositItemsDesk = new(this);
         this.Shovels = new(this);
         this.ShipTeleporters = new(this);
 
