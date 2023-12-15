@@ -11,6 +11,7 @@ public class PhantomMod : MonoBehaviour {
     Vector3 OriginalCameraParentPosition { get; set; }
     Vector3 OriginalCameraLocalPosition { get; set; }
     Quaternion OriginalCameraLocalRotation { get; set; }
+
     void OnEnable() {
         InputListener.onEqualsPress += this.TogglePhantom;
         InputListener.onRightArrowKeyPress += () => this.LookAtPlayer(1);
@@ -79,15 +80,16 @@ public class PhantomMod : MonoBehaviour {
                 mouse.enabled = false;
             }
 
-            if (!player.gameplayCamera.IsNotNull(out Camera gameplayCam))
+            if (!player.gameplayCamera.IsNotNull(out Camera gameplayCam)) {
                 return;
-
-            if (gameplayCam.GetComponent<KeyboardMovement>().IsNotNull(out KeyboardMovement gKeyboard)) {
-                gKeyboard.enabled = false;
             }
 
-            if (gameplayCam.GetComponent<MousePan>().IsNotNull(out MousePan gMouse)) {
-                gMouse.enabled = false;
+            if (gameplayCam.GetComponent<KeyboardMovement>().IsNotNull(out KeyboardMovement gameplayKeyboard)) {
+                gameplayKeyboard.enabled = false;
+            }
+
+            if (gameplayCam.GetComponent<MousePan>().IsNotNull(out MousePan gameplayMouse)) {
+                gameplayMouse.enabled = false;
             }
         }
     }
