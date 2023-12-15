@@ -42,8 +42,9 @@ public class Loader : MonoBehaviour {
             new Harmony("winstxnhdw.lc-hax").PatchAll();
         }
 
-        catch (HarmonyException exception) {
+        catch (Exception exception) {
             Logger.Write(exception.ToString());
+            throw exception;
         }
     }
 
