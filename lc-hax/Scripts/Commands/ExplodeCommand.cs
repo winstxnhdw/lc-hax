@@ -9,7 +9,7 @@ public class ExplodeCommand : ICommand {
             Object
                 .FindObjectsOfType<Landmine>()
                 .ToList()
-                .ForEach(mine => Reflector.Target(mine).InvokeInternalMethod("TriggerMineOnLocalClientByExiting"));
+                .ForEach(mine => mine.TriggerMine());
         }
 
         if (args[0] is "jet") {
