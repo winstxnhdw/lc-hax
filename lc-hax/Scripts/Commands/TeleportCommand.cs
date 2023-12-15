@@ -60,7 +60,7 @@ public class TeleportCommand : ICommand {
         teleporter.PressTeleportButtonServerRpc();
 
         Vector3 rotationOffset = new(-90.0f, 0.0f, 0.0f);
-        Vector3 positionOffset = new(0.0f, 1.5f, 0.0f);
+        Vector3 positionOffset = new(0.0f, 1.6f, 0.0f);
 
         ObjectPlacement<Transform, ShipTeleporter> teleporterPlacement = new(
             newTransform.transform,
