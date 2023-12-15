@@ -1,15 +1,13 @@
-using System;
 using System.Collections;
-using GameNetcodeStuff;
 using UnityEngine;
 using UnityEngine.Rendering.HighDefinition;
 
 namespace Hax;
 
 public class ClearVisionMod : MonoBehaviour {
-    private Transform? cloneSunIndirect = null;
-
     IEnumerator SetClearVision() {
+        Transform? cloneSunIndirect = null;
+
         while (true) {
             if (!Helper.StartOfRound.IsNotNull(out StartOfRound startOfRound)) {
                 yield return new WaitForEndOfFrame();
@@ -37,11 +35,13 @@ public class ClearVisionMod : MonoBehaviour {
             }
 
             HDAdditionalLightData? lightData = null;
+
             try {
                 lightData = sunIndirect.GetComponent<HDAdditionalLightData?>();
-
             }
+
             catch { }
+
             if (lightData == null) {
                 yield return new WaitForEndOfFrame();
                 continue;
@@ -55,15 +55,14 @@ public class ClearVisionMod : MonoBehaviour {
             timeOfDay.insideLighting = false;
             startOfRound.blackSkyVolume.weight = 0;
 
-            if (!this.cloneSunIndirect.IsNotNull(out Transform _)) {
-
-                this.cloneSunIndirect = Instantiate(sunIndirect).transform;
+            if (!cloneSunIndirect.IsNotNull(out Transform _)) {
+                cloneSunIndirect = Instantiate(sunIndirect).transform;
             }
 
             if (Helper.CurrentCamera.IsNotNull(out Camera cam)
-                && this.cloneSunIndirect.IsNotNull(out Transform cloneSunIndirect)) {
-                cloneSunIndirect.SetParent(cam.transform);
-                cloneSunIndirect.localPosition = Vector3.zero;
+                && cloneSunIndirect.IsNotNull(out Transform newSunIndirect)) {
+                newSunIndirect.SetParent(cam.transform);
+                newSunIndirect.localPosition = Vector3.zero;
             }
 
             yield return new WaitForEndOfFrame();
