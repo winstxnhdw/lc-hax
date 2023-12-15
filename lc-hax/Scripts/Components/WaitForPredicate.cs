@@ -4,17 +4,21 @@ using UnityEngine;
 
 namespace Hax;
 
-public class WaitFor : MonoBehaviour {
+public class WaitForPredicate : MonoBehaviour {
     Action? Action { get; set; }
     Func<bool>? Predicate { get; set; }
 
-    public void Init(Func<bool> predicate, Action action) {
-        this.Predicate = predicate;
+    public void Init(Action action) {
         this.Action = action;
-        _ = this.StartCoroutine(this.WaitForCoroutine());
+        _ = this.StartCoroutine(this.WaitForPredicateCoroutine());
     }
 
-    IEnumerator WaitForCoroutine() {
+    public WaitForPredicate SetPredicate(Func<bool> predicate) {
+        this.Predicate = predicate;
+        return this;
+    }
+
+    IEnumerator WaitForPredicateCoroutine() {
         while (true) {
             if (this.Predicate is not null && this.Predicate()) break;
             yield return new WaitForEndOfFrame();
