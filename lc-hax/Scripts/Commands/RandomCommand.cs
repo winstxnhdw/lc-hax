@@ -26,7 +26,7 @@ public class RandomCommand : ICommand {
         ObjectPlacement<Transform, ShipTeleporter> previousTeleporterPlacement = new(
             inverseTeleporter.transform.Copy().transform,
             inverseTeleporter,
-            new Vector3(0.0f, 1.75f, 0.0f),
+            new Vector3(0.0f, 1.6f, 0.0f),
             rotationOffset
         );
 
