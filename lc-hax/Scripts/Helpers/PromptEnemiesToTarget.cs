@@ -22,6 +22,8 @@ public static partial class Helper {
             if (enemy is DocileLocustBeesAI or DoublewingAI or BlobAI or DressGirlAI or LassoManAI) return;
             enemy.targetPlayer = player;
             enemy.ChangeEnemyOwnerServerRpc(localPlayer.actualClientId);
+            enemy.isEnemyDead = false;
+            enemy.enemyHP = enemy.enemyHP <= 0 ? 1 : enemy.enemyHP;
             enemyNames.Add(enemy.enemyType.enemyName);
 
             if (enemy is CrawlerAI thumper) {
