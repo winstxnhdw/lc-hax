@@ -21,9 +21,3 @@ public enum Unlockable {
     INVERSE_TELEPORTER = 19,
     JACK_O_LANTERN = 20
 }
-
-public static class UnlockableExtension {
-    public static bool Is(this Unlockable unlockable, int unlockableId) {
-        return unlockableId == (int)unlockable;
-    }
-}
