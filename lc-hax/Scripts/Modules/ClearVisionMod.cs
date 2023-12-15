@@ -6,46 +6,48 @@ namespace Hax;
 
 public class ClearVisionMod : MonoBehaviour {
     IEnumerator SetClearVision() {
-        float timer = 0;
         while (true) {
-            timer += Time.deltaTime;
-
-            if (Helper.StartOfRound.IsNotNull(out StartOfRound startOfRound)
-                && startOfRound.blackSkyVolume.IsNotNull(out UnityEngine.Rendering.Volume blackSkyVolume)) {
-                blackSkyVolume.weight = 0;
+            if (!Helper.StartOfRound.IsNotNull(out StartOfRound startOfRound)) {
+                yield return new WaitForEndOfFrame();
+                continue;
             }
 
-            if (TimeOfDay.Instance.IsNotNull(out TimeOfDay timeOfDay)) {
-                timeOfDay.insideLighting = false;
+            if (!TimeOfDay.Instance.IsNotNull(out TimeOfDay timeOfDay)) {
+                yield return new WaitForEndOfFrame();
+                continue;
             }
 
-            if (timeOfDay.sunAnimator.IsNotNull(out Animator sunAnimator)) {
-                sunAnimator.enabled = false;
+            if (!timeOfDay.sunIndirect.IsNotNull(out Light sunIndirect)) {
+                yield return new WaitForEndOfFrame();
+                continue;
             }
 
-            if (timeOfDay.sunIndirect.IsNotNull(out Light sunIndirect)) {
-                sunIndirect.transform.eulerAngles = new Vector3(90, 0, 0);
+            if (!timeOfDay.sunAnimator.IsNotNull(out Animator sunAnimator)) {
+                yield return new WaitForEndOfFrame();
+                continue;
             }
 
-            if (sunIndirect.GetComponent<HDAdditionalLightData>().IsNotNull(out HDAdditionalLightData lightData)) {
-                lightData.lightDimmer = float.MaxValue;
-                lightData.distance = float.MaxValue;
+            if (!timeOfDay.sunDirect.IsNotNull(out Light sunDirect)) {
+                yield return new WaitForEndOfFrame();
+                continue;
             }
 
-            if (timeOfDay.sunDirect.IsNotNull(out Light sunDirect)) {
-                sunDirect.transform.eulerAngles = new Vector3(90, 0, 0);
+            if (!sunIndirect.GetComponent<HDAdditionalLightData>().IsNotNull(out HDAdditionalLightData lightData)) {
+                yield return new WaitForEndOfFrame();
+                continue;
             }
 
-
-            try {
-                Console.Print("t", $"test{timer}");
-            }
-            catch { }
+            sunAnimator.enabled = false;
+            sunIndirect.transform.eulerAngles = new Vector3(90, 0, 0);
+            sunDirect.transform.eulerAngles = new Vector3(90, 0, 0);
+            lightData.lightDimmer = float.MaxValue;
+            lightData.distance = float.MaxValue;
+            timeOfDay.insideLighting = false;
+            startOfRound.blackSkyVolume.weight = 0;
 
             yield return new WaitForEndOfFrame();
         }
     }
-
     void Start() {
         _ = this.StartCoroutine(this.SetClearVision());
     }
