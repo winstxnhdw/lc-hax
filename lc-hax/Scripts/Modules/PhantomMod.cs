@@ -8,6 +8,7 @@ public class PhantomMod : MonoBehaviour {
     int CurrentSpectatorIndex { get; set; } = 0;
 
     Transform? OriginalCameraParent { get; set; }
+    Vector3 OriginalCameraParentPosition { get; set; }
     Vector3 OriginalCameraLocalPosition { get; set; }
     Quaternion OriginalCameraLocalRotation { get; set; }
     KeyboardMovement? KeyboardControls { get; set; }
@@ -45,6 +46,7 @@ public class PhantomMod : MonoBehaviour {
         if (!Helper.CurrentCamera.IsNotNull(out Camera camera) || !camera.enabled) return;
         if (this.OriginalCameraParent is null) {
             this.OriginalCameraParent = player.cameraContainerTransform;
+            this.OriginalCameraParentPosition = this.OriginalCameraParent.localPosition.Copy();
             return;
         }
 
@@ -59,6 +61,7 @@ public class PhantomMod : MonoBehaviour {
         }
 
         else {
+            this.OriginalCameraParent.localPosition = this.OriginalCameraParentPosition;
             camera.transform.SetParent(this.OriginalCameraParent, false);
             camera.transform.localPosition = Vector3.zero;
             camera.transform.localRotation = Quaternion.identity;
