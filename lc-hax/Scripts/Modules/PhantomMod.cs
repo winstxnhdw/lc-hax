@@ -11,9 +11,6 @@ public class PhantomMod : MonoBehaviour {
     Vector3 OriginalCameraParentPosition { get; set; }
     Vector3 OriginalCameraLocalPosition { get; set; }
     Quaternion OriginalCameraLocalRotation { get; set; }
-    KeyboardMovement? KeyboardControls { get; set; }
-    MousePan? MouseControls { get; set; }
-
     void OnEnable() {
         InputListener.onEqualsPress += this.TogglePhantom;
         InputListener.onRightArrowKeyPress += () => this.LookAtPlayer(1);
@@ -54,8 +51,14 @@ public class PhantomMod : MonoBehaviour {
         player.enabled = !this.EnablePhantom;
 
         if (this.EnablePhantom) {
-            this.KeyboardControls = camera.gameObject.AddComponent<KeyboardMovement>();
-            this.MouseControls = camera.gameObject.AddComponent<MousePan>();
+            if (!camera.gameObject.GetComponent<KeyboardMovement>().IsNotNull(out KeyboardMovement keyboard)) {
+                keyboard = camera.gameObject.AddComponent<KeyboardMovement>();
+            }
+            keyboard.enabled = true;
+            if (!camera.gameObject.GetComponent<MousePan>().IsNotNull(out MousePan mouse)) {
+                mouse = camera.gameObject.AddComponent<MousePan>();
+            }
+            mouse.enabled = true;
 
             camera.transform.SetParent(null, true);
         }
@@ -66,8 +69,12 @@ public class PhantomMod : MonoBehaviour {
             camera.transform.localPosition = Vector3.zero;
             camera.transform.localRotation = Quaternion.identity;
 
-            Destroy(this.KeyboardControls);
-            Destroy(this.MouseControls);
+            if (camera.gameObject.GetComponent<KeyboardMovement>().IsNotNull(out KeyboardMovement keyboard)) {
+                keyboard.enabled = false;
+            }
+            if (camera.gameObject.GetComponent<MousePan>().IsNotNull(out MousePan mouse)) {
+                mouse.enabled = false;
+            }
         }
     }
 }
