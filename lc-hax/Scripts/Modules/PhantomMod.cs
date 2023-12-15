@@ -44,7 +44,7 @@ public class PhantomMod : MonoBehaviour {
         if (!Helper.LocalPlayer.IsNotNull(out PlayerControllerB player)) return;
         if (!Helper.CurrentCamera.IsNotNull(out Camera camera) || !camera.enabled) return;
         if (this.OriginalCameraParent is null) {
-            this.OriginalCameraParent = camera.transform.parent;
+            this.OriginalCameraParent = player.cameraContainerTransform;
             return;
         }
 
