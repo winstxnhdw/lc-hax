@@ -66,7 +66,10 @@ public class ClearVisionMod : MonoBehaviour {
                      .ToggleFogTriggers
                      .Objects
                      .ToList()
-                     .ForEach(toggleFogTrigger => toggleFogTrigger.enabled = false);
+                     .ForEach(toggleFogTrigger => {
+                         toggleFogTrigger.fog1.enabled = false;
+                         toggleFogTrigger.fog2.enabled = false;
+                     });
 
             yield return new WaitForSeconds(5.0f);
         }
