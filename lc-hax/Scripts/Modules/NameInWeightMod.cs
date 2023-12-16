@@ -9,8 +9,9 @@ public class NameInWeightMod : MonoBehaviour {
     }
 
     void Fire() {
+        if (!Helper.HUDManager.IsNotNull(out HUDManager hudManager)) return;
+
         Helper.RaycastForward.ForEach(raycastHit => {
-            if (Helper.HUDManager.IsNotNull(out HUDManager hudManager)) return;
             if (!raycastHit.collider.gameObject.GetComponent<PlayerControllerB>().IsNotNull(out PlayerControllerB player)) {
                 return;
             }
