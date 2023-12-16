@@ -9,7 +9,7 @@ public class ShovelCommand : ICommand {
         }
 
         if (!int.TryParse(args[0], out int shovelHitForce)) {
-            Console.Print("Invalid valuer!");
+            Console.Print("Invalid value!");
             return;
         }
 
