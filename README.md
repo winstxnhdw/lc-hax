@@ -28,9 +28,10 @@ Execute `launch.bat` when you have launched the game.
 No features in this mod require host privileges.
 
 - Infinite stamina
+- Infinite scan range
 - Always sane
-- Clear vision
 - Always lightweight
+- Clear vision
 - No hidden HUD
 - [Commands](#commands)
 - [Binds](#binds)
