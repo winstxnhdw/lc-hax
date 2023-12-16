@@ -5,20 +5,26 @@ namespace Hax;
 
 public class TriggerMod : MonoBehaviour {
     bool interactEnabled = false;
+    bool funnyReviveEnabled = false;
     DepositItemsDesk? DepositItemsDesk => HaxObject.Instance?.DepositItemsDesk.Object;
 
     void OnEnable() {
         InputListener.onMiddleButtonPress += this.Fire;
         InputListener.onEButtonHold += this.InteractEnabled;
+        InputListener.onRButtonHold += this.FunnyReviveEnabled;
     }
 
     void OnDisable() {
         InputListener.onMiddleButtonPress -= this.Fire;
         InputListener.onEButtonHold -= this.InteractEnabled;
+        InputListener.onRButtonHold -= this.FunnyReviveEnabled;
     }
 
     void InteractEnabled(bool isHold) {
         this.interactEnabled = isHold;
+    }
+    void FunnyReviveEnabled(bool isHold) {
+        this.funnyReviveEnabled = isHold;
     }
 
     void Fire() {
@@ -66,7 +72,7 @@ public class TriggerMod : MonoBehaviour {
             }
 
             if (gameObject.GetComponent<PlayerControllerB>().IsNotNull(out PlayerControllerB player)) {
-                Helper.PromptEnemiesToTarget(player)
+                Helper.PromptEnemiesToTarget(player, this.funnyReviveEnabled)
                       .ForEach(enemy => Console.Print($"{enemy} prompted!"));
             }
         });
