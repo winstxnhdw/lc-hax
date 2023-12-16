@@ -5,7 +5,7 @@ using UnityEngine;
 namespace Hax;
 
 public static partial class Helper {
-    static ShipBuildModeManager? ShipBuildModeManager => ShipBuildModeManager.Instance;
+    public static ShipBuildModeManager? ShipBuildModeManager => ShipBuildModeManager.Instance;
 
     static NetworkObject GetNetworkObject<M>(M gameObject) where M : MonoBehaviour =>
         gameObject.GetComponentInChildren<PlaceableShipObject>()
