@@ -6,16 +6,15 @@ using UnityEngine.InputSystem;
 namespace Hax;
 
 public class InputListener : MonoBehaviour {
+    public static event Action<bool>? onEButtonHold;
+    public static event Action<bool>? onRButtonHold;
     public static event Action? onLeftArrowKeyPress;
     public static event Action? onRightArrowKeyPress;
     public static event Action? onEqualsPress;
     public static event Action? onMiddleButtonPress;
-    public static event Action<bool>? onEButtonHold;
-    public static event Action<bool>? onRButtonHold;
     public static event Action? onLeftButtonPress;
     public static event Action? onLeftBracketPress;
     public static event Action? onRightBracketPress;
-
 
     Dictionary<Func<bool>, Action> InputActions { get; } = new() {
         { () => true, () => InputListener.onRButtonHold?.Invoke(Keyboard.current[Key.R].isPressed) },
