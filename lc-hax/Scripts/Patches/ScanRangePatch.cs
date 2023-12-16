@@ -33,11 +33,4 @@ class ScanRangePatch {
         __result = true;
         return false;
     }
-
-    [HarmonyPrefix]
-    [HarmonyPatch("CanPlayerScan")]
-    static bool CanPlayerScan(ref bool __result) {
-        __result = true;
-        return false;
-    }
 }
