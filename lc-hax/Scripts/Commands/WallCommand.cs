@@ -1,12 +1,11 @@
 using UnityEngine;
-using GameNetcodeStuff;
 
 namespace Hax;
 
 public class WallCommand : ICommand {
     public void Execute(string[] _) {
-        if (!Helper.LocalPlayer.IsNotNull(out PlayerControllerB player)) {
-            Console.Print("Player not found!");
+        if (!Helper.CurrentCamera.IsNotNull(out Camera camera)) {
+            Console.Print("Camera not found!");
             return;
         }
 
@@ -15,13 +14,14 @@ public class WallCommand : ICommand {
             return;
         }
 
-        Vector3 newPosition = player.transform.position + (player.transform.forward * 2.0f);
-        newPosition.y += 1.75f;
+        Vector3 newPosition = camera.transform.position + (camera.transform.forward * 3.0f);
+        Vector3 newRotation = camera.transform.eulerAngles;
+        newRotation.x = -90.0f;
 
         Helper.PlaceObjectAtPosition(
             cupboard,
             newPosition,
-            new Vector3(-90.0f, 0.0f, 90.0f)
+            newRotation
         );
     }
 }
