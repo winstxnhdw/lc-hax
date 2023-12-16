@@ -6,7 +6,7 @@ namespace Hax;
 [HarmonyPatch(typeof(PlayerControllerB))]
 [HarmonyPatch("DamagePlayer")]
 class NoFallDamagePatch {
-    static bool Prefix(ref CauseOfDeath causeOfDeath) {
+    static bool Prefix(CauseOfDeath causeOfDeath) {
         return !Settings.DisableFallDamage || causeOfDeath != CauseOfDeath.Gravity;
     }
 }
