@@ -64,6 +64,7 @@ No features in this mod require host privileges.
 | Unlock all doors              | `/unlock`                  |
 | Lock all gates                | `/lock`                    |
 | Heal self                     | `/heal`                    |
+| Teleport the cupboard to you  | `/wall`                    |
 | Explode all mines             | `/explode`                 |
 | Explode all jetpacks          | `/explode jet`             |
 

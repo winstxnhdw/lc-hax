@@ -13,6 +13,7 @@ public static class Console {
         { "/home", new HomeCommand() },
         { "/stun", new StunCommand() },
         { "/heal", new HealCommand() },
+        { "/wall", new WallCommand() },
         { "/tp", new TeleportCommand() },
         { "/noise", new NoiseCommand() },
         { "/money", new MoneyCommand() },
