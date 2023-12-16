@@ -6,18 +6,21 @@ namespace Hax;
 public class TriggerMod : MonoBehaviour {
     bool interactEnabled = false;
     bool funnyReviveEnabled = false;
+    bool followPlayerEnabled = false;
     DepositItemsDesk? DepositItemsDesk => HaxObject.Instance?.DepositItemsDesk.Object;
 
     void OnEnable() {
         InputListener.onMiddleButtonPress += this.Fire;
         InputListener.onEButtonHold += this.InteractEnabled;
         InputListener.onRButtonHold += this.FunnyReviveEnabled;
+        InputListener.onFButtonHold += this.FollowPlayerEnabled;
     }
 
     void OnDisable() {
         InputListener.onMiddleButtonPress -= this.Fire;
         InputListener.onEButtonHold -= this.InteractEnabled;
         InputListener.onRButtonHold -= this.FunnyReviveEnabled;
+        InputListener.onFButtonHold -= this.FollowPlayerEnabled;
     }
 
     void InteractEnabled(bool isHold) {
@@ -27,7 +30,34 @@ public class TriggerMod : MonoBehaviour {
         this.funnyReviveEnabled = isHold;
     }
 
+    void FollowPlayerEnabled(bool isHold) {
+        this.followPlayerEnabled = isHold;
+    }
+
     void Fire() {
+        if (this.followPlayerEnabled) {
+            bool foundTarget = false;
+            Helper.RaycastForward().ForEach(raycastHit => {
+                GameObject gameObject = raycastHit.collider.gameObject;
+
+                if (gameObject.GetComponent<PlayerControllerB>().IsNotNull(out PlayerControllerB player)) {
+                    Console.Print($"Following #{player.playerClientId} {player.playerUsername}!");
+                    Settings.PlayerToFollow = player;
+                    foundTarget = true;
+                    return;
+                }
+            });
+
+            if (!foundTarget) {
+                if (Settings.PlayerToFollow != null) {
+                    Console.Print("Stopped following!");
+                    Settings.PlayerToFollow = null;
+                }
+            }
+
+            return;
+        }
+
         if (this.interactEnabled) {
             Helper.RaycastForward(0.25f).ForEach(hit => {
                 GameObject gameObject = hit.collider.gameObject;
