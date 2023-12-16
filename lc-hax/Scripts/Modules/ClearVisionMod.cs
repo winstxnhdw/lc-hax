@@ -86,6 +86,7 @@ public class ClearVisionMod : MonoBehaviour {
     }
 
     void Start() {
+        _ = this.StartCoroutine(this.DisableFog());
         _ = this.StartCoroutine(this.SetNightVision());
         _ = this.StartCoroutine(this.DisableSteamValves());
     }
