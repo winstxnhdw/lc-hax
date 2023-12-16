@@ -34,6 +34,7 @@ No features in this mod require host privileges.
 - Always sane
 - Always lightweight
 - Always show HUD
+- Build anywhere
 - Clear vision
 - [Commands](#commands)
 - [Binds](#binds)
