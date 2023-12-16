@@ -1,22 +1,33 @@
+using System;
 using GameNetcodeStuff;
 
 namespace Hax;
 
 public class HomeCommand : ICommand {
+    Action TeleportPlayerToBaseLater(PlayerControllerB targetPlayer) => () => {
+        HaxObject.Instance?.ShipTeleporters.Renew();
+
+        if (!Helper.Teleporter.IsNotNull(out ShipTeleporter teleporter)) {
+            Console.Print("ShipTeleporter not found!");
+            return;
+        }
+
+        Helper.SwitchRadarTarget(targetPlayer);
+        Helper.CreateComponent<WaitForPredicate>()
+              .SetPredicate(() => Helper.IsRadarTarget(targetPlayer.playerClientId))
+              .Init(teleporter.PressTeleportButtonServerRpc);
+    };
+
     Result TeleportPlayerToBase(string[] args) {
-        if (!Helper.GetPlayer(args[0]).IsNotNull(out PlayerControllerB sourcePlayer)) {
+        if (!Helper.GetPlayer(args[0]).IsNotNull(out PlayerControllerB targetPlayer)) {
             return new Result(message: "Player not found!");
         }
 
         Helper.BuyUnlockable(Unlockable.TELEPORTER);
-        HaxObject.Instance?.ShipTeleporters.Renew();
+        Helper.CreateComponent<WaitForPredicate>()
+              .SetPredicate(Helper.TeleporterExists)
+              .Init(this.TeleportPlayerToBaseLater(targetPlayer));
 
-        if (!Helper.Teleporter.IsNotNull(out ShipTeleporter teleporter)) {
-            return new Result(message: "ShipTeleporter not found!");
-        }
-
-        Helper.SwitchRadarTarget(sourcePlayer);
-        teleporter.PressTeleportButtonServerRpc();
         return new Result(true);
     }
 

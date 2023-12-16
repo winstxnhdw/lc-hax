@@ -5,11 +5,6 @@ using GameNetcodeStuff;
 namespace Hax;
 
 public class TeleportCommand : ICommand {
-    bool TeleporterExists() {
-        HaxObject.Instance?.ShipTeleporters.Renew();
-        return Helper.Teleporter.IsNotNull(out ShipTeleporter _);
-    }
-
     Vector3? GetCoordinates(string[] args) {
         bool isValidX = float.TryParse(args[0], out float x);
         bool isValidY = float.TryParse(args[1], out float y);
@@ -84,7 +79,7 @@ public class TeleportCommand : ICommand {
     Result TeleportPlayerToPosition(PlayerControllerB player, Vector3 position) {
         Helper.BuyUnlockable(Unlockable.TELEPORTER);
         Helper.CreateComponent<WaitForPredicate>()
-              .SetPredicate(this.TeleporterExists)
+              .SetPredicate(Helper.TeleporterExists)
               .Init(this.TeleportPlayerToPositionLater(player, position));
 
         return new Result(true);
