@@ -72,8 +72,8 @@ public class TeleportCommand : ICommand {
         );
 
         Helper.CreateComponent<TransientBehaviour>()
-              .Init(Helper.PlaceObjectAtPosition(teleporterPlacement), 6.0f)
-              .Dispose(() => Helper.PlaceObjectAtPosition(previousTeleporterPlacement).Invoke(0));
+              .Init((_) => Helper.PlaceObjectAtPosition(teleporterPlacement), 6.0f)
+              .Dispose(() => Helper.PlaceObjectAtPosition(previousTeleporterPlacement));
     };
 
     Result TeleportPlayerToPosition(PlayerControllerB player, Vector3 position) {

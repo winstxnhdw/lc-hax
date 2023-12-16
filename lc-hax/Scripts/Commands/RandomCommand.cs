@@ -71,8 +71,8 @@ public class RandomCommand : ICommand {
         }
 
         Helper.CreateComponent<TransientBehaviour>()
-              .Init(Helper.PlaceObjectAtTransform(teleporterPlacements.Value.Placement), 6.0f)
-              .Dispose(() => Helper.PlaceObjectAtTransform(teleporterPlacements.Value.PreviousPlacement).Invoke(0));
+              .Init((_) => Helper.PlaceObjectAtTransform(teleporterPlacements.Value.Placement), 6.0f)
+              .Dispose(() => Helper.PlaceObjectAtTransform(teleporterPlacements.Value.PreviousPlacement));
 
         ObjectPlacements<Transform, PlaceableShipObject>? cupboardPlacements = this.GetCupboardPlacements(targetPlayer);
 
@@ -82,14 +82,13 @@ public class RandomCommand : ICommand {
         }
 
         Helper.CreateComponent<TransientBehaviour>()
-              .Init(Helper.PlaceObjectAtPosition(cupboardPlacements.Value.Placement), 6.0f)
-              .Dispose(() => Helper.PlaceObjectAtTransform(cupboardPlacements.Value.PreviousPlacement).Invoke(0));
+              .Init((_) => Helper.PlaceObjectAtPosition(cupboardPlacements.Value.Placement), 6.0f)
+              .Dispose(() => Helper.PlaceObjectAtTransform(cupboardPlacements.Value.PreviousPlacement));
 
         teleporterPlacements.Value.Placement.GameObject.PressTeleportButtonServerRpc();
     };
 
     void TeleportPlayerToRandom(string[] args) {
-        Helper.BuyUnlockable(Unlockable.CUPBOARD);
         Helper.BuyUnlockable(Unlockable.INVERSE_TELEPORTER);
 
         Helper.CreateComponent<WaitForPredicate>()

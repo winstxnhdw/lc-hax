@@ -1,4 +1,3 @@
-using System;
 using Unity.Netcode;
 using UnityEngine;
 
@@ -12,12 +11,12 @@ public static partial class Helper {
                   .parentObject
                   .GetComponent<NetworkObject>();
 
-    public static Action<float> PlaceObjectAtTransform<T, M>(
+    public static void PlaceObjectAtTransform<T, M>(
         T targetObject,
         M gameObject,
         Vector3 positionOffset = new(),
         Vector3 rotationOffset = new()
-    ) where T : Transform where M : MonoBehaviour => (_) => {
+    ) where T : Transform where M : MonoBehaviour {
         NetworkObject networkObject = Helper.GetNetworkObject(gameObject);
         Helper.ShipBuildModeManager?.PlaceShipObjectServerRpc(
             targetObject.position + positionOffset,
@@ -25,9 +24,9 @@ public static partial class Helper {
             networkObject,
             -1
         );
-    };
+    }
 
-    public static Action<float> PlaceObjectAtTransform<T, M>(
+    public static void PlaceObjectAtTransform<T, M>(
         ObjectPlacement<T, M> placement
     ) where T : Transform where M : MonoBehaviour => Helper.PlaceObjectAtTransform(
         placement.TargetObject,
@@ -36,12 +35,12 @@ public static partial class Helper {
         placement.RotationOffset
     );
 
-    public static Action<float> PlaceObjectAtPosition<T, M>(
+    public static void PlaceObjectAtPosition<T, M>(
         T targetObject,
         M gameObject,
         Vector3 positionOffset = new(),
         Vector3 rotationOffset = new()
-    ) where T : Transform where M : MonoBehaviour => (_) => {
+    ) where T : Transform where M : MonoBehaviour {
         NetworkObject networkObject = Helper.GetNetworkObject(gameObject);
         Helper.ShipBuildModeManager?.PlaceShipObjectServerRpc(
             targetObject.position + positionOffset,
@@ -49,13 +48,13 @@ public static partial class Helper {
             networkObject,
             -1
         );
-    };
+    }
 
-    public static Action<float> PlaceObjectAtPosition<M>(
+    public static void PlaceObjectAtPosition<M>(
         M gameObject,
         Vector3 position,
         Vector3 rotation
-    ) where M : MonoBehaviour => (_) => {
+    ) where M : MonoBehaviour {
         NetworkObject networkObject = Helper.GetNetworkObject(gameObject);
         Helper.ShipBuildModeManager?.PlaceShipObjectServerRpc(
             position,
@@ -63,9 +62,9 @@ public static partial class Helper {
             networkObject,
             -1
         );
-    };
+    }
 
-    public static Action<float> PlaceObjectAtPosition<T, M>(
+    public static void PlaceObjectAtPosition<T, M>(
         ObjectPlacement<T, M> placement
     ) where T : Transform where M : MonoBehaviour => Helper.PlaceObjectAtPosition(
         placement.TargetObject,

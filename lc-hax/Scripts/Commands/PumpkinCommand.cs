@@ -1,8 +1,6 @@
 using System.Linq;
 using UnityEngine;
 using GameNetcodeStuff;
-using Unity.Netcode;
-using System.Collections.Generic;
 
 namespace Hax;
 
@@ -64,7 +62,7 @@ public class PumpkinCommand : ICommand {
                 Helper.PlaceObjectAtPosition(
                     jack,
                     Vector3.Lerp(toPlayerPos, this.toOutwardsPos, pingpongValue) + bobbing,
-                    Quaternion.LookRotation(targetPlayer.transform.position - jack.transform.position, Vector3.up).eulerAngles + new Vector3(220, -90, 0)).Invoke(x);
+                    Quaternion.LookRotation(targetPlayer.transform.position - jack.transform.position, Vector3.up).eulerAngles + new Vector3(220, -90, 0));
             }, DURATION);
 
         return new Result(true);
