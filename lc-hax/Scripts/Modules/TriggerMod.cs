@@ -4,14 +4,21 @@ using GameNetcodeStuff;
 namespace Hax;
 
 public class TriggerMod : MonoBehaviour {
+    bool interactEnabled = false;
     DepositItemsDesk? DepositItemsDesk => HaxObject.Instance?.DepositItemsDesk.Object;
 
     void OnEnable() {
         InputListener.onMiddleButtonPress += this.Fire;
+        InputListener.onEButtonHold += this.InteractEnabled;
     }
 
     void OnDisable() {
         InputListener.onMiddleButtonPress -= this.Fire;
+        InputListener.onEButtonHold -= this.InteractEnabled;
+    }
+
+    void InteractEnabled(bool isHold) {
+        this.interactEnabled = isHold;
     }
 
     void Fire() {
@@ -42,7 +49,6 @@ public class TriggerMod : MonoBehaviour {
                 doorLock.UnlockDoorSyncWithServer();
                 return;
             }
-
             if (gameObject.GetComponent<TerminalAccessibleObject>().IsNotNull(out TerminalAccessibleObject terminalObject)) {
                 terminalObject.SetDoorOpenServerRpc(!Reflector.Target(terminalObject).GetInternalField<bool>("isDoorOpen"));
                 return;
@@ -53,5 +59,15 @@ public class TriggerMod : MonoBehaviour {
                       .ForEach(enemy => Console.Print($"{enemy} prompted!"));
             }
         });
+
+        if (this.interactEnabled) {
+            Helper.NarrowRaycastForward.ForEach(hit => {
+                GameObject gameObject = hit.collider.gameObject;
+
+                if (gameObject.GetComponent<InteractTrigger>().IsNotNull(out InteractTrigger interactTrigger)) {
+                    interactTrigger.onInteract.Invoke(null);
+                }
+            });
+        }
     }
 }
