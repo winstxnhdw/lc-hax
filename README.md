@@ -31,8 +31,8 @@ No features in this mod require host privileges.
 - Infinite scan range
 - Always sane
 - Always lightweight
+- Always show HUD
 - Clear vision
-- No hidden HUD
 - [Commands](#commands)
 - [Binds](#binds)
 
