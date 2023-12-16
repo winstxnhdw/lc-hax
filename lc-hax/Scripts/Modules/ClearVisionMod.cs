@@ -1,11 +1,12 @@
 using System.Collections;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.Rendering.HighDefinition;
 
 namespace Hax;
 
 public class ClearVisionMod : MonoBehaviour {
-    IEnumerator SetClearVision() {
+    IEnumerator SetNightVision() {
         while (true) {
             if (!Helper.StartOfRound.IsNotNull(out StartOfRound startOfRound)) {
                 yield return new WaitForEndOfFrame();
@@ -58,7 +59,19 @@ public class ClearVisionMod : MonoBehaviour {
             yield return new WaitForEndOfFrame();
         }
     }
+
+    IEnumerator DisableSteamValves() {
+        while (true) {
+            HaxObject.Instance?.SteamValveHazard.Objects.ToList().ForEach(valve => {
+                _ = Reflector.Target(valve).InvokeInternalMethod("FixValveLocalClient");
+            });
+
+            yield return new WaitForSeconds(5.0f);
+        }
+    }
+
     void Start() {
-        _ = this.StartCoroutine(this.SetClearVision());
+        _ = this.StartCoroutine(this.SetNightVision());
+        _ = this.StartCoroutine(this.DisableSteamValves());
     }
 }
