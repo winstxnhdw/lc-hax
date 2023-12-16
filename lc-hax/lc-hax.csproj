@@ -3,11 +3,13 @@
   <PropertyGroup>
 
     <OutDir>../bin</OutDir>
+    <Optimize>true</Optimize>
     <Nullable>enable</Nullable>
     <LangVersion>latest</LangVersion>
+    <RuntimeIdentifier>win-x64</RuntimeIdentifier>
     <TargetFramework>netstandard2.1</TargetFramework>
-    <RootNamespace>lc-hax</RootNamespace>
     <ReferencePath>./References</ReferencePath>
+    <RootNamespace>lc-hax</RootNamespace>
 
   </PropertyGroup>
 
