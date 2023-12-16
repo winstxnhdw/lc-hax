@@ -6,7 +6,7 @@ namespace Hax;
 public class HateCommand : ICommand {
     public void Execute(string[] args) {
         if (args.Length is 0) {
-            Console.Print("Usage: /hate <player>");
+            Console.Print("Usage: /hate <player> <funnyRevive>");
             return;
         }
 
@@ -15,7 +15,14 @@ public class HateCommand : ICommand {
             return;
         }
 
-        List<string> promptedEnemies = Helper.PromptEnemiesToTarget(targetPlayer);
+        bool funnyRevive = false;
+        if (args.Length is 2 &&
+            !bool.TryParse(args[1], out funnyRevive)) {
+            Console.Print("funnyRevive parse failed, set to false!");
+            return;
+        }
+
+        List<string> promptedEnemies = Helper.PromptEnemiesToTarget(targetPlayer, funnyRevive);
 
         if (promptedEnemies.Count is 0) {
             Console.Print("No enemies found!");

@@ -5,7 +5,7 @@ using GameNetcodeStuff;
 namespace Hax;
 
 public static partial class Helper {
-    public static List<string> PromptEnemiesToTarget(PlayerControllerB player) {
+    public static List<string> PromptEnemiesToTarget(PlayerControllerB player, bool funnyRevive) {
         List<string> enemyNames = [];
 
         if (!Helper.RoundManager.IsNotNull(out RoundManager roundManager)) {
@@ -18,12 +18,18 @@ public static partial class Helper {
 
         _ = Reflector.Target(roundManager).InvokeInternalMethod("RefreshEnemiesList");
 
+        if (funnyRevive) {
+            Console.Print("Helper", "with funnyRevive!");
+        }
+
         roundManager.SpawnedEnemies.ForEach((enemy) => {
             if (enemy is DocileLocustBeesAI or DoublewingAI or BlobAI or DressGirlAI or LassoManAI) return;
 
+            if (funnyRevive) {
+                enemy.isEnemyDead = false;
+                enemy.enemyHP = enemy.enemyHP <= 0 ? 1 : enemy.enemyHP;
+            }
             enemy.targetPlayer = player;
-            enemy.isEnemyDead = false;
-            enemy.enemyHP = enemy.enemyHP <= 0 ? 1 : enemy.enemyHP;
             enemyNames.Add(enemy.enemyType.enemyName);
             enemy.ChangeEnemyOwnerServerRpc(localPlayer.actualClientId);
 
