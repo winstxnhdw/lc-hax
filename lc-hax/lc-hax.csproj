@@ -32,9 +32,13 @@
     <Reference Include="UnityEngine.UI">
       <HintPath>$(ReferencePath)/UnityEngine.UI.dll</HintPath>
     </Reference>
-    
+
     <Reference Include="UnityEngine.UIModule">
       <HintPath>$(ReferencePath)/UnityEngine.UIModule.dll</HintPath>
+    </Reference>
+
+    <Reference Include="UnityEngine.ParticleSystemModule">
+      <HintPath>$(ReferencePath)/UnityEngine.ParticleSystemModule.dll</HintPath>
     </Reference>
 
     <Reference Include="Unity.InputSystem">

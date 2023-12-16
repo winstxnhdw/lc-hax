@@ -60,11 +60,26 @@ public class ClearVisionMod : MonoBehaviour {
         }
     }
 
+    IEnumerator DisableFog() {
+        while (true) {
+            HaxObject.Instance?
+                     .ToggleFogTriggers
+                     .Objects
+                     .ToList()
+                     .ForEach(toggleFogTrigger => toggleFogTrigger.enabled = false);
+
+            yield return new WaitForSeconds(5.0f);
+        }
+    }
+
     IEnumerator DisableSteamValves() {
         while (true) {
-            HaxObject.Instance?.SteamValveHazard.Objects.ToList().ForEach(valve => {
-                _ = Reflector.Target(valve).InvokeInternalMethod("FixValveLocalClient");
-            });
+            HaxObject.Instance?
+                     .SteamValves
+                     .Objects
+                     .ToList()
+                     .ForEach(valve => valve.valveSteamParticle
+                     .Stop(true, ParticleSystemStopBehavior.StopEmittingAndClear));
 
             yield return new WaitForSeconds(5.0f);
         }
