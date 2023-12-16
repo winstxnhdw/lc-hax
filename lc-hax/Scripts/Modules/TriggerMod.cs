@@ -22,6 +22,17 @@ public class TriggerMod : MonoBehaviour {
     }
 
     void Fire() {
+        if (this.interactEnabled) {
+            Helper.NarrowRaycastForward.ForEach(hit => {
+                GameObject gameObject = hit.collider.gameObject;
+
+                if (gameObject.GetComponent<InteractTrigger>().IsNotNull(out InteractTrigger interactTrigger)) {
+                    interactTrigger.onInteract.Invoke(null);
+                }
+            });
+            return;
+        }
+
         if (this.DepositItemsDesk.IsNotNull(out DepositItemsDesk deposit)) {
             deposit.AttackPlayersServerRpc();
             return;
@@ -59,15 +70,5 @@ public class TriggerMod : MonoBehaviour {
                       .ForEach(enemy => Console.Print($"{enemy} prompted!"));
             }
         });
-
-        if (this.interactEnabled) {
-            Helper.NarrowRaycastForward.ForEach(hit => {
-                GameObject gameObject = hit.collider.gameObject;
-
-                if (gameObject.GetComponent<InteractTrigger>().IsNotNull(out InteractTrigger interactTrigger)) {
-                    interactTrigger.onInteract.Invoke(null);
-                }
-            });
-        }
     }
 }
