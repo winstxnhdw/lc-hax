@@ -90,7 +90,6 @@ public class RandomCommand : ICommand {
 
     void TeleportPlayerToRandom(string[] args) {
         Helper.BuyUnlockable(Unlockable.INVERSE_TELEPORTER);
-
         Helper.CreateComponent<WaitForPredicate>()
               .SetPredicate(this.InverseTeleporterExists)
               .Init(this.TeleportPlayerToRandomLater(args));
