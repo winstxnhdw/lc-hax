@@ -70,3 +70,5 @@ No features in this mod require host privileges.
 | --------------------------  | ------ |
 | Trigger various objects     | `M3`   |
 | Toggle Phantom              | `=`    |
+| Change spectator index      | `⇦`   |
+| Change spectator index      | `⇨`   |
