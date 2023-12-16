@@ -13,4 +13,14 @@ public static partial class Helper {
                 camera.transform.forward,
                 float.MaxValue
             )];
+
+    public static List<RaycastHit> NarrowRaycastForward =>
+            !Helper.CurrentCamera.IsNotNull(out Camera camera) || !camera.enabled
+            ? []
+            : [.. Physics.SphereCastAll(
+                camera.transform.position + (camera.transform.forward * 1.5f),
+                .25f,
+                camera.transform.forward,
+                float.MaxValue
+            )];
 }
