@@ -13,6 +13,8 @@ A highly performant and feature-rich portable Windows CLI-only internal cheat fo
 
 ## Installation
 
+**Recursively** clone the repository.
+
 ```bash
 git clone --recursive https://github.com/winstxnhdw/lc-hax.git
 ```
