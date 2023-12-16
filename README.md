@@ -72,3 +72,5 @@ No features in this mod require host privileges.
 | Toggle Phantom              | `=`    |
 | Change spectator index      | `⇦`   |
 | Change spectator index      | `⇨`   |
+| Increase sensitivity        | `]`    |
+| Decrease sensitivity        | `[`    |
