@@ -12,13 +12,9 @@ class ConsolePatch {
 
         string command = hudManager.chatTextField.text;
 
-        try {
-            Console.ExecuteCommand(command);
-        }
-
-        catch (Exception exception) {
+        Helper.Try(() => Console.ExecuteCommand(command), (Exception exception) => {
             Logger.Write(exception.ToString());
-        }
+        });
 
         return false;
     }
