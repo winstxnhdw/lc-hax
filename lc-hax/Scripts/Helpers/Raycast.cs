@@ -8,7 +8,7 @@ public static partial class Helper {
         return !Helper.CurrentCamera.IsNotNull(out Camera camera) || !camera.enabled
             ? []
             : [.. Physics.SphereCastAll(
-                camera.transform.position + (camera.transform.forward * (sphereRadius + 0.5f)),
+                camera.transform.position + (camera.transform.forward * (sphereRadius + 1.75f)),
                 sphereRadius,
                 camera.transform.forward,
                 float.MaxValue
