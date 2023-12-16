@@ -10,11 +10,13 @@ public class HaxObject : MonoBehaviour {
     public SingleObjectPool<DepositItemsDesk> DepositItemsDesk { get; private set; }
     public MultiObjectPool<Shovel> Shovels { get; private set; }
     public MultiObjectPool<ShipTeleporter> ShipTeleporters { get; private set; }
+    public MultiObjectPool<SteamValveHazard> SteamValveHazard { get; private set; }
 
     void Awake() {
         this.DepositItemsDesk = new(this);
         this.Shovels = new(this);
         this.ShipTeleporters = new(this);
+        this.SteamValveHazard = new(this, 5.0f);
 
         HaxObject.Instance = this;
     }
