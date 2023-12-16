@@ -75,9 +75,8 @@
 
   <Target Name="CleanBeforeRestore" BeforeTargets="Restore">
     <RemoveDir Directories="$(BaseIntermediateOutputPath)" />
-    <RemoveDir Directories="$(BaseOutputPath)" />
-    <RemoveDir Directories="$(PublishDir)" />
-    <RemoveDir Directories="$(PublishDir)../References/NuGet" />
+    <RemoveDir Directories="$(BaseIntermediateOutputPath)/../References/NuGet" />
+    <RemoveDir Directories="$(OutDir)" />
   </Target>
 
 </Project>
