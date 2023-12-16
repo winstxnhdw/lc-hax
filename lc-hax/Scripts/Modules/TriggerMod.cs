@@ -29,7 +29,7 @@ public class TriggerMod : MonoBehaviour {
 
     void Fire() {
         if (this.interactEnabled) {
-            Helper.NarrowRaycastForward.ForEach(hit => {
+            Helper.RaycastForward(0.25f).ForEach(hit => {
                 GameObject gameObject = hit.collider.gameObject;
 
                 if (gameObject.GetComponent<InteractTrigger>().IsNotNull(out InteractTrigger interactTrigger)) {
@@ -44,7 +44,7 @@ public class TriggerMod : MonoBehaviour {
             return;
         }
 
-        Helper.RaycastForward.ForEach(raycastHit => {
+        Helper.RaycastForward().ForEach(raycastHit => {
             GameObject gameObject = raycastHit.collider.gameObject;
 
             if (gameObject.GetComponent<Landmine>().IsNotNull(out Landmine landmine)) {
