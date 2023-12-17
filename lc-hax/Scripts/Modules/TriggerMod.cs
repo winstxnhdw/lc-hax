@@ -74,37 +74,38 @@ public class TriggerMod : MonoBehaviour {
             return;
         }
 
-        Helper.RaycastForward().ForEach(raycastHit => {
+        foreach (RaycastHit raycastHit in Helper.RaycastForward()) {
             GameObject gameObject = raycastHit.collider.gameObject;
 
             if (gameObject.GetComponent<Landmine>().IsNotNull(out Landmine landmine)) {
                 landmine.TriggerMine();
-                return;
+                break;
             }
 
             if (gameObject.GetComponent<JetpackItem>().IsNotNull(out JetpackItem jetpack)) {
                 jetpack.ExplodeJetpackServerRpc();
-                return;
+                break;
             }
 
             if (gameObject.GetComponent<Turret>().IsNotNull(out Turret turret)) {
                 turret.EnterBerserkModeServerRpc(-1);
-                return;
+                break;
             }
 
             if (gameObject.GetComponent<DoorLock>().IsNotNull(out DoorLock doorLock)) {
                 doorLock.UnlockDoorSyncWithServer();
-                return;
+                break;
             }
             if (gameObject.GetComponent<TerminalAccessibleObject>().IsNotNull(out TerminalAccessibleObject terminalObject)) {
                 terminalObject.SetDoorOpenServerRpc(!Reflector.Target(terminalObject).GetInternalField<bool>("isDoorOpen"));
-                return;
+                break;
             }
 
             if (gameObject.GetComponent<PlayerControllerB>().IsNotNull(out PlayerControllerB player)) {
                 Helper.PromptEnemiesToTarget(player, this.funnyReviveEnabled)
                       .ForEach(enemy => Console.Print($"{enemy} prompted!"));
+                break;
             }
-        });
+        }
     }
 }
