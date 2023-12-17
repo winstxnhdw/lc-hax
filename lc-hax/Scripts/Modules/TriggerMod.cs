@@ -4,49 +4,46 @@ using GameNetcodeStuff;
 namespace Hax;
 
 public class TriggerMod : MonoBehaviour {
-    bool interactEnabled = false;
-    bool funnyReviveEnabled = false;
-    bool followPlayerEnabled = false;
+    bool InteractEnabled { get; set; } = false;
+    bool FunnyReviveEnabled { get; set; } = false;
+    bool FollowPlayerEnabled { get; set; } = false;
+
     DepositItemsDesk? DepositItemsDesk => HaxObject.Instance?.DepositItemsDesk.Object;
 
     void OnEnable() {
         InputListener.onMiddleButtonPress += this.Fire;
-        InputListener.onEButtonHold += this.InteractEnabled;
-        InputListener.onRButtonHold += this.FunnyReviveEnabled;
-        InputListener.onFButtonHold += this.FollowPlayerEnabled;
+        InputListener.onEButtonHold += this.SetInteractEnabled;
+        InputListener.onRButtonHold += this.SetFunnyReviveEnabled;
+        InputListener.onFButtonHold += this.SetFollowPlayerEnabled;
     }
 
     void OnDisable() {
         InputListener.onMiddleButtonPress -= this.Fire;
-        InputListener.onEButtonHold -= this.InteractEnabled;
-        InputListener.onRButtonHold -= this.FunnyReviveEnabled;
-        InputListener.onFButtonHold -= this.FollowPlayerEnabled;
+        InputListener.onEButtonHold -= this.SetInteractEnabled;
+        InputListener.onRButtonHold -= this.SetFunnyReviveEnabled;
+        InputListener.onFButtonHold -= this.SetFollowPlayerEnabled;
     }
 
-    void InteractEnabled(bool isHold) {
-        this.interactEnabled = isHold;
-    }
-    void FunnyReviveEnabled(bool isHold) {
-        this.funnyReviveEnabled = isHold;
-    }
+    void SetInteractEnabled(bool isHeld) => this.InteractEnabled = isHeld;
 
-    void FollowPlayerEnabled(bool isHold) {
-        this.followPlayerEnabled = isHold;
-    }
+    void SetFunnyReviveEnabled(bool isHeld) => this.FunnyReviveEnabled = isHeld;
+
+    void SetFollowPlayerEnabled(bool isHeld) => this.FollowPlayerEnabled = isHeld;
 
     void Fire() {
-        if (this.followPlayerEnabled) {
+        if (this.FollowPlayerEnabled) {
             bool foundTarget = false;
-            Helper.RaycastForward().ForEach(raycastHit => {
+
+            foreach (RaycastHit raycastHit in Helper.RaycastForward()) {
                 GameObject gameObject = raycastHit.collider.gameObject;
 
                 if (gameObject.GetComponent<PlayerControllerB>().IsNotNull(out PlayerControllerB player)) {
                     Console.Print($"Following #{player.playerClientId} {player.playerUsername}!");
                     Settings.PlayerToFollow = player;
                     foundTarget = true;
-                    return;
+                    break;
                 }
-            });
+            }
 
             if (!foundTarget) {
                 if (Settings.PlayerToFollow != null) {
@@ -58,14 +55,16 @@ public class TriggerMod : MonoBehaviour {
             return;
         }
 
-        if (this.interactEnabled) {
-            Helper.RaycastForward(0.25f).ForEach(hit => {
-                GameObject gameObject = hit.collider.gameObject;
-
-                if (gameObject.GetComponent<InteractTrigger>().IsNotNull(out InteractTrigger interactTrigger)) {
-                    interactTrigger.onInteract.Invoke(null);
+        if (this.InteractEnabled) {
+            foreach (RaycastHit raycastHit in Helper.RaycastForward()) {
+                if (!raycastHit.collider.gameObject.GetComponent<InteractTrigger>().IsNotNull(out InteractTrigger interactTrigger)) {
+                    continue;
                 }
-            });
+
+                interactTrigger.onInteract.Invoke(null);
+                break;
+            }
+
             return;
         }
 
@@ -102,7 +101,7 @@ public class TriggerMod : MonoBehaviour {
             }
 
             if (gameObject.GetComponent<PlayerControllerB>().IsNotNull(out PlayerControllerB player)) {
-                Helper.PromptEnemiesToTarget(player, this.funnyReviveEnabled)
+                Helper.PromptEnemiesToTarget(player, this.FunnyReviveEnabled)
                       .ForEach(enemy => Console.Print($"{enemy} prompted!"));
                 break;
             }
