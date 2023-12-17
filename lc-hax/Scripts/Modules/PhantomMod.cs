@@ -4,21 +4,30 @@ using GameNetcodeStuff;
 namespace Hax;
 
 public class PhantomMod : MonoBehaviour {
+    bool IsShiftHeld { get; set; } = false;
     bool EnablePhantom { get; set; } = false;
     int CurrentSpectatorIndex { get; set; } = 0;
 
 
     void OnEnable() {
+        InputListener.onShiftButtonHold += this.HoldShift;
         InputListener.onEqualsPress += this.TogglePhantom;
-        InputListener.onRightArrowKeyPress += () => this.LookAtPlayer(1);
-        InputListener.onLeftArrowKeyPress += () => this.LookAtPlayer(-1);
+        InputListener.onRightArrowKeyPress += this.LookAtNextPlayer;
+        InputListener.onLeftArrowKeyPress += this.LookAtPreviousPlayer;
     }
 
     void OnDisable() {
+        InputListener.onShiftButtonHold -= this.HoldShift;
         InputListener.onEqualsPress -= this.TogglePhantom;
-        InputListener.onRightArrowKeyPress -= () => this.LookAtPlayer(1);
-        InputListener.onLeftArrowKeyPress -= () => this.LookAtPlayer(-1);
+        InputListener.onRightArrowKeyPress -= this.LookAtNextPlayer;
+        InputListener.onLeftArrowKeyPress -= this.LookAtPreviousPlayer;
     }
+
+    void HoldShift(bool isHeld) => this.IsShiftHeld = isHeld;
+
+    void LookAtNextPlayer() => this.LookAtPlayer(1);
+
+    void LookAtPreviousPlayer() => this.LookAtPlayer(-1);
 
     void LookAtPlayer(int indexChange) {
         if (!this.EnablePhantom || !Helper.CurrentCamera.IsNotNull(out Camera camera)) return;
@@ -59,6 +68,10 @@ public class PhantomMod : MonoBehaviour {
         }
 
         else {
+            if (this.IsShiftHeld) {
+                player.TeleportPlayer(camera.transform.position);
+            }
+
             camera.transform.SetParent(cameraParent, false);
             camera.transform.localPosition = Vector3.zero;
             camera.transform.localRotation = Quaternion.identity;

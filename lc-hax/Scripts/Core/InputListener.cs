@@ -6,6 +6,7 @@ using UnityEngine.InputSystem;
 namespace Hax;
 
 public class InputListener : MonoBehaviour {
+    public static event Action<bool>? onShiftButtonHold;
     public static event Action<bool>? onFButtonHold;
     public static event Action<bool>? onEButtonHold;
     public static event Action<bool>? onRButtonHold;
@@ -18,6 +19,7 @@ public class InputListener : MonoBehaviour {
     public static event Action? onRightBracketPress;
 
     Dictionary<Func<bool>, Action> InputActions { get; } = new() {
+        { () => true, () => InputListener.onShiftButtonHold?.Invoke(Keyboard.current[Key.LeftShift].isPressed) },
         { () => true, () => InputListener.onFButtonHold?.Invoke(Keyboard.current[Key.F].isPressed) },
         { () => true, () => InputListener.onRButtonHold?.Invoke(Keyboard.current[Key.R].isPressed) },
         { () => true, () => InputListener.onEButtonHold?.Invoke(Keyboard.current[Key.E].isPressed) },
