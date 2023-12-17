@@ -51,6 +51,7 @@ public class TriggerMod : MonoBehaviour {
             if (!foundTarget) {
                 if (Settings.PlayerToFollow != null) {
                     Settings.PlayerToFollow = null;
+                    Console.Print("Stopped following!");
                 }
             }
 
