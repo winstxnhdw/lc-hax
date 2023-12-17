@@ -7,7 +7,6 @@ public class PhantomMod : MonoBehaviour {
     bool EnablePhantom { get; set; } = false;
     int CurrentSpectatorIndex { get; set; } = 0;
 
-    Transform? OriginalCameraParent { get; set; }
 
     void OnEnable() {
         InputListener.onEqualsPress += this.TogglePhantom;
@@ -39,10 +38,7 @@ public class PhantomMod : MonoBehaviour {
     void TogglePhantom() {
         if (!Helper.LocalPlayer.IsNotNull(out PlayerControllerB player)) return;
         if (!Helper.CurrentCamera.IsNotNull(out Camera camera) || !camera.enabled) return;
-        if (this.OriginalCameraParent is null) {
-            this.OriginalCameraParent = player.cameraContainerTransform;
-            return;
-        }
+        if (!player.cameraContainerTransform.IsNotNull(out Transform cameraParent)) return;
 
         GameObject cameraGameObject = camera.gameObject;
         this.EnablePhantom = !this.EnablePhantom;
@@ -63,7 +59,7 @@ public class PhantomMod : MonoBehaviour {
         }
 
         else {
-            camera.transform.SetParent(this.OriginalCameraParent, false);
+            camera.transform.SetParent(cameraParent, false);
             camera.transform.localPosition = Vector3.zero;
             camera.transform.localRotation = Quaternion.identity;
 
