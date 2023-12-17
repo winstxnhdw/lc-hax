@@ -11,13 +11,14 @@ public class NameInWeightMod : MonoBehaviour {
     void Fire() {
         if (!Helper.HUDManager.IsNotNull(out HUDManager hudManager)) return;
 
-        Helper.RaycastForward().ForEach(raycastHit => {
+        foreach (RaycastHit raycastHit in Helper.RaycastForward()) {
             if (!raycastHit.collider.gameObject.GetComponent<PlayerControllerB>().IsNotNull(out PlayerControllerB player)) {
-                return;
+                continue;
             }
 
             hudManager.weightCounter.enableWordWrapping = false;
             hudManager.weightCounter.text = $"#{player.playerClientId} {player.playerUsername}";
-        });
+            break;
+        }
     }
 }
