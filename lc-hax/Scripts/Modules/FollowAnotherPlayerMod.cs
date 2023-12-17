@@ -6,6 +6,7 @@ namespace Hax;
 
 //in progress
 public class FollowAnotherPlayerMod : MonoBehaviour {
+    private const float SECOND = 1f;
     struct ValuesToCopy {
         public Vector3 pos;
         public Quaternion rot;
@@ -15,6 +16,7 @@ public class FollowAnotherPlayerMod : MonoBehaviour {
     Queue<ValuesToCopy> oneSecondOfValues = new();
     Quaternion deviateRot;
     float deviateTimer = 0;
+    float instantTeleTimer = 0;
     float distanceLimit = 1;
 
     float animBroadcastTimer = 0;
@@ -35,8 +37,14 @@ public class FollowAnotherPlayerMod : MonoBehaviour {
         }
 
         Settings.DisableFallDamage = true;
+        this.instantTeleTimer -= Time.deltaTime;
 
         if (player.isClimbingLadder) {
+            this.instantTeleTimer = SECOND;
+            this.oneSecondOfValues.Clear();
+        }
+
+        if (this.instantTeleTimer > 0) {
             localPlayer.transform.position = player.thisPlayerBody.position;
             return;
         }
@@ -56,7 +64,7 @@ public class FollowAnotherPlayerMod : MonoBehaviour {
             animSpeed = player.playerBodyAnimator.GetFloat("animationSpeed")
         });
         //if it isn't time to dequeue data, don't do it.
-        if (this.oneSecondOfValues.Count <= 1 / Time.deltaTime) {
+        if (this.oneSecondOfValues.Count <= SECOND / Time.deltaTime) {
             return;
         }
 
