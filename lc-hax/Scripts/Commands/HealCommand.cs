@@ -1,17 +1,15 @@
-using GameNetcodeStuff;
-
 namespace Hax;
 
 public class HealCommand : ICommand {
     public void Execute(string[] _) {
-        if (!Helper.LocalPlayer.IsNotNull(out PlayerControllerB localPlayer)) {
-            Console.Print("Player not found");
+        if (!Helper.HUDManager.IsNotNull(out HUDManager hudManager)) {
+            Console.Print("HUDManager is not found");
             return;
         }
 
-        localPlayer.health = 100;
-        localPlayer.bleedingHeavily = false;
-        localPlayer.criticallyInjured = false;
-        Helper.HUDManager?.UpdateHealthUI(localPlayer.health, false);
+        hudManager.localPlayer.health = 100;
+        hudManager.localPlayer.bleedingHeavily = false;
+        hudManager.localPlayer.criticallyInjured = false;
+        hudManager.UpdateHealthUI(hudManager.localPlayer.health, false);
     }
 }
