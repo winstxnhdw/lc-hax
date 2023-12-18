@@ -4,8 +4,8 @@ using UnityEngine;
 
 namespace Hax;
 
-public class HaxObject : MonoBehaviour {
-    public static HaxObject? Instance { get; private set; }
+public class HaxObjects : MonoBehaviour {
+    public static HaxObjects? Instance { get; private set; }
 
     public SingleObjectPool<DepositItemsDesk> DepositItemsDesk { get; private set; }
     public MultiObjectPool<Shovel> Shovels { get; private set; }
@@ -20,6 +20,6 @@ public class HaxObject : MonoBehaviour {
         this.ToggleFogTriggers = new(this);
         this.SteamValves = new(this, 5.0f);
 
-        HaxObject.Instance = this;
+        HaxObjects.Instance = this;
     }
 }

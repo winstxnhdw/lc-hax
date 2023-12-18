@@ -62,7 +62,7 @@ public class ClearVisionMod : MonoBehaviour {
 
     IEnumerator DisableFog() {
         while (true) {
-            HaxObject.Instance?
+            HaxObjects.Instance?
                      .ToggleFogTriggers
                      .Objects
                      .ToList()
@@ -77,7 +77,7 @@ public class ClearVisionMod : MonoBehaviour {
 
     IEnumerator DisableSteamValves() {
         while (true) {
-            HaxObject.Instance?
+            HaxObjects.Instance?
                      .SteamValves
                      .Objects
                      .ToList()

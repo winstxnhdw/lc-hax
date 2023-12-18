@@ -5,7 +5,7 @@ namespace Hax;
 
 public class HomeCommand : ICommand {
     Action TeleportPlayerToBaseLater(PlayerControllerB targetPlayer) => () => {
-        HaxObject.Instance?.ShipTeleporters.Renew();
+        HaxObjects.Instance?.ShipTeleporters.Renew();
 
         if (!Helper.Teleporter.IsNotNull(out ShipTeleporter teleporter)) {
             Console.Print("ShipTeleporter not found!");
