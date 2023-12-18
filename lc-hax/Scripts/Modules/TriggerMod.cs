@@ -8,7 +8,7 @@ public class TriggerMod : MonoBehaviour {
     bool UsingFollowRay { get; set; } = false;
     bool FunnyReviveEnabled { get; set; } = false;
 
-    DepositItemsDesk? DepositItemsDesk => HaxObject.Instance?.DepositItemsDesk.Object;
+    DepositItemsDesk? DepositItemsDesk => HaxObjects.Instance?.DepositItemsDesk.Object;
 
     void OnEnable() {
         InputListener.onMiddleButtonPress += this.Fire;

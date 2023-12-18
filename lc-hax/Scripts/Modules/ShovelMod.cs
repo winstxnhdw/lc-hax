@@ -10,7 +10,7 @@ public class ShovelMod : MonoBehaviour {
 
     bool IsLocalPlayerShovel(Shovel shovel) => this.ShovelOwner(shovel)?.actualClientId == Helper.LocalPlayer?.actualClientId;
 
-    Shovel? LocalPlayerShovel => HaxObject.Instance?.Shovels.Objects?.FirstOrDefault(this.IsLocalPlayerShovel);
+    Shovel? LocalPlayerShovel => HaxObjects.Instance?.Shovels.Objects?.FirstOrDefault(this.IsLocalPlayerShovel);
 
     IEnumerator SetShovelForce() {
         while (true) {

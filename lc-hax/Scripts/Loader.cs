@@ -51,7 +51,7 @@ public class Loader : MonoBehaviour {
     static void LoadHaxGameObjects() {
         DontDestroyOnLoad(Loader.HaxGameObjects);
 
-        Loader.AddHaxGameObject<HaxObject>();
+        Loader.AddHaxGameObject<HaxObjects>();
         Loader.AddHaxGameObject<InputListener>();
     }
 

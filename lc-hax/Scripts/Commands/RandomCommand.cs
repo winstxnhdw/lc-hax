@@ -6,7 +6,7 @@ namespace Hax;
 
 public class RandomCommand : ICommand {
     bool InverseTeleporterExists() {
-        HaxObject.Instance?.ShipTeleporters.Renew();
+        HaxObjects.Instance?.ShipTeleporters.Renew();
         return Helper.InverseTeleporter is not null;
     }
 
