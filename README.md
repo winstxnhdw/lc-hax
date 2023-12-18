@@ -7,7 +7,6 @@
 
 A powerful, feature-rich and highly performant portable Windows CLI-only internal cheat for [Lethal Company](https://en.wikipedia.org/wiki/Lethal_Company). This mod is partially compatible with [MoreCompany](https://github.com/notnotnotswipez/MoreCompany).
 
-
 <div align="center">
     <img src="https://raw.githubusercontent.com/wiki/winstxnhdw/lc-hax/resources/inverse.gif" />
 </div>
@@ -41,6 +40,7 @@ Execute `launch.bat` when you have launched the game.
 - Always show HUD
 - Build anywhere
 - Clear vision
+- Show player's name in HUD
 - [Commands](#commands)
 - [Binds](#binds)
 
