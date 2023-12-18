@@ -24,6 +24,8 @@ public class HomeCommand : ICommand {
         }
 
         Helper.BuyUnlockable(Unlockable.TELEPORTER);
+        Helper.ReturnUnlockable(Unlockable.TELEPORTER);
+
         Helper.CreateComponent<WaitForPredicate>()
               .SetPredicate(Helper.TeleporterExists)
               .Init(this.TeleportPlayerToBaseLater(targetPlayer));

@@ -61,12 +61,12 @@ public class Loader : MonoBehaviour {
         Loader.AddHaxModules<SaneMod>();
         Loader.AddHaxModules<ChatMod>();
         Loader.AddHaxModules<StunMod>();
-        Loader.AddHaxModules<StaminaMod>();
         Loader.AddHaxModules<ShovelMod>();
         Loader.AddHaxModules<WeightMod>();
+        Loader.AddHaxModules<StaminaMod>();
         Loader.AddHaxModules<PhantomMod>();
-        Loader.AddHaxModules<ClearVisionMod>();
         Loader.AddHaxModules<TriggerMod>();
+        Loader.AddHaxModules<ClearVisionMod>();
         Loader.AddHaxModules<NameInWeightMod>();
         Loader.AddHaxModules<BuildAnywhereMod>();
         Loader.AddHaxModules<FollowAnotherPlayerMod>();

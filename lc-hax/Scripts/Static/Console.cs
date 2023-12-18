@@ -13,23 +13,23 @@ public static class Console {
         { "/home", new HomeCommand() },
         { "/stun", new StunCommand() },
         { "/heal", new HealCommand() },
-        { "/wall", new WallCommand() },
+        { "/build", new BuildCommand() },
         { "/tp", new TeleportCommand() },
         { "/noise", new NoiseCommand() },
         { "/money", new MoneyCommand() },
+        { "/ready", new ReadyCommand() },
         { "/xyz", new LocationCommand() },
         { "/shovel", new ShovelCommand() },
         { "/unlock", new UnlockCommand() },
         { "/random", new RandomCommand() },
+        { "/start", new StartGameCommand() },
         { "/pumpkin", new PumpkinCommand() },
         { "/players", new PlayersCommand() },
         { "/explode", new ExplodeCommand() },
         { "/ct", new ChibakuTenseiCommand() },
+        { "/entrance", new EntranceCommand() },
         { "/timescale", new TimescaleCommand() },
         { "/stunclick", new StunOnClickCommand() },
-        { "/start", new StartGameCommand() },
-        { "/ready", new ReadyCommand() },
-        { "/entrance", new EntranceCommand() }
     };
 
     public static void Print(string name, string? message, bool isSystem = false) {
