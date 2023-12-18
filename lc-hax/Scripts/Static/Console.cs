@@ -18,6 +18,7 @@ public static class Console {
         { "/noise", new NoiseCommand() },
         { "/money", new MoneyCommand() },
         { "/ready", new ReadyCommand() },
+        { "/debug", new DebugCommand() },
         { "/xyz", new LocationCommand() },
         { "/shovel", new ShovelCommand() },
         { "/unlock", new UnlockCommand() },
