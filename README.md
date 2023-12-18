@@ -75,11 +75,14 @@ Execute `launch.bat` when you have launched the game.
 
 ## Binds
 
-| Action                      | Input  |
-| --------------------------  | ------ |
-| Trigger various objects     | `M3`   |
-| Toggle Phantom              | `=`    |
-| Change spectator index      | `⇦`   |
-| Change spectator index      | `⇨`   |
-| Increase sensitivity        | `]`    |
-| Decrease sensitivity        | `[`    |
+| Action                      | Input      |
+| --------------------------  | ---------- |
+| Trigger various objects     | `M3`       |
+| Follow player               | `M3` + `F` |
+| Interact at a distance      | `M3` + `E` |
+| Funny respawn mobs          | `M3` + `R` |
+| Toggle Phantom              | `=`        |
+| Change spectator index      | `⇦`        |
+| Change spectator index      | `⇨`        |
+| Increase sensitivity        | `]`        |
+| Decrease sensitivity        | `[`        |
