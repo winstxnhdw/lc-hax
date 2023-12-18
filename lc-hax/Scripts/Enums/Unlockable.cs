@@ -20,5 +20,8 @@ public enum Unlockable {
     LOUD_HORN = 18,
     INVERSE_TELEPORTER = 19,
     JACK_O_LANTERN = 20,
-    NULL = 21,
+    WELCOME_MAT = 21,
+    GOLDFISH = 22,
+    PLUSHIE_PAJAMA_MAN = 23,
+    NULL = 99,
 }
