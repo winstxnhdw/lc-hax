@@ -52,7 +52,7 @@ public class TriggerMod : MonoBehaviour {
         }
 
         if (this.UsingInteractRay) {
-            foreach (RaycastHit raycastHit in Helper.RaycastForward()) {
+            foreach (RaycastHit raycastHit in Helper.RaycastForward(0.25f)) {
                 if (!raycastHit.collider.gameObject.GetComponent<InteractTrigger>().IsNotNull(out InteractTrigger interactTrigger)) {
                     continue;
                 }
