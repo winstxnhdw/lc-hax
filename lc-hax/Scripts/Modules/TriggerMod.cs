@@ -72,6 +72,14 @@ public class TriggerMod : MonoBehaviour {
         foreach (RaycastHit raycastHit in Helper.RaycastForward()) {
             GameObject gameObject = raycastHit.collider.gameObject;
 
+            if (gameObject.GetComponent<TerminalAccessibleObject>().IsNotNull(out TerminalAccessibleObject terminalObject)) {
+                terminalObject.SetDoorOpenServerRpc(!Reflector.Target(terminalObject).GetInternalField<bool>("isDoorOpen"));
+            }
+
+            if (gameObject.GetComponent<Turret>().IsNotNull(out Turret turret)) {
+                turret.EnterBerserkModeServerRpc(-1);
+            }
+
             if (gameObject.GetComponent<Landmine>().IsNotNull(out Landmine landmine)) {
                 landmine.TriggerMine();
                 break;
@@ -82,17 +90,9 @@ public class TriggerMod : MonoBehaviour {
                 break;
             }
 
-            if (gameObject.GetComponent<Turret>().IsNotNull(out Turret turret)) {
-                turret.EnterBerserkModeServerRpc(-1);
-                break;
-            }
 
             if (gameObject.GetComponent<DoorLock>().IsNotNull(out DoorLock doorLock)) {
                 doorLock.UnlockDoorSyncWithServer();
-                break;
-            }
-            if (gameObject.GetComponent<TerminalAccessibleObject>().IsNotNull(out TerminalAccessibleObject terminalObject)) {
-                terminalObject.SetDoorOpenServerRpc(!Reflector.Target(terminalObject).GetInternalField<bool>("isDoorOpen"));
                 break;
             }
 
