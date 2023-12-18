@@ -17,6 +17,9 @@ A powerful, feature-rich and highly performant portable Windows CLI-only interna
 
 ## Installation
 
+> [!IMPORTANT]\
+> Do ensure that you have used the `--recursive` flag when cloning the repository.
+
 **Recursively** clone the repository.
 
 ```bash
