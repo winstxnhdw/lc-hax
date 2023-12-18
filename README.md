@@ -63,7 +63,7 @@ Execute `launch.bat` when you have launched the game.
 | Toggle stun on click          | `/stunclick`               |
 | List all players              | `/players`                 |
 | Get coordinates               | `/xyz`                     |
-| End the game                  | `/end`                     |
+| End the game                  | `/end <player?>`           |
 | Start the game                | `/start`                   |
 | Force everyone to be ready    | `/ready`                   |
 | Toggle God mode               | `/god`                     |
