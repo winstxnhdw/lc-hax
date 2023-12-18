@@ -90,7 +90,6 @@ public class TriggerMod : MonoBehaviour {
                 break;
             }
 
-
             if (gameObject.GetComponent<DoorLock>().IsNotNull(out DoorLock doorLock)) {
                 doorLock.UnlockDoorSyncWithServer();
                 break;
