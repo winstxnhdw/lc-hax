@@ -90,3 +90,17 @@ Execute `launch.bat` when you have launched the game.
 | Change spectator index      | `⇨`        |
 | Increase sensitivity        | `]`        |
 | Decrease sensitivity        | `[`        |
+
+## TriggerMod
+
+`TriggerMod` is a quality-of-life mod that allows you to trigger various objects in the game. It is activated by pointing at objects with `M3`. Currently, it can do the following.
+
+- Explode landmines
+- Explode jetpacks
+- Trigger turrets
+- Toggle gates
+- Unlock doors
+- Trigger Jeb's attack
+- Lure enemies to player
+- Follow a player's movements
+- Interact with objects from far
