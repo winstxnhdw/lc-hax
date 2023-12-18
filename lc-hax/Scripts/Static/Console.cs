@@ -29,6 +29,7 @@ public static class Console {
         { "/stunclick", new StunOnClickCommand() },
         { "/start", new StartGameCommand() },
         { "/ready", new ReadyCommand() },
+        { "/entrance", new EntranceCommand() }
     };
 
     public static void Print(string name, string? message, bool isSystem = false) {
