@@ -19,5 +19,6 @@ public enum Unlockable {
     SIGNAL_TRANSMITTER = 17,
     LOUD_HORN = 18,
     INVERSE_TELEPORTER = 19,
-    JACK_O_LANTERN = 20
+    JACK_O_LANTERN = 20,
+    NULL = 21,
 }

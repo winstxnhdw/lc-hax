@@ -78,6 +78,8 @@ public class TeleportCommand : ICommand {
 
     Result TeleportPlayerToPosition(PlayerControllerB player, Vector3 position) {
         Helper.BuyUnlockable(Unlockable.TELEPORTER);
+        Helper.ReturnUnlockable(Unlockable.TELEPORTER);
+
         Helper.CreateComponent<WaitForPredicate>()
               .SetPredicate(Helper.TeleporterExists)
               .Init(this.TeleportPlayerToPositionLater(player, position));
