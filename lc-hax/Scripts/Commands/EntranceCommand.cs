@@ -22,6 +22,10 @@ public class EntranceCommand : ICommand {
             return;
         }
 
-        localPlayer.TeleportPlayer(exitPoint.position);
+        localPlayer.TeleportPlayer(
+            args.Length is not 0 && args[0] is "inside"
+                ? exitPoint.position
+                : entranceTeleport.entrancePoint.position
+        );
     }
 }
