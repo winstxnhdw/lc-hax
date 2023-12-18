@@ -17,7 +17,6 @@ public static class Console {
         { "/tp", new TeleportCommand() },
         { "/noise", new NoiseCommand() },
         { "/money", new MoneyCommand() },
-        { "/ready", new ReadyCommand() },
         { "/debug", new DebugCommand() },
         { "/xyz", new LocationCommand() },
         { "/shovel", new ShovelCommand() },

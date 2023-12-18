@@ -70,7 +70,6 @@ Execute `launch.bat` when you have launched the game.
 | Get coordinates               | `/xyz`                     |
 | End the game                  | `/end <player?>`           |
 | Start the game                | `/start`                   |
-| Force everyone to be ready    | `/ready`                   |
 | Toggle God mode               | `/god`                     |
 | Unlock all doors              | `/unlock`                  |
 | Lock all gates                | `/lock`                    |
