@@ -34,6 +34,7 @@ public class InputListener : MonoBehaviour {
 
     void Update() {
         foreach (KeyValuePair<Func<bool>, Action> keyAction in this.InputActions) {
+            if (Helper.LocalPlayer is not null && Helper.LocalPlayer.isTypingChat) continue;
             if (!keyAction.Key()) continue;
             keyAction.Value();
         }
