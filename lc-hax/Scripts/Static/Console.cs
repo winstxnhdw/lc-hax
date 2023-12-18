@@ -27,6 +27,8 @@ public static class Console {
         { "/ct", new ChibakuTenseiCommand() },
         { "/timescale", new TimescaleCommand() },
         { "/stunclick", new StunOnClickCommand() },
+        { "/startgame", new StartGameCommand() },
+        { "/allready", new AllReadyCommand() },
     };
 
     public static void Print(string name, string? message, bool isSystem = false) {
