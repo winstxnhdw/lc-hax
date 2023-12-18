@@ -12,14 +12,10 @@ public static partial class Helper {
             return enemyNames;
         }
 
-        if (!Helper.LocalPlayer.IsNotNull(out PlayerControllerB localPlayer)) {
-            return enemyNames;
-        }
-
         _ = Reflector.Target(roundManager).InvokeInternalMethod("RefreshEnemiesList");
 
         if (funnyRevive) {
-            Console.Print("Helper", "with funnyRevive!");
+            Console.Print("Funny revive!");
         }
 
         roundManager.SpawnedEnemies.ForEach((enemy) => {
@@ -29,11 +25,11 @@ public static partial class Helper {
                 enemy.isEnemyDead = false;
                 enemy.enemyHP = enemy.enemyHP <= 0 ? 1 : enemy.enemyHP;
             }
-            //just to make EnemyAi script update enemy position garunteed one time.
+
             enemy.serverPosition = Vector3.positiveInfinity;
             enemy.targetPlayer = player;
             enemyNames.Add(enemy.enemyType.enemyName);
-            enemy.ChangeEnemyOwnerServerRpc(localPlayer.actualClientId);
+            enemy.ChangeEnemyOwnerServerRpc(roundManager.playersManager.localPlayerController.actualClientId);
 
             if (enemy is CrawlerAI thumper) {
                 thumper.BeginChasingPlayerServerRpc((int)player.playerClientId);
@@ -64,14 +60,13 @@ public static partial class Helper {
                 giant.chasingPlayer = player;
                 giant.timeSpentStaring = 10;
                 giant.SwitchToBehaviourState(1);
+
                 _ = Reflector.Target(giant).SetInternalField("lostPlayerInChase", false);
 
             }
 
             else if (enemy is SandWormAI) {
-                if (!player.isInsideFactory) {
-                    TeleportToPlayer(enemy, player);
-                }
+                if (!player.isInsideFactory) TeleportToPlayer(enemy, player);
                 enemy.SwitchToBehaviourState(1);
             }
 
@@ -81,9 +76,7 @@ public static partial class Helper {
             }
 
             else if (enemy is SpringManAI) {
-                if (player.isInsideFactory) {
-                    TeleportToPlayer(enemy, player);
-                }
+                if (player.isInsideFactory) TeleportToPlayer(enemy, player);
                 enemy.SwitchToBehaviourState(1);
             }
 
@@ -92,16 +85,12 @@ public static partial class Helper {
             }
 
             else if (enemy is CentipedeAI snareFlea) {
-                if (player.isInsideFactory) {
-                    TeleportToPlayer(enemy, player);
-                }
+                if (player.isInsideFactory) TeleportToPlayer(enemy, player);
                 enemy.SwitchToBehaviourState(2);
             }
 
             else if (enemy is FlowermanAI bracken) {
-                if (player.isInsideFactory) {
-                    TeleportToPlayer(enemy, player);
-                }
+                if (player.isInsideFactory) TeleportToPlayer(enemy, player);
                 bracken.SwitchToBehaviourState(2);
                 bracken.EnterAngerModeServerRpc(20);
             }
@@ -110,6 +99,7 @@ public static partial class Helper {
                 spider.meshContainer.position = player.transform.position;
                 spider.SwitchToBehaviourState(2);
                 spider.SyncMeshContainerPositionToClients();
+
                 _ = Reflector.Target(spider)
                              .SetInternalField("onWall", false)?
                              .SetInternalField("watchFromDistance", false);
@@ -119,15 +109,14 @@ public static partial class Helper {
                 hoardingBug.angryAtPlayer = player;
                 hoardingBug.angryTimer = 1000;
                 hoardingBug.SwitchToBehaviourState(2);
+
                 _ = Reflector.Target(hoardingBug)
                              .SetInternalField("lostPlayerInChase", false)?
                              .InvokeInternalMethod("SyncNestPositionServerRpc", player.transform.position);
             }
 
             else if (enemy is RedLocustBees bees) {
-                if (!player.isInsideFactory) {
-                    TeleportToPlayer(enemy, player);
-                }
+                if (!player.isInsideFactory) TeleportToPlayer(enemy, player);
 
                 bees.SwitchToBehaviourState(2);
                 bees.hive.isHeld = true;
