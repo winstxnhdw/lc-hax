@@ -4,35 +4,39 @@ using GameNetcodeStuff;
 namespace Hax;
 
 public class TriggerMod : MonoBehaviour {
-    bool InteractEnabled { get; set; } = false;
+    bool UsingInteractRay { get; set; } = false;
+    bool UsingFollowRay { get; set; } = false;
     bool FunnyReviveEnabled { get; set; } = false;
-    bool FollowPlayerEnabled { get; set; } = false;
 
     DepositItemsDesk? DepositItemsDesk => HaxObject.Instance?.DepositItemsDesk.Object;
 
     void OnEnable() {
         InputListener.onMiddleButtonPress += this.Fire;
-        InputListener.onEButtonHold += this.SetInteractEnabled;
+        InputListener.onEButtonHold += this.SetUsingInteractRay;
         InputListener.onRButtonHold += this.SetFunnyReviveEnabled;
-        InputListener.onFButtonHold += this.SetFollowPlayerEnabled;
+        InputListener.onFButtonHold += this.SetUsingFollowRay;
     }
 
     void OnDisable() {
         InputListener.onMiddleButtonPress -= this.Fire;
-        InputListener.onEButtonHold -= this.SetInteractEnabled;
+        InputListener.onEButtonHold -= this.SetUsingInteractRay;
         InputListener.onRButtonHold -= this.SetFunnyReviveEnabled;
-        InputListener.onFButtonHold -= this.SetFollowPlayerEnabled;
+        InputListener.onFButtonHold -= this.SetUsingFollowRay;
     }
 
-    void SetInteractEnabled(bool isHeld) => this.InteractEnabled = isHeld;
+    void SetUsingInteractRay(bool isHeld) => this.UsingInteractRay = isHeld;
+
+    void SetUsingFollowRay(bool isHeld) => this.UsingFollowRay = isHeld;
 
     void SetFunnyReviveEnabled(bool isHeld) => this.FunnyReviveEnabled = isHeld;
 
-    void SetFollowPlayerEnabled(bool isHeld) => this.FollowPlayerEnabled = isHeld;
-
     void Fire() {
-        if (this.FollowPlayerEnabled) {
-            bool foundTarget = false;
+        if (this.UsingFollowRay) {
+            if (Settings.PlayerToFollow is not null) {
+                Settings.PlayerToFollow = null;
+                Console.Print("Stopped following!");
+                return;
+            }
 
             foreach (RaycastHit raycastHit in Helper.RaycastForward()) {
                 GameObject gameObject = raycastHit.collider.gameObject;
@@ -40,22 +44,14 @@ public class TriggerMod : MonoBehaviour {
                 if (gameObject.GetComponent<PlayerControllerB>().IsNotNull(out PlayerControllerB player)) {
                     Console.Print($"Following #{player.playerClientId} {player.playerUsername}!");
                     Settings.PlayerToFollow = player;
-                    foundTarget = true;
                     break;
-                }
-            }
-
-            if (!foundTarget) {
-                if (Settings.PlayerToFollow != null) {
-                    Settings.PlayerToFollow = null;
-                    Console.Print("Stopped following!");
                 }
             }
 
             return;
         }
 
-        if (this.InteractEnabled) {
+        if (this.UsingInteractRay) {
             foreach (RaycastHit raycastHit in Helper.RaycastForward()) {
                 if (!raycastHit.collider.gameObject.GetComponent<InteractTrigger>().IsNotNull(out InteractTrigger interactTrigger)) {
                     continue;
