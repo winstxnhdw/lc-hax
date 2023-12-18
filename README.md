@@ -5,7 +5,7 @@
 [![CodeQL](https://github.com/winstxnhdw/lc-hax/actions/workflows/github-code-scanning/codeql/badge.svg)](https://github.com/winstxnhdw/lc-hax/actions/workflows/github-code-scanning/codeql)
 [![dependabot.yml](https://github.com/winstxnhdw/lc-hax/actions/workflows/dependabot.yml/badge.svg)](https://github.com/winstxnhdw/lc-hax/actions/workflows/dependabot.yml)
 
-A highly performant and feature-rich portable Windows CLI-only internal cheat for [Lethal Company](https://en.wikipedia.org/wiki/Lethal_Company). This mod is partially compatible with [MoreCompany](https://github.com/notnotnotswipez/MoreCompany).
+A powerful, feature-rich and highly performant portable Windows CLI-only internal cheat for [Lethal Company](https://en.wikipedia.org/wiki/Lethal_Company). This mod is partially compatible with [MoreCompany](https://github.com/notnotnotswipez/MoreCompany).
 
 ## Requirements
 
@@ -27,7 +27,7 @@ Execute `launch.bat` when you have launched the game.
 
 ## Features
 
-No features in this mod require host privileges.
+**No** features in this mod require host privileges.
 
 - Infinite stamina
 - Infinite scan range
@@ -46,26 +46,30 @@ No features in this mod require host privileges.
 | Inverse transport a player    | `/random <player>`         |
 | Play noise on player          | `/noise <player>`          |
 | Chibaku Tensei                | `/ct <player>`             |
+| Teleport to entrance          | `/entrance`                |
+| Teleport inside entrance      | `/entrance inside`         |
 | Teleport to a player          | `/tp <player>`             |
 | Teleport to a location        | `/tp <x> <y> <z>`          |
 | Teleport player to player     | `/tp <player> <player>`    |
 | Teleport player to a location | `/tp <player> <x> <y> <z>` |
 | Teleport back to ship         | `/home <player?>`          |
-| Kill player                   | `/kill <player?>`          |
 | Lure enemies to player        | `/hate <player>`           |
+| Kill player                   | `/kill <player?>`          |
 | Kill all players              | `/kill --all`              |
 | Modify shovel damage          | `/shovel <force=1>`        |
 | Give or take money            | `/money <amount>`          |
+| Place an unlockable           | `/build <unlockable>`      |
 | Stun enemies                  | `/stun <duration>`         |
 | Toggle stun on click          | `/stunclick`               |
 | List all players              | `/players`                 |
 | Get coordinates               | `/xyz`                     |
 | End the game                  | `/end`                     |
+| Start the game                | `/start`                   |
+| Force everyone to be ready    | `/ready`                   |
 | Toggle God mode               | `/god`                     |
 | Unlock all doors              | `/unlock`                  |
 | Lock all gates                | `/lock`                    |
 | Heal self                     | `/heal`                    |
-| Teleport the cupboard to you  | `/wall`                    |
 | Explode all mines             | `/explode`                 |
 | Explode all jetpacks          | `/explode jet`             |
 
