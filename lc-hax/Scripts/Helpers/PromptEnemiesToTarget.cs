@@ -69,7 +69,9 @@ public static partial class Helper {
             }
 
             else if (enemy is SandWormAI) {
-                TeleportToPlayer(enemy, player);
+                if (!player.isInsideFactory) {
+                    TeleportToPlayer(enemy, player);
+                }
                 enemy.SwitchToBehaviourState(1);
             }
 
@@ -79,7 +81,9 @@ public static partial class Helper {
             }
 
             else if (enemy is SpringManAI) {
-                TeleportToPlayer(enemy, player);
+                if (player.isInsideFactory) {
+                    TeleportToPlayer(enemy, player);
+                }
                 enemy.SwitchToBehaviourState(1);
             }
 
@@ -88,12 +92,16 @@ public static partial class Helper {
             }
 
             else if (enemy is CentipedeAI snareFlea) {
-                TeleportToPlayer(enemy, player);
+                if (player.isInsideFactory) {
+                    TeleportToPlayer(enemy, player);
+                }
                 enemy.SwitchToBehaviourState(2);
             }
 
             else if (enemy is FlowermanAI bracken) {
-                TeleportToPlayer(enemy, player);
+                if (player.isInsideFactory) {
+                    TeleportToPlayer(enemy, player);
+                }
                 bracken.SwitchToBehaviourState(2);
                 bracken.EnterAngerModeServerRpc(20);
             }
@@ -117,6 +125,10 @@ public static partial class Helper {
             }
 
             else if (enemy is RedLocustBees bees) {
+                if (!player.isInsideFactory) {
+                    TeleportToPlayer(enemy, player);
+                }
+
                 bees.SwitchToBehaviourState(2);
                 bees.hive.isHeld = true;
             }
