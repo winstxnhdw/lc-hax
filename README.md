@@ -28,9 +28,17 @@ git clone --recursive https://github.com/winstxnhdw/lc-hax.git
 
 You can now build and install the dependencies by executing `requirements.bat`.
 
+```bash
+.\requirements.bat
+```
+
 ## Usage
 
-Execute `launch.bat` when you have launched the game.
+Execute `launch.bat` when you have launched the game to inject the assembly into the game process. Avoid doing this more than once per instance.
+
+```bash
+.\launch.bat
+```
 
 ## Features
 
