@@ -59,7 +59,7 @@ Execute `launch.bat` when you have launched the game to inject the assembly into
 
 | Action                        | Command                    |
 | ----------------------------- | -------------------------- |
-| Inverse transport a player    | `/random <player>`         |
+| Inverse teleport a player     | `/random <player>`         |
 | Play noise on player          | `/noise <player>`          |
 | Chibaku Tensei                | `/ct <player>`             |
 | Teleport to entrance          | `/entrance`                |
