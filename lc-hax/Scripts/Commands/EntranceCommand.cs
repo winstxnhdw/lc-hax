@@ -12,7 +12,7 @@ public class EntranceCommand : ICommand {
             return;
         }
 
-        if (!Reflector.Target(entranceTeleport).GetInternalField<Transform>("exitPoint").IsNotNull(out Transform exitPoint)) {
+        if (!entranceTeleport.Reflect().GetInternalField<Transform>("exitPoint").IsNotNull(out Transform exitPoint)) {
             Console.Print("Exit point not found!");
             return;
         }

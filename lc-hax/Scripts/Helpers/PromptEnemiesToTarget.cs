@@ -12,7 +12,7 @@ public static partial class Helper {
             return enemyNames;
         }
 
-        _ = Reflector.Target(roundManager).InvokeInternalMethod("RefreshEnemiesList");
+        _ = roundManager.Reflect().InvokeInternalMethod("RefreshEnemiesList");
 
         if (funnyRevive) {
             Console.Print("Funny revive!");
@@ -53,7 +53,7 @@ public static partial class Helper {
                     hasAttacked = true
                 };
 
-                _ = Reflector.Target(baboonHawk).InvokeInternalMethod("ReactToThreat", threat);
+                _ = baboonHawk.Reflect().InvokeInternalMethod("ReactToThreat", threat);
             }
 
             else if (enemy is ForestGiantAI giant) {
@@ -61,7 +61,7 @@ public static partial class Helper {
                 giant.timeSpentStaring = 10;
                 giant.SwitchToBehaviourState(1);
 
-                _ = Reflector.Target(giant).SetInternalField("lostPlayerInChase", false);
+                _ = giant.Reflect().SetInternalField("lostPlayerInChase", false);
 
             }
 
@@ -100,9 +100,9 @@ public static partial class Helper {
                 spider.SwitchToBehaviourState(2);
                 spider.SyncMeshContainerPositionToClients();
 
-                _ = Reflector.Target(spider)
-                             .SetInternalField("onWall", false)?
-                             .SetInternalField("watchFromDistance", false);
+                _ = spider.Reflect()
+                          .SetInternalField("onWall", false)?
+                          .SetInternalField("watchFromDistance", false);
             }
 
             else if (enemy is HoarderBugAI hoardingBug) {
@@ -110,9 +110,9 @@ public static partial class Helper {
                 hoardingBug.angryTimer = 1000;
                 hoardingBug.SwitchToBehaviourState(2);
 
-                _ = Reflector.Target(hoardingBug)
-                             .SetInternalField("lostPlayerInChase", false)?
-                             .InvokeInternalMethod("SyncNestPositionServerRpc", player.transform.position);
+                _ = hoardingBug.Reflect()
+                               .SetInternalField("lostPlayerInChase", false)?
+                               .InvokeInternalMethod("SyncNestPositionServerRpc", player.transform.position);
             }
 
             else if (enemy is RedLocustBees bees) {
@@ -125,9 +125,9 @@ public static partial class Helper {
             else if (enemy is NutcrackerEnemyAI nutcracker) {
                 nutcracker.SwitchToBehaviourState(2);
                 nutcracker.SeeMovingThreatServerRpc((int)player.playerClientId);
-                _ = Reflector.Target(nutcracker)
-                             .SetInternalField("lastSeenPlayerPos", player.transform.position)?
-                             .SetInternalField("timeSinceSeeingTarget", 0);
+                _ = nutcracker.Reflect()
+                              .SetInternalField("lastSeenPlayerPos", player.transform.position)?
+                              .SetInternalField("timeSinceSeeingTarget", 0);
             }
         });
 

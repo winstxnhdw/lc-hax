@@ -6,12 +6,7 @@ namespace Hax;
 public class BuildAnywhereMod : MonoBehaviour {
     IEnumerator SetCanConfirmPosition() {
         while (true) {
-            if (!Helper.ShipBuildModeManager.IsNotNull(out ShipBuildModeManager shipBuildModeManager)) {
-                yield return new WaitForEndOfFrame();
-                continue;
-            }
-
-            _ = Reflector.Target(shipBuildModeManager).SetInternalField("CanConfirmPosition", true);
+            _ = Helper.ShipBuildModeManager?.Reflect().SetInternalField("CanConfirmPosition", true);
             yield return new WaitForEndOfFrame();
         }
     }

@@ -34,7 +34,7 @@ public static class Console {
 
     public static void Print(string name, string? message, bool isSystem = false) {
         if (string.IsNullOrWhiteSpace(message) || !Helper.HUDManager.IsNotNull(out HUDManager hudManager)) return;
-        _ = Reflector.Target(hudManager)?.InvokeInternalMethod("AddChatMessage", message, name);
+        _ = hudManager.Reflect().InvokeInternalMethod("AddChatMessage", message, name);
 
         if (!isSystem && hudManager.localPlayer.isTypingChat) {
             hudManager.localPlayer.isTypingChat = false;

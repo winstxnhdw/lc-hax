@@ -75,9 +75,11 @@ public class FollowAnotherPlayerMod : MonoBehaviour {
         localPlayer.transform.rotation = state.rotation * this.DeviateRotation;
 
         //broadcast fake rotation
-        _ = Reflector.Target(localPlayer).InvokeInternalMethod(
+        Reflector localPlayerReflector = localPlayer.Reflect();
+
+        _ = localPlayerReflector.InvokeInternalMethod(
             "UpdatePlayerRotationServerRpc",
-            (short)Reflector.Target(localPlayer).GetInternalField<float>("cameraUp"),
+            (short)localPlayerReflector.GetInternalField<float>("cameraUp"),
             (short)localPlayer.thisPlayerBody.eulerAngles.y
         );
 
@@ -91,7 +93,7 @@ public class FollowAnotherPlayerMod : MonoBehaviour {
         //broadcast copied animation
         if (this.AnimationBroadcastTimer < 0) {
             for (int i = 0; i < state.animationStates.Length; i++) {
-                _ = Reflector.Target(localPlayer).InvokeInternalMethod("UpdatePlayerAnimationServerRpc",
+                _ = localPlayerReflector.InvokeInternalMethod("UpdatePlayerAnimationServerRpc",
                     state.animationStates[i],
                     state.animationSpeed
                 );
@@ -108,7 +110,7 @@ public class FollowAnotherPlayerMod : MonoBehaviour {
         localPlayer.transform.position = state.position;
 
         //broadcast copied position.
-        _ = Reflector.Target(localPlayer).InvokeInternalMethod(
+        _ = localPlayerReflector.InvokeInternalMethod(
             "UpdatePlayerPositionServerRpc",
             localPlayer.thisPlayerBody.localPosition,
             localPlayer.isInElevator,
