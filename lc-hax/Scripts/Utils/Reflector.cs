@@ -33,7 +33,7 @@ public class Reflector {
 
     T? GetProperty<T>(string propertyName, BindingFlags flags) {
         try {
-            return (T)this.ObjType.GetProperty(propertyName, flags).GetValue(this.Obj, null);
+            return (T)this.ObjType.GetProperty(propertyName, flags).GetValue(this.Obj);
         }
 
         catch (InvalidCastException) {
@@ -54,7 +54,7 @@ public class Reflector {
 
     Reflector? SetProperty(string propertyName, object value, BindingFlags flags) {
         try {
-            this.ObjType.GetProperty(propertyName, flags).SetValue(this.Obj, value, null);
+            this.ObjType.GetProperty(propertyName, flags).SetValue(this.Obj, value);
             return this;
         }
 
