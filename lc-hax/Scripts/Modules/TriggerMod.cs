@@ -73,7 +73,7 @@ public class TriggerMod : MonoBehaviour {
             GameObject gameObject = raycastHit.collider.gameObject;
 
             if (gameObject.GetComponent<TerminalAccessibleObject>().IsNotNull(out TerminalAccessibleObject terminalObject)) {
-                terminalObject.SetDoorOpenServerRpc(!Reflector.Target(terminalObject).GetInternalField<bool>("isDoorOpen"));
+                terminalObject.SetDoorOpenServerRpc(!terminalObject.Reflect().GetInternalField<bool>("isDoorOpen"));
             }
 
             if (gameObject.GetComponent<Turret>().IsNotNull(out Turret turret)) {

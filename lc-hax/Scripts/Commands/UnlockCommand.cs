@@ -6,7 +6,7 @@ namespace Hax;
 
 public class UnlockCommand : ICommand {
     InteractTrigger? GetDoorTrigger(DoorLock door) =>
-        Reflector.Target(door).GetInternalField<InteractTrigger>("doorTrigger");
+        door.Reflect().GetInternalField<InteractTrigger>("doorTrigger");
 
     void UnlockDoor(DoorLock door) {
         if (!this.GetDoorTrigger(door).IsNotNull(out InteractTrigger doorTrigger)) return;
