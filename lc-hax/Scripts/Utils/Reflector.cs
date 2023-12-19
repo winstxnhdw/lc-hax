@@ -31,15 +31,13 @@ public class Reflector {
         }
     }
 
-    Reflector? GetProperty(string propertyName, BindingFlags flags) {
+    T? GetProperty<T>(string propertyName, BindingFlags flags) {
         try {
-            return new(
-                this.ObjType.GetProperty(propertyName, flags).GetValue(this.Obj, null)
-            );
+            return (T)this.ObjType.GetProperty(propertyName, flags).GetValue(this.Obj, null);
         }
 
         catch (Exception) {
-            return null;
+            return default;
         }
     }
 
@@ -75,32 +73,60 @@ public class Reflector {
         }
     }
 
-    public T? GetInternalField<T>(string variableName) => this.GetField<T>(variableName, Reflector.internalField);
+    public T? GetInternalField<T>(string variableName) {
+        return this.GetField<T>(variableName, Reflector.internalField);
+    }
 
-    public T? GetInternalStaticField<T>(string variableName) => this.GetField<T>(variableName, Reflector.internalStaticField);
+    public T? GetInternalStaticField<T>(string variableName) {
+        return this.GetField<T>(variableName, Reflector.internalStaticField);
+    }
 
     public Reflector? GetInternalField(string variableName) {
         object? type = this.GetInternalField(variableName);
-        return type is null ? null : new(type);
+        return type is null ? null : new Reflector(type);
     }
 
     public Reflector? GetInternalStaticField(string variableName) {
         object? type = this.GetInternalStaticField(variableName);
-        return type is null ? null : new(type);
+        return type is null ? null : new Reflector(type);
     }
 
-    public Reflector? SetInternalField(string variableName, object value) => this.SetField(variableName, value, Reflector.internalField);
+    public Reflector? SetInternalField(string variableName, object value) {
+        return this.SetField(variableName, value, Reflector.internalField);
+    }
 
-    public Reflector? SetInternalStaticField(string variableName, object value) => this.SetField(variableName, value, Reflector.internalStaticField);
+    public Reflector? SetInternalStaticField(string variableName, object value) {
+        return this.SetField(variableName, value, Reflector.internalStaticField);
+    }
 
-    public Reflector? GetInternalProperty(string propertyName) => this.GetProperty(propertyName, Reflector.internalProperty);
+    public T? GetInternalProperty<T>(string propertyName) {
+        return this.GetProperty<T>(propertyName, Reflector.internalProperty);
+    }
 
-    public Reflector? SetInternalProperty(string propertyName, object value) => this.SetProperty(propertyName, value, Reflector.internalProperty);
+    public Reflector? GetInternalProperty(string propertyName) {
+        object? obj = this.GetInternalProperty<object>(propertyName);
+        return obj is null ? null : new Reflector(obj);
+    }
 
-    public T? InvokeInternalMethod<T>(string methodName, params object[] args) => this.InvokeMethod<T>(methodName, Reflector.internalMethod, args);
+    public Reflector? SetInternalProperty(string propertyName, object value) {
+        return this.SetProperty(propertyName, value, Reflector.internalProperty);
+    }
+
+    public T? InvokeInternalMethod<T>(string methodName, params object[] args) {
+        return this.InvokeMethod<T>(methodName, Reflector.internalMethod, args);
+    }
 
     public Reflector? InvokeInternalMethod(string methodName, params object[] args) {
         object? obj = this.InvokeInternalMethod<object>(methodName, args);
+        return obj is null ? null : new Reflector(obj);
+    }
+
+    public T? InvokeInternalStaticMethod<T>(string methodName, params object[] args) {
+        return this.InvokeMethod<T>(methodName, Reflector.internalStaticMethod, args);
+    }
+
+    public Reflector? InvokeInternalStaticMethod(string methodName, params object[] args) {
+        object? obj = this.InvokeInternalStaticMethod<object>(methodName, args);
         return obj is null ? null : new Reflector(obj);
     }
 
