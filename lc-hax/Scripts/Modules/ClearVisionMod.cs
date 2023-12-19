@@ -64,13 +64,10 @@ public class ClearVisionMod : MonoBehaviour {
     IEnumerator DisableFog() {
         while (true) {
             HaxObjects.Instance?
-                     .ToggleFogTriggers
-                     .Objects
-                     .ToList()
-                     .ForEach(toggleFogTrigger => {
-                         toggleFogTrigger.fog1.enabled = false;
-                         toggleFogTrigger.fog2.enabled = false;
-                     });
+                      .LocalVolumetricFogs
+                      .Objects
+                      .ToList()
+                      .ForEach(localVolumetricFog => localVolumetricFog.gameObject.SetActive(false));
 
             yield return new WaitForSeconds(5.0f);
         }
