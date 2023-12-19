@@ -2,12 +2,20 @@ using System.Collections;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.Rendering.HighDefinition;
+using GameNetcodeStuff;
 
 namespace Hax;
 
 public class ClearVisionMod : MonoBehaviour {
     IEnumerator SetNightVision() {
         while (true) {
+
+            if (Helper.LocalPlayer.IsNotNull(out PlayerControllerB player) &&
+                player.localVisor.IsNotNull(out Transform helmet)) {
+                helmet.gameObject.SetActive(false);
+            }
+
+
             if (!Helper.StartOfRound.IsNotNull(out StartOfRound startOfRound)) {
                 yield return new WaitForEndOfFrame();
                 continue;
