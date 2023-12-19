@@ -8,7 +8,10 @@ namespace Hax;
 public class ShovelMod : MonoBehaviour {
     PlayerControllerB? ShovelOwner(Shovel shovel) => shovel.playerHeldBy;
 
-    bool IsLocalPlayerShovel(Shovel shovel) => this.ShovelOwner(shovel)?.actualClientId == Helper.LocalPlayer?.actualClientId;
+    bool IsLocalPlayerShovel(Shovel shovel) =>
+        Helper.LocalPlayer.IsNotNull(out PlayerControllerB localPlayer) &&
+        !this.ShovelOwner(shovel).IsNotNull(out PlayerControllerB shovelOwner) &&
+        shovelOwner.actualClientId == localPlayer.actualClientId;
 
     Shovel? LocalPlayerShovel => HaxObjects.Instance?.Shovels.Objects?.FirstOrDefault(this.IsLocalPlayerShovel);
 
