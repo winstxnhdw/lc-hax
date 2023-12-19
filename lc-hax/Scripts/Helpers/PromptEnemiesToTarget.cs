@@ -135,7 +135,7 @@ public static partial class Helper {
     }
 
     public static void TeleportToPlayer(EnemyAI enemy, PlayerControllerB player) {
-        enemy.transform.position = player.transform.position;
+        enemy.transform.position = player.transform.position + (player.transform.forward * -1);
         enemy.SyncPositionToClients();
     }
 }
