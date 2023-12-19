@@ -62,6 +62,10 @@ public class PhantomMod : MonoBehaviour {
                 mouse = cameraGameObject.AddComponent<MousePan>();
             }
 
+            if (player.localVisor.IsNotNull(out Transform helmet)) {
+                helmet.gameObject.SetActive(false);
+            }
+
             keyboard.enabled = true;
             mouse.enabled = true;
             camera.transform.SetParent(null, true);
