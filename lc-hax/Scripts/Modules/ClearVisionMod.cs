@@ -63,11 +63,12 @@ public class ClearVisionMod : MonoBehaviour {
 
     IEnumerator DisableFog() {
         while (true) {
-            HaxObjects.Instance?
-                      .LocalVolumetricFogs
-                      .Objects
-                      .ToList()
-                      .ForEach(localVolumetricFog => localVolumetricFog.gameObject.SetActive(false));
+            HaxObjects
+                .Instance?
+                .LocalVolumetricFogs
+                .Objects
+                .ToList()
+                .ForEach(localVolumetricFog => localVolumetricFog.gameObject.SetActive(false));
 
             yield return new WaitForSeconds(5.0f);
         }
@@ -75,12 +76,14 @@ public class ClearVisionMod : MonoBehaviour {
 
     IEnumerator DisableSteamValves() {
         while (true) {
-            HaxObjects.Instance?
-                     .SteamValves
-                     .Objects
-                     .ToList()
-                     .ForEach(valve => valve.valveSteamParticle
-                     .Stop(true, ParticleSystemStopBehavior.StopEmittingAndClear));
+            HaxObjects
+                .Instance?
+                .SteamValves
+                .Objects
+                .ToList()
+                .ForEach(valve =>
+                    valve.valveSteamParticle.Stop(true, ParticleSystemStopBehavior.StopEmittingAndClear)
+                );
 
             yield return new WaitForSeconds(5.0f);
         }
@@ -88,7 +91,7 @@ public class ClearVisionMod : MonoBehaviour {
 
     void Start() {
         _ = this.StartCoroutine(this.DisableFog());
-        _ = this.StartCoroutine(this.SetNightVision());
         _ = this.StartCoroutine(this.DisableSteamValves());
+        _ = this.StartCoroutine(this.SetNightVision());
     }
 }
