@@ -1,27 +1,19 @@
-using System.Collections;
 using System.Linq;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.Rendering.HighDefinition;
-using GameNetcodeStuff;
 
 namespace Hax;
 
 public class ClearVisionMod : MonoBehaviour {
     IEnumerator SetNightVision() {
         while (true) {
-
-            if (Helper.LocalPlayer.IsNotNull(out PlayerControllerB player) &&
-                player.localVisor.IsNotNull(out Transform helmet)) {
-                helmet.gameObject.SetActive(false);
-            }
-
-
             if (!Helper.StartOfRound.IsNotNull(out StartOfRound startOfRound)) {
                 yield return new WaitForEndOfFrame();
                 continue;
             }
 
-            if (!Helper.CurrentCamera.IsNotNull(out Camera cam)) {
+            if (!Helper.CurrentCamera.IsNotNull(out Camera camera)) {
                 yield return new WaitForEndOfFrame();
                 continue;
             }
@@ -53,7 +45,7 @@ public class ClearVisionMod : MonoBehaviour {
 
             sunAnimator.enabled = false;
             sunIndirect.transform.eulerAngles = new Vector3(90, 0, 0);
-            sunIndirect.transform.position = cam.transform.position;
+            sunIndirect.transform.position = camera.transform.position;
             sunIndirect.color = Color.white;
             sunIndirect.intensity = 10;
             sunIndirect.enabled = true;
@@ -63,6 +55,7 @@ public class ClearVisionMod : MonoBehaviour {
             lightData.distance = float.MaxValue;
             timeOfDay.insideLighting = false;
             startOfRound.blackSkyVolume.weight = 0;
+            startOfRound.localPlayerController.localVisor.gameObject.SetActive(false);
 
             yield return new WaitForEndOfFrame();
         }
