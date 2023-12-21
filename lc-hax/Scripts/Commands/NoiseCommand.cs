@@ -14,7 +14,7 @@ public class NoiseCommand : ICommand {
             return;
         }
 
-        if (!Helper.GetPlayer(args[0]).IsNotNull(out PlayerControllerB player)) {
+        if (!Helper.GetActivePlayer(args[0]).IsNotNull(out PlayerControllerB player)) {
             Console.Print("Player not found!");
             return;
         }

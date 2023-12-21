@@ -10,7 +10,7 @@ public class HateCommand : ICommand {
             return;
         }
 
-        if (!Helper.GetPlayer(args[0]).IsNotNull(out PlayerControllerB targetPlayer)) {
+        if (!Helper.GetActivePlayer(args[0]).IsNotNull(out PlayerControllerB targetPlayer)) {
             Console.Print("Player not found!");
             return;
         }

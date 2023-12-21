@@ -35,7 +35,7 @@ public class PhantomMod : MonoBehaviour {
         int playerCount = Helper.Players?.Length ?? 0;
         this.CurrentSpectatorIndex = (this.CurrentSpectatorIndex + indexChange) % playerCount;
 
-        if (!Helper.GetPlayer(this.CurrentSpectatorIndex).IsNotNull(out PlayerControllerB targetPlayer)) {
+        if (!Helper.GetActivePlayer(this.CurrentSpectatorIndex).IsNotNull(out PlayerControllerB targetPlayer)) {
             Console.Print("Player not found!");
             return;
         }
