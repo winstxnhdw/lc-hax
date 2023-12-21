@@ -5,12 +5,12 @@ namespace Hax;
 public static partial class Helper {
     static ManualCameraRenderer? ManualCameraRenderer => Helper.StartOfRound?.mapScreen;
 
-    public static void SwitchRadarTarget(ulong playerClientId) {
-        Helper.ManualCameraRenderer?.SwitchRadarTargetServerRpc((int)playerClientId);
+    public static void SwitchRadarTarget(int playerClientId) {
+        Helper.ManualCameraRenderer?.SwitchRadarTargetServerRpc(playerClientId);
     }
 
     public static void SwitchRadarTarget(PlayerControllerB player) {
-        Helper.SwitchRadarTarget(player.playerClientId);
+        Helper.SwitchRadarTarget((int)player.playerClientId);
     }
 
     public static bool IsRadarTarget(ulong playerClientId) {
