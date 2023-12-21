@@ -48,7 +48,7 @@ Execute `launch.bat` when you have launched the game to inject the assembly into
 > [!NOTE]\
 > There is **no** feature in this mod that require host privileges.
 
-`lc-hax` has an extensive list of features. Features are split into two distinct categories: **mods** and **commands**. Mods are features that are always active, while commands are features that are only active for a limited period of time when invoked. You may permanently disable mods by removing the corresponding `Mod` class under the `LoadHaxModules` function from the following [file](lc-hax/Scripts/Loader.cs).
+`lc-hax` has an extensive list of features. Features are split into two distinct categories: **mods** and **commands**. Mods are features that are always active, while commands are features that are only active for a limited period of time when invoked. You may permanently disable mods by removing the corresponding `Mod` class under the `LoadHaxModules` function from the following [file](lc-hax/Scripts/Loader.cs). The complete feature set includes the following.
 
 - Infinite stamina
 - Infinite scan range
