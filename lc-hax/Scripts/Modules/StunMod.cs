@@ -3,7 +3,7 @@ using GameNetcodeStuff;
 
 namespace Hax;
 
-public class StunMod : MonoBehaviour {
+public sealed class StunMod : MonoBehaviour {
     void OnEnable() {
         InputListener.onLeftButtonPress += this.Stun;
     }

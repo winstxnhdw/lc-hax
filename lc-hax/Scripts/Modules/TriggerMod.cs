@@ -3,7 +3,7 @@ using GameNetcodeStuff;
 
 namespace Hax;
 
-public class TriggerMod : MonoBehaviour {
+public sealed class TriggerMod : MonoBehaviour {
     bool UsingInteractRay { get; set; } = false;
     bool UsingFollowRay { get; set; } = false;
     bool FunnyReviveEnabled { get; set; } = false;

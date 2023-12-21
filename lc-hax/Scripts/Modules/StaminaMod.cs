@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Hax;
 
-public class StaminaMod : MonoBehaviour {
+public sealed class StaminaMod : MonoBehaviour {
     IEnumerator SetSprint() {
         while (true) {
             if (!Helper.LocalPlayer.IsNotNull(out PlayerControllerB player)) {

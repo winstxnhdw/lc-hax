@@ -3,7 +3,7 @@ using GameNetcodeStuff;
 
 namespace Hax;
 
-public class PhantomMod : MonoBehaviour {
+public sealed class PhantomMod : MonoBehaviour {
     bool IsShiftHeld { get; set; } = false;
     bool EnablePhantom { get; set; } = false;
     int CurrentSpectatorIndex { get; set; } = 0;

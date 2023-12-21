@@ -3,7 +3,7 @@ using GameNetcodeStuff;
 
 namespace Hax;
 
-public class NameInWeightMod : MonoBehaviour {
+public sealed class NameInWeightMod : MonoBehaviour {
     void LateUpdate() {
         this.Fire();
     }
