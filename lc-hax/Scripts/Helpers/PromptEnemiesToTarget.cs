@@ -5,6 +5,11 @@ using GameNetcodeStuff;
 namespace Hax;
 
 public static partial class Helper {
+    static void TeleportEnemyToPlayer(EnemyAI enemy, PlayerControllerB player) {
+        enemy.transform.position = player.transform.position - player.transform.forward;
+        enemy.SyncPositionToClients();
+    }
+
     public static List<string> PromptEnemiesToTarget(PlayerControllerB player, bool funnyRevive) {
         List<string> enemyNames = [];
 
@@ -66,17 +71,17 @@ public static partial class Helper {
             }
 
             else if (enemy is SandWormAI) {
-                if (!player.isInsideFactory) TeleportToPlayer(enemy, player);
+                if (!player.isInsideFactory) TeleportEnemyToPlayer(enemy, player);
                 enemy.SwitchToBehaviourState(1);
             }
 
             else if (enemy is MaskedPlayerEnemy) {
-                TeleportToPlayer(enemy, player);
+                TeleportEnemyToPlayer(enemy, player);
                 enemy.SwitchToBehaviourState(1);
             }
 
             else if (enemy is SpringManAI) {
-                if (player.isInsideFactory) TeleportToPlayer(enemy, player);
+                if (player.isInsideFactory) TeleportEnemyToPlayer(enemy, player);
                 enemy.SwitchToBehaviourState(1);
             }
 
@@ -85,12 +90,12 @@ public static partial class Helper {
             }
 
             else if (enemy is CentipedeAI snareFlea) {
-                if (player.isInsideFactory) TeleportToPlayer(enemy, player);
+                if (player.isInsideFactory) TeleportEnemyToPlayer(enemy, player);
                 enemy.SwitchToBehaviourState(2);
             }
 
             else if (enemy is FlowermanAI bracken) {
-                if (player.isInsideFactory) TeleportToPlayer(enemy, player);
+                if (player.isInsideFactory) TeleportEnemyToPlayer(enemy, player);
                 bracken.SwitchToBehaviourState(2);
                 bracken.EnterAngerModeServerRpc(20);
             }
@@ -116,7 +121,7 @@ public static partial class Helper {
             }
 
             else if (enemy is RedLocustBees bees) {
-                if (!player.isInsideFactory) TeleportToPlayer(enemy, player);
+                if (!player.isInsideFactory) TeleportEnemyToPlayer(enemy, player);
 
                 bees.SwitchToBehaviourState(2);
                 bees.hive.isHeld = true;
@@ -132,10 +137,5 @@ public static partial class Helper {
         });
 
         return enemyNames;
-    }
-
-    public static void TeleportToPlayer(EnemyAI enemy, PlayerControllerB player) {
-        enemy.transform.position = player.transform.position - player.transform.forward;
-        enemy.SyncPositionToClients();
     }
 }
