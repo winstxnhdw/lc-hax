@@ -57,12 +57,7 @@ public class RandomCommand : ICommand {
         );
     }
 
-    Action TeleportPlayerToRandomLater(string[] args) => () => {
-        if (!Helper.GetActivePlayer(args[0]).IsNotNull(out PlayerControllerB targetPlayer)) {
-            Console.Print("Player not found!");
-            return;
-        }
-
+    Action TeleportPlayerToRandomLater(PlayerControllerB targetPlayer) => () => {
         ObjectPlacements<Transform, ShipTeleporter>? teleporterPlacements = this.GetInverseTeleporterPlacements(targetPlayer);
 
         if (teleporterPlacements is null) {
@@ -88,22 +83,23 @@ public class RandomCommand : ICommand {
         teleporterPlacements.Value.Placement.GameObject.PressTeleportButtonServerRpc();
     };
 
-    void TeleportPlayerToRandom(string[] args) {
-        Helper.BuyUnlockable(Unlockable.INVERSE_TELEPORTER);
-        Helper.ReturnUnlockable(Unlockable.INVERSE_TELEPORTER);
-        Helper.ReturnUnlockable(Unlockable.CUPBOARD);
-
-        Helper.CreateComponent<WaitForBehaviour>()
-              .SetPredicate(this.InverseTeleporterExists)
-              .Init(this.TeleportPlayerToRandomLater(args));
-    }
-
     public void Execute(string[] args) {
         if (args.Length is 0) {
             Console.Print("Usage: /random <player>");
             return;
         }
 
-        this.TeleportPlayerToRandom(args);
+        if (!Helper.GetActivePlayer(args[0]).IsNotNull(out PlayerControllerB targetPlayer)) {
+            Console.Print("Player not found!");
+            return;
+        }
+
+        Helper.BuyUnlockable(Unlockable.INVERSE_TELEPORTER);
+        Helper.ReturnUnlockable(Unlockable.INVERSE_TELEPORTER);
+        Helper.ReturnUnlockable(Unlockable.CUPBOARD);
+
+        Helper.CreateComponent<WaitForBehaviour>()
+              .SetPredicate(this.InverseTeleporterExists)
+              .Init(this.TeleportPlayerToRandomLater(targetPlayer));
     }
 }
