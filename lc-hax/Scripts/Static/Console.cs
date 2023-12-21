@@ -17,7 +17,6 @@ public static class Console {
         { "/tp", new TeleportCommand() },
         { "/noise", new NoiseCommand() },
         { "/money", new MoneyCommand() },
-        { "/debug", new DebugCommand() },
         { "/xyz", new LocationCommand() },
         { "/shovel", new ShovelCommand() },
         { "/unlock", new UnlockCommand() },
@@ -30,6 +29,7 @@ public static class Console {
         { "/entrance", new EntranceCommand() },
         { "/timescale", new TimescaleCommand() },
         { "/stunclick", new StunOnClickCommand() },
+        { "/unlockables", new UnlockablesCommand() },
     };
 
     public static void Print(string name, string? message, bool isSystem = false) {
