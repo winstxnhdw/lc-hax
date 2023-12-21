@@ -1,9 +1,13 @@
 using System.Linq;
+using UnityEngine;
 using GameNetcodeStuff;
 
 namespace Hax;
 
 public static partial class Helper {
+    public static void KillPlayer(this PlayerControllerB player) =>
+        player.DamagePlayerFromOtherClientServerRpc(1000, Vector3.zero, -1);
+
     public static PlayerControllerB? LocalPlayer => GameNetworkManager.Instance.localPlayerController;
 
     public static PlayerControllerB[]? Players => Helper.StartOfRound?.allPlayerScripts;
