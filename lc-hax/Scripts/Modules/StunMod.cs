@@ -1,4 +1,3 @@
-using System.Linq;
 using UnityEngine;
 using GameNetcodeStuff;
 
@@ -17,10 +16,6 @@ public class StunMod : MonoBehaviour {
         if (!Settings.EnableStunOnLeftClick) return;
         if (!Helper.LocalPlayer.IsNotNull(out PlayerControllerB player)) return;
 
-        Physics.OverlapSphere(player.transform.position, 5.0f, 524288)
-               .Select(collider => collider.GetComponent<EnemyAICollisionDetect>())
-               .Where(enemy => enemy != null)
-               .ToList()
-               .ForEach(enemy => enemy.mainScript.SetEnemyStunned(true));
+        Helper.Stun(player.transform.position, 5.0f);
     }
 }
