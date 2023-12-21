@@ -48,7 +48,9 @@ Execute `launch.bat` when you have launched the game to inject the assembly into
 > [!NOTE]\
 > There is **no** feature in this mod that require host privileges.
 
-`lc-hax` has an extensive list of features. Features are split into two distinct categories: **mods** and **commands**. Mods are features that are always active, while commands are features that are only active for a limited period of time when invoked. You may permanently disable mods by removing the corresponding `Mod` class under the `LoadHaxModules` function from the following [file](lc-hax/Scripts/Loader.cs). The complete feature set includes the following.
+`lc-hax` has an extensive list of features. Features are split into two distinct categories: **mods** and **commands**. Mods are features that are always active, while commands are features that are only active for a limited period of time when invoked.
+
+The complete feature set includes the following.
 
 - Infinite stamina
 - Infinite scan range
@@ -155,3 +157,26 @@ The arguments for the `build` command can be executed with either the unlockable
 | 21 | WELCOME_MAT        |
 | 22 | GOLDFISH           |
 | 23 | PLUSHIE_PAJAMA_MAN |
+
+### Disabling Mods
+
+You may permanently disable mods by removing the corresponding `Mod` class under the `LoadHaxModules` function from the following [file](lc-hax/Scripts/Loader.cs). In the following example, we disable `StaminaMod` and you will return to the game's default stamina mechanics in your next injection.
+
+```cs
+static void LoadHaxModules() {
+    DontDestroyOnLoad(Loader.HaxModules);
+
+    Loader.AddHaxModules<SaneMod>();
+    Loader.AddHaxModules<ChatMod>();
+    Loader.AddHaxModules<StunMod>();
+    Loader.AddHaxModules<ShovelMod>();
+    Loader.AddHaxModules<WeightMod>();
+    // Loader.AddHaxModules<StaminaMod>();
+    Loader.AddHaxModules<PhantomMod>();
+    Loader.AddHaxModules<TriggerMod>();
+    Loader.AddHaxModules<ClearVisionMod>();
+    Loader.AddHaxModules<NameInWeightMod>();
+    Loader.AddHaxModules<BuildAnywhereMod>();
+    Loader.AddHaxModules<FollowAnotherPlayerMod>();
+}
+```
