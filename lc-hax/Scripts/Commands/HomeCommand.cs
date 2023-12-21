@@ -3,7 +3,7 @@ using GameNetcodeStuff;
 
 namespace Hax;
 
-public class HomeCommand : ICommand {
+public class HomeCommand : TeleportCommand {
     Action TeleportPlayerToBaseLater(PlayerControllerB targetPlayer) => () => {
         HaxObjects.Instance?.ShipTeleporters.Renew();
 
@@ -23,17 +23,11 @@ public class HomeCommand : ICommand {
             return new Result(message: "Player not found!");
         }
 
-        Helper.BuyUnlockable(Unlockable.TELEPORTER);
-        Helper.ReturnUnlockable(Unlockable.TELEPORTER);
-
-        Helper.CreateComponent<WaitForPredicate>()
-              .SetPredicate(Helper.TeleporterExists)
-              .Init(this.TeleportPlayerToBaseLater(targetPlayer));
-
+        this.PrepareToTeleport(this.TeleportPlayerToBaseLater(targetPlayer));
         return new Result(true);
     }
 
-    public void Execute(string[] args) {
+    public new void Execute(string[] args) {
         if (args.Length is 0) {
             Helper.StartOfRound?.ForcePlayerIntoShip();
             return;

@@ -5,6 +5,15 @@ using GameNetcodeStuff;
 namespace Hax;
 
 public class TeleportCommand : ICommand {
+    protected void PrepareToTeleport(Action action) {
+        Helper.BuyUnlockable(Unlockable.TELEPORTER);
+        Helper.ReturnUnlockable(Unlockable.TELEPORTER);
+
+        Helper.CreateComponent<WaitForPredicate>()
+              .SetPredicate(Helper.TeleporterExists)
+              .Init(action);
+    }
+
     Vector3? GetCoordinates(string[] args) {
         bool isValidX = float.TryParse(args[0], out float x);
         bool isValidY = float.TryParse(args[1], out float y);
@@ -40,7 +49,7 @@ public class TeleportCommand : ICommand {
         return new Result(true);
     }
 
-    Action TeleportPlayerToPositionLater(PlayerControllerB player, Vector3 position) => () => {
+    Action PlaceAndTeleport(PlayerControllerB player, Vector3 position) => () => {
         HaxObjects.Instance?.ShipTeleporters.Renew();
 
         if (!Helper.Teleporter.IsNotNull(out ShipTeleporter teleporter)) {
@@ -50,9 +59,6 @@ public class TeleportCommand : ICommand {
 
         GameObject newTransform = player.transform.Copy();
         newTransform.transform.position = position;
-
-        Helper.SwitchRadarTarget(player);
-        teleporter.PressTeleportButtonServerRpc();
 
         Vector3 rotationOffset = new(-90.0f, 0.0f, 0.0f);
         Vector3 positionOffset = new(0.0f, 1.6f, 0.0f);
@@ -74,16 +80,19 @@ public class TeleportCommand : ICommand {
         Helper.CreateComponent<TransientBehaviour>()
               .Init((_) => Helper.PlaceObjectAtPosition(teleporterPlacement), 6.0f)
               .Dispose(() => Helper.PlaceObjectAtPosition(previousTeleporterPlacement));
+
+        teleporter.PressTeleportButtonServerRpc();
+    };
+
+    Action TeleportPlayerToPositionLater(PlayerControllerB player, Vector3 position) => () => {
+        Helper.SwitchRadarTarget(player);
+        Helper.CreateComponent<WaitForPredicate>()
+              .SetPredicate(() => Helper.IsRadarTarget(player.playerClientId))
+              .Init(this.PlaceAndTeleport(player, position));
     };
 
     Result TeleportPlayerToPosition(PlayerControllerB player, Vector3 position) {
-        Helper.BuyUnlockable(Unlockable.TELEPORTER);
-        Helper.ReturnUnlockable(Unlockable.TELEPORTER);
-
-        Helper.CreateComponent<WaitForPredicate>()
-              .SetPredicate(Helper.TeleporterExists)
-              .Init(this.TeleportPlayerToPositionLater(player, position));
-
+        this.PrepareToTeleport(this.TeleportPlayerToPositionLater(player, position));
         return new Result(true);
     }
 
