@@ -7,6 +7,9 @@
 
 A powerful, feature-rich and highly performant portable Windows CLI-only internal cheat for [Lethal Company](https://en.wikipedia.org/wiki/Lethal_Company). This mod is partially compatible with [MoreCompany](https://github.com/notnotnotswipez/MoreCompany).
 
+> [!IMPORTANT]\
+> To aid in its speed of development, `lc-hax` has no concept of versioning aside from the Git commit history. We make no guarantees for any kind of backward compatiblity. Any feature can be removed or heavily modified to maximise user experience and overwrite poor early decisions.
+
 <div align="center">
     <img src="https://raw.githubusercontent.com/wiki/winstxnhdw/lc-hax/resources/inverse.gif" />
 </div>
@@ -115,3 +118,37 @@ Execute `launch.bat` when you have launched the game to inject the assembly into
 - Lure enemies to player
 - Follow a player's movements
 - Interact with objects from far
+
+## Build
+
+The arguments for the `build` command can be executed with either the unlockable index or name. The list of unlockables can be found in the following table.
+
+> [!NOTE]\
+> Unintuitively, not all unlockables are buildable. Thus, the `build` command also doubles as a pseudo unlock function for unlockables.
+
+| ID | Name               |
+|--- |--------------------|
+| 0  | ORANGE_SUIT        |
+| 1  | GREEN_SUIT         |
+| 2  | HAZARD_SUIT        |
+| 3  | PAJAMA_SUIT        |
+| 4  | COZY_LIGHTS        |
+| 5  | TELEPORTER         |
+| 6  | TELEVISION         |
+| 7  | CUPBOARD           |
+| 8  | FILE_CABINET       |
+| 9  | TOILET             |
+| 10 | SHOWER             |
+| 11 | LIGHT_SWITCH       |
+| 12 | RECORD_PLAYER      |
+| 13 | TABLE              |
+| 14 | ROMANTIC_TABLE     |
+| 15 | BUNKBEDS           |
+| 16 | TERMINAL           |
+| 17 | SIGNAL_TRANSMITTER |
+| 18 | LOUD_HORN          |
+| 19 | INVERSE_TELEPORTER |
+| 20 | JACK_O_LANTERN     |
+| 21 | WELCOME_MAT        |
+| 22 | GOLDFISH           |
+| 23 | PLUSHIE_PAJAMA_MAN |
