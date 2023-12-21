@@ -3,10 +3,9 @@ using UnityEngine;
 namespace Hax;
 
 public class BuildCommand : ICommand {
-    void PlaceUnlockable(Unlockable unlockable, Camera camera) {
+    Result PlaceUnlockable(Unlockable unlockable, Camera camera) {
         if (!Helper.GetUnlockable(unlockable).IsNotNull(out PlaceableShipObject shipObject)) {
-            Console.Print("Unlockable is not found or placeable!");
-            return;
+            return new Result(message: "Unlockable is not found or placeable!");
         }
 
         Vector3 newPosition = camera.transform.position + (camera.transform.forward * 3.0f);
@@ -18,6 +17,8 @@ public class BuildCommand : ICommand {
             newPosition,
             newRotation
         );
+
+        return new Result(true);
     }
 
     public void Execute(string[] args) {
@@ -38,6 +39,10 @@ public class BuildCommand : ICommand {
 
         Helper.BuyUnlockable(unlockable);
         Helper.ReturnUnlockable(unlockable);
-        this.PlaceUnlockable(unlockable, camera);
+        Result result = this.PlaceUnlockable(unlockable, camera);
+
+        if (!result.Success) {
+            Console.Print(result.Message);
+        }
     }
 }
