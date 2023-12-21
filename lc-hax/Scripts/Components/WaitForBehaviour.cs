@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Hax;
 
-public class WaitForPredicate : MonoBehaviour {
+public class WaitForBehaviour : MonoBehaviour {
     Action? Action { get; set; }
     Func<bool>? Predicate { get; set; }
 
@@ -13,7 +13,7 @@ public class WaitForPredicate : MonoBehaviour {
         _ = this.StartCoroutine(this.WaitForPredicateCoroutine());
     }
 
-    public WaitForPredicate SetPredicate(Func<bool> predicate) {
+    public WaitForBehaviour SetPredicate(Func<bool> predicate) {
         this.Predicate = predicate;
         return this;
     }
