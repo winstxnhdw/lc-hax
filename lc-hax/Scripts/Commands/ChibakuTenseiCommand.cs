@@ -7,7 +7,7 @@ public class ChibakuTenseiCommand : ICommand {
     Vector3 spinningY = new(0, 2, 0);
 
     Result TeleportPlayerToRandom(string[] args) {
-        if (!Helper.GetPlayer(args[0]).IsNotNull(out PlayerControllerB targetPlayer)) {
+        if (!Helper.GetActivePlayer(args[0]).IsNotNull(out PlayerControllerB targetPlayer)) {
             return new Result(message: "Player not found!");
         }
 

@@ -58,7 +58,7 @@ public class RandomCommand : ICommand {
     }
 
     Action TeleportPlayerToRandomLater(string[] args) => () => {
-        if (!Helper.GetPlayer(args[0]).IsNotNull(out PlayerControllerB targetPlayer)) {
+        if (!Helper.GetActivePlayer(args[0]).IsNotNull(out PlayerControllerB targetPlayer)) {
             Console.Print("Player not found!");
             return;
         }

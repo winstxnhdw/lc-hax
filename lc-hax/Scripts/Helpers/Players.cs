@@ -16,4 +16,11 @@ public static partial class Helper {
     }
 
     public static PlayerControllerB? GetPlayer(int playerId) => Helper.GetPlayer(playerId.ToString());
+
+    public static PlayerControllerB? GetActivePlayer(string playerNameOrId) =>
+        !Helper.GetPlayer(playerNameOrId).IsNotNull(out PlayerControllerB player)
+            ? null
+            : player.isPlayerDead ? null : !player.isPlayerControlled ? null : player;
+
+    public static PlayerControllerB? GetActivePlayer(int playerId) => Helper.GetActivePlayer(playerId.ToString());
 }
