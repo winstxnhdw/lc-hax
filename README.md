@@ -45,7 +45,7 @@ Execute `launch.bat` when you have launched the game to inject the assembly into
 
 ## Features
 
-**No** features in this mod require host privileges.
+There is **no** feature in this mod that require host privileges.
 
 - Infinite stamina
 - Infinite scan range
