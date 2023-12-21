@@ -1,5 +1,3 @@
-using System.Linq;
-using UnityEngine;
 using GameNetcodeStuff;
 
 namespace Hax;
@@ -21,10 +19,6 @@ public class StunCommand : ICommand {
             return;
         }
 
-        Physics.OverlapSphere(player.transform.position, float.MaxValue, 524288)
-               .Select(collider => collider.GetComponent<EnemyAICollisionDetect>())
-               .Where(enemy => enemy != null)
-               .ToList()
-               .ForEach(enemy => enemy.mainScript.SetEnemyStunned(true, stunDuration));
+        Helper.Stun(player.transform.position, float.MaxValue, stunDuration);
     }
 }
