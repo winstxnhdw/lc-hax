@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Hax;
 
-public class UnlockCommand : ICommand {
+public class UnlockCommand : LockCommand {
     InteractTrigger? GetDoorTrigger(DoorLock door) =>
         door.Reflect().GetInternalField<InteractTrigger>("doorTrigger");
 
@@ -15,11 +15,9 @@ public class UnlockCommand : ICommand {
         doorTrigger.timeToHold = 0.0f;
     }
 
-    public void Execute(string[] _) {
+    public new void Execute(string[] _) {
         Object.FindObjectsOfType<DoorLock>().ToList().ForEach(this.UnlockDoor);
-        Object.FindObjectsOfType<TerminalAccessibleObject>()
-              .ToList()
-              .ForEach(terminalAccessibleObject => terminalAccessibleObject.SetDoorOpenServerRpc(true));
+        this.SetGateState(true);
 
         Console.Print("All doors unlocked!");
     }
