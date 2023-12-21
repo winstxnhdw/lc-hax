@@ -25,15 +25,14 @@ public class NoiseCommand : ICommand {
 
         if (args.Length is 1) {
             this.PlayNoiseContinuously(player.transform.position, 30.0f);
+            return;
         }
 
-        else {
-            if (!float.TryParse(args[1], out float duration)) {
-                Console.Print("Invalid duration!");
-                return;
-            }
-
-            this.PlayNoiseContinuously(player.transform.position, duration);
+        if (!float.TryParse(args[1], out float duration)) {
+            Console.Print("Invalid duration!");
+            return;
         }
+
+        this.PlayNoiseContinuously(player.transform.position, duration);
     }
 }
