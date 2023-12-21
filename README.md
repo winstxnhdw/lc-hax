@@ -63,36 +63,36 @@ Execute `launch.bat` when you have launched the game to inject the assembly into
 
 ### Commands
 
-| Action                        | Command                    |
-| ----------------------------- | -------------------------- |
-| Inverse teleport a player     | `/random <player>`         |
-| Play noise on player          | `/noise <player>`          |
-| Chibaku Tensei                | `/ct <player>`             |
-| Teleport to entrance          | `/entrance`                |
-| Teleport inside entrance      | `/entrance inside`         |
-| Teleport to a player          | `/tp <player>`             |
-| Teleport to a location        | `/tp <x> <y> <z>`          |
-| Teleport player to player     | `/tp <player> <player>`    |
-| Teleport player to a location | `/tp <player> <x> <y> <z>` |
-| Teleport back to ship         | `/home <player?>`          |
-| Lure enemies to player        | `/hate <player>`           |
-| Kill player                   | `/kill <player?>`          |
-| Kill all players              | `/kill --all`              |
-| Modify shovel damage          | `/shovel <force=1>`        |
-| Give or take money            | `/money <amount>`          |
-| Place an unlockable           | `/build <unlockable>`      |
-| Stun enemies                  | `/stun <duration>`         |
-| Toggle stun on click          | `/stunclick`               |
-| List all players              | `/players`                 |
-| Get coordinates               | `/xyz`                     |
-| End the game                  | `/end <player?>`           |
-| Start the game                | `/start`                   |
-| Toggle God mode               | `/god`                     |
-| Unlock all doors              | `/unlock`                  |
-| Lock all gates                | `/lock`                    |
-| Heal self                     | `/heal`                    |
-| Explode all mines             | `/explode`                 |
-| Explode all jetpacks          | `/explode jet`             |
+| Action                        | Command                         |
+| ----------------------------- | ------------------------------- |
+| Inverse teleport a player     | `/random <player>`              |
+| Play noise on player          | `/noise <player> <duration=30>` |
+| Chibaku Tensei                | `/ct <player>`                  |
+| Teleport to entrance          | `/entrance`                     |
+| Teleport inside entrance      | `/entrance inside`              |
+| Teleport to a player          | `/tp <player>`                  |
+| Teleport to a location        | `/tp <x> <y> <z>`               |
+| Teleport player to player     | `/tp <player> <player>`         |
+| Teleport player to a location | `/tp <player> <x> <y> <z>`      |
+| Teleport back to ship         | `/home <player?>`               |
+| Lure enemies to player        | `/hate <player>`                |
+| Kill player                   | `/kill <player?>`               |
+| Kill all players              | `/kill --all`                   |
+| Modify shovel damage          | `/shovel <force=1>`             |
+| Give or take money            | `/money <amount>`               |
+| Place an unlockable           | `/build <unlockable>`           |
+| Stun enemies                  | `/stun <duration>`              |
+| Toggle stun on click          | `/stunclick`                    |
+| End the game                  | `/end <player=-1>`              |
+| Start the game                | `/start`                        |
+| List all players              | `/players`                      |
+| Get coordinates               | `/xyz`                          |
+| Toggle God mode               | `/god`                          |
+| Unlock all doors              | `/unlock`                       |
+| Lock all gates                | `/lock`                         |
+| Heal self                     | `/heal`                         |
+| Explode all mines             | `/explode`                      |
+| Explode all jetpacks          | `/explode jet`                  |
 
 ### Binds
 
