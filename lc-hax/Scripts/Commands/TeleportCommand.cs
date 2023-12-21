@@ -9,7 +9,7 @@ public class TeleportCommand : ICommand {
         Helper.BuyUnlockable(Unlockable.TELEPORTER);
         Helper.ReturnUnlockable(Unlockable.TELEPORTER);
 
-        Helper.CreateComponent<WaitForPredicate>()
+        Helper.CreateComponent<WaitForBehaviour>()
               .SetPredicate(Helper.TeleporterExists)
               .Init(action);
     }
@@ -86,7 +86,7 @@ public class TeleportCommand : ICommand {
 
     Action TeleportPlayerToPositionLater(PlayerControllerB player, Vector3 position) => () => {
         Helper.SwitchRadarTarget(player);
-        Helper.CreateComponent<WaitForPredicate>()
+        Helper.CreateComponent<WaitForBehaviour>()
               .SetPredicate(() => Helper.IsRadarTarget(player.playerClientId))
               .Init(this.PlaceAndTeleport(player, position));
     };
