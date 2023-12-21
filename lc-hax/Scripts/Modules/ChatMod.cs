@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Hax;
 
-public class ChatMod : MonoBehaviour {
+public sealed class ChatMod : MonoBehaviour {
     IEnumerator ShowHUD() {
         while (true) {
             Helper.HUDManager?.HideHUD(false);

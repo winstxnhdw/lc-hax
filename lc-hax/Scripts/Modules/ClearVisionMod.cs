@@ -5,7 +5,7 @@ using UnityEngine.Rendering.HighDefinition;
 
 namespace Hax;
 
-public class ClearVisionMod : MonoBehaviour {
+public sealed class ClearVisionMod : MonoBehaviour {
     IEnumerator SetNightVision() {
         while (true) {
             if (!Helper.StartOfRound.IsNotNull(out StartOfRound startOfRound)) {

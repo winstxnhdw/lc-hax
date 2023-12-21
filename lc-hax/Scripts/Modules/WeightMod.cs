@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Hax;
 
-public class WeightMod : MonoBehaviour {
+public sealed class WeightMod : MonoBehaviour {
     IEnumerator SetWeight() {
         while (true) {
             if (!Helper.LocalPlayer.IsNotNull(out PlayerControllerB player)) {

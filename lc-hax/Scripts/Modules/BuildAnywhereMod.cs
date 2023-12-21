@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Hax;
 
-public class BuildAnywhereMod : MonoBehaviour {
+public sealed class BuildAnywhereMod : MonoBehaviour {
     IEnumerator SetCanConfirmPosition() {
         while (true) {
             _ = Helper.ShipBuildModeManager?.Reflect().SetInternalField("CanConfirmPosition", true);

@@ -12,7 +12,7 @@ struct CopiedStates {
     public float animationSpeed;
 }
 
-public class FollowAnotherPlayerMod : MonoBehaviour {
+public sealed class FollowAnotherPlayerMod : MonoBehaviour {
     const float secondsBeforeRealtime = 1f;
 
     Queue<CopiedStates> PlayerStates { get; set; } = new();

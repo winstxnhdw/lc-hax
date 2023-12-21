@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace Hax;
 
-public class ShovelMod : MonoBehaviour {
+public sealed class ShovelMod : MonoBehaviour {
     PlayerControllerB? ShovelOwner(Shovel shovel) => shovel.playerHeldBy;
 
     bool IsLocalPlayerShovel(Shovel shovel) =>

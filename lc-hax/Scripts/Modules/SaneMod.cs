@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Hax;
 
-public class SaneMod : MonoBehaviour {
+public sealed class SaneMod : MonoBehaviour {
     IEnumerator SetSanity() {
         while (true) {
             if (!Helper.LocalPlayer.IsNotNull(out PlayerControllerB localPlayer)) {
