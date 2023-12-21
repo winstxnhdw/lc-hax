@@ -58,7 +58,7 @@ Execute `launch.bat` when you have launched the game to inject the assembly into
 - [Commands](#commands)
 - [Binds](#binds)
 
-## Commands
+### Commands
 
 | Action                        | Command                    |
 | ----------------------------- | -------------------------- |
@@ -91,7 +91,7 @@ Execute `launch.bat` when you have launched the game to inject the assembly into
 | Explode all mines             | `/explode`                 |
 | Explode all jetpacks          | `/explode jet`             |
 
-## Binds
+### Binds
 
 | Action                      | Input      |
 | --------------------------  | ---------- |
@@ -105,7 +105,7 @@ Execute `launch.bat` when you have launched the game to inject the assembly into
 | Increase sensitivity        | `]`        |
 | Decrease sensitivity        | `[`        |
 
-## TriggerMod
+### TriggerMod
 
 `TriggerMod` is a quality-of-life mod that allows you to trigger various objects in the game. It is activated by pointing at objects with `M3`. Currently, it can do the following.
 
@@ -119,7 +119,7 @@ Execute `launch.bat` when you have launched the game to inject the assembly into
 - Follow a player's movements
 - Interact with objects from far
 
-## Build
+### Build
 
 The arguments for the `build` command can be executed with either the unlockable index or name. The list of unlockables can be found in the following table.
 
