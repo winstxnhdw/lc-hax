@@ -1,19 +1,15 @@
 using System.Linq;
 using GameNetcodeStuff;
-using UnityEngine;
 
 namespace Hax;
 
 public class KillCommand : ICommand {
-    void KillPlayer(PlayerControllerB player) =>
-        player.DamagePlayerFromOtherClientServerRpc(1000, Vector3.zero, -1);
-
     Result KillSelf() {
         if (!Helper.LocalPlayer.IsNotNull(out PlayerControllerB localPlayer) || localPlayer.isPlayerDead) {
             return new Result(message: "Player not found!");
         }
 
-        this.KillPlayer(localPlayer);
+        localPlayer.KillPlayer();
         return new Result(true);
     }
 
@@ -22,12 +18,12 @@ public class KillCommand : ICommand {
             return new Result(message: "Player not found!");
         }
 
-        this.KillPlayer(targetPlayer);
+        targetPlayer.KillPlayer();
         return new Result(true);
     }
 
     Result KillAllPlayers() {
-        Helper.Players.ToList().ForEach(this.KillPlayer);
+        Helper.Players.ToList().ForEach(player => player.KillPlayer());
         return new Result(true);
     }
 
