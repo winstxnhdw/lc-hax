@@ -18,25 +18,17 @@ public class HomeCommand : TeleportCommand {
               .Init(teleporter.PressTeleportButtonServerRpc);
     };
 
-    Result TeleportPlayerToBase(string[] args) {
-        if (!Helper.GetPlayer(args[0]).IsNotNull(out PlayerControllerB targetPlayer)) {
-            return new Result(message: "Player not found!");
-        }
-
-        this.PrepareToTeleport(this.TeleportPlayerToBaseLater(targetPlayer));
-        return new Result(true);
-    }
-
     public new void Execute(string[] args) {
         if (args.Length is 0) {
             Helper.StartOfRound?.ForcePlayerIntoShip();
             return;
         }
 
-        Result result = this.TeleportPlayerToBase(args);
-
-        if (!result.Success) {
-            Console.Print(result.Message);
+        if (!Helper.GetPlayer(args[0]).IsNotNull(out PlayerControllerB targetPlayer)) {
+            Console.Print("Player not found!");
+            return;
         }
+
+        this.PrepareToTeleport(this.TeleportPlayerToBaseLater(targetPlayer));
     }
 }
