@@ -10,7 +10,7 @@ public class NoiseCommand : ICommand {
 
     public void Execute(string[] args) {
         if (args.Length is 0) {
-            Console.Print("Usage: /noise <player>");
+            Console.Print("Usage: /noise <player> <duration=30>");
             return;
         }
 
@@ -19,7 +19,12 @@ public class NoiseCommand : ICommand {
             return;
         }
 
+        if (float.TryParse(args.Length > 1 ? args[1] : "30", out float duration)) {
+            Console.Print("Invalid duration!");
+            return;
+        }
+
         _ = Helper.CreateComponent<TransientBehaviour>()
-                  .Init(this.PlayNoise(player.transform.position), 30.0f);
+                  .Init(this.PlayNoise(player.transform.position), duration);
     }
 }
