@@ -8,6 +8,10 @@ public class NoiseCommand : ICommand {
     Action<float> PlayNoise(Vector3 position) => (_) =>
         Helper.RoundManager?.PlayAudibleNoise(position, float.MaxValue, float.MaxValue, 10, false);
 
+    void PlayNoiseContinuously(Vector3 position, float duration) =>
+        Helper.CreateComponent<TransientBehaviour>()
+              .Init(this.PlayNoise(position), duration);
+
     public void Execute(string[] args) {
         if (args.Length is 0) {
             Console.Print("Usage: /noise <player> <duration=30>");
@@ -19,12 +23,17 @@ public class NoiseCommand : ICommand {
             return;
         }
 
-        if (float.TryParse(args.Length > 1 ? args[1] : "30", out float duration)) {
-            Console.Print("Invalid duration!");
-            return;
+        if (args.Length is 1) {
+            this.PlayNoiseContinuously(player.transform.position, 30.0f);
         }
 
-        _ = Helper.CreateComponent<TransientBehaviour>()
-                  .Init(this.PlayNoise(player.transform.position), duration);
+        else {
+            if (!float.TryParse(args[1], out float duration)) {
+                Console.Print("Invalid duration!");
+                return;
+            }
+
+            this.PlayNoiseContinuously(player.transform.position, duration);
+        }
     }
 }
