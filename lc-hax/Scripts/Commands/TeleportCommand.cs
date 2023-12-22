@@ -117,23 +117,13 @@ public class TeleportCommand : ICommand {
             return;
         }
 
-        Result result = new(message: "Invalid arguments!");
-
-        if (args.Length is 1) {
-            result = this.TeleportToPlayer(args);
-        }
-
-        else if (args.Length is 2) {
-            result = this.TeleportPlayerToPlayer(args);
-        }
-
-        else if (args.Length is 3) {
-            result = this.TeleportToPosition(args);
-        }
-
-        else if (args.Length is 4) {
-            result = this.TeleportPlayerToPosition(args);
-        }
+        Result result = args.Length switch {
+            1 => this.TeleportToPlayer(args),
+            2 => this.TeleportPlayerToPlayer(args),
+            3 => this.TeleportToPosition(args),
+            4 => this.TeleportPlayerToPosition(args),
+            _ => new Result(message: "Invalid arguments!")
+        };
 
         if (!result.Success) {
             Console.Print(result.Message);
