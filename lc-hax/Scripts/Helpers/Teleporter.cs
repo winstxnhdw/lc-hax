@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 
 namespace Hax;
@@ -12,5 +13,14 @@ public static partial class Helper {
     public static bool TeleporterExists() {
         HaxObjects.Instance?.ShipTeleporters.Renew();
         return Helper.Teleporter is not null;
+    }
+
+    public static void PrepareToTeleport(Action action) {
+        Helper.BuyUnlockable(Unlockable.TELEPORTER);
+        Helper.ReturnUnlockable(Unlockable.TELEPORTER);
+
+        Helper.CreateComponent<WaitForBehaviour>()
+              .SetPredicate(Helper.TeleporterExists)
+              .Init(action);
     }
 }
