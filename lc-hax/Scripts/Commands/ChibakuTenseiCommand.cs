@@ -53,7 +53,7 @@ public class ChibakuTenseiCommand : ICommand {
         Vector3 closingInDirection = Vector3.forward;
 
         _ = Helper.CreateComponent<TransientBehaviour>()
-            .Init((timeDelta) => {
+            .Init(timeDelta => {
                 distanceFromPlayerMultiplier = Mathf.Clamp(distanceFromPlayerMultiplier - (timeDelta * 3), 1, 5);
                 closingInDirection = finalClosingIn * distanceFromPlayerMultiplier;
                 changingTargetPlayerOffset.y += timeDelta * 0.1f;
@@ -61,32 +61,32 @@ public class ChibakuTenseiCommand : ICommand {
             }, duration - 3);
 
         _ = Helper.CreateComponent<TransientBehaviour>()
-            .Init((_) => {
+            .Init(_ => {
                 Helper.PlaceObjectAtTransform(targetPlayer.transform, cupboard, changingTargetPlayerOffset);
             }, duration);
 
         _ = Helper.CreateComponent<TransientBehaviour>()
-            .Init((_) => {
+            .Init(_ => {
                 Helper.PlaceObjectAtTransform(targetPlayer.transform, jackOLantern, changingTargetPlayerOffset + (Vector3.up * 4f));
             }, duration);
 
         _ = Helper.CreateComponent<TransientBehaviour>()
-            .Init((_) => {
+            .Init(_ => {
                 Helper.PlaceObjectAtTransform(targetPlayer.transform, romanticTable, changingTargetPlayerOffset + (Quaternion.Euler(0, increasingSpiral, 0) * closingInDirection) + this.spinningY, Vector3.zero);
             }, duration);
 
         _ = Helper.CreateComponent<TransientBehaviour>()
-            .Init((_) => {
+            .Init(_ => {
                 Helper.PlaceObjectAtTransform(targetPlayer.transform, fileCabinet, changingTargetPlayerOffset + (Quaternion.Euler(0, increasingSpiral + 90, 0) * closingInDirection) + this.spinningY, new Vector3(90, 0, 0));
             }, duration);
 
         _ = Helper.CreateComponent<TransientBehaviour>()
-            .Init((_) => {
+            .Init(_ => {
                 Helper.PlaceObjectAtTransform(targetPlayer.transform, table, changingTargetPlayerOffset + (Quaternion.Euler(0, increasingSpiral + 180, 0) * closingInDirection) + this.spinningY, Vector3.zero);
             }, duration);
 
         _ = Helper.CreateComponent<TransientBehaviour>()
-            .Init((_) => {
+            .Init(_ => {
                 Helper.PlaceObjectAtTransform(targetPlayer.transform, recordPlayer, changingTargetPlayerOffset + (Quaternion.Euler(0, increasingSpiral + 270, 0) * closingInDirection) + this.spinningY);
             }, duration);
 

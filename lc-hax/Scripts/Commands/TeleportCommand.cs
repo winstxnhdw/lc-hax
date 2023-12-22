@@ -69,7 +69,7 @@ public class TeleportCommand : ICommand {
         );
 
         Helper.CreateComponent<TransientBehaviour>()
-              .Init((_) => Helper.PlaceObjectAtPosition(teleporterPlacement), 6.0f)
+              .Init(_ => Helper.PlaceObjectAtPosition(teleporterPlacement), 6.0f)
               .Dispose(() => Helper.PlaceObjectAtPosition(previousTeleporterPlacement));
 
         teleporter.PressTeleportButtonServerRpc();
