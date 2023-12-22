@@ -2,8 +2,8 @@ using System.Collections.Generic;
 
 namespace Hax;
 
-public class UnlockablesCommand : IDebugCommand {
-    public void DebugExecute(string[] _) {
+public class UnlockablesCommand : ICommand {
+    public void Execute(string[] _) {
         if (!Helper.StartOfRound.IsNotNull(out StartOfRound startOfRound)) {
             Console.Print("StartOfRound not found!");
             return;
