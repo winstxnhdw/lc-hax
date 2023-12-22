@@ -1,5 +1,6 @@
 using System.Linq;
 using GameNetcodeStuff;
+using UnityEngine;
 
 namespace Hax;
 
@@ -27,15 +28,28 @@ public class KillCommand : ICommand {
         return new Result(true);
     }
 
-    public void Execute(string[] args) {
-        Result result = args.Length is 0
-                      ? this.KillSelf()
-                      : args[0] is "--all"
-                      ? this.KillAllPlayers()
-                      : this.KillTargetPlayer(args);
+    Result KillAllEnemies() {
+        Object.FindObjectsOfType<EnemyAI>().ToList().ForEach(enemy => enemy.gameObject.SetActive(false));
+        return new Result(true);
+    }
 
-        if (!result.Success) {
-            Console.Print(result.Message);
+    void HandleResult(Result result) {
+        if (result.Success) return;
+        Console.Print(result.Message);
+    }
+
+    public void Execute(string[] args) {
+        if (args.Length is 0) {
+            this.HandleResult(this.KillSelf());
+            return;
         }
+
+        Result result = args[0] switch {
+            "--all" => this.KillAllPlayers(),
+            "--enemy" => this.KillAllEnemies(),
+            _ => this.KillTargetPlayer(args)
+        };
+
+        this.HandleResult(result);
     }
 }
