@@ -10,7 +10,7 @@ public sealed class ShovelMod : MonoBehaviour {
 
     bool IsLocalPlayerShovel(Shovel shovel) =>
         Helper.LocalPlayer.IsNotNull(out PlayerControllerB localPlayer) &&
-        !this.ShovelOwner(shovel).IsNotNull(out PlayerControllerB shovelOwner) &&
+        this.ShovelOwner(shovel).IsNotNull(out PlayerControllerB shovelOwner) &&
         shovelOwner.actualClientId == localPlayer.actualClientId;
 
     Shovel? LocalPlayerShovel => HaxObjects.Instance?.Shovels.Objects?.FirstOrDefault(this.IsLocalPlayerShovel);
