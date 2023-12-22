@@ -1,4 +1,4 @@
-name: Latest
+name: v45
 
 on:
   push:
