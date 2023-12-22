@@ -22,7 +22,7 @@ public static class Console {
         { "/unlock", new UnlockCommand() },
         { "/random", new RandomCommand() },
         { "/start", new StartGameCommand() },
-        { "/pumpkin", new PumpkinCommand() },
+        // { "/pumpkin", new PumpkinCommand() },
         { "/players", new PlayersCommand() },
         { "/explode", new ExplodeCommand() },
         { "/ct", new ChibakuTenseiCommand() },
