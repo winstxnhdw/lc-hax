@@ -80,6 +80,7 @@ The complete feature set includes the following.
 | Lure enemies to player        | `/hate <player>`                |
 | Kill player                   | `/kill <player?>`               |
 | Kill all players              | `/kill --all`                   |
+| Kill all enemies              | `/kill --enemy`                 |
 | Modify shovel damage          | `/shovel <force=1>`             |
 | Give or take money            | `/money <amount>`               |
 | Place an unlockable           | `/build <unlockable>`           |
