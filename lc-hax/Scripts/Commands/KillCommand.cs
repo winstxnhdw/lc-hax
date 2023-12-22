@@ -1,10 +1,14 @@
+using System;
 using System.Linq;
 using GameNetcodeStuff;
-using UnityEngine;
+using UnityObject = UnityEngine.Object;
 
 namespace Hax;
 
 public class KillCommand : ICommand {
+    void ForEachEnemy(Action<EnemyAI> action) =>
+        UnityObject.FindObjectsOfType<EnemyAI>().ToList().ForEach(action);
+
     Result KillSelf() {
         if (!Helper.LocalPlayer.IsNotNull(out PlayerControllerB localPlayer) || localPlayer.isPlayerDead) {
             return new Result(message: "Player not found!");
@@ -29,12 +33,12 @@ public class KillCommand : ICommand {
     }
 
     Result KillAllLocalEnemies() {
-        Object.FindObjectsOfType<EnemyAI>().ToList().ForEach(enemy => enemy.gameObject.SetActive(false));
+        this.ForEachEnemy(enemy => enemy.gameObject.SetActive(false));
         return new Result(true);
     }
 
     Result KillAllEnemies() {
-        Object.FindObjectsOfType<EnemyAI>().ToList().ForEach(enemy => enemy.KillEnemyServerRpc(true));
+        this.ForEachEnemy(enemy => enemy.KillEnemyServerRpc(true));
         return new Result(true);
     }
 
