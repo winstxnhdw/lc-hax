@@ -9,9 +9,20 @@ public static partial class Helper {
 
     public static bool Is(this Unlockable unlockable, string unlockableName) => unlockable.ToString() == unlockableName.ToUpper();
 
-    public static bool TryParseUnlockable(string unlockableName, out Unlockable unlockable) {
-        unlockable = Enum.GetValues(typeof(Unlockable)).Cast<Unlockable>()?
-                         .FirstOrDefault(unlockableEnum => unlockableEnum.Is(unlockableName)) ?? Unlockable.NULL;
+    public static bool TryParseUnlockable(string unlockableNameOrId, out Unlockable unlockable) {
+        unlockable = Unlockable.NULL;
+
+        foreach (Unlockable unlockableEnum in Enum.GetValues(typeof(Unlockable)).Cast<Unlockable>()) {
+            if (unlockableEnum.Is(unlockableNameOrId)) {
+                unlockable = unlockableEnum;
+                break;
+            }
+
+            if (int.TryParse(unlockableNameOrId, out int unlockableId) && unlockableEnum.Is(unlockableId)) {
+                unlockable = unlockableEnum;
+                break;
+            }
+        }
 
         return unlockable is not Unlockable.NULL;
     }
