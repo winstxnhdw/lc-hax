@@ -27,9 +27,9 @@ public static class Console {
         { "/explode", new ExplodeCommand() },
         { "/ct", new ChibakuTenseiCommand() },
         { "/entrance", new EntranceCommand() },
-        { "/timescale", new TimescaleCommand() },
         { "/stunclick", new StunOnClickCommand() },
-        { "/unlockables", new UnlockablesCommand() },
+        { "/timescale", new Debug(new TimescaleCommand()) },
+        { "/unlockables", new Debug(new UnlockablesCommand()) },
     };
 
     public static void Print(string name, string? message, bool isSystem = false) {

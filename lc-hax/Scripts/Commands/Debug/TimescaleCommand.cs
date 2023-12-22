@@ -2,10 +2,8 @@ using UnityEngine;
 
 namespace Hax;
 
-public class TimescaleCommand : DebugCommand {
-    public new void Execute(string[] args) {
-        base.Execute(args);
-
+public class TimescaleCommand : IDebugCommand {
+    public void DebugExecute(string[] args) {
         if (args.Length is 0) {
             Console.Print("Usage: /timescale <scale>");
             return;
