@@ -28,8 +28,13 @@ public class KillCommand : ICommand {
         return new Result(true);
     }
 
-    Result KillAllEnemies() {
+    Result KillAllLocalEnemies() {
         Object.FindObjectsOfType<EnemyAI>().ToList().ForEach(enemy => enemy.gameObject.SetActive(false));
+        return new Result(true);
+    }
+
+    Result KillAllEnemies() {
+        Object.FindObjectsOfType<EnemyAI>().ToList().ForEach(enemy => enemy.KillEnemyServerRpc(true));
         return new Result(true);
     }
 
@@ -47,6 +52,7 @@ public class KillCommand : ICommand {
         Result result = args[0] switch {
             "--all" => this.KillAllPlayers(),
             "--enemy" => this.KillAllEnemies(),
+            "--localenemy" => this.KillAllLocalEnemies(),
             _ => this.KillTargetPlayer(args)
         };
 
