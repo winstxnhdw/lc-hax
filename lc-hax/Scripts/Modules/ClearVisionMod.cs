@@ -47,7 +47,7 @@ public sealed class ClearVisionMod : MonoBehaviour {
             sunIndirect.transform.eulerAngles = new Vector3(90, 0, 0);
             sunIndirect.transform.position = camera.transform.position;
             sunIndirect.color = Color.white;
-            sunIndirect.intensity = 10;
+            sunIndirect.intensity = 5;
             sunIndirect.enabled = true;
             sunDirect.transform.eulerAngles = new Vector3(90, 0, 0);
             sunDirect.enabled = true;
