@@ -78,6 +78,7 @@ The complete feature set includes the following.
 | Teleport player to player     | `/tp <player> <player>`         |
 | Teleport player to a location | `/tp <player> <x> <y> <z>`      |
 | Teleport back to ship         | `/home <player?>`               |
+| Teleport enemies to player    | `/mob <player>`                 |
 | Lure enemies to player        | `/hate <player>`                |
 | Kill player                   | `/kill <player?>`               |
 | Kill all players              | `/kill --all`                   |
