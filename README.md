@@ -88,6 +88,7 @@ The complete feature set includes the following.
 | Modify shovel damage          | `/shovel <force=1>`             |
 | Give or take money            | `/money <amount>`               |
 | Place an unlockable           | `/build <unlockable>`           |
+| Change moons                  | `/visit <moons>`                |
 | Stun enemies                  | `/stun <duration>`              |
 | Toggle stun on click          | `/stunclick`                    |
 | End the game                  | `/end <player=-1>`              |
