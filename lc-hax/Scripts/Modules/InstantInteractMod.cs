@@ -1,4 +1,3 @@
-using System.Linq;
 using System.Collections;
 using UnityEngine;
 
@@ -7,14 +6,9 @@ namespace Hax;
 public sealed class InstantInteractMod : MonoBehaviour {
     IEnumerator SetTimeToHold() {
         while (true) {
-            HaxObjects.Instance?.InteractTriggers.Objects.ToList().ForEach(interactTrigger => {
-                interactTrigger.timeToHold = 0.0f;
-            });
-
-            FindObjectsOfType<EntranceTeleport>().ToList().ForEach(entranceTeleport => {
-                if (entranceTeleport.name is not "EntranceTeleportB") return;
-                entranceTeleport.GetComponent<InteractTrigger>().timeToHold = 0.3f;
-            });
+            HaxObjects.Instance?.InteractTriggers.Objects?.ForEach(interactTrigger =>
+                interactTrigger.timeToHold = interactTrigger.transform.parent.name is "EntranceTeleportB" ? 0.3f : 0.0f
+            );
 
             yield return new WaitForSeconds(5.0f);
         }

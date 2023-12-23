@@ -1,4 +1,3 @@
-using System.Linq;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.Rendering.HighDefinition;
@@ -66,9 +65,10 @@ public sealed class ClearVisionMod : MonoBehaviour {
             HaxObjects
                 .Instance?
                 .LocalVolumetricFogs
-                .Objects
-                .ToList()
-                .ForEach(localVolumetricFog => localVolumetricFog.gameObject.SetActive(false));
+                .Objects?
+                .ForEach(localVolumetricFog =>
+                    localVolumetricFog.gameObject.SetActive(false)
+                );
 
             yield return new WaitForSeconds(5.0f);
         }
@@ -79,8 +79,7 @@ public sealed class ClearVisionMod : MonoBehaviour {
             HaxObjects
                 .Instance?
                 .SteamValves
-                .Objects
-                .ToList()
+                .Objects?
                 .ForEach(valve =>
                     valve.valveSteamParticle.Stop(true, ParticleSystemStopBehavior.StopEmittingAndClear)
                 );
