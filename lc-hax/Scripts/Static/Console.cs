@@ -14,6 +14,7 @@ public static class Console {
         { "/home", new HomeCommand() },
         { "/stun", new StunCommand() },
         { "/heal", new HealCommand() },
+        { "/visit", new VisitCommand() },
         { "/build", new BuildCommand() },
         { "/tp", new TeleportCommand() },
         { "/noise", new NoiseCommand() },
