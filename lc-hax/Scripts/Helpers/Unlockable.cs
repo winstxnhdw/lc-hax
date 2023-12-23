@@ -7,31 +7,19 @@ namespace Hax;
 public static partial class Helper {
     public static bool Is(this Unlockable unlockable, int unlockableId) => unlockableId == (int)unlockable;
 
-    public static bool Is(this Unlockable unlockable, string unlockableName) => unlockable.ToString() == unlockableName.ToUpper();
-
     public static bool TryParseUnlockable(string unlockableNameOrId, out Unlockable unlockable) {
-        unlockable = Unlockable.NULL;
-
-        foreach (Unlockable unlockableEnum in Enum.GetValues(typeof(Unlockable)).Cast<Unlockable>()) {
-            if (unlockableEnum.Is(unlockableNameOrId)) {
-                unlockable = unlockableEnum;
-                break;
-            }
-
-            if (int.TryParse(unlockableNameOrId, out int unlockableId) && unlockableEnum.Is(unlockableId)) {
-                unlockable = unlockableEnum;
-                break;
-            }
+        if (int.TryParse(unlockableNameOrId, out int unlockableId) && Enum.IsDefined(typeof(Unlockable), unlockableId)) {
+            unlockable = (Unlockable)unlockableId;
+            return true;
         }
 
-        return unlockable is not Unlockable.NULL;
-    }
+        if (Enum.TryParse(unlockableNameOrId, true, out Unlockable unlockableEnum)) {
+            unlockable = unlockableEnum;
+            return true;
+        }
 
-    public static bool TryParseUnlockable(int unlockableId, out Unlockable unlockable) {
-        unlockable = Enum.GetValues(typeof(Unlockable)).Cast<Unlockable>()?
-                         .FirstOrDefault(unlockableEnum => unlockableEnum.Is(unlockableId)) ?? Unlockable.NULL;
-
-        return unlockable is not Unlockable.NULL;
+        unlockable = 0;
+        return false;
     }
 
     public static void BuyUnlockable(Unlockable unlockable) {
