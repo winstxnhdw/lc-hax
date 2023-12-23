@@ -31,6 +31,7 @@ public static class Console {
         { "/stunclick", new StunOnClickCommand() },
         { "/timescale", new Debug(new TimescaleCommand()) },
         { "/unlockables", new Debug(new UnlockablesCommand()) },
+        { "/fixcamera", new Debug(new FixCameraCommand()) }
     };
 
     public static void Print(string name, string? message, bool isSystem = false) {
