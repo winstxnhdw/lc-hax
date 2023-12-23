@@ -12,11 +12,11 @@ public static partial class Helper {
             return enemyNames;
         }
 
-        _ = roundManager.Reflect().InvokeInternalMethod("RefreshEnemiesList");
-
         if (funnyRevive) {
             Console.Print("Funny revive!");
         }
+
+        _ = roundManager.Reflect().InvokeInternalMethod("RefreshEnemiesList");
 
         roundManager.SpawnedEnemies.ForEach((enemy) => {
             if (enemy is DocileLocustBeesAI or DoublewingAI or BlobAI or DressGirlAI or LassoManAI) return;
@@ -28,8 +28,9 @@ public static partial class Helper {
 
             enemy.serverPosition = Vector3.positiveInfinity;
             enemy.targetPlayer = player;
-            enemyNames.Add(enemy.enemyType.enemyName);
             enemy.ChangeEnemyOwnerServerRpc(roundManager.playersManager.localPlayerController.actualClientId);
+            enemy.SetMovingTowardsTargetPlayer(player);
+            enemyNames.Add(enemy.enemyType.enemyName);
 
             if (enemy is CrawlerAI thumper) {
                 thumper.BeginChasingPlayerServerRpc((int)player.playerClientId);
@@ -53,19 +54,8 @@ public static partial class Helper {
                     hasAttacked = true
                 };
 
+                baboonHawk.SetAggressiveModeServerRpc(1);
                 _ = baboonHawk.Reflect().InvokeInternalMethod("ReactToThreat", threat);
-            }
-
-            else if (enemy is ForestGiantAI giant) {
-                giant.chasingPlayer = player;
-                giant.timeSpentStaring = 10;
-                giant.SwitchToBehaviourState(1);
-
-                _ = giant.Reflect().SetInternalField("lostPlayerInChase", false);
-            }
-
-            else if (enemy is SandWormAI) {
-                enemy.SwitchToBehaviourState(1);
             }
 
             else if (enemy is MaskedPlayerEnemy) {
@@ -76,12 +66,27 @@ public static partial class Helper {
                 enemy.SwitchToBehaviourState(1);
             }
 
+            else if (enemy is ForestGiantAI giant) {
+                giant.SwitchToBehaviourState(1);
+                giant.StopSearch(giant.roamPlanet, false);
+                giant.chasingPlayer = player;
+                giant.investigating = true;
+
+                _ = giant.SetDestinationToPosition(player.transform.position);
+                _ = giant.Reflect().SetInternalField("lostPlayerInChase", false);
+            }
+
+            else if (enemy is SandWormAI earthLeviathan) {
+                earthLeviathan.SwitchToBehaviourState(1);
+            }
+
             else if (enemy is PufferAI or JesterAI) {
                 enemy.SwitchToBehaviourState(2);
             }
 
             else if (enemy is CentipedeAI snareFlea) {
                 snareFlea.SwitchToBehaviourState(2);
+                snareFlea.ClingToPlayerServerRpc(player.playerClientId);
             }
 
             else if (enemy is FlowermanAI bracken) {
@@ -91,6 +96,7 @@ public static partial class Helper {
 
             else if (enemy is SandSpiderAI spider) {
                 spider.SwitchToBehaviourState(2);
+                spider.meshContainer.position = player.transform.position;
                 spider.SyncMeshContainerPositionToClients();
 
                 _ = spider.Reflect()
@@ -100,7 +106,7 @@ public static partial class Helper {
 
             else if (enemy is HoarderBugAI hoardingBug) {
                 hoardingBug.angryAtPlayer = player;
-                hoardingBug.angryTimer = 1000;
+                hoardingBug.angryTimer = float.MaxValue;
                 hoardingBug.SwitchToBehaviourState(2);
 
                 _ = hoardingBug.Reflect()
