@@ -53,6 +53,7 @@ public class EnemyPrompter {
     }
 
     void HandleSnareFlea(CentipedeAI snareFlea, PlayerControllerB targetPlayer) {
+        if (!targetPlayer.isInsideFactory) return;
         this.SetBehaviourState(snareFlea, BehaviourState.AGGRAVATED);
         snareFlea.ClingToPlayerServerRpc(targetPlayer.playerClientId);
     }
@@ -197,7 +198,6 @@ public class EnemyPrompter {
                 enemy.enemyHP = enemy.enemyHP <= 0 ? 1 : enemy.enemyHP;
             }
 
-            enemy.serverPosition = Vector3.positiveInfinity;
             enemy.targetPlayer = player;
             enemy.ChangeEnemyOwnerServerRpc(roundManager.playersManager.localPlayerController.actualClientId);
             enemy.SetMovingTowardsTargetPlayer(player);
