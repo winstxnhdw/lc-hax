@@ -13,9 +13,7 @@ class EnableChatPatch {
         ___localPlayer.isPlayerDead = false;
     }
 
-    static void Postfix(ref PlayerControllerB ___localPlayer, bool __state) {
-        ___localPlayer.isPlayerDead = __state;
-    }
+    static void Postfix(ref PlayerControllerB ___localPlayer, bool __state) => ___localPlayer.isPlayerDead = __state;
 }
 
 [HarmonyPatch(typeof(HUDManager))]
@@ -26,7 +24,5 @@ class SubmitChatPatch {
         ___localPlayer.isPlayerDead = false;
     }
 
-    static void Postfix(ref PlayerControllerB ___localPlayer, bool __state) {
-        ___localPlayer.isPlayerDead = __state;
-    }
+    static void Postfix(ref PlayerControllerB ___localPlayer, bool __state) => ___localPlayer.isPlayerDead = __state;
 }
