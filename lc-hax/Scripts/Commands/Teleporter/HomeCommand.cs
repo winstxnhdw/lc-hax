@@ -3,7 +3,7 @@ using GameNetcodeStuff;
 
 namespace Hax;
 
-public class HomeCommand : ICommand {
+public class HomeCommand : Teleporter, ICommand {
     Action TeleportPlayerToBaseLater(PlayerControllerB targetPlayer) => () => {
         HaxObjects.Instance?.ShipTeleporters.Renew();
 
@@ -29,6 +29,6 @@ public class HomeCommand : ICommand {
             return;
         }
 
-        Helper.PrepareToTeleport(this.TeleportPlayerToBaseLater(targetPlayer));
+        base.PrepareToTeleport(this.TeleportPlayerToBaseLater(targetPlayer));
     }
 }
