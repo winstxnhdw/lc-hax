@@ -59,9 +59,7 @@ public class Loader : MonoBehaviour {
         DontDestroyOnLoad(Loader.HaxModules);
 
         Loader.AddHaxModules<SaneMod>();
-        Loader.AddHaxModules<ChatMod>();
         Loader.AddHaxModules<StunMod>();
-        Loader.AddHaxModules<ShovelMod>();
         Loader.AddHaxModules<WeightMod>();
         Loader.AddHaxModules<StaminaMod>();
         Loader.AddHaxModules<PhantomMod>();
