@@ -9,8 +9,11 @@ public sealed class InstantInteractMod : MonoBehaviour {
         while (true) {
             HaxObjects.Instance?.InteractTriggers.Objects.ToList().ForEach(interactTrigger => {
                 interactTrigger.timeToHold = 0.0f;
-                interactTrigger.cooldownTime = 0.0f;
-                interactTrigger.currentCooldownValue = 0.0f;
+            });
+
+            FindObjectsOfType<EntranceTeleport>().ToList().ForEach(entranceTeleport => {
+                if (entranceTeleport.name is not "EntranceTeleportB") return;
+                entranceTeleport.GetComponent<InteractTrigger>().timeToHold = 0.3f;
             });
 
             yield return new WaitForSeconds(5.0f);
