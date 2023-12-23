@@ -4,7 +4,7 @@ using GameNetcodeStuff;
 
 namespace Hax;
 
-public class TeleportCommand : ICommand {
+public class TeleportCommand : Teleporter, ICommand {
     Vector3? GetCoordinates(string[] args) {
         bool isValidX = float.TryParse(args[0], out float x);
         bool isValidY = float.TryParse(args[1], out float y);
@@ -83,7 +83,7 @@ public class TeleportCommand : ICommand {
     };
 
     Result TeleportPlayerToPosition(PlayerControllerB player, Vector3 position) {
-        Helper.PrepareToTeleport(this.TeleportPlayerToPositionLater(player, position));
+        base.PrepareToTeleport(this.TeleportPlayerToPositionLater(player, position));
         return new Result(true);
     }
 
