@@ -96,8 +96,9 @@ public sealed class TriggerMod : MonoBehaviour {
             }
 
             if (gameObject.GetComponent<PlayerControllerB>().IsNotNull(out PlayerControllerB player)) {
-                Helper.PromptEnemiesToTarget(player, this.FunnyReviveEnabled)
-                      .ForEach(enemy => Console.Print($"{enemy} prompted!"));
+                new EnemyPrompter()
+                    .PromptEnemiesToTarget(player, this.FunnyReviveEnabled)
+                    .ForEach(enemy => Console.Print($"{enemy} prompted!"));
                 break;
             }
         }

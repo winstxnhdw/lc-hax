@@ -3,7 +3,7 @@ using GameNetcodeStuff;
 
 namespace Hax;
 
-public class HateCommand : ICommand {
+public class HateCommand : EnemyPrompter, ICommand {
     public void Execute(string[] args) {
         if (args.Length is 0) {
             Console.Print("Usage: /hate <player> <funnyRevive>");
@@ -15,7 +15,7 @@ public class HateCommand : ICommand {
             return;
         }
 
-        List<string> promptedEnemies = Helper.PromptEnemiesToTarget(targetPlayer, false);
+        List<string> promptedEnemies = base.PromptEnemiesToTarget(targetPlayer);
 
         if (promptedEnemies.Count is 0) {
             Console.Print("No enemies found!");
