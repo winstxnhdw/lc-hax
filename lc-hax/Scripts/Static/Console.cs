@@ -7,6 +7,7 @@ public static class Console {
     static Dictionary<string, ICommand> Commands { get; } = new() {
         { "/god", new GodCommand() },
         { "/end", new EndCommand() },
+        { "/mob", new MobCommand() },
         { "/hate", new HateCommand() },
         { "/kill", new KillCommand() },
         { "/lock", new LockCommand() },
