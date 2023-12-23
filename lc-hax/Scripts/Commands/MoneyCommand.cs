@@ -1,4 +1,3 @@
-
 namespace Hax;
 
 public class MoneyCommand : ICommand {
