@@ -29,9 +29,10 @@ public static class Console {
         { "/ct", new ChibakuTenseiCommand() },
         { "/entrance", new EntranceCommand() },
         { "/stunclick", new StunOnClickCommand() },
+        { "/levels", new Debug(new LevelsCommand()) },
         { "/timescale", new Debug(new TimescaleCommand()) },
+        { "/fixcamera", new Debug(new FixCameraCommand()) },
         { "/unlockables", new Debug(new UnlockablesCommand()) },
-        { "/fixcamera", new Debug(new FixCameraCommand()) }
     };
 
     public static void Print(string name, string? message, bool isSystem = false) {
