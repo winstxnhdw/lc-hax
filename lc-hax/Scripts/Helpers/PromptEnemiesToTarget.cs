@@ -64,7 +64,7 @@ public static partial class Helper {
                 _ = giant.Reflect().SetInternalField("lostPlayerInChase", false);
             }
 
-            else if (enemy is SandWormAI) {;
+            else if (enemy is SandWormAI) {
                 enemy.SwitchToBehaviourState(1);
             }
 
