@@ -8,6 +8,5 @@ public static partial class Helper {
         Physics.OverlapSphere(position, radius, 524288)
                .Select(collider => collider.GetComponent<EnemyAICollisionDetect>())
                .Where(enemy => enemy != null)
-               .ToList()
                .ForEach(enemy => enemy.mainScript.SetEnemyStunned(true, duration));
 }

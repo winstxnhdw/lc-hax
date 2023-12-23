@@ -1,5 +1,4 @@
 using System;
-using System.Linq;
 using GameNetcodeStuff;
 using UnityObject = UnityEngine.Object;
 
@@ -7,7 +6,7 @@ namespace Hax;
 
 public class KillCommand : ICommand {
     void ForEachEnemy(Action<EnemyAI> action) =>
-        UnityObject.FindObjectsOfType<EnemyAI>().ToList().ForEach(action);
+        UnityObject.FindObjectsOfType<EnemyAI>().ForEach(action);
 
     Result KillSelf() {
         if (!Helper.LocalPlayer.IsNotNull(out PlayerControllerB localPlayer) || localPlayer.isPlayerDead) {
@@ -28,7 +27,7 @@ public class KillCommand : ICommand {
     }
 
     Result KillAllPlayers() {
-        Helper.Players.ToList().ForEach(player => player.KillPlayer());
+        Helper.Players?.ForEach(player => player.KillPlayer());
         return new Result(true);
     }
 
