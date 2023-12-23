@@ -58,6 +58,7 @@ The complete feature set includes the following.
 - Always sane
 - Always lightweight
 - Always show HUD
+- Instant interact
 - Build anywhere
 - Clear vision
 - Show player's name in HUD
