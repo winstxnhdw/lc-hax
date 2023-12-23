@@ -54,6 +54,7 @@ The complete feature set includes the following.
 
 - Infinite stamina
 - Infinite scan range
+- Infinite ammo
 - Always sane
 - Always lightweight
 - Always show HUD
