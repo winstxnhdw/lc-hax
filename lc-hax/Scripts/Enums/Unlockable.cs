@@ -22,6 +22,5 @@ public enum Unlockable {
     JACK_O_LANTERN = 20,
     WELCOME_MAT = 21,
     GOLDFISH = 22,
-    PLUSHIE_PAJAMA_MAN = 23,
-    NULL = 99,
+    PLUSHIE_PAJAMA_MAN = 23
 }
