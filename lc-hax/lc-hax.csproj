@@ -67,6 +67,11 @@
       <HintPath>$(ReferencePath)/Unity.Netcode.Runtime.dll</HintPath>
     </Reference>
 
+    
+    <Reference Include="UnityEngine.AIModule">
+      <HintPath>$(ReferencePath)/UnityEngine.AIModule.dll</HintPath>
+    </Reference>
+
     <PackageReference Include="Lib.Harmony" Version="2.2.2">
       <NoWarn>NU1701</NoWarn>
     </PackageReference>

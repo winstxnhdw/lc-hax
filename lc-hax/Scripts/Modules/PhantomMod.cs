@@ -6,8 +6,8 @@ namespace Hax;
 public sealed class PhantomMod : MonoBehaviour {
     bool IsShiftHeld { get; set; } = false;
     bool EnablePhantom { get; set; } = false;
+    bool EnabledPossession { get; set; } = false;
     int CurrentSpectatorIndex { get; set; } = 0;
-
 
     void OnEnable() {
         InputListener.onShiftButtonHold += this.HoldShift;
@@ -21,6 +21,55 @@ public sealed class PhantomMod : MonoBehaviour {
         InputListener.onEqualsPress -= this.TogglePhantom;
         InputListener.onRightArrowKeyPress -= this.LookAtNextPlayer;
         InputListener.onLeftArrowKeyPress -= this.LookAtPreviousPlayer;
+    }
+
+    void Update() {
+        if (!Helper.CurrentCamera.IsNotNull(out Camera camera) || !camera.enabled) return;
+
+        GameObject cameraGameObject = camera.gameObject;
+
+        if (!Settings.PossessionMod.IsNotNull(out PossessionMod possessionMod)) {
+            return;
+        }
+        if (!cameraGameObject.GetComponent<KeyboardMovement>().IsNotNull(out KeyboardMovement keyboard)) {
+            return;
+        }
+
+        if (!cameraGameObject.GetComponent<MousePan>().IsNotNull(out MousePan mouse)) {
+            return;
+        }
+
+        //for handling possession mod
+        if (this.EnablePhantom) {
+            //if was enabled possession before, but no longer possesing
+            if (this.EnabledPossession && !possessionMod.Possessing) {
+                this.EnabledPossession = false;
+                possessionMod.enabled = false;
+
+                keyboard.enabled = true;
+                mouse.enabled = true;
+            }
+
+            //if not possessing any monster
+            if (!possessionMod.Possessing) return;
+
+            // possessing monster in the first frame
+            if (!this.EnabledPossession) {
+                this.EnabledPossession = true;
+                possessionMod.enabled = true;
+
+                //turn off phantom's keyboard and mouse
+                keyboard.enabled = false;
+                mouse.enabled = false;
+            }
+        }
+        else {
+            if (this.EnabledPossession) {
+                possessionMod.UnPossessEnemy();
+                this.EnabledPossession = false;
+                possessionMod.enabled = false;
+            }
+        }
     }
 
     void HoldShift(bool isHeld) => this.IsShiftHeld = isHeld;
@@ -51,6 +100,7 @@ public sealed class PhantomMod : MonoBehaviour {
 
         GameObject cameraGameObject = camera.gameObject;
         this.EnablePhantom = !this.EnablePhantom;
+        Settings.PhantomEnabled = this.EnablePhantom;
         player.enabled = !this.EnablePhantom;
 
         if (this.EnablePhantom) {
