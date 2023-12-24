@@ -53,7 +53,6 @@ public sealed class PossessionMod : MonoBehaviour {
         }
 
         if (this.FirstUpdate) {
-            enemy.SetClientCalculatingAI(false);
             if (enemy.GetComponentInChildren<Collider>().IsNotNull(out Collider enemyCollider)) {
                 enemyCollider.enabled = false;
             }
@@ -86,7 +85,6 @@ public sealed class PossessionMod : MonoBehaviour {
     public void UnPossessEnemy() {
         if (this.EnemyToPossess.IsNotNull(out EnemyAI enemy)) {
             enemy.updatePositionThreshold = 1;
-            enemy.agent.enabled = true;
             if (enemy.GetComponentInChildren<Collider>().IsNotNull(out Collider enemyCollider)) {
                 enemyCollider.enabled = true;
             }
