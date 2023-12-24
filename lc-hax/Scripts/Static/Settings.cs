@@ -10,4 +10,5 @@ public static class Settings {
     public static bool PhantomEnabled { get; set; } = false;
     public static EnemyAI? PossessedEnemy { get; set; } = null;
     public static PossessionMod? PossessionMod { get; set; } = null;
+    public static bool InvertYAxis => IngamePlayerSettings.Instance.settings.invertYAxis;
 }
