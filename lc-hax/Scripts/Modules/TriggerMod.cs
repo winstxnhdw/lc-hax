@@ -3,7 +3,7 @@ using GameNetcodeStuff;
 
 namespace Hax;
 
-public sealed class TriggerMod : MonoBehaviour {
+public sealed class TriggerMod : MonoBehaviour, IEnemyPrompter {
     bool UsingInteractRay { get; set; } = false;
     bool UsingFollowRay { get; set; } = false;
     bool FunnyReviveEnabled { get; set; } = false;
@@ -96,8 +96,7 @@ public sealed class TriggerMod : MonoBehaviour {
             }
 
             if (gameObject.GetComponent<PlayerControllerB>().IsNotNull(out PlayerControllerB player)) {
-                new EnemyPrompter()
-                    .PromptEnemiesToTarget(player, this.FunnyReviveEnabled)
+                this.PromptEnemiesToTarget(player, this.FunnyReviveEnabled)
                     .ForEach(enemy => Console.Print($"{enemy} prompted!"));
                 break;
             }
