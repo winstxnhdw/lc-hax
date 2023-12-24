@@ -3,7 +3,7 @@ using GameNetcodeStuff;
 
 namespace Hax;
 
-public class MobCommand : EnemyPrompter, ICommand {
+public class MobCommand : IEnemyPrompter, ICommand {
     public void Execute(string[] args) {
         if (args.Length is 0) {
             Console.Print("Usage: /mob <player>");
@@ -15,7 +15,7 @@ public class MobCommand : EnemyPrompter, ICommand {
             return;
         }
 
-        List<string> mobs = base.PromptEnemiesToTarget(targetPlayer, willTeleportEnemies: true);
+        List<string> mobs = this.PromptEnemiesToTarget(targetPlayer, willTeleportEnemies: true);
 
         if (mobs.Count is 0) {
             Console.Print("No mobs found!");

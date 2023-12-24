@@ -11,7 +11,7 @@ enum BehaviourState {
     UNKNOWN = 3
 }
 
-public class EnemyPrompter {
+public class EnemyPromptHandler {
     void SetBehaviourState(EnemyAI enemy, BehaviourState behaviourState) => enemy.SwitchToBehaviourState((int)behaviourState);
 
     void TeleportEnemyToPlayer(
@@ -145,7 +145,7 @@ public class EnemyPrompter {
         this.SetBehaviourState(earthLeviathan, BehaviourState.CHASE);
     }
 
-    void HandleEnemy(EnemyAI enemy, PlayerControllerB targetPlayer, bool willTeleportEnemy) {
+    public void HandleEnemy(EnemyAI enemy, PlayerControllerB targetPlayer, bool willTeleportEnemy) {
         switch (enemy) {
             case CrawlerAI thumper:
                 this.HandleThumper(thumper, targetPlayer, willTeleportEnemy);
@@ -213,7 +213,13 @@ public class EnemyPrompter {
         }
     }
 
-    public List<string> PromptEnemiesToTarget(
+}
+
+public interface IEnemyPrompter { }
+
+public static class EnemyPromptExtension {
+    public static List<string> PromptEnemiesToTarget(
+        this IEnemyPrompter _,
         PlayerControllerB player,
         bool funnyRevive = false,
         bool willTeleportEnemies = false
@@ -228,7 +234,8 @@ public class EnemyPrompter {
             Console.Print("Funny revive!");
         }
 
-        _ = roundManager.Reflect().InvokeInternalMethod("RefreshEnemiesList");
+        Reflector? reflector = roundManager.Reflect().InvokeInternalMethod("RefreshEnemiesList");
+        EnemyPromptHandler enemyPromptHandler = new();
 
         roundManager.SpawnedEnemies.ForEach((enemy) => {
             if (enemy is DocileLocustBeesAI or DoublewingAI or BlobAI or DressGirlAI or LassoManAI) return;
@@ -242,7 +249,7 @@ public class EnemyPrompter {
             enemy.ChangeEnemyOwnerServerRpc(roundManager.playersManager.localPlayerController.actualClientId);
             enemy.SetMovingTowardsTargetPlayer(player);
             enemyNames.Add(enemy.enemyType.enemyName);
-            this.HandleEnemy(enemy, player, willTeleportEnemies);
+            enemyPromptHandler.HandleEnemy(enemy, player, willTeleportEnemies);
         });
 
         return enemyNames;
