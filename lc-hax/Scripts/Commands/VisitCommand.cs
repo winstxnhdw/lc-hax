@@ -3,18 +3,22 @@ using System;
 namespace Hax;
 
 public class VisitCommand : ICommand {
-    bool TryParseLevel(string levelNameOrId, out int levelId) {
-        if (int.TryParse(levelNameOrId, out int chosenLevelId) && Enum.IsDefined(typeof(Level), chosenLevelId)) {
-            levelId = chosenLevelId;
+    bool IsValidLevelIndex(string levelIndex, out int chosenLevelId) =>
+        int.TryParse(levelIndex, out chosenLevelId) && 
+        Enum.IsDefined(typeof(Level), chosenLevelId);
+
+    bool TryParseLevel(string levelNameOrId, out int levelIndex) {
+        if (this.IsValidLevelIndex(levelNameOrId, out int chosenLevelId)) {
+            levelIndex = chosenLevelId;
             return true;
         }
 
         if (Enum.TryParse(levelNameOrId, true, out Level levelEnum)) {
-            levelId = (int)levelEnum;
+            levelIndex = (int)levelEnum;
             return true;
         }
 
-        levelId = -1;
+        levelIndex = -1;
         return false;
     }
 
@@ -29,11 +33,11 @@ public class VisitCommand : ICommand {
             return;
         }
 
-        if (!this.TryParseLevel(args[0], out int levelId)) {
+        if (!this.TryParseLevel(args[0], out int levelIndex)) {
             Console.Print("Invalid level!");
             return;
         }
 
-        Helper.StartOfRound?.ChangeLevelServerRpc(levelId, terminal.groupCredits);
+        Helper.StartOfRound?.ChangeLevelServerRpc(levelIndex, terminal.groupCredits);
     }
 }
