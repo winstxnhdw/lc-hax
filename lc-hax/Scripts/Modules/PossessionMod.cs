@@ -70,9 +70,8 @@ public sealed class PossessionMod : MonoBehaviour {
         enemy.transform.eulerAngles = enemyEuler;
         enemy.transform.position = this.transform.position;
 
-        camera.transform.position = this.transform.position + (-enemy.transform.forward * 2f) + (Vector3.up * 2.5f);
+        camera.transform.position = this.transform.position + (Vector3.up * 2.5f) - (enemy.transform.forward * 2f);
         camera.transform.rotation = this.transform.rotation;
-
 
         this.FirstUpdate = false;
     }
