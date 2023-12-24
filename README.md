@@ -55,6 +55,7 @@ The complete feature set includes the following.
 - Infinite stamina
 - Infinite scan range
 - Infinite ammo
+- No reload
 - Always sane
 - Always lightweight
 - Always show HUD
@@ -129,6 +130,7 @@ The complete feature set includes the following.
 - Lure enemies to player
 - Follow a player's movements
 - Interact with objects from far
+- Possess enemies
 
 ### Build
 
