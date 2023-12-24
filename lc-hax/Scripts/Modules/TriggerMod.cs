@@ -101,6 +101,12 @@ public sealed class TriggerMod : MonoBehaviour {
                     .ForEach(enemy => Console.Print($"{enemy} prompted!"));
                 break;
             }
+
+            if (gameObject.GetComponentInParent<EnemyAI>().IsNotNull(out EnemyAI enemy) &&
+                Settings.PossessionMod.IsNotNull(out PossessionMod possessionMod)) {
+                possessionMod.PossessEnemy(enemy);
+                break;
+            }
         }
     }
 }

@@ -69,6 +69,7 @@ public class Loader : MonoBehaviour {
         Loader.AddHaxModules<BuildAnywhereMod>();
         Loader.AddHaxModules<InstantInteractMod>();
         Loader.AddHaxModules<FollowAnotherPlayerMod>();
+        Loader.AddHaxModules<PossessionMod>();
     }
 
     public static void Unload() {
