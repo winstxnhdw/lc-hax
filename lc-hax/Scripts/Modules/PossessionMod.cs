@@ -53,8 +53,8 @@ public sealed class PossessionMod : MonoBehaviour {
         }
 
         if (this.FirstUpdate) {
-            if (enemy.GetComponentInChildren<Collider>().IsNotNull(out Collider enemyCollider)) {
-                enemyCollider.enabled = false;
+            if (enemy.GetComponentsInChildren<Collider>().IsNotNull(out Collider[] enemyColliders)) {
+                enemyColliders.ForEach(c => c.enabled = false);
             }
             rbKeyboard.Init();
             this.transform.position = enemy.transform.position;
@@ -85,8 +85,8 @@ public sealed class PossessionMod : MonoBehaviour {
     public void UnPossessEnemy() {
         if (this.EnemyToPossess.IsNotNull(out EnemyAI enemy)) {
             enemy.updatePositionThreshold = 1;
-            if (enemy.GetComponentInChildren<Collider>().IsNotNull(out Collider enemyCollider)) {
-                enemyCollider.enabled = true;
+            if (enemy.GetComponentsInChildren<Collider>().IsNotNull(out Collider[] enemyColliders)) {
+                enemyColliders.ForEach(c => c.enabled = true);
             }
         }
         this.EnemyToPossess = null;
