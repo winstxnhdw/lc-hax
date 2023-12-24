@@ -10,6 +10,9 @@ public class HealCommand : ICommand {
         hudManager.localPlayer.health = 100;
         hudManager.localPlayer.bleedingHeavily = false;
         hudManager.localPlayer.criticallyInjured = false;
+        hudManager.localPlayer.hasBeenCriticallyInjured = false;
+        hudManager.localPlayer.playerBodyAnimator.SetBool("Limp", false);
+        hudManager.HUDAnimator.SetTrigger("HealFromCritical");
         hudManager.UpdateHealthUI(hudManager.localPlayer.health, false);
     }
 }
