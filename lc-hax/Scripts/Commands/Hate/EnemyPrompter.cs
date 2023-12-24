@@ -14,17 +14,34 @@ enum BehaviourState {
 public class EnemyPrompter {
     void SetBehaviourState(EnemyAI enemy, BehaviourState behaviourState) => enemy.SwitchToBehaviourState((int)behaviourState);
 
-    void TeleportEnemyToPlayer(EnemyAI enemy, PlayerControllerB targetPlayer, bool willTeleportEnemy) {
+    void TeleportEnemyToPlayer(
+        EnemyAI enemy,
+        PlayerControllerB targetPlayer,
+        bool willTeleportEnemy,
+        bool allowedOutside = false,
+        bool allowedInside = false
+    ) {
         if (!willTeleportEnemy) return;
+        if (!allowedOutside && !targetPlayer.isInsideFactory) return;
+        if (!allowedInside && targetPlayer.isInsideFactory) return;
+
         enemy.transform.position = targetPlayer.transform.position;
         enemy.SyncPositionToClients();
     }
 
-    void HandleThumper(CrawlerAI thumper, PlayerControllerB targetPlayer) => thumper.BeginChasingPlayerServerRpc((int)targetPlayer.playerClientId);
+    void HandleThumper(CrawlerAI thumper, PlayerControllerB targetPlayer, bool willTeleportEnemy) {
+        this.TeleportEnemyToPlayer(thumper, targetPlayer, willTeleportEnemy, allowedInside: true);
+        thumper.BeginChasingPlayerServerRpc((int)targetPlayer.playerClientId);
+    }
 
-    void HandleEyelessDog(MouthDogAI eyelessDog, PlayerControllerB targetPlayer) => eyelessDog.ReactToOtherDogHowl(targetPlayer.transform.position);
+    void HandleEyelessDog(MouthDogAI eyelessDog, PlayerControllerB targetPlayer, bool willTeleportEnemy) {
+        this.TeleportEnemyToPlayer(eyelessDog, targetPlayer, willTeleportEnemy, true);
+        eyelessDog.ReactToOtherDogHowl(targetPlayer.transform.position);
+    }
 
-    void HandleBaboonHawk(BaboonBirdAI baboonHawk, PlayerControllerB targetPlayer) {
+    void HandleBaboonHawk(BaboonBirdAI baboonHawk, PlayerControllerB targetPlayer, bool willTeleportEnemy) {
+        this.TeleportEnemyToPlayer(baboonHawk, targetPlayer, willTeleportEnemy, true);
+
         Threat threat = new() {
             threatScript = targetPlayer,
             lastSeenPosition = targetPlayer.transform.position,
@@ -42,7 +59,8 @@ public class EnemyPrompter {
         _ = baboonHawk.Reflect().InvokeInternalMethod("ReactToThreat", threat);
     }
 
-    void HandleForestGiant(ForestGiantAI forestGiant, PlayerControllerB targetPlayer) {
+    void HandleForestGiant(ForestGiantAI forestGiant, PlayerControllerB targetPlayer, bool willTeleportEnemy) {
+        this.TeleportEnemyToPlayer(forestGiant, targetPlayer, willTeleportEnemy, true);
         this.SetBehaviourState(forestGiant, BehaviourState.CHASE);
         forestGiant.StopSearch(forestGiant.roamPlanet, false);
         forestGiant.chasingPlayer = targetPlayer;
@@ -58,28 +76,31 @@ public class EnemyPrompter {
         snareFlea.ClingToPlayerServerRpc(targetPlayer.playerClientId);
     }
 
-    void HandleBracken(FlowermanAI bracken) {
+    void HandleBracken(FlowermanAI bracken, PlayerControllerB targetPlayer, bool willTeleportEnemy) {
+        this.TeleportEnemyToPlayer(bracken, targetPlayer, willTeleportEnemy, allowedInside: true);
         this.SetBehaviourState(bracken, BehaviourState.AGGRAVATED);
         bracken.EnterAngerModeServerRpc(20);
     }
 
-    void HandleBunkerSpider(SandSpiderAI bunkerSpider) {
+    void HandleBunkerSpider(SandSpiderAI bunkerSpider, PlayerControllerB targetPlayer, bool willTeleportEnemy) {
+        this.TeleportEnemyToPlayer(bunkerSpider, targetPlayer, willTeleportEnemy, allowedInside: true);
         this.SetBehaviourState(bunkerSpider, BehaviourState.AGGRAVATED);
-        bunkerSpider.meshContainer.position = bunkerSpider.transform.position;
+        bunkerSpider.meshContainer.position = targetPlayer.transform.position;
         bunkerSpider.SyncMeshContainerPositionToClients();
 
         _ = bunkerSpider.Reflect()
-                         .SetInternalField("onWall", false)?
-                         .SetInternalField("watchFromDistance", false);
+                        .SetInternalField("onWall", false)?
+                        .SetInternalField("watchFromDistance", false);
     }
 
     void HandleBee(RedLocustBees bee, PlayerControllerB targetPlayer, bool willTeleportEnemy) {
-        this.TeleportEnemyToPlayer(bee, targetPlayer, willTeleportEnemy);
+        this.TeleportEnemyToPlayer(bee, targetPlayer, willTeleportEnemy, true);
         this.SetBehaviourState(bee, BehaviourState.AGGRAVATED);
         bee.hive.isHeld = true;
     }
 
-    void HandleHoardingBug(HoarderBugAI hoardingBug, PlayerControllerB targetPlayer) {
+    void HandleHoardingBug(HoarderBugAI hoardingBug, PlayerControllerB targetPlayer, bool willTeleportEnemy) {
+        this.TeleportEnemyToPlayer(hoardingBug, targetPlayer, willTeleportEnemy, allowedInside: true);
         this.SetBehaviourState(hoardingBug, BehaviourState.AGGRAVATED);
         hoardingBug.angryAtPlayer = targetPlayer;
         hoardingBug.angryTimer = float.MaxValue;
@@ -89,7 +110,8 @@ public class EnemyPrompter {
                        .InvokeInternalMethod("SyncNestPositionServerRpc", targetPlayer.transform.position);
     }
 
-    void HandleNutcracker(NutcrackerEnemyAI nutcracker, PlayerControllerB targetPlayer) {
+    void HandleNutcracker(NutcrackerEnemyAI nutcracker, PlayerControllerB targetPlayer, bool willTeleportEnemy) {
+        this.TeleportEnemyToPlayer(nutcracker, targetPlayer, willTeleportEnemy, allowedInside: true);
         this.SetBehaviourState(nutcracker, BehaviourState.AGGRAVATED);
         nutcracker.SeeMovingThreatServerRpc((int)targetPlayer.playerClientId);
 
@@ -99,31 +121,46 @@ public class EnemyPrompter {
     }
 
     void HandleMaskedPlayer(MaskedPlayerEnemy maskedPlayer, PlayerControllerB targetPlayer, bool willTeleportEnemy) {
-        this.TeleportEnemyToPlayer(maskedPlayer, targetPlayer, willTeleportEnemy);
+        this.TeleportEnemyToPlayer(maskedPlayer, targetPlayer, willTeleportEnemy, true, true);
         this.SetBehaviourState(maskedPlayer, BehaviourState.CHASE);
     }
 
     void HandleCoilHead(SpringManAI coilHead, PlayerControllerB targetPlayer, bool willTeleportEnemy) {
-        this.TeleportEnemyToPlayer(coilHead, targetPlayer, willTeleportEnemy);
+        this.TeleportEnemyToPlayer(coilHead, targetPlayer, willTeleportEnemy, allowedInside: true);
         this.SetBehaviourState(coilHead, BehaviourState.CHASE);
+    }
+
+    void HandleSporeLizard(PufferAI sporeLizard, PlayerControllerB targetPlayer, bool willTeleportEnemy) {
+        this.TeleportEnemyToPlayer(sporeLizard, targetPlayer, willTeleportEnemy, allowedInside: true);
+        this.SetBehaviourState(sporeLizard, BehaviourState.AGGRAVATED);
+    }
+
+    void HandleJester(JesterAI jester, PlayerControllerB targetPlayer, bool willTeleportEnemy) {
+        this.TeleportEnemyToPlayer(jester, targetPlayer, willTeleportEnemy, allowedInside: true);
+        this.SetBehaviourState(jester, BehaviourState.AGGRAVATED);
+    }
+
+    void HandleEarthLeviathan(SandWormAI earthLeviathan, PlayerControllerB targetPlayer, bool willTeleportEnemy) {
+        this.TeleportEnemyToPlayer(earthLeviathan, targetPlayer, willTeleportEnemy, true);
+        this.SetBehaviourState(earthLeviathan, BehaviourState.CHASE);
     }
 
     void HandleEnemy(EnemyAI enemy, PlayerControllerB targetPlayer, bool willTeleportEnemy) {
         switch (enemy) {
             case CrawlerAI thumper:
-                this.HandleThumper(thumper, targetPlayer);
+                this.HandleThumper(thumper, targetPlayer, willTeleportEnemy);
                 break;
 
             case MouthDogAI eyelessDog:
-                this.HandleEyelessDog(eyelessDog, targetPlayer);
+                this.HandleEyelessDog(eyelessDog, targetPlayer, willTeleportEnemy);
                 break;
 
             case BaboonBirdAI baboonHawk:
-                this.HandleBaboonHawk(baboonHawk, targetPlayer);
+                this.HandleBaboonHawk(baboonHawk, targetPlayer, willTeleportEnemy);
                 break;
 
             case ForestGiantAI forestGiant:
-                this.HandleForestGiant(forestGiant, targetPlayer);
+                this.HandleForestGiant(forestGiant, targetPlayer, willTeleportEnemy);
                 break;
 
             case CentipedeAI snareFlea:
@@ -131,11 +168,11 @@ public class EnemyPrompter {
                 break;
 
             case FlowermanAI bracken:
-                this.HandleBracken(bracken);
+                this.HandleBracken(bracken, targetPlayer, willTeleportEnemy);
                 break;
 
             case SandSpiderAI bunkerSpider:
-                this.HandleBunkerSpider(bunkerSpider);
+                this.HandleBunkerSpider(bunkerSpider, targetPlayer, willTeleportEnemy);
                 break;
 
             case RedLocustBees bee:
@@ -143,28 +180,31 @@ public class EnemyPrompter {
                 break;
 
             case HoarderBugAI hoardingBug:
-                this.HandleHoardingBug(hoardingBug, targetPlayer);
+                this.HandleHoardingBug(hoardingBug, targetPlayer, willTeleportEnemy);
                 break;
 
             case NutcrackerEnemyAI nutcracker:
-                this.HandleNutcracker(nutcracker, targetPlayer);
+                this.HandleNutcracker(nutcracker, targetPlayer, willTeleportEnemy);
                 break;
 
             case MaskedPlayerEnemy maskedPlayer:
                 this.HandleMaskedPlayer(maskedPlayer, targetPlayer, willTeleportEnemy);
                 break;
 
-            case SpringManAI:
-                this.HandleCoilHead((SpringManAI)enemy, targetPlayer, willTeleportEnemy);
+            case SpringManAI coilHead:
+                this.HandleCoilHead(coilHead, targetPlayer, willTeleportEnemy);
                 break;
 
-            case PufferAI:
-            case JesterAI:
-                this.SetBehaviourState(enemy, BehaviourState.AGGRAVATED);
+            case PufferAI sporeLizard:
+                this.HandleSporeLizard(sporeLizard, targetPlayer, willTeleportEnemy);
                 break;
 
-            case SandWormAI:
-                this.SetBehaviourState(enemy, BehaviourState.CHASE);
+            case JesterAI jester:
+                this.HandleJester(jester, targetPlayer, willTeleportEnemy);
+                break;
+
+            case SandWormAI earthLeviathan:
+                this.HandleEarthLeviathan(earthLeviathan, targetPlayer, willTeleportEnemy);
                 break;
 
             default:
