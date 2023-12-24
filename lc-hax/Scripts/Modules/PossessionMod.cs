@@ -53,6 +53,10 @@ public sealed class PossessionMod : MonoBehaviour {
         }
 
         if (this.FirstUpdate) {
+            enemy.SetClientCalculatingAI(false);
+            if (enemy.GetComponentInChildren<Collider>().IsNotNull(out Collider enemyCollider)) {
+                enemyCollider.enabled = false;
+            }
             rbKeyboard.Init();
             this.transform.position = enemy.transform.position;
             rbKeyboard.enabled = true;
@@ -67,7 +71,7 @@ public sealed class PossessionMod : MonoBehaviour {
         enemy.transform.eulerAngles = enemyEuler;
         enemy.transform.position = this.transform.position;
 
-        camera.transform.position = this.transform.position + (-enemy.transform.forward) + (Vector3.up * 2);
+        camera.transform.position = this.transform.position + (-enemy.transform.forward * 2f) + (Vector3.up * 2.5f);
         camera.transform.rotation = this.transform.rotation;
 
 
@@ -82,6 +86,10 @@ public sealed class PossessionMod : MonoBehaviour {
     public void UnPossessEnemy() {
         if (this.EnemyToPossess.IsNotNull(out EnemyAI enemy)) {
             enemy.updatePositionThreshold = 1;
+            enemy.agent.enabled = true;
+            if (enemy.GetComponentInChildren<Collider>().IsNotNull(out Collider enemyCollider)) {
+                enemyCollider.enabled = true;
+            }
         }
         this.EnemyToPossess = null;
     }
