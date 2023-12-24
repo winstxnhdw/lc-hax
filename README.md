@@ -56,6 +56,7 @@ The complete feature set includes the following.
 - Infinite scan range
 - Infinite ammo
 - No reload
+- No lobby refresh delay
 - Always sane
 - Always lightweight
 - Always show HUD
