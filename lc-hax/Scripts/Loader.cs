@@ -60,16 +60,17 @@ public class Loader : MonoBehaviour {
 
         Loader.AddHaxModules<SaneMod>();
         Loader.AddHaxModules<StunMod>();
+        Loader.AddHaxModules<NamesMod>();
         Loader.AddHaxModules<WeightMod>();
         Loader.AddHaxModules<StaminaMod>();
         Loader.AddHaxModules<PhantomMod>();
         Loader.AddHaxModules<TriggerMod>();
+        Loader.AddHaxModules<PossessionMod>();
         Loader.AddHaxModules<ClearVisionMod>();
         Loader.AddHaxModules<NameInWeightMod>();
         Loader.AddHaxModules<BuildAnywhereMod>();
         Loader.AddHaxModules<InstantInteractMod>();
         Loader.AddHaxModules<FollowAnotherPlayerMod>();
-        Loader.AddHaxModules<PossessionMod>();
     }
 
     public static void Unload() {
