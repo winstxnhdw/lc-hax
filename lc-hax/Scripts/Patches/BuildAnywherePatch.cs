@@ -1,5 +1,6 @@
 #pragma warning disable IDE1006
 
+using GameNetcodeStuff;
 using HarmonyLib;
 
 namespace Hax;
@@ -8,7 +9,7 @@ namespace Hax;
 [HarmonyPatch("PlayerMeetsConditionsToBuild")]
 class BuildAnywherePatch {
     static bool Prefix(ref bool __result) {
-        __result = true;
+        __result = !Helper.LocalPlayer.IsNotNull(out PlayerControllerB player) || !player.inTerminalMenu;
         return false;
     }
 }
