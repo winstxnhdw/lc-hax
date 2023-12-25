@@ -7,7 +7,7 @@ public class HomeCommand : ITeleporter, ICommand {
     Action TeleportPlayerToBaseLater(PlayerControllerB targetPlayer) => () => {
         HaxObjects.Instance?.ShipTeleporters.Renew();
 
-        if (!Helper.Teleporter.IsNotNull(out ShipTeleporter teleporter)) {
+        if (!this.TryGetTeleporter(out ShipTeleporter teleporter)) {
             Console.Print("ShipTeleporter not found!");
             return;
         }
