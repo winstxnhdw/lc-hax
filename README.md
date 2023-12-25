@@ -101,8 +101,8 @@ The complete feature set includes the following.
 | Unlock all doors              | `/unlock`                       |
 | Lock all gates                | `/lock`                         |
 | Heal self                     | `/heal`                         |
-| Explode all mines             | `/explode`                      |
-| Explode all jetpacks          | `/explode jet`                  |
+| Explode all jetpacks          | `/explode`                      |
+| Explode all landmines         | `/explode mine`                  |
 
 ### Binds
 
