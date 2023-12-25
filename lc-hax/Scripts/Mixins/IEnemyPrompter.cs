@@ -217,7 +217,7 @@ public class EnemyPromptHandler {
 
 public interface IEnemyPrompter { }
 
-public static class EnemyPromptExtension {
+public static class EnemyPromptMixin {
     public static List<string> PromptEnemiesToTarget(
         this IEnemyPrompter _,
         PlayerControllerB player,

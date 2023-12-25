@@ -43,7 +43,7 @@ public class TeleportCommand : ITeleporter, ICommand {
     Action PlaceAndTeleport(PlayerControllerB player, Vector3 position) => () => {
         HaxObjects.Instance?.ShipTeleporters.Renew();
 
-        if (!Helper.Teleporter.IsNotNull(out ShipTeleporter teleporter)) {
+        if (!this.TryGetTeleporter(out ShipTeleporter teleporter)) {
             Console.Print("ShipTeleporter not found!");
             return;
         }
