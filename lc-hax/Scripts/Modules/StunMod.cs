@@ -1,5 +1,4 @@
 using UnityEngine;
-using GameNetcodeStuff;
 
 namespace Hax;
 
@@ -14,8 +13,8 @@ public sealed class StunMod : MonoBehaviour {
 
     void Stun() {
         if (!Settings.EnableStunOnLeftClick) return;
-        if (!Helper.LocalPlayer.IsNotNull(out PlayerControllerB player)) return;
+        if (!Helper.CurrentCamera.IsNotNull(out Camera camera)) return;
 
-        Helper.Stun(player.transform.position, 5.0f);
+        Helper.Stun(camera.transform.position, 5.0f);
     }
 }

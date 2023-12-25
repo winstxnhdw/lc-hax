@@ -1,4 +1,4 @@
-using GameNetcodeStuff;
+using UnityEngine;
 
 namespace Hax;
 
@@ -14,11 +14,11 @@ public class StunCommand : ICommand {
             return;
         }
 
-        if (!Helper.LocalPlayer.IsNotNull(out PlayerControllerB player)) {
+        if (!Helper.CurrentCamera.IsNotNull(out Camera camera)) {
             Console.Print("Could not find the player!");
             return;
         }
 
-        Helper.Stun(player.transform.position, float.MaxValue, stunDuration);
+        Helper.Stun(camera.transform.position, float.MaxValue, stunDuration);
     }
 }
