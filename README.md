@@ -89,6 +89,7 @@ The complete feature set includes the following.
 | Kill all enemies on client    | `/kill --localenemy`            |
 | Modify shovel damage          | `/shovel <force=1>`             |
 | Give or take money            | `/money <amount>`               |
+| Add or remove experience      | `/xp <amount>`                  |
 | Place an unlockable           | `/build <unlockable>`           |
 | Change moons                  | `/visit <moons>`                |
 | Stun enemies                  | `/stun <duration>`              |
@@ -96,6 +97,7 @@ The complete feature set includes the following.
 | End the game                  | `/end <player=-1>`              |
 | Start the game                | `/start`                        |
 | List all players              | `/players`                      |
+| Toggle the Beta badge         | `/beta`                         |
 | Get coordinates               | `/xyz`                          |
 | Toggle God mode               | `/god`                          |
 | Unlock all doors              | `/unlock`                       |
