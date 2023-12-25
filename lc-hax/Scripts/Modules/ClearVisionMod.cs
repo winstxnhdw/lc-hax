@@ -65,7 +65,7 @@ public sealed class ClearVisionMod : MonoBehaviour {
             HaxObjects
                 .Instance?
                 .LocalVolumetricFogs
-                .Objects?
+                .Objects
                 .ForEach(localVolumetricFog =>
                     localVolumetricFog.gameObject.SetActive(false)
                 );
@@ -79,7 +79,7 @@ public sealed class ClearVisionMod : MonoBehaviour {
             HaxObjects
                 .Instance?
                 .SteamValves
-                .Objects?
+                .Objects
                 .ForEach(valve =>
                     valve.valveSteamParticle.Stop(true, ParticleSystemStopBehavior.StopEmittingAndClear)
                 );
