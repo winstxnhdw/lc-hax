@@ -60,6 +60,7 @@ The complete feature set includes the following.
 - Always sane
 - Always lightweight
 - Always show HUD
+- Always show names
 - Instant interact
 - Build anywhere
 - Clear vision
