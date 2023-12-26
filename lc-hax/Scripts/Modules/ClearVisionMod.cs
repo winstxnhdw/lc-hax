@@ -67,7 +67,7 @@ public sealed class ClearVisionMod : MonoBehaviour {
                 .LocalVolumetricFogs
                 .Objects
                 .ForEach(localVolumetricFog =>
-                    localVolumetricFog.gameObject.SetActive(false)
+                    localVolumetricFog?.gameObject.SetActive(false)
                 );
 
             yield return new WaitForSeconds(5.0f);
@@ -81,7 +81,7 @@ public sealed class ClearVisionMod : MonoBehaviour {
                 .SteamValves
                 .Objects
                 .ForEach(valve =>
-                    valve.valveSteamParticle.Stop(true, ParticleSystemStopBehavior.StopEmittingAndClear)
+                    valve?.valveSteamParticle.Stop(true, ParticleSystemStopBehavior.StopEmittingAndClear)
                 );
 
             yield return new WaitForSeconds(5.0f);
