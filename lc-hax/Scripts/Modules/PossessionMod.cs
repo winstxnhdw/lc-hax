@@ -77,6 +77,14 @@ public sealed class PossessionMod : MonoBehaviour {
     }
 
     public void PossessEnemy(EnemyAI enemy) {
+        //if previous enemy exists, reset it
+        if (this.EnemyToPossess.IsNotNull(out EnemyAI prevEnemy)) {
+            prevEnemy.updatePositionThreshold = 1;
+            if (enemy.GetComponentsInChildren<Collider>().IsNotNull(out Collider[] enemyColliders)) {
+                enemyColliders.ForEach(c => c.enabled = true);
+            }
+        }
+
         this.EnemyToPossess = enemy;
         this.FirstUpdate = true;
     }
