@@ -25,6 +25,7 @@ public static class Console {
         { "/shovel", new ShovelCommand() },
         { "/unlock", new UnlockCommand() },
         { "/random", new RandomCommand() },
+        { "/demigod", new DemiGodCommand() },
         { "/start", new StartGameCommand() },
         { "/grab", new GrabCommand() },
         // { "/pumpkin", new PumpkinCommand() },

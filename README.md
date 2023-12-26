@@ -104,11 +104,12 @@ The complete feature set includes the following.
 | Toggle the Beta badge         | `/beta`                         |
 | Get coordinates               | `/xyz`                          |
 | Toggle God mode               | `/god`                          |
+| Toggle Demigod mode           | `/demigod`                      |
 | Unlock all doors              | `/unlock`                       |
 | Lock all gates                | `/lock`                         |
 | Heal self                     | `/heal`                         |
 | Explode all jetpacks          | `/explode`                      |
-| Explode all landmines         | `/explode mine`                  |
+| Explode all landmines         | `/explode mine`                 |
 
 ### Binds
 
