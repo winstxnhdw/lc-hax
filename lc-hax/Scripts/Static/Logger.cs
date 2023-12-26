@@ -15,4 +15,6 @@ public static class Logger {
             );
         }
     }
+
+    public static void Write(Exception exception) => Logger.Write(exception.ToString());
 }
