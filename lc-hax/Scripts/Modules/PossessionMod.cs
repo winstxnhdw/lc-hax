@@ -1,7 +1,6 @@
 using UnityEngine;
 using System.Collections;
 using GameNetcodeStuff;
-using System.ComponentModel;
 
 namespace Hax;
 
@@ -75,13 +74,7 @@ public sealed class PossessionMod : MonoBehaviour {
             mousePan.enabled = true;
 
         }
-
-        enemy.ChangeEnemyOwnerServerRpc(localPlayer.actualClientId);
-        enemy.updatePositionThreshold = 0;
-        Vector3 enemyEuler = enemy.transform.eulerAngles;
-        enemyEuler.y = this.transform.eulerAngles.y;
-        enemy.transform.eulerAngles = enemyEuler;
-        enemy.transform.position = this.transform.position;
+        this.UpdateEnemyPositionToHere(enemy);
 
         camera.transform.position = this.transform.position + (Vector3.up * 2.5f) - (enemy.transform.forward * 2f);
         camera.transform.rotation = this.transform.rotation;
@@ -89,30 +82,44 @@ public sealed class PossessionMod : MonoBehaviour {
         this.FirstUpdate = false;
     }
 
-    public void PossessEnemy(EnemyAI enemy) {
+    private void UpdateEnemyPositionToHere(EnemyAI enemy) {
+        if (!Helper.LocalPlayer.IsNotNull(out PlayerControllerB localPlayer)) {
+            return;
+        }
+
+        enemy.ChangeEnemyOwnerServerRpc(localPlayer.actualClientId);
+        enemy.updatePositionThreshold = 0;
+        Vector3 enemyEuler = enemy.transform.eulerAngles;
+        enemyEuler.y = this.transform.eulerAngles.y;
+        enemy.transform.eulerAngles = enemyEuler;
+        enemy.transform.position = this.transform.position;
+    }
+
+    private void UnPossessCurrentEnemy() {
         //if previous enemy exists, reset it
         if (this.EnemyToPossess.IsNotNull(out EnemyAI prevEnemy)) {
             prevEnemy.updatePositionThreshold = 1;
             prevEnemy.agent.updatePosition = true;
             prevEnemy.agent.updateRotation = true;
-            if (enemy.GetComponentsInChildren<Collider>().IsNotNull(out Collider[] enemyColliders)) {
+            this.UpdateEnemyPositionToHere(prevEnemy);
+            _ = prevEnemy.agent.Warp(prevEnemy.transform.position);
+
+            if (prevEnemy.GetComponentsInChildren<Collider>().IsNotNull(out Collider[] enemyColliders)) {
                 enemyColliders.ForEach(c => c.enabled = true);
             }
         }
+    }
+
+    public void PossessEnemy(EnemyAI enemy) {
+        this.UnPossessCurrentEnemy();
 
         this.EnemyToPossess = enemy;
         this.FirstUpdate = true;
     }
 
     public void UnPossessEnemy() {
-        if (this.EnemyToPossess.IsNotNull(out EnemyAI enemy)) {
-            enemy.updatePositionThreshold = 1;
-            enemy.agent.updatePosition = true;
-            enemy.agent.updateRotation = true;
-            if (enemy.GetComponentsInChildren<Collider>().IsNotNull(out Collider[] enemyColliders)) {
-                enemyColliders.ForEach(c => c.enabled = true);
-            }
-        }
+        this.UnPossessCurrentEnemy();
+
         this.EnemyToPossess = null;
     }
 }
