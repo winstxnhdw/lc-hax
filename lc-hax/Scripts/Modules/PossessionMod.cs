@@ -1,4 +1,5 @@
 using UnityEngine;
+using System.Collections;
 using GameNetcodeStuff;
 
 namespace Hax;
@@ -39,6 +40,15 @@ public sealed class PossessionMod : MonoBehaviour {
     }
 
     void Update() {
+        _ = this.StartCoroutine(this.EndOfFrameCoroutine());
+    }
+
+    IEnumerator EndOfFrameCoroutine() {
+        yield return new WaitForEndOfFrame();
+        this.EndOfFrameUpdate();
+    }
+
+    private void EndOfFrameUpdate() {
         if (!this.MousePan.IsNotNull(out MousePan mousePan) ||
             !this.RBKeyboard.IsNotNull(out RBKeyboardMovement rbKeyboard))
             return;
