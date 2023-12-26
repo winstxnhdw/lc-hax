@@ -43,7 +43,6 @@ public class RBKeyboardMovement : MonoBehaviour {
 
     void Update() {
         if (!Keyboard.current.IsNotNull(out Keyboard keyboard)) return;
-        if (!this.rb.IsNotNull(out Rigidbody rb)) return;
 
         Vector3 direction = new(
             keyboard.dKey.ReadValue() - keyboard.aKey.ReadValue(),
