@@ -20,6 +20,7 @@ public sealed class PossessionMod : MonoBehaviour {
     }
 
     void OnEnable() {
+        InputListener.onXPress += this.ToggleRealisticPossession;
         InputListener.onZPress += this.UnPossessEnemy;
         if (!this.MousePan.IsNotNull(out MousePan mousePan) ||
             !this.RBKeyboard.IsNotNull(out RBKeyboardMovement rbKeyboard))
@@ -30,6 +31,7 @@ public sealed class PossessionMod : MonoBehaviour {
     }
 
     void OnDisable() {
+        InputListener.onXPress -= this.ToggleRealisticPossession;
         InputListener.onZPress -= this.UnPossessEnemy;
         if (!this.MousePan.IsNotNull(out MousePan mousePan) ||
             !this.RBKeyboard.IsNotNull(out RBKeyboardMovement rbKeyboard))
@@ -37,6 +39,15 @@ public sealed class PossessionMod : MonoBehaviour {
 
         mousePan.enabled = false;
         rbKeyboard.enabled = false;
+    }
+
+    private void ToggleRealisticPossession() {
+        Settings.RealisticPossessionEnabled = !Settings.RealisticPossessionEnabled;
+        Console.Print($"Realistic Possession:{Settings.RealisticPossessionEnabled}");
+
+        if (!this.EnemyToPossess.IsNotNull(out EnemyAI enemy)) return;
+        enemy.agent.updatePosition = Settings.RealisticPossessionEnabled;
+        enemy.agent.updateRotation = Settings.RealisticPossessionEnabled;
     }
 
     void Update() {
@@ -66,8 +77,9 @@ public sealed class PossessionMod : MonoBehaviour {
             if (enemy.GetComponentsInChildren<Collider>().IsNotNull(out Collider[] enemyColliders)) {
                 enemyColliders.ForEach(c => c.enabled = false);
             }
-            enemy.agent.updatePosition = false;
-            enemy.agent.updateRotation = false;
+            //only works if you enable it before FirstUpdate happens
+            enemy.agent.updatePosition = Settings.RealisticPossessionEnabled;
+            enemy.agent.updateRotation = Settings.RealisticPossessionEnabled;
             rbKeyboard.Init();
             this.transform.position = enemy.transform.position;
             rbKeyboard.enabled = true;
