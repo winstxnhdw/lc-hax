@@ -11,7 +11,7 @@ public static class ITeleporterMixin {
 
     public static bool TeleporterExists(this ITeleporter self) {
         HaxObjects.Instance?.ShipTeleporters.Renew();
-        return self.TryGetTeleporter(out ShipTeleporter _) is false;
+        return self.TryGetTeleporter(out ShipTeleporter _);
     }
 
     public static void PrepareToTeleport(this ITeleporter self, Action action) {
