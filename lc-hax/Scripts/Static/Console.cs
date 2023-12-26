@@ -26,6 +26,7 @@ public static class Console {
         { "/unlock", new UnlockCommand() },
         { "/random", new RandomCommand() },
         { "/start", new StartGameCommand() },
+        { "/grab", new GrabCommand() },
         // { "/pumpkin", new PumpkinCommand() },
         { "/players", new PlayersCommand() },
         { "/explode", new ExplodeCommand() },

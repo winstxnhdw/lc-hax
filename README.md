@@ -99,6 +99,7 @@ The complete feature set includes the following.
 | End the game                  | `/end <player=-1>`              |
 | Start the game                | `/start`                        |
 | List all players              | `/players`                      |
+| Grab all scraps               | `/grab`                         |
 | Toggle the Beta badge         | `/beta`                         |
 | Get coordinates               | `/xyz`                          |
 | Toggle God mode               | `/god`                          |
