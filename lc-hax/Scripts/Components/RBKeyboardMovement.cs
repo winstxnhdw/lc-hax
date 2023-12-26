@@ -1,15 +1,17 @@
 using UnityEngine;
 using GameNetcodeStuff;
 using UnityEngine.InputSystem;
+using System.Collections.Generic;
 
 namespace Hax;
 
 public class RBKeyboardMovement : MonoBehaviour {
     const float baseSpeed = 25;
-    const float verticalMultiplier = 2f;
+    const float jumpForce = 12f;
     float SprintMultiplier { get; set; } = 1;
     Rigidbody? rb = null;
     SphereCollider? sphereCollider = null;
+    List<Collider> CollidedColliders { get; } = [];
 
     void Awake() {
         this.rb = this.gameObject.AddComponent<Rigidbody>();
@@ -41,6 +43,7 @@ public class RBKeyboardMovement : MonoBehaviour {
 
     void Update() {
         if (!Keyboard.current.IsNotNull(out Keyboard keyboard)) return;
+        if (!this.rb.IsNotNull(out Rigidbody rb)) return;
 
         Vector3 direction = new(
             keyboard.dKey.ReadValue() - keyboard.aKey.ReadValue(),
@@ -50,6 +53,9 @@ public class RBKeyboardMovement : MonoBehaviour {
 
         this.UpdateSprintMultiplier(keyboard);
         this.Move(direction);
+
+        if (keyboard.spaceKey.wasPressedThisFrame) this.Jump();
+        if (keyboard.spaceKey.isPressed) this.BHop();
     }
 
     void UpdateSprintMultiplier(Keyboard keyboard) {
@@ -69,9 +75,31 @@ public class RBKeyboardMovement : MonoBehaviour {
 
         Vector3 translatedDirection =
             (right * direction.x) +
-            (Vector3.up * direction.y * verticalMultiplier) +
             (forward * direction.z);
 
         rb.velocity += translatedDirection * Time.deltaTime * baseSpeed * this.SprintMultiplier;
+    }
+
+    void Jump() {
+        if (!this.rb.IsNotNull(out Rigidbody rb)) return;
+
+        Vector3 newVelocity = rb.velocity;
+        newVelocity.y = jumpForce;
+        rb.velocity = newVelocity;
+    }
+
+    void BHop() {
+        //this method covers most cases
+        if (this.CollidedColliders.Count > 0) {
+            this.Jump();
+        }
+    }
+
+    void OnCollisionEnter(Collision collision) {
+        this.CollidedColliders.Add(collision.collider);
+    }
+
+    void OnCollisionExit(Collision collision) {
+        _ = this.CollidedColliders.Remove(collision.collider);
     }
 }
