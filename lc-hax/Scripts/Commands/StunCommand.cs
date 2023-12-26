@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace Hax;
 
-public class StunCommand : ICommand {
+public class StunCommand : IStun, ICommand {
     public void Execute(string[] args) {
         if (args.Length is 0) {
             Console.Print("Usage: /stun <duration>");
@@ -19,6 +19,6 @@ public class StunCommand : ICommand {
             return;
         }
 
-        Helper.Stun(camera.transform.position, float.MaxValue, stunDuration);
+        this.Stun(camera.transform.position, float.MaxValue, stunDuration);
     }
 }
