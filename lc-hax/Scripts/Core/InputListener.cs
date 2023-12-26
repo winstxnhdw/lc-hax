@@ -18,6 +18,7 @@ public class InputListener : MonoBehaviour {
     public static event Action? onLeftBracketPress;
     public static event Action? onRightBracketPress;
     public static event Action? onZPress;
+    public static event Action? onXPress;
 
     Dictionary<Func<bool>, Action> InputActions { get; } = new() {
         { () => true, () => InputListener.onShiftButtonHold?.Invoke(Keyboard.current[Key.LeftShift].isPressed) },
@@ -32,6 +33,7 @@ public class InputListener : MonoBehaviour {
         { () => Mouse.current.middleButton.wasPressedThisFrame, () => InputListener.onMiddleButtonPress?.Invoke() },
         { () => Mouse.current.leftButton.wasPressedThisFrame, () => InputListener.onLeftButtonPress?.Invoke() },
         { () => Keyboard.current[Key.Z].wasPressedThisFrame, () => InputListener.onZPress?.Invoke() },
+        { () => Keyboard.current[Key.X].wasPressedThisFrame, () => InputListener.onXPress?.Invoke() },
     };
 
     void Update() {

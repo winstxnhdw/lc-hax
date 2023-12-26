@@ -11,4 +11,5 @@ public static class Settings {
     public static EnemyAI? PossessedEnemy { get; set; } = null;
     public static PossessionMod? PossessionMod { get; set; } = null;
     public static bool InvertYAxis => IngamePlayerSettings.Instance.settings.invertYAxis;
+    public static bool RealisticPossessionEnabled { get; set; } = false;
 }
