@@ -104,7 +104,7 @@ The complete feature set includes the following.
 | Toggle the Beta badge         | `/beta`                         |
 | Get coordinates               | `/xyz`                          |
 | Toggle God mode               | `/god`                          |
-| Toggle Demigod mode           | `/demigod`                      |
+| God mode with team-killing    | `/demigod`                      |
 | Unlock all doors              | `/unlock`                       |
 | Lock all gates                | `/lock`                         |
 | Heal self                     | `/heal`                         |
