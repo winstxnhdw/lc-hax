@@ -1,6 +1,7 @@
 using UnityEngine;
 using System.Collections;
 using GameNetcodeStuff;
+using UnityEngine.AI;
 
 namespace Hax;
 
@@ -46,8 +47,9 @@ public sealed class PossessionMod : MonoBehaviour {
         Console.Print($"Realistic Possession:{Settings.RealisticPossessionEnabled}");
 
         if (!this.EnemyToPossess.IsNotNull(out EnemyAI enemy)) return;
-        enemy.agent.updatePosition = Settings.RealisticPossessionEnabled;
-        enemy.agent.updateRotation = Settings.RealisticPossessionEnabled;
+        if (!enemy.agent.IsNotNull(out NavMeshAgent agent)) return;
+        agent.updatePosition = Settings.RealisticPossessionEnabled;
+        agent.updateRotation = Settings.RealisticPossessionEnabled;
     }
 
     void Update() {
@@ -67,8 +69,7 @@ public sealed class PossessionMod : MonoBehaviour {
         if (!this.EnemyToPossess.IsNotNull(out EnemyAI enemy) ||
             !Helper.CurrentCamera.IsNotNull(out Camera camera) ||
             !camera.enabled ||
-            !Helper.LocalPlayer.IsNotNull(out PlayerControllerB localPlayer) ||
-            !enemy.GetComponentInChildren<Rigidbody>().IsNotNull(out Rigidbody _)) {
+            !Helper.LocalPlayer.IsNotNull(out PlayerControllerB localPlayer)) {
 
             return;
         }
@@ -77,9 +78,13 @@ public sealed class PossessionMod : MonoBehaviour {
             if (enemy.GetComponentsInChildren<Collider>().IsNotNull(out Collider[] enemyColliders)) {
                 enemyColliders.ForEach(c => c.enabled = false);
             }
+
             //only works if you enable it before FirstUpdate happens
-            enemy.agent.updatePosition = Settings.RealisticPossessionEnabled;
-            enemy.agent.updateRotation = Settings.RealisticPossessionEnabled;
+            if (enemy.agent.IsNotNull(out NavMeshAgent agent)) {
+                agent.updatePosition = Settings.RealisticPossessionEnabled;
+                agent.updateRotation = Settings.RealisticPossessionEnabled;
+            }
+
             rbKeyboard.Init();
             this.transform.position = enemy.transform.position;
             rbKeyboard.enabled = true;
@@ -107,30 +112,28 @@ public sealed class PossessionMod : MonoBehaviour {
         enemy.transform.position = this.transform.position;
     }
 
-    private void UnPossessCurrentEnemy() {
-        //if previous enemy exists, reset it
-        if (this.EnemyToPossess.IsNotNull(out EnemyAI prevEnemy)) {
-            prevEnemy.updatePositionThreshold = 1;
-            prevEnemy.agent.updatePosition = true;
-            prevEnemy.agent.updateRotation = true;
-            this.UpdateEnemyPositionToHere(prevEnemy);
-            _ = prevEnemy.agent.Warp(prevEnemy.transform.position);
-
-            if (prevEnemy.GetComponentsInChildren<Collider>().IsNotNull(out Collider[] enemyColliders)) {
-                enemyColliders.ForEach(c => c.enabled = true);
-            }
-        }
-    }
-
     public void PossessEnemy(EnemyAI enemy) {
-        this.UnPossessCurrentEnemy();
+        this.UnPossessEnemy();
 
         this.EnemyToPossess = enemy;
         this.FirstUpdate = true;
     }
 
     public void UnPossessEnemy() {
-        this.UnPossessCurrentEnemy();
+        //if previous enemy exists, reset it
+        if (this.EnemyToPossess.IsNotNull(out EnemyAI prevEnemy)) {
+            prevEnemy.updatePositionThreshold = 1;
+            if (prevEnemy.agent.IsNotNull(out NavMeshAgent agent)) {
+                agent.updatePosition = true;
+                agent.updateRotation = true;
+                this.UpdateEnemyPositionToHere(prevEnemy);
+                _ = prevEnemy.agent.Warp(prevEnemy.transform.position);
+            }
+
+            if (prevEnemy.GetComponentsInChildren<Collider>().IsNotNull(out Collider[] enemyColliders)) {
+                enemyColliders.ForEach(c => c.enabled = true);
+            }
+        }
 
         this.EnemyToPossess = null;
     }
