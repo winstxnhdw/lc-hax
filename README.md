@@ -55,6 +55,7 @@ The complete feature set includes the following.
 - Infinite stamina
 - Infinite scan range
 - Infinite ammo
+- Infinite charge
 - No reload
 - No lobby refresh delay
 - Always sane
