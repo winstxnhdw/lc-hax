@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace Hax;
 
-public sealed class StunMod : MonoBehaviour {
+public sealed class StunMod : MonoBehaviour, IStun {
     void OnEnable() {
         InputListener.onLeftButtonPress += this.Stun;
     }
@@ -15,6 +15,6 @@ public sealed class StunMod : MonoBehaviour {
         if (!Settings.EnableStunOnLeftClick) return;
         if (!Helper.CurrentCamera.IsNotNull(out Camera camera)) return;
 
-        Helper.Stun(camera.transform.position, 5.0f);
+        this.Stun(camera.transform.position, 5.0f);
     }
 }
