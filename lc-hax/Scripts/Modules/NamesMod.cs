@@ -4,12 +4,11 @@ using UnityEngine;
 namespace Hax;
 
 public sealed class NamesMod : MonoBehaviour {
+    void ShowNameBillboard() => Helper.Players?.ForEach(player => player.ShowNameBillboard());
+
     IEnumerator ShowNames() {
         while (true) {
-            Helper.Players?.ForEach(player => {
-                player.ShowNameBillboard();
-            });
-
+            this.ShowNameBillboard();
             yield return new WaitForEndOfFrame();
         }
     }
