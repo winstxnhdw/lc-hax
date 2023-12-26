@@ -1,6 +1,7 @@
 using UnityEngine;
 using System.Collections;
 using GameNetcodeStuff;
+using System.ComponentModel;
 
 namespace Hax;
 
@@ -66,6 +67,8 @@ public sealed class PossessionMod : MonoBehaviour {
             if (enemy.GetComponentsInChildren<Collider>().IsNotNull(out Collider[] enemyColliders)) {
                 enemyColliders.ForEach(c => c.enabled = false);
             }
+            enemy.agent.updatePosition = false;
+            enemy.agent.updateRotation = false;
             rbKeyboard.Init();
             this.transform.position = enemy.transform.position;
             rbKeyboard.enabled = true;
@@ -90,6 +93,8 @@ public sealed class PossessionMod : MonoBehaviour {
         //if previous enemy exists, reset it
         if (this.EnemyToPossess.IsNotNull(out EnemyAI prevEnemy)) {
             prevEnemy.updatePositionThreshold = 1;
+            prevEnemy.agent.updatePosition = true;
+            prevEnemy.agent.updateRotation = true;
             if (enemy.GetComponentsInChildren<Collider>().IsNotNull(out Collider[] enemyColliders)) {
                 enemyColliders.ForEach(c => c.enabled = true);
             }
@@ -102,6 +107,8 @@ public sealed class PossessionMod : MonoBehaviour {
     public void UnPossessEnemy() {
         if (this.EnemyToPossess.IsNotNull(out EnemyAI enemy)) {
             enemy.updatePositionThreshold = 1;
+            enemy.agent.updatePosition = true;
+            enemy.agent.updateRotation = true;
             if (enemy.GetComponentsInChildren<Collider>().IsNotNull(out Collider[] enemyColliders)) {
                 enemyColliders.ForEach(c => c.enabled = true);
             }
