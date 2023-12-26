@@ -4,7 +4,7 @@ namespace Hax;
 
 public class VisitCommand : ICommand {
     bool IsValidLevelIndex(string levelIndex, out int chosenLevelId) =>
-        int.TryParse(levelIndex, out chosenLevelId) && 
+        int.TryParse(levelIndex, out chosenLevelId) &&
         Enum.IsDefined(typeof(Level), chosenLevelId);
 
     bool TryParseLevel(string levelNameOrId, out int levelIndex) {
