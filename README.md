@@ -56,13 +56,13 @@ The complete feature set includes the following.
 - Infinite scan range
 - Infinite ammo
 - No reload
-- No bend Zap gun
 - No lobby refresh delay
 - Always sane
 - Always lightweight
 - Always show HUD
 - Always show names
 - Instant interact
+- Stable Zap gun
 - Build anywhere
 - Clear vision
 - Show player's name in HUD
