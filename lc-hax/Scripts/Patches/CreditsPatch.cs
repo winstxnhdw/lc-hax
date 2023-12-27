@@ -6,18 +6,20 @@ namespace Hax;
 
 [HarmonyPatch(typeof(Terminal), nameof(Terminal.SyncGroupCreditsClientRpc))]
 class CreditsPatch {
-    static bool IsNotSynced { get; set; } = true;
+    static bool IsSynced { get; set; } = false;
 
     static bool Prefix(Terminal __instance) {
-        if (!Setting.EnableBlockCredits) return true;
-        if (CreditsPatch.IsNotSynced) {
-            __instance.SyncGroupCreditsServerRpc(
-                __instance.groupCredits,
-                __instance.numberOfItemsInDropship
-            );
-        }
+        if (!Setting.EnableBlockCredits || CreditsPatch.IsSynced) return true;
 
-        CreditsPatch.IsNotSynced = !CreditsPatch.IsNotSynced;
+        CreditsPatch.IsSynced = true;
+
+        __instance.SyncGroupCreditsServerRpc(
+            __instance.groupCredits,
+            __instance.numberOfItemsInDropship
+        );
+
+        CreditsPatch.IsSynced = false;
+
         return false;
     }
 }
