@@ -41,7 +41,7 @@ public sealed class TriggerMod : MonoBehaviour, IEnemyPrompter {
             foreach (RaycastHit raycastHit in Helper.RaycastForward()) {
                 GameObject gameObject = raycastHit.collider.gameObject;
 
-                if (gameObject.GetComponent<PlayerControllerB>().IsNotNull(out PlayerControllerB player)) {
+                if (gameObject.TryGetComponent(out PlayerControllerB player)) {
                     Console.Print($"Following #{player.playerClientId} {player.playerUsername}!");
                     Settings.PlayerToFollow = player;
                     break;
@@ -53,7 +53,7 @@ public sealed class TriggerMod : MonoBehaviour, IEnemyPrompter {
 
         if (this.UsingInteractRay) {
             foreach (RaycastHit raycastHit in Helper.RaycastForward(0.25f)) {
-                if (!raycastHit.collider.gameObject.GetComponent<InteractTrigger>().IsNotNull(out InteractTrigger interactTrigger)) {
+                if (!raycastHit.collider.gameObject.TryGetComponent(out InteractTrigger interactTrigger)) {
                     continue;
                 }
 
@@ -72,30 +72,30 @@ public sealed class TriggerMod : MonoBehaviour, IEnemyPrompter {
         foreach (RaycastHit raycastHit in Helper.RaycastForward()) {
             GameObject gameObject = raycastHit.collider.gameObject;
 
-            if (gameObject.GetComponent<TerminalAccessibleObject>().IsNotNull(out TerminalAccessibleObject terminalObject)) {
+            if (gameObject.TryGetComponent(out TerminalAccessibleObject terminalObject)) {
                 terminalObject.SetDoorOpenServerRpc(!terminalObject.Reflect().GetInternalField<bool>("isDoorOpen"));
             }
 
-            if (gameObject.GetComponent<Turret>().IsNotNull(out Turret turret)) {
+            if (gameObject.TryGetComponent(out Turret turret)) {
                 turret.EnterBerserkModeServerRpc(-1);
             }
 
-            if (gameObject.GetComponent<Landmine>().IsNotNull(out Landmine landmine)) {
+            if (gameObject.TryGetComponent(out Landmine landmine)) {
                 landmine.TriggerMine();
                 break;
             }
 
-            if (gameObject.GetComponent<JetpackItem>().IsNotNull(out JetpackItem jetpack)) {
+            if (gameObject.TryGetComponent(out JetpackItem jetpack)) {
                 jetpack.ExplodeJetpackServerRpc();
                 break;
             }
 
-            if (gameObject.GetComponent<DoorLock>().IsNotNull(out DoorLock doorLock)) {
+            if (gameObject.TryGetComponent(out DoorLock doorLock)) {
                 doorLock.UnlockDoorSyncWithServer();
                 break;
             }
 
-            if (gameObject.GetComponent<PlayerControllerB>().IsNotNull(out PlayerControllerB player)) {
+            if (gameObject.TryGetComponent(out PlayerControllerB player)) {
                 this.PromptEnemiesToTarget(player, this.FunnyReviveEnabled)
                     .ForEach(enemy => Console.Print($"{enemy} prompted!"));
                 break;

@@ -37,7 +37,7 @@ public sealed class ClearVisionMod : MonoBehaviour {
                 continue;
             }
 
-            if (!Helper.Try(sunIndirect.GetComponent<HDAdditionalLightData>).IsNotNull(out HDAdditionalLightData lightData)) {
+            if (!sunIndirect.TryGetComponent(out HDAdditionalLightData lightData)) {
                 yield return new WaitForEndOfFrame();
                 continue;
             }
