@@ -9,17 +9,19 @@ namespace Hax;
 [HarmonyPatch(typeof(PlayerControllerB))]
 [HarmonyPatch("SetHoverTipAndCurrentInteractTrigger")]
 class GrabPatch {
-    static void Prefix(ref bool ___isGrabbingObjectAnimation) {
-        ___isGrabbingObjectAnimation = true;
+    static void Prefix(ref bool ___isGrabbingObjectAnimation, ref bool __state) {
+        __state = ___isGrabbingObjectAnimation;
+        ___isGrabbingObjectAnimation = false;
     }
 
     static void Postfix(
+        ref bool ___isGrabbingObjectAnimation,
         ref int ___interactableObjectsMask,
         ref float ___grabDistance,
-        ref bool ___isGrabbingObjectAnimation
+        bool __state
     ) {
+        ___isGrabbingObjectAnimation = __state;
         ___interactableObjectsMask = LayerMask.GetMask(["Props", "InteractableObject"]);
         ___grabDistance = float.MaxValue;
-        ___isGrabbingObjectAnimation = false;
     }
 }
