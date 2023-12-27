@@ -68,7 +68,6 @@ public class Loader : MonoBehaviour {
         Loader.AddHaxModules<PossessionMod>();
         Loader.AddHaxModules<ClearVisionMod>();
         Loader.AddHaxModules<NameInWeightMod>();
-        Loader.AddHaxModules<BuildAnywhereMod>();
         Loader.AddHaxModules<InstantInteractMod>();
         Loader.AddHaxModules<FollowAnotherPlayerMod>();
     }
