@@ -5,8 +5,12 @@ using GameNetcodeStuff;
 namespace Hax;
 
 public static partial class Helper {
-    public static void KillPlayer(this PlayerControllerB player) =>
-        player.DamagePlayerFromOtherClientServerRpc(1000, Vector3.zero, -1);
+    static void DamagePlayer(this PlayerControllerB player, int damage) =>
+        player.DamagePlayerFromOtherClientServerRpc(damage, Vector3.zero, -1);
+
+    public static void HealPlayer(this PlayerControllerB player) => player.DamagePlayer(100);
+
+    public static void KillPlayer(this PlayerControllerB player) => player.DamagePlayer(player.health);
 
     public static PlayerControllerB? LocalPlayer => GameNetworkManager.Instance.localPlayerController;
 
