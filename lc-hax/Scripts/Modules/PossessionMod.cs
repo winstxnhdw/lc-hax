@@ -121,12 +121,9 @@ public sealed class PossessionMod : MonoBehaviour {
 
     public void UnPossessEnemy() {
         //if previous enemy exists, reset it
-        if (this.EnemyToPossess != null) {
-            EnemyAI prevEnemy = this.EnemyToPossess;
+        if (this.EnemyToPossess.IsNotNull(out EnemyAI prevEnemy)) {
             prevEnemy.updatePositionThreshold = 1;
-            //this works for some reason, maybe runtime unity is better with this.
-            if (prevEnemy.agent != null) {
-                NavMeshAgent agent = prevEnemy.agent;
+            if (prevEnemy.agent.IsNotNull(out NavMeshAgent agent)) {
                 agent.updatePosition = true;
                 agent.updateRotation = true;
                 this.UpdateEnemyPositionToHere(prevEnemy);
