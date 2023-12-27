@@ -4,7 +4,7 @@ using HarmonyLib;
 
 namespace Hax;
 
-[HarmonyPatch(typeof(GrabbableObject), nameof(GrabbableObject.Update))]
+[HarmonyPatch(typeof(GrabbableObject), nameof(GrabbableObject.LateUpdate))]
 class InfiniteBatteryPatch {
     static void Postfix(ref Battery ___insertedBattery) {
         if (!___insertedBattery.IsNotNull(out Battery battery)) return;
