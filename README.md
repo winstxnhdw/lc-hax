@@ -57,6 +57,8 @@ The complete feature set includes the following.
 - Infinite ammo
 - Infinite charge
 - Infinite grab distance
+- Grab through walls
+- Pocket any item
 - No reload
 - No lobby refresh delay
 - Always sane
