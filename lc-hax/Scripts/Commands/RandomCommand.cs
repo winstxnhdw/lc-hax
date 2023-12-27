@@ -24,7 +24,7 @@ public class RandomCommand : ICommand {
         );
 
         ObjectPlacement<Transform, ShipTeleporter> previousTeleporterPlacement = new(
-            inverseTeleporter.transform.Copy().transform,
+            inverseTeleporter.transform.Copy(),
             inverseTeleporter,
             new Vector3(0.0f, 1.6f, 0.0f),
             rotationOffset
@@ -47,7 +47,7 @@ public class RandomCommand : ICommand {
         );
 
         ObjectPlacement<Transform, PlaceableShipObject> previousCupboardPlacement = new(
-            cupboard.transform.Copy().transform,
+            cupboard.transform.Copy(),
             cupboard
         );
 
