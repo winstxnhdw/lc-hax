@@ -56,6 +56,7 @@ The complete feature set includes the following.
 - Infinite scan range
 - Infinite ammo
 - Infinite charge
+- Infinite grab distance
 - No reload
 - No lobby refresh delay
 - Always sane
