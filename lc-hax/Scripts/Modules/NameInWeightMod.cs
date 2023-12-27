@@ -13,7 +13,7 @@ public sealed class NameInWeightMod : MonoBehaviour {
             }
 
             foreach (RaycastHit raycastHit in Helper.RaycastForward()) {
-                if (!raycastHit.collider.gameObject.GetComponent<PlayerControllerB>().IsNotNull(out PlayerControllerB player)) {
+                if (!raycastHit.collider.gameObject.TryGetComponent(out PlayerControllerB player)) {
                     continue;
                 }
 

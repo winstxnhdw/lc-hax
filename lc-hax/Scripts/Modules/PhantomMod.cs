@@ -31,11 +31,11 @@ public sealed class PhantomMod : MonoBehaviour {
         if (!Settings.PossessionMod.IsNotNull(out PossessionMod possessionMod)) {
             return;
         }
-        if (!cameraGameObject.GetComponent<KeyboardMovement>().IsNotNull(out KeyboardMovement keyboard)) {
+        if (!cameraGameObject.TryGetComponent(out KeyboardMovement keyboard)) {
             return;
         }
 
-        if (!cameraGameObject.GetComponent<MousePan>().IsNotNull(out MousePan mouse)) {
+        if (!cameraGameObject.TryGetComponent(out MousePan mouse)) {
             return;
         }
 
@@ -104,11 +104,11 @@ public sealed class PhantomMod : MonoBehaviour {
         player.enabled = !this.EnablePhantom;
 
         if (this.EnablePhantom) {
-            if (!cameraGameObject.GetComponent<KeyboardMovement>().IsNotNull(out KeyboardMovement keyboard)) {
+            if (!cameraGameObject.TryGetComponent(out KeyboardMovement keyboard)) {
                 keyboard = cameraGameObject.AddComponent<KeyboardMovement>();
             }
 
-            if (!cameraGameObject.GetComponent<MousePan>().IsNotNull(out MousePan mouse)) {
+            if (!cameraGameObject.TryGetComponent(out MousePan mouse)) {
                 mouse = cameraGameObject.AddComponent<MousePan>();
             }
 
@@ -126,11 +126,11 @@ public sealed class PhantomMod : MonoBehaviour {
             camera.transform.localPosition = Vector3.zero;
             camera.transform.localRotation = Quaternion.identity;
 
-            if (cameraGameObject.GetComponent<KeyboardMovement>().IsNotNull(out KeyboardMovement keyboard)) {
+            if (cameraGameObject.TryGetComponent(out KeyboardMovement keyboard)) {
                 keyboard.enabled = false;
             }
 
-            if (cameraGameObject.GetComponent<MousePan>().IsNotNull(out MousePan mouse)) {
+            if (cameraGameObject.TryGetComponent(out MousePan mouse)) {
                 mouse.enabled = false;
             }
 
@@ -138,11 +138,11 @@ public sealed class PhantomMod : MonoBehaviour {
                 return;
             }
 
-            if (gameplayCam.GetComponent<KeyboardMovement>().IsNotNull(out KeyboardMovement gameplayKeyboard)) {
+            if (gameplayCam.TryGetComponent(out KeyboardMovement gameplayKeyboard)) {
                 gameplayKeyboard.enabled = false;
             }
 
-            if (gameplayCam.GetComponent<MousePan>().IsNotNull(out MousePan gameplayMouse)) {
+            if (gameplayCam.TryGetComponent(out MousePan gameplayMouse)) {
                 gameplayMouse.enabled = false;
             }
         }
