@@ -1,3 +1,5 @@
+using UnityEngine;
+
 namespace Hax;
 
 public class MoneyCommand : ICommand {
@@ -17,7 +19,7 @@ public class MoneyCommand : ICommand {
             return;
         }
 
-        terminal.groupCredits += amount;
+        terminal.groupCredits = Mathf.Clamp(terminal.groupCredits + amount, 0, int.MaxValue);
         terminal.SyncGroupCreditsServerRpc(terminal.groupCredits, terminal.numberOfItemsInDropship);
     }
 }
