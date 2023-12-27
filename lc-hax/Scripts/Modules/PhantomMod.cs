@@ -28,7 +28,7 @@ public sealed class PhantomMod : MonoBehaviour {
 
         GameObject cameraGameObject = camera.gameObject;
 
-        if (!Settings.PossessionMod.IsNotNull(out PossessionMod possessionMod)) {
+        if (!Setting.PossessionMod.IsNotNull(out PossessionMod possessionMod)) {
             return;
         }
         if (!cameraGameObject.TryGetComponent(out KeyboardMovement keyboard)) {
@@ -100,7 +100,7 @@ public sealed class PhantomMod : MonoBehaviour {
 
         GameObject cameraGameObject = camera.gameObject;
         this.EnablePhantom = !this.EnablePhantom;
-        Settings.PhantomEnabled = this.EnablePhantom;
+        Setting.PhantomEnabled = this.EnablePhantom;
         player.enabled = !this.EnablePhantom;
 
         if (this.EnablePhantom) {

@@ -32,8 +32,8 @@ public sealed class TriggerMod : MonoBehaviour, IEnemyPrompter {
 
     void Fire() {
         if (this.UsingFollowRay) {
-            if (Settings.PlayerToFollow is not null) {
-                Settings.PlayerToFollow = null;
+            if (Setting.PlayerToFollow is not null) {
+                Setting.PlayerToFollow = null;
                 Console.Print("Stopped following!");
                 return;
             }
@@ -43,7 +43,7 @@ public sealed class TriggerMod : MonoBehaviour, IEnemyPrompter {
 
                 if (gameObject.TryGetComponent(out PlayerControllerB player)) {
                     Console.Print($"Following #{player.playerClientId} {player.playerUsername}!");
-                    Settings.PlayerToFollow = player;
+                    Setting.PlayerToFollow = player;
                     break;
                 }
             }
@@ -102,7 +102,7 @@ public sealed class TriggerMod : MonoBehaviour, IEnemyPrompter {
             }
 
             if (gameObject.GetComponentInParent<EnemyAI>().IsNotNull(out EnemyAI enemy) &&
-                Settings.PossessionMod.IsNotNull(out PossessionMod possessionMod)) {
+                Setting.PossessionMod.IsNotNull(out PossessionMod possessionMod)) {
                 possessionMod.PossessEnemy(enemy);
                 break;
             }

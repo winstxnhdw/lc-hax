@@ -16,7 +16,7 @@ public sealed class PossessionMod : MonoBehaviour {
     void Awake() {
         this.RBKeyboard = this.gameObject.AddComponent<RBKeyboardMovement>();
         this.MousePan = this.gameObject.AddComponent<MousePan>();
-        Settings.PossessionMod = this;
+        Setting.PossessionMod = this;
         this.enabled = false;
     }
 
@@ -43,13 +43,13 @@ public sealed class PossessionMod : MonoBehaviour {
     }
 
     private void ToggleRealisticPossession() {
-        Settings.RealisticPossessionEnabled = !Settings.RealisticPossessionEnabled;
-        Console.Print($"Realistic Possession:{Settings.RealisticPossessionEnabled}");
+        Setting.RealisticPossessionEnabled = !Setting.RealisticPossessionEnabled;
+        Console.Print($"Realistic Possession:{Setting.RealisticPossessionEnabled}");
 
         if (!this.EnemyToPossess.IsNotNull(out EnemyAI enemy)) return;
         if (!enemy.agent.IsNotNull(out NavMeshAgent agent)) return;
-        agent.updatePosition = Settings.RealisticPossessionEnabled;
-        agent.updateRotation = Settings.RealisticPossessionEnabled;
+        agent.updatePosition = Setting.RealisticPossessionEnabled;
+        agent.updateRotation = Setting.RealisticPossessionEnabled;
     }
 
     void Update() {
@@ -81,8 +81,8 @@ public sealed class PossessionMod : MonoBehaviour {
 
             //only works if you enable it before FirstUpdate happens
             if (enemy.agent.IsNotNull(out NavMeshAgent agent)) {
-                agent.updatePosition = Settings.RealisticPossessionEnabled;
-                agent.updateRotation = Settings.RealisticPossessionEnabled;
+                agent.updatePosition = Setting.RealisticPossessionEnabled;
+                agent.updateRotation = Setting.RealisticPossessionEnabled;
             }
 
             rbKeyboard.Init();

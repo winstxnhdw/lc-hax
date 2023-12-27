@@ -8,20 +8,20 @@ public class BlockCommand : ICommand {
         }
 
         if (args[0] is "credits") {
-            Settings.EnableBlockCredits = !Settings.EnableBlockCredits;
+            Setting.EnableBlockCredits = !Setting.EnableBlockCredits;
 
             Console.Print(
-                $"{(Settings.EnableBlockCredits
+                $"{(Setting.EnableBlockCredits
                     ? "Blocking all incoming credits!"
                     : "No longer blocking credits!")}"
             );
         }
 
         else if (args[0] is "enemy") {
-            Settings.EnableUntargetable = !Settings.EnableUntargetable;
+            Setting.EnableUntargetable = !Setting.EnableUntargetable;
 
             Console.Print(
-                $"{(Settings.EnableUntargetable
+                $"{(Setting.EnableUntargetable
                     ? "Enemies will no longer target you!"
                     : "Enemies can now target you!")}"
             );
