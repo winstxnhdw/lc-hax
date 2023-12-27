@@ -38,6 +38,9 @@ public class PumpkinCommand : ICommand {
             return;
         }
 
+
+        Helper.BuyUnlockable(Unlockable.JACK_O_LANTERN);
+        Helper.ReturnUnlockable(Unlockable.JACK_O_LANTERN);
         float duration = args.Length > 1 && float.TryParse(args[1], out float parsedDuration) ? parsedDuration : 15.0f;
 
         Helper.CreateComponent<WaitForBehaviour>()
