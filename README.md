@@ -89,6 +89,7 @@ The complete feature set includes the following.
 | Teleport back to ship         | `/home <player?>`               |
 | Teleport enemies to player    | `/mob <player>`                 |
 | Lure enemies to player        | `/hate <player>`                |
+| Heal player                   | `/heal <player?>`               |
 | Kill player                   | `/kill <player?>`               |
 | Kill all players              | `/kill --all`                   |
 | Kill all enemies              | `/kill --enemy`                 |
@@ -110,7 +111,6 @@ The complete feature set includes the following.
 | God mode with team-killing    | `/demigod`                      |
 | Unlock all doors              | `/unlock`                       |
 | Lock all gates                | `/lock`                         |
-| Heal self                     | `/heal`                         |
 | Explode all jetpacks          | `/explode`                      |
 | Explode all landmines         | `/explode mine`                 |
 
