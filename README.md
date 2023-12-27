@@ -100,7 +100,7 @@ The complete feature set includes the following.
 | Block incoming credits        | `/block credits`                |
 | Become untargetable           | `/block enemy`                  |
 | Place an unlockable           | `/build <unlockable>`           |
-| Change moons                  | `/visit <moons>`                |
+| Change moons                  | `/visit <moon>`                |
 | Stun enemies                  | `/stun <duration>`              |
 | Toggle stun on click          | `/stunclick`                    |
 | End the game                  | `/end <player=-1>`              |
