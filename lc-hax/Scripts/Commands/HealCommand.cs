@@ -15,6 +15,6 @@ public class HealCommand : IStun, ICommand {
         hudManager.HUDAnimator.SetTrigger("HealFromCritical");
         hudManager.UpdateHealthUI(hudManager.localPlayer.health, false);
 
-        this.Stun(hudManager.localPlayer.transform.position, 1.0f, 0.1f);
+        this.Stun(hudManager.localPlayer.transform.position, 5.0f, 0.1f);
     }
 }
