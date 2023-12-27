@@ -20,11 +20,13 @@ public static partial class Extensions {
         );
     }
 
-    public static GameObject Copy(this Transform transform) {
+    public static Transform Copy(this Transform transform) {
         GameObject gameObject = new();
         gameObject.transform.position = transform.position.Copy();
         gameObject.transform.eulerAngles = transform.eulerAngles.Copy();
+        gameObject.transform.rotation = transform.rotation.Copy();
+        gameObject.transform.localScale = transform.localScale.Copy();
 
-        return gameObject;
+        return gameObject.transform;
     }
 }

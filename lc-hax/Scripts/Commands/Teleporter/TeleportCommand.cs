@@ -48,21 +48,21 @@ public class TeleportCommand : ITeleporter, ICommand {
             return;
         }
 
-        GameObject newTransform = player.transform.Copy();
+        Transform newTransform = player.transform.Copy();
         newTransform.transform.position = position;
 
         Vector3 rotationOffset = new(-90.0f, 0.0f, 0.0f);
         Vector3 positionOffset = new(0.0f, 1.6f, 0.0f);
 
         ObjectPlacement<Transform, ShipTeleporter> teleporterPlacement = new(
-            newTransform.transform,
+            newTransform,
             teleporter,
             positionOffset,
             rotationOffset
         );
 
         ObjectPlacement<Transform, ShipTeleporter> previousTeleporterPlacement = new(
-            teleporter.transform.Copy().transform,
+            teleporter.transform.Copy(),
             teleporter,
             positionOffset,
             rotationOffset
