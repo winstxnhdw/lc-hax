@@ -2,7 +2,7 @@ namespace Hax;
 
 public static partial class Extensions {
     public static bool IsNotNull<T>(this T? obj, out T notNullObj) where T : class {
-        if (obj is null) {
+        if (obj == null || obj.Equals(null)) {
             notNullObj = null!;
             return false;
         }
