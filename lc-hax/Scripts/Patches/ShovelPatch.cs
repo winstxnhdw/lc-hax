@@ -4,8 +4,7 @@ using HarmonyLib;
 
 namespace Hax;
 
-[HarmonyPatch(typeof(Shovel))]
+[HarmonyPatch(typeof(Shovel), nameof(Shovel.HitShovel))]
 class ShovelPatch {
-    [HarmonyPatch(nameof(Shovel.HitShovel))]
     static void Prefix(ref int ___shovelHitForce) => ___shovelHitForce = Settings.ShovelHitForce;
 }
