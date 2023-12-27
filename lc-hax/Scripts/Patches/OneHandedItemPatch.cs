@@ -4,8 +4,7 @@ using HarmonyLib;
 
 namespace Hax;
 
-[HarmonyPatch(typeof(GrabbableObject))]
-[HarmonyPatch("GrabClientRpc")]
+[HarmonyPatch(typeof(GrabbableObject), nameof(GrabbableObject.LateUpdate))]
 class OneHandedItemPatch {
     static void Postfix(ref Item ___itemProperties) {
         ___itemProperties.twoHanded = false;
