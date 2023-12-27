@@ -7,9 +7,9 @@ using UnityEngine;
 namespace Hax;
 
 [HarmonyPatch(typeof(PlayerControllerB))]
-[HarmonyPatch("Start")]
+[HarmonyPatch("LateUpdate")]
 class GrabAnywherePatch {
-    static void Postfix(ref float ___interactableObjectsMask) {
+    static void Postfix(ref int ___interactableObjectsMask) {
         ___interactableObjectsMask = LayerMask.GetMask(["Props", "InteractableObject"]);
     }
 }
