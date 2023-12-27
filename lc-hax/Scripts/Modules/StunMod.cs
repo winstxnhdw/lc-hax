@@ -12,7 +12,7 @@ public sealed class StunMod : MonoBehaviour, IStun {
     }
 
     void Stun() {
-        if (!Settings.EnableStunOnLeftClick) return;
+        if (!Setting.EnableStunOnLeftClick) return;
         if (!Helper.CurrentCamera.IsNotNull(out Camera camera)) return;
 
         this.Stun(camera.transform.position, 5.0f);

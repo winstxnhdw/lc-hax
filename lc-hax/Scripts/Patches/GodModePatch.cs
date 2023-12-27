@@ -5,5 +5,5 @@ namespace Hax;
 
 [HarmonyPatch(typeof(PlayerControllerB), nameof(PlayerControllerB.AllowPlayerDeath))]
 class GodModePatch {
-    static bool Prefix() => !Settings.EnableGodMode;
+    static bool Prefix() => !Setting.EnableGodMode;
 }

@@ -25,19 +25,19 @@ public sealed class FollowAnotherPlayerMod : MonoBehaviour {
 
     void Update() {
         if (!Helper.LocalPlayer.IsNotNull(out PlayerControllerB localPlayer) || localPlayer.isPlayerDead ||
-            !Settings.PlayerToFollow.IsNotNull(out PlayerControllerB player) || player.isPlayerDead
+            !Setting.PlayerToFollow.IsNotNull(out PlayerControllerB player) || player.isPlayerDead
         ) {
-            if (Settings.PlayerToFollow is not null) {
+            if (Setting.PlayerToFollow is not null) {
                 Console.Print("Stopped following!");
-                Settings.PlayerToFollow = null;
+                Setting.PlayerToFollow = null;
             }
 
-            Settings.DisableFallDamage = false;
+            Setting.DisableFallDamage = false;
             this.PlayerStates.Clear();
             return;
         }
 
-        Settings.DisableFallDamage = true;
+        Setting.DisableFallDamage = true;
         this.InstantTeleTimer -= Time.deltaTime;
 
         if (player.isClimbingLadder) {

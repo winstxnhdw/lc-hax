@@ -8,7 +8,7 @@ namespace Hax;
 [HarmonyPatch(typeof(EnemyAI), nameof(EnemyAI.PlayerIsTargetable))]
 class UntargetablePatch {
     public static bool Prefix(PlayerControllerB playerScript, ref bool __result) {
-        if (!Settings.EnableUntargetable) return true;
+        if (!Setting.EnableUntargetable) return true;
         if (!Helper.LocalPlayer.IsNotNull(out PlayerControllerB localPlayer)) return true;
         if (localPlayer.actualClientId != playerScript.actualClientId) return true;
 

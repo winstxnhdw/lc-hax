@@ -13,7 +13,7 @@ public class ShovelCommand : ICommand {
             return;
         }
 
-        Settings.ShovelHitForce = shovelHitForce;
+        Setting.ShovelHitForce = shovelHitForce;
         Console.Print($"Shovel hit force is now set to {shovelHitForce}!");
     }
 }

@@ -31,7 +31,7 @@ public class MousePan : MonoBehaviour {
         this.Yaw += mouse.delta.x.ReadValue() * this.Sensitivity;
         this.Yaw = (this.Yaw + 360) % 360;
 
-        this.Pitch -= mouse.delta.y.ReadValue() * this.Sensitivity * (Settings.InvertYAxis ? -1 : 1);
+        this.Pitch -= mouse.delta.y.ReadValue() * this.Sensitivity * (Setting.InvertYAxis ? -1 : 1);
         this.Pitch = Mathf.Clamp(this.Pitch, -90, 90);
 
         this.transform.localEulerAngles = new Vector3(this.Pitch, this.Yaw, 0.0f);

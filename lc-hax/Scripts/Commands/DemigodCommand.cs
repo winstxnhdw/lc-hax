@@ -2,7 +2,7 @@ namespace Hax;
 
 public class DemiGodCommand : ICommand {
     public void Execute(string[] _) {
-        Settings.EnableDemigodMode = !Settings.EnableDemigodMode;
-        Console.Print($"Demigod mode: {(Settings.EnableDemigodMode ? "Enabled" : "Disabled")}");
+        Setting.EnableDemigodMode = !Setting.EnableDemigodMode;
+        Console.Print($"Demigod mode: {(Setting.EnableDemigodMode ? "Enabled" : "Disabled")}");
     }
 }
