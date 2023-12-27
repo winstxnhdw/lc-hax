@@ -15,7 +15,20 @@ public class BlockCommand : ICommand {
                     ? "Blocking all incoming credits!"
                     : "No longer blocking credits!")}"
             );
-            return;
+        }
+
+        else if (args[0] is "enemy") {
+            Settings.EnableUntargetable = !Settings.EnableUntargetable;
+
+            Console.Print(
+                $"{(Settings.EnableUntargetable
+                    ? "Enemies will no longer target you!"
+                    : "Enemies can now target you!")}"
+            );
+        }
+
+        else {
+            Console.Print($"Invalid property!");
         }
     }
 }
