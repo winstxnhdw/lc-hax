@@ -6,7 +6,7 @@ using HarmonyLib;
 namespace Hax;
 
 [HarmonyPatch(typeof(PlayerControllerB))]
-[HarmonyPatch("Start")]
+[HarmonyPatch("LateUpdate")]
 class InfiniteGrabPatch {
     static void Postfix(ref float ___grabDistance) {
         ___grabDistance = float.MaxValue;
