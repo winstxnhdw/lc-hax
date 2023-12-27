@@ -29,7 +29,7 @@ public static class Console {
         { "/random", new RandomCommand() },
         { "/demigod", new DemiGodCommand() },
         { "/start", new StartGameCommand() },
-        // { "/pumpkin", new PumpkinCommand() },
+        { "/pumpkin", new PumpkinCommand() },
         { "/players", new PlayersCommand() },
         { "/explode", new ExplodeCommand() },
         { "/ct", new ChibakuTenseiCommand() },

@@ -75,46 +75,47 @@ The complete feature set includes the following.
 
 ### Commands
 
-| Action                        | Command                         |
-| ----------------------------- | ------------------------------- |
-| Inverse teleport a player     | `/random <player>`              |
-| Play noise on player          | `/noise <player> <duration=30>` |
-| Chibaku Tensei                | `/ct <player>`                  |
-| Teleport to entrance          | `/entrance`                     |
-| Teleport inside entrance      | `/entrance inside`              |
-| Teleport to a player          | `/tp <player>`                  |
-| Teleport to a location        | `/tp <x> <y> <z>`               |
-| Teleport player to player     | `/tp <player> <player>`         |
-| Teleport player to a location | `/tp <player> <x> <y> <z>`      |
-| Teleport back to ship         | `/home <player?>`               |
-| Teleport enemies to player    | `/mob <player>`                 |
-| Lure enemies to player        | `/hate <player>`                |
-| Heal player                   | `/heal <player?>`               |
-| Kill player                   | `/kill <player?>`               |
-| Kill all players              | `/kill --all`                   |
-| Kill all enemies              | `/kill --enemy`                 |
-| Kill all enemies on client    | `/kill --localenemy`            |
-| Modify shovel damage          | `/shovel <force=1>`             |
-| Give or take money            | `/money <amount>`               |
-| Add or remove experience      | `/xp <amount>`                  |
-| Block incoming credits        | `/block credits`                |
-| Become untargetable           | `/block enemy`                  |
-| Place an unlockable           | `/build <unlockable>`           |
-| Change moons                  | `/visit <moon>`                |
-| Stun enemies                  | `/stun <duration>`              |
-| Toggle stun on click          | `/stunclick`                    |
-| End the game                  | `/end <player=-1>`              |
-| Start the game                | `/start`                        |
-| List all players              | `/players`                      |
-| Grab all scraps               | `/grab`                         |
-| Toggle the Beta badge         | `/beta`                         |
-| Get coordinates               | `/xyz`                          |
-| Toggle God mode               | `/god`                          |
-| God mode with team-killing    | `/demigod`                      |
-| Unlock all doors              | `/unlock`                       |
-| Lock all gates                | `/lock`                         |
-| Explode all jetpacks          | `/explode`                      |
-| Explode all landmines         | `/explode mine`                 |
+| Action                        | Command                           |
+| ----------------------------- | --------------------------------- |
+| Teleport to entrance          | `/entrance`                       |
+| Teleport inside entrance      | `/entrance inside`                |
+| Teleport to a player          | `/tp <player>`                    |
+| Teleport to a location        | `/tp <x> <y> <z>`                 |
+| Teleport player to player     | `/tp <player> <player>`           |
+| Teleport player to a location | `/tp <player> <x> <y> <z>`        |
+| Teleport back to ship         | `/home <player?>`                 |
+| Teleport enemies to player    | `/mob <player>`                   |
+| Inverse teleport a player     | `/random <player>`                |
+| Chibaku Tensei                | `/ct <player>`                    |
+| Play noise on player          | `/noise <player> <duration=30>`   |
+| Lure enemies to player        | `/hate <player>`                  |
+| Heal player                   | `/heal <player?>`                 |
+| Kill player                   | `/kill <player?>`                 |
+| Kill all players              | `/kill --all`                     |
+| Kill all enemies              | `/kill --enemy`                   |
+| Kill all enemies on client    | `/kill --localenemy`              |
+| Kill with pumpkin             | `/pumpkin <player> <duration=15>` |
+| Modify shovel damage          | `/shovel <force=1>`               |
+| Give or take money            | `/money <amount>`                 |
+| Add or remove experience      | `/xp <amount>`                    |
+| Block incoming credits        | `/block credits`                  |
+| Become untargetable           | `/block enemy`                    |
+| Place an unlockable           | `/build <unlockable>`             |
+| Change moons                  | `/visit <moon>`                   |
+| Stun enemies                  | `/stun <duration>`                |
+| Toggle stun on click          | `/stunclick`                      |
+| End the game                  | `/end <player=-1>`                |
+| Start the game                | `/start`                          |
+| List all players              | `/players`                        |
+| Grab all scraps               | `/grab`                           |
+| Toggle the Beta badge         | `/beta`                           |
+| Get coordinates               | `/xyz`                            |
+| Toggle God mode               | `/god`                            |
+| God mode with team-killing    | `/demigod`                        |
+| Unlock all doors              | `/unlock`                         |
+| Lock all gates                | `/lock`                           |
+| Explode all jetpacks          | `/explode`                        |
+| Explode all landmines         | `/explode mine`                   |
 
 ### Binds
 

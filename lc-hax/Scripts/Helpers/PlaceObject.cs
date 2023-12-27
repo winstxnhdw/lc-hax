@@ -53,7 +53,7 @@ public static partial class Helper {
     public static void PlaceObjectAtPosition<M>(
         M gameObject,
         Vector3 position,
-        Vector3 rotation
+        Vector3 rotation = new()
     ) where M : MonoBehaviour {
         NetworkObject networkObject = Helper.GetNetworkObject(gameObject);
         Helper.ShipBuildModeManager?.PlaceShipObjectServerRpc(
