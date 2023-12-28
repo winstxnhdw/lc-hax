@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using GameNetcodeStuff;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -37,8 +38,9 @@ public class InputListener : MonoBehaviour {
     };
 
     void Update() {
+        if (Helper.LocalPlayer.IsNotNull(out PlayerControllerB player) && player.isTypingChat) return;
+
         foreach (KeyValuePair<Func<bool>, Action> keyAction in this.InputActions) {
-            if (Helper.LocalPlayer is not null && Helper.LocalPlayer.isTypingChat) break;
             if (!keyAction.Key()) continue;
             keyAction.Value();
         }
