@@ -1,3 +1,4 @@
+using GameNetcodeStuff;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -8,6 +9,7 @@ public class KeyboardMovement : MonoBehaviour {
     float SprintMultiplier { get; set; } = 1;
 
     void Update() {
+        if (Helper.LocalPlayer.IsNotNull(out PlayerControllerB player) && player.isTypingChat) return;
         if (!Keyboard.current.IsNotNull(out Keyboard keyboard)) return;
 
         Vector3 direction = new(
