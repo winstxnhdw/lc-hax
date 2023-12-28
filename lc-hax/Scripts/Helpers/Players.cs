@@ -10,7 +10,7 @@ public static partial class Helper {
 
     public static void HealPlayer(this PlayerControllerB player) => player.DamagePlayer(-100);
 
-    public static void KillPlayer(this PlayerControllerB player) => player.DamagePlayer(player.health);
+    public static void KillPlayer(this PlayerControllerB player) => player.DamagePlayer(100);
 
     public static PlayerControllerB? LocalPlayer => GameNetworkManager.Instance.localPlayerController;
 
