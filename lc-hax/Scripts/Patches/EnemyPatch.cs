@@ -13,21 +13,8 @@ class EnemyPatch {
     // Fixes game bug where you can't aim anymore if an enemy dies while attempting to kill you.
     [HarmonyPatch(nameof(EnemyAI.CancelSpecialAnimationWithPlayer))]
     static void Prefix(ref PlayerControllerB ___inSpecialAnimationWithPlayer) {
-        if (Helper.LocalPlayer == ___inSpecialAnimationWithPlayer) {
-            Helper.LocalPlayer.disableLookInput = false;
-        }
-    }
-}
+        if (!___inSpecialAnimationWithPlayer.IsNotNull(out PlayerControllerB player)) return;
 
-[HarmonyPatch(typeof(MaskedPlayerEnemy))]
-class MaskedPlayerEnemyPatch {
-    // Getting infected spawns a masked AI even during god mode, leading to mass cloning.
-    // To prevent this, the original is despawned, leaving only the new clone alive.
-    [HarmonyPatch(nameof(MaskedPlayerEnemy.FinishKillAnimation))]
-    static void Prefix(MaskedPlayerEnemy __instance, ref bool killedPlayer) {
-        if (__instance.inSpecialAnimationWithPlayer == Helper.LocalPlayer && killedPlayer && Setting.EnableGodMode) {
-            __instance.KillEnemyServerRpc(true);
-            __instance.HitEnemy(1000); // fallback if KillEnemy fails
-        }
+        player.disableLookInput = false;
     }
 }

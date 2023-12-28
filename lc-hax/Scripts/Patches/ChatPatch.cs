@@ -9,13 +9,10 @@ namespace Hax;
 [HarmonyPatch("EnableChat_performed")]
 class EnableChatPatch {
     static void Prefix(ref PlayerControllerB ___localPlayer, ref bool __state) {
-        if (___localPlayer is null) {
-            __state = false;
-        }
-        else {
-            __state = ___localPlayer.isPlayerDead;
-            ___localPlayer.isPlayerDead = false;
-        }
+        if (!___localPlayer.IsNotNull(out PlayerControllerB localPlayer)) return;
+
+        __state = localPlayer.isPlayerDead;
+        localPlayer.isPlayerDead = false;
     }
 
     static void Postfix(ref PlayerControllerB ___localPlayer, bool __state) => ___localPlayer.isPlayerDead = __state;
