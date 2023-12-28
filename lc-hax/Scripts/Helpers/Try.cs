@@ -14,6 +14,17 @@ public static partial class Helper {
         }
     }
 
+    public static bool Try(Func<bool> function, Action<Exception>? onError = null) {
+        try {
+            return function();
+        }
+
+        catch (Exception exception) {
+            onError?.Invoke(exception);
+            return false;
+        }
+    }
+
     public static void Try(Action function, Action<Exception>? onError = null) {
         try {
             function();
