@@ -6,8 +6,7 @@ using UnityEngine;
 
 namespace Hax;
 
-[HarmonyPatch(typeof(PlayerControllerB))]
-[HarmonyPatch("SetHoverTipAndCurrentInteractTrigger")]
+[HarmonyPatch(typeof(PlayerControllerB), "SetHoverTipAndCurrentInteractTrigger")]
 class GrabPatch {
     static void Prefix(ref bool ___isGrabbingObjectAnimation, ref bool __state) {
         __state = ___isGrabbingObjectAnimation;

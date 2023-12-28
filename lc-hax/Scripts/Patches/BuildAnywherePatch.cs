@@ -5,8 +5,7 @@ using HarmonyLib;
 
 namespace Hax;
 
-[HarmonyPatch(typeof(ShipBuildModeManager))]
-[HarmonyPatch("PlayerMeetsConditionsToBuild")]
+[HarmonyPatch(typeof(ShipBuildModeManager), "PlayerMeetsConditionsToBuild")]
 class BuildAnywherePatch {
     static bool Prefix(ref bool __result, ref bool ___CanConfirmPosition) {
         ___CanConfirmPosition = true;

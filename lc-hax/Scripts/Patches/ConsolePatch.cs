@@ -3,8 +3,7 @@ using HarmonyLib;
 
 namespace Hax;
 
-[HarmonyPatch(typeof(HUDManager))]
-[HarmonyPatch("SubmitChat_performed")]
+[HarmonyPatch(typeof(HUDManager), "SubmitChat_performed")]
 class ConsolePatch {
     static bool Prefix() {
         if (!Helper.HUDManager.IsNotNull(out HUDManager hudManager)) return true;
