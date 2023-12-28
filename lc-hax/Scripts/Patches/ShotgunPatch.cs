@@ -7,7 +7,7 @@ namespace Hax;
 [HarmonyPatch(typeof(ShotgunItem))]
 class ShotgunPatch {
     [HarmonyPatch(nameof(ShotgunItem.ShootGun))]
-    static void Prefix() => SoundManager.Instance.timeSinceEarsStartedRinging = 0f;
+    static void Prefix() => SoundManager.Instance.timeSinceEarsStartedRinging = 0.0f;
 
     [HarmonyPatch(nameof(ShotgunItem.Update))]
     static void Prefix(ref float ___misfireTimer, ref bool ___hasHitGroundWithSafetyOff) {
