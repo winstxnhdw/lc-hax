@@ -24,7 +24,7 @@ public sealed class PhantomMod : MonoBehaviour {
     }
 
     void Update() {
-        if (!Helper.CurrentCamera.IsNotNull(out Camera camera) || !camera.enabled) return;
+        if (!Helper.CurrentCamera.IsNotNull(out Camera camera) || Helper.Try(() => !camera.enabled)) return;
 
         GameObject cameraGameObject = camera.gameObject;
 
