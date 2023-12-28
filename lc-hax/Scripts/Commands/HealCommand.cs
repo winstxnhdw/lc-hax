@@ -15,6 +15,7 @@ public class HealCommand : IStun, ICommand {
         hudManager.localPlayer.criticallyInjured = false;
         hudManager.localPlayer.hasBeenCriticallyInjured = false;
         hudManager.localPlayer.playerBodyAnimator.SetBool("Limp", false);
+        hudManager.HUDAnimator.SetBool("biohazardDamage", false);
         hudManager.HUDAnimator.SetTrigger("HealFromCritical");
         hudManager.UpdateHealthUI(hudManager.localPlayer.health, false);
 
