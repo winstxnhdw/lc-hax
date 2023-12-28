@@ -18,3 +18,16 @@ class EnemyPatch {
         }
     }
 }
+
+[HarmonyPatch(typeof(MaskedPlayerEnemy))]
+class MaskedPlayerEnemyPatch {
+    // Getting infected spawns a masked AI even during god mode, leading to mass cloning.
+    // To prevent this, the original is despawned, leaving only the new clone alive.
+    [HarmonyPatch(nameof(MaskedPlayerEnemy.FinishKillAnimation))]
+    static void Prefix(MaskedPlayerEnemy __instance, ref bool killedPlayer) {
+        if (__instance.inSpecialAnimationWithPlayer == Helper.LocalPlayer && killedPlayer && Setting.EnableGodMode) {
+            __instance.KillEnemyServerRpc(true);
+            __instance.HitEnemy(1000); // fallback if KillEnemy fails
+        }
+    }
+}
