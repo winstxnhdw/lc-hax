@@ -34,6 +34,8 @@ public static class Console {
         { "/explode", new ExplodeCommand() },
         { "/ct", new ChibakuTenseiCommand() },
         { "/entrance", new EntranceCommand() },
+        { "/enter", new EntranceCommand(inside: true) },
+        { "/exit", new EntranceCommand() },
         { "/stunclick", new StunOnClickCommand() },
         { "/levels", new Debug(new LevelsCommand()) },
         { "/timescale", new Debug(new TimescaleCommand()) },

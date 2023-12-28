@@ -78,8 +78,8 @@ The complete feature set includes the following.
 
 | Action                        | Command                           |
 | ----------------------------- | --------------------------------- |
-| Teleport to entrance          | `/entrance`                       |
-| Teleport inside entrance      | `/entrance inside`                |
+| Teleport outside entrance     | `/exit`                           |
+| Teleport inside entrance      | `/enter`                          |
 | Teleport to a player          | `/tp <player>`                    |
 | Teleport to a location        | `/tp <x> <y> <z>`                 |
 | Teleport player to player     | `/tp <player> <player>`           |

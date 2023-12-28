@@ -4,6 +4,12 @@ using UnityEngine;
 namespace Hax;
 
 public class EntranceCommand : ICommand {
+    public bool forceInside = false;
+
+    public EntranceCommand(bool inside = false) {
+        this.forceInside = inside;
+    }
+
     public void Execute(string[] args) {
         EntranceTeleport entranceTeleport = RoundManager.FindMainEntranceScript(true);
 
@@ -23,7 +29,7 @@ public class EntranceCommand : ICommand {
         }
 
         localPlayer.TeleportPlayer(
-            args.Length is not 0 && args[0] is "inside"
+            this.forceInside || (args.Length is not 0 && args[0] is "inside")
                 ? exitPoint.position
                 : entranceTeleport.entrancePoint.position
         );
