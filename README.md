@@ -60,6 +60,7 @@ The complete feature set includes the following.
 - Grab through walls
 - Pocket any item
 - No reload
+- No item usage cooldown
 - No lobby refresh delay
 - Always sane
 - Always lightweight
