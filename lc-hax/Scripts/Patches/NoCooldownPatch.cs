@@ -17,11 +17,12 @@ class NoCooldownPatch {
 [HarmonyPatch(typeof(Shovel), "reelUpShovel", MethodType.Enumerator)]
 class NoShovelCooldownPatch {
     static IEnumerable<CodeInstruction> Transpiler(IEnumerable<CodeInstruction> instructions) {
-        foreach (CodeInstruction inst in instructions) {
-            if (inst.opcode == OpCodes.Ldc_R4) {
-                inst.operand = 0f;
+        foreach (CodeInstruction instruction in instructions) {
+            if (instruction.opcode == OpCodes.Ldc_R4) {
+                instruction.operand = 0f;
             }
-            yield return inst;
+            
+            yield return instruction;
         }
     }
 }
