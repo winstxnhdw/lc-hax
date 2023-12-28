@@ -8,7 +8,6 @@ public class TransientBehaviour : MonoBehaviour {
     Action<float>? Action { get; set; }
     Action? DisposeAction { get; set; }
     float ExpireTime { get; set; } = 0.0f;
-    float Timer { get; set; } = 0.0f;
     float Delay { get; set; } = 0.0f;
 
     public TransientBehaviour Init(Action<float> action, float expireTime, float delay = 0.0f) {
@@ -25,9 +24,9 @@ public class TransientBehaviour : MonoBehaviour {
     }
 
     IEnumerator TransientCoroutine() {
-        while (this.Timer < this.ExpireTime) {
+        while (this.ExpireTime > 0.0f) {
             float deltaTime = Time.deltaTime;
-            this.Timer += deltaTime;
+            this.ExpireTime -= deltaTime;
             this.Action?.Invoke(deltaTime);
 
             yield return this.Delay > 0.0f ? new WaitForSeconds(this.Delay) : new WaitForEndOfFrame();
