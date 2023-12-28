@@ -112,7 +112,7 @@ The complete feature set includes the following.
 | Toggle the Beta badge         | `/beta`                           |
 | Get coordinates               | `/xyz`                            |
 | Toggle God mode               | `/god`                            |
-| Immune to melee and guns      | `/demigod`                        |
+| Immune to non-instakill       | `/demigod`                        |
 | Unlock all doors              | `/unlock`                         |
 | Lock all gates                | `/lock`                           |
 | Explode all jetpacks          | `/explode`                        |
