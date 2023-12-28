@@ -4,8 +4,7 @@ using HarmonyLib;
 
 namespace Hax;
 
-[HarmonyPatch(typeof(GrabbableObject))]
-[HarmonyPatch("GrabClientRpc")]
+[HarmonyPatch(typeof(GrabbableObject), "GrabClientRpc")]
 class ChargeAnyItemPatch {
     static void Postfix(ref Item ___itemProperties) {
         ___itemProperties.requiresBattery = true;

@@ -21,7 +21,7 @@ class NoShovelCooldownPatch {
             if (instruction.opcode == OpCodes.Ldc_R4) {
                 instruction.operand = 0f;
             }
-            
+
             yield return instruction;
         }
     }
