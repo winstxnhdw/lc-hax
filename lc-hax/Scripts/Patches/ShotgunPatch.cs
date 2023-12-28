@@ -10,7 +10,7 @@ class ShotgunPatch {
     static void Prefix() => SoundManager.Instance.timeSinceEarsStartedRinging = 0.0f;
 
     [HarmonyPatch(nameof(ShotgunItem.Update))]
-    static void Prefix(ref float ___misfireTimer, ref bool ___hasHitGroundWithSafetyOff) {
+    static void Postfix(ref float ___misfireTimer, ref bool ___hasHitGroundWithSafetyOff) {
         ___misfireTimer = 30f;
         ___hasHitGroundWithSafetyOff = true;
     }
