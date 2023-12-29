@@ -11,7 +11,9 @@ A powerful, feature-rich and highly performant portable Windows CLI-only interna
 > To aid in its speed of development, `lc-hax` has no concept of versioning aside from the Git commit history. We make no guarantees for any kind of backward compatiblity. Any feature can be removed or heavily modified to maximise user experience and overwrite poor early decisions.
 
 <div align="center">
-    <img src="https://raw.githubusercontent.com/wiki/winstxnhdw/lc-hax/resources/inverse.gif" />
+    <img alt="Executing a command which forcefully inverse teleporting another player"
+         src="https://raw.githubusercontent.com/wiki/winstxnhdw/lc-hax/resources/inverse.gif"
+    />
 </div>
 
 ## Requirements
@@ -120,17 +122,19 @@ The complete feature set includes the following.
 
 ### Binds
 
-| Action                      | Input      |
-| --------------------------  | ---------- |
-| Trigger various objects     | `M3`       |
-| Follow player               | `M3` + `F` |
-| Interact at a distance      | `M3` + `E` |
-| Funny respawn mobs          | `M3` + `R` |
-| Toggle Phantom              | `=`        |
-| Change spectator index      | `⇦`        |
-| Change spectator index      | `⇨`        |
-| Increase sensitivity        | `]`        |
-| Decrease sensitivity        | `[`        |
+| Action                     | Input                            |
+| -------------------------- | -------------------------------- |
+| Trigger various objects    | <kbd> M3 </kbd>                  |
+| Follow player              | <kbd> M3 </kbd> + <kbd> F </kbd> |
+| Interact at a distance     | <kbd> M3 </kbd> + <kbd> E </kbd> |
+| Funny respawn mobs         | <kbd> M3 </kbd> + <kbd> R </kbd> |
+| Toggle Phantom             | <kbd> = </kbd>                   |
+| Change spectator index     | <kbd> ⇦ </kbd>                  |
+| Change spectator index     | <kbd> ⇨ </kbd>                  |
+| Increase mouse sensitivity | <kbd> ] </kbd>                   |
+| Decrease mouse sensitivity | <kbd> [ </kbd>                   |
+| Unpossess enemy            | <kbd> Z </kbd>                   |
+| Toggle realistic movement  | <kbd> X </kbd>                   |
 
 ### TriggerMod
 
@@ -145,7 +149,7 @@ The complete feature set includes the following.
 - Lure enemies to player
 - Follow a player's movements
 - Interact with objects from far
-- Possess enemies
+- Possess enemies (only in `Phantom`)
 
 ### Build
 
