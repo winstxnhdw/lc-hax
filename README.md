@@ -61,6 +61,8 @@ The complete feature set includes the following.
 - Infinite grab distance
 - Grab through walls
 - Pocket any item
+- Instant interact
+- Build anywhere
 - No reload
 - No item usage cooldown
 - No lobby refresh delay
@@ -68,9 +70,7 @@ The complete feature set includes the following.
 - Always lightweight
 - Always show HUD
 - Always show names
-- Instant interact
 - Stable Zap gun
-- Build anywhere
 - Clear vision
 - Show player's name in HUD
 - [Commands](#commands)
@@ -129,8 +129,8 @@ The complete feature set includes the following.
 | Interact at a distance     | <kbd> M3 </kbd> + <kbd> E </kbd> |
 | Funny respawn mobs         | <kbd> M3 </kbd> + <kbd> R </kbd> |
 | Toggle Phantom             | <kbd> = </kbd>                   |
-| Change spectator index     | <kbd> ⇦ </kbd>                  |
-| Change spectator index     | <kbd> ⇨ </kbd>                  |
+| Change spectator index     | <kbd> ⇽ </kbd>                  |
+| Change spectator index     | <kbd> ⇾ </kbd>                  |
 | Increase mouse sensitivity | <kbd> ] </kbd>                   |
 | Decrease mouse sensitivity | <kbd> [ </kbd>                   |
 | Unpossess enemy            | <kbd> Z </kbd>                   |
