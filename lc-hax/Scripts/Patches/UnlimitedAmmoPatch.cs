@@ -7,8 +7,7 @@ namespace Hax;
 [HarmonyPatch(typeof(ShotgunItem), nameof(ShotgunItem.ItemActivate))]
 class UnlimitedShotgunAmmoPatch {
     static void Prefix(ref int ___shellsLoaded, ref EnemyAI ___heldByEnemy) {
-        if (___heldByEnemy is null) {
-            ___shellsLoaded = 3;
-        }
+        if (___heldByEnemy is not null) return;
+        ___shellsLoaded = 3;
     }
 }
