@@ -28,7 +28,7 @@ public sealed class PhantomMod : MonoBehaviour {
 
         GameObject cameraGameObject = camera.gameObject;
 
-        if (!Setting.PossessionMod.IsNotNull(out PossessionMod possessionMod)) {
+        if (!PossessionMod.Instance.IsNotNull(out PossessionMod possessionMod)) {
             return;
         }
         if (!cameraGameObject.TryGetComponent(out KeyboardMovement keyboard)) {
@@ -42,7 +42,7 @@ public sealed class PhantomMod : MonoBehaviour {
         //for handling possession mod
         if (this.EnablePhantom) {
             //if was enabled possession before, but no longer possesing
-            if (this.EnabledPossession && !possessionMod.Possessing) {
+            if (this.EnabledPossession && !possessionMod.IsPossessed) {
                 this.EnabledPossession = false;
                 possessionMod.enabled = false;
 
@@ -51,7 +51,9 @@ public sealed class PhantomMod : MonoBehaviour {
             }
 
             //if not possessing any monster
-            if (!possessionMod.Possessing) return;
+            if (!possessionMod.IsPossessed) {
+                return;
+            }
 
             // possessing monster in the first frame
             if (!this.EnabledPossession) {
@@ -63,9 +65,10 @@ public sealed class PhantomMod : MonoBehaviour {
                 mouse.enabled = false;
             }
         }
+
         else {
             if (this.EnabledPossession) {
-                possessionMod.UnPossessEnemy();
+                possessionMod.Unpossess();
                 this.EnabledPossession = false;
                 possessionMod.enabled = false;
             }
@@ -99,7 +102,7 @@ public sealed class PhantomMod : MonoBehaviour {
 
         GameObject cameraGameObject = camera.gameObject;
         this.EnablePhantom = !this.EnablePhantom;
-        Setting.PhantomEnabled = this.EnablePhantom;
+        Setting.EnablePhantom = this.EnablePhantom;
         player.enabled = !this.EnablePhantom;
 
         if (this.EnablePhantom) {
