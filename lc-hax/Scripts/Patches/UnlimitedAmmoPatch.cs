@@ -4,11 +4,11 @@ using HarmonyLib;
 
 namespace Hax;
 
-[HarmonyPatch(typeof(ShotgunItem))]
-class UnlimitedAmmoPatch {
-    [HarmonyPatch(nameof(ShotgunItem.ItemActivate))]
-    static void Prefix(ref int ___shellsLoaded) => ___shellsLoaded = 2;
-
-    [HarmonyPatch(nameof(ShotgunItem.ShootGun))]
-    static void Postfix(ref int ___shellsLoaded) => ___shellsLoaded = 2;
+[HarmonyPatch(typeof(ShotgunItem), nameof(ShotgunItem.ItemActivate))]
+class UnlimitedShotgunAmmoPatch {
+    static void Prefix(ref int ___shellsLoaded, ref EnemyAI ___heldByEnemy) {
+        if (___heldByEnemy is null) {
+            ___shellsLoaded = 3;
+        }
+    }
 }
