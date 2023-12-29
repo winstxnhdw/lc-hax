@@ -23,7 +23,7 @@ public sealed class StunMod : MonoBehaviour, IStun {
         for (int i = 0; i < colliders; i++) {
             GameObject gameObject = this.Colliders[i].gameObject;
 
-            if (gameObject.TryGetComponent(out Turret _) && gameObject.TryGetComponent(out Landmine _)) {
+            if (!gameObject.TryGetComponent(out Turret _) && !gameObject.TryGetComponent(out Landmine _)) {
                 return;
             }
 
