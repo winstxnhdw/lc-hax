@@ -24,11 +24,11 @@ public sealed class StunMod : MonoBehaviour, IStun {
             GameObject gameObject = this.Colliders[i].gameObject;
 
             if (!gameObject.TryGetComponent(out Turret _) && !gameObject.TryGetComponent(out Landmine _)) {
-                return;
+                continue;
             }
 
             if (!gameObject.TryGetComponent(out TerminalAccessibleObject terminalAccessibleObject)) {
-                return;
+                continue;
             }
 
             terminalAccessibleObject.CallFunctionFromTerminal();
