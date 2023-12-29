@@ -141,7 +141,7 @@ The complete feature set includes the following.
 `TriggerMod` is a quality-of-life mod that allows you to trigger various objects in the game. It is activated by pointing at objects with `M3`. Currently, it can do the following.
 
 - Explode landmines
-- Explode jetpacks
+- Explode unequipped jetpacks
 - Trigger turrets
 - Toggle gates
 - Unlock doors
