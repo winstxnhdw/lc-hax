@@ -10,7 +10,7 @@ public sealed class NameInWeightMod : MonoBehaviour {
         if (!hudManager.weightCounter.IsNotNull(out TMPro.TextMeshProUGUI weightCounter)) return;
 
         foreach (RaycastHit raycastHit in Helper.RaycastForward(camera.transform)) {
-            if (!raycastHit.collider.gameObject.TryGetComponent(out PlayerControllerB player)) {
+            if (!raycastHit.collider.TryGetComponent(out PlayerControllerB player)) {
                 continue;
             }
 
