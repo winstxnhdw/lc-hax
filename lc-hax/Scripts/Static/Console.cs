@@ -9,6 +9,7 @@ public static class Console {
         { "/end", new EndCommand() },
         { "/mob", new MobCommand() },
         { "/hate", new HateCommand() },
+        { "/void", new VoidCommand() },
         { "/kill", new KillCommand() },
         { "/lock", new LockCommand() },
         { "/home", new HomeCommand() },
