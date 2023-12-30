@@ -12,24 +12,24 @@ struct CopiedStates {
     public float animationSpeed;
 }
 
-public sealed class FollowAnotherPlayerMod : MonoBehaviour {
-    const float secondsBeforeRealtime = 1f;
+public sealed class FollowMod : MonoBehaviour {
+    const float secondsBeforeRealtime = 1.0f;
+    const float maxDistanceFromTarget = 1.0f;
 
     Queue<CopiedStates> PlayerStates { get; set; } = new();
     Quaternion DeviateRotation { get; set; } = Quaternion.identity;
 
-    float DeviateTimer { get; set; } = 0;
-    float InstantTeleTimer { get; set; } = 0;
-    float DistanceLimit { get; set; } = 1;
-    float AnimationBroadcastTimer { get; set; } = 0;
+    float DeviateTimer { get; set; } = 0.0f;
+    float InstantTeleTimer { get; set; } = 0.0f;
+    float AnimationBroadcastTimer { get; set; } = 0.0f;
 
     void Update() {
         if (!Helper.LocalPlayer.IsNotNull(out PlayerControllerB localPlayer) || localPlayer.isPlayerDead ||
             !Setting.PlayerToFollow.IsNotNull(out PlayerControllerB player) || player.isPlayerDead
         ) {
             if (Setting.PlayerToFollow is not null) {
-                Console.Print("Stopped following!");
                 Setting.PlayerToFollow = null;
+                Console.Print("Stopped following!");
             }
 
             Setting.DisableFallDamage = false;
@@ -41,11 +41,11 @@ public sealed class FollowAnotherPlayerMod : MonoBehaviour {
         this.InstantTeleTimer -= Time.deltaTime;
 
         if (player.isClimbingLadder) {
-            this.InstantTeleTimer = secondsBeforeRealtime;
+            this.InstantTeleTimer = FollowMod.secondsBeforeRealtime;
             this.PlayerStates.Clear();
         }
 
-        if (this.InstantTeleTimer > 0) {
+        if (this.InstantTeleTimer > 0.0f) {
             localPlayer.transform.position = player.thisPlayerBody.position;
             return;
         }
@@ -86,26 +86,27 @@ public sealed class FollowAnotherPlayerMod : MonoBehaviour {
         );
 
         if (this.DeviateTimer < 0) {
-            this.DeviateRotation = Quaternion.Euler(0, Random.Range(-360, 360), 0);
-            this.DeviateTimer = Random.Range(0.1f, 2f);
+            this.DeviateRotation = Quaternion.Euler(0.0f, Random.Range(-360.0f, 360.0f), 0.0f);
+            this.DeviateTimer = Random.Range(0.1f, 2.0f);
         }
 
         localPlayer.transform.rotation = previousRotation;
 
         //broadcast copied animation
-        if (this.AnimationBroadcastTimer < 0) {
-            for (int i = 0; i < state.animationStates.Length; i++) {
-                _ = localPlayerReflector.InvokeInternalMethod("UpdatePlayerAnimationServerRpc",
+        if (this.AnimationBroadcastTimer < 0.0f) {
+            state.animationStates.Length.Range().ForEach(i => {
+                _ = localPlayerReflector.InvokeInternalMethod(
+                    "UpdatePlayerAnimationServerRpc",
                     state.animationStates[i],
                     state.animationSpeed
                 );
-            };
+            });
 
             //too much broadcast will make your animation stuck at first animation frame in other players pov.
             this.AnimationBroadcastTimer = 0.14f;
         }
 
-        if (Vector3.Distance(player.thisPlayerBody.position, state.position) < this.DistanceLimit) {
+        if (Vector3.Distance(player.thisPlayerBody.position, state.position) < FollowMod.maxDistanceFromTarget) {
             return;
         }
 
@@ -119,6 +120,5 @@ public sealed class FollowAnotherPlayerMod : MonoBehaviour {
             localPlayer.isExhausted,
             localPlayer.thisController.isGrounded
         );
-
     }
 }
