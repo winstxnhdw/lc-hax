@@ -129,9 +129,21 @@ public sealed class PhantomMod : MonoBehaviour {
         if (!Helper.CurrentCamera.IsNotNull(out Camera camera) || !camera.enabled) return;
 
         Setting.EnablePhantom = !Setting.EnablePhantom;
+
+        //to handle spectate camera.
+        if (player.isPlayerDead) {
+            player.enabled = !Setting.EnablePhantom;
+        }
+        else {
+            if (!player.enabled) {
+                player.enabled = true;
+            }
+        }
+
         player.playerBodyAnimator.enabled = !Setting.EnablePhantom;
         player.thisController.enabled = !Setting.EnablePhantom;
         player.isFreeCamera = Setting.EnablePhantom;
+
 
         if (Setting.EnablePhantom) {
             this.PhantomEnabled(camera);
