@@ -3,8 +3,8 @@ using UnityEngine;
 namespace Hax;
 
 public sealed class StunMod : MonoBehaviour {
-    Collider[] Colliders { get; set; } = new Collider[20];
-    RaycastHit[] RaycastHits { get; set; } = new RaycastHit[10];
+    Collider[] Colliders { get; set; } = new Collider[100];
+    RaycastHit[] RaycastHits { get; set; } = new RaycastHit[100];
 
     void OnEnable() {
         InputListener.onLeftButtonPress += this.Stun;
