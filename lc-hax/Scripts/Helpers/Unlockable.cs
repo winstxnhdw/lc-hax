@@ -40,5 +40,5 @@ public static partial class Helper {
 
     public static PlaceableShipObject? GetUnlockable(Unlockable unlockable) =>
         UnityObject.FindObjectsOfType<PlaceableShipObject>()
-                   .FirstOrDefault(placeableObject => unlockable.Is(placeableObject.unlockableID));
+                   .First(placeableObject => unlockable.Is(placeableObject.unlockableID));
 }
