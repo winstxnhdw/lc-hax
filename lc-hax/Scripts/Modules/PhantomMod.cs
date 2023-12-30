@@ -24,22 +24,11 @@ public sealed class PhantomMod : MonoBehaviour {
     }
 
     void Update() {
+        if (!PossessionMod.Instance.IsNotNull(out PossessionMod possessionMod)) return;
         if (!Helper.CurrentCamera.IsNotNull(out Camera camera) || Helper.Try(() => !camera.enabled)) return;
+        if (!camera.gameObject.TryGetComponent(out KeyboardMovement keyboard)) return;
+        if (!camera.gameObject.TryGetComponent(out MousePan mouse)) return;
 
-        GameObject cameraGameObject = camera.gameObject;
-
-        if (!PossessionMod.Instance.IsNotNull(out PossessionMod possessionMod)) {
-            return;
-        }
-        if (!cameraGameObject.TryGetComponent(out KeyboardMovement keyboard)) {
-            return;
-        }
-
-        if (!cameraGameObject.TryGetComponent(out MousePan mouse)) {
-            return;
-        }
-
-        //for handling possession mod
         if (this.EnablePhantom) {
             //if was enabled possession before, but no longer possesing
             if (this.EnabledPossession && !possessionMod.IsPossessed) {
@@ -50,7 +39,6 @@ public sealed class PhantomMod : MonoBehaviour {
                 mouse.enabled = true;
             }
 
-            //if not possessing any monster
             if (!possessionMod.IsPossessed) {
                 return;
             }
@@ -97,8 +85,8 @@ public sealed class PhantomMod : MonoBehaviour {
 
     void TogglePhantom() {
         if (!Helper.LocalPlayer.IsNotNull(out PlayerControllerB player)) return;
-        if (!Helper.CurrentCamera.IsNotNull(out Camera camera) || !camera.enabled) return;
         if (!player.cameraContainerTransform.IsNotNull(out Transform cameraParent)) return;
+        if (!Helper.CurrentCamera.IsNotNull(out Camera camera) || !camera.enabled) return;
 
         GameObject cameraGameObject = camera.gameObject;
         this.EnablePhantom = !this.EnablePhantom;
