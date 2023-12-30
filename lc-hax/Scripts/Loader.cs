@@ -1,6 +1,5 @@
 using System;
 using System.IO;
-using System.Linq;
 using System.Reflection;
 using UnityEngine;
 using HarmonyLib;
@@ -16,12 +15,16 @@ public class Loader : MonoBehaviour {
 
     static Assembly OnResolveAssembly(object _, ResolveEventArgs args) {
         Assembly assembly = Assembly.GetExecutingAssembly();
-
-        using Stream stream = assembly.GetManifestResourceStream(
+        string? resourceName =
             assembly.GetManifestResourceNames()
-                    .First(name => name.EndsWith($"{new AssemblyName(args.Name).Name}.dll"))
-        );
+                    .First(name => name.EndsWith($"{new AssemblyName(args.Name).Name}.dll"));
 
+        if (string.IsNullOrWhiteSpace(resourceName)) {
+            Logger.Write($"Failed to resolve assembly: {args.Name}");
+            throw new FileNotFoundException();
+        }
+
+        using Stream stream = assembly.GetManifestResourceStream(resourceName);
         using MemoryStream memoryStream = new();
         stream.CopyTo(memoryStream);
         return Assembly.Load(memoryStream.ToArray());
