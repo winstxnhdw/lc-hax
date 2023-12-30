@@ -4,6 +4,7 @@ namespace Hax;
 
 public sealed class StunMod : MonoBehaviour {
     Collider[] Colliders { get; set; } = new Collider[20];
+    RaycastHit[] RaycastHits { get; set; } = new RaycastHit[5];
 
     void OnEnable() {
         InputListener.onLeftButtonPress += this.Stun;
@@ -17,8 +18,8 @@ public sealed class StunMod : MonoBehaviour {
         if (!Setting.EnableStunOnLeftClick) return;
         if (!Helper.CurrentCamera.IsNotNull(out Camera camera)) return;
 
-        foreach (RaycastHit raycastHit in Helper.SphereCastForward(camera.transform)) {
-            Collider collider = raycastHit.collider;
+        foreach (int i in this.RaycastHits.SphereCastForward(camera.transform).Range()) {
+            Collider collider = this.RaycastHits[i].collider;
 
             if (collider.TryGetComponent(out EnemyAICollisionDetect enemy)) {
                 enemy.mainScript.SetEnemyStunned(true, 5.0f);
