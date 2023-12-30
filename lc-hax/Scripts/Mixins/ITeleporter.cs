@@ -1,5 +1,4 @@
 using System;
-using System.Linq;
 
 namespace Hax;
 
@@ -8,7 +7,7 @@ public interface ITeleporter { }
 public static class ITeleporterMixin {
     public static bool TryGetTeleporter(this ITeleporter _, out ShipTeleporter teleporter) =>
         Helper.ShipTeleporters
-              .FirstOrDefault(teleporter => teleporter is not null && !teleporter.isInverseTeleporter)
+              .First(teleporter => teleporter is not null && !teleporter.isInverseTeleporter)
               .IsNotNull(out teleporter);
 
     public static bool TeleporterExists(this ITeleporter self) {

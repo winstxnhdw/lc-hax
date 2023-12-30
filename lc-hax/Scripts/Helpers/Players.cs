@@ -1,4 +1,3 @@
-using System.Linq;
 using UnityEngine;
 using GameNetcodeStuff;
 
@@ -19,11 +18,11 @@ public static partial class Helper {
     public static PlayerControllerB? GetPlayer(string playerNameOrId) {
         PlayerControllerB[] players = Helper.Players;
 
-        return players.FirstOrDefault(player => player.playerUsername == playerNameOrId) ??
-               players.FirstOrDefault(player => player.playerClientId.ToString() == playerNameOrId);
+        return players.First(player => player.playerUsername == playerNameOrId) ??
+               players.First(player => player.playerClientId.ToString() == playerNameOrId);
     }
 
-    public static PlayerControllerB? GetPlayer(int playerClientId) => Helper.Players.FirstOrDefault(player => player.playerClientId == (ulong)playerClientId);
+    public static PlayerControllerB? GetPlayer(int playerClientId) => Helper.Players.First(player => player.playerClientId == (ulong)playerClientId);
 
     public static PlayerControllerB? GetActivePlayer(string playerNameOrId) =>
         Helper.GetPlayer(playerNameOrId).IsNotNull(out PlayerControllerB player)
