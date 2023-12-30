@@ -17,7 +17,7 @@ public sealed class StunMod : MonoBehaviour {
         if (!Setting.EnableStunOnLeftClick) return;
         if (!Helper.CurrentCamera.IsNotNull(out Camera camera)) return;
 
-        foreach (RaycastHit raycastHit in Helper.RaycastForward(camera.transform)) {
+        foreach (RaycastHit raycastHit in Helper.SphereCastForward(camera.transform)) {
             Collider collider = raycastHit.collider;
 
             if (collider.TryGetComponent(out EnemyAICollisionDetect enemy)) {
@@ -25,7 +25,7 @@ public sealed class StunMod : MonoBehaviour {
                 break;
             }
 
-            if (collider.TryGetComponent(out Turret _) || collider.TryGetComponent(out Landmine _)) {
+            if (!collider.TryGetComponent(out Turret _) && !collider.TryGetComponent(out Landmine _)) {
                 continue;
             }
 
@@ -46,7 +46,7 @@ public sealed class StunMod : MonoBehaviour {
                        enemy.mainScript.SetEnemyStunned(true, 5.0f);
                    }
 
-                   if (collider.TryGetComponent(out Turret _) || collider.TryGetComponent(out Landmine _)) {
+                   if (!collider.TryGetComponent(out Turret _) && !collider.TryGetComponent(out Landmine _)) {
                        return;
                    }
 
