@@ -8,8 +8,9 @@ namespace Hax;
 class CreditsPatch {
     static bool IsSynced { get; set; } = false;
 
-    static bool Prefix(Terminal __instance) {
+    static bool Prefix(Terminal __instance, int newGroupCredits) {
         if (!Setting.EnableBlockCredits || CreditsPatch.IsSynced) return true;
+        if (newGroupCredits == __instance.groupCredits) return true;
 
         CreditsPatch.IsSynced = true;
 
@@ -19,6 +20,7 @@ class CreditsPatch {
         );
 
         CreditsPatch.IsSynced = false;
+        Console.Print("A player has attempted to modify the credits!");
 
         return false;
     }
