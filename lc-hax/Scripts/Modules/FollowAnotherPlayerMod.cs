@@ -54,8 +54,10 @@ public sealed class FollowAnotherPlayerMod : MonoBehaviour {
         this.AnimationBroadcastTimer -= Time.deltaTime;
 
         int[] animationStates =
-            Enumerable.Range(0, player.playerBodyAnimator.layerCount)
-                      .Select(i => player.playerBodyAnimator.GetCurrentAnimatorStateInfo(i).fullPathHash).ToArray();
+            player.playerBodyAnimator
+                  .layerCount
+                  .Range()
+                  .Select(i => player.playerBodyAnimator.GetCurrentAnimatorStateInfo(i).fullPathHash).ToArray();
 
         this.PlayerStates.Enqueue(new CopiedStates {
             position = player.thisPlayerBody.position.Copy(),
