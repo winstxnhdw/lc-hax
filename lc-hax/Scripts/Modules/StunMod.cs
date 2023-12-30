@@ -4,7 +4,7 @@ namespace Hax;
 
 public sealed class StunMod : MonoBehaviour {
     Collider[] Colliders { get; set; } = new Collider[20];
-    RaycastHit[] RaycastHits { get; set; } = new RaycastHit[5];
+    RaycastHit[] RaycastHits { get; set; } = new RaycastHit[10];
 
     void OnEnable() {
         InputListener.onLeftButtonPress += this.Stun;
