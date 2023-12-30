@@ -11,7 +11,7 @@ class ShotgunPatch {
 
     [HarmonyPatch(nameof(ShotgunItem.Update))]
     static void Postfix(ref float ___misfireTimer, ref bool ___hasHitGroundWithSafetyOff) {
-        ___misfireTimer = 30f;
+        ___misfireTimer = 30.0f;
         ___hasHitGroundWithSafetyOff = true;
     }
 }

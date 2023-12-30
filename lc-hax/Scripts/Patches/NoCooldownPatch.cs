@@ -19,7 +19,7 @@ class NoShovelCooldownPatch {
     static IEnumerable<CodeInstruction> Transpiler(IEnumerable<CodeInstruction> instructions) {
         foreach (CodeInstruction instruction in instructions) {
             if (instruction.opcode == OpCodes.Ldc_R4) {
-                instruction.operand = 0f;
+                instruction.operand = 0.0f;
             }
 
             yield return instruction;
