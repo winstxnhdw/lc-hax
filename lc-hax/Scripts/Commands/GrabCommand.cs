@@ -16,7 +16,8 @@ public class GrabCommand : ICommand {
         }
 
         Vector3 currentPlayerPosition = localPlayer.transform.position;
-        Vector3 positionOffset = currentPlayerPosition + localPlayer.transform.forward + localPlayer.transform.up - shipBuildModeManager.transform.position;
+        Vector3 microOffset = localPlayer.transform.forward + localPlayer.transform.up;
+        Vector3 positionOffset = currentPlayerPosition - shipBuildModeManager.transform.position + microOffset;
 
         Object.FindObjectsOfType<GrabbableObject>().ForEach(grabbableObject => {
             if (Vector3.Distance(grabbableObject.transform.position, currentPlayerPosition) < 20.0f) return;
