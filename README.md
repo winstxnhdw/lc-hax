@@ -86,6 +86,7 @@ The complete feature set includes the following.
 | Teleport to a location        | `/tp <x> <y> <z>`                 |
 | Teleport player to player     | `/tp <player> <player>`           |
 | Teleport player to a location | `/tp <player> <x> <y> <z>`        |
+| Teleports the player to hell  | `/void <player>`                  |
 | Teleport back to ship         | `/home <player?>`                 |
 | Teleport enemies to player    | `/mob <player>`                   |
 | Inverse teleport a player     | `/random <player>`                |
