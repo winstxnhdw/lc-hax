@@ -4,7 +4,7 @@ using GameNetcodeStuff;
 namespace Hax;
 
 public sealed class NameInWeightMod : MonoBehaviour {
-    RaycastHit[] RaycastHits { get; set; } = new RaycastHit[5];
+    RaycastHit[] RaycastHits { get; set; } = new RaycastHit[50];
 
     void SetWeightCounterText() {
         if (!Helper.CurrentCamera.IsNotNull(out Camera camera)) return;
