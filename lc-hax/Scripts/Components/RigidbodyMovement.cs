@@ -15,6 +15,11 @@ public class RigidbodyMovement : MonoBehaviour {
     float SprintMultiplier { get; set; } = 1.0f;
     List<Collider> CollidedColliders { get; } = [];
 
+    public void Init() {
+        if (!Helper.LocalPlayer.IsNotNull(out PlayerControllerB localPlayer)) return;
+        this.gameObject.layer = localPlayer.gameObject.layer;
+    }
+
     void Awake() {
         this.rigidbody = this.gameObject.AddComponent<Rigidbody>();
         this.rigidbody.collisionDetectionMode = CollisionDetectionMode.ContinuousDynamic;
@@ -22,11 +27,6 @@ public class RigidbodyMovement : MonoBehaviour {
 
         this.sphereCollider = this.gameObject.AddComponent<SphereCollider>();
         this.sphereCollider.radius = 0.25f;
-    }
-
-    public void Init() {
-        if (!Helper.LocalPlayer.IsNotNull(out PlayerControllerB localPlayer)) return;
-        this.gameObject.layer = localPlayer.gameObject.layer;
     }
 
     void OnEnable() {
@@ -37,6 +37,14 @@ public class RigidbodyMovement : MonoBehaviour {
     void OnDisable() {
         if (!this.rigidbody.IsNotNull(out Rigidbody rigidbody)) return;
         rigidbody.isKinematic = true;
+    }
+
+    void OnCollisionEnter(Collision collision) {
+        this.CollidedColliders.Add(collision.collider);
+    }
+
+    void OnCollisionExit(Collision collision) {
+        _ = this.CollidedColliders.Remove(collision.collider);
     }
 
     void Update() {
@@ -91,17 +99,7 @@ public class RigidbodyMovement : MonoBehaviour {
     }
 
     void BunnyHop() {
-        //this method covers most cases
-        if (this.CollidedColliders.Count > 0) {
-            this.Jump();
-        }
-    }
-
-    void OnCollisionEnter(Collision collision) {
-        this.CollidedColliders.Add(collision.collider);
-    }
-
-    void OnCollisionExit(Collision collision) {
-        _ = this.CollidedColliders.Remove(collision.collider);
+        if (this.CollidedColliders.Count <= 0) return;
+        this.Jump();
     }
 }
