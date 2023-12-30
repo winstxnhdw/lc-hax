@@ -8,7 +8,7 @@ public sealed class InstantInteractMod : MonoBehaviour {
 
     IEnumerator SetTimeToHold() {
         while (true) {
-            HaxObjects.Instance?.InteractTriggers.Objects?.ForEach(nullableInteractTrigger => {
+            HaxObjects.Instance?.InteractTriggers.ForEach(nullableInteractTrigger => {
                 if (!nullableInteractTrigger.IsNotNull(out InteractTrigger interactTrigger)) return;
                 interactTrigger.timeToHold = interactTrigger.name is "EntranceTeleportB(Clone)" ? 0.3f : 0.0f;
             });
