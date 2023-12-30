@@ -4,7 +4,7 @@ using GameNetcodeStuff;
 namespace Hax;
 
 public sealed class TriggerMod : MonoBehaviour, IEnemyPrompter {
-    RaycastHit[] RaycastHits { get; set; } = new RaycastHit[50];
+    RaycastHit[] RaycastHits { get; set; } = new RaycastHit[100];
 
     bool UsingInteractRay { get; set; } = false;
     bool UsingFollowRay { get; set; } = false;
