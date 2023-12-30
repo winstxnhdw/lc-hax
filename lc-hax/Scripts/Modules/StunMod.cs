@@ -18,7 +18,7 @@ public sealed class StunMod : MonoBehaviour {
         if (!Setting.EnableStunOnLeftClick) return;
         if (!Helper.CurrentCamera.IsNotNull(out Camera camera)) return;
 
-        foreach (int i in this.RaycastHits.SphereCastForward(camera.transform).Range()) {
+        this.RaycastHits.SphereCastForward(camera.transform).Range().ForEach(i => {
             Collider collider = this.RaycastHits[i].collider;
 
             if (collider.TryGetComponent(out EnemyAICollisionDetect enemy)) {
@@ -26,34 +26,32 @@ public sealed class StunMod : MonoBehaviour {
             }
 
             if (!collider.TryGetComponent(out Turret _) && !collider.TryGetComponent(out Landmine _)) {
-                continue;
+                return;
             }
 
             if (!collider.TryGetComponent(out TerminalAccessibleObject terminalAccessibleObject)) {
-                continue;
+                return;
             }
 
             terminalAccessibleObject.CallFunctionFromTerminal();
-        }
+        });
 
-        Physics.OverlapSphereNonAlloc(camera.transform.position, 5.0f, this.Colliders)
-               .Range()
-               .ForEach(i => {
-                   Collider collider = this.Colliders[i];
+        Physics.OverlapSphereNonAlloc(camera.transform.position, 5.0f, this.Colliders).Range().ForEach(i => {
+            Collider collider = this.Colliders[i];
 
-                   if (collider.TryGetComponent(out EnemyAICollisionDetect enemy)) {
-                       enemy.mainScript.SetEnemyStunned(true, 5.0f);
-                   }
+            if (collider.TryGetComponent(out EnemyAICollisionDetect enemy)) {
+                enemy.mainScript.SetEnemyStunned(true, 5.0f);
+            }
 
-                   if (!collider.TryGetComponent(out Turret _) && !collider.TryGetComponent(out Landmine _)) {
-                       return;
-                   }
+            if (!collider.TryGetComponent(out Turret _) && !collider.TryGetComponent(out Landmine _)) {
+                return;
+            }
 
-                   if (!collider.TryGetComponent(out TerminalAccessibleObject terminalAccessibleObject)) {
-                       return;
-                   }
+            if (!collider.TryGetComponent(out TerminalAccessibleObject terminalAccessibleObject)) {
+                return;
+            }
 
-                   terminalAccessibleObject.CallFunctionFromTerminal();
-               });
+            terminalAccessibleObject.CallFunctionFromTerminal();
+        });
     }
 }
