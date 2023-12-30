@@ -23,7 +23,6 @@ public sealed class StunMod : MonoBehaviour {
 
             if (collider.TryGetComponent(out EnemyAICollisionDetect enemy)) {
                 enemy.mainScript.SetEnemyStunned(true, 5.0f);
-                break;
             }
 
             if (!collider.TryGetComponent(out Turret _) && !collider.TryGetComponent(out Landmine _)) {
@@ -35,7 +34,6 @@ public sealed class StunMod : MonoBehaviour {
             }
 
             terminalAccessibleObject.CallFunctionFromTerminal();
-            break;
         }
 
         Physics.OverlapSphereNonAlloc(camera.transform.position, 5.0f, this.Colliders)
