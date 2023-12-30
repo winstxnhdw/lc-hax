@@ -5,9 +5,9 @@ using HarmonyLib;
 
 namespace Hax;
 
-[HarmonyPatch(typeof(PlayerControllerB), "SetHoverTipAndCurrentInteractTrigger")]
+[HarmonyPatch(typeof(PlayerControllerB), "LateUpdate")]
 class NameBillboardPatch {
-    static void Prefix(ref PlayerControllerB __instance) {
+    static void Postfix(ref PlayerControllerB __instance) {
         __instance.ShowNameBillboard();
     }
 }
