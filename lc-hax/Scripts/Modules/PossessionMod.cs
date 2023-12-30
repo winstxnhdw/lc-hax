@@ -9,7 +9,7 @@ namespace Hax;
 public sealed class PossessionMod : MonoBehaviour {
     EnemyAI? EnemyToPossess { get; set; } = null;
     bool FirstUpdate { get; set; } = true;
-    RBKeyboardMovement? RBKeyboard { get; set; } = null;
+    RigidbodyMovement? RBKeyboard { get; set; } = null;
     MousePan? MousePan { get; set; } = null;
 
     public static PossessionMod? Instance { get; private set; }
@@ -17,7 +17,7 @@ public sealed class PossessionMod : MonoBehaviour {
     public bool IsPossessed => this.EnemyToPossess != null;
 
     void Awake() {
-        this.RBKeyboard = this.gameObject.AddComponent<RBKeyboardMovement>();
+        this.RBKeyboard = this.gameObject.AddComponent<RigidbodyMovement>();
         this.MousePan = this.gameObject.AddComponent<MousePan>();
         this.enabled = false;
 
@@ -28,7 +28,7 @@ public sealed class PossessionMod : MonoBehaviour {
         InputListener.onXPress += this.ToggleRealisticPossession;
         InputListener.onZPress += this.Unpossess;
         if (!this.MousePan.IsNotNull(out MousePan mousePan) ||
-            !this.RBKeyboard.IsNotNull(out RBKeyboardMovement rbKeyboard))
+            !this.RBKeyboard.IsNotNull(out RigidbodyMovement rbKeyboard))
             return;
 
         mousePan.enabled = true;
@@ -43,7 +43,7 @@ public sealed class PossessionMod : MonoBehaviour {
             return;
         }
 
-        if (!this.RBKeyboard.IsNotNull(out RBKeyboardMovement rbKeyboard)) {
+        if (!this.RBKeyboard.IsNotNull(out RigidbodyMovement rbKeyboard)) {
             return;
         }
 
@@ -78,7 +78,7 @@ public sealed class PossessionMod : MonoBehaviour {
 
     private void EndOfFrameUpdate() {
         if (!this.MousePan.IsNotNull(out MousePan mousePan) ||
-            !this.RBKeyboard.IsNotNull(out RBKeyboardMovement rbKeyboard) ||
+            !this.RBKeyboard.IsNotNull(out RigidbodyMovement rbKeyboard) ||
             !this.EnemyToPossess.IsNotNull(out EnemyAI enemy) ||
             !Helper.CurrentCamera.IsNotNull(out Camera camera) ||
             !camera.enabled
