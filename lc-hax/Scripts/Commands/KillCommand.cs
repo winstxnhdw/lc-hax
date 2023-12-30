@@ -37,8 +37,14 @@ public class KillCommand : ICommand {
     }
 
     Result KillAllEnemies() {
-        this.ForEachEnemy(enemy => enemy.HitEnemy(1000));
-        this.ForEachEnemy(enemy => enemy.KillEnemyServerRpc(true));
+        this.ForEachEnemy(enemy => {
+            enemy.HitEnemyServerRpc(1000, -1, false);
+
+            if (!enemy.isEnemyDead) {
+                enemy.KillEnemyServerRpc(true);
+            }
+        });
+
         return new Result(true);
     }
 
