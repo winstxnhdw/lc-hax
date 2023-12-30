@@ -41,13 +41,13 @@ public sealed class TriggerMod : MonoBehaviour, IEnemyPrompter {
             }
 
             foreach (RaycastHit raycastHit in Helper.RaycastForward(camera.transform)) {
-                GameObject gameObject = raycastHit.collider.gameObject;
-
-                if (gameObject.TryGetComponent(out PlayerControllerB player)) {
-                    Console.Print($"Following #{player.playerClientId} {player.playerUsername}!");
-                    Setting.PlayerToFollow = player;
-                    break;
+                if (!raycastHit.collider.TryGetComponent(out PlayerControllerB player)) {
+                    continue;
                 }
+
+                Console.Print($"Following #{player.playerClientId} {player.playerUsername}!");
+                Setting.PlayerToFollow = player;
+                break;
             }
 
             return;
@@ -55,7 +55,7 @@ public sealed class TriggerMod : MonoBehaviour, IEnemyPrompter {
 
         if (this.UsingInteractRay) {
             foreach (RaycastHit raycastHit in Helper.RaycastForward(camera.transform, 0.25f)) {
-                if (!raycastHit.collider.gameObject.TryGetComponent(out InteractTrigger interactTrigger)) {
+                if (!raycastHit.collider.TryGetComponent(out InteractTrigger interactTrigger)) {
                     continue;
                 }
 
@@ -72,38 +72,38 @@ public sealed class TriggerMod : MonoBehaviour, IEnemyPrompter {
         }
 
         foreach (RaycastHit raycastHit in Helper.RaycastForward(camera.transform)) {
-            GameObject gameObject = raycastHit.collider.gameObject;
+            Collider collider = raycastHit.collider;
 
-            if (gameObject.TryGetComponent(out TerminalAccessibleObject terminalObject)) {
+            if (collider.TryGetComponent(out TerminalAccessibleObject terminalObject)) {
                 terminalObject.SetDoorOpenServerRpc(!terminalObject.Reflect().GetInternalField<bool>("isDoorOpen"));
             }
 
-            if (gameObject.TryGetComponent(out Turret turret)) {
+            if (collider.TryGetComponent(out Turret turret)) {
                 turret.EnterBerserkModeServerRpc(-1);
             }
 
-            if (gameObject.TryGetComponent(out Landmine landmine)) {
+            if (collider.TryGetComponent(out Landmine landmine)) {
                 landmine.TriggerMine();
                 break;
             }
 
-            if (gameObject.TryGetComponent(out JetpackItem jetpack)) {
+            if (collider.TryGetComponent(out JetpackItem jetpack)) {
                 jetpack.ExplodeJetpackServerRpc();
                 break;
             }
 
-            if (gameObject.TryGetComponent(out DoorLock doorLock)) {
+            if (collider.TryGetComponent(out DoorLock doorLock)) {
                 doorLock.UnlockDoorSyncWithServer();
                 break;
             }
 
-            if (gameObject.TryGetComponent(out PlayerControllerB player)) {
+            if (collider.TryGetComponent(out PlayerControllerB player)) {
                 this.PromptEnemiesToTarget(player, this.FunnyReviveEnabled)
                     .ForEach(enemy => Console.Print($"{enemy} prompted!"));
                 break;
             }
 
-            if (gameObject.GetComponentInParent<EnemyAI>().IsNotNull(out EnemyAI enemy) &&
+            if (collider.GetComponentInParent<EnemyAI>().IsNotNull(out EnemyAI enemy) &&
                 PossessionMod.Instance.IsNotNull(out PossessionMod possessionMod)) {
                 possessionMod.Possess(enemy);
                 break;
