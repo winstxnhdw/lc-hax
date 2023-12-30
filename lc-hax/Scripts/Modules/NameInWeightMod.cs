@@ -4,13 +4,15 @@ using GameNetcodeStuff;
 namespace Hax;
 
 public sealed class NameInWeightMod : MonoBehaviour {
+    RaycastHit[] RaycastHits { get; set; } = new RaycastHit[5];
+
     void SetWeightCounterText() {
         if (!Helper.CurrentCamera.IsNotNull(out Camera camera)) return;
         if (!Helper.HUDManager.IsNotNull(out HUDManager hudManager)) return;
         if (!hudManager.weightCounter.IsNotNull(out TMPro.TextMeshProUGUI weightCounter)) return;
 
-        foreach (RaycastHit raycastHit in Helper.RaycastForward(camera.transform)) {
-            if (!raycastHit.collider.TryGetComponent(out PlayerControllerB player)) {
+        foreach (int i in this.RaycastHits.SphereCastForward(camera.transform).Range()) {
+            if (!this.RaycastHits[i].collider.TryGetComponent(out PlayerControllerB player)) {
                 continue;
             }
 

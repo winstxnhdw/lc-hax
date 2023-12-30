@@ -40,7 +40,7 @@ public sealed class TriggerMod : MonoBehaviour, IEnemyPrompter {
                 return;
             }
 
-            foreach (RaycastHit raycastHit in Helper.RaycastForward(camera.transform)) {
+            foreach (RaycastHit raycastHit in Helper.SphereCastForward(camera.transform)) {
                 if (!raycastHit.collider.TryGetComponent(out PlayerControllerB player)) {
                     continue;
                 }
@@ -54,7 +54,7 @@ public sealed class TriggerMod : MonoBehaviour, IEnemyPrompter {
         }
 
         if (this.UsingInteractRay) {
-            foreach (RaycastHit raycastHit in Helper.RaycastForward(camera.transform, 0.25f)) {
+            foreach (RaycastHit raycastHit in Helper.SphereCastForward(camera.transform, 0.25f)) {
                 if (!raycastHit.collider.TryGetComponent(out InteractTrigger interactTrigger)) {
                     continue;
                 }
@@ -71,7 +71,7 @@ public sealed class TriggerMod : MonoBehaviour, IEnemyPrompter {
             return;
         }
 
-        foreach (RaycastHit raycastHit in Helper.RaycastForward(camera.transform)) {
+        foreach (RaycastHit raycastHit in Helper.SphereCastForward(camera.transform)) {
             Collider collider = raycastHit.collider;
 
             if (collider.TryGetComponent(out TerminalAccessibleObject terminalObject)) {
