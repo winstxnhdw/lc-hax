@@ -4,6 +4,8 @@ using GameNetcodeStuff;
 namespace Hax;
 
 public sealed class TriggerMod : MonoBehaviour, IEnemyPrompter {
+    RaycastHit[] RaycastHits { get; set; } = new RaycastHit[5];
+
     bool UsingInteractRay { get; set; } = false;
     bool UsingFollowRay { get; set; } = false;
     bool FunnyReviveEnabled { get; set; } = false;
@@ -40,8 +42,8 @@ public sealed class TriggerMod : MonoBehaviour, IEnemyPrompter {
                 return;
             }
 
-            foreach (RaycastHit raycastHit in Helper.SphereCastForward(camera.transform)) {
-                if (!raycastHit.collider.TryGetComponent(out PlayerControllerB player)) {
+            foreach (int i in this.RaycastHits.SphereCastForward(camera.transform).Range()) {
+                if (!this.RaycastHits[i].collider.TryGetComponent(out PlayerControllerB player)) {
                     continue;
                 }
 
@@ -54,8 +56,8 @@ public sealed class TriggerMod : MonoBehaviour, IEnemyPrompter {
         }
 
         if (this.UsingInteractRay) {
-            foreach (RaycastHit raycastHit in Helper.SphereCastForward(camera.transform, 0.25f)) {
-                if (!raycastHit.collider.TryGetComponent(out InteractTrigger interactTrigger)) {
+            foreach (int i in this.RaycastHits.SphereCastForward(camera.transform, 0.25f).Range()) {
+                if (!this.RaycastHits[i].collider.TryGetComponent(out InteractTrigger interactTrigger)) {
                     continue;
                 }
 
@@ -71,7 +73,7 @@ public sealed class TriggerMod : MonoBehaviour, IEnemyPrompter {
             return;
         }
 
-        foreach (RaycastHit raycastHit in Helper.SphereCastForward(camera.transform)) {
+        foreach (RaycastHit raycastHit in camera.transform.SphereCastForward()) {
             Collider collider = raycastHit.collider;
 
             if (collider.TryGetComponent(out TerminalAccessibleObject terminalObject)) {
