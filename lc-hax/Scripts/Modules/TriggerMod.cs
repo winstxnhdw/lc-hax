@@ -31,6 +31,8 @@ public sealed class TriggerMod : MonoBehaviour, IEnemyPrompter {
     void SetFunnyReviveEnabled(bool isHeld) => this.FunnyReviveEnabled = isHeld;
 
     void Fire() {
+        if (!Helper.CurrentCamera.IsNotNull(out Camera camera)) return;
+
         if (this.UsingFollowRay) {
             if (Setting.PlayerToFollow is not null) {
                 Setting.PlayerToFollow = null;
@@ -38,7 +40,7 @@ public sealed class TriggerMod : MonoBehaviour, IEnemyPrompter {
                 return;
             }
 
-            foreach (RaycastHit raycastHit in Helper.RaycastForward()) {
+            foreach (RaycastHit raycastHit in Helper.RaycastForward(camera.transform)) {
                 GameObject gameObject = raycastHit.collider.gameObject;
 
                 if (gameObject.TryGetComponent(out PlayerControllerB player)) {
@@ -52,7 +54,7 @@ public sealed class TriggerMod : MonoBehaviour, IEnemyPrompter {
         }
 
         if (this.UsingInteractRay) {
-            foreach (RaycastHit raycastHit in Helper.RaycastForward(0.25f)) {
+            foreach (RaycastHit raycastHit in Helper.RaycastForward(camera.transform, 0.25f)) {
                 if (!raycastHit.collider.gameObject.TryGetComponent(out InteractTrigger interactTrigger)) {
                     continue;
                 }
@@ -69,7 +71,7 @@ public sealed class TriggerMod : MonoBehaviour, IEnemyPrompter {
             return;
         }
 
-        foreach (RaycastHit raycastHit in Helper.RaycastForward()) {
+        foreach (RaycastHit raycastHit in Helper.RaycastForward(camera.transform)) {
             GameObject gameObject = raycastHit.collider.gameObject;
 
             if (gameObject.TryGetComponent(out TerminalAccessibleObject terminalObject)) {

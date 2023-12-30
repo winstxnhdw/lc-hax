@@ -5,13 +5,11 @@ namespace Hax;
 
 public sealed class NameInWeightMod : MonoBehaviour {
     void SetWeightCounterText() {
-        if (!Helper.HUDManager.IsNotNull(out HUDManager hudManager) ||
-            !hudManager.weightCounter.IsNotNull(out TMPro.TextMeshProUGUI weightCounter)) {
-            return;
-        }
+        if (!Helper.CurrentCamera.IsNotNull(out Camera camera)) return;
+        if (!Helper.HUDManager.IsNotNull(out HUDManager hudManager)) return;
+        if (!hudManager.weightCounter.IsNotNull(out TMPro.TextMeshProUGUI weightCounter)) return;
 
-
-        foreach (RaycastHit raycastHit in Helper.RaycastForward()) {
+        foreach (RaycastHit raycastHit in Helper.RaycastForward(camera.transform)) {
             if (!raycastHit.collider.gameObject.TryGetComponent(out PlayerControllerB player)) {
                 continue;
             }

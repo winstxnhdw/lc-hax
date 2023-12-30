@@ -4,14 +4,12 @@ using UnityEngine;
 namespace Hax;
 
 public static partial class Helper {
-    public static RaycastHit[] RaycastForward(float sphereRadius = 1.0f) {
-        if (!Helper.CurrentCamera.IsNotNull(out Camera camera)) return [];
-
+    public static RaycastHit[] RaycastForward(Transform transform, float sphereRadius = 1.0f) {
         try {
             return Physics.SphereCastAll(
-                camera.transform.position + (camera.transform.forward * (sphereRadius + 1.75f)),
+                transform.position + (transform.forward * (sphereRadius + 1.75f)),
                 sphereRadius,
-                camera.transform.forward,
+                transform.forward,
                 float.MaxValue
             );
         }
