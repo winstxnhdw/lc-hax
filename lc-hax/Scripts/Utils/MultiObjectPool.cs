@@ -2,8 +2,6 @@ using System.Collections;
 using UnityEngine;
 using UnityObject = UnityEngine.Object;
 
-namespace Hax;
-
 public class MultiObjectPool<T> where T : UnityObject {
     public T?[] Objects { get; private set; } = [];
 

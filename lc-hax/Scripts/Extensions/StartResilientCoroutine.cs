@@ -1,8 +1,6 @@
 using System.Collections;
 using UnityEngine;
 
-namespace Hax;
-
 public static partial class Extensions {
     public static Coroutine StartResilientCoroutine(this MonoBehaviour self, IEnumerator coroutine) {
         static IEnumerator ResilientCoroutine(IEnumerator coroutine) {
