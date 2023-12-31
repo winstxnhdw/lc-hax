@@ -9,9 +9,7 @@ class ConsolePatch {
         if (!Helper.HUDManager.IsNotNull(out HUDManager hudManager)) return true;
         if (!hudManager.chatTextField.text.StartsWith("/")) return true;
 
-        string command = hudManager.chatTextField.text;
-
-        Helper.Try(() => Console.ExecuteCommand(command), (Exception exception) => {
+        Helper.Try(() => Console.ExecuteCommand(hudManager.chatTextField.text), (Exception exception) => {
             Logger.Write(exception.ToString());
         });
 
