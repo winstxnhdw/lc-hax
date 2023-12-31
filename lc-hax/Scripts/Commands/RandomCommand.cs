@@ -4,6 +4,7 @@ using System;
 
 namespace Hax;
 
+[Command("/random")]
 public class RandomCommand : ICommand {
     bool InverseTeleporterExists() {
         HaxObjects.Instance?.ShipTeleporters.Renew();

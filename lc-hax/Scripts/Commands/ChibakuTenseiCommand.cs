@@ -3,6 +3,7 @@ using GameNetcodeStuff;
 
 namespace Hax;
 
+[Command("/ct")]
 public class ChibakuTenseiCommand : ICommand {
     Vector3 spinningY = new(0, 2, 0);
 

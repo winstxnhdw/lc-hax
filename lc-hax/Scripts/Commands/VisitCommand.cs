@@ -2,6 +2,7 @@ using System;
 
 namespace Hax;
 
+[Command("/visit")]
 public class VisitCommand : ICommand {
     bool IsValidLevelIndex(string levelIndex, out int chosenLevelId) =>
         int.TryParse(levelIndex, out chosenLevelId) &&

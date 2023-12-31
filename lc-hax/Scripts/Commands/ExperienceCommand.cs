@@ -1,5 +1,6 @@
 namespace Hax;
 
+[Command("/xp")]
 public class ExperienceCommand : ICommand {
     enum Rank {
         INTERN = 0,

@@ -2,6 +2,7 @@ using GameNetcodeStuff;
 
 namespace Hax;
 
+[Command("/heal")]
 public class HealCommand : IStun, ICommand {
     void StunAtPlayerPosition(PlayerControllerB player) => this.Stun(player.transform.position, 5.0f, 0.1f);
 

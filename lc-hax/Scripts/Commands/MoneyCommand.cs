@@ -2,6 +2,7 @@ using UnityEngine;
 
 namespace Hax;
 
+[Command("/money")]
 public class MoneyCommand : ICommand {
     public void Execute(string[] args) {
         if (args.Length is 0) {

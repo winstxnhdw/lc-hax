@@ -1,5 +1,6 @@
 namespace Hax;
 
+[Command("/block")]
 public class BlockCommand : ICommand {
     public void Execute(string[] args) {
         if (args.Length is 0) {

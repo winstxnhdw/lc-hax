@@ -1,5 +1,6 @@
 namespace Hax;
 
+[Command("/god")]
 public class GodCommand : ICommand {
     public void Execute(string[] _) {
         Setting.EnableGodMode = !Setting.EnableGodMode;

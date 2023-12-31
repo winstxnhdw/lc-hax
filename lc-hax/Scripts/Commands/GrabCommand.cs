@@ -3,6 +3,7 @@ using UnityEngine;
 
 namespace Hax;
 
+[Command("/grab")]
 public class GrabCommand : ICommand {
     public void Execute(string[] args) {
         if (!Helper.ShipBuildModeManager.IsNotNull(out ShipBuildModeManager shipBuildModeManager)) {

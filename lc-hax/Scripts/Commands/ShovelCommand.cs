@@ -1,6 +1,7 @@
 
 namespace Hax;
 
+[Command("/shovel")]
 public class ShovelCommand : ICommand {
     public void Execute(string[] args) {
         if (args.Length is 0) {

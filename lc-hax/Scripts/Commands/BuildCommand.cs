@@ -2,6 +2,7 @@ using UnityEngine;
 
 namespace Hax;
 
+[Command("/build")]
 public class BuildCommand : ICommand {
     Result PlaceUnlockable(Unlockable unlockable, Camera camera) {
         if (!Helper.GetUnlockable(unlockable).IsNotNull(out PlaceableShipObject shipObject)) {

@@ -1,47 +1,22 @@
+using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
 using UnityEngine.EventSystems;
 
 namespace Hax;
 
 public static class Console {
-    static Dictionary<string, ICommand> Commands { get; } = new() {
-        { "/god", new GodCommand() },
-        { "/end", new EndCommand() },
-        { "/mob", new MobCommand() },
-        { "/hate", new HateCommand() },
-        { "/void", new VoidCommand() },
-        { "/kill", new KillCommand() },
-        { "/lock", new LockCommand() },
-        { "/home", new HomeCommand() },
-        { "/stun", new StunCommand() },
-        { "/heal", new HealCommand() },
-        { "/beta", new BetaCommand() },
-        { "/grab", new GrabCommand() },
-        { "/block", new BlockCommand() },
-        { "/visit", new VisitCommand() },
-        { "/build", new BuildCommand() },
-        { "/tp", new TeleportCommand() },
-        { "/noise", new NoiseCommand() },
-        { "/money", new MoneyCommand() },
-        { "/xyz", new LocationCommand() },
-        { "/xp", new ExperienceCommand() },
-        { "/shovel", new ShovelCommand() },
-        { "/unlock", new UnlockCommand() },
-        { "/random", new RandomCommand() },
-        { "/demigod", new DemiGodCommand() },
-        { "/start", new StartGameCommand() },
-        { "/pumpkin", new PumpkinCommand() },
-        { "/players", new PlayersCommand() },
-        { "/explode", new ExplodeCommand() },
-        { "/ct", new ChibakuTenseiCommand() },
-        { "/enter", new EnterCommand() },
-        { "/exit", new ExitCommand() },
-        { "/stunclick", new StunOnClickCommand() },
-        { "/levels", new Debug(new LevelsCommand()) },
-        { "/timescale", new Debug(new TimescaleCommand()) },
-        { "/fixcamera", new Debug(new FixCameraCommand()) },
-        { "/unlockables", new Debug(new UnlockablesCommand()) },
-    };
+    static Dictionary<string, ICommand> Commands { get; } =
+        Assembly
+            .GetExecutingAssembly()
+            .GetTypes()
+            .Where(type => typeof(ICommand).IsAssignableFrom(type))
+            .Where(type => type.GetCustomAttribute<CommandAttribute>() is not null)
+            .ToDictionary(
+                type => type.GetCustomAttribute<CommandAttribute>().Syntax,
+                type => (ICommand)Activator.CreateInstance(type)
+            );
 
     public static void Print(string name, string? message, bool isSystem = false) {
         if (string.IsNullOrWhiteSpace(message) || !Helper.HUDManager.IsNotNull(out HUDManager hudManager)) return;
