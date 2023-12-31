@@ -4,6 +4,7 @@ using UnityObject = UnityEngine.Object;
 
 namespace Hax;
 
+[Command("/kill")]
 public class KillCommand : ICommand {
     void ForEachEnemy(Action<EnemyAI> action) =>
         UnityObject.FindObjectsOfType<EnemyAI>().ForEach(action);

@@ -4,6 +4,7 @@ using GameNetcodeStuff;
 
 namespace Hax;
 
+[Command("/tp")]
 public class TeleportCommand : ITeleporter, ICommand {
     Vector3? GetCoordinates(string[] args) {
         bool isValidX = float.TryParse(args[0], out float x);

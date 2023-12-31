@@ -2,6 +2,7 @@ using UnityEngine;
 
 namespace Hax;
 
+[Command("/explode")]
 public class ExplodeCommand : ICommand {
     public void Execute(string[] args) {
         if (args.Length is 0) {

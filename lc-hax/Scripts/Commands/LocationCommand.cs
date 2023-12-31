@@ -2,6 +2,7 @@ using UnityEngine;
 
 namespace Hax;
 
+[Command("/xyz")]
 public class LocationCommand : ICommand {
     public void Execute(string[] _) {
         if (!Helper.CurrentCamera.IsNotNull(out Camera camera)) {

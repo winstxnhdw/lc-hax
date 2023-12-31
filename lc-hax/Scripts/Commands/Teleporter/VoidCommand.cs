@@ -4,6 +4,7 @@ using GameNetcodeStuff;
 
 namespace Hax;
 
+[Command("/void")]
 public class VoidCommand : ITeleporter, ICommand {
     Action PlaceAndTeleport(PlayerControllerB player, Vector3 position) => () => {
         HaxObjects.Instance?.ShipTeleporters.Renew();

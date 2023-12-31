@@ -6,6 +6,7 @@ using GameNetcodeStuff;
 
 namespace Hax;
 
+[Command("/pumpkin")]
 public class PumpkinCommand : ICommand {
     bool PumpkinExists() {
         return UnityObject

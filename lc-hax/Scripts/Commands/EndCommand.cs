@@ -2,6 +2,7 @@ using GameNetcodeStuff;
 
 namespace Hax;
 
+[Command("/end")]
 public class EndCommand : ICommand {
     public void Execute(string[] args) {
         if (args.Length is 0) {

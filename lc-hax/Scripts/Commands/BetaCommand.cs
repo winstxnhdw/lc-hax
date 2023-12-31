@@ -1,5 +1,6 @@
 namespace Hax;
 
+[Command("/beta")]
 public class BetaCommand : ICommand {
     public void Execute(string[] _) {
         bool playedDuringBeta = ES3.Load("playedDuringBeta", "LCGeneralSaveData", true);
