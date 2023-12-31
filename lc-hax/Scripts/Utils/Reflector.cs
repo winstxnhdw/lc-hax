@@ -1,8 +1,6 @@
 using System;
 using System.Reflection;
 
-namespace Hax;
-
 public class Reflector {
     const BindingFlags privateOrInternal = BindingFlags.NonPublic | BindingFlags.Instance;
     const BindingFlags internalStatic = BindingFlags.NonPublic | BindingFlags.Static;

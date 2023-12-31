@@ -2,8 +2,6 @@ using System.Collections;
 using UnityObject = UnityEngine.Object;
 using UnityEngine;
 
-namespace Hax;
-
 public class SingleObjectPool<T> where T : UnityObject {
     public T? Object { get; private set; }
 

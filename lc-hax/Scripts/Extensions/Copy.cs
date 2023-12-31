@@ -1,7 +1,5 @@
 using UnityEngine;
 
-namespace Hax;
-
 public static partial class Extensions {
     public static Vector3 Copy(this Vector3 vector) {
         return new Vector3(
