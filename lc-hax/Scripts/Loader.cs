@@ -56,6 +56,8 @@ public class Loader : MonoBehaviour {
 
         Loader.AddHaxGameObject<HaxObjects>();
         Loader.AddHaxGameObject<InputListener>();
+        Loader.AddHaxGameObject<ScreenListener>();
+        Loader.AddHaxGameObject<GameListener>();
     }
 
     static void LoadHaxModules() {
@@ -72,6 +74,7 @@ public class Loader : MonoBehaviour {
         Loader.AddHaxModules<NameInWeightMod>();
         Loader.AddHaxModules<InstantInteractMod>();
         Loader.AddHaxModules<FollowMod>();
+        Loader.AddHaxModules<CrosshairMod>();
     }
 
     public static void Unload() {

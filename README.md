@@ -73,6 +73,7 @@ The complete feature set includes the following.
 - Stable Zap gun
 - Clear vision
 - Show player's name in HUD
+- Crosshair
 - [Commands](#commands)
 - [Binds](#binds)
 
@@ -123,19 +124,20 @@ The complete feature set includes the following.
 
 ### Binds
 
-| Action                     | Input                            |
-| -------------------------- | -------------------------------- |
-| Trigger various objects    | <kbd> M3 </kbd>                  |
-| Follow player              | <kbd> M3 </kbd> + <kbd> F </kbd> |
-| Interact at a distance     | <kbd> M3 </kbd> + <kbd> E </kbd> |
-| Funny respawn mobs         | <kbd> M3 </kbd> + <kbd> R </kbd> |
-| Toggle Phantom             | <kbd> = </kbd>                   |
-| Change spectator index     | <kbd> ⇽ </kbd>                  |
-| Change spectator index     | <kbd> ⇾ </kbd>                  |
-| Increase mouse sensitivity | <kbd> ] </kbd>                   |
-| Decrease mouse sensitivity | <kbd> [ </kbd>                   |
-| Unpossess enemy            | <kbd> Z </kbd>                   |
-| Toggle realistic movement  | <kbd> X </kbd>                   |
+| Action                     | Input                                |
+| -------------------------- | ------------------------------------ |
+| Trigger various objects    | <kbd> M3 </kbd>                      |
+| Follow player              | <kbd> M3 </kbd> + <kbd> F </kbd>     |
+| Interact at a distance     | <kbd> M3 </kbd> + <kbd> E </kbd>     |
+| Funny respawn mobs         | <kbd> M3 </kbd> + <kbd> R </kbd>     |
+| Toggle Phantom             | <kbd> = </kbd>                       |
+| Teleport to Phantom        | <kbd> Shift </kbd> +  <kbd> = </kbd> |
+| Change spectator index     | <kbd> ⇽ </kbd>                      |
+| Change spectator index     | <kbd> ⇾ </kbd>                      |
+| Increase mouse sensitivity | <kbd> ] </kbd>                       |
+| Decrease mouse sensitivity | <kbd> [ </kbd>                       |
+| Unpossess enemy            | <kbd> Z </kbd>                       |
+| Toggle realistic movement  | <kbd> X </kbd>                       |
 
 ### TriggerMod
 
