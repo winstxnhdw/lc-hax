@@ -22,5 +22,6 @@ public class MoneyCommand : ICommand {
 
         terminal.groupCredits = Mathf.Clamp(terminal.groupCredits + amount, 0, int.MaxValue);
         terminal.SyncGroupCreditsServerRpc(terminal.groupCredits, terminal.numberOfItemsInDropship);
+        Console.Print($"You now have {terminal.groupCredits} credits!");
     }
 }
