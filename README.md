@@ -100,6 +100,7 @@ The complete feature set includes the following.
 | Kill all enemies              | `/kill --enemy`                   |
 | Kill all enemies on client    | `/kill --localenemy`              |
 | Kill with pumpkin             | `/pumpkin <player> <duration=15>` |
+| Spoof a server message        | `/say <player> <message>`         |
 | Modify shovel damage          | `/shovel <force=1>`               |
 | Give or take money            | `/money <amount>`                 |
 | Add or remove experience      | `/xp <amount>`                    |
