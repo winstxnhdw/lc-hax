@@ -43,6 +43,10 @@
       <HintPath>$(ReferencePath)/UnityEngine.UIModule.dll</HintPath>
     </Reference>
 
+    <Reference Include="UnityEngine.IMGUIModule">
+      <HintPath>$(ReferencePath)/UnityEngine.IMGUIModule.dll</HintPath>
+    </Reference>
+
     <Reference Include="UnityEngine.ParticleSystemModule">
       <HintPath>$(ReferencePath)/UnityEngine.ParticleSystemModule.dll</HintPath>
     </Reference>
