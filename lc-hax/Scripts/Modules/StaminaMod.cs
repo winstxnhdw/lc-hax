@@ -5,7 +5,7 @@ using UnityEngine;
 namespace Hax;
 
 public sealed class StaminaMod : MonoBehaviour {
-    IEnumerator SetSprint() {
+    IEnumerator SetSprint(object[] args) {
         while (true) {
             if (!Helper.LocalPlayer.IsNotNull(out PlayerControllerB player)) {
                 yield return new WaitForEndOfFrame();

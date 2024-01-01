@@ -60,7 +60,7 @@ public sealed class ClearVisionMod : MonoBehaviour {
         }
     }
 
-    IEnumerator DisableFog() {
+    IEnumerator DisableFog(object[] args) {
         while (true) {
             HaxObjects
                 .Instance?
@@ -73,7 +73,7 @@ public sealed class ClearVisionMod : MonoBehaviour {
         }
     }
 
-    IEnumerator DisableSteamValves() {
+    IEnumerator DisableSteamValves(object[] args) {
         while (true) {
             HaxObjects
                 .Instance?

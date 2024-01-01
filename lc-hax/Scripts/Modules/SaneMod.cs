@@ -5,7 +5,7 @@ using UnityEngine;
 namespace Hax;
 
 public sealed class SaneMod : MonoBehaviour {
-    IEnumerator SetSanity() {
+    IEnumerator SetSanity(object[] args) {
         while (true) {
             if (!Helper.LocalPlayer.IsNotNull(out PlayerControllerB localPlayer)) {
                 yield return new WaitForEndOfFrame();
