@@ -2,6 +2,7 @@ using GameNetcodeStuff;
 
 namespace Hax;
 
+[DebugCommand("/fixcamera")]
 public class FixCameraCommand : ICommand {
     public void Execute(string[] args) {
         if (!Helper.LocalPlayer.IsNotNull(out PlayerControllerB localPlayer)) {

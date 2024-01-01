@@ -1,5 +1,6 @@
 namespace Hax;
 
+[DebugCommand("/levels")]
 public class LevelsCommand : ICommand {
     public void Execute(string[] _) {
         if (!Helper.StartOfRound.IsNotNull(out StartOfRound startOfRound)) {

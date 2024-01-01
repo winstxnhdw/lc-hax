@@ -3,6 +3,7 @@ using GameNetcodeStuff;
 
 namespace Hax;
 
+[Command("/hate")]
 public class HateCommand : IEnemyPrompter, ICommand {
     public void Execute(string[] args) {
         if (args.Length is 0) {

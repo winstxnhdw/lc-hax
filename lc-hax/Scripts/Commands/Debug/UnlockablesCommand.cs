@@ -1,5 +1,6 @@
 namespace Hax;
 
+[DebugCommand("/unlockables")]
 public class UnlockablesCommand : ICommand {
     public void Execute(string[] _) {
         if (!Helper.StartOfRound.IsNotNull(out StartOfRound startOfRound)) {
