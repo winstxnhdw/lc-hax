@@ -18,6 +18,6 @@ public sealed class WeightMod : MonoBehaviour {
     }
 
     void Start() {
-        _ = this.StartResilientCoroutine(this.SetWeight());
+        _ = this.StartResilientCoroutine(this.SetWeight);
     }
 }
