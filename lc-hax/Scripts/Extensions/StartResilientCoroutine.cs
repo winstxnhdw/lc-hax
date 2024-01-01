@@ -11,42 +11,44 @@ enum CoroutineState {
 class InvalidCoroutineState(CoroutineState state) : Exception($"Invalid CoroutineState: {state}") { }
 
 public static partial class Extensions {
-    public static Coroutine StartResilientCoroutine(this MonoBehaviour self, Func<IEnumerator> coroutineFactory) {
-        static CoroutineState ExecuteCoroutineStep(IEnumerator coroutine) {
-            try {
-                return coroutine.MoveNext() ? CoroutineState.RUNNING : CoroutineState.EXHAUSTED;
-            }
-
-            catch {
-                return CoroutineState.ERROR;
-            }
+    static CoroutineState ExecuteCoroutineStep(IEnumerator coroutine) {
+        try {
+            return coroutine.MoveNext() ? CoroutineState.RUNNING : CoroutineState.EXHAUSTED;
         }
 
-        static IEnumerator ResilientCoroutine(Func<IEnumerator> coroutineFactory) {
-            IEnumerator coroutine = coroutineFactory();
-
-            while (true) {
-                CoroutineState state = ExecuteCoroutineStep(coroutine);
-
-                switch (state) {
-                    case CoroutineState.RUNNING:
-                        yield return coroutine.Current;
-                        break;
-
-                    case CoroutineState.ERROR:
-                        coroutine = coroutineFactory();
-                        yield return new WaitForSeconds(1.0f);
-                        break;
-
-                    case CoroutineState.EXHAUSTED:
-                        yield break;
-
-                    default:
-                        throw new InvalidCoroutineState(state);
-                }
-            }
+        catch {
+            return CoroutineState.ERROR;
         }
-
-        return self.StartCoroutine(ResilientCoroutine(coroutineFactory));
     }
+
+    static IEnumerator ResilientCoroutine(Func<object[], IEnumerator> coroutineFactory, object[] args) {
+        IEnumerator coroutine = coroutineFactory(args);
+
+        while (true) {
+            CoroutineState state = Extensions.ExecuteCoroutineStep(coroutine);
+
+            switch (state) {
+                case CoroutineState.RUNNING:
+                    yield return coroutine.Current;
+                    break;
+
+                case CoroutineState.ERROR:
+                    coroutine = coroutineFactory(args);
+                    yield return new WaitForSeconds(1.0f);
+                    break;
+
+                case CoroutineState.EXHAUSTED:
+                    yield break;
+
+                default:
+                    throw new InvalidCoroutineState(state);
+            }
+        }
+    }
+
+    public static Coroutine StartResilientCoroutine(this MonoBehaviour self, Func<object[], IEnumerator> coroutineFactory, params object[] args) =>
+        self.StartCoroutine(Extensions.ResilientCoroutine(coroutineFactory, args));
+
+    public static Coroutine StartResilientCoroutine(this MonoBehaviour self, Func<object[], IEnumerator> coroutineFactory) =>
+        self.StartResilientCoroutine(coroutineFactory, []);
 }
