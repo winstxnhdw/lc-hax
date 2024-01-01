@@ -18,6 +18,17 @@ public static class Console {
                 type => (ICommand)Activator.CreateInstance(type)
             );
 
+    static Dictionary<string, ICommand> DebugCommands { get; } =
+        Assembly
+            .GetExecutingAssembly()
+            .GetTypes()
+            .Where(type => typeof(ICommand).IsAssignableFrom(type))
+            .Where(type => type.GetCustomAttribute<DebugCommandAttribute>() is not null)
+            .ToDictionary(
+                type => type.GetCustomAttribute<DebugCommandAttribute>().Syntax,
+                type => (ICommand)new Debug((ICommand)Activator.CreateInstance(type))
+            );
+
     public static void Print(string name, string? message, bool isSystem = false) {
         if (string.IsNullOrWhiteSpace(message) || !Helper.HUDManager.IsNotNull(out HUDManager hudManager)) return;
         _ = hudManager.Reflect().InvokeInternalMethod("AddChatMessage", message, name);
@@ -46,12 +57,17 @@ public static class Console {
             return;
         }
 
-        if (!Console.Commands.ContainsKey(args[0])) {
-            Console.Print("Command not found!");
+        if (Console.Commands.TryGetValue(args[0], out ICommand command)) {
+            command.Execute(args[1..]);
             return;
         }
 
-        Console.Commands[args[0]].Execute(args[1..]);
+        if (Console.DebugCommands.TryGetValue(args[0], out ICommand debugCommand)) {
+            debugCommand.Execute(args[1..]);
+            return;
+        }
+
+        Console.Print("Command not found!");
     }
 }
 

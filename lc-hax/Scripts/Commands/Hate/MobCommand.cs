@@ -3,6 +3,7 @@ using GameNetcodeStuff;
 
 namespace Hax;
 
+[Command("/mob")]
 public class MobCommand : IEnemyPrompter, ICommand {
     public void Execute(string[] args) {
         if (args.Length is 0) {
