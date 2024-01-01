@@ -87,8 +87,8 @@ public sealed class ClearVisionMod : MonoBehaviour {
     }
 
     void Start() {
-        _ = this.StartResilientCoroutine(this.DisableFog());
-        _ = this.StartResilientCoroutine(this.DisableSteamValves());
+        _ = this.StartResilientCoroutine(this.DisableFog);
+        _ = this.StartResilientCoroutine(this.DisableSteamValves);
         _ = this.StartCoroutine(this.SetNightVision());
     }
 }

@@ -18,6 +18,6 @@ public sealed class InstantInteractMod : MonoBehaviour {
     }
 
     void Start() {
-        _ = this.StartResilientCoroutine(this.SetTimeToHold());
+        _ = this.StartResilientCoroutine(this.SetTimeToHold);
     }
 }
