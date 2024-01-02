@@ -6,7 +6,5 @@ namespace Hax;
 
 [HarmonyPatch(typeof(PatcherTool), nameof(PatcherTool.ShiftBendRandomizer))]
 class ZapGunPatch {
-    static void Postfix(ref float ___bendMultiplier) {
-        ___bendMultiplier = 0.0f;
-    }
+    static void Postfix(ref float ___bendMultiplier) => ___bendMultiplier = 0.0f;
 }
