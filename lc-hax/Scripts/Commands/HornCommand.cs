@@ -29,7 +29,7 @@ public class HornCommand : ICommand {
         Helper.ReturnUnlockable(Unlockable.LOUD_HORN);
 
         Helper.CreateComponent<WaitForBehaviour>()
-              .SetPredicate(time => time >= 1.0f)
+              .SetPredicate(time => time >= 0.5f)
               .Init(this.PullHornLater(hornDuration));
     }
 }
