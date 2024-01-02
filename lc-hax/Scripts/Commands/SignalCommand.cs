@@ -7,6 +7,13 @@ public class SignalCommand : ICommand {
             Console.Print("Usage: /signal <message>");
         }
 
-        Helper.HUDManager?.UseSignalTranslatorServerRpc(string.Join(" ", args));
+        string message = string.Join(" ", args);
+
+        if (message.Length > 12) {
+            Console.Print($"You've exceeded the maximum message length by {message.Length - 12} character(s)!");
+            return;
+        }
+
+        Helper.HUDManager?.UseSignalTranslatorServerRpc(message);
     }
 }
