@@ -1,11 +1,13 @@
 public static partial class Extensions {
-    public static bool IsNotNull<T>(this T? obj, out T notNullObj) where T : class {
-        if (obj is null || obj.Equals(null)) {
-            notNullObj = null!;
-            return false;
-        }
+    /// <summary>
+    /// Replaces Unity's "fake" null with a real null when applicable, allowing the "?." operator to work properly.
+    /// </summary>
+    public static T? Unfake<T>(this T? obj) where T : class {
+        return obj is null || obj.Equals(null) ? null : obj;
+    }
 
-        notNullObj = obj;
-        return true;
+    public static bool IsNotNull<T>(this T? obj, out T notNullObj) where T : class {
+        notNullObj = obj.Unfake()!;
+        return notNullObj is not null;
     }
 }
