@@ -3,8 +3,6 @@
 using GameNetcodeStuff;
 using HarmonyLib;
 
-namespace Hax;
-
 [HarmonyPatch(typeof(HUDManager), "EnableChat_performed")]
 class EnableChatPatch {
     static void Prefix(ref PlayerControllerB ___localPlayer, ref bool __state) {

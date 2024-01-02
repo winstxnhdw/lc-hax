@@ -1,7 +1,6 @@
 using GameNetcodeStuff;
 using HarmonyLib;
-
-namespace Hax;
+using Hax;
 
 [HarmonyPatch(typeof(PlayerControllerB), nameof(PlayerControllerB.AllowPlayerDeath))]
 class GodModePatch {

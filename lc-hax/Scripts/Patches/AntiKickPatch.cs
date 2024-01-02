@@ -3,8 +3,7 @@
 using GameNetcodeStuff;
 using HarmonyLib;
 using Steamworks;
-
-namespace Hax;
+using Hax;
 
 [HarmonyPatch(typeof(PlayerControllerB), "SendNewPlayerValuesServerRpc")]
 class AntiKickPatch {

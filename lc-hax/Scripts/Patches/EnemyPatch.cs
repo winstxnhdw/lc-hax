@@ -3,8 +3,6 @@
 using GameNetcodeStuff;
 using HarmonyLib;
 
-namespace Hax;
-
 [HarmonyPatch(typeof(EnemyAI))]
 class EnemyPatch {
     [HarmonyPatch(nameof(EnemyAI.SyncPositionToClients))]

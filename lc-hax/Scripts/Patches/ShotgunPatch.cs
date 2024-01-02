@@ -2,8 +2,6 @@
 
 using HarmonyLib;
 
-namespace Hax;
-
 [HarmonyPatch(typeof(ShotgunItem))]
 class ShotgunPatch {
     [HarmonyPatch(nameof(ShotgunItem.ShootGun))]

@@ -2,8 +2,6 @@
 
 using HarmonyLib;
 
-namespace Hax;
-
 [HarmonyPatch(typeof(GrabbableObject), nameof(GrabbableObject.LateUpdate))]
 class InfiniteBatteryPatch {
     static void Postfix(ref Battery ___insertedBattery) {
