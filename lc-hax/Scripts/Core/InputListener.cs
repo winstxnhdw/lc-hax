@@ -18,6 +18,7 @@ public class InputListener : MonoBehaviour {
     public static event Action? onEqualsPress;
     public static event Action? onLeftBracketPress;
     public static event Action? onRightBracketPress;
+    public static event Action? onBackslashPress;
     public static event Action? onZPress;
     public static event Action? onXPress;
 
@@ -33,6 +34,7 @@ public class InputListener : MonoBehaviour {
         { () => Keyboard.current[Key.RightArrow].wasPressedThisFrame, () => InputListener.onRightArrowKeyPress?.Invoke() },
         { () => Keyboard.current[Key.LeftBracket].wasPressedThisFrame, () => InputListener.onLeftBracketPress?.Invoke() },
         { () => Keyboard.current[Key.RightBracket].wasPressedThisFrame, () => InputListener.onRightBracketPress?.Invoke() },
+        { () => Keyboard.current[Key.Backslash].wasPressedThisFrame, () => InputListener.onBackslashPress?.Invoke() },
         { () => Keyboard.current[Key.Z].wasPressedThisFrame, () => InputListener.onZPress?.Invoke() },
         { () => Keyboard.current[Key.X].wasPressedThisFrame, () => InputListener.onXPress?.Invoke() },
     };

@@ -137,13 +137,14 @@ The complete feature set includes the following.
 | Interact at a distance     | <kbd> M3 </kbd> + <kbd> E </kbd>     |
 | Funny respawn mobs         | <kbd> M3 </kbd> + <kbd> R </kbd>     |
 | Toggle Phantom             | <kbd> = </kbd>                       |
-| Teleport to Phantom        | <kbd> Shift </kbd> +  <kbd> = </kbd> |
+| Teleport to Phantom        | <kbd> + </kbd>                       |
 | Change spectator index     | <kbd> ⇽ </kbd>                      |
 | Change spectator index     | <kbd> ⇾ </kbd>                      |
 | Increase mouse sensitivity | <kbd> ] </kbd>                       |
 | Decrease mouse sensitivity | <kbd> [ </kbd>                       |
 | Unpossess enemy            | <kbd> Z </kbd>                       |
 | Toggle realistic movement  | <kbd> X </kbd>                       |
+| Toggle Anti-Kick           | <kbd> \ </kbd>                       |
 
 ### TriggerMod
 

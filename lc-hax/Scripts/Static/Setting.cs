@@ -8,6 +8,7 @@ public static class Setting {
     public static bool EnableBlockCredits { get; set; } = false;
     public static bool EnableUntargetable { get; set; } = false;
     public static bool EnableStunOnLeftClick { get; set; } = false;
+    public static bool EnableAntiKick { get; set; } = false;
     public static bool EnablePhantom { get; set; } = false;
     public static bool DisableFallDamage { get; set; } = false;
     public static PlayerControllerB? PlayerToFollow { get; set; } = null;
