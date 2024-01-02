@@ -32,7 +32,7 @@ public class CrosshairMod : MonoBehaviour {
 
     void OnGUI() {
         if (!this.InGame) return;
-        this.RenderFakeCrosshair();
+        this.RenderCrosshair();
     }
 
     void ToggleInGame() => this.InGame = true;
@@ -52,7 +52,7 @@ public class CrosshairMod : MonoBehaviour {
         this.LeftCrosshairPosition = new Vector2(screenCentre.x - lengthToCentre, topLeftY);
     }
 
-    void RenderFakeCrosshair() {
+    void RenderCrosshair() {
         Size verticalSize = new(CrosshairMod.thickness, CrosshairMod.length);
         Size horizontalSize = new(CrosshairMod.length, CrosshairMod.thickness);
 
