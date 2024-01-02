@@ -15,12 +15,28 @@ public class TransientBehaviour : MonoBehaviour {
         this.ExpireTime = expireTime;
         this.Delay = delay;
 
-        _ = this.StartCoroutine(this.TransientCoroutine());
+        _ = this.Delay > 0.0f
+            ? this.StartCoroutine(this.TransientCoroutineWithDelay())
+            : this.StartCoroutine(this.TransientCoroutine());
+
         return this;
     }
 
     public void Dispose(Action disposeAction) {
         this.DisposeAction = disposeAction;
+    }
+
+    IEnumerator TransientCoroutineWithDelay() {
+        while (this.ExpireTime > 0.0f) {
+            float deltaTime = Time.deltaTime;
+            this.ExpireTime -= deltaTime;
+            this.Action?.Invoke(deltaTime);
+
+            yield return new WaitForSeconds(this.Delay);
+        }
+
+        this.DisposeAction?.Invoke();
+        Destroy(this.gameObject);
     }
 
     IEnumerator TransientCoroutine() {
@@ -29,7 +45,7 @@ public class TransientBehaviour : MonoBehaviour {
             this.ExpireTime -= deltaTime;
             this.Action?.Invoke(deltaTime);
 
-            yield return this.Delay > 0.0f ? new WaitForSeconds(this.Delay) : new WaitForEndOfFrame();
+            yield return new WaitForEndOfFrame();
         }
 
         this.DisposeAction?.Invoke();
