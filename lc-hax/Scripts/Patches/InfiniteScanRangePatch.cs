@@ -7,7 +7,7 @@ using HarmonyLib;
 namespace Hax;
 
 [HarmonyPatch(typeof(HUDManager))]
-class ScanRangePatch {
+class InfiniteScanRangePatch {
     [HarmonyPatch("AssignNewNodes")]
     static IEnumerable<CodeInstruction> Transpiler(IEnumerable<CodeInstruction> instructions) {
         bool foundMaxDistance = false;

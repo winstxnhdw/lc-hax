@@ -59,6 +59,7 @@ The complete feature set includes the following.
 - Infinite ammo
 - Infinite charge
 - Infinite grab distance
+- Infinite item usage
 - Grab through walls
 - Pocket any item
 - Instant interact
