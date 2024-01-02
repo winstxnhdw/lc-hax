@@ -12,7 +12,7 @@ public static class ITeleporterMixin {
               .First(teleporter => teleporter is not null && !teleporter.isInverseTeleporter)
               .IsNotNull(out teleporter);
 
-    public static bool TeleporterExists(this ITeleporter self) {
+    public static bool TeleporterExists(this ITeleporter self, float _) {
         HaxObjects.Instance?.ShipTeleporters.Renew();
         return self.TryGetTeleporter(out ShipTeleporter _);
     }
@@ -72,7 +72,7 @@ public static class ITeleporterMixin {
     ) => () => {
         Helper.SwitchRadarTarget(player);
         Helper.CreateComponent<WaitForBehaviour>()
-              .SetPredicate(() => Helper.IsRadarTarget(player.playerClientId))
+              .SetPredicate(_ => Helper.IsRadarTarget(player.playerClientId))
               .Init(self.PlaceAndTeleport(player, position));
     };
 }

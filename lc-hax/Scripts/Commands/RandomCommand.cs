@@ -6,13 +6,13 @@ namespace Hax;
 
 [Command("/random")]
 public class RandomCommand : ICommand {
-    bool InverseTeleporterExists() {
+    bool InverseTeleporterExists(float _) {
         HaxObjects.Instance?.ShipTeleporters.Renew();
         return Helper.InverseTeleporter is not null;
     }
 
     ObjectPlacements<Transform, ShipTeleporter>? GetInverseTeleporterPlacements(Component target) {
-        if (!this.InverseTeleporterExists()) return null;
+        if (!this.InverseTeleporterExists(0.0f)) return null;
         if (!Helper.InverseTeleporter.IsNotNull(out ShipTeleporter inverseTeleporter)) return null;
 
         Vector3 rotationOffset = new(-90.0f, 0.0f, 0.0f);

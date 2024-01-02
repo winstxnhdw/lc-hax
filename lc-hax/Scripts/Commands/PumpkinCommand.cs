@@ -8,7 +8,7 @@ namespace Hax;
 
 [Command("/pumpkin")]
 public class PumpkinCommand : ICommand {
-    bool PumpkinExists() {
+    bool PumpkinExists(float _) {
         return UnityObject
                 .FindObjectsOfType<PlaceableShipObject>()
                 .Where(placeableShipObject => placeableShipObject.unlockableID == (int)Unlockable.JACK_O_LANTERN)

@@ -18,8 +18,10 @@ public class HornCommand : ICommand {
         Helper.BuyUnlockable(Unlockable.LOUD_HORN);
         Helper.ReturnUnlockable(Unlockable.LOUD_HORN);
         ShipAlarmCord shipAlarmCord = Object.FindObjectOfType<ShipAlarmCord>();
+        shipAlarmCord.PullCordServerRpc(-1);
 
-        _ = Helper.CreateComponent<TransientBehaviour>()
-                  .Init(_ => shipAlarmCord.PullCordServerRpc(-1), hornDuration);
+        Helper.CreateComponent<WaitForBehaviour>()
+              .SetPredicate(time => time >= hornDuration)
+              .Init(() => shipAlarmCord.StopPullingCordServerRpc(-1));
     }
 }
