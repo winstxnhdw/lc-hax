@@ -79,6 +79,10 @@
       <HintPath>$(ReferencePath)/Unity.Netcode.Runtime.dll</HintPath>
     </Reference>
 
+    <Reference Include="Facepunch.Steamworks.Win64">
+      <HintPath>$(ReferencePath)/Facepunch.Steamworks.Win64.dll</HintPath>
+    </Reference>
+
     <PackageReference Include="Lib.Harmony" Version="2.2.2">
       <NoWarn>NU1701</NoWarn>
     </PackageReference>
