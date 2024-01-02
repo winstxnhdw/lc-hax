@@ -2,8 +2,7 @@
 
 using GameNetcodeStuff;
 using HarmonyLib;
-
-namespace Hax;
+using Hax;
 
 [HarmonyPatch(typeof(ShipBuildModeManager), "PlayerMeetsConditionsToBuild")]
 class BuildAnywherePatch {

@@ -4,8 +4,6 @@ using System.Collections.Generic;
 using System.Reflection.Emit;
 using HarmonyLib;
 
-namespace Hax;
-
 [HarmonyPatch(typeof(HUDManager))]
 class InfiniteScanRangePatch {
     [HarmonyPatch("AssignNewNodes")]

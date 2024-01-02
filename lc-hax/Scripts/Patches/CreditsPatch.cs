@@ -1,8 +1,7 @@
 #pragma warning disable IDE1006
 
 using HarmonyLib;
-
-namespace Hax;
+using Hax;
 
 [HarmonyPatch(typeof(Terminal), nameof(Terminal.SyncGroupCreditsClientRpc))]
 class CreditsPatch {

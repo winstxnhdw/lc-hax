@@ -4,8 +4,6 @@ using GameNetcodeStuff;
 using HarmonyLib;
 using UnityEngine;
 
-namespace Hax;
-
 [HarmonyPatch(typeof(PlayerControllerB), "SetHoverTipAndCurrentInteractTrigger")]
 class InfiniteGrabPatch {
     static void Postfix(

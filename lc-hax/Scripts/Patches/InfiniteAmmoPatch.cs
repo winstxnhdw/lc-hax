@@ -2,8 +2,6 @@
 
 using HarmonyLib;
 
-namespace Hax;
-
 [HarmonyPatch(typeof(ShotgunItem), nameof(ShotgunItem.ItemActivate))]
 class InfiniteShotgunAmmoPatch {
     static void Prefix(ref int ___shellsLoaded, ref EnemyAI ___heldByEnemy) {

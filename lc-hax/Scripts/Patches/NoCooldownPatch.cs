@@ -4,8 +4,6 @@ using System.Collections.Generic;
 using System.Reflection.Emit;
 using HarmonyLib;
 
-namespace Hax;
-
 [HarmonyPatch(typeof(GrabbableObject), nameof(GrabbableObject.RequireCooldown))]
 class NoCooldownPatch {
     static bool Prefix(ref bool __result) {
