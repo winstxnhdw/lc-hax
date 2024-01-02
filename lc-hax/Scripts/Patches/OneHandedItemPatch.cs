@@ -1,12 +1,13 @@
 #pragma warning disable IDE1006
 
+using GameNetcodeStuff;
 using HarmonyLib;
 
 namespace Hax;
 
-[HarmonyPatch(typeof(GrabbableObject), nameof(GrabbableObject.LateUpdate))]
+[HarmonyPatch(typeof(PlayerControllerB), "LateUpdate")]
 class OneHandedItemPatch {
-    static void Postfix(ref Item ___itemProperties) {
-        ___itemProperties.twoHanded = false;
+    static void Postfix(ref bool ___twoHanded) {
+        ___twoHanded = false;
     }
 }
