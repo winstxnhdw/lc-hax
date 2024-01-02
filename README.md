@@ -124,6 +124,7 @@ The complete feature set includes the following.
 | Immune to non-instakill       | `/demigod`                        |
 | Unlock all doors              | `/unlock`                         |
 | Lock all gates                | `/lock`                           |
+| Trigger the garage doors      | `/garage`                         |
 | Explode all jetpacks          | `/explode`                        |
 | Explode all landmines         | `/explode mine`                   |
 
