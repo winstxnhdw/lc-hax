@@ -7,7 +7,7 @@ using UnityEngine;
 namespace Hax;
 
 [HarmonyPatch(typeof(PlayerControllerB), "SetHoverTipAndCurrentInteractTrigger")]
-class GrabPatch {
+class InfiniteGrabPatch {
     static void Postfix(
         ref int ___interactableObjectsMask,
         ref float ___grabDistance
