@@ -1,4 +1,3 @@
-using System;
 using UnityEngine;
 using GameNetcodeStuff;
 
@@ -40,48 +39,6 @@ public class TeleportCommand : ITeleporter, ICommand {
         currentPlayer.TeleportPlayer(coordinates.Value);
         return new Result(true);
     }
-
-    Action PlaceAndTeleport(PlayerControllerB player, Vector3 position) => () => {
-        HaxObjects.Instance?.ShipTeleporters.Renew();
-
-        if (!this.TryGetTeleporter(out ShipTeleporter teleporter)) {
-            Console.Print("ShipTeleporter not found!");
-            return;
-        }
-
-        Transform newTransform = player.transform.Copy();
-        newTransform.transform.position = position;
-
-        Vector3 rotationOffset = new(-90.0f, 0.0f, 0.0f);
-        Vector3 positionOffset = new(0.0f, 1.6f, 0.0f);
-
-        ObjectPlacement<Transform, ShipTeleporter> teleporterPlacement = new(
-            newTransform,
-            teleporter,
-            positionOffset,
-            rotationOffset
-        );
-
-        ObjectPlacement<Transform, ShipTeleporter> previousTeleporterPlacement = new(
-            teleporter.transform.Copy(),
-            teleporter,
-            positionOffset,
-            rotationOffset
-        );
-
-        Helper.CreateComponent<TransientBehaviour>()
-              .Init(_ => Helper.PlaceObjectAtPosition(teleporterPlacement), 6.0f)
-              .Dispose(() => Helper.PlaceObjectAtPosition(previousTeleporterPlacement));
-
-        teleporter.PressTeleportButtonServerRpc();
-    };
-
-    Action TeleportPlayerToPositionLater(PlayerControllerB player, Vector3 position) => () => {
-        Helper.SwitchRadarTarget(player);
-        Helper.CreateComponent<WaitForBehaviour>()
-              .SetPredicate(() => Helper.IsRadarTarget(player.playerClientId))
-              .Init(this.PlaceAndTeleport(player, position));
-    };
 
     Result TeleportPlayerToPosition(PlayerControllerB player, Vector3 position) {
         this.PrepareToTeleport(this.TeleportPlayerToPositionLater(player, position));
