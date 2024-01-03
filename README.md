@@ -75,6 +75,7 @@ The complete feature set includes the following.
 - Clear vision
 - Show player's name in HUD
 - Crosshair
+- ESP
 - [Commands](#commands)
 - [Binds](#binds)
 
