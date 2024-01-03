@@ -1,7 +1,7 @@
 #pragma warning disable IDE1006
 
-using System.Collections.Generic;
-using System.Reflection.Emit;
+using System.Collections;
+using UnityEngine;
 using HarmonyLib;
 using Hax;
 
@@ -15,15 +15,13 @@ class NoCooldownPatch {
     }
 }
 
-[HarmonyPatch(typeof(Shovel), "reelUpShovel", MethodType.Enumerator)]
+[HarmonyPatch(typeof(Shovel), "reelUpShovel")]
 class NoShovelCooldownPatch {
-    static IEnumerable<CodeInstruction> Transpiler(IEnumerable<CodeInstruction> instructions) {
-        foreach (CodeInstruction instruction in instructions) {
-            if (instruction.opcode == OpCodes.Ldc_R4) {
-                instruction.operand = 0.0f;
-            }
+    static IEnumerator Postfix(IEnumerator reelUpShovel) {
+        while (reelUpShovel.MoveNext()) {
+            if (reelUpShovel.Current is WaitForSeconds && Setting.EnableNoCooldown) continue;
 
-            yield return instruction;
+            yield return reelUpShovel.Current;
         }
     }
 }
