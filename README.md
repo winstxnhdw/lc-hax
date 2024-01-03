@@ -126,6 +126,8 @@ The complete feature set includes the following.
 | Toggle rapid item usage       | `/rapid`                          |
 | Unlock all doors              | `/unlock`                         |
 | Lock all gates                | `/lock`                           |
+| Open ship door                | `/open`                           |
+| Close ship door               | `/close`                          |
 | Trigger the garage doors      | `/garage`                         |
 | Explode all jetpacks          | `/explode`                        |
 | Explode all landmines         | `/explode mine`                   |
