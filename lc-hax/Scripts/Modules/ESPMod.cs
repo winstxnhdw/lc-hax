@@ -9,8 +9,8 @@ namespace Hax;
 
 public class ESPMod : MonoBehaviour {
     IEnumerable<RendererPair<PlayerControllerB>> PlayerRenderers { get; set; } = [];
-    IEnumerable<RendererPair<Landmine>> LandmineRenderers { get; set; } = [];
-    IEnumerable<RendererPair<Turret>> TurretRenderers { get; set; } = [];
+    IEnumerable<Renderer> LandmineRenderers { get; set; } = [];
+    IEnumerable<Renderer> TurretRenderers { get; set; } = [];
 
     bool InGame { get; set; } = false;
 
@@ -43,16 +43,16 @@ public class ESPMod : MonoBehaviour {
             );
         });
 
-        this.LandmineRenderers.ForEach(rendererPair => this.RenderBounds(
+        this.LandmineRenderers.ForEach(renderer => this.RenderBounds(
             camera,
-            rendererPair.Renderer,
+            renderer,
             Color.yellow,
             this.RenderObject("Landmine")
         ));
 
-        this.TurretRenderers.ForEach(rendererPair => this.RenderBounds(
+        this.TurretRenderers.ForEach(renderer => this.RenderBounds(
             camera,
-            rendererPair.Renderer,
+            renderer,
             Color.yellow,
             this.RenderObject("Turret")
         ));
@@ -84,11 +84,11 @@ public class ESPMod : MonoBehaviour {
         );
 
         this.LandmineRenderers = UnityObject.FindObjectsOfType<Landmine>().Select(landmine =>
-            new RendererPair<Landmine>(landmine, landmine.GetComponent<Renderer>())
+            landmine.GetComponent<Renderer>()
         );
 
         this.TurretRenderers = UnityObject.FindObjectsOfType<Turret>().Select(turret =>
-            new RendererPair<Turret>(turret, turret.GetComponent<Renderer>())
+            turret.GetComponent<Renderer>()
         );
     }
 
