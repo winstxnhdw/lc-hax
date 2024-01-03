@@ -55,6 +55,10 @@
       <HintPath>$(ReferencePath)/UnityEngine.AIModule.dll</HintPath>
     </Reference>
 
+    <Reference Include="UnityEngine.TextRenderingModule">
+      <HintPath>$(ReferencePath)/UnityEngine.TextRenderingModule.dll</HintPath>
+    </Reference>
+
     <Reference Include="Unity.InputSystem">
       <HintPath>$(ReferencePath)/Unity.InputSystem.dll</HintPath>
     </Reference>
