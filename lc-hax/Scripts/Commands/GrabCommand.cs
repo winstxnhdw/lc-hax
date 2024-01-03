@@ -23,7 +23,7 @@ public class GrabCommand : ICommand {
         Object.FindObjectsOfType<GrabbableObject>().ForEach(grabbableObject => {
             if (Vector3.Distance(grabbableObject.transform.position, currentPlayerPosition) < 20.0f) return;
 
-            Helper.LocalPlayer?.PlaceGrabbableObject(
+            localPlayer?.PlaceGrabbableObject(
                 shipBuildModeManager.transform,
                 positionOffset,
                 true,
