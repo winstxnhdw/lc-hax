@@ -11,7 +11,7 @@ public static partial class Helper {
 
     public static void KillPlayer(this PlayerControllerB player) => player.DamagePlayerRpc(100);
 
-    public static PlayerControllerB? LocalPlayer => GameNetworkManager.Instance.localPlayerController;
+    public static PlayerControllerB? LocalPlayer => GameNetworkManager.Instance.localPlayerController.Unfake();
 
     public static PlayerControllerB[] Players => Helper.StartOfRound?.allPlayerScripts ?? [];
 
