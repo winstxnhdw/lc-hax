@@ -63,7 +63,7 @@ public class Loader : MonoBehaviour {
     static void LoadHaxModules() {
         DontDestroyOnLoad(Loader.HaxModules);
 
-        // Loader.AddHaxModules<ESPMod>();
+        Loader.AddHaxModules<ESPMod>();
         Loader.AddHaxModules<SaneMod>();
         Loader.AddHaxModules<StunMod>();
         Loader.AddHaxModules<FollowMod>();

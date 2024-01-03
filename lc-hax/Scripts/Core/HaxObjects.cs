@@ -13,6 +13,7 @@ public class HaxObjects : MonoBehaviour {
     public MultiObjectPool<LocalVolumetricFog> LocalVolumetricFogs { get; private set; }
     public MultiObjectPool<SteamValveHazard> SteamValves { get; private set; }
     public MultiObjectPool<InteractTrigger> InteractTriggers { get; private set; }
+    public MultiObjectPool<EnemyAI> EnemyAIs { get; private set; }
 
     void Awake() {
         this.DepositItemsDesk = new(this);
@@ -20,6 +21,7 @@ public class HaxObjects : MonoBehaviour {
         this.LocalVolumetricFogs = new(this);
         this.InteractTriggers = new(this);
         this.SteamValves = new(this, 5.0f);
+        this.EnemyAIs = new(this, 2.0f);
 
         HaxObjects.Instance = this;
     }
