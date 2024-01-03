@@ -1,5 +1,6 @@
 using System;
 using GameNetcodeStuff;
+using UnityEngine;
 using UnityObject = UnityEngine.Object;
 
 namespace Hax;
@@ -39,11 +40,14 @@ public class KillCommand : ICommand {
 
     Result KillAllEnemies() {
         this.ForEachEnemy(enemy => {
-            enemy.HitEnemyServerRpc(1000, -1, false);
-
-            if (!enemy.isEnemyDead) {
-                enemy.KillEnemyServerRpc(true);
+            if (Helper.LocalPlayer.IsNotNull(out PlayerControllerB localPlayer) &&
+                enemy is NutcrackerEnemyAI nutcracker
+            ) {
+                nutcracker.ChangeEnemyOwnerServerRpc(localPlayer.actualClientId);
+                nutcracker.DropGunServerRpc(Vector3.zero);
             }
+
+            enemy.KillEnemyServerRpc(true);
         });
 
         return new Result(true);
