@@ -131,6 +131,7 @@ The complete feature set includes the following.
 | Trigger the garage doors      | `/garage`                         |
 | Explode all jetpacks          | `/explode`                        |
 | Explode all landmines         | `/explode mine`                   |
+| Upset all turrets             | `/berserk`                        |
 
 ### Binds
 
