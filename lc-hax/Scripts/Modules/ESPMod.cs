@@ -1,6 +1,6 @@
 using System;
-using System.Collections.Generic;
 using System.Linq;
+using System.Collections.Generic;
 using GameNetcodeStuff;
 using UnityEngine;
 using UnityObject = UnityEngine.Object;
@@ -24,10 +24,6 @@ public class ESPMod : MonoBehaviour {
         GameListener.onGameStart -= this.OnGameJoin;
         GameListener.onGameEnd -= this.OnGameEnd;
         GameListener.onShipLand -= this.InitialiseRenderers;
-    }
-
-    void Start() {
-        this.InitialiseRenderers();
     }
 
     void OnGUI() {
@@ -76,7 +72,6 @@ public class ESPMod : MonoBehaviour {
     }
 
     void OnGameEnd() => this.InGame = false;
-
 
     void InitialiseRenderers() {
         this.PlayerRenderers = Helper.Players.Select(player =>
