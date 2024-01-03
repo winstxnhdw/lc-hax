@@ -34,6 +34,10 @@ public sealed class StunMod : MonoBehaviour {
         if (!Setting.EnableStunOnLeftClick) return;
         if (!Helper.CurrentCamera.IsNotNull(out Camera camera)) return;
 
+        if ((Helper.LocalPlayer?.currentlyHeldObject).IsNotNull(out GrabbableObject currentItem) &&
+            (currentItem.itemProperties.isDefensiveWeapon || currentItem.TryGetComponent(out Shovel _) || currentItem.TryGetComponent(out ShotgunItem _)))
+            return;
+
         this.RaycastHits.SphereCastForward(camera.transform).Range().ForEach(i => {
             Collider collider = this.RaycastHits[i].collider;
             this.StunAndJam(collider);
