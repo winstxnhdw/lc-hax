@@ -42,8 +42,16 @@ public sealed class TriggerMod : MonoBehaviour, IEnemyPrompter {
                 return;
             }
 
+            if (!Helper.LocalPlayer.IsNotNull(out PlayerControllerB localPlayer)) {
+                return;
+            }
+
             foreach (int i in this.RaycastHits.SphereCastForward(camera.transform).Range()) {
                 if (!this.RaycastHits[i].collider.TryGetComponent(out PlayerControllerB player)) {
+                    continue;
+                }
+
+                if (player.playerClientId == localPlayer.playerClientId) {
                     continue;
                 }
 
