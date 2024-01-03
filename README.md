@@ -73,7 +73,6 @@ The complete feature set includes the following.
 - Always show names
 - Stable Zap gun
 - Clear vision
-- Show player's name in HUD
 - Crosshair
 - ESP
 - [Commands](#commands)

@@ -76,7 +76,6 @@ public class Loader : MonoBehaviour {
         Loader.AddHaxModules<MinimalGUIMod>();
         Loader.AddHaxModules<PossessionMod>();
         Loader.AddHaxModules<ClearVisionMod>();
-        Loader.AddHaxModules<NameInWeightMod>();
         Loader.AddHaxModules<InstantInteractMod>();
     }
 
