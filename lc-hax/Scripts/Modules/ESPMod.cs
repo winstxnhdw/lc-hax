@@ -88,7 +88,7 @@ public class ESPMod : MonoBehaviour {
     void RenderBounds(Camera camera, Renderer renderer, Color colour, Action<Vector3>? action) {
         Vector3 rendererCentrePoint = camera.WorldToEyesPoint(renderer.bounds.center);
 
-        if (rendererCentrePoint.z <= 5.0f) {
+        if (rendererCentrePoint.z <= 4.0f) {
             return;
         }
 
