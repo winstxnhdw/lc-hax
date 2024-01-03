@@ -3,10 +3,13 @@
 using System.Collections.Generic;
 using System.Reflection.Emit;
 using HarmonyLib;
+using Hax;
 
 [HarmonyPatch(typeof(GrabbableObject), nameof(GrabbableObject.RequireCooldown))]
 class NoCooldownPatch {
     static bool Prefix(ref bool __result) {
+        if (!Setting.EnableNoCooldown) return true;
+
         __result = false;
         return false;
     }
