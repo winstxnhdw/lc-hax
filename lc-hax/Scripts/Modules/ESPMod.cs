@@ -8,7 +8,7 @@ using UnityObject = UnityEngine.Object;
 namespace Hax;
 
 public class ESPMod : MonoBehaviour {
-    IEnumerable<RendererPair<PlayerControllerB>> PlayerRenderers { get; set; } = [];
+    IEnumerable<RendererPair<PlayerControllerB, SkinnedMeshRenderer>> PlayerRenderers { get; set; } = [];
     IEnumerable<Renderer> LandmineRenderers { get; set; } = [];
     IEnumerable<Renderer> TurretRenderers { get; set; } = [];
 
@@ -80,7 +80,7 @@ public class ESPMod : MonoBehaviour {
 
     void InitialiseRenderers() {
         this.PlayerRenderers = Helper.Players.Select(player =>
-            new RendererPair<PlayerControllerB>(player, player.thisPlayerModel)
+            new RendererPair<PlayerControllerB, SkinnedMeshRenderer>(player, player.thisPlayerModel)
         );
 
         this.LandmineRenderers = UnityObject.FindObjectsOfType<Landmine>().Select(landmine =>
