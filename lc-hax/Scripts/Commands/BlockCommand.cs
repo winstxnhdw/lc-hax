@@ -28,6 +28,16 @@ public class BlockCommand : ICommand {
             );
         }
 
+        else if (args[0] is "radar") {
+            Setting.EnableBlockRadar = !Setting.EnableBlockRadar;
+
+            Console.Print(
+                $"{(Setting.EnableBlockRadar
+                    ? "Blocking radar targets!"
+                    : "No longer blocking radar targets!")}"
+            );
+        }
+
         else {
             Console.Print($"Invalid property!");
         }
