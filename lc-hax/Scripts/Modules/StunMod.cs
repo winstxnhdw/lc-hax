@@ -1,3 +1,4 @@
+using GameNetcodeStuff;
 using UnityEngine;
 
 namespace Hax;
@@ -12,6 +13,14 @@ public sealed class StunMod : MonoBehaviour {
 
     void OnDisable() {
         InputListener.onLeftButtonPress -= this.Stun;
+    }
+
+    bool IsHoldingADefensiveWeapon() {
+        return Helper.LocalPlayer.IsNotNull(out PlayerControllerB localPlayer) && (
+            localPlayer.currentlyHeldObject.itemProperties.isDefensiveWeapon ||
+            localPlayer.currentlyHeldObject.TryGetComponent(out Shovel _) ||
+            localPlayer.currentlyHeldObject.TryGetComponent(out ShotgunItem _)
+        );
     }
 
     void StunAndJam(Collider collider) {
@@ -33,10 +42,7 @@ public sealed class StunMod : MonoBehaviour {
     void Stun() {
         if (!Setting.EnableStunOnLeftClick) return;
         if (!Helper.CurrentCamera.IsNotNull(out Camera camera)) return;
-
-        if ((Helper.LocalPlayer?.currentlyHeldObject).IsNotNull(out GrabbableObject currentItem) &&
-            (currentItem.itemProperties.isDefensiveWeapon || currentItem.TryGetComponent(out Shovel _) || currentItem.TryGetComponent(out ShotgunItem _)))
-            return;
+        if (this.IsHoldingADefensiveWeapon()) return;
 
         this.RaycastHits.SphereCastForward(camera.transform).Range().ForEach(i => {
             Collider collider = this.RaycastHits[i].collider;
