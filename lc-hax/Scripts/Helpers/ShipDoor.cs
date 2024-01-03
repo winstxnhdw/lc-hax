@@ -1,19 +1,16 @@
-using System.Linq;
 using UnityEngine;
 
 namespace Hax;
 
 public static partial class Helper {
-    public static InteractTrigger? GetInteractTriggerForAnimation(GameObject? gameObject, string animation) {
-        return gameObject.Unfake()?
+    static InteractTrigger? GetInteractTriggerForAnimation(this GameObject? gameObject, string animation) =>
+        gameObject.Unfake()?
             .GetComponentsInChildren<AnimatedObjectTrigger>()
-            .FirstOrDefault(trigger => trigger.animationString == animation)?
+            .First(trigger => trigger.animationString == animation)?
             .GetComponentInParent<InteractTrigger>();
-    }
 
-    public static void CloseShipDoor(bool closed) {
-        if (!Object.FindObjectOfType<HangarShipDoor>().IsNotNull(out HangarShipDoor shipDoor)) return;
-
-        GetInteractTriggerForAnimation(shipDoor.gameObject, closed ? "CloseDoor" : "OpenDoor")?.onInteract.Invoke(Helper.LocalPlayer);
-    }
+    public static void CloseShipDoor(bool closed) =>
+        Object.FindObjectOfType<HangarShipDoor>()
+              .gameObject.GetInteractTriggerForAnimation(closed ? "CloseDoor" : "OpenDoor")?
+              .onInteract.Invoke(Helper.LocalPlayer);
 }
