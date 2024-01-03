@@ -112,6 +112,7 @@ public class ESPMod : MonoBehaviour {
 
         HaxObjects.Instance?.EnemyAIs.ForEach(nullableEnemy => {
             if (!nullableEnemy.IsNotNull(out EnemyAI enemy)) return;
+            if (enemy is DocileLocustBeesAI or DoublewingAI) return;
 
             this.RenderBounds(
                 camera,
