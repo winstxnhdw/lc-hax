@@ -69,7 +69,11 @@ public sealed class TriggerMod : MonoBehaviour, IEnemyPrompter {
                     continue;
                 }
 
-                interactTrigger.onInteract.Invoke(null);
+                if (!Helper.LocalPlayer.IsNotNull(out PlayerControllerB localPlayer)) {
+                    continue;
+                }
+
+                interactTrigger.Interact(localPlayer.transform);
                 break;
             }
 
