@@ -108,6 +108,7 @@ The complete feature set includes the following.
 | Give or take money            | `/money <amount>`                 |
 | Add or remove experience      | `/xp <amount>`                    |
 | Block incoming credits        | `/block credits`                  |
+| Block any radar targets       | `/block radar`                    |
 | Become untargetable           | `/block enemy`                    |
 | Place an unlockable           | `/build <unlockable>`             |
 | Change moons                  | `/visit <moon>`                   |
