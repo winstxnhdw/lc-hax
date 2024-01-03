@@ -3,22 +3,27 @@ using System.Collections.Generic;
 using System.Linq;
 using GameNetcodeStuff;
 using UnityEngine;
+using UnityObject = UnityEngine.Object;
 
 namespace Hax;
 
 public class ESPMod : MonoBehaviour {
     IEnumerable<RendererPair<PlayerControllerB>> PlayerRenderers { get; set; } = [];
+    IEnumerable<RendererPair<Landmine>> LandmineRenderers { get; set; } = [];
+    IEnumerable<RendererPair<Turret>> TurretRenderers { get; set; } = [];
 
     bool InGame { get; set; } = false;
 
     void OnEnable() {
         GameListener.onGameStart += this.OnGameJoin;
-        GameListener.onGameEnd += this.ToggleNotInGame;
+        GameListener.onGameEnd += this.OnGameEnd;
+        GameListener.onShipLand += this.InitialiseRenderers;
     }
 
     void OnDisable() {
         GameListener.onGameStart -= this.OnGameJoin;
-        GameListener.onGameEnd -= this.ToggleNotInGame;
+        GameListener.onGameEnd -= this.OnGameEnd;
+        GameListener.onShipLand -= this.InitialiseRenderers;
     }
 
     void Start() {
@@ -35,7 +40,7 @@ public class ESPMod : MonoBehaviour {
         this.InGame = true;
     }
 
-    void ToggleNotInGame() => this.InGame = false;
+    void OnGameEnd() => this.InGame = false;
 
     Size GetRendererSize(Renderer renderer, Camera camera) {
         Bounds bounds = renderer.bounds;
@@ -67,15 +72,23 @@ public class ESPMod : MonoBehaviour {
     }
 
     void InitialiseRenderers() {
-        this.PlayerRenderers = Helper.Players.Select(
-            player => new RendererPair<PlayerControllerB>(player, player.thisPlayerModel)
+        this.PlayerRenderers = Helper.Players.Select(player =>
+            new RendererPair<PlayerControllerB>(player, player.thisPlayerModel)
+        );
+
+        this.LandmineRenderers = UnityObject.FindObjectsOfType<Landmine>().Select(landmine =>
+            new RendererPair<Landmine>(landmine, landmine.GetComponent<Renderer>())
+        );
+
+        this.TurretRenderers = UnityObject.FindObjectsOfType<Turret>().Select(turret =>
+            new RendererPair<Turret>(turret, turret.GetComponent<Renderer>())
         );
     }
 
     void RenderBounds(Camera camera, Renderer renderer, Color colour, Action<Vector3>? action) {
         Vector3 rendererCentrePoint = camera.WorldToEyesPoint(renderer.bounds.center);
 
-        if (rendererCentrePoint.z <= 3.0f) {
+        if (rendererCentrePoint.z <= 5.0f) {
             return;
         }
 
@@ -101,13 +114,35 @@ public class ESPMod : MonoBehaviour {
         Helper.DrawLabel(rendererCentrePoint, enemy.enemyType.enemyName, Color.red);
     };
 
+    Action<Vector3> RenderObject(string name) => rendererCentrePoint => {
+        Helper.DrawLabel(rendererCentrePoint, name, Color.yellow);
+    };
+
     void RenderESP() {
         if (!Helper.CurrentCamera.IsNotNull(out Camera camera)) return;
 
-        this.PlayerRenderers.ForEach(rendererPair => this.RenderBounds(
+        this.PlayerRenderers.ForEach(rendererPair => {
+            if (rendererPair.GameObject.isPlayerDead) return;
+
+            this.RenderBounds(
+                camera,
+                rendererPair.Renderer,
+                this.RenderPlayer(rendererPair.GameObject)
+            );
+        });
+
+        this.LandmineRenderers.ForEach(rendererPair => this.RenderBounds(
             camera,
             rendererPair.Renderer,
-            this.RenderPlayer(rendererPair.GameObject)
+            Color.yellow,
+            this.RenderObject("Landmine")
+        ));
+
+        this.TurretRenderers.ForEach(rendererPair => this.RenderBounds(
+            camera,
+            rendererPair.Renderer,
+            Color.yellow,
+            this.RenderObject("Turret")
         ));
 
         HaxObjects.Instance?.EnemyAIs.ForEach(nullableEnemy => {
