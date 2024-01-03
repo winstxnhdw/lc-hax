@@ -54,9 +54,15 @@ public sealed class ClearVisionMod : MonoBehaviour {
             lightData.distance = float.MaxValue;
             timeOfDay.insideLighting = false;
             startOfRound.blackSkyVolume.weight = 0;
-            startOfRound.localPlayerController.localVisor.gameObject.SetActive(false);
 
             yield return new WaitForEndOfFrame();
+        }
+    }
+
+    IEnumerator DisableVisor(object[] args) {
+        while (true) {
+            Helper.LocalPlayer?.localVisor.gameObject.SetActive(false);
+            yield return new WaitForSeconds(10.0f);
         }
     }
 
@@ -89,6 +95,7 @@ public sealed class ClearVisionMod : MonoBehaviour {
     void Start() {
         _ = this.StartResilientCoroutine(this.DisableFog);
         _ = this.StartResilientCoroutine(this.DisableSteamValves);
+        _ = this.StartResilientCoroutine(this.DisableVisor);
         _ = this.StartCoroutine(this.SetNightVision());
     }
 }
