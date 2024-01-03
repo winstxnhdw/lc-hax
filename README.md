@@ -122,6 +122,7 @@ The complete feature set includes the following.
 | Get coordinates               | `/xyz`                            |
 | Toggle God mode               | `/god`                            |
 | Immune to non-instakill       | `/demigod`                        |
+| Toggle rapid item usage       | `/rapid`                          |
 | Unlock all doors              | `/unlock`                         |
 | Lock all gates                | `/lock`                           |
 | Trigger the garage doors      | `/garage`                         |
