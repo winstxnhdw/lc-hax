@@ -224,3 +224,7 @@ static void LoadHaxModules() {
     Loader.AddHaxModules<FollowAnotherPlayerMod>();
 }
 ```
+
+### Anti-virus false positives
+
+Despite being compiled from source locally, SharpMonoInjector is sometimes falsely identified as a virus by Windows Defender. A batch script is provided in the [submodules](/submodules) folder to whitelist it.
