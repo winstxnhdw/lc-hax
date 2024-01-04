@@ -19,6 +19,7 @@ A powerful, feature-rich and highly performant portable Windows CLI-only interna
 ## Requirements
 
 - [Microsoft .NET 8.0 SDK](https://dotnet.microsoft.com/en-us/download)
+- [Git](https://git-scm.com/download/win)
 
 ## Installation
 
