@@ -87,7 +87,7 @@ public class ESPMod : MonoBehaviour {
         );
     }
 
-    Size GetRendererSize(Renderer renderer, Camera camera) {
+    Size GetRendererSize<R>(R renderer, Camera camera) where R : Renderer {
         Bounds bounds = renderer.bounds;
 
         Vector3[] corners = [
@@ -116,7 +116,7 @@ public class ESPMod : MonoBehaviour {
         );
     }
 
-    void RenderBounds(Camera camera, Renderer renderer, Color colour, Action<Vector3>? action) {
+    void RenderBounds<R>(Camera camera, R renderer, Color colour, Action<Vector3>? action) where R : Renderer {
         Vector3 rendererCentrePoint = camera.WorldToEyesPoint(renderer.bounds.center);
 
         if (rendererCentrePoint.z <= 4.0f) {
@@ -133,7 +133,7 @@ public class ESPMod : MonoBehaviour {
         action?.Invoke(rendererCentrePoint);
     }
 
-    void RenderBounds(Camera camera, Renderer renderer, Action<Vector3>? action) =>
+    void RenderBounds<R>(Camera camera, R renderer, Action<Vector3>? action) where R : Renderer =>
         this.RenderBounds(camera, renderer, Color.white, action);
 
     Action<Vector3> RenderPlayer(PlayerControllerB player) => rendererCentrePoint =>
