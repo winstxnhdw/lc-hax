@@ -11,6 +11,7 @@ public class ESPMod : MonoBehaviour {
     IEnumerable<RendererPair<PlayerControllerB, SkinnedMeshRenderer>> PlayerRenderers { get; set; } = [];
     IEnumerable<Renderer> LandmineRenderers { get; set; } = [];
     IEnumerable<Renderer> TurretRenderers { get; set; } = [];
+    IEnumerable<Renderer> EntranceRenderers { get; set; } = [];
 
     bool InGame { get; set; } = false;
 
@@ -53,6 +54,14 @@ public class ESPMod : MonoBehaviour {
             this.RenderObject("Turret")
         ));
 
+        this.EntranceRenderers.ForEach(renderer => this.RenderBounds(
+            camera,
+            renderer,
+            Color.yellow,
+            this.RenderObject("Entrance")
+        ));
+
+
         HaxObjects.Instance?.EnemyAIs.ForEach(nullableEnemy => {
             if (!nullableEnemy.IsNotNull(out EnemyAI enemy)) return;
             if (enemy is DocileLocustBeesAI or DoublewingAI) return;
@@ -84,6 +93,10 @@ public class ESPMod : MonoBehaviour {
 
         this.TurretRenderers = UnityObject.FindObjectsOfType<Turret>().Select(turret =>
             turret.GetComponent<Renderer>()
+        );
+
+        this.EntranceRenderers = UnityObject.FindObjectsOfType<EntranceTeleport>().Select(entrance =>
+            entrance.GetComponent<Renderer>()
         );
     }
 
