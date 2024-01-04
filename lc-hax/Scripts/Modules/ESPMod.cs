@@ -3,7 +3,6 @@ using System.Linq;
 using System.Collections.Generic;
 using GameNetcodeStuff;
 using UnityEngine;
-using UnityObject = UnityEngine.Object;
 
 namespace Hax;
 
@@ -31,7 +30,7 @@ public class ESPMod : MonoBehaviour {
         if (!this.InGame || !Helper.CurrentCamera.IsNotNull(out Camera camera)) return;
 
         this.PlayerRenderers.ForEach(rendererPair => {
-            if (rendererPair.GameObject.isPlayerDead) return;
+            if (rendererPair.GameObject.Unfake()?.isPlayerDead ?? true) return;
 
             this.RenderBounds(
                 camera,
@@ -64,10 +63,11 @@ public class ESPMod : MonoBehaviour {
         HaxObjects.Instance?.EnemyAIs.ForEach(nullableEnemy => {
             if (!nullableEnemy.IsNotNull(out EnemyAI enemy)) return;
             if (enemy is DocileLocustBeesAI or DoublewingAI) return;
+            if (!enemy.skinnedMeshRenderers.FirstOrDefault().IsNotNull(out SkinnedMeshRenderer meshRenderer)) return;
 
             this.RenderBounds(
                 camera,
-                enemy.skinnedMeshRenderers[0],
+                meshRenderer,
                 Color.red,
                 this.RenderEnemy(enemy)
             );
@@ -86,15 +86,15 @@ public class ESPMod : MonoBehaviour {
             new RendererPair<PlayerControllerB, SkinnedMeshRenderer>(player, player.thisPlayerModel)
         );
 
-        this.LandmineRenderers = UnityObject.FindObjectsOfType<Landmine>().Select(landmine =>
+        this.LandmineRenderers = Helper.FindNonNullObjectsOfType<Landmine>().Select(landmine =>
             landmine.GetComponent<Renderer>()
         );
 
-        this.TurretRenderers = UnityObject.FindObjectsOfType<Turret>().Select(turret =>
+        this.TurretRenderers = Helper.FindNonNullObjectsOfType<Turret>().Select(turret =>
             turret.GetComponent<Renderer>()
         );
 
-        this.EntranceRenderers = UnityObject.FindObjectsOfType<EntranceTeleport>().Select(entrance =>
+        this.EntranceRenderers = Helper.FindNonNullObjectsOfType<EntranceTeleport>().Select(entrance =>
             entrance.GetComponent<Renderer>()
         );
     }
