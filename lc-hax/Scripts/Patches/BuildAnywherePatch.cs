@@ -9,6 +9,7 @@ class BuildAnywherePatch {
     static bool Prefix(ref bool __result, ref bool ___CanConfirmPosition) {
         ___CanConfirmPosition = true;
         __result = !Helper.LocalPlayer.IsNotNull(out PlayerControllerB player) || !player.inTerminalMenu;
+
         return false;
     }
 }
