@@ -33,11 +33,6 @@ public class KillCommand : ICommand {
         return new Result(true);
     }
 
-    Result KillAllLocalEnemies() {
-        this.ForEachEnemy(enemy => enemy.gameObject.SetActive(false));
-        return new Result(true);
-    }
-
     Result KillAllEnemies() {
         this.ForEachEnemy(enemy => {
             if (Helper.LocalPlayer.IsNotNull(out PlayerControllerB localPlayer) &&
@@ -67,7 +62,6 @@ public class KillCommand : ICommand {
         Result result = args[0] switch {
             "--all" => this.KillAllPlayers(),
             "--enemy" => this.KillAllEnemies(),
-            "--localenemy" => this.KillAllLocalEnemies(),
             _ => this.KillTargetPlayer(args)
         };
 
