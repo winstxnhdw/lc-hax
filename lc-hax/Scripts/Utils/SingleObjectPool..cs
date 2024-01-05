@@ -10,7 +10,7 @@ public class SingleObjectPool<T> where T : UnityObject {
     }
 
     public void Renew() {
-        this.Object = UnityObject.FindObjectOfType<T>();
+        this.Object = UnityObject.FindAnyObjectByType<T>();
     }
 
     IEnumerator RenewObject(float renewInterval) {
