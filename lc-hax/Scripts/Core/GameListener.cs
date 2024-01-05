@@ -32,7 +32,7 @@ public class GameListener : MonoBehaviour {
     }
 
     void InGameListener() {
-        bool inGame = Helper.LocalPlayer != null;
+        bool inGame = Helper.LocalPlayer is not null;
 
         if (this.InGame == inGame) {
             return;
