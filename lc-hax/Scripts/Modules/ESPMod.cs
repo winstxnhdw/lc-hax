@@ -34,28 +34,28 @@ public class ESPMod : MonoBehaviour {
 
             this.RenderBounds(
                 camera,
-                rendererPair.Renderer,
+                rendererPair.Renderer.bounds,
                 this.RenderPlayer(rendererPair.GameObject)
             );
         });
 
         this.LandmineRenderers.ForEach(renderer => this.RenderBounds(
             camera,
-            renderer,
+            renderer.bounds,
             Color.yellow,
             this.RenderObject("Landmine")
         ));
 
         this.TurretRenderers.ForEach(renderer => this.RenderBounds(
             camera,
-            renderer,
+            renderer.bounds,
             Color.yellow,
             this.RenderObject("Turret")
         ));
 
         this.EntranceRenderers.ForEach(renderer => this.RenderBounds(
             camera,
-            renderer,
+            renderer.bounds,
             Color.yellow,
             this.RenderObject("Entrance")
         ));
@@ -63,11 +63,11 @@ public class ESPMod : MonoBehaviour {
         HaxObjects.Instance?.EnemyAIs.ForEach(nullableEnemy => {
             if (!nullableEnemy.IsNotNull(out EnemyAI enemy)) return;
             if (enemy is DocileLocustBeesAI or DoublewingAI) return;
-            if (!enemy.skinnedMeshRenderers.First().IsNotNull(out SkinnedMeshRenderer meshRenderer)) return;
+            if (!enemy.skinnedMeshRenderers.First().IsNotNull(out SkinnedMeshRenderer renderer)) return;
 
             this.RenderBounds(
                 camera,
-                meshRenderer,
+                renderer.bounds,
                 Color.red,
                 this.RenderEnemy(enemy)
             );
@@ -97,9 +97,7 @@ public class ESPMod : MonoBehaviour {
         this.EntranceRenderers = this.GetRenderers<EntranceTeleport>();
     }
 
-    Size GetRendererSize<R>(R renderer, Camera camera) where R : Renderer {
-        Bounds bounds = renderer.bounds;
-
+    Size GetRendererSize(Bounds bounds, Camera camera) {
         Vector3[] corners = [
             new(bounds.min.x, bounds.min.y, bounds.min.z),
             new(bounds.max.x, bounds.min.y, bounds.min.z),
@@ -126,8 +124,8 @@ public class ESPMod : MonoBehaviour {
         );
     }
 
-    void RenderBounds<R>(Camera camera, R renderer, Color colour, Action<Vector3>? action) where R : Renderer {
-        Vector3 rendererCentrePoint = camera.WorldToEyesPoint(renderer.bounds.center);
+    void RenderBounds(Camera camera, Bounds bounds, Color colour, Action<Vector3>? action) {
+        Vector3 rendererCentrePoint = camera.WorldToEyesPoint(bounds.center);
 
         if (rendererCentrePoint.z <= 4.0f) {
             return;
@@ -135,7 +133,7 @@ public class ESPMod : MonoBehaviour {
 
         Helper.DrawOutlineBox(
             rendererCentrePoint,
-            this.GetRendererSize(renderer, camera),
+            this.GetRendererSize(bounds, camera),
             1.0f,
             colour
         );
@@ -143,8 +141,8 @@ public class ESPMod : MonoBehaviour {
         action?.Invoke(rendererCentrePoint);
     }
 
-    void RenderBounds<R>(Camera camera, R renderer, Action<Vector3>? action) where R : Renderer =>
-        this.RenderBounds(camera, renderer, Color.white, action);
+    void RenderBounds(Camera camera, Bounds bounds, Action<Vector3>? action) =>
+        this.RenderBounds(camera, bounds, Color.white, action);
 
     Action<Vector3> RenderPlayer(PlayerControllerB player) => rendererCentrePoint =>
         Helper.DrawLabel(
