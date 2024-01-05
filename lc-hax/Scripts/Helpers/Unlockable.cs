@@ -1,4 +1,5 @@
 using System;
+using UnityEngine;
 using UnityObject = UnityEngine.Object;
 
 namespace Hax;
@@ -38,6 +39,6 @@ public static partial class Helper {
     }
 
     public static PlaceableShipObject? GetUnlockable(Unlockable unlockable) =>
-        UnityObject.FindObjectsOfType<PlaceableShipObject>()
+        UnityObject.FindObjectsByType<PlaceableShipObject>(FindObjectsSortMode.None)
                    .First(placeableObject => unlockable.Is(placeableObject.unlockableID));
 }

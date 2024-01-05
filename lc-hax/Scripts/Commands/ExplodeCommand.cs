@@ -6,12 +6,12 @@ namespace Hax;
 public class ExplodeCommand : ICommand {
     public void Execute(string[] args) {
         if (args.Length is 0) {
-            Object.FindObjectsOfType<JetpackItem>()
+            Object.FindObjectsByType<JetpackItem>(FindObjectsSortMode.None)
                   .ForEach(jetpack => jetpack.ExplodeJetpackServerRpc());
         }
 
         if (args[0] is "mine") {
-            Object.FindObjectsOfType<Landmine>()
+            Object.FindObjectsByType<Landmine>(FindObjectsSortMode.None)
                   .ForEach(landmine => landmine.TriggerMine());
         }
     }

@@ -8,7 +8,7 @@ namespace Hax;
 [Command("/kill")]
 public class KillCommand : ICommand {
     void ForEachEnemy(Action<EnemyAI> action) =>
-        UnityObject.FindObjectsOfType<EnemyAI>().ForEach(action);
+        UnityObject.FindObjectsByType<EnemyAI>(FindObjectsSortMode.None).ForEach(action);
 
     Result KillSelf() {
         if (!Helper.LocalPlayer.IsNotNull(out PlayerControllerB localPlayer) || localPlayer.isPlayerDead) {

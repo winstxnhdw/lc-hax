@@ -10,7 +10,7 @@ public class MultiObjectPool<T> where T : UnityObject {
     }
 
     public void Renew() {
-        this.Objects = UnityObject.FindObjectsOfType<T>();
+        this.Objects = UnityObject.FindObjectsByType<T>(FindObjectsSortMode.None);
     }
 
     IEnumerator RenewObjects(float renewInterval) {
