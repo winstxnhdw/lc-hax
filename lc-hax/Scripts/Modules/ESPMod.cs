@@ -85,7 +85,8 @@ public class ESPMod : MonoBehaviour {
     IEnumerable<Renderer> GetRenderers<T>() where T : Component =>
         UnityObject.FindObjectsByType<T>(FindObjectsSortMode.None)
                    .Where(obj => obj != null)
-                   .Select(obj => obj.GetComponent<Renderer>());
+                   .Select(obj => obj.GetComponent<Renderer>())
+                   .Where(renderer => renderer != null);
 
     void InitialiseRenderers() {
         this.PlayerRenderers = Helper.Players.Select(player =>
