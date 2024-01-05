@@ -1,6 +1,4 @@
 using System;
-using UnityEngine;
-using UnityObject = UnityEngine.Object;
 
 namespace Hax;
 

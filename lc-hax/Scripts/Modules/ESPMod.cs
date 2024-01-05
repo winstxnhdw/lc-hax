@@ -3,7 +3,6 @@ using System.Linq;
 using System.Collections.Generic;
 using GameNetcodeStuff;
 using UnityEngine;
-using UnityObject = UnityEngine.Object;
 
 namespace Hax;
 
