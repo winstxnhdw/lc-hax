@@ -16,10 +16,10 @@ public sealed class StunMod : MonoBehaviour {
     }
 
     bool IsHoldingADefensiveWeapon() {
-        return Helper.LocalPlayer.IsNotNull(out PlayerControllerB localPlayer) && (
-            localPlayer.currentlyHeldObject.itemProperties.isDefensiveWeapon ||
-            localPlayer.currentlyHeldObject.TryGetComponent(out Shovel _) ||
-            localPlayer.currentlyHeldObject.TryGetComponent(out ShotgunItem _)
+        return (Helper.LocalPlayer?.currentlyHeldObject).IsNotNull(out GrabbableObject currentItem) && (
+            currentItem.itemProperties.isDefensiveWeapon ||
+            currentItem.TryGetComponent(out Shovel _) ||
+            currentItem.TryGetComponent(out ShotgunItem _)
         );
     }
 
