@@ -111,7 +111,7 @@ public class EnemyPromptHandler {
     }
 
     void HandleNutcracker(NutcrackerEnemyAI nutcracker, PlayerControllerB targetPlayer, bool willTeleportEnemy) {
-        this.TeleportEnemyToPlayer(nutcracker, targetPlayer, willTeleportEnemy, allowedInside: true);
+        this.TeleportEnemyToPlayer(nutcracker, targetPlayer, willTeleportEnemy, true, true);
         this.SetBehaviourState(nutcracker, BehaviourState.AGGRAVATED);
         nutcracker.SeeMovingThreatServerRpc((int)targetPlayer.playerClientId);
 
