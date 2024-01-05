@@ -72,6 +72,15 @@ public class ESPMod : MonoBehaviour {
                 this.RenderEnemy(enemy)
             );
         });
+
+        if (Helper.StartOfRound?.shipBounds.IsNotNull(out Collider shipBounds) ?? false) {
+            this.RenderBounds(
+                camera,
+                shipBounds.bounds,
+                Color.green,
+                this.RenderObject("Ship")
+            );
+        }
     }
 
     void OnGameJoin() {
