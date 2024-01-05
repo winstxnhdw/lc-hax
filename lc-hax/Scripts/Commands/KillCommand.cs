@@ -1,14 +1,13 @@
 using System;
 using GameNetcodeStuff;
 using UnityEngine;
-using UnityObject = UnityEngine.Object;
 
 namespace Hax;
 
 [Command("/kill")]
 public class KillCommand : ICommand {
     void ForEachEnemy(Action<EnemyAI> action) =>
-        UnityObject.FindObjectsByType<EnemyAI>(FindObjectsSortMode.None).ForEach(action);
+        Helper.FindObjects<EnemyAI>().ForEach(action);
 
     Result KillSelf() {
         if (!Helper.LocalPlayer.IsNotNull(out PlayerControllerB localPlayer) || localPlayer.isPlayerDead) {

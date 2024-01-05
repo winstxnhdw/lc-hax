@@ -21,7 +21,7 @@ class WaitForShipPatch {
         while (leverBroken) {
             yield return new WaitForSeconds(Random.Range(1.0f, 5.0f)); // Make users not send it all at once
 
-            leverBroken = (Helper.StartOfRound?.inShipPhase ?? true) && !(Object.FindObjectOfType<StartMatchLever>()?.triggerScript.interactable ?? true);
+            leverBroken = (Helper.StartOfRound?.inShipPhase ?? true) && !(Helper.FindObject<StartMatchLever>()?.triggerScript.interactable ?? true);
 
             if (leverBroken) Helper.StartOfRound?.PlayerHasRevivedServerRpc();
         }

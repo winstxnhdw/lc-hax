@@ -1,19 +1,16 @@
 using System;
 using System.Linq;
 using UnityEngine;
-using UnityObject = UnityEngine.Object;
 using GameNetcodeStuff;
 
 namespace Hax;
 
 [Command("/pumpkin")]
 public class PumpkinCommand : ICommand {
-    bool PumpkinExists(float _) {
-        return UnityObject
-                .FindObjectsByType<PlaceableShipObject>(FindObjectsSortMode.None)
-                .Where(placeableShipObject => placeableShipObject.unlockableID == (int)Unlockable.JACK_O_LANTERN)
-                .Any();
-    }
+    bool PumpkinExists(float _) =>
+        Helper.FindObjects<PlaceableShipObject>()
+              .Where(placeableShipObject => placeableShipObject.unlockableID == (int)Unlockable.JACK_O_LANTERN)
+              .Any();
 
     Action TeleportPumpkinToPlayerLater(PlayerControllerB player, float duration) => () => {
         if (!Helper.GetUnlockable(Unlockable.JACK_O_LANTERN).IsNotNull(out PlaceableShipObject jackOLantern)) return;
@@ -38,7 +35,6 @@ public class PumpkinCommand : ICommand {
             Console.Print("Player not found!");
             return;
         }
-
 
         Helper.BuyUnlockable(Unlockable.JACK_O_LANTERN);
         Helper.ReturnUnlockable(Unlockable.JACK_O_LANTERN);

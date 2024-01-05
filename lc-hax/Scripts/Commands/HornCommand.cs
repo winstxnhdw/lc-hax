@@ -1,12 +1,11 @@
 using System;
-using UnityObject = UnityEngine.Object;
 
 namespace Hax;
 
 [Command("/horn")]
 public class HornCommand : ICommand {
     Action PullHornLater(int hornDuration) => () => {
-        ShipAlarmCord shipAlarmCord = UnityObject.FindObjectOfType<ShipAlarmCord>();
+        ShipAlarmCord shipAlarmCord = Helper.FindObject<ShipAlarmCord>();
         shipAlarmCord.PullCordServerRpc(-1);
 
         Helper.CreateComponent<WaitForBehaviour>()

@@ -39,6 +39,6 @@ public static partial class Helper {
     }
 
     public static PlaceableShipObject? GetUnlockable(Unlockable unlockable) =>
-        UnityObject.FindObjectsByType<PlaceableShipObject>(FindObjectsSortMode.None)
-                   .First(placeableObject => unlockable.Is(placeableObject.unlockableID));
+        Helper.FindObjects<PlaceableShipObject>()
+              .First(placeableObject => unlockable.Is(placeableObject.unlockableID));
 }
