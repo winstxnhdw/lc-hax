@@ -19,6 +19,7 @@ class AntiKickPatch {
         playerSteamIds[__instance.playerClientId] = SteamClient.SteamId;
 
         _ = __instance.Reflect().InvokeInternalMethod("SendNewPlayerValuesClientRpc", playerSteamIds);
+
         return false;
     }
 }
