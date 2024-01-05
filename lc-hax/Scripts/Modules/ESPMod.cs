@@ -3,6 +3,7 @@ using System.Linq;
 using System.Collections.Generic;
 using GameNetcodeStuff;
 using UnityEngine;
+using UnityObject = UnityEngine.Object;
 
 namespace Hax;
 
@@ -63,7 +64,7 @@ public class ESPMod : MonoBehaviour {
         HaxObjects.Instance?.EnemyAIs.ForEach(nullableEnemy => {
             if (!nullableEnemy.IsNotNull(out EnemyAI enemy)) return;
             if (enemy is DocileLocustBeesAI or DoublewingAI) return;
-            if (!enemy.skinnedMeshRenderers.FirstOrDefault().IsNotNull(out SkinnedMeshRenderer meshRenderer)) return;
+            if (!enemy.skinnedMeshRenderers.First().IsNotNull(out SkinnedMeshRenderer meshRenderer)) return;
 
             this.RenderBounds(
                 camera,
@@ -81,22 +82,19 @@ public class ESPMod : MonoBehaviour {
 
     void OnGameEnd() => this.InGame = false;
 
+    IEnumerable<Renderer> GetRenderers<T>() where T : Component =>
+        UnityObject.FindObjectsByType<T>(FindObjectsSortMode.None)
+                   .Where(obj => obj != null)
+                   .Select(obj => obj.GetComponent<Renderer>());
+
     void InitialiseRenderers() {
         this.PlayerRenderers = Helper.Players.Select(player =>
             new RendererPair<PlayerControllerB, SkinnedMeshRenderer>(player, player.thisPlayerModel)
         );
 
-        this.LandmineRenderers = Helper.FindNonNullObjectsOfType<Landmine>().Select(landmine =>
-            landmine.GetComponent<Renderer>()
-        );
-
-        this.TurretRenderers = Helper.FindNonNullObjectsOfType<Turret>().Select(turret =>
-            turret.GetComponent<Renderer>()
-        );
-
-        this.EntranceRenderers = Helper.FindNonNullObjectsOfType<EntranceTeleport>().Select(entrance =>
-            entrance.GetComponent<Renderer>()
-        );
+        this.LandmineRenderers = this.GetRenderers<Landmine>();
+        this.TurretRenderers = this.GetRenderers<Turret>();
+        this.EntranceRenderers = this.GetRenderers<EntranceTeleport>();
     }
 
     Size GetRendererSize<R>(R renderer, Camera camera) where R : Renderer {
