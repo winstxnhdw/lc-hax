@@ -1,3 +1,5 @@
+#pragma warning disable IDE1006
+
 using GameNetcodeStuff;
 using HarmonyLib;
 using UnityEngine;
@@ -34,12 +36,14 @@ class InvisiblePatch {
     [HarmonyPrefix]
     [HarmonyPatch("UpdatePlayerPositionClientRpc")]
     static void UpdatePlayerPositionClientRpcPrefix(
+        PlayerControllerB __instance,
         ref Vector3 newPos,
         ref bool inElevator,
         ref bool exhausted,
         ref bool isPlayerGrounded
     ) {
         if (!Setting.EnableInvisible) return;
+        if (__instance.actualClientId != Helper.LocalPlayer?.actualClientId) return;
 
         newPos = InvisiblePatch.LastNewPos;
         inElevator = InvisiblePatch.LastInElevator;
@@ -47,4 +51,3 @@ class InvisiblePatch {
         isPlayerGrounded = InvisiblePatch.LastIsPlayerGrounded;
     }
 }
-
