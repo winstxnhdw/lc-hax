@@ -21,6 +21,7 @@ public class InputListener : MonoBehaviour {
     public static event Action? onBackslashPress;
     public static event Action? onZPress;
     public static event Action? onXPress;
+    public static event Action? onNPress;
 
     Dictionary<Func<bool>, Action> InputActions { get; } = new() {
         { () => Mouse.current.middleButton.wasPressedThisFrame, () => InputListener.onMiddleButtonPress?.Invoke() },
@@ -37,6 +38,7 @@ public class InputListener : MonoBehaviour {
         { () => Keyboard.current[Key.Backslash].wasPressedThisFrame, () => InputListener.onBackslashPress?.Invoke() },
         { () => Keyboard.current[Key.Z].wasPressedThisFrame, () => InputListener.onZPress?.Invoke() },
         { () => Keyboard.current[Key.X].wasPressedThisFrame, () => InputListener.onXPress?.Invoke() },
+        { () => Keyboard.current[Key.N].wasPressedThisFrame, () => InputListener.onNPress?.Invoke() },
     };
 
     void Update() {

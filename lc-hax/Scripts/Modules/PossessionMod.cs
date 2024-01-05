@@ -10,14 +10,17 @@ public sealed class PossessionMod : MonoBehaviour {
     EnemyAI? EnemyToPossess { get; set; } = null;
     bool FirstUpdate { get; set; } = true;
     RigidbodyMovement? RBKeyboard { get; set; } = null;
+    KeyboardMovement? Keyboard { get; set; } = null;
     MousePan? MousePan { get; set; } = null;
 
     public static PossessionMod? Instance { get; private set; }
 
     public bool IsPossessed => this.EnemyToPossess != null;
+    bool noClip = false;
 
     void Awake() {
         this.RBKeyboard = this.gameObject.AddComponent<RigidbodyMovement>();
+        this.Keyboard = this.gameObject.AddComponent<KeyboardMovement>();
         this.MousePan = this.gameObject.AddComponent<MousePan>();
         this.enabled = false;
 
@@ -25,30 +28,19 @@ public sealed class PossessionMod : MonoBehaviour {
     }
 
     void OnEnable() {
+        InputListener.onNPress += this.ToggleNoClip;
         InputListener.onXPress += this.ToggleRealisticPossession;
         InputListener.onZPress += this.Unpossess;
-        if (!this.MousePan.IsNotNull(out MousePan mousePan) ||
-            !this.RBKeyboard.IsNotNull(out RigidbodyMovement rbKeyboard))
-            return;
 
-        mousePan.enabled = true;
-        rbKeyboard.enabled = true;
+        this.UpdateComponentsOnCurrentState(true);
     }
 
     void OnDisable() {
+        InputListener.onNPress -= this.ToggleNoClip;
         InputListener.onXPress -= this.ToggleRealisticPossession;
         InputListener.onZPress -= this.Unpossess;
 
-        if (!this.MousePan.IsNotNull(out MousePan mousePan)) {
-            return;
-        }
-
-        if (!this.RBKeyboard.IsNotNull(out RigidbodyMovement rbKeyboard)) {
-            return;
-        }
-
-        mousePan.enabled = false;
-        rbKeyboard.enabled = false;
+        this.UpdateComponentsOnCurrentState(false);
     }
 
     private void ToggleRealisticPossession() {
@@ -67,6 +59,31 @@ public sealed class PossessionMod : MonoBehaviour {
         navMeshAgent.updateRotation = Setting.RealisticPossessionEnabled;
     }
 
+    private void ToggleNoClip() {
+        this.noClip = !this.noClip;
+        Console.Print($"Possess NoClip: {this.noClip}");
+
+        this.UpdateComponentsOnCurrentState(this.enabled);
+    }
+
+    private void UpdateComponentsOnCurrentState(bool thisGameObjectIsEnabled) {
+        if (!this.MousePan.IsNotNull(out MousePan mousePan)) {
+            return;
+        }
+
+        if (!this.RBKeyboard.IsNotNull(out RigidbodyMovement rbKeyboard)) {
+            return;
+        }
+
+        if (!this.Keyboard.IsNotNull(out KeyboardMovement keyboard)) {
+            return;
+        }
+
+        mousePan.enabled = thisGameObjectIsEnabled;
+        rbKeyboard.enabled = !this.noClip;
+        keyboard.enabled = this.noClip;
+    }
+
     void Update() {
         _ = this.StartCoroutine(this.EndOfFrameCoroutine());
     }
@@ -77,8 +94,7 @@ public sealed class PossessionMod : MonoBehaviour {
     }
 
     private void EndOfFrameUpdate() {
-        if (!this.MousePan.IsNotNull(out MousePan mousePan) ||
-            !this.RBKeyboard.IsNotNull(out RigidbodyMovement rbKeyboard) ||
+        if (!this.RBKeyboard.IsNotNull(out RigidbodyMovement rbKeyboard) ||
             !this.EnemyToPossess.IsNotNull(out EnemyAI enemy) ||
             !Helper.CurrentCamera.IsNotNull(out Camera camera) ||
             !camera.enabled
@@ -98,9 +114,7 @@ public sealed class PossessionMod : MonoBehaviour {
 
             rbKeyboard.Init();
             this.transform.position = enemy.transform.position;
-            rbKeyboard.enabled = true;
-            mousePan.enabled = true;
-
+            this.UpdateComponentsOnCurrentState(true);
         }
 
         this.UpdateEnemyPositionToHere(enemy);
