@@ -47,13 +47,8 @@ public sealed class TriggerMod : MonoBehaviour, IEnemyPrompter {
             }
 
             foreach (int i in this.RaycastHits.SphereCastForward(camera.transform).Range()) {
-                if (!this.RaycastHits[i].collider.TryGetComponent(out PlayerControllerB player)) {
-                    continue;
-                }
-
-                if (player.playerClientId == localPlayer.playerClientId) {
-                    continue;
-                }
+                if (!this.RaycastHits[i].collider.TryGetComponent(out PlayerControllerB player)) continue;
+                if (player.actualClientId == localPlayer.actualClientId) continue;
 
                 Console.Print($"Following #{player.playerClientId} {player.playerUsername}!");
                 Setting.PlayerToFollow = player;
@@ -65,13 +60,8 @@ public sealed class TriggerMod : MonoBehaviour, IEnemyPrompter {
 
         if (this.UsingInteractRay) {
             foreach (int i in this.RaycastHits.SphereCastForward(camera.transform, 0.25f).Range()) {
-                if (!this.RaycastHits[i].collider.TryGetComponent(out InteractTrigger interactTrigger)) {
-                    continue;
-                }
-
-                if (!Helper.LocalPlayer.IsNotNull(out PlayerControllerB localPlayer)) {
-                    continue;
-                }
+                if (!this.RaycastHits[i].collider.TryGetComponent(out InteractTrigger interactTrigger)) continue;
+                if (!Helper.LocalPlayer.IsNotNull(out PlayerControllerB localPlayer)) continue;
 
                 interactTrigger.Interact(localPlayer.transform);
                 break;
