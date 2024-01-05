@@ -3,14 +3,48 @@ using HarmonyLib;
 using UnityEngine;
 using Hax;
 
-[HarmonyPatch(typeof(PlayerControllerB), "UpdatePlayerPositionServerRpc")]
+[HarmonyPatch(typeof(PlayerControllerB))]
 class InvisiblePatch {
-    static void Prefix(ref Vector3 newPos, ref bool inElevator, ref bool exhausted, ref bool isPlayerGrounded) {
-        if (Setting.EnableInvisible) {
-            newPos = new Vector3(0, -100, 0);
-            inElevator = false;
-            exhausted = false;
-            isPlayerGrounded = true;
-        }
+    static Vector3 LastNewPos { get; set; }
+    static bool LastInElevator { get; set; }
+    static bool LastExhausted { get; set; }
+    static bool LastIsPlayerGrounded { get; set; }
+
+    [HarmonyPrefix]
+    [HarmonyPatch("UpdatePlayerPositionServerRpc")]
+    static void UpdatePlayerPositionServerRpcPrefix(
+        ref Vector3 newPos,
+        ref bool inElevator,
+        ref bool exhausted,
+        ref bool isPlayerGrounded
+    ) {
+        if (!Setting.EnableInvisible) return;
+
+        InvisiblePatch.LastNewPos = newPos;
+        InvisiblePatch.LastInElevator = inElevator;
+        InvisiblePatch.LastExhausted = exhausted;
+        InvisiblePatch.LastIsPlayerGrounded = isPlayerGrounded;
+
+        newPos = new Vector3(0, -100, 0);
+        inElevator = false;
+        exhausted = false;
+        isPlayerGrounded = true;
+    }
+
+    [HarmonyPrefix]
+    [HarmonyPatch("UpdatePlayerPositionClientRpc")]
+    static void UpdatePlayerPositionClientRpcPrefix(
+        ref Vector3 newPos,
+        ref bool inElevator,
+        ref bool exhausted,
+        ref bool isPlayerGrounded
+    ) {
+        if (!Setting.EnableInvisible) return;
+
+        newPos = InvisiblePatch.LastNewPos;
+        inElevator = InvisiblePatch.LastInElevator;
+        exhausted = InvisiblePatch.LastExhausted;
+        isPlayerGrounded = InvisiblePatch.LastIsPlayerGrounded;
     }
 }
+
