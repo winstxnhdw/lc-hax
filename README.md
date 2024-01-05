@@ -151,6 +151,7 @@ The complete feature set includes the following.
 | Decrease mouse sensitivity | <kbd> [ </kbd>                       |
 | Unpossess enemy            | <kbd> Z </kbd>                       |
 | Toggle realistic movement  | <kbd> X </kbd>                       |
+| Toggle possession noclip   | <kbd> N </kbd>                       |
 | Toggle Anti-Kick           | <kbd> \ </kbd>                       |
 
 ### TriggerMod
