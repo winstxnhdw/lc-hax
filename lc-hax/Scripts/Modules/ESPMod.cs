@@ -64,10 +64,11 @@ public class ESPMod : MonoBehaviour {
         HaxObjects.Instance?.EnemyAIs.ForEach(nullableEnemy => {
             if (!nullableEnemy.IsNotNull(out EnemyAI enemy)) return;
             if (enemy is DocileLocustBeesAI or DoublewingAI) return;
+            if (!enemy.skinnedMeshRenderers.First().IsNotNull(out SkinnedMeshRenderer meshRenderer)) return;
 
             this.RenderBounds(
                 camera,
-                enemy.skinnedMeshRenderers[0],
+                meshRenderer,
                 Color.red,
                 this.RenderEnemy(enemy)
             );
@@ -81,22 +82,19 @@ public class ESPMod : MonoBehaviour {
 
     void OnGameEnd() => this.InGame = false;
 
+    IEnumerable<Renderer> GetRenderers<T>() where T : Component =>
+        UnityObject.FindObjectsByType<T>(FindObjectsSortMode.None)
+                   .Where(obj => obj != null)
+                   .Select(obj => obj.GetComponent<Renderer>());
+
     void InitialiseRenderers() {
         this.PlayerRenderers = Helper.Players.Select(player =>
             new RendererPair<PlayerControllerB, SkinnedMeshRenderer>(player, player.thisPlayerModel)
         );
 
-        this.LandmineRenderers = UnityObject.FindObjectsOfType<Landmine>().Select(landmine =>
-            landmine.GetComponent<Renderer>()
-        );
-
-        this.TurretRenderers = UnityObject.FindObjectsOfType<Turret>().Select(turret =>
-            turret.GetComponent<Renderer>()
-        );
-
-        this.EntranceRenderers = UnityObject.FindObjectsOfType<EntranceTeleport>().Select(entrance =>
-            entrance.GetComponent<Renderer>()
-        );
+        this.LandmineRenderers = this.GetRenderers<Landmine>();
+        this.TurretRenderers = this.GetRenderers<Turret>();
+        this.EntranceRenderers = this.GetRenderers<EntranceTeleport>();
     }
 
     Size GetRendererSize<R>(R renderer, Camera camera) where R : Renderer {

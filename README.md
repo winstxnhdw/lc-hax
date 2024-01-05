@@ -225,3 +225,11 @@ static void LoadHaxModules() {
     Loader.AddHaxModules<FollowAnotherPlayerMod>();
 }
 ```
+
+### Whitelisting SharpMonoInjectorCore
+
+Despite being compiled from source locally, SharpMonoInjector is occasionally falsely identified as a virus by Windows Defender. If you believe you know what you are doing, you can run the following command with administrator privileges to whitelist the injector.
+
+```ps1
+Set-MpPreference -ExclusionPath (Split-Path -Parent $MyInvocation.MyCommand.Definition), (Join-Path -Path $env:TEMP -ChildPath ".net\SharpMonoInjector")
+```
