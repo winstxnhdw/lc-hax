@@ -225,6 +225,10 @@ static void LoadHaxModules() {
 }
 ```
 
-### Anti-virus false positives
+### Whitelisting SharpMonoInjectorCore
 
-Despite being compiled from source locally, SharpMonoInjector is sometimes falsely identified as a virus by Windows Defender. A batch script is provided in the [submodules](/submodules) folder to whitelist it.
+Despite being compiled from source locally, SharpMonoInjector is occasionally falsely identified as a virus by Windows Defender. If you believe you know what you are doing, you can run the following command with administrator privileges to whitelist the injector.
+
+```ps1
+Set-MpPreference -ExclusionPath (Split-Path -Parent $MyInvocation.MyCommand.Definition), (Join-Path -Path $env:TEMP -ChildPath ".net\SharpMonoInjector")
+```
