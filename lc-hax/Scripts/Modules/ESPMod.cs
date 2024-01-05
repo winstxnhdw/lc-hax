@@ -30,7 +30,7 @@ public class ESPMod : MonoBehaviour {
         if (!this.InGame || !Helper.CurrentCamera.IsNotNull(out Camera camera)) return;
 
         this.PlayerRenderers.ForEach(rendererPair => {
-            if (rendererPair.GameObject.Unfake()?.isPlayerDead ?? true) return;
+            if (rendererPair.GameObject.isPlayerDead) return;
 
             this.RenderBounds(
                 camera,
