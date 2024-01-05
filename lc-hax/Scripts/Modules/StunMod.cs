@@ -1,4 +1,3 @@
-using GameNetcodeStuff;
 using UnityEngine;
 
 namespace Hax;
