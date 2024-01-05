@@ -118,7 +118,8 @@ public sealed class TriggerMod : MonoBehaviour, IEnemyPrompter {
             }
 
             if (collider.GetComponentInParent<EnemyAI>().IsNotNull(out EnemyAI enemy) &&
-                PossessionMod.Instance.IsNotNull(out PossessionMod possessionMod)) {
+                PossessionMod.Instance.IsNotNull(out PossessionMod possessionMod) &&
+                Setting.EnablePhantom) {
                 possessionMod.Possess(enemy);
                 break;
             }
