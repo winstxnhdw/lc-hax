@@ -36,8 +36,8 @@ public sealed class TriggerMod : MonoBehaviour, IEnemyPrompter {
         if (!Helper.CurrentCamera.IsNotNull(out Camera camera)) return;
 
         if (this.UsingFollowRay) {
-            if (Setting.PlayerToFollow is not null) {
-                Setting.PlayerToFollow = null;
+            if (FollowMod.PlayerToFollow is not null) {
+                FollowMod.PlayerToFollow = null;
                 Console.Print("Stopped following!");
                 return;
             }
@@ -51,7 +51,7 @@ public sealed class TriggerMod : MonoBehaviour, IEnemyPrompter {
                 if (player.actualClientId == localPlayer.actualClientId) continue;
 
                 Console.Print($"Following #{player.playerClientId} {player.playerUsername}!");
-                Setting.PlayerToFollow = player;
+                FollowMod.PlayerToFollow = player;
                 break;
             }
 
