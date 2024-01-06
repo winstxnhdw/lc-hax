@@ -3,9 +3,8 @@ using UnityEngine;
 namespace Hax;
 
 public static partial class Helper {
-    static InteractTrigger? GetAnimationInteractTrigger(this GameObject? gameObject, string animation) =>
+    static InteractTrigger? GetAnimationInteractTrigger(this GameObject gameObject, string animation) =>
         gameObject
-            .Unfake()?
             .GetComponentsInChildren<AnimatedObjectTrigger>()
             .First(trigger => trigger.animationString == animation)?
             .GetComponentInParent<InteractTrigger>();
