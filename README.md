@@ -233,5 +233,5 @@ Despite being compiled from source locally, SharpMonoInjector is occasionally fa
 > Do ensure that you are currently in the `lc-hax` directory before executing the command.
 
 ```ps1
-Set-MpPreference -ExclusionPath (Split-Path -Parent $MyInvocation.MyCommand.Definition), (Join-Path -Path $env:TEMP -ChildPath ".net\SharpMonoInjector")
+Add-MpPreference -ExclusionPath $pwd, "$env:TEMP\.net\SharpMonoInjector"
 ```
