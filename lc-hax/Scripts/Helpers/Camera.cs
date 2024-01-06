@@ -1,12 +1,10 @@
 using UnityEngine;
-using GameNetcodeStuff;
 
 namespace Hax;
 
 public static partial class Helper {
     public static Camera? CurrentCamera =>
-        Helper.LocalPlayer.IsNotNull(out PlayerControllerB localPlayer) &&
-        localPlayer.gameplayCamera.IsNotNull(out Camera gameplayCamera) &&
+        Helper.LocalPlayer?.gameplayCamera.IsNotNull(out Camera gameplayCamera) is true &&
         gameplayCamera.enabled
             ? gameplayCamera
             : Helper.StartOfRound?.spectateCamera;

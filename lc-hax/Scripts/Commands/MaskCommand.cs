@@ -10,17 +10,12 @@ public class MaskCommand : ICommand {
             return;
         }
 
-        if (!Helper.LocalPlayer.IsNotNull(out PlayerControllerB localPlayer)) {
-            Console.Print("Local player is not found!");
-            return;
-        }
-
         if (!Helper.GetActivePlayer(args[0]).IsNotNull(out PlayerControllerB targetPlayer)) {
             Console.Print("Player not found!");
             return;
         }
 
-        if (localPlayer.currentlyHeldObjectServer is not HauntedMaskItem hauntedMaskItem) {
+        if (Helper.LocalPlayer?.currentlyHeldObjectServer is not HauntedMaskItem hauntedMaskItem) {
             Console.Print("You are not holding a mask!");
             return;
         }

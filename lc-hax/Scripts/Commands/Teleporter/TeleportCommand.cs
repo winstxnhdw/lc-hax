@@ -26,17 +26,13 @@ public class TeleportCommand : ITeleporter, ICommand {
     }
 
     Result TeleportToPosition(string[] args) {
-        if (!Helper.LocalPlayer.IsNotNull(out PlayerControllerB currentPlayer)) {
-            return new Result(message: "Player not found!");
-        }
-
         Vector3? coordinates = this.GetCoordinates(args);
 
         if (coordinates is null) {
             return new Result(message: "Invalid coordinates!");
         }
 
-        currentPlayer.TeleportPlayer(coordinates.Value);
+        Helper.LocalPlayer?.TeleportPlayer(coordinates.Value);
         return new Result(true);
     }
 
