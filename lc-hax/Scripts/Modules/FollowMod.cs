@@ -13,6 +13,8 @@ struct CopiedStates {
 }
 
 public sealed class FollowMod : MonoBehaviour {
+    public static PlayerControllerB? PlayerToFollow { get; set; }
+
     const float secondsBeforeRealtime = 1.0f;
     const float maxDistanceFromTarget = 1.0f;
 
@@ -24,11 +26,12 @@ public sealed class FollowMod : MonoBehaviour {
     float AnimationBroadcastTimer { get; set; } = 0.0f;
 
     void Update() {
-        if (!Helper.LocalPlayer.IsNotNull(out PlayerControllerB localPlayer) || localPlayer.isPlayerDead ||
-            !Setting.PlayerToFollow.IsNotNull(out PlayerControllerB player) || player.isPlayerDead
-        ) {
-            if (Setting.PlayerToFollow is not null) {
-                Setting.PlayerToFollow = null;
+        if (!Helper.LocalPlayer.IsNotNull(out PlayerControllerB localPlayer)) return;
+        if (!FollowMod.PlayerToFollow.IsNotNull(out PlayerControllerB targetPlayer)) return;
+
+        if (localPlayer.isPlayerDead || targetPlayer.isPlayerDead) {
+            if (FollowMod.PlayerToFollow is not null) {
+                FollowMod.PlayerToFollow = null;
                 Console.Print("Stopped following!");
             }
 
@@ -40,13 +43,13 @@ public sealed class FollowMod : MonoBehaviour {
         Setting.DisableFallDamage = true;
         this.InstantTeleTimer -= Time.deltaTime;
 
-        if (player.isClimbingLadder) {
+        if (targetPlayer.isClimbingLadder) {
             this.InstantTeleTimer = FollowMod.secondsBeforeRealtime;
             this.PlayerStates.Clear();
         }
 
         if (this.InstantTeleTimer > 0.0f) {
-            localPlayer.transform.position = player.thisPlayerBody.position;
+            localPlayer.transform.position = targetPlayer.thisPlayerBody.position;
             return;
         }
 
@@ -54,16 +57,16 @@ public sealed class FollowMod : MonoBehaviour {
         this.AnimationBroadcastTimer -= Time.deltaTime;
 
         int[] animationStates =
-            player.playerBodyAnimator
+            targetPlayer.playerBodyAnimator
                   .layerCount
                   .Range()
-                  .Select(i => player.playerBodyAnimator.GetCurrentAnimatorStateInfo(i).fullPathHash).ToArray();
+                  .Select(i => targetPlayer.playerBodyAnimator.GetCurrentAnimatorStateInfo(i).fullPathHash).ToArray();
 
         this.PlayerStates.Enqueue(new CopiedStates {
-            position = player.thisPlayerBody.position.Copy(),
-            rotation = player.thisPlayerBody.rotation.Copy(),
+            position = targetPlayer.thisPlayerBody.position.Copy(),
+            rotation = targetPlayer.thisPlayerBody.rotation.Copy(),
             animationStates = animationStates,
-            animationSpeed = player.playerBodyAnimator.GetFloat("animationSpeed")
+            animationSpeed = targetPlayer.playerBodyAnimator.GetFloat("animationSpeed")
         });
 
         //if it isn't time to dequeue data, don't do it.
@@ -106,7 +109,7 @@ public sealed class FollowMod : MonoBehaviour {
             this.AnimationBroadcastTimer = 0.14f;
         }
 
-        if (Vector3.Distance(player.thisPlayerBody.position, state.position) < FollowMod.maxDistanceFromTarget) {
+        if (Vector3.Distance(targetPlayer.thisPlayerBody.position, state.position) < FollowMod.maxDistanceFromTarget) {
             return;
         }
 
