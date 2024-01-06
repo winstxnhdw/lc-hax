@@ -73,7 +73,7 @@ public class ESPMod : MonoBehaviour {
             );
         });
 
-        if (Helper.StartOfRound?.shipBounds.IsNotNull(out Collider shipBounds) ?? false) {
+        if (Helper.StartOfRound?.shipBounds.IsNotNull(out Collider shipBounds) is true) {
             this.RenderBounds(
                 camera,
                 shipBounds.bounds,
