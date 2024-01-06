@@ -43,7 +43,7 @@ class InvisiblePatch {
         ref bool isPlayerGrounded
     ) {
         if (!Setting.EnableInvisible) return;
-        if (__instance.actualClientId != Helper.LocalPlayer?.actualClientId) return;
+        if (Helper.LocalPlayer?.actualClientId != __instance.actualClientId) return;
 
         newPos = InvisiblePatch.LastNewPos;
         inElevator = InvisiblePatch.LastInElevator;
