@@ -10,11 +10,7 @@ public class KillCommand : ICommand {
         Helper.FindObjects<EnemyAI>().ForEach(action);
 
     Result KillSelf() {
-        if (!Helper.LocalPlayer.IsNotNull(out PlayerControllerB localPlayer) || localPlayer.isPlayerDead) {
-            return new Result(message: "Player not found!");
-        }
-
-        localPlayer.KillPlayer();
+        Helper.LocalPlayer?.KillPlayer();
         return new Result(true);
     }
 

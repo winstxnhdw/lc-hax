@@ -14,11 +14,6 @@ public class SayCommand : ICommand {
             return;
         }
 
-        if (!Helper.HUDManager.IsNotNull(out HUDManager hudManager)) {
-            Console.Print("HUDManager is not found");
-            return;
-        }
-
-        hudManager.AddTextToChatOnServer(string.Join(" ", args[1..]), (int)player.playerClientId);
+        Helper.HUDManager?.AddTextToChatOnServer(string.Join(" ", args[1..]), (int)player.playerClientId);
     }
 }

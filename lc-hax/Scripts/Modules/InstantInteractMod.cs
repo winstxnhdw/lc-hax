@@ -4,8 +4,6 @@ using UnityEngine;
 namespace Hax;
 
 public sealed class InstantInteractMod : MonoBehaviour {
-    string? GetInteractTriggerName(InteractTrigger? interactTrigger) => interactTrigger?.name;
-
     IEnumerator SetTimeToHold(object[] args) {
         while (true) {
             HaxObjects.Instance?.InteractTriggers.ForEach(nullableInteractTrigger => {
