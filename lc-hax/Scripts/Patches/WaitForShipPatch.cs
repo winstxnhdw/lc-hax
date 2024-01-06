@@ -10,20 +10,20 @@ using Hax;
 [HarmonyPatch(typeof(StartOfRound), "EndOfGame")]
 class WaitForShipPatch {
     static IEnumerator Postfix(IEnumerator endOfGame) {
-        while (endOfGame.MoveNext()) {
-            yield return endOfGame.Current;
-        }
-
+        while (endOfGame.MoveNext()) yield return endOfGame.Current;
         yield return new WaitForSeconds(5.0f); // Wait a bit to give it a chance to fix itself
+        bool isLeverBroken = true;
 
-        bool leverBroken = true;
+        while (isLeverBroken) {
+            isLeverBroken =
+                Helper.StartOfRound?.inShipPhase is true &&
+                Helper.FindObject<StartMatchLever>()?.triggerScript.interactable is false;
 
-        while (leverBroken) {
+            if (isLeverBroken) {
+                Helper.StartOfRound?.PlayerHasRevivedServerRpc();
+            }
+
             yield return new WaitForSeconds(Random.Range(1.0f, 5.0f)); // Make users not send it all at once
-
-            leverBroken = (Helper.StartOfRound?.inShipPhase ?? true) && !(Helper.FindObject<StartMatchLever>()?.triggerScript.interactable ?? true);
-
-            if (leverBroken) Helper.StartOfRound?.PlayerHasRevivedServerRpc();
         }
     }
 }
