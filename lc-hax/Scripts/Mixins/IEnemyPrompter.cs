@@ -134,6 +134,8 @@ public class EnemyPromptHandler {
     void HandleMaskedPlayer(MaskedPlayerEnemy maskedPlayer, PlayerControllerB targetPlayer, bool willTeleportEnemy) {
         this.TeleportEnemyToPlayer(maskedPlayer, targetPlayer, willTeleportEnemy, true, true);
         this.SetBehaviourState(maskedPlayer, BehaviourState.CHASE);
+
+        maskedPlayer.SetEnemyOutside(!targetPlayer.isInsideFactory);
     }
 
     void HandleCoilHead(SpringManAI coilHead, PlayerControllerB targetPlayer, bool willTeleportEnemy) {
