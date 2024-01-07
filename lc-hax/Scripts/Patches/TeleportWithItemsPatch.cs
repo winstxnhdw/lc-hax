@@ -5,5 +5,5 @@ using HarmonyLib;
 
 [HarmonyPatch(typeof(PlayerControllerB), nameof(PlayerControllerB.DropAllHeldItems))]
 class TeleportWithItemsPatch {
-    static bool Postfix(int ___shipTeleporterId) => ___shipTeleporterId is -1;
+    static bool Prefix(int ___shipTeleporterId) => ___shipTeleporterId is -1;
 }
