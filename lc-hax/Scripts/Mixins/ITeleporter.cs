@@ -34,7 +34,7 @@ public static class ITeleporterMixin {
         HaxObjects.Instance?.ShipTeleporters.Renew();
 
         if (!self.TryGetTeleporter(out ShipTeleporter teleporter)) {
-            Console.Print("ShipTeleporter not found!");
+            Chat.Print("ShipTeleporter not found!");
             return;
         }
 

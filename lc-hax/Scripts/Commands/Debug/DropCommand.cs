@@ -1,4 +1,4 @@
-namespace Hax;
+using Hax;
 
 [DebugCommand("/drop")]
 public class DropCommand : ICommand {

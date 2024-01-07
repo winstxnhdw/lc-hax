@@ -1,4 +1,4 @@
-namespace Hax;
+using Hax;
 
 [Command("/start")]
 public class StartGameCommand : ICommand {

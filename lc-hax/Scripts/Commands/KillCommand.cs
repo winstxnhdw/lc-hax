@@ -1,8 +1,7 @@
 using System;
 using GameNetcodeStuff;
 using UnityEngine;
-
-namespace Hax;
+using Hax;
 
 [Command("/kill")]
 public class KillCommand : ICommand {
@@ -45,7 +44,7 @@ public class KillCommand : ICommand {
 
     void HandleResult(Result result) {
         if (result.Success) return;
-        Console.Print(result.Message);
+        Chat.Print(result.Message);
     }
 
     public void Execute(string[] args) {

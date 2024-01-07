@@ -1,4 +1,4 @@
-namespace Hax;
+using Hax;
 
 [DebugCommand("/unlockables")]
 public class UnlockablesCommand : ICommand {

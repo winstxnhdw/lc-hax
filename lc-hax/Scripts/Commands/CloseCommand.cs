@@ -1,4 +1,4 @@
-namespace Hax;
+using Hax;
 
 [Command("/close")]
 public class CloseCommand : ICommand {

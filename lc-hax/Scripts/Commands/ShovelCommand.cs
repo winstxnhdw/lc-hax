@@ -1,20 +1,20 @@
 
-namespace Hax;
+using Hax;
 
 [Command("/shovel")]
 public class ShovelCommand : ICommand {
     public void Execute(string[] args) {
         if (args.Length is 0) {
-            Console.Print("Usage: /shovel <force=1>");
+            Chat.Print("Usage: /shovel <force=1>");
             return;
         }
 
         if (!int.TryParse(args[0], out int shovelHitForce)) {
-            Console.Print("Invalid value!");
+            Chat.Print("Invalid value!");
             return;
         }
 
         Setting.ShovelHitForce = shovelHitForce;
-        Console.Print($"Shovel hit force is now set to {shovelHitForce}!");
+        Chat.Print($"Shovel hit force is now set to {shovelHitForce}!");
     }
 }

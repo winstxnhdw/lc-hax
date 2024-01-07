@@ -32,7 +32,7 @@ public sealed class FollowMod : MonoBehaviour {
         if (localPlayer.isPlayerDead || targetPlayer.isPlayerDead) {
             if (FollowMod.PlayerToFollow is not null) {
                 FollowMod.PlayerToFollow = null;
-                Console.Print("Stopped following!");
+                Chat.Print("Stopped following!");
             }
 
             Setting.DisableFallDamage = false;

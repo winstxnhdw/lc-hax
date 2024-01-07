@@ -1,4 +1,4 @@
-namespace Hax;
+using Hax;
 
 [Command("/berserk")]
 public class BerserkCommand : ICommand {

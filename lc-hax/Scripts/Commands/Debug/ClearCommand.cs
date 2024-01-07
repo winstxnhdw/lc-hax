@@ -1,4 +1,4 @@
-namespace Hax;
+using Hax;
 
 [DebugCommand("/clear")]
 public class ClearCommand : ICommand {

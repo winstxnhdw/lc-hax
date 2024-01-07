@@ -1,7 +1,6 @@
 using UnityEngine;
 using GameNetcodeStuff;
-
-namespace Hax;
+using Hax;
 
 [Command("/tp")]
 public class TeleportCommand : ITeleporter, ICommand {
@@ -64,10 +63,10 @@ public class TeleportCommand : ITeleporter, ICommand {
 
     public void Execute(string[] args) {
         if (args.Length is 0) {
-            Console.Print("Usage: /tp <player>");
-            Console.Print("Usage: /tp <x> <y> <z>");
-            Console.Print("Usage: /tp <player> <x> <y> <z>");
-            Console.Print("Usage: /tp <player> <player>");
+            Chat.Print("Usage: /tp <player>");
+            Chat.Print("Usage: /tp <x> <y> <z>");
+            Chat.Print("Usage: /tp <player> <x> <y> <z>");
+            Chat.Print("Usage: /tp <player> <player>");
             return;
         }
 
@@ -80,7 +79,7 @@ public class TeleportCommand : ITeleporter, ICommand {
         };
 
         if (!result.Success) {
-            Console.Print(result.Message);
+            Chat.Print(result.Message);
         }
     }
 }

@@ -45,7 +45,7 @@ public sealed class PossessionMod : MonoBehaviour {
 
     private void ToggleRealisticPossession() {
         Setting.RealisticPossessionEnabled = !Setting.RealisticPossessionEnabled;
-        Console.Print($"Realistic Possession: {Setting.RealisticPossessionEnabled}");
+        Chat.Print($"Realistic Possession: {Setting.RealisticPossessionEnabled}");
 
         if (!this.EnemyToPossess.IsNotNull(out EnemyAI enemy)) {
             return;
@@ -61,7 +61,7 @@ public sealed class PossessionMod : MonoBehaviour {
 
     private void ToggleNoClip() {
         this.noClip = !this.noClip;
-        Console.Print($"Possess NoClip: {this.noClip}");
+        Chat.Print($"Possess NoClip: {this.noClip}");
 
         this.UpdateComponentsOnCurrentState(this.enabled);
     }

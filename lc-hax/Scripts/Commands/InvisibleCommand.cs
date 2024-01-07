@@ -1,6 +1,5 @@
 using UnityEngine;
-
-namespace Hax;
+using Hax;
 
 [Command("/invis")]
 public class InvisibleCommand : ICommand {
@@ -11,7 +10,7 @@ public class InvisibleCommand : ICommand {
 
     public void Execute(string[] args) {
         Setting.EnableInvisible = !Setting.EnableInvisible;
-        Console.Print($"Invisible: {(Setting.EnableInvisible ? "enabled" : "disabled")}");
+        Chat.Print($"Invisible: {(Setting.EnableInvisible ? "enabled" : "disabled")}");
 
         if (Setting.EnableInvisible) {
             this.ImmediatelyUpdatePlayerPosition();
