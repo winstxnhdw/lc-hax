@@ -79,7 +79,7 @@ public class EnemyPromptHandler {
     void HandleBracken(FlowermanAI bracken, PlayerControllerB targetPlayer, bool willTeleportEnemy) {
         this.TeleportEnemyToPlayer(bracken, targetPlayer, willTeleportEnemy, allowedInside: true);
         this.SetBehaviourState(bracken, BehaviourState.AGGRAVATED);
-        bracken.EnterAngerModeServerRpc(20);
+        bracken.EnterAngerModeServerRpc(float.MaxValue);
     }
 
     void HandleBunkerSpider(SandSpiderAI bunkerSpider, PlayerControllerB targetPlayer, bool willTeleportEnemy) {
@@ -87,16 +87,15 @@ public class EnemyPromptHandler {
         this.SetBehaviourState(bunkerSpider, BehaviourState.AGGRAVATED);
 
         Vector3 playerPosition = targetPlayer.transform.position;
-        bunkerSpider.meshContainer.position = playerPosition;
-        bunkerSpider.SyncMeshContainerPositionToClients();
+
         bunkerSpider.SpawnWebTrapServerRpc(
-            playerPosition, 
-            playerPosition + targetPlayer.transform.forward * 3.0f
+            playerPosition,
+            playerPosition + (targetPlayer.transform.forward * 3.0f)
         );
 
         _ = bunkerSpider.Reflect()
-                        .SetInternalField("onWall", false)?
-                        .SetInternalField("watchFromDistance", false);
+                        .SetInternalField("watchFromDistance", false)?
+                        .SetInternalField("chaseTimer", float.MaxValue);
     }
 
     void HandleBee(RedLocustBees bee, PlayerControllerB targetPlayer, bool willTeleportEnemy) {
@@ -108,6 +107,7 @@ public class EnemyPromptHandler {
     void HandleHoardingBug(HoarderBugAI hoardingBug, PlayerControllerB targetPlayer, bool willTeleportEnemy) {
         this.TeleportEnemyToPlayer(hoardingBug, targetPlayer, willTeleportEnemy, allowedInside: true);
         this.SetBehaviourState(hoardingBug, BehaviourState.AGGRAVATED);
+
         hoardingBug.angryAtPlayer = targetPlayer;
         hoardingBug.angryTimer = float.MaxValue;
 
@@ -118,8 +118,13 @@ public class EnemyPromptHandler {
 
     void HandleNutcracker(NutcrackerEnemyAI nutcracker, PlayerControllerB targetPlayer, bool willTeleportEnemy) {
         this.TeleportEnemyToPlayer(nutcracker, targetPlayer, willTeleportEnemy, true, true);
-        this.SetBehaviourState(nutcracker, BehaviourState.AGGRAVATED);
-        nutcracker.SeeMovingThreatServerRpc((int)targetPlayer.playerClientId);
+
+        int playerId = (int)targetPlayer.playerClientId;
+        nutcracker.StopInspection();
+        nutcracker.LegKickPlayerServerRpc(playerId);
+        nutcracker.SeeMovingThreatServerRpc(playerId);
+        nutcracker.AimGunServerRpc(targetPlayer.transform.position);
+        nutcracker.FireGunServerRpc();
 
         _ = nutcracker.Reflect()
                       .SetInternalField("lastSeenPlayerPos", targetPlayer.transform.position)?
@@ -134,6 +139,8 @@ public class EnemyPromptHandler {
     void HandleCoilHead(SpringManAI coilHead, PlayerControllerB targetPlayer, bool willTeleportEnemy) {
         this.TeleportEnemyToPlayer(coilHead, targetPlayer, willTeleportEnemy, allowedInside: true);
         this.SetBehaviourState(coilHead, BehaviourState.CHASE);
+
+        coilHead.SetAnimationGoServerRpc();
     }
 
     void HandleSporeLizard(PufferAI sporeLizard, PlayerControllerB targetPlayer, bool willTeleportEnemy) {
