@@ -81,59 +81,60 @@ The complete feature set includes the following.
 
 ### Commands
 
-| Action                        | Command                           |
-| ----------------------------- | --------------------------------- |
-| Teleport outside entrance     | `/exit`                           |
-| Teleport inside entrance      | `/enter`                          |
-| Teleport to a player          | `/tp <player>`                    |
-| Teleport to a location        | `/tp <x> <y> <z>`                 |
-| Teleport player to player     | `/tp <player> <player>`           |
-| Teleport player to a location | `/tp <player> <x> <y> <z>`        |
-| Teleports the player to hell  | `/void <player>`                  |
-| Teleport back to ship         | `/home <player?>`                 |
-| Teleport enemies to player    | `/mob <player>`                   |
-| Inverse teleport a player     | `/random <player>`                |
-| Chibaku Tensei                | `/ct <player>`                    |
-| Play noise on player          | `/noise <player> <duration=30>`   |
-| Lure enemies to player        | `/hate <player>`                  |
-| Spawn masked enemy on player  | `/mask <player>`                  |
-| Heal player                   | `/heal <player?>`                 |
-| Kill player                   | `/kill <player?>`                 |
-| Kill all players              | `/kill --all`                     |
-| Kill all enemies              | `/kill --enemy`                   |
-| Kill player with animation    | `/fatality <player> <enemy>`      |
-| Kill with pumpkin             | `/pumpkin <player> <duration=15>` |
-| Spoof a server message        | `/say <player> <message>`         |
-| Transmit a signal             | `/signal <message>`               |
-| Modify shovel damage          | `/shovel <force=1>`               |
-| Give or take money            | `/money <amount>`                 |
-| Add or remove experience      | `/xp <amount>`                    |
-| Block incoming credits        | `/block credits`                  |
-| Block any radar targets       | `/block radar`                    |
-| Become untargetable           | `/block enemy`                    |
-| Place an unlockable           | `/build <unlockable>`             |
-| Change moons                  | `/visit <moon>`                   |
-| Stun enemies                  | `/stun <duration>`                |
-| Pull the ship's horn          | `/horn <duration>`                |
-| Toggle stun on click          | `/stunclick`                      |
-| End the game                  | `/end <player=-1>`                |
-| Start the game                | `/start`                          |
-| List all players              | `/players`                        |
-| Grab all scraps               | `/grab`                           |
-| Toggle the Beta badge         | `/beta`                           |
-| Get coordinates               | `/xyz`                            |
-| Toggle God mode               | `/god`                            |
-| Immune to non-instakill       | `/demigod`                        |
-| Toggle rapid item usage       | `/rapid`                          |
-| Unlock all doors              | `/unlock`                         |
-| Lock all gates                | `/lock`                           |
-| Open ship door                | `/open`                           |
-| Close ship door               | `/close`                          |
-| Trigger the garage doors      | `/garage`                         |
-| Explode all jetpacks          | `/explode`                        |
-| Explode all landmines         | `/explode mine`                   |
-| Upset all turrets             | `/berserk`                        |
-| Turn invisible to players     | `/invis`                          |
+| Action                        | Command                                        |
+| ----------------------------- | ---------------------------------------------- |
+| Teleport outside entrance     | `/exit`                                        |
+| Teleport inside entrance      | `/enter`                                       |
+| Teleport to a player          | `/tp <player>`                                 |
+| Teleport to a location        | `/tp <x> <y> <z>`                              |
+| Teleport player to player     | `/tp <player> <player>`                        |
+| Teleport player to a location | `/tp <player> <x> <y> <z>`                     |
+| Teleports the player to hell  | `/void <player>`                               |
+| Teleport back to ship         | `/home <player?>`                              |
+| Teleport enemies to player    | `/mob <player>`                                |
+| Inverse teleport a player     | `/random <player>`                             |
+| Chibaku Tensei                | `/ct <player>`                                 |
+| Play noise on player          | `/noise <player> <duration=30>`                |
+| Lure enemies to player        | `/hate <player>`                               |
+| Spawn masked enemy on player  | `/mask <player>`                               |
+| Heal player                   | `/heal <player?>`                              |
+| Kill player                   | `/kill <player?>`                              |
+| Kill all players              | `/kill --all`                                  |
+| Kill all enemies              | `/kill --enemy`                                |
+| Kill player with animation    | `/fatality <player> <enemy>`                   |
+| Kill with pumpkin             | `/pumpkin <player> <duration=15>`              |
+| Poison a player               | `/poison <player> <damage> <delay> <duration>` |
+| Spoof a server message        | `/say <player> <message>`                      |
+| Transmit a signal             | `/signal <message>`                            |
+| Modify shovel damage          | `/shovel <force=1>`                            |
+| Give or take money            | `/money <amount>`                              |
+| Add or remove experience      | `/xp <amount>`                                 |
+| Block incoming credits        | `/block credits`                               |
+| Block any radar targets       | `/block radar`                                 |
+| Become untargetable           | `/block enemy`                                 |
+| Place an unlockable           | `/build <unlockable>`                          |
+| Change moons                  | `/visit <moon>`                                |
+| Stun enemies                  | `/stun <duration>`                             |
+| Pull the ship's horn          | `/horn <duration>`                             |
+| Toggle stun on click          | `/stunclick`                                   |
+| End the game                  | `/end <player=-1>`                             |
+| Start the game                | `/start`                                       |
+| List all players              | `/players`                                     |
+| Grab all scraps               | `/grab`                                        |
+| Toggle the Beta badge         | `/beta`                                        |
+| Get coordinates               | `/xyz`                                         |
+| Toggle God mode               | `/god`                                         |
+| Immune to non-instakill       | `/demigod`                                     |
+| Toggle rapid item usage       | `/rapid`                                       |
+| Unlock all doors              | `/unlock`                                      |
+| Lock all gates                | `/lock`                                        |
+| Open ship door                | `/open`                                        |
+| Close ship door               | `/close`                                       |
+| Trigger the garage doors      | `/garage`                                      |
+| Explode all jetpacks          | `/explode`                                     |
+| Explode all landmines         | `/explode mine`                                |
+| Upset all turrets             | `/berserk`                                     |
+| Turn invisible to players     | `/invis`                                       |
 
 ### Binds
 
