@@ -1,6 +1,6 @@
 #pragma warning disable IDE1006
 
-using SystemException = System.Exception;
+using System;
 using GameNetcodeStuff;
 using HarmonyLib;
 using Hax;
@@ -32,7 +32,7 @@ class SubmitChatPatch {
         }
 
         Helper.Try(() => Chat.ExecuteCommand(hudManager.chatTextField.text),
-            (SystemException exception) => Logger.Write(exception.ToString())
+            (Exception exception) => Logger.Write(exception.ToString())
         );
 
         return false;
