@@ -10,7 +10,7 @@ public static partial class Helper {
             .GetComponentInParent<InteractTrigger>();
 
     public static void CloseShipDoor(bool closed) =>
-        Helper.FindObject<HangarShipDoor>()
+        Helper.FindObject<HangarShipDoor>()?
               .gameObject.GetAnimationInteractTrigger(closed ? "CloseDoor" : "OpenDoor")?
               .onInteract.Invoke(Helper.LocalPlayer);
 }
