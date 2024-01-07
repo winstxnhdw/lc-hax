@@ -85,8 +85,14 @@ public class EnemyPromptHandler {
     void HandleBunkerSpider(SandSpiderAI bunkerSpider, PlayerControllerB targetPlayer, bool willTeleportEnemy) {
         this.TeleportEnemyToPlayer(bunkerSpider, targetPlayer, willTeleportEnemy, allowedInside: true);
         this.SetBehaviourState(bunkerSpider, BehaviourState.AGGRAVATED);
-        bunkerSpider.meshContainer.position = targetPlayer.transform.position;
+
+        Vector3 playerPosition = targetPlayer.transform.position;
+        bunkerSpider.meshContainer.position = playerPosition;
         bunkerSpider.SyncMeshContainerPositionToClients();
+        bunkerSpider.SpawnWebTrapServerRpc(
+            playerPosition, 
+            playerPosition + targetPlayer.transform.forward * 3.0f
+        );
 
         _ = bunkerSpider.Reflect()
                         .SetInternalField("onWall", false)?
