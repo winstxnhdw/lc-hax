@@ -101,6 +101,7 @@ The complete feature set includes the following.
 | Kill player                   | `/kill <player?>`                 |
 | Kill all players              | `/kill --all`                     |
 | Kill all enemies              | `/kill --enemy`                   |
+| Kill player with animation    | `/fatality <player> <enemy>`      |
 | Kill with pumpkin             | `/pumpkin <player> <duration=15>` |
 | Spoof a server message        | `/say <player> <message>`         |
 | Transmit a signal             | `/signal <message>`               |
