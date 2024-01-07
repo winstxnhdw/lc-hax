@@ -4,7 +4,7 @@ using GameNetcodeStuff;
 namespace Hax;
 
 public static partial class Helper {
-    static void DamagePlayerRpc(this PlayerControllerB player, int damage) =>
+    public static void DamagePlayerRpc(this PlayerControllerB player, int damage) =>
         player.DamagePlayerFromOtherClientServerRpc(damage, Vector3.zero, -1);
 
     public static void HealPlayer(this PlayerControllerB player) => player.DamagePlayerRpc(-100);
