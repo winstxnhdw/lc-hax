@@ -5,12 +5,12 @@ namespace Hax;
 [Command("/horn")]
 public class HornCommand : ICommand {
     Action PullHornLater(int hornDuration) => () => {
-        ShipAlarmCord shipAlarmCord = Helper.FindObject<ShipAlarmCord>();
-        shipAlarmCord.PullCordServerRpc(-1);
+        ShipAlarmCord? shipAlarmCord = Helper.FindObject<ShipAlarmCord>();
+        shipAlarmCord?.PullCordServerRpc(-1);
 
         Helper.CreateComponent<WaitForBehaviour>()
               .SetPredicate(time => time >= hornDuration)
-              .Init(() => shipAlarmCord.StopPullingCordServerRpc(-1));
+              .Init(() => shipAlarmCord?.StopPullingCordServerRpc(-1));
     };
 
     public void Execute(string[] args) {
