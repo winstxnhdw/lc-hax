@@ -1,7 +1,6 @@
 using UnityEngine;
 using GameNetcodeStuff;
-
-namespace Hax;
+using Hax;
 
 [Command("/ct")]
 public class ChibakuTenseiCommand : ICommand {
@@ -96,14 +95,14 @@ public class ChibakuTenseiCommand : ICommand {
 
     public void Execute(string[] args) {
         if (args.Length is 0) {
-            Console.Print("Usage: /ct <player>");
+            Chat.Print("Usage: /ct <player>");
             return;
         }
 
         Result result = this.TeleportPlayerToRandom(args);
 
         if (!result.Success) {
-            Console.Print(result.Message);
+            Chat.Print(result.Message);
         }
     }
 }

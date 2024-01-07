@@ -1,4 +1,4 @@
-namespace Hax;
+using Hax;
 
 [DebugCommand("/levels")]
 public class LevelsCommand : ICommand {

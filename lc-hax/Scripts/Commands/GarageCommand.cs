@@ -1,15 +1,15 @@
-namespace Hax;
+using Hax;
 
 [Command("/garage")]
 public class GarageCommand : ICommand {
     public void Execute(string[] _) {
         if (!Helper.RoundManager.IsNotNull(out RoundManager roundManager)) {
-            Console.Print("RoundManager not found!");
+            Chat.Print("RoundManager not found!");
             return;
         }
 
         if (roundManager.currentLevel.levelID is not (int)Level.EXPERIMENTATION) {
-            Console.Print("You must be in Experimentation to use this command!");
+            Chat.Print("You must be in Experimentation to use this command!");
             return;
         }
 

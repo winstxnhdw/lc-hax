@@ -1,4 +1,4 @@
-namespace Hax;
+using Hax;
 
 [Command("/unlock")]
 public class UnlockCommand : ICommand {
@@ -7,6 +7,6 @@ public class UnlockCommand : ICommand {
         Helper.FindObjects<DoorLock>()
               .ForEach(door => door.UnlockDoorSyncWithServer());
 
-        Console.Print("All doors unlocked!");
+        Chat.Print("All doors unlocked!");
     }
 }

@@ -15,7 +15,7 @@ public sealed class AntiKickMod : MonoBehaviour {
 
     void ToggleAntiKick() {
         if (Helper.LocalPlayer is not null) {
-            Console.Print("You cannot toggle anti-kick while in-game!");
+            Chat.Print("You cannot toggle anti-kick while in-game!");
             return;
         }
 
@@ -25,6 +25,6 @@ public sealed class AntiKickMod : MonoBehaviour {
 
     void PrintInvisibleWarning() {
         if (!Setting.EnableAntiKick) return;
-        Console.Print("You are invisible! Do /invis to disable!");
+        Chat.Print("You are invisible! Do /invis to disable!");
     }
 }

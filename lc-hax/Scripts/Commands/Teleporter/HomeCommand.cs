@@ -1,7 +1,6 @@
 using System;
 using GameNetcodeStuff;
-
-namespace Hax;
+using Hax;
 
 [Command("/home")]
 public class HomeCommand : ITeleporter, ICommand {
@@ -9,7 +8,7 @@ public class HomeCommand : ITeleporter, ICommand {
         HaxObjects.Instance?.ShipTeleporters.Renew();
 
         if (!this.TryGetTeleporter(out ShipTeleporter teleporter)) {
-            Console.Print("ShipTeleporter not found!");
+            Chat.Print("ShipTeleporter not found!");
             return;
         }
 
@@ -26,7 +25,7 @@ public class HomeCommand : ITeleporter, ICommand {
         }
 
         if (!Helper.GetPlayer(args[0]).IsNotNull(out PlayerControllerB targetPlayer)) {
-            Console.Print("Player not found!");
+            Chat.Print("Player not found!");
             return;
         }
 

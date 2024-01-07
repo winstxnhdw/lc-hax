@@ -1,4 +1,4 @@
-namespace Hax;
+using Hax;
 
 [Command("/exit")]
 public class ExitCommand : IEntrance, ICommand {

@@ -1,22 +1,21 @@
 using GameNetcodeStuff;
-
-namespace Hax;
+using Hax;
 
 [Command("/fatality")]
 public class FatalityCommand : ICommand {
     public void Execute(string[] args) {
         if (args.Length < 2) {
-            Console.Print("Usage: /fatality <player> <enemy>");
+            Chat.Print("Usage: /fatality <player> <enemy>");
             return;
         }
 
         if (Helper.LocalPlayer is not PlayerControllerB localPlayer) {
-            Console.Print("Local player not found!");
+            Chat.Print("Local player not found!");
             return;
         }
 
         if (Helper.GetActivePlayer(args[0]) is not PlayerControllerB player) {
-            Console.Print("Invalid player!");
+            Chat.Print("Invalid player!");
             return;
         }
 
@@ -39,7 +38,7 @@ public class FatalityCommand : ICommand {
         }
 
         else {
-            Console.Print("Enemy fatality has not yet been implemented or does not exist!");
+            Chat.Print("Enemy fatality has not yet been implemented or does not exist!");
         }
     }
 }

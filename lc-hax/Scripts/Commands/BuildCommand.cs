@@ -1,6 +1,5 @@
 using UnityEngine;
-
-namespace Hax;
+using Hax;
 
 [Command("/build")]
 public class BuildCommand : ICommand {
@@ -24,17 +23,17 @@ public class BuildCommand : ICommand {
 
     public void Execute(string[] args) {
         if (args.Length is 0) {
-            Console.Print("Usage: /build <unlockable>");
+            Chat.Print("Usage: /build <unlockable>");
             return;
         }
 
         if (!Helper.CurrentCamera.IsNotNull(out Camera camera)) {
-            Console.Print("Camera not found!");
+            Chat.Print("Camera not found!");
             return;
         }
 
         if (!Helper.TryParseUnlockable(args[0], out Unlockable unlockable)) {
-            Console.Print("Incorrect unlockable name!");
+            Chat.Print("Incorrect unlockable name!");
             return;
         }
 
@@ -43,7 +42,7 @@ public class BuildCommand : ICommand {
         Result result = this.PlaceUnlockable(unlockable, camera);
 
         if (!result.Success) {
-            Console.Print(result.Message);
+            Chat.Print(result.Message);
         }
     }
 }

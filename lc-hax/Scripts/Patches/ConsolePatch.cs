@@ -8,7 +8,7 @@ class ConsolePatch {
         if (!Helper.HUDManager.IsNotNull(out HUDManager hudManager)) return true;
         if (!hudManager.chatTextField.text.StartsWith("/")) return true;
 
-        Helper.Try(() => Console.ExecuteCommand(hudManager.chatTextField.text),
+        Helper.Try(() => Chat.ExecuteCommand(hudManager.chatTextField.text),
             (SystemException exception) => Logger.Write(exception.ToString())
         );
 

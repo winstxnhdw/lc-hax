@@ -1,4 +1,4 @@
-namespace Hax;
+using Hax;
 
 [Command("/lock")]
 public class LockCommand : ICommand {
