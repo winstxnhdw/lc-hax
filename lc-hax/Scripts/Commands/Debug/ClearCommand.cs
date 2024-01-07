@@ -3,6 +3,7 @@ namespace Hax;
 [DebugCommand("/clear")]
 public class ClearCommand : ICommand {
     public void Execute(string[] _) {
-        Helper.HUDManager?.ChatMessageHistory.Clear();
+        if (!Helper.HUDManager.IsNotNull(out HUDManager hudManager)) return;
+        hudManager.chatText = "";
     }
 }
