@@ -225,7 +225,6 @@ public class EnemyPromptHandler {
                 break;
         }
     }
-
 }
 
 public interface IEnemyPrompter { }
