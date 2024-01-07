@@ -1,8 +1,7 @@
 using UnityEngine;
 using GameNetcodeStuff;
 using System;
-
-namespace Hax;
+using Hax;
 
 [Command("/random")]
 public class RandomCommand : ICommand {
@@ -62,7 +61,7 @@ public class RandomCommand : ICommand {
         ObjectPlacements<Transform, ShipTeleporter>? teleporterPlacements = this.GetInverseTeleporterPlacements(targetPlayer);
 
         if (teleporterPlacements is null) {
-            Console.Print("Inverse Teleporter not found!");
+            Chat.Print("Inverse Teleporter not found!");
             return;
         }
 
@@ -73,7 +72,7 @@ public class RandomCommand : ICommand {
         ObjectPlacements<Transform, PlaceableShipObject>? cupboardPlacements = this.GetCupboardPlacements(targetPlayer);
 
         if (cupboardPlacements is null) {
-            Console.Print("Cupboard not found!");
+            Chat.Print("Cupboard not found!");
             return;
         }
 
@@ -86,12 +85,12 @@ public class RandomCommand : ICommand {
 
     public void Execute(string[] args) {
         if (args.Length is 0) {
-            Console.Print("Usage: /random <player>");
+            Chat.Print("Usage: /random <player>");
             return;
         }
 
         if (!Helper.GetActivePlayer(args[0]).IsNotNull(out PlayerControllerB targetPlayer)) {
-            Console.Print("Player not found!");
+            Chat.Print("Player not found!");
             return;
         }
 

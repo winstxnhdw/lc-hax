@@ -1,4 +1,4 @@
-namespace Hax;
+using Hax;
 
 [Command("/explode")]
 public class ExplodeCommand : ICommand {

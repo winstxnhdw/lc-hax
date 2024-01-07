@@ -1,12 +1,11 @@
 using GameNetcodeStuff;
-
-namespace Hax;
+using Hax;
 
 [DebugCommand("/fixcamera")]
 public class FixCameraCommand : ICommand {
     public void Execute(string[] args) {
         if (!Helper.LocalPlayer.IsNotNull(out PlayerControllerB localPlayer)) {
-            Console.Print("Local player not found!");
+            Chat.Print("Local player not found!");
             return;
         }
 

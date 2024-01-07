@@ -1,4 +1,4 @@
-namespace Hax;
+using Hax;
 
 [Command("/open")]
 public class OpenCommand : ICommand {

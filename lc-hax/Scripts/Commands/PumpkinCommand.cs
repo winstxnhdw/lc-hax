@@ -2,8 +2,7 @@ using System;
 using System.Linq;
 using UnityEngine;
 using GameNetcodeStuff;
-
-namespace Hax;
+using Hax;
 
 [Command("/pumpkin")]
 public class PumpkinCommand : ICommand {
@@ -27,12 +26,12 @@ public class PumpkinCommand : ICommand {
 
     public void Execute(string[] args) {
         if (args.Length is 0) {
-            Console.Print("Usage: /pumpkin <player> <duration=30>");
+            Chat.Print("Usage: /pumpkin <player> <duration=30>");
             return;
         }
 
         if (!Helper.GetActivePlayer(args[0]).IsNotNull(out PlayerControllerB targetPlayer)) {
-            Console.Print("Player not found!");
+            Chat.Print("Player not found!");
             return;
         }
 

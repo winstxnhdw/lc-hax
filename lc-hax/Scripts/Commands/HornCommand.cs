@@ -1,6 +1,5 @@
 using System;
-
-namespace Hax;
+using Hax;
 
 [Command("/horn")]
 public class HornCommand : ICommand {
@@ -15,12 +14,12 @@ public class HornCommand : ICommand {
 
     public void Execute(string[] args) {
         if (args.Length is 0) {
-            Console.Print("Usage: /horn <duration>");
+            Chat.Print("Usage: /horn <duration>");
             return;
         }
 
         if (!int.TryParse(args[0], out int hornDuration)) {
-            Console.Print("Invalid duration!");
+            Chat.Print("Invalid duration!");
             return;
         }
 

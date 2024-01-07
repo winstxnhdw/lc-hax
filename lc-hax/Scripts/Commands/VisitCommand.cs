@@ -1,6 +1,5 @@
 using System;
-
-namespace Hax;
+using Hax;
 
 [Command("/visit")]
 public class VisitCommand : ICommand {
@@ -25,17 +24,17 @@ public class VisitCommand : ICommand {
 
     public void Execute(string[] args) {
         if (args.Length is 0) {
-            Console.Print("Usage: /visit <moon>");
+            Chat.Print("Usage: /visit <moon>");
             return;
         }
 
         if (!Helper.Terminal.IsNotNull(out Terminal terminal)) {
-            Console.Print("Terminal not found!");
+            Chat.Print("Terminal not found!");
             return;
         }
 
         if (!this.TryParseLevel(args[0], out int levelIndex)) {
-            Console.Print("Invalid level!");
+            Chat.Print("Invalid level!");
             return;
         }
 

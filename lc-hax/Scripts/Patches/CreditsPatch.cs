@@ -19,7 +19,7 @@ class CreditsPatch {
         );
 
         CreditsPatch.IsSynced = false;
-        Console.Print("A player has attempted to modify the credits!");
+        Chat.Print("A player has attempted to modify the credits!");
 
         return false;
     }

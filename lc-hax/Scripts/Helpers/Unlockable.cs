@@ -22,7 +22,7 @@ public static partial class Helper {
 
     public static void BuyUnlockable(Unlockable unlockable) {
         if (!Helper.Terminal.IsNotNull(out Terminal terminal)) {
-            Console.Print("Terminal not found!");
+            Chat.Print("Terminal not found!");
             return;
         }
 

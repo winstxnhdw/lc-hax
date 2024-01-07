@@ -1,18 +1,17 @@
 using GameNetcodeStuff;
 using UnityEngine;
-
-namespace Hax;
+using Hax;
 
 [Command("/grab")]
 public class GrabCommand : ICommand {
     public void Execute(string[] args) {
         if (!Helper.ShipBuildModeManager.IsNotNull(out ShipBuildModeManager shipBuildModeManager)) {
-            Console.Print("ShipBuildModeManager not found!");
+            Chat.Print("ShipBuildModeManager not found!");
             return;
         }
 
         if (!Helper.LocalPlayer.IsNotNull(out PlayerControllerB localPlayer)) {
-            Console.Print("Player not found!");
+            Chat.Print("Player not found!");
             return;
         }
 

@@ -1,4 +1,4 @@
-namespace Hax;
+using Hax;
 
 [Command("/xp")]
 public class ExperienceCommand : ICommand {
@@ -12,17 +12,17 @@ public class ExperienceCommand : ICommand {
 
     public void Execute(string[] args) {
         if (args.Length is 0) {
-            Console.Print("Usage: /xp <amount>");
+            Chat.Print("Usage: /xp <amount>");
             return;
         }
 
         if (!int.TryParse(args[0], out int amount)) {
-            Console.Print("Invalid amount!");
+            Chat.Print("Invalid amount!");
             return;
         }
 
         if (!Helper.HUDManager.IsNotNull(out HUDManager hudManager)) {
-            Console.Print("HUDManager is not found");
+            Chat.Print("HUDManager is not found");
             return;
         }
 

@@ -1,6 +1,5 @@
 using GameNetcodeStuff;
-
-namespace Hax;
+using Hax;
 
 [Command("/heal")]
 public class HealCommand : IStun, ICommand {
@@ -42,7 +41,7 @@ public class HealCommand : IStun, ICommand {
         };
 
         if (!result.Success) {
-            Console.Print(result.Message);
+            Chat.Print(result.Message);
         }
     }
 }

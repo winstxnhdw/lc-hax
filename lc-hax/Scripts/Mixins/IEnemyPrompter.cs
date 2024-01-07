@@ -243,7 +243,7 @@ public static class EnemyPromptMixin {
         }
 
         if (funnyRevive) {
-            Console.Print("Funny revive!");
+            Chat.Print("Funny revive!");
         }
 
         Reflector? reflector = roundManager.Reflect().InvokeInternalMethod("RefreshEnemiesList");

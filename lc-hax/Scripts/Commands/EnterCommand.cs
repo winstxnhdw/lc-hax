@@ -1,4 +1,4 @@
-namespace Hax;
+using Hax;
 
 [Command("/enter")]
 public class EnterCommand : IEntrance, ICommand {

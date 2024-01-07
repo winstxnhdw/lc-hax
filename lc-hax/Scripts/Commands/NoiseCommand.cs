@@ -1,8 +1,7 @@
 using System;
 using GameNetcodeStuff;
 using UnityEngine;
-
-namespace Hax;
+using Hax;
 
 [Command("/noise")]
 public class NoiseCommand : ICommand {
@@ -15,12 +14,12 @@ public class NoiseCommand : ICommand {
 
     public void Execute(string[] args) {
         if (args.Length is 0) {
-            Console.Print("Usage: /noise <player> <duration=30>");
+            Chat.Print("Usage: /noise <player> <duration=30>");
             return;
         }
 
         if (!Helper.GetActivePlayer(args[0]).IsNotNull(out PlayerControllerB player)) {
-            Console.Print("Player not found!");
+            Chat.Print("Player not found!");
             return;
         }
 
@@ -30,7 +29,7 @@ public class NoiseCommand : ICommand {
         }
 
         if (!float.TryParse(args[1], out float duration)) {
-            Console.Print("Invalid duration!");
+            Chat.Print("Invalid duration!");
             return;
         }
 

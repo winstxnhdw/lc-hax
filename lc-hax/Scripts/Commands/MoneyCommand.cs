@@ -1,27 +1,26 @@
 using UnityEngine;
-
-namespace Hax;
+using Hax;
 
 [Command("/money")]
 public class MoneyCommand : ICommand {
     public void Execute(string[] args) {
         if (args.Length is 0) {
-            Console.Print("Usage: /money <amount>");
+            Chat.Print("Usage: /money <amount>");
             return;
         }
 
         if (!Helper.Terminal.IsNotNull(out Terminal terminal)) {
-            Console.Print("Terminal not found!");
+            Chat.Print("Terminal not found!");
             return;
         }
 
         if (!int.TryParse(args[0], out int amount)) {
-            Console.Print("Invalid amount!");
+            Chat.Print("Invalid amount!");
             return;
         }
 
         terminal.groupCredits = Mathf.Clamp(terminal.groupCredits + amount, 0, int.MaxValue);
         terminal.SyncGroupCreditsServerRpc(terminal.groupCredits, terminal.numberOfItemsInDropship);
-        Console.Print($"You now have {terminal.groupCredits} credits!");
+        Chat.Print($"You now have {terminal.groupCredits} credits!");
     }
 }

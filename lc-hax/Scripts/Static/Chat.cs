@@ -6,7 +6,7 @@ using UnityEngine.EventSystems;
 
 namespace Hax;
 
-public static class Console {
+public static class Chat {
     static Dictionary<string, ICommand> Commands { get; } =
         Assembly
             .GetExecutingAssembly()
@@ -43,31 +43,31 @@ public static class Console {
     }
 
     public static void Print(string? message) {
-        Console.Print("SYSTEM", message, true);
+        Chat.Print("SYSTEM", message, true);
     }
 
     public static void ExecuteCommand(string command) {
-        Console.Print("USER", command);
-        Console.ExecuteCommand(command.Split(' '));
+        Chat.Print("USER", command);
+        Chat.ExecuteCommand(command.Split(' '));
     }
 
     public static void ExecuteCommand(string[] args) {
         if (args.Length is 0) {
-            Console.Print("Usage: /<command> <args>");
+            Chat.Print("Usage: /<command> <args>");
             return;
         }
 
-        if (Console.Commands.TryGetValue(args[0], out ICommand command)) {
+        if (Chat.Commands.TryGetValue(args[0], out ICommand command)) {
             command.Execute(args[1..]);
             return;
         }
 
-        if (Console.DebugCommands.TryGetValue(args[0], out ICommand debugCommand)) {
+        if (Chat.DebugCommands.TryGetValue(args[0], out ICommand debugCommand)) {
             debugCommand.Execute(args[1..]);
             return;
         }
 
-        Console.Print("Command not found!");
+        Chat.Print("Command not found!");
     }
 }
 

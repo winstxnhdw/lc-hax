@@ -1,4 +1,4 @@
-namespace Hax;
+using Hax;
 
 [DebugCommand("/scraps")]
 public class ScrapsCommand : ICommand {

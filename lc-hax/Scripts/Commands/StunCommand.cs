@@ -1,22 +1,21 @@
 using UnityEngine;
-
-namespace Hax;
+using Hax;
 
 [Command("/stun")]
 public class StunCommand : IStun, ICommand {
     public void Execute(string[] args) {
         if (args.Length is 0) {
-            Console.Print("Usage: /stun <duration>");
+            Chat.Print("Usage: /stun <duration>");
             return;
         }
 
         if (!float.TryParse(args[0], out float stunDuration)) {
-            Console.Print("Invalid duration!");
+            Chat.Print("Invalid duration!");
             return;
         }
 
         if (!Helper.CurrentCamera.IsNotNull(out Camera camera)) {
-            Console.Print("Could not find the player!");
+            Chat.Print("Could not find the player!");
             return;
         }
 

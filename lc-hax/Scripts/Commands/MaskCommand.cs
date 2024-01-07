@@ -1,22 +1,21 @@
 using GameNetcodeStuff;
-
-namespace Hax;
+using Hax;
 
 [Command("/mask")]
 public class MaskCommand : ICommand {
     public void Execute(string[] args) {
         if (args.Length is 0) {
-            Console.Print("Usage: /mask <player>");
+            Chat.Print("Usage: /mask <player>");
             return;
         }
 
         if (!Helper.GetActivePlayer(args[0]).IsNotNull(out PlayerControllerB targetPlayer)) {
-            Console.Print("Player not found!");
+            Chat.Print("Player not found!");
             return;
         }
 
         if (Helper.LocalPlayer?.currentlyHeldObjectServer is not HauntedMaskItem hauntedMaskItem) {
-            Console.Print("You are not holding a mask!");
+            Chat.Print("You are not holding a mask!");
             return;
         }
 

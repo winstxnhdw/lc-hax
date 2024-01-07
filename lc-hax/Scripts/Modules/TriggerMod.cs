@@ -38,7 +38,7 @@ public sealed class TriggerMod : MonoBehaviour, IEnemyPrompter {
         if (this.UsingFollowRay) {
             if (FollowMod.PlayerToFollow is not null) {
                 FollowMod.PlayerToFollow = null;
-                Console.Print("Stopped following!");
+                Chat.Print("Stopped following!");
                 return;
             }
 
@@ -46,7 +46,7 @@ public sealed class TriggerMod : MonoBehaviour, IEnemyPrompter {
                 if (!this.RaycastHits[i].collider.TryGetComponent(out PlayerControllerB player)) continue;
                 if (Helper.LocalPlayer?.actualClientId == player.actualClientId) continue;
 
-                Console.Print($"Following #{player.playerClientId} {player.playerUsername}!");
+                Chat.Print($"Following #{player.playerClientId} {player.playerUsername}!");
                 FollowMod.PlayerToFollow = player;
                 break;
             }
@@ -98,7 +98,7 @@ public sealed class TriggerMod : MonoBehaviour, IEnemyPrompter {
 
             if (collider.TryGetComponent(out PlayerControllerB player)) {
                 this.PromptEnemiesToTarget(player, this.FunnyReviveEnabled)
-                    .ForEach(enemy => Console.Print($"{enemy} prompted!"));
+                    .ForEach(enemy => Chat.Print($"{enemy} prompted!"));
                 break;
             }
 
