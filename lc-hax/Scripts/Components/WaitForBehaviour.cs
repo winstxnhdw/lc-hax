@@ -7,7 +7,6 @@ namespace Hax;
 public class WaitForBehaviour : MonoBehaviour {
     Action? Action { get; set; }
     Func<float, bool>? Predicate { get; set; }
-    float Timer { get; set; } = 0.0f;
 
     public void Init(Action action) {
         this.Action = action;
@@ -20,9 +19,11 @@ public class WaitForBehaviour : MonoBehaviour {
     }
 
     IEnumerator WaitForPredicateCoroutine() {
+        float timer = 0.0f;
+
         while (true) {
-            if (this.Predicate is not null && this.Predicate(this.Timer)) break;
-            this.Timer += Time.deltaTime;
+            if (this.Predicate is not null && this.Predicate(timer)) break;
+            timer += Time.deltaTime;
             yield return new WaitForEndOfFrame();
         }
 
