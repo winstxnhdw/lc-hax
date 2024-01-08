@@ -3,12 +3,12 @@ using Hax;
 
 [Command("/visit")]
 public class VisitCommand : ICommand {
-    bool IsValidLevelIndex(string levelIndex, out int chosenLevelId) =>
-        int.TryParse(levelIndex, out chosenLevelId) &&
+    bool IsValidLevelIndex(string levelIndex, out ushort chosenLevelId) =>
+        ushort.TryParse(levelIndex, out chosenLevelId) &&
         Enum.IsDefined(typeof(Level), chosenLevelId);
 
     bool TryParseLevel(string levelNameOrId, out int levelIndex) {
-        if (this.IsValidLevelIndex(levelNameOrId, out int chosenLevelId)) {
+        if (this.IsValidLevelIndex(levelNameOrId, out ushort chosenLevelId)) {
             levelIndex = chosenLevelId;
             return true;
         }

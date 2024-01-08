@@ -3,7 +3,7 @@ using Hax;
 
 [Command("/horn")]
 public class HornCommand : ICommand {
-    Action PullHornLater(int hornDuration) => () => {
+    Action PullHornLater(float hornDuration) => () => {
         ShipAlarmCord? shipAlarmCord = Helper.FindObject<ShipAlarmCord>();
         shipAlarmCord?.PullCordServerRpc(-1);
 
@@ -18,7 +18,7 @@ public class HornCommand : ICommand {
             return;
         }
 
-        if (!int.TryParse(args[0], out int hornDuration)) {
+        if (!ulong.TryParse(args[0], out ulong hornDuration)) {
             Chat.Print("Invalid duration!");
             return;
         }

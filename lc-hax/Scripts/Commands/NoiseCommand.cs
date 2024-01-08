@@ -28,7 +28,7 @@ public class NoiseCommand : ICommand {
             return;
         }
 
-        if (!float.TryParse(args[1], out float duration)) {
+        if (!ulong.TryParse(args[1], out ulong duration)) {
             Chat.Print("Invalid duration!");
             return;
         }
