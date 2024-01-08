@@ -9,7 +9,7 @@ public class StunCommand : IStun, ICommand {
             return;
         }
 
-        if (!float.TryParse(args[0], out float stunDuration)) {
+        if (!ulong.TryParse(args[0], out ulong stunDuration)) {
             Chat.Print("Invalid duration!");
             return;
         }

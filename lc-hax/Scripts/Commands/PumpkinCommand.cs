@@ -35,7 +35,7 @@ public class PumpkinCommand : ICommand {
             return;
         }
 
-        if (!float.TryParse(args[1], out float duration) || duration < 0) {
+        if (!ulong.TryParse(args[1], out ulong duration)) {
             Chat.Print("Invalid duration!");
             return;
         }

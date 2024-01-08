@@ -9,7 +9,7 @@ public class ShovelCommand : ICommand {
             return;
         }
 
-        if (!int.TryParse(args[0], out int shovelHitForce)) {
+        if (!ushort.TryParse(args[0], out ushort shovelHitForce)) {
             Chat.Print("Invalid value!");
             return;
         }
