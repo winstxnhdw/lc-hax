@@ -11,8 +11,8 @@ A powerful, feature-rich and highly performant portable Windows CLI-only interna
 > To aid in its speed of development, `lc-hax` has no concept of versioning aside from the Git commit history. We make no guarantees for any kind of backward compatiblity. Any feature can be removed or heavily modified to maximise user experience and overwrite poor early decisions.
 
 <div align="center">
-    <img alt="Executing a command which forcefully inverse teleporting another player"
-         src="https://raw.githubusercontent.com/wiki/winstxnhdw/lc-hax/resources/inverse.gif"
+    <img alt="User in Phantom mode"
+         src="https://raw.githubusercontent.com/wiki/winstxnhdw/lc-hax/resources/title.gif"
     />
 </div>
 
@@ -238,3 +238,7 @@ Despite being compiled from source locally, SharpMonoInjector is occasionally fa
 ```ps1
 Add-MpPreference -ExclusionPath $pwd, "$env:TEMP\.net\SharpMonoInjector"
 ```
+
+## Credits
+
+Thanks to @Quesoteric for the title GIF.
