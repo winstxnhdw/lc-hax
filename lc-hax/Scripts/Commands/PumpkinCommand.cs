@@ -26,7 +26,7 @@ public class PumpkinCommand : ICommand {
 
     public void Execute(string[] args) {
         if (args.Length is 0) {
-            Chat.Print("Usage: /pumpkin <player> <duration=30>");
+            Chat.Print("Usage: /pumpkin <player> <duration>");
             return;
         }
 
@@ -35,10 +35,13 @@ public class PumpkinCommand : ICommand {
             return;
         }
 
+        if (!float.TryParse(args[1], out float duration) || duration < 0) {
+            Chat.Print("Invalid duration!");
+            return;
+        }
+
         Helper.BuyUnlockable(Unlockable.JACK_O_LANTERN);
         Helper.ReturnUnlockable(Unlockable.JACK_O_LANTERN);
-        float duration = args.Length > 1 && float.TryParse(args[1], out float parsedDuration) ? parsedDuration : 15.0f;
-
         Helper.CreateComponent<WaitForBehaviour>()
               .SetPredicate(this.PumpkinExists)
               .Init(this.TeleportPumpkinToPlayerLater(targetPlayer, duration));
