@@ -19,12 +19,12 @@ public class PoisonCommand : ICommand {
             return;
         }
 
-        if (!int.TryParse(args[2], out int delay)) {
+        if (!ulong.TryParse(args[2], out ulong delay)) {
             Chat.Print("Invalid delay!");
             return;
         }
 
-        if (!int.TryParse(args[3], out int duration)) {
+        if (!ulong.TryParse(args[3], out ulong duration)) {
             Chat.Print("Invalid duration!");
             return;
         }
