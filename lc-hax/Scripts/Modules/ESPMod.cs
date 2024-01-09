@@ -87,6 +87,15 @@ public class ESPMod : MonoBehaviour {
             );
         });
 
+        HaxObjects.Instance?.GrabbableObjects.ForEach(nullableGrabbableObject => {
+            if (!nullableGrabbableObject.IsNotNull(out GrabbableObject grabbableObject)) return;
+
+            this.RenderLabel($"{grabbableObject.itemProperties.itemName} ${grabbableObject.scrapValue}").Invoke(
+                Color.gray,
+                camera.WorldToEyesPoint(grabbableObject.mainObjectRenderer.bounds.center)
+            );
+        });
+
         if (Helper.StartOfRound?.shipBounds.IsNotNull(out Collider shipBounds) is true) {
             this.RenderBounds(
                 camera,
