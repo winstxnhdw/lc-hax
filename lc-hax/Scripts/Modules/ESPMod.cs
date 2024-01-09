@@ -66,7 +66,18 @@ public class ESPMod : MonoBehaviour {
         HaxObjects.Instance?.EnemyAIs.ForEach(nullableEnemy => {
             if (!nullableEnemy.IsNotNull(out EnemyAI enemy)) return;
             if (enemy is DocileLocustBeesAI or DoublewingAI) return;
-            if (!enemy.skinnedMeshRenderers.First().IsNotNull(out SkinnedMeshRenderer renderer)) return;
+            if (enemy is RedLocustBees) {
+                this.RenderLabel(enemy.enemyType.enemyName).Invoke(
+                    Color.red,
+                    camera.WorldToEyesPoint(enemy.transform.position)
+                );
+
+                return;
+            }
+
+            if (!enemy.skinnedMeshRenderers.First().IsNotNull(out SkinnedMeshRenderer renderer)) {
+                return;
+            }
 
             this.RenderBounds(
                 camera,
