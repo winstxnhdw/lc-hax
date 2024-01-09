@@ -30,7 +30,7 @@ public class ESPMod : MonoBehaviour {
         if (!this.InGame || !Helper.CurrentCamera.IsNotNull(out Camera camera)) return;
 
         this.PlayerRenderers.ForEach(rendererPair => {
-            if (rendererPair.GameObject.isPlayerDead) return;
+            if (rendererPair.GameObject.isPlayerDead || !rendererPair.GameObject.isPlayerControlled) return;
 
             PlayerControllerB player = rendererPair.GameObject;
             string label = $"#{player.playerClientId} {player.playerUsername}";
@@ -66,16 +66,12 @@ public class ESPMod : MonoBehaviour {
         HaxObjects.Instance?.EnemyAIs.ForEach(nullableEnemy => {
             if (!nullableEnemy.IsNotNull(out EnemyAI enemy)) return;
             if (enemy is DocileLocustBeesAI or DoublewingAI) return;
-            if (enemy is RedLocustBees) {
-                this.RenderLabel(enemy.enemyType.enemyName).Invoke(
-                    Color.red,
-                    camera.WorldToEyesPoint(enemy.transform.position)
-                );
 
-                return;
-            }
+            Renderer? nullableRenderer = enemy is RedLocustBees
+                ? enemy.meshRenderers.First()
+                : enemy.skinnedMeshRenderers.First();
 
-            if (!enemy.skinnedMeshRenderers.First().IsNotNull(out SkinnedMeshRenderer renderer)) {
+            if (!nullableRenderer.IsNotNull(out Renderer renderer)) {
                 return;
             }
 
@@ -87,12 +83,19 @@ public class ESPMod : MonoBehaviour {
             );
         });
 
-        HaxObjects.Instance?.GrabbableObjects.ForEach(nullableGrabbableObject => {
+        HaxObjects.Instance?.GrabbableObjects.Objects.ForEach(nullableGrabbableObject => {
             if (!nullableGrabbableObject.IsNotNull(out GrabbableObject grabbableObject)) return;
+            if (!grabbableObject.mainObjectRenderer.IsNotNull(out MeshRenderer renderer)) return;
+
+            Vector3 rendererCentrePoint = camera.WorldToEyesPoint(renderer.bounds.center);
+
+            if (rendererCentrePoint.z <= 2.0f) {
+                return;
+            }
 
             this.RenderLabel($"{grabbableObject.itemProperties.itemName} ${grabbableObject.scrapValue}").Invoke(
                 Color.gray,
-                camera.WorldToEyesPoint(grabbableObject.mainObjectRenderer.bounds.center)
+                rendererCentrePoint
             );
         });
 
