@@ -23,10 +23,7 @@ A powerful, feature-rich and highly performant portable Windows CLI-only interna
 
 ## Installation
 
-> [!IMPORTANT]\
-> Do ensure that you have used the `--recursive` flag when cloning the repository.
-
-**Recursively** clone the repository.
+Clone the repository.
 
 ```bash
 git clone --recursive https://github.com/winstxnhdw/lc-hax.git
@@ -171,6 +168,20 @@ The complete feature set includes the following.
 - Interact with objects from far
 - Possess enemies (only in `Phantom`)
 
+### Fatality
+
+The `fatality` command allows you to kill a player with a custom animation. The list of supported enemies are:
+
+- Forest Giant
+- Jester
+- Masked
+- Baboon Hawk
+- Circuit Bee
+- Thumper
+- Eyeless Dog
+- Bracken
+- Nutcracker
+
 ### Build
 
 The arguments for the `build` command can be executed with either the unlockable index or name. The list of unlockables can be found in the following table.
@@ -241,4 +252,4 @@ Add-MpPreference -ExclusionPath $pwd, "$env:TEMP\.net\SharpMonoInjector"
 
 ## Credits
 
-Thanks to @Quesoteric for the title GIF.
+Thanks to [Quesoteric](https://github.com/Quesoteric) for the title GIF.

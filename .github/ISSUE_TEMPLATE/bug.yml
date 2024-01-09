@@ -49,7 +49,7 @@ body:
     attributes:
       label: Acknowledgement
       options:
-        - label: I have **recursively** cloned the repository as instructed in the [README](https://github.com/winstxnhdw/lc-hax/edit/main/README.md)
+        - label: I have confirmed that my anti-virus is not blocking any of the relevant programs
           required: true
         - label: I have done my due diligence to check for similar issues
           required: true
