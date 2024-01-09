@@ -32,10 +32,13 @@ public class ESPMod : MonoBehaviour {
         this.PlayerRenderers.ForEach(rendererPair => {
             if (rendererPair.GameObject.isPlayerDead) return;
 
+            PlayerControllerB player = rendererPair.GameObject;
+            string label = $"#{player.playerClientId} {player.playerUsername}";
+
             this.RenderBounds(
                 camera,
                 rendererPair.Renderer.bounds,
-                this.RenderPlayer(rendererPair.GameObject)
+                this.RenderLabel(label)
             );
         });
 
@@ -43,21 +46,21 @@ public class ESPMod : MonoBehaviour {
             camera,
             renderer.bounds,
             Color.yellow,
-            this.RenderObject("Landmine")
+            this.RenderLabel("Landmine")
         ));
 
         this.TurretRenderers.ForEach(renderer => this.RenderBounds(
             camera,
             renderer.bounds,
             Color.yellow,
-            this.RenderObject("Turret")
+            this.RenderLabel("Turret")
         ));
 
         this.EntranceRenderers.ForEach(renderer => this.RenderBounds(
             camera,
             renderer.bounds,
             Color.yellow,
-            this.RenderObject("Entrance")
+            this.RenderLabel("Entrance")
         ));
 
         HaxObjects.Instance?.EnemyAIs.ForEach(nullableEnemy => {
@@ -69,9 +72,18 @@ public class ESPMod : MonoBehaviour {
                 camera,
                 renderer.bounds,
                 Color.red,
-                this.RenderEnemy(enemy)
+                this.RenderLabel(enemy.enemyType.enemyName)
             );
         });
+
+        if (Helper.StartOfRound?.shipBounds.IsNotNull(out Collider shipBounds) is true) {
+            this.RenderBounds(
+                camera,
+                shipBounds.bounds,
+                Color.green,
+                this.RenderLabel("Ship")
+            );
+        }
     }
 
     void OnGameJoin() {
@@ -124,7 +136,7 @@ public class ESPMod : MonoBehaviour {
         );
     }
 
-    void RenderBounds(Camera camera, Bounds bounds, Color colour, Action<Vector3>? action) {
+    void RenderBounds(Camera camera, Bounds bounds, Color colour, Action<Color, Vector3>? action) {
         Vector3 rendererCentrePoint = camera.WorldToEyesPoint(bounds.center);
 
         if (rendererCentrePoint.z <= 4.0f) {
@@ -138,29 +150,12 @@ public class ESPMod : MonoBehaviour {
             colour
         );
 
-        action?.Invoke(rendererCentrePoint);
+        action?.Invoke(colour, rendererCentrePoint);
     }
 
-    void RenderBounds(Camera camera, Bounds bounds, Action<Vector3>? action) =>
+    void RenderBounds(Camera camera, Bounds bounds, Action<Color, Vector3>? action) =>
         this.RenderBounds(camera, bounds, Color.white, action);
 
-    Action<Vector3> RenderPlayer(PlayerControllerB player) => rendererCentrePoint =>
-        Helper.DrawLabel(
-            rendererCentrePoint,
-            $"#{player.playerClientId} {player.playerUsername}"
-        );
-
-    Action<Vector3> RenderEnemy(EnemyAI enemy) => rendererCentrePoint =>
-        Helper.DrawLabel(
-            rendererCentrePoint,
-            enemy.enemyType.enemyName,
-            Color.red
-        );
-
-    Action<Vector3> RenderObject(string name) => rendererCentrePoint =>
-        Helper.DrawLabel(
-            rendererCentrePoint,
-            name,
-            Color.yellow
-        );
+    Action<Color, Vector3> RenderLabel(string name) => (colour, rendererCentrePoint) =>
+        Helper.DrawLabel(rendererCentrePoint, name, colour);
 }
