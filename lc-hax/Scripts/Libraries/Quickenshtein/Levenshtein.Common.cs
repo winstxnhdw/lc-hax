@@ -234,7 +234,7 @@ namespace Quickenshtein {
         /// <param name="rowIndex"></param>
         /// <param name="targetPtr"></param>
         /// <param name="targetLength"></param>
-        private static unsafe void CalculateRows_4Rows(int* previousRowPtr, char* sourcePtr, int sourceLength, ref int rowIndex, char* targetPtr, int targetLength) {
+        static unsafe void CalculateRows_4Rows(int* previousRowPtr, char* sourcePtr, int sourceLength, ref int rowIndex, char* targetPtr, int targetLength) {
             int acceptableRowCount = sourceLength - 3;
 
             int row1Costs, row2Costs, row3Costs, row4Costs, row5Costs;
@@ -295,7 +295,7 @@ namespace Quickenshtein {
         /// <param name="sourceChar3"></param>
         /// <param name="sourceChar4"></param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        private static unsafe void CalculateColumn_4Rows(ref char* targetPtr, ref int* previousRowPtr, ref int row1Costs, ref int row2Costs, ref int row3Costs, ref int row4Costs, ref int row5Costs, char sourceChar1, char sourceChar2, char sourceChar3, char sourceChar4) {
+        static unsafe void CalculateColumn_4Rows(ref char* targetPtr, ref int* previousRowPtr, ref int row1Costs, ref int row2Costs, ref int row3Costs, ref int row4Costs, ref int row5Costs, char sourceChar1, char sourceChar2, char sourceChar3, char sourceChar4) {
             char targetChar = targetPtr[0];
             int lastDeletionCost = previousRowPtr[0];
             int localCost = row1Costs;

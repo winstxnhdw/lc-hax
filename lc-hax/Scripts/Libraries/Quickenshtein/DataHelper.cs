@@ -3,7 +3,6 @@ using System.Runtime.CompilerServices;
 
 namespace Quickenshtein.Internal {
     internal static class DataHelper {
-
         /// <summary>
         /// Fills <paramref name="targetPtr"/> with a number sequence from 1 to the length specified.
         /// </summary>

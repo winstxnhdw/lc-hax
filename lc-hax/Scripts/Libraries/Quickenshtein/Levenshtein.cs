@@ -26,7 +26,7 @@ namespace Quickenshtein {
             }
         }
 
-        private static unsafe int CalculateDistance(char* sourcePtr, char* targetPtr, int sourceLength, int targetLength) {
+        static unsafe int CalculateDistance(char* sourcePtr, char* targetPtr, int sourceLength, int targetLength) {
             //Identify and trim any common prefix or suffix between the strings
             int offset = DataHelper.GetIndexOfFirstNonMatchingCharacter(sourcePtr, targetPtr, sourceLength, targetLength);
             sourcePtr += offset;
@@ -52,7 +52,6 @@ namespace Quickenshtein {
                 (sourceLength, targetLength) = (targetLength, sourceLength);
             }
 
-
             int[] pooledArray = ArrayPool<int>.Shared.Rent(targetLength);
 
             fixed (int* previousRowPtr = pooledArray) {
@@ -72,8 +71,13 @@ namespace Quickenshtein {
                     CalculateRow(previousRowPtr, targetPtr, targetLength, sourcePrevChar, lastInsertionCost, lastSubstitutionCost);
                 }
 
+                if (targetLength > pooledArray.Length) {
+                    throw new InvalidOperationException("Target length exceeds the length of the pooled array.");
+                }
+
                 int result = previousRowPtr[targetLength - 1];
                 ArrayPool<int>.Shared.Return(pooledArray);
+
                 return result;
             }
         }
