@@ -121,7 +121,6 @@ public class EnemyPromptHandler {
 
         int playerId = (int)targetPlayer.playerClientId;
         nutcracker.StopInspection();
-        nutcracker.LegKickPlayerServerRpc(playerId);
         nutcracker.SeeMovingThreatServerRpc(playerId);
         nutcracker.AimGunServerRpc(targetPlayer.transform.position);
 
