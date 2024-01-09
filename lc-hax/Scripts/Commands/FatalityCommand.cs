@@ -31,7 +31,7 @@ public class FatalityCommand : ICommand {
         return null;
     }
 
-    string? HandleMask(PlayerControllerB targetPlayer) {
+    string? HandleMasked(PlayerControllerB targetPlayer) {
         if (this.GetEnemy<MaskedPlayerEnemy>() is not MaskedPlayerEnemy spider) {
             return "Enemy has not yet spawned!";
         }
@@ -106,23 +106,25 @@ public class FatalityCommand : ICommand {
         }
 
         Dictionary<string, Func<PlayerControllerB, string?>> enemyHandlers = new() {
-            { "giant", this.HandleGiant },
-            { "jester", this.HandleJester },
-            { "mask", this.HandleMask },
-            { "baboon", this.HandleBaboonHawk },
-            { "bees", this.HandleBees },
-            { "thumper", this.HandleThumper },
-            { "dog", this.HandleEyelessDog },
-            { "bracken", this.HandleBracken },
-            { "nutcracker", this.HandleNutcracker }
+            { "Forest Giant", this.HandleGiant },
+            { "Jester", this.HandleJester },
+            { "Masked", this.HandleMasked },
+            { "Baboon Hawk", this.HandleBaboonHawk },
+            { "Bees", this.HandleBees },
+            { "Thumper", this.HandleThumper },
+            { "Eyeless Dog", this.HandleEyelessDog },
+            { "Bracken", this.HandleBracken },
+            { "Nutcracker", this.HandleNutcracker }
         };
 
-        string? key = Helper.FuzzyMatch(args[1], [.. enemyHandlers.Keys]);
+        string? key = Helper.FuzzyMatch(string.Join(" ", args[1..]), [.. enemyHandlers.Keys]);
 
         if (key is null) {
             Chat.Print("There are no queryable enemies!");
             return;
         }
+
+        Chat.Print($"Performing {key} fatality on {targetPlayer.playerUsername}..");
 
         if (enemyHandlers[key](targetPlayer) is string message) {
             Chat.Print(message);
