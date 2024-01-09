@@ -1,3 +1,5 @@
+using System;
+using System.Collections.Generic;
 using GameNetcodeStuff;
 using Hax;
 
@@ -11,31 +13,85 @@ public class FatalityCommand : ICommand {
         return enemy;
     }
 
-    Result HandleGiant(PlayerControllerB targetPlayer) {
+    string? HandleGiant(PlayerControllerB targetPlayer) {
         if (this.GetEnemy<ForestGiantAI>() is not ForestGiantAI forestGiant) {
-            return new Result(message: "Enemy has not yet spawned!");
+            return "Enemy has not yet spawned!";
         }
 
         forestGiant.GrabPlayerServerRpc((int)targetPlayer.playerClientId);
-        return new Result(true);
+        return null;
     }
 
-    Result HandleJester(PlayerControllerB targetPlayer) {
+    string? HandleJester(PlayerControllerB targetPlayer) {
         if (this.GetEnemy<JesterAI>() is not JesterAI jester) {
-            return new Result(message: "Enemy has not yet spawned!");
+            return "Enemy has not yet spawned!";
         }
 
         jester.KillPlayerServerRpc((int)targetPlayer.playerClientId);
-        return new Result(true);
+        return null;
     }
 
-    Result HandleMask(PlayerControllerB targetPlayer) {
+    string? HandleMask(PlayerControllerB targetPlayer) {
         if (this.GetEnemy<MaskedPlayerEnemy>() is not MaskedPlayerEnemy spider) {
-            return new Result(message: "Enemy has not yet spawned!");
+            return "Enemy has not yet spawned!";
         }
 
         spider.KillPlayerAnimationServerRpc((int)targetPlayer.playerClientId);
-        return new Result(true);
+        return null;
+    }
+
+    string? HandleBaboonHawk(PlayerControllerB targetPlayer) {
+        if (this.GetEnemy<BaboonBirdAI>() is not BaboonBirdAI baboonHawk) {
+            return "Enemy has not yet spawned!";
+        }
+
+        baboonHawk.StabPlayerDeathAnimServerRpc((int)targetPlayer.playerClientId);
+        return null;
+    }
+
+    string? HandleBees(PlayerControllerB targetPlayer) {
+        if (this.GetEnemy<RedLocustBees>() is not RedLocustBees bees) {
+            return "Enemy has not yet spawned!";
+        }
+
+        bees.BeeKillPlayerServerRpc((int)targetPlayer.playerClientId);
+        return null;
+    }
+
+    string? HandleThumper(PlayerControllerB targetPlayer) {
+        if (this.GetEnemy<CrawlerAI>() is not CrawlerAI thumper) {
+            return "Enemy has not yet spawned!";
+        }
+
+        thumper.EatPlayerBodyServerRpc((int)targetPlayer.playerClientId);
+        return null;
+    }
+
+    string? HandleEyelessDog(PlayerControllerB targetPlayer) {
+        if (this.GetEnemy<MouthDogAI>() is not MouthDogAI eyelessDog) {
+            return "Enemy has not yet spawned!";
+        }
+
+        eyelessDog.KillPlayerServerRpc((int)targetPlayer.playerClientId);
+        return null;
+    }
+
+    string? HandleBracken(PlayerControllerB targetPlayer) {
+        if (this.GetEnemy<FlowermanAI>() is not FlowermanAI bracken) {
+            return "Enemy has not yet spawned!";
+        }
+
+        bracken.KillPlayerAnimationServerRpc((int)targetPlayer.playerClientId);
+        return null;
+    }
+
+    string? HandleNutcracker(PlayerControllerB targetPlayer) {
+        if (this.GetEnemy<NutcrackerEnemyAI>() is not NutcrackerEnemyAI nutcracker) {
+            return "Enemy has not yet spawned!";
+        }
+
+        nutcracker.LegKickPlayerServerRpc((int)targetPlayer.playerClientId);
+        return null;
     }
 
     public void Execute(string[] args) {
@@ -49,15 +105,27 @@ public class FatalityCommand : ICommand {
             return;
         }
 
-        Result result = args[1].ToLower() switch {
-            "giant" => this.HandleGiant(targetPlayer),
-            "jester" => this.HandleJester(targetPlayer),
-            "mask" => this.HandleMask(targetPlayer),
-            _ => new Result(message: "Enemy has either not yet been implemented or does not exist!")
+        Dictionary<string, Func<PlayerControllerB, string?>> enemyHandlers = new() {
+            { "giant", this.HandleGiant },
+            { "jester", this.HandleJester },
+            { "mask", this.HandleMask },
+            { "baboon", this.HandleBaboonHawk },
+            { "bees", this.HandleBees },
+            { "thumper", this.HandleThumper },
+            { "dog", this.HandleEyelessDog },
+            { "bracken", this.HandleBracken },
+            { "nutcracker", this.HandleNutcracker }
         };
 
-        if (!result.Success) {
-            Chat.Print(result.Message);
+        string? key = Helper.FuzzyMatch(args[1], [.. enemyHandlers.Keys]);
+
+        if (key is null) {
+            Chat.Print("There are no queryable enemies!");
+            return;
+        }
+
+        if (enemyHandlers[key](targetPlayer) is string message) {
+            Chat.Print(message);
         }
     }
 }
