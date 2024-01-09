@@ -25,7 +25,7 @@ jobs:
 
       - name: Check for new version
         env:
-          SUPPORTED_VERSION: 13120469
+          SUPPORTED_VERSION: 13123274
         run: |
           CURRENT_VERSION=$(steamctl --anonymous apps product_info 1966720 --skip-licenses | jq -r .depots.branches.public.buildid)
           echo "Current version: $CURRENT_VERSION"
