@@ -124,7 +124,6 @@ public class EnemyPromptHandler {
         nutcracker.LegKickPlayerServerRpc(playerId);
         nutcracker.SeeMovingThreatServerRpc(playerId);
         nutcracker.AimGunServerRpc(targetPlayer.transform.position);
-        nutcracker.FireGunServerRpc();
 
         _ = nutcracker.Reflect()
                       .SetInternalField("lastSeenPlayerPos", targetPlayer.transform.position)?
