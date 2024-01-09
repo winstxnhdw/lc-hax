@@ -1,4 +1,4 @@
-using UnityEngine;
+using System;
 using Hax;
 
 [Command("/money")]
@@ -19,7 +19,7 @@ public class MoneyCommand : ICommand {
             return;
         }
 
-        terminal.groupCredits = Mathf.Clamp(terminal.groupCredits + amount, 0, int.MaxValue);
+        terminal.groupCredits = Math.Clamp(terminal.groupCredits + amount, 0, int.MaxValue);
         terminal.SyncGroupCreditsServerRpc(terminal.groupCredits, terminal.numberOfItemsInDropship);
         Chat.Print($"You now have {terminal.groupCredits} credits!");
     }
