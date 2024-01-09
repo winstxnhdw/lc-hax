@@ -1,4 +1,5 @@
 using System;
+using UnityEngine;
 using Hax;
 
 [Command("/horn")]
@@ -9,12 +10,12 @@ public class HornCommand : ICommand {
         Vector3 previousRotation
     ) => () => {
         Helper.PlaceObjectAtPosition(shipAlarmCord, previousPosition, previousRotation);
-        shipAlarmCord?.StopPullingCordServerRpc(-1);
+        shipAlarmCord.StopPullingCordServerRpc(-1);
     };
 
     Action PullHornLater(float hornDuration) => () => {
-        if(!Helper.FindObject<ShipAlarmCord>().IsNotNull(out ShipAlarmCord shipAlarmCord)) return;
-        
+        if (!Helper.FindObject<ShipAlarmCord>().IsNotNull(out ShipAlarmCord shipAlarmCord)) return;
+
         Vector3 previousPosition = shipAlarmCord.transform.position.Copy();
         Vector3 previousRotation = shipAlarmCord.transform.eulerAngles.Copy();
         Helper.PlaceObjectAtPosition(shipAlarmCord, new Vector3(0.0f, -50.0f, 0.0f));
@@ -22,7 +23,7 @@ public class HornCommand : ICommand {
 
         Helper.CreateComponent<WaitForBehaviour>()
               .SetPredicate(time => time >= hornDuration)
-              .Init(this.ResetHornLater(shipAlarmCord));
+              .Init(this.ResetHornLater(shipAlarmCord, previousPosition, previousRotation));
     };
 
     public void Execute(string[] args) {
