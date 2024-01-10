@@ -79,6 +79,9 @@ The complete feature set includes the following.
 
 ### Commands
 
+> [!NOTE]\
+> **No one** can see the commands you send.
+
 | Action                        | Command                                        |
 | ----------------------------- | ---------------------------------------------- |
 | Teleport outside entrance     | `/exit`                                        |
