@@ -14,7 +14,7 @@ public class HomeCommand : ITeleporter, ICommand {
 
         Helper.SwitchRadarTarget(targetPlayer);
         Helper.CreateComponent<WaitForBehaviour>()
-              .SetPredicate(_ => Helper.IsRadarTarget(targetPlayer.playerClientId))
+              .SetPredicate(() => Helper.IsRadarTarget(targetPlayer.playerClientId))
               .Init(teleporter.PressTeleportButtonServerRpc);
     };
 
