@@ -14,13 +14,7 @@ public sealed class StunMod : MonoBehaviour {
         InputListener.onLeftButtonPress -= this.Stun;
     }
 
-    bool IsHoldingADefensiveWeapon() {
-        return (Helper.LocalPlayer?.currentlyHeldObject).IsNotNull(out GrabbableObject currentItem) && (
-            currentItem.itemProperties.isDefensiveWeapon ||
-            currentItem.TryGetComponent(out Shovel _) ||
-            currentItem.TryGetComponent(out ShotgunItem _)
-        );
-    }
+    bool IsHoldingADefensiveWeapon() => Helper.LocalPlayer?.currentlyHeldObjectServer.Unfake()?.itemProperties.isDefensiveWeapon is true;
 
     void StunAndJam(Collider collider) {
         if (collider.TryGetComponent(out EnemyAICollisionDetect enemy)) {
