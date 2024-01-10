@@ -10,7 +10,7 @@ public class HornCommand : ICommand {
     ) => () => {
         Helper.PlaceObjectAtPosition(shipAlarmCord, previousPosition, previousRotation);
         shipAlarmCord?.StopPullingCordServerRpc(-1);
-    }
+    };
 
     Action PullHornLater(float hornDuration) => () => {
         if(!Helper.FindObject<ShipAlarmCord>().IsNotNull(out ShipAlarmCord shipAlarmCord)) return;
