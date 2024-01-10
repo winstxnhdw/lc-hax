@@ -6,9 +6,11 @@ namespace Hax;
 
 public sealed class SaneMod : MonoBehaviour {
     IEnumerator SetSanity(object[] args) {
+        WaitForEndOfFrame waitForEndOfFrame = new();
+
         while (true) {
             if (!Helper.StartOfRound.IsNotNull(out StartOfRound startOfRound)) {
-                yield return new WaitForEndOfFrame();
+                yield return waitForEndOfFrame;
                 continue;
             }
 
@@ -19,7 +21,7 @@ public sealed class SaneMod : MonoBehaviour {
             localPlayer.insanityLevel = 0.0f;
             localPlayer.insanitySpeedMultiplier = 0.0f;
 
-            yield return new WaitForEndOfFrame();
+            yield return waitForEndOfFrame;
         }
     }
 

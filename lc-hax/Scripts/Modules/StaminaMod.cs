@@ -6,9 +6,12 @@ namespace Hax;
 
 public sealed class StaminaMod : MonoBehaviour {
     IEnumerator SetSprint(object[] args) {
+        WaitForEndOfFrame waitForEndOfFrame = new();
+        WaitForSeconds waitForFiveSeconds = new(5.0f);
+
         while (true) {
             if (!Helper.LocalPlayer.IsNotNull(out PlayerControllerB player)) {
-                yield return new WaitForEndOfFrame();
+                yield return waitForEndOfFrame;
                 continue;
             }
 
@@ -17,7 +20,7 @@ public sealed class StaminaMod : MonoBehaviour {
             player.isExhausted = false;
             player.sprintMeter = 1.0f;
 
-            yield return new WaitForSeconds(5.0f);
+            yield return waitForFiveSeconds;
         }
     }
 

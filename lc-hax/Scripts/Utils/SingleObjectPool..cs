@@ -14,9 +14,10 @@ public class SingleObjectPool<T> where T : UnityObject {
     }
 
     IEnumerator RenewObject(float renewInterval) {
+        WaitForSeconds waitForRenewInterval = new(renewInterval);
         while (true) {
             this.Renew();
-            yield return new WaitForSeconds(renewInterval);
+            yield return waitForRenewInterval;
         }
     }
 }

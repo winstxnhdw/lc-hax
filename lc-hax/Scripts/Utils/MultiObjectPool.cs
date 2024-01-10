@@ -14,9 +14,11 @@ public class MultiObjectPool<T> where T : UnityObject {
     }
 
     IEnumerator RenewObjects(float renewInterval) {
+        WaitForSeconds waitForRenewInterval = new(renewInterval);
+
         while (true) {
             this.Renew();
-            yield return new WaitForSeconds(renewInterval);
+            yield return waitForRenewInterval;
         }
     }
 }

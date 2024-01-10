@@ -6,14 +6,17 @@ namespace Hax;
 
 public sealed class WeightMod : MonoBehaviour {
     IEnumerator SetWeight(object[] args) {
+        WaitForEndOfFrame waitForEndOfFrame = new();
+        WaitForSeconds waitForOneSecond = new(1.0f);
+
         while (true) {
             if (!Helper.LocalPlayer.IsNotNull(out PlayerControllerB player)) {
-                yield return new WaitForEndOfFrame();
+                yield return waitForEndOfFrame;
                 continue;
             }
 
             player.carryWeight = 1.0f;
-            yield return new WaitForSeconds(1.0f);
+            yield return waitForOneSecond;
         }
     }
 
