@@ -9,7 +9,7 @@ public class HornCommand : ICommand {
         Vector3 previousRotation
     ) => () => {
         Helper.PlaceObjectAtPosition(shipAlarmCord, previousPosition, previousRotation);
-        shipAlarmCord?.StopPullingCordServerRpc(-1)
+        shipAlarmCord?.StopPullingCordServerRpc(-1);
     }
 
     Action PullHornLater(float hornDuration) => () => {
