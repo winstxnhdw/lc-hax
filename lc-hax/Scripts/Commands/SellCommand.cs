@@ -18,8 +18,7 @@ public class SellCommand : ICommand {
 
         HaxObjects.Instance?.GrabbableObjects.ForEach(nullableGrabbableObject => {
             if (!nullableGrabbableObject.IsNotNull(out GrabbableObject grabbableObject)) return;
-            if (grabbableObject.scrapValue <= 0) return;
-            if (grabbableObject.itemProperties.isDefensiveWeapon) return;
+            if (!grabbableObject.itemProperties.isScrap) return;
 
             player.currentlyHeldObjectServer = grabbableObject;
             depositItemsDesk.PlaceItemOnCounter(player);
