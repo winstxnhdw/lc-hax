@@ -1,3 +1,5 @@
+using GameNetcodeStuff;
+
 namespace Hax;
 
 public interface IEntrance { }
