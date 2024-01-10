@@ -16,35 +16,32 @@ public sealed class StunMod : MonoBehaviour {
 
     bool IsHoldingADefensiveWeapon() => Helper.LocalPlayer?.currentlyHeldObjectServer.Unfake()?.itemProperties.isDefensiveWeapon is true;
 
-    void StunAndJam(Collider collider) {
+    void StunHitJam(Collider collider) {
         if (collider.TryGetComponent(out EnemyAICollisionDetect enemy)) {
-            enemy.mainScript.SetEnemyStunned(true, 5.0f);
+            if (Setting.EnableStunOnLeftClick) enemy.mainScript.SetEnemyStunned(true, 5.0f);
+            if (Setting.EnableHitOnLeftClick) enemy.mainScript.HitEnemyServerRpc(Setting.ShovelHitForce, -1, false);
         }
 
-        if (!collider.TryGetComponent(out Turret _) && !collider.TryGetComponent(out Landmine _)) {
+        if (!Setting.EnableStunOnLeftClick || (!collider.TryGetComponent(out Turret _) && !collider.TryGetComponent(out Landmine _))) {
             return;
         }
 
-        if (!collider.TryGetComponent(out TerminalAccessibleObject terminalAccessibleObject)) {
-            return;
-        }
-
-        terminalAccessibleObject.CallFunctionFromTerminal();
+        collider.GetComponent<TerminalAccessibleObject>().Unfake()?.CallFunctionFromTerminal();
     }
 
     void Stun() {
-        if (!Setting.EnableStunOnLeftClick) return;
+        if (!Setting.EnableStunOnLeftClick && !Setting.EnableHitOnLeftClick) return;
         if (!Helper.CurrentCamera.IsNotNull(out Camera camera)) return;
         if (this.IsHoldingADefensiveWeapon()) return;
 
         this.RaycastHits.SphereCastForward(camera.transform).Range().ForEach(i => {
             Collider collider = this.RaycastHits[i].collider;
-            this.StunAndJam(collider);
+            this.StunHitJam(collider);
         });
 
         Physics.OverlapSphereNonAlloc(camera.transform.position, 5.0f, this.Colliders).Range().ForEach(i => {
             Collider collider = this.Colliders[i];
-            this.StunAndJam(collider);
+            this.StunHitJam(collider);
         });
     }
 }

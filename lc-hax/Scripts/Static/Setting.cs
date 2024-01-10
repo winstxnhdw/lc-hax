@@ -7,6 +7,7 @@ public static class Setting {
     public static bool EnableBlockRadar { get; set; } = false;
     public static bool EnableUntargetable { get; set; } = false;
     public static bool EnableStunOnLeftClick { get; set; } = false;
+    public static bool EnableHitOnLeftClick { get; set; } = false;
     public static bool EnableInvisible { get; set; } = false;
     public static bool EnableNoCooldown { get; set; } = false;
     public static bool EnableAntiKick { get; set; } = false;
