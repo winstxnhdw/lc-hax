@@ -73,7 +73,6 @@ public class EnemyPromptHandler {
     void HandleSnareFlea(CentipedeAI snareFlea, PlayerControllerB targetPlayer) {
         if (!targetPlayer.isInsideFactory) return;
         this.SetBehaviourState(snareFlea, BehaviourState.AGGRAVATED);
-        snareFlea.ClingToPlayerServerRpc(targetPlayer.playerClientId);
     }
 
     void HandleBracken(FlowermanAI bracken, PlayerControllerB targetPlayer, bool willTeleportEnemy) {
