@@ -6,39 +6,40 @@ namespace Hax;
 
 public sealed class ClearVisionMod : MonoBehaviour {
     IEnumerator SetNightVision() {
+        WaitForEndOfFrame waitForEndOfFrame = new();
         while (true) {
             if (!Helper.StartOfRound.IsNotNull(out StartOfRound startOfRound)) {
-                yield return new WaitForEndOfFrame();
+                yield return waitForEndOfFrame;
                 continue;
             }
 
             if (!Helper.CurrentCamera.IsNotNull(out Camera camera)) {
-                yield return new WaitForEndOfFrame();
+                yield return waitForEndOfFrame;
                 continue;
             }
 
             if (!TimeOfDay.Instance.IsNotNull(out TimeOfDay timeOfDay)) {
-                yield return new WaitForEndOfFrame();
+                yield return waitForEndOfFrame;
                 continue;
             }
 
             if (!timeOfDay.sunAnimator.IsNotNull(out Animator sunAnimator)) {
-                yield return new WaitForEndOfFrame();
+                yield return waitForEndOfFrame;
                 continue;
             }
 
             if (!timeOfDay.sunDirect.IsNotNull(out Light sunDirect)) {
-                yield return new WaitForEndOfFrame();
+                yield return waitForEndOfFrame;
                 continue;
             }
 
             if (!timeOfDay.sunIndirect.IsNotNull(out Light sunIndirect)) {
-                yield return new WaitForEndOfFrame();
+                yield return waitForEndOfFrame;
                 continue;
             }
 
             if (!sunIndirect.TryGetComponent(out HDAdditionalLightData lightData)) {
-                yield return new WaitForEndOfFrame();
+                yield return waitForEndOfFrame;
                 continue;
             }
 
@@ -55,18 +56,22 @@ public sealed class ClearVisionMod : MonoBehaviour {
             timeOfDay.insideLighting = false;
             startOfRound.blackSkyVolume.weight = 0;
 
-            yield return new WaitForEndOfFrame();
+            yield return waitForEndOfFrame;
         }
     }
 
     IEnumerator DisableVisor(object[] args) {
+        WaitForSeconds waitForTenSeconds = new(10.0f);
+
         while (true) {
             Helper.LocalPlayer?.localVisor.gameObject.SetActive(false);
-            yield return new WaitForSeconds(10.0f);
+            yield return waitForTenSeconds;
         }
     }
 
     IEnumerator DisableFog(object[] args) {
+        WaitForSeconds waitForFiveSeconds = new(5.0f);
+
         while (true) {
             HaxObjects
                 .Instance?
@@ -75,11 +80,13 @@ public sealed class ClearVisionMod : MonoBehaviour {
                     localVolumetricFog?.gameObject.SetActive(false)
                 );
 
-            yield return new WaitForSeconds(5.0f);
+            yield return waitForFiveSeconds;
         }
     }
 
     IEnumerator DisableSteamValves(object[] args) {
+        WaitForSeconds waitForFiveSeconds = new(5.0f);
+
         while (true) {
             HaxObjects
                 .Instance?
@@ -88,7 +95,7 @@ public sealed class ClearVisionMod : MonoBehaviour {
                     valve?.valveSteamParticle.Stop(true, ParticleSystemStopBehavior.StopEmittingAndClear)
                 );
 
-            yield return new WaitForSeconds(5.0f);
+            yield return waitForFiveSeconds;
         }
     }
 

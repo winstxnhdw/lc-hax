@@ -23,6 +23,7 @@ public static partial class Extensions {
 
     static IEnumerator ResilientCoroutine(Func<object[], IEnumerator> coroutineFactory, object[] args) {
         IEnumerator coroutine = coroutineFactory(args);
+        WaitForSeconds waitForOneSecond = new(1.0f);
 
         while (true) {
             CoroutineState state = Extensions.ExecuteCoroutineStep(coroutine);
@@ -34,7 +35,7 @@ public static partial class Extensions {
 
                 case CoroutineState.ERROR:
                     coroutine = coroutineFactory(args);
-                    yield return new WaitForSeconds(1.0f);
+                    yield return waitForOneSecond;
                     break;
 
                 case CoroutineState.EXHAUSTED:

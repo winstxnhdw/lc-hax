@@ -5,28 +5,45 @@ namespace Hax;
 
 public sealed class AntiKickMod : MonoBehaviour {
     Coroutine? AntiKickCoroutine { get; set; }
+    bool InGame { get; set; } = false;
 
     void OnEnable() {
         InputListener.onBackslashPress += this.ToggleAntiKick;
-        GameListener.onGameStart += this.PrintInvisibleWarning;
+        GameListener.onGameStart += this.OnGameStart;
+        GameListener.onGameEnd += this.OnGameEnd;
     }
 
     void OnDisable() {
         InputListener.onBackslashPress -= this.ToggleAntiKick;
-        GameListener.onGameStart += this.PrintInvisibleWarning;
+        GameListener.onGameStart -= this.OnGameStart;
+        GameListener.onGameEnd -= this.OnGameEnd;
+    }
+
+    void OnGameStart() {
+        this.InGame = true;
+
+        if (Setting.EnableInvisible) {
+            Chat.Print("You are invisible! Do /invis to disable!");
+        }
+    }
+
+    void OnGameEnd() {
+        this.InGame = false;
+        this.StopCoroutine(this.AntiKickCoroutine);
     }
 
     IEnumerator SendSpoofedValues() {
+        WaitForSeconds waitForHalfSecond = new(0.5f);
         Reflector? playerReflector = Helper.LocalPlayer?.Reflect();
 
         while (true) {
             _ = playerReflector?.InvokeInternalMethod("SendNewPlayerValuesServerRpc");
-            yield return new WaitForSeconds(0.5f);
+            yield return waitForHalfSecond;
         }
     }
 
     void ToggleAntiKick() {
-        if (Helper.LocalPlayer is not null) {
+        if (!this.InGame) {
             Chat.Print("You cannot toggle anti-kick while in-game!");
             return;
         }
@@ -41,10 +58,5 @@ public sealed class AntiKickMod : MonoBehaviour {
         else {
             this.StopCoroutine(this.AntiKickCoroutine);
         }
-    }
-
-    void PrintInvisibleWarning() {
-        if (!Setting.EnableInvisible) return;
-        Chat.Print("You are invisible! Do /invis to disable!");
     }
 }
