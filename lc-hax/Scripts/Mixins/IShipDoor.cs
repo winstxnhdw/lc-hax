@@ -11,7 +11,7 @@ public static class IShipDoorMixin {
             .First(trigger => trigger.animationString == animation)?
             .GetComponentInParent<InteractTrigger>();
 
-    public static void CloseShipDoor(this IShipDoor _, bool closed) =>
+    public static void SetShipDoorState(this IShipDoor _, bool closed) =>
         Helper.FindObject<HangarShipDoor>()?
               .gameObject.GetAnimationInteractTrigger(closed ? "CloseDoor" : "OpenDoor")?
               .onInteract.Invoke(Helper.LocalPlayer);

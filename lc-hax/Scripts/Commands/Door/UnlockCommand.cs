@@ -1,9 +1,9 @@
 using Hax;
 
 [Command("/unlock")]
-public class UnlockCommand : ICommand {
+public class UnlockCommand : ICommand, ISecureGate {
     public void Execute(string[] _) {
-        Helper.SetGateState(true);
+        this.SetSecureDoorState(true);
         Helper.FindObjects<DoorLock>()
               .ForEach(door => door.UnlockDoorSyncWithServer());
 
