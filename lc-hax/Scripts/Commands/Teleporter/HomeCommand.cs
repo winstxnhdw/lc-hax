@@ -20,7 +20,13 @@ public class HomeCommand : ITeleporter, ICommand {
 
     public void Execute(string[] args) {
         if (args.Length is 0) {
-            Helper.StartOfRound?.ForcePlayerIntoShip();
+            if (!Helper.StartOfRound.IsNotNull(out StartOfRound startOfRound)) {
+                Chat.Print("StartOfRound is not found");
+                return;
+            }
+
+            startOfRound.ForcePlayerIntoShip();
+            startOfRound.localPlayerController.isInsideFactory = false;
             return;
         }
 
