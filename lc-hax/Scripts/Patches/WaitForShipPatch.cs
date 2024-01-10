@@ -11,10 +11,14 @@ using Hax;
 class WaitForShipPatch {
     static IEnumerator Postfix(IEnumerator endOfGame) {
         while (endOfGame.MoveNext()) yield return endOfGame.Current;
+        yield return new WaitUntil(() => Helper.StartOfRound?.shipIsLeaving is false);
         yield return new WaitForSeconds(5.0f); // Wait a bit to give it a chance to fix itself
         bool isLeverBroken = true;
 
         while (isLeverBroken) {
+            yield return new WaitForSeconds(Random.Range(2.0f, 5.0f)); // Make lc-hax users not send it all at the same time
+            if (Helper.StartOfRound?.travellingToNewLevel is true) continue;
+
             isLeverBroken =
                 Helper.StartOfRound?.inShipPhase is true &&
                 Helper.FindObject<StartMatchLever>()?.triggerScript.interactable is false;
@@ -22,8 +26,6 @@ class WaitForShipPatch {
             if (isLeverBroken) {
                 Helper.StartOfRound?.PlayerHasRevivedServerRpc();
             }
-
-            yield return new WaitForSeconds(Random.Range(1.0f, 5.0f)); // Make users not send it all at once
         }
     }
 }
