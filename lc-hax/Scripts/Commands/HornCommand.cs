@@ -3,13 +3,26 @@ using Hax;
 
 [Command("/horn")]
 public class HornCommand : ICommand {
+    Action ResetHornLater(
+        ShipAlarmCord shipAlarmCord,
+        Vector3 previousPosition,
+        Vector3 previousRotation
+    ) => () => {
+        Helper.PlaceObjectAtPosition(shipAlarmCord, previousPosition, previousRotation);
+        shipAlarmCord?.StopPullingCordServerRpc(-1)
+    }
+
     Action PullHornLater(float hornDuration) => () => {
-        ShipAlarmCord? shipAlarmCord = Helper.FindObject<ShipAlarmCord>();
-        shipAlarmCord?.PullCordServerRpc(-1);
+        if(!Helper.FindObject<ShipAlarmCord>().IsNotNull(out ShipAlarmCord shipAlarmCord)) return;
+        
+        Vector3 previousPosition = shipAlarmCord.transform.position.Copy();
+        Vector3 previousRotation = shipAlarmCord.transform.eulerAngles.Copy();
+        Helper.PlaceObjectAtPosition(shipAlarmCord, new Vector3(0.0f, -50.0f, 0.0f));
+        shipAlarmCord.PullCordServerRpc(-1);
 
         Helper.CreateComponent<WaitForBehaviour>()
               .SetPredicate(time => time >= hornDuration)
-              .Init(() => shipAlarmCord?.StopPullingCordServerRpc(-1));
+              .Init(this.ResetHornLater(shipAlarmCord));
     };
 
     public void Execute(string[] args) {
