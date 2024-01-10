@@ -124,7 +124,7 @@ The complete feature set includes the following.
 | Start the game                | `/start`                                       |
 | List all players              | `/players`                                     |
 | Grab all scraps               | `/grab`                                        |
-| Sell all valuable scraps      | `/sell`                                        |
+| Deposit all valuable items    | `/sell`                                        |
 | Toggle the Beta badge         | `/beta`                                        |
 | Get coordinates               | `/xyz`                                         |
 | Toggle God mode               | `/god`                                         |
