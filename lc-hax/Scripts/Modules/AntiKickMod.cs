@@ -44,7 +44,7 @@ public sealed class AntiKickMod : MonoBehaviour {
     }
 
     void PrintInvisibleWarning() {
-        if (!Setting.EnableAntiKick) return;
+        if (!Setting.EnableInvisible) return;
         Chat.Print("You are invisible! Do /invis to disable!");
     }
 }
