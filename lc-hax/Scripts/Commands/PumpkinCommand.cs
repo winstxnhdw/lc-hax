@@ -25,7 +25,7 @@ public class PumpkinCommand : ICommand {
     };
 
     public void Execute(string[] args) {
-        if (args.Length is 0) {
+        if (args.Length < 2) {
             Chat.Print("Usage: /pumpkin <player> <duration>");
             return;
         }
