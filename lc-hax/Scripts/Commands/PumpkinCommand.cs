@@ -6,7 +6,7 @@ using Hax;
 
 [Command("/pumpkin")]
 public class PumpkinCommand : ICommand {
-    bool PumpkinExists(float _) =>
+    bool PumpkinExists() =>
         Helper.FindObjects<PlaceableShipObject>()
               .Where(placeableShipObject => placeableShipObject.unlockableID == (int)Unlockable.JACK_O_LANTERN)
               .Any();

@@ -12,7 +12,7 @@ public static class ITeleporterMixin {
               .First(teleporter => teleporter is not null && !teleporter.isInverseTeleporter)
               .IsNotNull(out teleporter);
 
-    public static bool TeleporterExists(this ITeleporter self, float _) {
+    public static bool TeleporterExists(this ITeleporter self) {
         HaxObjects.Instance?.ShipTeleporters.Renew();
         return self.TryGetTeleporter(out ShipTeleporter _);
     }
