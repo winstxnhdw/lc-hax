@@ -71,7 +71,7 @@ namespace Quickenshtein {
                     CalculateRow(previousRowPtr, targetPtr, targetLength, sourcePrevChar, lastInsertionCost, lastSubstitutionCost);
                 }
 
-                if (targetLength > pooledArray.Length) {
+                if (targetLength < 0 || targetLength > pooledArray.Length) {
                     throw new InvalidOperationException("Target length exceeds the length of the pooled array.");
                 }
 
