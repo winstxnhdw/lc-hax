@@ -43,7 +43,7 @@ public sealed class AntiKickMod : MonoBehaviour {
     }
 
     void ToggleAntiKick() {
-        if (!this.InGame) {
+        if (this.InGame) {
             Chat.Print("You cannot toggle anti-kick while in-game!");
             return;
         }
