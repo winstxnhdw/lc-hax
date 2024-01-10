@@ -32,11 +32,11 @@ public class FatalityCommand : ICommand {
     }
 
     string? HandleMasked(PlayerControllerB targetPlayer) {
-        if (this.GetEnemy<MaskedPlayerEnemy>() is not MaskedPlayerEnemy spider) {
+        if (this.GetEnemy<MaskedPlayerEnemy>() is not MaskedPlayerEnemy masked) {
             return "Enemy has not yet spawned!";
         }
 
-        spider.KillPlayerAnimationServerRpc((int)targetPlayer.playerClientId);
+        masked.KillPlayerAnimationServerRpc((int)targetPlayer.playerClientId);
         return null;
     }
 
