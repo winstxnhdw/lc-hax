@@ -58,6 +58,7 @@ The complete feature set includes the following.
 - Infinite charge
 - Infinite grab distance
 - Infinite item usage
+- Infinite item deposit
 - Grab through walls
 - Pocket any item
 - Instant interact
