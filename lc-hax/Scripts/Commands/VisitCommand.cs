@@ -1,5 +1,6 @@
-using System;
 using Hax;
+using System;
+using System.Linq;
 
 [Command("/visit")]
 public class VisitCommand : ICommand {
@@ -8,8 +9,8 @@ public class VisitCommand : ICommand {
         Enum.IsDefined(typeof(Level), chosenLevelId);
 
     bool TryParseLevel(string levelNameOrId, out int levelIndex) {
-        if (this.IsValidLevelIndex(levelNameOrId, out ushort chosenLevelId)) {
-            levelIndex = chosenLevelId;
+        if (int.TryParse(levelNameOrId, out int index)) {
+            levelIndex = index;
             return true;
         }
 
@@ -35,6 +36,8 @@ public class VisitCommand : ICommand {
 
         if (!this.TryParseLevel(args[0], out int levelIndex)) {
             Chat.Print("Invalid level!");
+            string levels = Enum.GetValues(typeof(Level)).Cast<Level>().Aggregate(string.Empty, (current, level) => current + $"{level} : {(int)level}");
+            Chat.Print(levels);
             return;
         }
 
