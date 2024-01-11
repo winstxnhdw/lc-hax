@@ -1,29 +1,15 @@
 using System;
-using UnityEngine;
 using Hax;
 
 [Command("/horn")]
 public class HornCommand : ICommand {
-    Action ResetHornLater(
-        ShipAlarmCord shipAlarmCord,
-        Vector3 previousPosition,
-        Vector3 previousRotation
-    ) => () => {
-        Helper.PlaceObjectAtPosition(shipAlarmCord, previousPosition, previousRotation);
-        shipAlarmCord.StopPullingCordServerRpc(-1);
-    };
-
-    Action PullHornLater(float hornDuration) => () => {
-        if (!Helper.FindObject<ShipAlarmCord>().IsNotNull(out ShipAlarmCord shipAlarmCord)) return;
-
-        Vector3 previousPosition = shipAlarmCord.transform.position.Copy();
-        Vector3 previousRotation = shipAlarmCord.transform.eulerAngles.Copy();
-        Helper.PlaceObjectAtPosition(shipAlarmCord, new Vector3(0.0f, -50.0f, 0.0f));
-        shipAlarmCord.PullCordServerRpc(-1);
+    Action PullHornLater(int hornDuration) => () => {
+        ShipAlarmCord? shipAlarmCord = Helper.FindObject<ShipAlarmCord>();
+        shipAlarmCord?.PullCordServerRpc(-1);
 
         Helper.CreateComponent<WaitForBehaviour>()
               .SetPredicate(time => time >= hornDuration)
-              .Init(this.ResetHornLater(shipAlarmCord, previousPosition, previousRotation));
+              .Init(() => shipAlarmCord?.StopPullingCordServerRpc(-1));
     };
 
     public void Execute(string[] args) {
@@ -32,7 +18,7 @@ public class HornCommand : ICommand {
             return;
         }
 
-        if (!ulong.TryParse(args[0], out ulong hornDuration)) {
+        if (!int.TryParse(args[0], out int hornDuration)) {
             Chat.Print("Invalid duration!");
             return;
         }
