@@ -9,9 +9,16 @@ public class KillCommand : ICommand {
         Helper.FindObjects<EnemyAI>().ForEach(action);
 
     Result KillSelf() {
+        var demi = Setting.EnableDemigodMode;
+        var god = Setting.EnableGodMode;
+        Setting.EnableDemigodMode = false;
+        Setting.EnableGodMode = false;
         Helper.LocalPlayer?.KillPlayer();
+        Setting.EnableDemigodMode = demi;
+        Setting.EnableGodMode = god;
         return new Result(true);
     }
+
 
     Result KillTargetPlayer(string[] args) {
         if (!Helper.GetActivePlayer(args[0]).IsNotNull(out PlayerControllerB targetPlayer)) {
