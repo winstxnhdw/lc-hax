@@ -110,7 +110,7 @@ public class FatalityCommand : ICommand {
             { "Jester", this.HandleJester },
             { "Masked", this.HandleMasked },
             { "Baboon Hawk", this.HandleBaboonHawk },
-            { "Bees", this.HandleBees },
+            { "Circuit Bees", this.HandleBees },
             { "Thumper", this.HandleThumper },
             { "Eyeless Dog", this.HandleEyelessDog },
             { "Bracken", this.HandleBracken },
