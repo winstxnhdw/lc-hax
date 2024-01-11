@@ -4,19 +4,19 @@ using System.Linq;
 
 [Command("/visit")]
 public class VisitCommand : ICommand {
-    bool IsValidLevelIndex(string levelIndex, out ushort chosenLevelId) =>
-        ushort.TryParse(levelIndex, out chosenLevelId) &&
+    bool IsValidLevelIndex(string levelIndex, out int chosenLevelId) =>
+        Enum.TryParse(levelIndex, out chosenLevelId) &&
         Enum.IsDefined(typeof(Level), chosenLevelId);
 
     bool TryParseLevel(string levelNameOrId, out int levelIndex) {
         if (int.TryParse(levelNameOrId, out int index)) {
             levelIndex = index;
-            return true;
+            return this.IsValidLevelIndex(levelNameOrId, out levelIndex);
         }
 
         if (Enum.TryParse(levelNameOrId, true, out Level levelEnum)) {
             levelIndex = (int)levelEnum;
-            return true;
+            return this.IsValidLevelIndex(levelNameOrId, out levelIndex);
         }
 
         levelIndex = -1;
