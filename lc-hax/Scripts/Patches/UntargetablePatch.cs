@@ -4,11 +4,9 @@ using GameNetcodeStuff;
 using HarmonyLib;
 using Hax;
 
-[HarmonyPatch()]
 class UntargetablePatch {
-    [HarmonyPrefix]
     [HarmonyPatch(typeof(EnemyAI), nameof(EnemyAI.PlayerIsTargetable))]
-    public static bool PlayerPrefix(PlayerControllerB playerScript, ref bool __result) {
+    public static bool Prefix(PlayerControllerB playerScript, ref bool __result) {
         if (!Setting.EnableUntargetable && !Setting.EnableGodMode) return true;
         if (Helper.LocalPlayer?.actualClientId != playerScript.actualClientId) return true;
 
@@ -16,23 +14,17 @@ class UntargetablePatch {
         return false;
     }
 
-    [HarmonyPrefix]
     [HarmonyPatch(typeof(EnemyAI), nameof(EnemyAI.Update))]
-    public static bool EnemyAIPrefix(EnemyAI __instance) {
+    public static bool Prefix(ref PlayerControllerB? ___targetPlayer, ref bool ___movingTowardsTargetPlayer) {
         if (!Setting.EnableUntargetable) return true;
-        if (!__instance.targetPlayer) return true;
-        if (Helper.LocalPlayer?.actualClientId != __instance.targetPlayer.actualClientId) return true;
+        if (!___targetPlayer) return true;
+        if (Helper.LocalPlayer?.actualClientId != ___targetPlayer?.actualClientId) return true;
 
-        __instance.targetPlayer = null;
-        __instance.movingTowardsTargetPlayer = false;
+        ___targetPlayer = null;
+        ___movingTowardsTargetPlayer = false;
         return false;
     }
 
-    [HarmonyPrefix]
     [HarmonyPatch(typeof(NutcrackerEnemyAI), nameof(NutcrackerEnemyAI.CheckLineOfSightForLocalPlayer))]
-    static bool NutcrackerPrefix() => !Setting.EnableUntargetable;
+    static bool Prefix() => !Setting.EnableUntargetable;
 }
-
-//TODO: PufferAI.Update
-//__instance.playerIsInLOS = false;
-//__instance.closestSeenPlayer = null;
