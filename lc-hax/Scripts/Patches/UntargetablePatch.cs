@@ -8,7 +8,7 @@ using Hax;
 class UntargetableEnemyPatch {
     [HarmonyPatch(nameof(EnemyAI.PlayerIsTargetable))]
     public static bool Prefix(PlayerControllerB playerScript, ref bool __result) {
-        if (!Setting.EnableUntargetable && !Setting.EnableGodMode) return true;
+        if (!Setting.EnableUntargetable) return true;
         if (Helper.LocalPlayer?.actualClientId != playerScript.actualClientId) return true;
 
         __result = false;
