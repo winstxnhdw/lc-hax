@@ -1,10 +1,11 @@
+using System;
 using GameNetcodeStuff;
 using UnityEngine;
 using Hax;
 
 [DebugCommand("/fakedeath")]
 public class FakeDeathCommand : ICommand {
-    public void Execute(string[] args) {
+    public void Execute(ReadOnlySpan<string> args) {
         if (Helper.LocalPlayer is not PlayerControllerB player) return;
 
         //call only once, when round starts, to garuntee no more players are joining,

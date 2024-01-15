@@ -1,6 +1,6 @@
+using System;
 using UnityEngine;
 using GameNetcodeStuff;
-using System;
 using Hax;
 
 [Command("/random")]
@@ -83,7 +83,7 @@ public class RandomCommand : ICommand {
         teleporterPlacements.Value.Placement.GameObject.PressTeleportButtonServerRpc();
     };
 
-    public void Execute(string[] args) {
+    public void Execute(ReadOnlySpan<string> args) {
         if (args.Length is 0) {
             Chat.Print("Usage: /random <player>");
             return;

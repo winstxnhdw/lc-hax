@@ -1,8 +1,9 @@
+using System;
 using Hax;
 
 [Command("/block")]
 public class BlockCommand : ICommand {
-    public void Execute(string[] args) {
+    public void Execute(ReadOnlySpan<string> args) {
         if (args.Length is 0) {
             Chat.Print("Usage: /block <property>");
             return;

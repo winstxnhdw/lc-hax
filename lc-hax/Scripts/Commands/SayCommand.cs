@@ -1,9 +1,10 @@
+using System;
 using GameNetcodeStuff;
 using Hax;
 
 [Command("/say")]
 public class SayCommand : ICommand {
-    public void Execute(string[] args) {
+    public void Execute(ReadOnlySpan<string> args) {
         if (args.Length < 2) {
             Chat.Print("Usage: /say <player> <message>");
         }
@@ -13,6 +14,6 @@ public class SayCommand : ICommand {
             return;
         }
 
-        Helper.HUDManager?.AddTextToChatOnServer(string.Join(" ", args[1..]), (int)player.playerClientId);
+        Helper.HUDManager?.AddTextToChatOnServer(string.Join(" ", args[1..].ToArray()), (int)player.playerClientId);
     }
 }

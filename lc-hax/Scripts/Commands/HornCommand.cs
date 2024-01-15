@@ -12,7 +12,7 @@ public class HornCommand : ICommand {
               .Init(() => shipAlarmCord?.StopPullingCordServerRpc(-1));
     };
 
-    public void Execute(string[] args) {
+    public void Execute(ReadOnlySpan<string> args) {
         if (args.Length is 0) {
             Chat.Print("Usage: /horn <duration>");
             return;

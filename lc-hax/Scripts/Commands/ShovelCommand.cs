@@ -1,9 +1,9 @@
-
+using System;
 using Hax;
 
 [Command("/shovel")]
 public class ShovelCommand : ICommand {
-    public void Execute(string[] args) {
+    public void Execute(ReadOnlySpan<string> args) {
         if (args.Length is 0) {
             Chat.Print("Usage: /shovel <force=1>");
             return;

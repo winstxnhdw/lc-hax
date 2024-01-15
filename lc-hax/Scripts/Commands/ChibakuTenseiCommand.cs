@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using GameNetcodeStuff;
 using Hax;
@@ -6,7 +7,7 @@ using Hax;
 public class ChibakuTenseiCommand : ICommand {
     Vector3 spinningY = new(0, 2, 0);
 
-    Result TeleportPlayerToRandom(string[] args) {
+    Result TeleportPlayerToRandom(ReadOnlySpan<string> args) {
         if (!Helper.GetActivePlayer(args[0]).IsNotNull(out PlayerControllerB targetPlayer)) {
             return new Result(message: "Player not found!");
         }
@@ -93,7 +94,7 @@ public class ChibakuTenseiCommand : ICommand {
         return new Result(true);
     }
 
-    public void Execute(string[] args) {
+    public void Execute(ReadOnlySpan<string> args) {
         if (args.Length is 0) {
             Chat.Print("Usage: /ct <player>");
             return;

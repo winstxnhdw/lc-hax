@@ -1,9 +1,10 @@
+using System;
 using GameNetcodeStuff;
 using Hax;
 
 [Command("/poison")]
 public class PoisonCommand : ICommand {
-    public void Execute(string[] args) {
+    public void Execute(ReadOnlySpan<string> args) {
         if (args.Length < 4) {
             Chat.Print("Usage: /poison <player> <damage> <delay> <duration>");
             return;

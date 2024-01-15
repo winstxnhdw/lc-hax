@@ -1,3 +1,5 @@
+using System;
+
 public interface ICommand {
-    void Execute(string[] args);
+    void Execute(ReadOnlySpan<string> args);
 }

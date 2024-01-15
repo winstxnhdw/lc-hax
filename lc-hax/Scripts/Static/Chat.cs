@@ -51,7 +51,7 @@ public static class Chat {
         Chat.ExecuteCommand(command.Split(' '));
     }
 
-    public static void ExecuteCommand(string[] args) {
+    public static void ExecuteCommand(ReadOnlySpan<string> args) {
         if (args.Length is 0) {
             Chat.Print("Usage: /<command> <args>");
             return;

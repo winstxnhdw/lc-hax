@@ -12,7 +12,7 @@ public class NoiseCommand : ICommand {
         Helper.CreateComponent<TransientBehaviour>()
               .Init(this.PlayNoise(position), duration);
 
-    public void Execute(string[] args) {
+    public void Execute(ReadOnlySpan<string> args) {
         if (args.Length is 0) {
             Chat.Print("Usage: /noise <player> <duration=30>");
             return;
