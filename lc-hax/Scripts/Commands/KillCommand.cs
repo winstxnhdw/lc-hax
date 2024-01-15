@@ -9,7 +9,14 @@ public class KillCommand : ICommand {
         Helper.FindObjects<EnemyAI>().ForEach(action);
 
     Result KillSelf() {
+        bool EnableDemigodMode = Setting.EnableDemigodMode;
+        bool EnableGodMode = Setting.EnableGodMode;
+        Setting.EnableDemigodMode = false;
+        Setting.EnableGodMode = false;
         Helper.LocalPlayer?.KillPlayer();
+        Setting.EnableDemigodMode = EnableDemigodMode;
+        Setting.EnableGodMode = EnableGodMode;
+
         return new Result(true);
     }
 
