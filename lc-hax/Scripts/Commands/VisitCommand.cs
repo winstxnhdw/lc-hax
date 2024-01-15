@@ -22,13 +22,13 @@ public class VisitCommand : ICommand {
         }
 
         Dictionary<string, int> levels = startOfRound.levels.ToDictionary(
-            level => level.name[..(level.name.Length - "Level".Length)].ToUpper(),
+            level => level.name[..(level.name.Length - "Level".Length)].ToLower(),
             level => level.levelID
         );
 
-        string key = Helper.FuzzyMatch(args[0].ToUpper(), [.. levels.Keys]);
+        string key = Helper.FuzzyMatch(args[0].ToLower(), [.. levels.Keys]);
         Helper.StartOfRound?.ChangeLevelServerRpc(levels[key], terminal.groupCredits);
 
-        Chat.Print($"Visiting {key}!");
+        Chat.Print($"Visiting {key.ToTitleCase()}!");
     }
 }
