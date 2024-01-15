@@ -54,5 +54,5 @@ jobs:
       - name: Commit changes
         run: |
           git add .
-          git commit -m "style: fix whitespaces" || true
+          git commit -m "style: format scripts" || true
           git push

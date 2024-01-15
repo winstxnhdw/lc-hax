@@ -1,8 +1,9 @@
+using System;
 using Hax;
 
 [Command("/lock")]
 public class LockCommand : ICommand, ISecureGate {
-    public void Execute(string[] args) {
+    public void Execute(ReadOnlySpan<string> _) {
         this.SetSecureDoorState(false);
     }
 }

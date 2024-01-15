@@ -21,7 +21,7 @@ public class VisitCommand : ICommand {
         return false;
     }
 
-    public void Execute(string[] args) {
+    public void Execute(ReadOnlySpan<string> args) {
         if (args.Length is 0) {
             Chat.Print("Usage: /visit <moon>");
             return;
