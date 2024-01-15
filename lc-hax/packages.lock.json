@@ -1,0 +1,14 @@
+{
+  "version": 1,
+  "dependencies": {
+    ".NETStandard,Version=v2.1": {
+      "Lib.Harmony": {
+        "type": "Direct",
+        "requested": "[2.2.2, )",
+        "resolved": "2.2.2",
+        "contentHash": "70KvWz+DiUELxafsYL/LHxA/jH3PDWeApLo/VwtnrpTvRWQ/eUdPfS/l5funmhZWOy41QXw6UjVv+6C57Nx77A=="
+      }
+    },
+    ".NETStandard,Version=v2.1/win-x64": {}
+  }
+}
