@@ -9,11 +9,11 @@ public class VisitCommand : ICommand {
         Enum.IsDefined(typeof(Level), chosenLevelId);
 
     bool TryParseLevel(string levelNameOrId, out int levelIndex) {
-        if (int.TryParse(levelNameOrId, out int index)) {
+        if (int.TryParse(levelNameOrId, out _)) {
             return this.IsValidLevelIndex(levelNameOrId, out levelIndex);
         }
 
-        if (Enum.TryParse(levelNameOrId, true, out Level levelEnum)) {
+        if (Enum.TryParse(levelNameOrId, true, out Level _)) {
             return this.IsValidLevelIndex(levelNameOrId, out levelIndex);
         }
 
