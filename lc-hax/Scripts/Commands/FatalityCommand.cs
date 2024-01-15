@@ -121,7 +121,7 @@ public class FatalityCommand : ICommand {
         TextInfo textInfo = new CultureInfo("en-SG").TextInfo;
 
         string key = Helper.FuzzyMatch(
-            textInfo.ToTitleCase(string.Join(" ", args[1..].ToArray())),
+            string.Join(" ", args[1..].ToArray()).ToTitleCase(),
             [.. enemyHandlers.Keys]
         );
 
