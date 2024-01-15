@@ -8,7 +8,7 @@ public class SignalCommand : ICommand {
             Chat.Print("Usage: /signal <message>");
         }
 
-        string message = string.Join(" ", args.ToArray());
+        string message = string.Join(" ", [.. args]);
 
         if (message.Length > 12) {
             Chat.Print($"You've exceeded the maximum message length by {message.Length - 12} character(s)!");
