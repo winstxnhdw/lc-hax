@@ -15,7 +15,7 @@ public class KillCommand : ICommand {
         Setting.EnableGodMode = false;
         Helper.LocalPlayer?.KillPlayer();
         Setting.EnableDemigodMode = EnableDemigodMode;
-        Setting.EnableGodMode = EnableDemigodMode;
+        Setting.EnableGodMode = EnableGodMode;
 
         return new Result(true);
     }
