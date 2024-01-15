@@ -19,8 +19,7 @@ class NoCooldownPatch {
 class NoShovelCooldownPatch {
     static IEnumerator Postfix(IEnumerator reelUpShovel) {
         while (reelUpShovel.MoveNext()) {
-            if (reelUpShovel.Current is WaitForSeconds && Setting.EnableNoCooldown) continue;
-
+            if (Setting.EnableNoCooldown && reelUpShovel.Current is WaitForSeconds) continue;
             yield return reelUpShovel.Current;
         }
     }
