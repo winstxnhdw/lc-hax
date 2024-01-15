@@ -30,11 +30,11 @@ public static partial class Helper {
         return result;
     }
 
-    public static string? FuzzyMatch(ReadOnlySpan<char> query, ReadOnlySpan<string> strings) {
+    public static string FuzzyMatch(ReadOnlySpan<char> query, ReadOnlySpan<string> strings) {
         int lowestWeight = int.MaxValue;
-        string? closestMatch = null;
+        string closestMatch = strings[0];
 
-        for (int i = 0; i < strings.Length; i++) {
+        for (int i = 1; i < strings.Length; i++) {
             int distance = Levenshtein.GetDistance(query, strings[i]);
             int commonalityReward = LongestCommonSubstring(query, strings[i]) * -2;
             int totalWeight = distance + commonalityReward;
