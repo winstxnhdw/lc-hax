@@ -65,6 +65,7 @@ The complete feature set includes the following.
 - No reload
 - No item usage cooldown
 - No lobby refresh delay
+- No build constraints
 - Always sane
 - Always lightweight
 - Always show HUD
