@@ -107,6 +107,7 @@ The complete feature set includes the following.
 | Modify shovel damage          | `/shovel <force=1>`                            |
 | Give or take money            | `/money <amount>`                              |
 | Add or remove experience      | `/xp <amount>`                                 |
+| Buy an item                   | `/buy <item> <quantity=1>`                     |
 | Block incoming credits        | `/block credits`                               |
 | Block any radar targets       | `/block radar`                                 |
 | Become untargetable           | `/block enemy`                                 |
