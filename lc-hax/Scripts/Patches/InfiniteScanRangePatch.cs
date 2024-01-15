@@ -25,7 +25,7 @@ class InfiniteScanRangePatch {
     }
 
     [HarmonyPatch("MeetsScanNodeRequirements")]
-    static bool Prefix(ScanNodeProperties node, ref bool __result) {
+    static bool Prefix(ScanNodeProperties? node, ref bool __result) {
         if (node is null) return true;
 
         __result = true;
