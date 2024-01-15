@@ -10,12 +10,10 @@ public class VisitCommand : ICommand {
 
     bool TryParseLevel(string levelNameOrId, out int levelIndex) {
         if (int.TryParse(levelNameOrId, out int index)) {
-            levelIndex = index;
             return this.IsValidLevelIndex(levelNameOrId, out levelIndex);
         }
 
         if (Enum.TryParse(levelNameOrId, true, out Level levelEnum)) {
-            levelIndex = (int)levelEnum;
             return this.IsValidLevelIndex(levelNameOrId, out levelIndex);
         }
 
