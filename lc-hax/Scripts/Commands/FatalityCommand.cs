@@ -120,15 +120,10 @@ public class FatalityCommand : ICommand {
 
         TextInfo textInfo = new CultureInfo("en-SG").TextInfo;
 
-        string? key = Helper.FuzzyMatch(
+        string key = Helper.FuzzyMatch(
             textInfo.ToTitleCase(string.Join(" ", args[1..].ToArray())),
             [.. enemyHandlers.Keys]
         );
-
-        if (key is null) {
-            Chat.Print("There are no queryable enemies!");
-            return;
-        }
 
         Chat.Print($"Performing {key} fatality on {targetPlayer.playerUsername}..");
 
