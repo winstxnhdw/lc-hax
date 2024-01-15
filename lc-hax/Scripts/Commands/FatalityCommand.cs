@@ -1,4 +1,5 @@
 using System;
+using System.Globalization;
 using System.Collections.Generic;
 using GameNetcodeStuff;
 using Hax;
@@ -117,7 +118,12 @@ public class FatalityCommand : ICommand {
             { "Nutcracker", this.HandleNutcracker }
         };
 
-        string? key = Helper.FuzzyMatch(string.Join(" ", args[1..].ToArray()), [.. enemyHandlers.Keys]);
+        TextInfo textInfo = new CultureInfo("en-SG").TextInfo;
+
+        string? key = Helper.FuzzyMatch(
+            textInfo.ToTitleCase(string.Join(" ", args[1..].ToArray())),
+            [.. enemyHandlers.Keys]
+        );
 
         if (key is null) {
             Chat.Print("There are no queryable enemies!");
