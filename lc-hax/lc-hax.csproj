@@ -11,6 +11,7 @@
     <ReferencePath>./References</ReferencePath>
     <RootNamespace>lc-hax</RootNamespace>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <RestorePackagesWithLockFile>true</RestorePackagesWithLockFile>
 
   </PropertyGroup>
 
