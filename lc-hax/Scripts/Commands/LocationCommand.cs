@@ -1,9 +1,10 @@
+using System;
 using UnityEngine;
 using Hax;
 
 [Command("/xyz")]
 public class LocationCommand : ICommand {
-    public void Execute(string[] _) {
+    public void Execute(ReadOnlySpan<string> _) {
         if (!Helper.CurrentCamera.IsNotNull(out Camera camera)) {
             Chat.Print("Player not found!");
             return;

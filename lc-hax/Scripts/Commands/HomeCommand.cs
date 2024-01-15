@@ -37,7 +37,7 @@ public class HomeCommand : ICommand {
               .Init(action);
     }
 
-    public void Execute(string[] args) {
+    public void Execute(ReadOnlySpan<string> args) {
         if (args.Length is 0) {
             if (!Helper.StartOfRound.IsNotNull(out StartOfRound startOfRound)) {
                 Chat.Print("StartOfRound is not found");

@@ -1,10 +1,11 @@
+using System;
 using UnityEngine;
 using GameNetcodeStuff;
 using Hax;
 
 [Command("/tp")]
 public class TeleportCommand : ICommand {
-    Vector3? GetCoordinates(string[] args) {
+    Vector3? GetCoordinates(ReadOnlySpan<string> args) {
         bool isValidX = float.TryParse(args[0], out float x);
         bool isValidY = float.TryParse(args[1], out float y);
         bool isValidZ = float.TryParse(args[2], out float z);
@@ -12,7 +13,7 @@ public class TeleportCommand : ICommand {
         return !isValidX || !isValidY || !isValidZ ? null : new Vector3(x, y, z);
     }
 
-    Result TeleportToPlayer(string[] args) {
+    Result TeleportToPlayer(ReadOnlySpan<string> args) {
         PlayerControllerB? targetPlayer = Helper.GetPlayer(args[0]);
         PlayerControllerB? currentPlayer = Helper.LocalPlayer;
 
@@ -24,7 +25,7 @@ public class TeleportCommand : ICommand {
         return new Result(true);
     }
 
-    Result TeleportToPosition(string[] args) {
+    Result TeleportToPosition(ReadOnlySpan<string> args) {
         Vector3? coordinates = this.GetCoordinates(args);
 
         if (coordinates is null) {
@@ -35,7 +36,7 @@ public class TeleportCommand : ICommand {
         return new Result(true);
     }
 
-    public void Execute(string[] args) {
+    public void Execute(ReadOnlySpan<string> args) {
         if (args.Length is 0) {
             Chat.Print("Usage: /tp <player>");
             Chat.Print("Usage: /tp <x> <y> <z>");

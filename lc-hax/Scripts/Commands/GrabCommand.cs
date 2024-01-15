@@ -1,10 +1,11 @@
+using System;
 using GameNetcodeStuff;
 using UnityEngine;
 using Hax;
 
 [Command("/grab")]
 public class GrabCommand : ICommand {
-    public void Execute(string[] args) {
+    public void Execute(ReadOnlySpan<string> _) {
         if (!Helper.ShipBuildModeManager.IsNotNull(out ShipBuildModeManager shipBuildModeManager)) {
             Chat.Print("ShipBuildModeManager not found!");
             return;

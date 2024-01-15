@@ -1,3 +1,4 @@
+using System;
 using GameNetcodeStuff;
 using Hax;
 
@@ -23,7 +24,7 @@ public class HealCommand : IStun, ICommand {
         return new Result(true);
     }
 
-    Result HealPlayer(string[] args) {
+    Result HealPlayer(ReadOnlySpan<string> args) {
         if (!Helper.GetActivePlayer(args[0]).IsNotNull(out PlayerControllerB targetPlayer)) {
             return new Result(message: "Player not found!");
         }
@@ -34,7 +35,7 @@ public class HealCommand : IStun, ICommand {
         return new Result(true);
     }
 
-    public void Execute(string[] args) {
+    public void Execute(ReadOnlySpan<string> args) {
         Result result = args.Length switch {
             0 => this.HealLocalPlayer(),
             _ => this.HealPlayer(args)

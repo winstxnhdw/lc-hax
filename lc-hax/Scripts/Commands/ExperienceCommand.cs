@@ -1,3 +1,4 @@
+using System;
 using Hax;
 
 [Command("/xp")]
@@ -10,7 +11,7 @@ public class ExperienceCommand : ICommand {
         BOSS = 4
     }
 
-    public void Execute(string[] args) {
+    public void Execute(ReadOnlySpan<string> args) {
         if (args.Length is 0) {
             Chat.Print("Usage: /xp <amount>");
             return;
