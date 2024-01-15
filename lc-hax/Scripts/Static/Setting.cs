@@ -12,6 +12,7 @@ public static class Setting {
     public static bool EnableNoCooldown { get; set; } = false;
     public static bool EnableAntiKick { get; set; } = false;
     public static bool EnablePhantom { get; set; } = false;
+    public static bool EnableFakeDeath { get; set; } = false;
     public static bool DisableFallDamage { get; set; } = false;
     public static int ShovelHitForce { get; set; } = 1;
     public static bool InvertYAxis => IngamePlayerSettings.Instance.settings.invertYAxis;

@@ -1,14 +1,9 @@
-// #pragma warning disable IDE0060
-// using GameNetcodeStuff;
-// using HarmonyLib;
-// using UnityEngine;
-// using Hax;
+using GameNetcodeStuff;
+using HarmonyLib;
+using Hax;
 
-// [HarmonyPatch(typeof(PlayerControllerB), "KillPlayerClientRpc")]
-// class FakeDeathPatch {
-//     static void Prefix(ref int playerId, ref bool spawnBody, ref Vector3 bodyVelocity, ref int causeOfDeath, ref int deathAnimation) {
-//         if (playerId == (int)Helper.LocalPlayer!.playerClientId) {
-//             playerId = -1;
-//         }
-//     }
-// }
+[HarmonyPatch(typeof(PlayerControllerB), "KillPlayerClientRpc")]
+class FakeDeathPatch {
+    static bool Prefix(ref int playerId) =>
+        !Setting.EnableFakeDeath || Helper.LocalPlayer is not PlayerControllerB player || playerId != (int)player.playerClientId;
+}
