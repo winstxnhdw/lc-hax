@@ -4,13 +4,9 @@ using Hax;
 [Command("/money")]
 public class MoneyCommand : ICommand {
     public void Execute(ReadOnlySpan<string> args) {
+        if (Helper.Terminal is not Terminal terminal) return;
         if (args.Length is 0) {
             Chat.Print("Usage: /money <amount>");
-            return;
-        }
-
-        if (!Helper.Terminal.IsNotNull(out Terminal terminal)) {
-            Chat.Print("Terminal not found!");
             return;
         }
 

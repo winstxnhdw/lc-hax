@@ -9,7 +9,7 @@ public class SayCommand : ICommand {
             Chat.Print("Usage: /say <player> <message>");
         }
 
-        if (!Helper.GetPlayer(args[0]).IsNotNull(out PlayerControllerB player)) {
+        if (Helper.GetPlayer(args[0]) is not PlayerControllerB player) {
             Chat.Print("Player not found!");
             return;
         }

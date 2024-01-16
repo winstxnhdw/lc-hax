@@ -8,7 +8,7 @@ public class ChibakuTenseiCommand : ICommand {
     Vector3 spinningY = new(0, 2, 0);
 
     Result TeleportPlayerToRandom(ReadOnlySpan<string> args) {
-        if (!Helper.GetActivePlayer(args[0]).IsNotNull(out PlayerControllerB targetPlayer)) {
+        if (Helper.GetActivePlayer(args[0]) is not PlayerControllerB targetPlayer) {
             return new Result(message: "Player not found!");
         }
 
@@ -21,27 +21,27 @@ public class ChibakuTenseiCommand : ICommand {
         Helper.ReturnUnlockable(Unlockable.RECORD_PLAYER);
         Helper.ReturnUnlockable(Unlockable.TABLE);
 
-        if (!Helper.GetUnlockable(Unlockable.CUPBOARD).IsNotNull(out PlaceableShipObject cupboard)) {
+        if (Helper.GetUnlockable(Unlockable.CUPBOARD) is not PlaceableShipObject cupboard) {
             return new Result(message: "Cupboard not found!");
         }
 
-        if (!Helper.GetUnlockable(Unlockable.ROMANTIC_TABLE).IsNotNull(out PlaceableShipObject romanticTable)) {
+        if (Helper.GetUnlockable(Unlockable.ROMANTIC_TABLE) is not PlaceableShipObject romanticTable) {
             return new Result(message: "Romantic table not found!");
         }
 
-        if (!Helper.GetUnlockable(Unlockable.JACK_O_LANTERN).IsNotNull(out PlaceableShipObject jackOLantern)) {
+        if (Helper.GetUnlockable(Unlockable.JACK_O_LANTERN) is not PlaceableShipObject jackOLantern) {
             return new Result(message: "Jack O' Lantern not found!");
         }
 
-        if (!Helper.GetUnlockable(Unlockable.FILE_CABINET).IsNotNull(out PlaceableShipObject fileCabinet)) {
+        if (Helper.GetUnlockable(Unlockable.FILE_CABINET) is not PlaceableShipObject fileCabinet) {
             return new Result(message: "File cabinet not found!");
         }
 
-        if (!Helper.GetUnlockable(Unlockable.TABLE).IsNotNull(out PlaceableShipObject table)) {
+        if (Helper.GetUnlockable(Unlockable.TABLE) is not PlaceableShipObject table) {
             return new Result(message: "Table not found!");
         }
 
-        if (!Helper.GetUnlockable(Unlockable.RECORD_PLAYER).IsNotNull(out PlaceableShipObject recordPlayer)) {
+        if (Helper.GetUnlockable(Unlockable.RECORD_PLAYER) is not PlaceableShipObject recordPlayer) {
             return new Result(message: "Cupboard not found!");
         }
 

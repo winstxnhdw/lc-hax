@@ -4,10 +4,14 @@ using Hax;
 
 [Command("/home")]
 public class HomeCommand : ICommand {
+    ShipTeleporter? Teleporter => Helper.ShipTeleporters.First(
+        teleporter => teleporter is not null && !teleporter.isInverseTeleporter
+    );
+
     Action TeleportPlayerToBaseLater(PlayerControllerB targetPlayer) => () => {
         HaxObjects.Instance?.ShipTeleporters.Renew();
 
-        if (!this.TryGetTeleporter(out ShipTeleporter teleporter)) {
+        if (this.Teleporter is not ShipTeleporter teleporter) {
             Chat.Print("ShipTeleporter not found!");
             return;
         }
@@ -18,14 +22,9 @@ public class HomeCommand : ICommand {
               .Init(teleporter.PressTeleportButtonServerRpc);
     };
 
-    bool TryGetTeleporter(out ShipTeleporter teleporter) =>
-        Helper.ShipTeleporters
-            .First(teleporter => teleporter is not null && !teleporter.isInverseTeleporter)
-            .IsNotNull(out teleporter);
-
     bool TeleporterExists() {
         HaxObjects.Instance?.ShipTeleporters.Renew();
-        return this.TryGetTeleporter(out ShipTeleporter _);
+        return this.Teleporter is not null;
     }
 
     void PrepareToTeleport(Action action) {
@@ -38,18 +37,14 @@ public class HomeCommand : ICommand {
     }
 
     public void Execute(ReadOnlySpan<string> args) {
+        if (Helper.StartOfRound is not StartOfRound startOfRound) return;
         if (args.Length is 0) {
-            if (!Helper.StartOfRound.IsNotNull(out StartOfRound startOfRound)) {
-                Chat.Print("StartOfRound is not found");
-                return;
-            }
-
             startOfRound.ForcePlayerIntoShip();
             startOfRound.localPlayerController.isInsideFactory = false;
             return;
         }
 
-        if (!Helper.GetPlayer(args[0]).IsNotNull(out PlayerControllerB targetPlayer)) {
+        if (Helper.GetPlayer(args[0]) is not PlayerControllerB targetPlayer) {
             Chat.Print("Player not found!");
             return;
         }

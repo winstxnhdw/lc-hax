@@ -22,7 +22,7 @@ public class ExperienceCommand : ICommand {
             return;
         }
 
-        if (!Helper.HUDManager.IsNotNull(out HUDManager hudManager)) {
+        if (Helper.HUDManager is not HUDManager hudManager) {
             Chat.Print("HUDManager is not found");
             return;
         }

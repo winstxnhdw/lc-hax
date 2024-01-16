@@ -7,5 +7,5 @@ public static partial class Helper {
 
     public static StartOfRound? StartOfRound => StartOfRound.Instance.Unfake();
 
-    public static Terminal? Terminal => Helper.HUDManager?.Reflect().GetInternalField<Terminal>("terminalScript");
+    public static Terminal? Terminal => Helper.HUDManager?.Reflect().GetInternalField<Terminal>("terminalScript").Unfake();
 }

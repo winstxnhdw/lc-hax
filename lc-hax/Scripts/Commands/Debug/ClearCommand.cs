@@ -4,7 +4,7 @@ using Hax;
 [DebugCommand("/clear")]
 public class ClearCommand : ICommand {
     public void Execute(ReadOnlySpan<string> _) {
-        if (!Helper.HUDManager.IsNotNull(out HUDManager hudManager)) return;
+        if (Helper.HUDManager is not HUDManager hudManager) return;
         hudManager.chatText.text = "";
     }
 }

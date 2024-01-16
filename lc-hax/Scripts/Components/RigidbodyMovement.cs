@@ -16,7 +16,7 @@ public class RigidbodyMovement : MonoBehaviour {
     List<Collider> CollidedColliders { get; } = [];
 
     public void Init() {
-        if (!Helper.LocalPlayer.IsNotNull(out PlayerControllerB localPlayer)) return;
+        if (Helper.LocalPlayer is not PlayerControllerB localPlayer) return;
         this.gameObject.layer = localPlayer.gameObject.layer;
     }
 
@@ -30,12 +30,12 @@ public class RigidbodyMovement : MonoBehaviour {
     }
 
     void OnEnable() {
-        if (!this.rigidbody.IsNotNull(out Rigidbody rigidbody)) return;
+        if (this.rigidbody.Unfake() is not Rigidbody rigidbody) return;
         rigidbody.isKinematic = false;
     }
 
     void OnDisable() {
-        if (!this.rigidbody.IsNotNull(out Rigidbody rigidbody)) return;
+        if (this.rigidbody.Unfake() is not Rigidbody rigidbody) return;
         rigidbody.isKinematic = true;
     }
 
@@ -48,22 +48,20 @@ public class RigidbodyMovement : MonoBehaviour {
     }
 
     void Update() {
-        if (!Keyboard.current.IsNotNull(out Keyboard keyboard)) return;
-
         Vector3 direction = new(
-            keyboard.dKey.ReadValue() - keyboard.aKey.ReadValue(),
-            keyboard.spaceKey.ReadValue() - keyboard.ctrlKey.ReadValue(),
-            keyboard.wKey.ReadValue() - keyboard.sKey.ReadValue()
+            Keyboard.current.dKey.ReadValue() - Keyboard.current.aKey.ReadValue(),
+            Keyboard.current.spaceKey.ReadValue() - Keyboard.current.ctrlKey.ReadValue(),
+            Keyboard.current.wKey.ReadValue() - Keyboard.current.sKey.ReadValue()
         );
 
-        this.UpdateSprintMultiplier(keyboard);
+        this.UpdateSprintMultiplier(Keyboard.current);
         this.Move(direction);
 
-        if (keyboard.spaceKey.wasPressedThisFrame) {
+        if (Keyboard.current.spaceKey.wasPressedThisFrame) {
             this.Jump();
         }
 
-        if (keyboard.spaceKey.isPressed) {
+        if (Keyboard.current.spaceKey.isPressed) {
             this.BunnyHop();
         }
     }
@@ -76,7 +74,7 @@ public class RigidbodyMovement : MonoBehaviour {
     }
 
     void Move(Vector3 direction) {
-        if (!this.rigidbody.IsNotNull(out Rigidbody rigidbody)) return;
+        if (this.rigidbody.Unfake() is not Rigidbody rigidbody) return;
 
         Vector3 forward = this.transform.forward;
         Vector3 right = this.transform.right;
@@ -91,7 +89,7 @@ public class RigidbodyMovement : MonoBehaviour {
     }
 
     void Jump() {
-        if (!this.rigidbody.IsNotNull(out Rigidbody rigidbody)) return;
+        if (this.rigidbody.Unfake() is not Rigidbody rigidbody) return;
 
         Vector3 newVelocity = rigidbody.velocity;
         newVelocity.y = RigidbodyMovement.jumpForce;

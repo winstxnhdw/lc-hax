@@ -13,7 +13,7 @@ public class BuyCommand : ICommand {
             return;
         }
 
-        if (!Helper.Terminal.IsNotNull(out Terminal terminal)) {
+        if (Helper.Terminal is not Terminal terminal) {
             Chat.Print("Terminal not found!");
             return;
         }

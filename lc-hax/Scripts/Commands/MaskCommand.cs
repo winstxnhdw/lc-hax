@@ -10,7 +10,7 @@ public class MaskCommand : ICommand {
             return;
         }
 
-        if (!Helper.GetActivePlayer(args[0]).IsNotNull(out PlayerControllerB targetPlayer)) {
+        if (Helper.GetActivePlayer(args[0]) is not PlayerControllerB targetPlayer) {
             Chat.Print("Player not found!");
             return;
         }

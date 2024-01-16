@@ -6,11 +6,7 @@ using Hax;
 public class HealCommand : IStun, ICommand {
     void StunAtPlayerPosition(PlayerControllerB player) => this.Stun(player.transform.position, 5.0f, 1.0f);
 
-    Result HealLocalPlayer() {
-        if (!Helper.HUDManager.IsNotNull(out HUDManager hudManager)) {
-            return new Result(message: "HUDManager is not found");
-        }
-
+    Result HealLocalPlayer(HUDManager hudManager) {
         hudManager.localPlayer.health = 100;
         hudManager.localPlayer.bleedingHeavily = false;
         hudManager.localPlayer.criticallyInjured = false;
@@ -25,7 +21,7 @@ public class HealCommand : IStun, ICommand {
     }
 
     Result HealPlayer(ReadOnlySpan<string> args) {
-        if (!Helper.GetActivePlayer(args[0]).IsNotNull(out PlayerControllerB targetPlayer)) {
+        if (Helper.GetActivePlayer(args[0]) is not PlayerControllerB targetPlayer) {
             return new Result(message: "Player not found!");
         }
 
@@ -36,8 +32,10 @@ public class HealCommand : IStun, ICommand {
     }
 
     public void Execute(ReadOnlySpan<string> args) {
+        if (Helper.HUDManager is not HUDManager hudManager) return;
+
         Result result = args.Length switch {
-            0 => this.HealLocalPlayer(),
+            0 => this.HealLocalPlayer(hudManager),
             _ => this.HealPlayer(args)
         };
 
