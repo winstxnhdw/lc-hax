@@ -18,7 +18,8 @@ public class GrabCommand : ICommand {
         Vector3 positionOffset,
         Transform parentObject
     ) {
-        Helper.FindObjects<GrabbableObject>().ForEach(grabbableObject => {
+        HaxObjects.Instance?.GrabbableObjects.ForEach(nullableGrabbableObject => {
+            if (nullableGrabbableObject is not GrabbableObject grabbableObject) return;
             if (!this.CanGrabItem(grabbableObject, currentPlayerPosition)) return;
 
             player.PlaceGrabbableObject(
@@ -38,13 +39,13 @@ public class GrabCommand : ICommand {
         string itemName
     ) {
         Dictionary<string, GrabbableObject> grabbableObjects =
-            Helper.FindObjects<GrabbableObject>()
-                  .Where(grabbableObject => this.CanGrabItem(grabbableObject, currentPlayerPosition))
-                  .GroupBy(grabbableObject => grabbableObject.itemProperties.name.ToLower())
+            HaxObjects.Instance?.GrabbableObjects.Objects
+                  .Where(nullableGrabbableObject => nullableGrabbableObject is GrabbableObject grabbableObject && this.CanGrabItem(grabbableObject, currentPlayerPosition))
+                  .GroupBy(grabbableObject => grabbableObject?.itemProperties.name.ToLower())
                   .ToDictionary(
                     group => group.Key,
-                    group => group.First()!
-                );
+                    group => group.First()
+                )!;
 
         string key = Helper.FuzzyMatch(itemName.ToLower(), [.. grabbableObjects.Keys]);
 
