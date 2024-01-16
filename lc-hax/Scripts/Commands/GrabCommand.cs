@@ -21,6 +21,7 @@ public class GrabCommand : ICommand {
         Vector3 positionOffset = currentPlayerPosition - shipBuildModeManager.transform.position + microOffset;
 
         Helper.FindObjects<GrabbableObject>().ForEach(grabbableObject => {
+            if (grabbableObject.isHeld || grabbableObject.isHeldByEnemy) return;
             if (Vector3.Distance(grabbableObject.transform.position, currentPlayerPosition) < 20.0f) return;
 
             localPlayer?.PlaceGrabbableObject(
