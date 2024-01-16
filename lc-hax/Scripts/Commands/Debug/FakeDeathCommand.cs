@@ -8,6 +8,9 @@ public class FakeDeathCommand : ICommand {
     public void Execute(ReadOnlySpan<string> args) {
         if (Helper.LocalPlayer is not PlayerControllerB player) return;
 
+        //CAN COMBO WITH ANTI-KICK AND /INVIS
+        // YOU MUST CALL EVERY START OF ROUND
+
         //call only once, when round starts, to garuntee no more players are joining,
         //you will announce to other clients you died without leaving body behind.
 
@@ -17,7 +20,8 @@ public class FakeDeathCommand : ICommand {
         //you will revive in everyone's world when the round ends.
         //just don't move to not update your position to other clients
 
-        Setting.EnableFakeDeath = !Setting.EnableFakeDeath;
+
+        Setting.EnableFakeDeath = true;
 
         _ = player.Reflect().InvokeInternalMethod(
             "KillPlayerServerRpc",
