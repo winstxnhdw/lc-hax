@@ -5,7 +5,7 @@ using Hax;
 [Command("/build")]
 public class BuildCommand : ICommand {
     Result PlaceUnlockable(Unlockable unlockable, Camera camera) {
-        if (!Helper.GetUnlockable(unlockable).IsNotNull(out PlaceableShipObject shipObject)) {
+        if (Helper.GetUnlockable(unlockable) is not PlaceableShipObject shipObject) {
             return new Result(message: "Unlockable is not found or placeable!");
         }
 
@@ -28,7 +28,7 @@ public class BuildCommand : ICommand {
             return;
         }
 
-        if (!Helper.CurrentCamera.IsNotNull(out Camera camera)) {
+        if (Helper.CurrentCamera is not Camera camera) {
             Chat.Print("Camera not found!");
             return;
         }

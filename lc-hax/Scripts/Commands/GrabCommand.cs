@@ -59,12 +59,12 @@ public class GrabCommand : ICommand {
     }
 
     public void Execute(ReadOnlySpan<string> args) {
-        if (!Helper.ShipBuildModeManager.IsNotNull(out ShipBuildModeManager shipBuildModeManager)) {
+        if (Helper.ShipBuildModeManager is not ShipBuildModeManager shipBuildModeManager) {
             Chat.Print("ShipBuildModeManager not found!");
             return;
         }
 
-        if (!Helper.LocalPlayer.IsNotNull(out PlayerControllerB localPlayer)) {
+        if (Helper.LocalPlayer is not PlayerControllerB localPlayer) {
             Chat.Print("Player not found!");
             return;
         }

@@ -9,7 +9,7 @@ public class EndCommand : ICommand {
             Helper.StartOfRound?.EndGameServerRpc(-1);
         }
 
-        else if (Helper.GetPlayer(args[0]).IsNotNull(out PlayerControllerB player)) {
+        else if (Helper.GetPlayer(args[0]) is PlayerControllerB player) {
             Helper.StartOfRound?.EndGameServerRpc((int)player.playerClientId);
         }
     }

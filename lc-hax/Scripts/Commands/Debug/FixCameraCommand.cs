@@ -5,10 +5,7 @@ using Hax;
 [DebugCommand("/fixcamera")]
 public class FixCameraCommand : ICommand {
     public void Execute(ReadOnlySpan<string> _) {
-        if (!Helper.LocalPlayer.IsNotNull(out PlayerControllerB localPlayer)) {
-            Chat.Print("Local player not found!");
-            return;
-        }
+        if (Helper.LocalPlayer is not PlayerControllerB localPlayer) return;
 
         Helper.Terminal?
               .Reflect()

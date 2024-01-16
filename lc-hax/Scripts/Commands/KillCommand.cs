@@ -5,8 +5,7 @@ using Hax;
 
 [Command("/kill")]
 public class KillCommand : ICommand {
-    void ForEachEnemy(Action<EnemyAI> action) =>
-        Helper.FindObjects<EnemyAI>().ForEach(action);
+    void ForEachEnemy(Action<EnemyAI> action) => Helper.FindObjects<EnemyAI>().ForEach(action);
 
     Result KillSelf() {
         bool EnableDemigodMode = Setting.EnableDemigodMode;
@@ -21,7 +20,7 @@ public class KillCommand : ICommand {
     }
 
     Result KillTargetPlayer(ReadOnlySpan<string> args) {
-        if (!Helper.GetActivePlayer(args[0]).IsNotNull(out PlayerControllerB targetPlayer)) {
+        if (Helper.GetActivePlayer(args[0]) is not PlayerControllerB targetPlayer) {
             return new Result(message: "Player not found!");
         }
 
@@ -36,9 +35,7 @@ public class KillCommand : ICommand {
 
     Result KillAllEnemies() {
         this.ForEachEnemy(enemy => {
-            if (Helper.LocalPlayer.IsNotNull(out PlayerControllerB localPlayer) &&
-                enemy is NutcrackerEnemyAI nutcracker
-            ) {
+            if (Helper.LocalPlayer is PlayerControllerB localPlayer && enemy is NutcrackerEnemyAI nutcracker) {
                 nutcracker.ChangeEnemyOwnerServerRpc(localPlayer.actualClientId);
                 nutcracker.DropGunServerRpc(Vector3.zero);
             }

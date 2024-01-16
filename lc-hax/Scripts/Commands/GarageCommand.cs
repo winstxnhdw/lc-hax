@@ -4,7 +4,7 @@ using Hax;
 [Command("/garage")]
 public class GarageCommand : ICommand {
     public void Execute(ReadOnlySpan<string> _) {
-        if (!Helper.RoundManager.IsNotNull(out RoundManager roundManager)) {
+        if (Helper.RoundManager is not RoundManager roundManager) {
             Chat.Print("RoundManager not found!");
             return;
         }
@@ -15,7 +15,7 @@ public class GarageCommand : ICommand {
         }
 
         HaxObjects.Instance?.InteractTriggers.ForEach(nullableIteractTrigger => {
-            if (!nullableIteractTrigger.IsNotNull(out InteractTrigger interactTrigger)) return;
+            if (nullableIteractTrigger.Unfake() is not InteractTrigger interactTrigger) return;
             if (interactTrigger.name is not "Cube" || interactTrigger.transform.parent.name is not "Cutscenes") return;
 
             interactTrigger.randomChancePercentage = 100;

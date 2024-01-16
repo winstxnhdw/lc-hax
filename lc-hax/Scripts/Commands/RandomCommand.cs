@@ -5,6 +5,10 @@ using Hax;
 
 [Command("/random")]
 public class RandomCommand : ICommand {
+    public ShipTeleporter? InverseTeleporter => Helper.ShipTeleporters.First(
+        teleporter => teleporter is not null && teleporter.isInverseTeleporter
+    );
+
     bool InverseTeleporterExists() {
         HaxObjects.Instance?.ShipTeleporters.Renew();
         return Helper.InverseTeleporter is not null;
@@ -12,7 +16,7 @@ public class RandomCommand : ICommand {
 
     ObjectPlacements<Transform, ShipTeleporter>? GetInverseTeleporterPlacements(Component target) {
         if (!this.InverseTeleporterExists()) return null;
-        if (!Helper.InverseTeleporter.IsNotNull(out ShipTeleporter inverseTeleporter)) return null;
+        if (this.InverseTeleporter is not ShipTeleporter inverseTeleporter) return null;
 
         Vector3 rotationOffset = new(-90.0f, 0.0f, 0.0f);
 
@@ -37,7 +41,7 @@ public class RandomCommand : ICommand {
     }
 
     ObjectPlacements<Transform, PlaceableShipObject>? GetCupboardPlacements(Component target) {
-        if (!Helper.GetUnlockable(Unlockable.CUPBOARD).IsNotNull(out PlaceableShipObject cupboard)) return null;
+        if (Helper.GetUnlockable(Unlockable.CUPBOARD) is not PlaceableShipObject cupboard) return null;
 
         ObjectPlacement<Transform, PlaceableShipObject> cupboardPlacement = new(
             target.transform,
@@ -89,7 +93,7 @@ public class RandomCommand : ICommand {
             return;
         }
 
-        if (!Helper.GetActivePlayer(args[0]).IsNotNull(out PlayerControllerB targetPlayer)) {
+        if (Helper.GetActivePlayer(args[0]) is not PlayerControllerB targetPlayer) {
             Chat.Print("Player not found!");
             return;
         }
