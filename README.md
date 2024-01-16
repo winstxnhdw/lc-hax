@@ -108,6 +108,7 @@ The complete feature set includes the following.
 | Give or take money            | `/money <amount>`                              |
 | Add or remove experience      | `/xp <amount>`                                 |
 | Buy an item                   | `/buy <item> <quantity=1>`                     |
+| Grab scrap(s)                 | `/grab <item?>`                                |
 | Block incoming credits        | `/block credits`                               |
 | Block any radar targets       | `/block radar`                                 |
 | Become untargetable           | `/block enemy`                                 |
@@ -120,7 +121,6 @@ The complete feature set includes the following.
 | End the game                  | `/end <player=-1>`                             |
 | Start the game                | `/start`                                       |
 | List all players              | `/players`                                     |
-| Grab all scraps               | `/grab`                                        |
 | Deposit all valuable items    | `/sell`                                        |
 | Toggle the Beta badge         | `/beta`                                        |
 | Get coordinates               | `/xyz`                                         |
