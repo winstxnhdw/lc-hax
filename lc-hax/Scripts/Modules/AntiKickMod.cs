@@ -10,7 +10,7 @@ public sealed class AntiKickMod : MonoBehaviour {
 
     void OnDisable() {
         InputListener.onBackslashPress -= this.ToggleAntiKick;
-        GameListener.onGameStart += this.PrintInvisibleWarning;
+        GameListener.onGameStart -= this.PrintInvisibleWarning;
     }
 
     void ToggleAntiKick() {
