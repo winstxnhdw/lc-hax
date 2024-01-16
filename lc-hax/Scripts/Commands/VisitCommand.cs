@@ -11,7 +11,7 @@ public class VisitCommand : ICommand {
             return;
         }
 
-        if (!Helper.Terminal.IsNotNull(out Terminal terminal)) {
+        if (Helper.Terminal is not Terminal terminal) {
             Chat.Print("Terminal not found!");
             return;
         }
@@ -21,13 +21,18 @@ public class VisitCommand : ICommand {
             return;
         }
 
+        if (startOfRound.travellingToNewLevel) {
+            Chat.Print("You cannot use this command while travelling to a new level!");
+            return;
+        }
+
         Dictionary<string, int> levels = startOfRound.levels.ToDictionary(
             level => level.name[..(level.name.Length - "Level".Length)].ToLower(),
             level => level.levelID
         );
 
         string key = Helper.FuzzyMatch(args[0].ToLower(), [.. levels.Keys]);
-        Helper.StartOfRound?.ChangeLevelServerRpc(levels[key], terminal.groupCredits);
+        startOfRound.ChangeLevelServerRpc(levels[key], terminal.groupCredits);
 
         Chat.Print($"Visiting {key.ToTitleCase()}!");
     }
