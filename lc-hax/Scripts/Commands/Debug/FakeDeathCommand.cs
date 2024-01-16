@@ -20,7 +20,6 @@ public class FakeDeathCommand : ICommand {
         //you will revive in everyone's world when the round ends.
         //just don't move to not update your position to other clients
 
-
         Setting.EnableFakeDeath = true;
 
         _ = player.Reflect().InvokeInternalMethod(
