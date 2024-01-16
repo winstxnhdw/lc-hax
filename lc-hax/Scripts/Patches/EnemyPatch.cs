@@ -9,8 +9,8 @@ class EnemyPatch {
     static void Prefix(ref float ___updatePositionThreshold) => ___updatePositionThreshold = 0.0f;
 
     [HarmonyPatch(nameof(EnemyAI.CancelSpecialAnimationWithPlayer))]
-    static void Prefix(ref PlayerControllerB ___inSpecialAnimationWithPlayer) {
-        if (!___inSpecialAnimationWithPlayer.IsNotNull(out PlayerControllerB player)) return;
-        player.disableLookInput = false;
+    static void Prefix(ref PlayerControllerB? ___inSpecialAnimationWithPlayer) {
+        if (___inSpecialAnimationWithPlayer is null) return;
+        ___inSpecialAnimationWithPlayer.disableLookInput = false;
     }
 }

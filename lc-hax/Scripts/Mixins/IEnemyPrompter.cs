@@ -100,7 +100,6 @@ public class EnemyPromptHandler {
     void HandleBee(RedLocustBees bee, PlayerControllerB targetPlayer, bool willTeleportEnemy) {
         this.TeleportEnemyToPlayer(bee, targetPlayer, willTeleportEnemy, true);
         this.SetBehaviourState(bee, BehaviourState.AGGRAVATED);
-        bee.hive.isHeld = true;
     }
 
     void HandleHoardingBug(HoarderBugAI hoardingBug, PlayerControllerB targetPlayer, bool willTeleportEnemy) {

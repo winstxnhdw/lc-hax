@@ -5,6 +5,15 @@ on:
     paths:
       - .github/workflows/main.yml
       - lc-hax/**
+  pull_request_target:
+    paths:
+      - .github/workflows/formatter.yml
+      - .editorconfig
+      - lc-hax/Scripts/**/*.cs
+
+
+env:
+  NUGET_PACKAGES: ${{ github.workspace }}/lc-hax/References/NuGet
 
 jobs:
   build:
@@ -19,6 +28,8 @@ jobs:
       uses: actions/setup-dotnet@v4
       with:
         dotnet-version: 8.0.x
+        cache: true
+        cache-dependency-path: lc-hax
 
     - name: Build
       run: dotnet build lc-hax

@@ -9,11 +9,18 @@ public class KillCommand : ICommand {
         Helper.FindObjects<EnemyAI>().ForEach(action);
 
     Result KillSelf() {
+        bool EnableDemigodMode = Setting.EnableDemigodMode;
+        bool EnableGodMode = Setting.EnableGodMode;
+        Setting.EnableDemigodMode = false;
+        Setting.EnableGodMode = false;
         Helper.LocalPlayer?.KillPlayer();
+        Setting.EnableDemigodMode = EnableDemigodMode;
+        Setting.EnableGodMode = EnableGodMode;
+
         return new Result(true);
     }
 
-    Result KillTargetPlayer(string[] args) {
+    Result KillTargetPlayer(ReadOnlySpan<string> args) {
         if (!Helper.GetActivePlayer(args[0]).IsNotNull(out PlayerControllerB targetPlayer)) {
             return new Result(message: "Player not found!");
         }
@@ -47,7 +54,7 @@ public class KillCommand : ICommand {
         Chat.Print(result.Message);
     }
 
-    public void Execute(string[] args) {
+    public void Execute(ReadOnlySpan<string> args) {
         if (args.Length is 0) {
             this.HandleResult(this.KillSelf());
             return;

@@ -1,0 +1,58 @@
+name: Format
+
+on:
+  push:
+    branches: main
+    paths:
+      - .github/workflows/formatter.yml
+      - .editorconfig
+      - lc-hax/Scripts/**/*.cs
+  pull_request_target:
+    paths:
+      - .github/workflows/formatter.yml
+      - .editorconfig
+      - lc-hax/Scripts/**/*.cs
+
+permissions:
+  contents: write
+
+jobs:
+  format:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          show-progress: false
+          repository: ${{ github.event.pull_request.head.repo.full_name }}
+          ref: ${{ github.head_ref }}
+
+      - name: Cache .NET tools
+        uses: actions/cache@v3
+        with:
+          path: ~/.nuget/packages
+          key: dotnet-tools-${{ runner.os }}-${{ hashFiles('.config/dotnet-tools.json') }}
+          restore-keys: dotnet-tools-${{ runner.os }}-
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 8.0.x
+
+      - name: Restore tools
+        run: dotnet tool restore
+
+      - name: Format scripts
+        run: dotnet format lc-hax
+
+      - name: Set Git config
+        run: |
+          git config user.email github-actions[bot]@users.noreply.github.com
+          git config user.name github-actions[bot]
+
+      - name: Commit changes
+        run: |
+          git add .
+          git commit -m "style: format scripts" || true
+          git push

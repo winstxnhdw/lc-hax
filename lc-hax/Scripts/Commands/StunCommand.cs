@@ -1,9 +1,10 @@
+using System;
 using UnityEngine;
 using Hax;
 
 [Command("/stun")]
 public class StunCommand : IStun, ICommand {
-    public void Execute(string[] args) {
+    public void Execute(ReadOnlySpan<string> args) {
         if (args.Length is 0) {
             Chat.Print("Usage: /stun <duration>");
             return;

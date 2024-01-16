@@ -1,12 +1,12 @@
+using System;
+using System.Linq;
 using System.Collections.Generic;
 using GameNetcodeStuff;
 using Hax;
-using System.Linq;
 
 [Command("/sell")]
 public class SellCommand : ICommand {
-
-    public void Execute(string[] args) {
+    public void Execute(ReadOnlySpan<string> _) {
         if (Helper.LocalPlayer is not PlayerControllerB player) return;
 
         if (Helper.FindObject<DepositItemsDesk>().Unfake() is not DepositItemsDesk depositItemsDesk) {

@@ -12,9 +12,8 @@ class InvisiblePatch {
     static bool LastExhausted { get; set; }
     static bool LastIsPlayerGrounded { get; set; }
 
-    [HarmonyPrefix]
     [HarmonyPatch("UpdatePlayerPositionServerRpc")]
-    static void UpdatePlayerPositionServerRpcPrefix(
+    static void Prefix(
         ref Vector3 newPos,
         ref bool inElevator,
         ref bool exhausted,
@@ -33,17 +32,15 @@ class InvisiblePatch {
         isPlayerGrounded = true;
     }
 
-    [HarmonyPrefix]
     [HarmonyPatch("UpdatePlayerPositionClientRpc")]
-    static void UpdatePlayerPositionClientRpcPrefix(
-        PlayerControllerB __instance,
+    static void Prefix(
+        ulong ___actualClientId,
         ref Vector3 newPos,
         ref bool inElevator,
         ref bool exhausted,
         ref bool isPlayerGrounded
     ) {
-        if (!Setting.EnableInvisible) return;
-        if (Helper.LocalPlayer?.actualClientId != __instance.actualClientId) return;
+        if (!Setting.EnableInvisible || Helper.LocalPlayer?.actualClientId != ___actualClientId) return;
 
         newPos = InvisiblePatch.LastNewPos;
         inElevator = InvisiblePatch.LastInElevator;

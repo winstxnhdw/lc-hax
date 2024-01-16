@@ -1,17 +1,51 @@
+using System;
 using Quickenshtein;
 
 namespace Hax;
 
 public static partial class Helper {
-    public static string? FuzzyMatch(string query, string[] strings) {
-        int lowestDistance = int.MaxValue;
-        string? closestMatch = null;
+    static int GetSimilarityWeight(ReadOnlySpan<char> query, ReadOnlySpan<char> original) {
+        int distancePenalty = Levenshtein.GetDistance(query, original);
+        int commonalityReward = LongestCommonSubstring(query, original) * -2;
 
-        for (int i = 0; i < strings.Length; i++) {
-            int distance = Levenshtein.GetDistance(query, strings[i]);
+        return distancePenalty + commonalityReward;
+    }
 
-            if (distance < lowestDistance) {
-                lowestDistance = distance;
+    static int LongestCommonSubstring(ReadOnlySpan<char> query, ReadOnlySpan<char> original) {
+        int originalLength = original.Length;
+        int queryLength = query.Length;
+
+        int[,] table = new int[2, originalLength + 1];
+        int result = 0;
+
+        for (int i = 1; i <= queryLength; i++) {
+            for (int j = 1; j <= originalLength; j++) {
+                if (query[i - 1] == original[j - 1]) {
+                    table[i % 2, j] = table[(i - 1) % 2, j - 1] + 1;
+
+                    if (table[i % 2, j] > result) {
+                        result = table[i % 2, j];
+                    }
+                }
+
+                else {
+                    table[i % 2, j] = 0;
+                }
+            }
+        }
+
+        return result;
+    }
+
+    public static string FuzzyMatch(ReadOnlySpan<char> query, ReadOnlySpan<string> strings) {
+        string closestMatch = strings[0];
+        int lowestWeight = GetSimilarityWeight(query, strings[0]);
+
+        for (int i = 1; i < strings.Length; i++) {
+            int totalWeight = GetSimilarityWeight(query, strings[i]);
+
+            if (totalWeight < lowestWeight) {
+                lowestWeight = totalWeight;
                 closestMatch = strings[i];
             }
         }

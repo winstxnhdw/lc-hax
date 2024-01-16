@@ -62,10 +62,10 @@ The complete feature set includes the following.
 - Grab through walls
 - Pocket any item
 - Instant interact
-- Build anywhere
 - No reload
 - No item usage cooldown
 - No lobby refresh delay
+- No build constraints
 - Always sane
 - Always lightweight
 - Always show HUD
@@ -89,9 +89,6 @@ The complete feature set includes the following.
 | Teleport inside entrance      | `/enter`                                       |
 | Teleport to a player          | `/tp <player>`                                 |
 | Teleport to a location        | `/tp <x> <y> <z>`                              |
-| Teleport player to player     | `/tp <player> <player>`                        |
-| Teleport player to a location | `/tp <player> <x> <y> <z>`                     |
-| Teleports the player to hell  | `/void <player>`                               |
 | Teleport back to ship         | `/home <player?>`                              |
 | Teleport enemies to player    | `/mob <player>`                                |
 | Inverse teleport a player     | `/random <player>`                             |
@@ -104,13 +101,14 @@ The complete feature set includes the following.
 | Kill all players              | `/kill --all`                                  |
 | Kill all enemies              | `/kill --enemy`                                |
 | Kill player with animation    | `/fatality <player> <enemy>`                   |
-| Kill with pumpkin             | `/pumpkin <player> <duration>`                 |
 | Poison a player               | `/poison <player> <damage> <delay> <duration>` |
 | Spoof a server message        | `/say <player> <message>`                      |
 | Transmit a signal             | `/signal <message>`                            |
 | Modify shovel damage          | `/shovel <force=1>`                            |
 | Give or take money            | `/money <amount>`                              |
 | Add or remove experience      | `/xp <amount>`                                 |
+| Buy an item                   | `/buy <item> <quantity=1>`                     |
+| Grab scrap(s)                 | `/grab <item?>`                                |
 | Block incoming credits        | `/block credits`                               |
 | Block any radar targets       | `/block radar`                                 |
 | Become untargetable           | `/block enemy`                                 |
@@ -123,12 +121,10 @@ The complete feature set includes the following.
 | End the game                  | `/end <player=-1>`                             |
 | Start the game                | `/start`                                       |
 | List all players              | `/players`                                     |
-| Grab all scraps               | `/grab`                                        |
 | Deposit all valuable items    | `/sell`                                        |
 | Toggle the Beta badge         | `/beta`                                        |
 | Get coordinates               | `/xyz`                                         |
 | Toggle God mode               | `/god`                                         |
-| Immune to non-instakill       | `/demigod`                                     |
 | Toggle rapid item usage       | `/rapid`                                       |
 | Unlock all doors              | `/unlock`                                      |
 | Lock all gates                | `/lock`                                        |

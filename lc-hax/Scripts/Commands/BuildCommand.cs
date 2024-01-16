@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using Hax;
 
@@ -21,7 +22,7 @@ public class BuildCommand : ICommand {
         return new Result(true);
     }
 
-    public void Execute(string[] args) {
+    public void Execute(ReadOnlySpan<string> args) {
         if (args.Length is 0) {
             Chat.Print("Usage: /build <unlockable>");
             return;

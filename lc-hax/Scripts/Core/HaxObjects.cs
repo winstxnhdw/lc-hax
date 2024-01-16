@@ -23,7 +23,7 @@ public class HaxObjects : MonoBehaviour {
         this.InteractTriggers = new(this);
         this.SteamValves = new(this, 5.0f);
         this.EnemyAIs = new(this, 2.0f);
-        this.GrabbableObjects = new(this, 2.0f);
+        this.GrabbableObjects = new(this, 4.0f);
 
         HaxObjects.Instance = this;
     }
