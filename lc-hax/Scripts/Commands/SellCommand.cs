@@ -53,7 +53,7 @@ public class SellCommand : ICommand {
                 .OrderByDescending(grabbableObject => grabbableObject != null ? grabbableObject.scrapValue : 0)
                 .ToList();
 
-            System.Random random = new();
+            Random random = new();
             int remainingAmount = value;
 
             while (scraps != null && remainingAmount > 0 && scraps.Count > 0) {
