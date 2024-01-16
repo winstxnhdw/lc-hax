@@ -11,7 +11,7 @@ public class RandomCommand : ICommand {
 
     bool InverseTeleporterExists() {
         HaxObjects.Instance?.ShipTeleporters.Renew();
-        return Helper.InverseTeleporter is not null;
+        return this.InverseTeleporter is not null;
     }
 
     ObjectPlacements<Transform, ShipTeleporter>? GetInverseTeleporterPlacements(Component target) {
