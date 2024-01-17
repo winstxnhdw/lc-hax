@@ -4,8 +4,7 @@ namespace Hax;
 
 public static partial class Helper {
     public static Camera? CurrentCamera =>
-        Helper.LocalPlayer?.gameplayCamera.IsNotNull(out Camera gameplayCamera) is true &&
-        gameplayCamera.enabled
+        Helper.LocalPlayer?.gameplayCamera is Camera gameplayCamera && gameplayCamera.enabled
             ? gameplayCamera
             : Helper.StartOfRound?.spectateCamera;
 }

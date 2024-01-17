@@ -8,7 +8,7 @@ using Hax;
 [HarmonyPatch(typeof(HUDManager), "EnableChat_performed")]
 class EnableChatPatch {
     static void Prefix(ref PlayerControllerB ___localPlayer, ref bool __state) {
-        if (!___localPlayer.IsNotNull(out PlayerControllerB localPlayer)) return;
+        if (___localPlayer is not PlayerControllerB localPlayer) return;
 
         __state = localPlayer.isPlayerDead;
         localPlayer.isPlayerDead = false;
@@ -23,7 +23,7 @@ class SubmitChatPatch {
         __state = ___localPlayer.isPlayerDead;
         ___localPlayer.isPlayerDead = false;
 
-        if (!Helper.HUDManager.IsNotNull(out HUDManager hudManager)) {
+        if (Helper.HUDManager is not HUDManager hudManager) {
             return true;
         }
 

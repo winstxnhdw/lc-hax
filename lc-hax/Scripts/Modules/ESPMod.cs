@@ -27,7 +27,7 @@ public class ESPMod : MonoBehaviour {
     }
 
     void OnGUI() {
-        if (!this.InGame || !Helper.CurrentCamera.IsNotNull(out Camera camera)) return;
+        if (!this.InGame || Helper.CurrentCamera is not Camera camera) return;
 
         this.PlayerRenderers.ForEach(rendererPair => {
             if (rendererPair.GameObject.isPlayerDead || !rendererPair.GameObject.isPlayerControlled) return;
@@ -64,7 +64,7 @@ public class ESPMod : MonoBehaviour {
         ));
 
         HaxObjects.Instance?.EnemyAIs.ForEach(nullableEnemy => {
-            if (!nullableEnemy.IsNotNull(out EnemyAI enemy)) return;
+            if (nullableEnemy.Unfake() is not EnemyAI enemy) return;
             if (enemy.isEnemyDead) return;
             if (enemy is DocileLocustBeesAI or DoublewingAI) return;
 
@@ -72,7 +72,7 @@ public class ESPMod : MonoBehaviour {
                 ? enemy.meshRenderers.First()
                 : enemy.skinnedMeshRenderers.First();
 
-            if (!nullableRenderer.IsNotNull(out Renderer renderer)) {
+            if (nullableRenderer.Unfake() is not Renderer renderer) {
                 return;
             }
 
@@ -85,13 +85,13 @@ public class ESPMod : MonoBehaviour {
         });
 
         HaxObjects.Instance?.GrabbableObjects.Objects.ForEach(nullableGrabbableObject => {
-            if (!nullableGrabbableObject.IsNotNull(out GrabbableObject grabbableObject)) return;
+            if (nullableGrabbableObject.Unfake() is not GrabbableObject grabbableObject) return;
 
             Renderer? nullableRenderer = grabbableObject is LungProp lungProp
                 ? lungProp.lungDeviceMesh
                 : grabbableObject.mainObjectRenderer;
 
-            if (!nullableRenderer.IsNotNull(out Renderer renderer)) {
+            if (nullableRenderer.Unfake() is not Renderer renderer) {
                 return;
             }
 
@@ -107,7 +107,7 @@ public class ESPMod : MonoBehaviour {
             );
         });
 
-        if (Helper.StartOfRound?.shipBounds.IsNotNull(out Collider shipBounds) is true) {
+        if (Helper.StartOfRound?.shipBounds is Collider shipBounds) {
             this.RenderBounds(
                 camera,
                 shipBounds.bounds,

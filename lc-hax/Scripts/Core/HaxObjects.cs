@@ -17,7 +17,7 @@ public class HaxObjects : MonoBehaviour {
     public MultiObjectPool<GrabbableObject> GrabbableObjects { get; private set; }
 
     void Awake() {
-        this.DepositItemsDesk = new(this);
+        this.DepositItemsDesk = new(this, 3.0f);
         this.ShipTeleporters = new(this);
         this.LocalVolumetricFogs = new(this);
         this.InteractTriggers = new(this);

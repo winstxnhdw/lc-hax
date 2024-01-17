@@ -7,38 +7,39 @@ namespace Hax;
 public sealed class ClearVisionMod : MonoBehaviour {
     IEnumerator SetNightVision() {
         WaitForEndOfFrame waitForEndOfFrame = new();
+
         while (true) {
-            if (!Helper.StartOfRound.IsNotNull(out StartOfRound startOfRound)) {
+            if (Helper.StartOfRound is not StartOfRound startOfRound) {
                 yield return waitForEndOfFrame;
                 continue;
             }
 
-            if (!Helper.CurrentCamera.IsNotNull(out Camera camera)) {
+            if (Helper.CurrentCamera is not Camera camera) {
                 yield return waitForEndOfFrame;
                 continue;
             }
 
-            if (!TimeOfDay.Instance.IsNotNull(out TimeOfDay timeOfDay)) {
+            if (TimeOfDay.Instance.Unfake() is not TimeOfDay timeOfDay) {
                 yield return waitForEndOfFrame;
                 continue;
             }
 
-            if (!timeOfDay.sunAnimator.IsNotNull(out Animator sunAnimator)) {
+            if (timeOfDay.sunAnimator.Unfake() is not Animator sunAnimator) {
                 yield return waitForEndOfFrame;
                 continue;
             }
 
-            if (!timeOfDay.sunDirect.IsNotNull(out Light sunDirect)) {
+            if (timeOfDay.sunDirect.Unfake() is not Light sunDirect) {
                 yield return waitForEndOfFrame;
                 continue;
             }
 
-            if (!timeOfDay.sunIndirect.IsNotNull(out Light sunIndirect)) {
+            if (timeOfDay.sunIndirect.Unfake() is not Light sunIndirect) {
                 yield return waitForEndOfFrame;
                 continue;
             }
 
-            if (!sunIndirect.TryGetComponent(out HDAdditionalLightData lightData)) {
+            if (sunIndirect.TryGetComponent(out HDAdditionalLightData lightData)) {
                 yield return waitForEndOfFrame;
                 continue;
             }

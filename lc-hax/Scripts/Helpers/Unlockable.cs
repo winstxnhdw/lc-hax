@@ -21,10 +21,7 @@ public static partial class Helper {
     }
 
     public static void BuyUnlockable(Unlockable unlockable) {
-        if (!Helper.Terminal.IsNotNull(out Terminal terminal)) {
-            Chat.Print("Terminal not found!");
-            return;
-        }
+        if (Helper.Terminal is not Terminal terminal) return;
 
         Helper.StartOfRound?.BuyShipUnlockableServerRpc(
             (int)unlockable,

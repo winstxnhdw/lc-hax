@@ -42,7 +42,7 @@ public class InputListener : MonoBehaviour {
     };
 
     void Update() {
-        if (Helper.LocalPlayer.IsNotNull(out PlayerControllerB player) && player.isTypingChat) return;
+        if (Helper.LocalPlayer?.isTypingChat is true) return;
 
         foreach (KeyValuePair<Func<bool>, Action> keyAction in this.InputActions) {
             if (!keyAction.Key()) continue;

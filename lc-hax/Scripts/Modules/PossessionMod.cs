@@ -9,7 +9,7 @@ namespace Hax;
 public sealed class PossessionMod : MonoBehaviour {
     EnemyAI? EnemyToPossess { get; set; } = null;
     bool FirstUpdate { get; set; } = true;
-    RigidbodyMovement? RBKeyboard { get; set; } = null;
+    RigidbodyMovement? RigidbodyKeyboard { get; set; } = null;
     KeyboardMovement? Keyboard { get; set; } = null;
     MousePan? MousePan { get; set; } = null;
 
@@ -19,7 +19,7 @@ public sealed class PossessionMod : MonoBehaviour {
     bool noClip = false;
 
     void Awake() {
-        this.RBKeyboard = this.gameObject.AddComponent<RigidbodyMovement>();
+        this.RigidbodyKeyboard = this.gameObject.AddComponent<RigidbodyMovement>();
         this.Keyboard = this.gameObject.AddComponent<KeyboardMovement>();
         this.MousePan = this.gameObject.AddComponent<MousePan>();
         this.enabled = false;
@@ -47,11 +47,7 @@ public sealed class PossessionMod : MonoBehaviour {
         Setting.RealisticPossessionEnabled = !Setting.RealisticPossessionEnabled;
         Chat.Print($"Realistic Possession: {Setting.RealisticPossessionEnabled}");
 
-        if (!this.EnemyToPossess.IsNotNull(out EnemyAI enemy)) {
-            return;
-        }
-
-        if (!enemy.agent.IsNotNull(out NavMeshAgent navMeshAgent)) {
+        if (this.EnemyToPossess?.agent.Unfake() is not NavMeshAgent navMeshAgent) {
             return;
         }
 
@@ -67,20 +63,20 @@ public sealed class PossessionMod : MonoBehaviour {
     }
 
     private void UpdateComponentsOnCurrentState(bool thisGameObjectIsEnabled) {
-        if (!this.MousePan.IsNotNull(out MousePan mousePan)) {
+        if (this.MousePan is not MousePan mousePan) {
             return;
         }
 
-        if (!this.RBKeyboard.IsNotNull(out RigidbodyMovement rbKeyboard)) {
+        if (this.RigidbodyKeyboard is not RigidbodyMovement rigidbodyKeyboard) {
             return;
         }
 
-        if (!this.Keyboard.IsNotNull(out KeyboardMovement keyboard)) {
+        if (this.Keyboard is not KeyboardMovement keyboard) {
             return;
         }
 
         mousePan.enabled = thisGameObjectIsEnabled;
-        rbKeyboard.enabled = !this.noClip;
+        rigidbodyKeyboard.enabled = !this.noClip;
         keyboard.enabled = this.noClip;
     }
 
@@ -94,25 +90,20 @@ public sealed class PossessionMod : MonoBehaviour {
     }
 
     private void EndOfFrameUpdate() {
-        if (!this.RBKeyboard.IsNotNull(out RigidbodyMovement rbKeyboard) ||
-            !this.EnemyToPossess.IsNotNull(out EnemyAI enemy) ||
-            !Helper.CurrentCamera.IsNotNull(out Camera camera) ||
-            !camera.enabled
-        ) {
-            return;
-        }
-
+        if (this.RigidbodyKeyboard is not RigidbodyMovement rigidbodyKeyboard) return;
+        if (this.EnemyToPossess is not EnemyAI enemy) return;
+        if (Helper.CurrentCamera is not Camera camera || !camera.enabled) return;
 
         if (this.FirstUpdate) {
             this.SetEnemyColliders(enemy, false);
 
             //only works if you enable it before FirstUpdate happens
-            if (enemy.agent.IsNotNull(out NavMeshAgent agent)) {
+            if (enemy.agent.Unfake() is NavMeshAgent agent) {
                 agent.updatePosition = Setting.RealisticPossessionEnabled;
                 agent.updateRotation = Setting.RealisticPossessionEnabled;
             }
 
-            rbKeyboard.Init();
+            rigidbodyKeyboard.Init();
             this.transform.position = enemy.transform.position;
             this.UpdateComponentsOnCurrentState(true);
         }
@@ -125,7 +116,7 @@ public sealed class PossessionMod : MonoBehaviour {
     }
 
     void UpdateEnemyPositionToHere(EnemyAI enemy) {
-        if (!Helper.LocalPlayer.IsNotNull(out PlayerControllerB localPlayer)) return;
+        if (Helper.LocalPlayer is not PlayerControllerB localPlayer) return;
 
         enemy.ChangeEnemyOwnerServerRpc(localPlayer.actualClientId);
         enemy.updatePositionThreshold = 0;
@@ -136,8 +127,7 @@ public sealed class PossessionMod : MonoBehaviour {
     }
 
     void SetEnemyColliders(EnemyAI enemy, bool enabled) {
-        if (!enemy.GetComponentsInChildren<Collider>().IsNotNull(out Collider[] enemyColliders)) return;
-        enemyColliders.ForEach(c => c.enabled = enabled);
+        enemy.GetComponentsInChildren<Collider>().ForEach(c => c.enabled = enabled);
     }
 
     public void Possess(EnemyAI enemy) {
@@ -148,10 +138,10 @@ public sealed class PossessionMod : MonoBehaviour {
     }
 
     public void Unpossess() {
-        if (this.EnemyToPossess.IsNotNull(out EnemyAI previousEnemy)) {
+        if (this.EnemyToPossess is EnemyAI previousEnemy) {
             previousEnemy.updatePositionThreshold = 1;
 
-            if (previousEnemy.agent.IsNotNull(out NavMeshAgent navMeshAgent)) {
+            if (previousEnemy.agent.Unfake() is NavMeshAgent navMeshAgent) {
                 navMeshAgent.updatePosition = true;
                 navMeshAgent.updateRotation = true;
                 this.UpdateEnemyPositionToHere(previousEnemy);

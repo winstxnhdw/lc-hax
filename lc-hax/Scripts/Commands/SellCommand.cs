@@ -70,7 +70,7 @@ public class SellCommand : ICommand {
     public void Execute(ReadOnlySpan<string> args) {
         if (Helper.LocalPlayer is not PlayerControllerB player) return;
         if (Helper.StartOfRound is not StartOfRound startOfRound) return;
-        if (Helper.FindObject<DepositItemsDesk>() is not DepositItemsDesk depositItemsDesk) {
+        if (HaxObjects.Instance?.DepositItemsDesk.Object.Unfake() is not DepositItemsDesk depositItemsDesk) {
             Chat.Print("You must be at the company to use this command!");
             return;
         }

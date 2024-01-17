@@ -18,7 +18,7 @@ public class GameListener : MonoBehaviour {
     }
 
     void ShipDoorListener() {
-        if (!Helper.StartOfRound.IsNotNull(out StartOfRound startOfRound)) return;
+        if (Helper.StartOfRound is not StartOfRound startOfRound) return;
 
         if (startOfRound.shipHasLanded && !this.ShipLand) {
             this.ShipLand = true;

@@ -234,22 +234,14 @@ public static class EnemyPromptMixin {
         bool funnyRevive = false,
         bool willTeleportEnemies = false
     ) {
+        if (Helper.RoundManager is not RoundManager roundManager) return [];
+
         List<string> enemyNames = [];
-
-        if (!Helper.RoundManager.IsNotNull(out RoundManager roundManager)) {
-            return enemyNames;
-        }
-
-        if (funnyRevive) {
-            Chat.Print("Funny revive!");
-        }
-
         Reflector? reflector = roundManager.Reflect().InvokeInternalMethod("RefreshEnemiesList");
         EnemyPromptHandler enemyPromptHandler = new();
 
         roundManager.SpawnedEnemies.ForEach((enemy) => {
             if (enemy is DocileLocustBeesAI or DoublewingAI or BlobAI or DressGirlAI or LassoManAI) return;
-
             if (funnyRevive) {
                 enemy.isEnemyDead = false;
                 enemy.enemyHP = enemy.enemyHP <= 0 ? 1 : enemy.enemyHP;

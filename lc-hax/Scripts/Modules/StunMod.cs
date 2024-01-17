@@ -31,7 +31,7 @@ public sealed class StunMod : MonoBehaviour {
 
     void Stun() {
         if (!Setting.EnableStunOnLeftClick && !Setting.EnableHitOnLeftClick) return;
-        if (!Helper.CurrentCamera.IsNotNull(out Camera camera)) return;
+        if (Helper.CurrentCamera is not Camera camera) return;
         if (this.IsHoldingADefensiveWeapon()) return;
 
         this.RaycastHits.SphereCastForward(camera.transform).Range().ForEach(i => {
