@@ -2,6 +2,7 @@
 
 [![version-check.yml](https://github.com/winstxnhdw/lc-hax/actions/workflows/version-check.yml/badge.svg)](https://github.com/winstxnhdw/lc-hax/actions/workflows/version-check.yml)
 [![main.yml](https://github.com/winstxnhdw/lc-hax/actions/workflows/main.yml/badge.svg)](https://github.com/winstxnhdw/lc-hax/actions/workflows/main.yml)
+[![formatter.yml](https://github.com/winstxnhdw/lc-hax/actions/workflows/formatter.yml/badge.svg)](https://github.com/winstxnhdw/lc-hax/actions/workflows/formatter.yml)
 [![CodeQL](https://github.com/winstxnhdw/lc-hax/actions/workflows/github-code-scanning/codeql/badge.svg)](https://github.com/winstxnhdw/lc-hax/actions/workflows/github-code-scanning/codeql)
 [![dependabot.yml](https://github.com/winstxnhdw/lc-hax/actions/workflows/dependabot.yml/badge.svg)](https://github.com/winstxnhdw/lc-hax/actions/workflows/dependabot.yml)
 
@@ -108,7 +109,7 @@ The complete feature set includes the following.
 | Give or take money            | `/money <amount>`                              |
 | Add or remove experience      | `/xp <amount>`                                 |
 | Buy an item                   | `/buy <item> <quantity=1>`                     |
-| Deposit valuable items        | `/sell <quota?>`                               |
+| Deposit valuable item(s)      | `/sell <quota?>`                               |
 | Grab scrap(s)                 | `/grab <item?>`                                |
 | Block incoming credits        | `/block credits`                               |
 | Block any radar targets       | `/block radar`                                 |
