@@ -187,37 +187,36 @@ The `fatality` command allows you to kill a player with a custom animation. The 
 
 ### Build
 
-The arguments for the `build` command can be executed with either the unlockable index or name. The list of unlockables can be found in the following table.
+The arguments for the `build` command can be executed with either the unlockable index or name. The list of unlockables can be found in the following.
 
 > [!NOTE]\
 > Unintuitively, not all unlockables are buildable. Thus, the `build` command also doubles as a pseudo unlock function for unlockables.
 
-| ID | Name               |
-|--- |--------------------|
-| 0  | ORANGE_SUIT        |
-| 1  | GREEN_SUIT         |
-| 2  | HAZARD_SUIT        |
-| 3  | PAJAMA_SUIT        |
-| 4  | COZY_LIGHTS        |
-| 5  | TELEPORTER         |
-| 6  | TELEVISION         |
-| 7  | CUPBOARD           |
-| 8  | FILE_CABINET       |
-| 9  | TOILET             |
-| 10 | SHOWER             |
-| 11 | LIGHT_SWITCH       |
-| 12 | RECORD_PLAYER      |
-| 13 | TABLE              |
-| 14 | ROMANTIC_TABLE     |
-| 15 | BUNKBEDS           |
-| 16 | TERMINAL           |
-| 17 | SIGNAL_TRANSMITTER |
-| 18 | LOUD_HORN          |
-| 19 | INVERSE_TELEPORTER |
-| 20 | JACK_O_LANTERN     |
-| 21 | WELCOME_MAT        |
-| 22 | GOLDFISH           |
-| 23 | PLUSHIE_PAJAMA_MAN |
+- Orange Suit
+- Green Suit
+- Hazard Suit
+- Pajama Suit
+- Cozy Lights
+- Teleporter
+- Television
+- Cupboard
+- File Cabinet
+- Toilet
+- Shower
+- Light Switch
+- Record Player
+- Table
+- Romantic Table
+- Bunkbeds
+- Terminal
+- Signal Transmitter
+- Loud Horn
+- Inverse Teleporter
+- Jack O' Lantern
+- Welcome Mat
+- Goldfish
+- Plushie Pajama Man
+- Purple Suit
 
 ### Disabling Mods
 
