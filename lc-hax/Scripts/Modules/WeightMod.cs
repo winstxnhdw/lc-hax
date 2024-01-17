@@ -10,7 +10,7 @@ public sealed class WeightMod : MonoBehaviour {
         WaitForSeconds waitForOneSecond = new(1.0f);
 
         while (true) {
-            if (!Helper.LocalPlayer.IsNotNull(out PlayerControllerB player)) {
+            if (Helper.LocalPlayer is not PlayerControllerB player) {
                 yield return waitForEndOfFrame;
                 continue;
             }

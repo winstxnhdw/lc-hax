@@ -23,8 +23,8 @@ public sealed class PhantomMod : MonoBehaviour {
     }
 
     void Update() {
-        if (!PossessionMod.Instance.IsNotNull(out PossessionMod possessionMod)) return;
-        if (!Helper.CurrentCamera.IsNotNull(out Camera camera) || Helper.Try(() => !camera.enabled)) return;
+        if (PossessionMod.Instance is not PossessionMod possessionMod) return;
+        if (Helper.CurrentCamera is not Camera camera || Helper.Try(() => !camera.enabled)) return;
         if (!camera.gameObject.TryGetComponent(out KeyboardMovement keyboard)) return;
         if (!camera.gameObject.TryGetComponent(out MousePan mouse)) return;
 
@@ -68,12 +68,12 @@ public sealed class PhantomMod : MonoBehaviour {
     void LookAtPreviousPlayer() => this.LookAtPlayer(-1);
 
     void LookAtPlayer(int indexChange) {
-        if (!Setting.EnablePhantom || !Helper.CurrentCamera.IsNotNull(out Camera camera)) return;
+        if (!Setting.EnablePhantom || Helper.CurrentCamera is not Camera camera) return;
 
         int playerCount = Helper.Players?.Length ?? 0;
         this.CurrentSpectatorIndex = (this.CurrentSpectatorIndex + indexChange) % playerCount;
 
-        if (!Helper.GetActivePlayer(this.CurrentSpectatorIndex).IsNotNull(out PlayerControllerB targetPlayer)) {
+        if (Helper.GetActivePlayer(this.CurrentSpectatorIndex) is not PlayerControllerB targetPlayer) {
             this.LookAtNextPlayer();
             return;
         }
@@ -96,8 +96,10 @@ public sealed class PhantomMod : MonoBehaviour {
     }
 
     void PhantomDisabled(PlayerControllerB player, Camera camera) {
-        if (!player.cameraContainerTransform.IsNotNull(out Transform cameraParent)) return;
-        if (this.IsShiftHeld) player.TeleportPlayer(camera.transform.position);
+        if (player.cameraContainerTransform is not Transform cameraParent) return;
+        if (this.IsShiftHeld) {
+            player.TeleportPlayer(camera.transform.position);
+        }
 
         camera.transform.SetParent(cameraParent, false);
         camera.transform.localPosition = Vector3.zero;
@@ -111,7 +113,7 @@ public sealed class PhantomMod : MonoBehaviour {
             mouse.enabled = false;
         }
 
-        if (!player.gameplayCamera.IsNotNull(out Camera gameplayCamera)) {
+        if (player.gameplayCamera is not Camera gameplayCamera) {
             return;
         }
 
@@ -125,8 +127,8 @@ public sealed class PhantomMod : MonoBehaviour {
     }
 
     void TogglePhantom() {
-        if (!Helper.LocalPlayer.IsNotNull(out PlayerControllerB player)) return;
-        if (!Helper.CurrentCamera.IsNotNull(out Camera camera) || !camera.enabled) return;
+        if (Helper.LocalPlayer is not PlayerControllerB player) return;
+        if (Helper.CurrentCamera is not Camera camera || !camera.enabled) return;
 
         Setting.EnablePhantom = !Setting.EnablePhantom;
 
@@ -134,6 +136,7 @@ public sealed class PhantomMod : MonoBehaviour {
         if (player.isPlayerDead) {
             player.enabled = !Setting.EnablePhantom;
         }
+
         else {
             if (!player.enabled) {
                 player.enabled = true;

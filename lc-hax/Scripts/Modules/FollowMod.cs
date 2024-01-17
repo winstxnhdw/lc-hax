@@ -26,8 +26,8 @@ public sealed class FollowMod : MonoBehaviour {
     float AnimationBroadcastTimer { get; set; } = 0.0f;
 
     void Update() {
-        if (!Helper.LocalPlayer.IsNotNull(out PlayerControllerB localPlayer)) return;
-        if (!FollowMod.PlayerToFollow.IsNotNull(out PlayerControllerB targetPlayer)) return;
+        if (Helper.LocalPlayer is not PlayerControllerB localPlayer) return;
+        if (FollowMod.PlayerToFollow is not PlayerControllerB targetPlayer) return;
 
         if (localPlayer.isPlayerDead || targetPlayer.isPlayerDead) {
             if (FollowMod.PlayerToFollow is not null) {

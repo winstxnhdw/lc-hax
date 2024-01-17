@@ -9,7 +9,7 @@ public sealed class SaneMod : MonoBehaviour {
         WaitForEndOfFrame waitForEndOfFrame = new();
 
         while (true) {
-            if (!Helper.StartOfRound.IsNotNull(out StartOfRound startOfRound)) {
+            if (Helper.StartOfRound is not StartOfRound startOfRound) {
                 yield return waitForEndOfFrame;
                 continue;
             }

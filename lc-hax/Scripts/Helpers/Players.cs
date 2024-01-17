@@ -25,12 +25,9 @@ public static partial class Helper {
     public static PlayerControllerB? GetPlayer(int playerClientId) => Helper.Players.First(player => player.playerClientId == (ulong)playerClientId);
 
     public static PlayerControllerB? GetActivePlayer(string playerNameOrId) =>
-        Helper.GetPlayer(playerNameOrId).IsNotNull(out PlayerControllerB player)
-            ? player.isPlayerDead ? null : !player.isPlayerControlled ? null : player
-            : null;
+        Helper.GetPlayer(playerNameOrId) is not PlayerControllerB player || !player.isPlayerControlled || player.isPlayerDead
+            ? null
+            : player;
 
-    public static PlayerControllerB? GetActivePlayer(int playerClientId) =>
-        Helper.GetPlayer(playerClientId).IsNotNull(out PlayerControllerB player)
-            ? player.isPlayerDead ? null : !player.isPlayerControlled ? null : player
-            : null;
+    public static PlayerControllerB? GetActivePlayer(int playerClientId) => Helper.GetActivePlayer(playerClientId.ToString());
 }

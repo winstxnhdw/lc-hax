@@ -10,8 +10,6 @@ public sealed class TriggerMod : MonoBehaviour, IEnemyPrompter {
     bool UsingFollowRay { get; set; } = false;
     bool FunnyReviveEnabled { get; set; } = false;
 
-    DepositItemsDesk? DepositItemsDesk => HaxObjects.Instance?.DepositItemsDesk.Object;
-
     void OnEnable() {
         InputListener.onMiddleButtonPress += this.Fire;
         InputListener.onEButtonHold += this.SetUsingInteractRay;
@@ -33,7 +31,7 @@ public sealed class TriggerMod : MonoBehaviour, IEnemyPrompter {
     void SetFunnyReviveEnabled(bool isHeld) => this.FunnyReviveEnabled = isHeld;
 
     void Fire() {
-        if (!Helper.CurrentCamera.IsNotNull(out Camera camera)) return;
+        if (Helper.CurrentCamera is not Camera camera) return;
 
         if (this.UsingFollowRay) {
             if (FollowMod.PlayerToFollow is not null) {
@@ -65,7 +63,7 @@ public sealed class TriggerMod : MonoBehaviour, IEnemyPrompter {
             return;
         }
 
-        if (this.DepositItemsDesk.IsNotNull(out DepositItemsDesk deposit)) {
+        if (HaxObjects.Instance?.DepositItemsDesk.Object.Unfake() is DepositItemsDesk deposit) {
             deposit.AttackPlayersServerRpc();
             return;
         }
@@ -103,10 +101,8 @@ public sealed class TriggerMod : MonoBehaviour, IEnemyPrompter {
                 break;
             }
 
-            if (collider.GetComponentInParent<EnemyAI>().IsNotNull(out EnemyAI enemy) &&
-                PossessionMod.Instance.IsNotNull(out PossessionMod possessionMod) &&
-                Setting.EnablePhantom) {
-                possessionMod.Possess(enemy);
+            if (collider.GetComponentInParent<EnemyAI>().Unfake() is EnemyAI enemy && Setting.EnablePhantom) {
+                PossessionMod.Instance?.Possess(enemy);
                 break;
             }
         }
