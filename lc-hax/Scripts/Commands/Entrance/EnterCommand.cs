@@ -1,5 +1,3 @@
-using Hax;
-
 [Command("/enter")]
 public class EnterCommand : IEntrance, ICommand {
     public void Execute(StringArray _) {

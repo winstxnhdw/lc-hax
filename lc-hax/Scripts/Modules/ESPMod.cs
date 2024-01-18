@@ -3,8 +3,7 @@ using System.Linq;
 using System.Collections.Generic;
 using GameNetcodeStuff;
 using UnityEngine;
-
-namespace Hax;
+using Hax;
 
 public class ESPMod : MonoBehaviour {
     IEnumerable<RendererPair<PlayerControllerB, SkinnedMeshRenderer>> PlayerRenderers { get; set; } = [];

@@ -1,8 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using GameNetcodeStuff;
-
-namespace Hax;
+using Hax;
 
 enum BehaviourState {
     IDLE = 0,

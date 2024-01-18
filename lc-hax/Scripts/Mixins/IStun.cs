@@ -1,7 +1,5 @@
 using UnityEngine;
 
-namespace Hax;
-
 public interface IStun { }
 
 public static class IStunMixin {

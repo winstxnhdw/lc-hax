@@ -1,5 +1,3 @@
-using Hax;
-
 [Command("/lock")]
 public class LockCommand : ICommand, ISecureGate {
     public void Execute(StringArray _) {
