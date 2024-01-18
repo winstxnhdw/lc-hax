@@ -29,29 +29,19 @@ public sealed class ClearVisionMod : MonoBehaviour {
                 continue;
             }
 
-            if (timeOfDay.sunDirect is not Light sunDirect) {
-                yield return waitForEndOfFrame;
-                continue;
-            }
-
-            if (timeOfDay.sunIndirect is not Light sunIndirect) {
-                yield return waitForEndOfFrame;
-                continue;
-            }
-
-            if (!sunIndirect.TryGetComponent(out HDAdditionalLightData lightData)) {
+            if (!timeOfDay.sunIndirect.TryGetComponent(out HDAdditionalLightData lightData)) {
                 yield return waitForEndOfFrame;
                 continue;
             }
 
             sunAnimator.enabled = false;
-            sunIndirect.transform.eulerAngles = new Vector3(90, 0, 0);
-            sunIndirect.transform.position = camera.transform.position;
-            sunIndirect.color = Color.white;
-            sunIndirect.intensity = 5;
-            sunIndirect.enabled = true;
-            sunDirect.transform.eulerAngles = new Vector3(90, 0, 0);
-            sunDirect.enabled = true;
+            timeOfDay.sunIndirect.transform.eulerAngles = new Vector3(90, 0, 0);
+            timeOfDay.sunIndirect.transform.position = camera.transform.position;
+            timeOfDay.sunIndirect.color = Color.white;
+            timeOfDay.sunIndirect.intensity = 2;
+            timeOfDay.sunIndirect.enabled = true;
+            timeOfDay.sunDirect.transform.eulerAngles = new Vector3(90, 0, 0);
+            timeOfDay.sunDirect.enabled = true;
             lightData.lightDimmer = float.MaxValue;
             lightData.distance = float.MaxValue;
             timeOfDay.insideLighting = false;
