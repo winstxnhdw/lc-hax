@@ -19,27 +19,27 @@ public sealed class ClearVisionMod : MonoBehaviour {
                 continue;
             }
 
-            if (TimeOfDay.Instance.Unfake() is not TimeOfDay timeOfDay) {
+            if (TimeOfDay.Instance is not TimeOfDay timeOfDay) {
                 yield return waitForEndOfFrame;
                 continue;
             }
 
-            if (timeOfDay.sunAnimator.Unfake() is not Animator sunAnimator) {
+            if (timeOfDay.sunAnimator is not Animator sunAnimator) {
                 yield return waitForEndOfFrame;
                 continue;
             }
 
-            if (timeOfDay.sunDirect.Unfake() is not Light sunDirect) {
+            if (timeOfDay.sunDirect is not Light sunDirect) {
                 yield return waitForEndOfFrame;
                 continue;
             }
 
-            if (timeOfDay.sunIndirect.Unfake() is not Light sunIndirect) {
+            if (timeOfDay.sunIndirect is not Light sunIndirect) {
                 yield return waitForEndOfFrame;
                 continue;
             }
 
-            if (sunIndirect.TryGetComponent(out HDAdditionalLightData lightData)) {
+            if (!sunIndirect.TryGetComponent(out HDAdditionalLightData lightData)) {
                 yield return waitForEndOfFrame;
                 continue;
             }
