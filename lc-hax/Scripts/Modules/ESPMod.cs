@@ -1,15 +1,14 @@
 using System;
 using System.Linq;
-using System.Collections.Generic;
 using GameNetcodeStuff;
 using UnityEngine;
 using Hax;
 
 public class ESPMod : MonoBehaviour {
-    IEnumerable<RendererPair<PlayerControllerB, SkinnedMeshRenderer>> PlayerRenderers { get; set; } = [];
-    IEnumerable<Renderer> LandmineRenderers { get; set; } = [];
-    IEnumerable<Renderer> TurretRenderers { get; set; } = [];
-    IEnumerable<Renderer> EntranceRenderers { get; set; } = [];
+    RendererPair<PlayerControllerB, SkinnedMeshRenderer>[] PlayerRenderers { get; set; } = [];
+    Renderer[] LandmineRenderers { get; set; } = [];
+    Renderer[] TurretRenderers { get; set; } = [];
+    Renderer[] EntranceRenderers { get; set; } = [];
 
     bool InGame { get; set; } = false;
 
@@ -121,15 +120,15 @@ public class ESPMod : MonoBehaviour {
 
     void OnGameEnd() => this.InGame = false;
 
-    IEnumerable<Renderer> GetRenderers<T>() where T : Component =>
+    Renderer[] GetRenderers<T>() where T : Component =>
         Helper.FindObjects<T>()
-              .WhereIsNotNull()
-              .Select(obj => obj.GetComponent<Renderer>());
+              .Select(obj => obj.GetComponent<Renderer>())
+              .ToArray();
 
     void InitialiseRenderers() {
         this.PlayerRenderers = Helper.Players.Select(player =>
             new RendererPair<PlayerControllerB, SkinnedMeshRenderer>(player, player.thisPlayerModel)
-        );
+        ).ToArray();
 
         this.LandmineRenderers = this.GetRenderers<Landmine>();
         this.TurretRenderers = this.GetRenderers<Turret>();
