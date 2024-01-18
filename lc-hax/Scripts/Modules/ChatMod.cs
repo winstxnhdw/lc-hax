@@ -1,0 +1,48 @@
+using UnityEngine;
+using Hax;
+using System;
+using System.Collections.Generic;
+
+public sealed class ChatMod : MonoBehaviour {
+    List<string> CommandHistory { get; } = [];
+    int HistoryIndex { get; set; } = -1;
+
+    void OnEnable() {
+        InputListener.onUpArrowPress += this.CycleBackInHistory;
+        InputListener.onDownArrowPress += this.CycleForwardInHistory;
+        Chat.onExecuteCommandAttempt += this.OnHistoryAdded;
+    }
+
+    void OnDisable() {
+        InputListener.onUpArrowPress -= this.CycleBackInHistory;
+        InputListener.onDownArrowPress -= this.CycleForwardInHistory;
+        Chat.onExecuteCommandAttempt -= this.OnHistoryAdded;
+    }
+
+    void OnHistoryAdded(string command) => this.CommandHistory.Add(command);
+
+    void CycleBackInHistory() {
+        if (Helper.LocalPlayer?.isTypingChat is not true) return;
+        if (Helper.HUDManager is not HUDManager hudManager) return;
+
+        this.HistoryIndex = Math.Clamp(this.HistoryIndex + 1, 0, this.CommandHistory.Count - 1);
+        int commandHistoryIndex = this.CommandHistory.Count - this.HistoryIndex - 1;
+        hudManager.chatTextField.text = this.CommandHistory[commandHistoryIndex];
+        hudManager.chatTextField.caretPosition = hudManager.chatTextField.text.Length;
+    }
+
+    void CycleForwardInHistory() {
+        if (Helper.LocalPlayer?.isTypingChat is not true) return;
+        if (Helper.HUDManager is not HUDManager hudManager) return;
+        if (this.HistoryIndex < 0) return;
+
+        this.HistoryIndex = Math.Clamp(this.HistoryIndex - 1, 0, this.CommandHistory.Count - 1);
+        int commandHistoryIndex = this.CommandHistory.Count - this.HistoryIndex - 1;
+        hudManager.chatTextField.text = this.CommandHistory[commandHistoryIndex];
+        hudManager.chatTextField.caretPosition = hudManager.chatTextField.text.Length;
+    }
+
+    void Update() {
+        this.HistoryIndex = Helper.LocalPlayer?.isTypingChat is true ? this.HistoryIndex : -1;
+    }
+}

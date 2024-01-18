@@ -66,6 +66,7 @@ public class Loader : MonoBehaviour {
         Loader.AddHaxModules<ESPMod>();
         Loader.AddHaxModules<SaneMod>();
         Loader.AddHaxModules<StunMod>();
+        Loader.AddHaxModules<ChatMod>();
         Loader.AddHaxModules<FollowMod>();
         Loader.AddHaxModules<WeightMod>();
         Loader.AddHaxModules<StaminaMod>();
