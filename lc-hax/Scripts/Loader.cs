@@ -3,7 +3,8 @@ using System.IO;
 using System.Reflection;
 using UnityEngine;
 using HarmonyLib;
-using Hax;
+
+namespace Hax;
 
 public class Loader : MonoBehaviour {
     static GameObject HaxGameObjects { get; } = new();
