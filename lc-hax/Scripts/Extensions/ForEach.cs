@@ -9,12 +9,6 @@ public static partial class Extensions {
         }
     }
 
-    public static void ForEach<T>(this T[] array, Action<T> action) {
-        for (int i = 0; i < array.Length; i++) {
-            action(array[i]);
-        }
-    }
-
     public static void ForEach<T>(this T[] array, Action<int, T> action) {
         for (int i = 0; i < array.Length; i++) {
             action(i, array[i]);
@@ -27,11 +21,9 @@ public static partial class Extensions {
         }
     }
 
-    public static void ForEach<T>(this MultiObjectPool<T> multiObjectPool, Action<T?> action) where T : UnityObject {
-        T?[] objectPool = multiObjectPool.Objects;
+    public static void ForEach<T>(this MultiObjectPool<T> multiObjectPool, Action<T?> action) where T : UnityObject =>
+        multiObjectPool.Objects.ForEach(action);
 
-        for (int i = 0; i < objectPool.Length; i++) {
-            action(objectPool[i]);
-        }
-    }
+    public static void ForEach<T>(this MultiObjectPool<T> multiObjectPool, Action<int, T?> action) where T : UnityObject =>
+        multiObjectPool.Objects.ForEach(action);
 }

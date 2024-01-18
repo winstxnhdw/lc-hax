@@ -17,10 +17,8 @@ public class SellCommand : ICommand {
     }
 
     void SellEverything(DepositItemsDesk depositItemsDesk, PlayerControllerB player) {
-        HaxObjects.Instance?.GrabbableObjects.ForEach(nullableGrabbableObject => {
-            if (nullableGrabbableObject.Unfake() is not GrabbableObject grabbableObject) return;
+        HaxObjects.Instance?.GrabbableObjects.WhereIsNotNull().ForEach(grabbableObject => {
             if (!this.CanBeSold(grabbableObject)) return;
-
             this.SellObject(depositItemsDesk, player, grabbableObject);
         });
     }
@@ -28,10 +26,8 @@ public class SellCommand : ICommand {
     void SellScrapValue(DepositItemsDesk depositItemsDesk, PlayerControllerB player, StartOfRound startOfRound, ushort targetValue) {
         List<GrabbableObject> sellableScraps = [];
 
-        HaxObjects.Instance?.GrabbableObjects.ForEach(nullableGrabbableObject => {
-            if (nullableGrabbableObject.Unfake() is not GrabbableObject grabbableObject) return;
+        HaxObjects.Instance?.GrabbableObjects.WhereIsNotNull().ForEach(grabbableObject => {
             if (!this.CanBeSold(grabbableObject)) return;
-
             sellableScraps.Add(grabbableObject);
         });
 

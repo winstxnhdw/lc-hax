@@ -63,8 +63,7 @@ public class ESPMod : MonoBehaviour {
             this.RenderLabel("Entrance")
         ));
 
-        HaxObjects.Instance?.EnemyAIs.ForEach(nullableEnemy => {
-            if (nullableEnemy.Unfake() is not EnemyAI enemy) return;
+        Helper.RoundManager?.SpawnedEnemies.ForEach(enemy => {
             if (enemy.isEnemyDead) return;
             if (enemy is DocileLocustBeesAI or DoublewingAI) return;
 
@@ -84,9 +83,7 @@ public class ESPMod : MonoBehaviour {
             );
         });
 
-        HaxObjects.Instance?.GrabbableObjects.Objects.ForEach(nullableGrabbableObject => {
-            if (nullableGrabbableObject.Unfake() is not GrabbableObject grabbableObject) return;
-
+        HaxObjects.Instance?.GrabbableObjects.WhereIsNotNull().ForEach(grabbableObject => {
             Renderer? nullableRenderer = grabbableObject is LungProp lungProp
                 ? lungProp.lungDeviceMesh
                 : grabbableObject.mainObjectRenderer;
@@ -126,9 +123,8 @@ public class ESPMod : MonoBehaviour {
 
     IEnumerable<Renderer> GetRenderers<T>() where T : Component =>
         Helper.FindObjects<T>()
-              .Where(obj => obj != null)
-              .Select(obj => obj.GetComponent<Renderer>())
-              .Where(renderer => renderer != null);
+              .WhereIsNotNull()
+              .Select(obj => obj.GetComponent<Renderer>());
 
     void InitialiseRenderers() {
         this.PlayerRenderers = Helper.Players.Select(player =>

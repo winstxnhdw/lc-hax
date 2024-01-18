@@ -127,7 +127,7 @@ public sealed class PossessionMod : MonoBehaviour {
     }
 
     void SetEnemyColliders(EnemyAI enemy, bool enabled) {
-        enemy.GetComponentsInChildren<Collider>().ForEach(c => c.enabled = enabled);
+        enemy.GetComponentsInChildren<Collider>().ForEach(collider => collider.enabled = enabled);
     }
 
     public void Possess(EnemyAI enemy) {
