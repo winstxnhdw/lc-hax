@@ -219,7 +219,7 @@ The arguments for the `build` command can be executed with either the unlockable
 
 ### Disabling Mods
 
-You may permanently disable mods by removing the corresponding `Mod` class under the `LoadHaxModules` function from the following [file](lc-hax/Scripts/Loader.cs). In the following example, we disable `StaminaMod` and you will return to the game's default stamina mechanics in your next injection.
+You may permanently disable mods by removing the corresponding `Mod` class under the `LoadHaxModules` function from the following [file](lc-hax/Scripts/Loader.cs). In the following example, we disable `StaminaMod` and you will return to the game's default stamina mechanic in your next injection.
 
 ```cs
 static void LoadHaxModules() {
@@ -239,6 +239,10 @@ static void LoadHaxModules() {
     Loader.AddHaxModules<FollowAnotherPlayerMod>();
 }
 ```
+
+### Disabling Patches
+
+There is usually little reason for you to disable patches as they are carefully chosen and come with sane defaults. However, if for whatever reason you wish to disable a patch, you may freely delete any of the corresponding files based on their names [here](lc-hax/Scripts/Patches).
 
 ## Whitelisting SharpMonoInjectorCore
 
