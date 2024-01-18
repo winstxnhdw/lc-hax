@@ -5,8 +5,6 @@ using Hax;
 
 [Command("/kill")]
 public class KillCommand : ICommand {
-    void ForEachEnemy(Action<EnemyAI> action) => Helper.FindObjects<EnemyAI>().ForEach(action);
-
     Result KillSelf() {
         bool EnableDemigodMode = Setting.EnableDemigodMode;
         bool EnableGodMode = Setting.EnableGodMode;
@@ -34,7 +32,7 @@ public class KillCommand : ICommand {
     }
 
     Result KillAllEnemies() {
-        this.ForEachEnemy(enemy => {
+        Helper.RoundManager?.SpawnedEnemies.ForEach(enemy => {
             if (Helper.LocalPlayer is PlayerControllerB localPlayer && enemy is NutcrackerEnemyAI nutcracker) {
                 nutcracker.ChangeEnemyOwnerServerRpc(localPlayer.actualClientId);
                 nutcracker.DropGunServerRpc(Vector3.zero);
