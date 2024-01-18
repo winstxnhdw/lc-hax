@@ -111,7 +111,7 @@ The complete feature set includes the following.
 | Buy an item                   | `/buy <item> <quantity=1>`                     |
 | Deposit valuable item(s)      | `/sell <quota?>`                               |
 | Grab scrap(s)                 | `/grab <item?>`                                |
-| Block incoming credits        | `/block credits`                               |
+| Block incoming credits        | `/block credit`                               |
 | Block any radar targets       | `/block radar`                                 |
 | Become untargetable           | `/block enemy`                                 |
 | Place an unlockable           | `/build <unlockable>`                          |
@@ -153,7 +153,7 @@ The complete feature set includes the following.
 | Decrease mouse sensitivity | <kbd> [ </kbd>                       |
 | Unpossess enemy            | <kbd> Z </kbd>                       |
 | Toggle realistic movement  | <kbd> X </kbd>                       |
-| Toggle possession noclip   | <kbd> N </kbd>                       |
+| Toggle possession NoClip   | <kbd> N </kbd>                       |
 | Toggle Anti-Kick           | <kbd> \ </kbd>                       |
 
 ### TriggerMod
