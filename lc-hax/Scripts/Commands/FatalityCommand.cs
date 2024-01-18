@@ -6,17 +6,16 @@ using Hax;
 
 [Command("/fatality")]
 public class FatalityCommand : ICommand {
-    T? GetEnemy<T>() where T : EnemyAI {
+    T? GetEnemyOwnership<T>() where T : EnemyAI {
         if (Helper.LocalPlayer is not PlayerControllerB localPlayer) return null;
-        if (Helper.RoundManager is not RoundManager roundManager) return null;
-        if (roundManager.SpawnedEnemies.First(enemy => enemy is T) is not T enemy) return null;
+        if (Helper.GetEnemy<T>() is not T enemy) return null;
 
         enemy.ChangeEnemyOwnerServerRpc(localPlayer.actualClientId);
         return enemy;
     }
 
     string? HandleGiant(PlayerControllerB targetPlayer) {
-        if (this.GetEnemy<ForestGiantAI>() is not ForestGiantAI forestGiant) {
+        if (this.GetEnemyOwnership<ForestGiantAI>() is not ForestGiantAI forestGiant) {
             return "Enemy has not yet spawned!";
         }
 
@@ -25,7 +24,7 @@ public class FatalityCommand : ICommand {
     }
 
     string? HandleJester(PlayerControllerB targetPlayer) {
-        if (this.GetEnemy<JesterAI>() is not JesterAI jester) {
+        if (this.GetEnemyOwnership<JesterAI>() is not JesterAI jester) {
             return "Enemy has not yet spawned!";
         }
 
@@ -34,7 +33,7 @@ public class FatalityCommand : ICommand {
     }
 
     string? HandleMasked(PlayerControllerB targetPlayer) {
-        if (this.GetEnemy<MaskedPlayerEnemy>() is not MaskedPlayerEnemy masked) {
+        if (this.GetEnemyOwnership<MaskedPlayerEnemy>() is not MaskedPlayerEnemy masked) {
             return "Enemy has not yet spawned!";
         }
 
@@ -43,7 +42,7 @@ public class FatalityCommand : ICommand {
     }
 
     string? HandleBaboonHawk(PlayerControllerB targetPlayer) {
-        if (this.GetEnemy<BaboonBirdAI>() is not BaboonBirdAI baboonHawk) {
+        if (this.GetEnemyOwnership<BaboonBirdAI>() is not BaboonBirdAI baboonHawk) {
             return "Enemy has not yet spawned!";
         }
 
@@ -52,7 +51,7 @@ public class FatalityCommand : ICommand {
     }
 
     string? HandleBees(PlayerControllerB targetPlayer) {
-        if (this.GetEnemy<RedLocustBees>() is not RedLocustBees bees) {
+        if (this.GetEnemyOwnership<RedLocustBees>() is not RedLocustBees bees) {
             return "Enemy has not yet spawned!";
         }
 
@@ -61,7 +60,7 @@ public class FatalityCommand : ICommand {
     }
 
     string? HandleThumper(PlayerControllerB targetPlayer) {
-        if (this.GetEnemy<CrawlerAI>() is not CrawlerAI thumper) {
+        if (this.GetEnemyOwnership<CrawlerAI>() is not CrawlerAI thumper) {
             return "Enemy has not yet spawned!";
         }
 
@@ -70,7 +69,7 @@ public class FatalityCommand : ICommand {
     }
 
     string? HandleEyelessDog(PlayerControllerB targetPlayer) {
-        if (this.GetEnemy<MouthDogAI>() is not MouthDogAI eyelessDog) {
+        if (this.GetEnemyOwnership<MouthDogAI>() is not MouthDogAI eyelessDog) {
             return "Enemy has not yet spawned!";
         }
 
@@ -79,7 +78,7 @@ public class FatalityCommand : ICommand {
     }
 
     string? HandleBracken(PlayerControllerB targetPlayer) {
-        if (this.GetEnemy<FlowermanAI>() is not FlowermanAI bracken) {
+        if (this.GetEnemyOwnership<FlowermanAI>() is not FlowermanAI bracken) {
             return "Enemy has not yet spawned!";
         }
 
@@ -88,7 +87,7 @@ public class FatalityCommand : ICommand {
     }
 
     string? HandleNutcracker(PlayerControllerB targetPlayer) {
-        if (this.GetEnemy<NutcrackerEnemyAI>() is not NutcrackerEnemyAI nutcracker) {
+        if (this.GetEnemyOwnership<NutcrackerEnemyAI>() is not NutcrackerEnemyAI nutcracker) {
             return "Enemy has not yet spawned!";
         }
 

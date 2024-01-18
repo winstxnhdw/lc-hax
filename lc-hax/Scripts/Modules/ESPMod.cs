@@ -63,7 +63,7 @@ public class ESPMod : MonoBehaviour {
             this.RenderLabel("Entrance")
         ));
 
-        Helper.RoundManager?.SpawnedEnemies.ForEach(enemy => {
+        Helper.Enemies.ForEach(enemy => {
             if (enemy.isEnemyDead) return;
             if (enemy is DocileLocustBeesAI or DoublewingAI) return;
 

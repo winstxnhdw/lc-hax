@@ -95,7 +95,7 @@ public sealed class TriggerMod : MonoBehaviour, IEnemyPrompter {
             }
 
             if (collider.TryGetComponent(out PlayerControllerB player)) {
-                Helper.FindObject<CentipedeAI>()?.ClingToPlayerServerRpc(player.playerClientId);
+                Helper.GetEnemy<CentipedeAI>()?.ClingToPlayerServerRpc(player.playerClientId);
                 this.PromptEnemiesToTarget(player, this.FunnyReviveEnabled)
                     .ForEach(enemy => Chat.Print($"{enemy} prompted!"));
                 break;
