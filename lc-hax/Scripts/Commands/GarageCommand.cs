@@ -1,9 +1,8 @@
-using System;
 using Hax;
 
 [Command("/garage")]
 public class GarageCommand : ICommand {
-    public void Execute(ReadOnlySpan<string> _) {
+    public void Execute(StringArray _) {
         if (Helper.RoundManager is not RoundManager roundManager) {
             Chat.Print("RoundManager not found!");
             return;

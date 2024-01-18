@@ -37,7 +37,7 @@ public static partial class Helper {
         return result;
     }
 
-    public static string FuzzyMatch(ReadOnlySpan<char> query, ReadOnlySpan<string> strings) {
+    public static string FuzzyMatch(ReadOnlySpan<char> query, StringArray strings) {
         string closestMatch = strings[0];
         int lowestWeight = GetSimilarityWeight(query, strings[0]);
 

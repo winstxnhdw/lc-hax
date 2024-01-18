@@ -1,4 +1,3 @@
-using System;
 using UnityEngine;
 using Hax;
 
@@ -9,7 +8,7 @@ public class InvisibleCommand : ICommand {
               .Reflect()
               .InvokeInternalMethod("UpdatePlayerPositionServerRpc", Vector3.zero, true, false, true);
 
-    public void Execute(ReadOnlySpan<string> _) {
+    public void Execute(StringArray _) {
         Setting.EnableInvisible = !Setting.EnableInvisible;
         Chat.Print($"Invisible: {(Setting.EnableInvisible ? "enabled" : "disabled")}");
 

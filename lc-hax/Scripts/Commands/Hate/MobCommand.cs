@@ -1,11 +1,10 @@
-using System;
 using System.Collections.Generic;
 using GameNetcodeStuff;
 using Hax;
 
 [Command("/mob")]
 public class MobCommand : IEnemyPrompter, ICommand {
-    public void Execute(ReadOnlySpan<string> args) {
+    public void Execute(StringArray args) {
         if (args.Length is 0) {
             Chat.Print("Usage: /mob <player>");
             return;
