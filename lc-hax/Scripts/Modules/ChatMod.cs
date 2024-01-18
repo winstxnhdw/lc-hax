@@ -20,10 +20,7 @@ public sealed class ChatMod : MonoBehaviour {
     }
 
     void OnHistoryAdded(string command) {
-        if (this.CommandHistory.Contains(command)) {
-            _ = this.CommandHistory.Remove(command);
-        }
-
+        _ = this.CommandHistory.Remove(command);
         this.CommandHistory.Add(command);
     }
 
