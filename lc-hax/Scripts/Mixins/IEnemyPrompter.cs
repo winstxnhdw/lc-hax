@@ -237,7 +237,6 @@ public static class EnemyPromptMixin {
         if (Helper.RoundManager is not RoundManager roundManager) return [];
 
         List<string> enemyNames = [];
-        Reflector? reflector = roundManager.Reflect().InvokeInternalMethod("RefreshEnemiesList");
         EnemyPromptHandler enemyPromptHandler = new();
 
         roundManager.SpawnedEnemies.ForEach((enemy) => {

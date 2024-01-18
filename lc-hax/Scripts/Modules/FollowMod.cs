@@ -60,7 +60,8 @@ public sealed class FollowMod : MonoBehaviour {
             targetPlayer.playerBodyAnimator
                   .layerCount
                   .Range()
-                  .Select(i => targetPlayer.playerBodyAnimator.GetCurrentAnimatorStateInfo(i).fullPathHash).ToArray();
+                  .Select(i => targetPlayer.playerBodyAnimator.GetCurrentAnimatorStateInfo(i).fullPathHash)
+                  .ToArray();
 
         this.PlayerStates.Enqueue(new CopiedStates {
             position = targetPlayer.thisPlayerBody.position.Copy(),

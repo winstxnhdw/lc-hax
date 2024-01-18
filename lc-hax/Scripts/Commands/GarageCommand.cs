@@ -14,8 +14,7 @@ public class GarageCommand : ICommand {
             return;
         }
 
-        HaxObjects.Instance?.InteractTriggers.ForEach(nullableIteractTrigger => {
-            if (nullableIteractTrigger.Unfake() is not InteractTrigger interactTrigger) return;
+        HaxObjects.Instance?.InteractTriggers.WhereIsNotNull().ForEach(interactTrigger => {
             if (interactTrigger.name is not "Cube" || interactTrigger.transform.parent.name is not "Cutscenes") return;
 
             interactTrigger.randomChancePercentage = 100;
