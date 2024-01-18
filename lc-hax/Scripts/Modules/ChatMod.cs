@@ -38,9 +38,9 @@ public sealed class ChatMod : MonoBehaviour {
     }
 
     void CycleForwardInHistory() {
+        if (this.HistoryIndex < 0) return;
         if (Helper.LocalPlayer?.isTypingChat is not true) return;
         if (Helper.HUDManager is not HUDManager hudManager) return;
-        if (this.HistoryIndex < 0) return;
 
         this.HistoryIndex = Math.Clamp(this.HistoryIndex - 1, 0, this.CommandHistory.Count - 1);
         int commandHistoryIndex = this.CommandHistory.Count - this.HistoryIndex - 1;
