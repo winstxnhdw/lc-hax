@@ -7,8 +7,9 @@ using Hax;
 [Command("/fatality")]
 public class FatalityCommand : ICommand {
     T? GetEnemy<T>() where T : EnemyAI {
-        if (Helper.FindObject<T>() is not T enemy) return null;
         if (Helper.LocalPlayer is not PlayerControllerB localPlayer) return null;
+        if (Helper.RoundManager is not RoundManager roundManager) return null;
+        if (roundManager.SpawnedEnemies.First(enemy => enemy is T) is not T enemy) return null;
 
         enemy.ChangeEnemyOwnerServerRpc(localPlayer.actualClientId);
         return enemy;
