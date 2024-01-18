@@ -8,7 +8,7 @@ public class GarageCommand : ICommand {
             return;
         }
 
-        if (roundManager.currentLevel.levelID is not (int)Level.EXPERIMENTATION) {
+        if (roundManager.currentLevel.levelID is not 0) {
             Chat.Print("You must be in Experimentation to use this command!");
             return;
         }
