@@ -21,6 +21,8 @@ public class InputListener : MonoBehaviour {
     public static event Action? onZPress;
     public static event Action? onXPress;
     public static event Action? onNPress;
+    public static event Action? onUpArrowPress;
+    public static event Action? onDownArrowPress;
 
     Dictionary<Func<bool>, Action> InputActions { get; } = new() {
         { () => Mouse.current.middleButton.wasPressedThisFrame, () => InputListener.onMiddleButtonPress?.Invoke() },
@@ -38,11 +40,11 @@ public class InputListener : MonoBehaviour {
         { () => Keyboard.current[Key.Z].wasPressedThisFrame, () => InputListener.onZPress?.Invoke() },
         { () => Keyboard.current[Key.X].wasPressedThisFrame, () => InputListener.onXPress?.Invoke() },
         { () => Keyboard.current[Key.N].wasPressedThisFrame, () => InputListener.onNPress?.Invoke() },
+        { () => Keyboard.current[Key.UpArrow].wasPressedThisFrame, () => InputListener.onUpArrowPress?.Invoke() },
+        { () => Keyboard.current[Key.DownArrow].wasPressedThisFrame, () => InputListener.onDownArrowPress?.Invoke() }
     };
 
     void Update() {
-        if (Helper.LocalPlayer?.isTypingChat is true) return;
-
         foreach (KeyValuePair<Func<bool>, Action> keyAction in this.InputActions) {
             if (!keyAction.Key()) continue;
             keyAction.Value();

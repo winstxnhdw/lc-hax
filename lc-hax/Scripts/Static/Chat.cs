@@ -7,6 +7,8 @@ using UnityEngine.EventSystems;
 namespace Hax;
 
 public static class Chat {
+    public static event Action<string>? onExecuteCommandAttempt;
+
     static Dictionary<string, ICommand> Commands { get; } =
         Assembly
             .GetExecutingAssembly()
@@ -48,6 +50,7 @@ public static class Chat {
 
     public static void ExecuteCommand(string command) {
         Chat.Print("USER", command);
+        Chat.onExecuteCommandAttempt?.Invoke(command);
         Chat.ExecuteCommand(command.Split(' '));
     }
 
