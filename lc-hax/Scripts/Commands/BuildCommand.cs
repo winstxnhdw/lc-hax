@@ -1,4 +1,3 @@
-using System;
 using System.Linq;
 using System.Collections.Generic;
 using UnityEngine;
@@ -6,7 +5,7 @@ using Hax;
 
 [Command("/build")]
 public class BuildCommand : ICommand {
-    public void Execute(ReadOnlySpan<string> args) {
+    public void Execute(StringArray args) {
         if (Helper.StartOfRound is not StartOfRound startOfRound) return;
         if (Helper.CurrentCamera is not Camera camera) return;
         if (args.Length is 0) {

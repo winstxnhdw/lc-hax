@@ -3,7 +3,7 @@ using Hax;
 
 [Command("/money")]
 public class MoneyCommand : ICommand {
-    public void Execute(ReadOnlySpan<string> args) {
+    public void Execute(StringArray args) {
         if (Helper.Terminal is not Terminal terminal) return;
         if (args.Length is 0) {
             Chat.Print("Usage: /money <amount>");

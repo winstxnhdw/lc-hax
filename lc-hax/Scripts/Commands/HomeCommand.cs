@@ -36,7 +36,7 @@ public class HomeCommand : ICommand {
               .Init(action);
     }
 
-    public void Execute(ReadOnlySpan<string> args) {
+    public void Execute(StringArray args) {
         if (Helper.StartOfRound is not StartOfRound startOfRound) return;
         if (args.Length is 0) {
             startOfRound.ForcePlayerIntoShip();

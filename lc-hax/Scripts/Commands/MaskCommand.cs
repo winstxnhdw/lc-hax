@@ -1,10 +1,9 @@
-using System;
 using GameNetcodeStuff;
 using Hax;
 
 [Command("/mask")]
 public class MaskCommand : ICommand {
-    public void Execute(ReadOnlySpan<string> args) {
+    public void Execute(StringArray args) {
         if (args.Length is 0) {
             Chat.Print("Usage: /mask <player>");
             return;

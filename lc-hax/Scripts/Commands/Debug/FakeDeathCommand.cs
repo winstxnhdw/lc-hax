@@ -1,11 +1,10 @@
-using System;
 using GameNetcodeStuff;
 using UnityEngine;
 using Hax;
 
 [DebugCommand("/fakedeath")]
 public class FakeDeathCommand : ICommand {
-    public void Execute(ReadOnlySpan<string> args) {
+    public void Execute(StringArray args) {
         if (Helper.LocalPlayer is not PlayerControllerB player) return;
 
         //CAN COMBO WITH ANTI-KICK AND /INVIS

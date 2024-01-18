@@ -63,7 +63,7 @@ public class SellCommand : ICommand {
         Chat.Print($"Remaining scrap value to reach target is {result}!");
     }
 
-    public void Execute(ReadOnlySpan<string> args) {
+    public void Execute(StringArray args) {
         if (Helper.LocalPlayer is not PlayerControllerB player) return;
         if (Helper.StartOfRound is not StartOfRound startOfRound) return;
         if (HaxObjects.Instance?.DepositItemsDesk.Object.Unfake() is not DepositItemsDesk depositItemsDesk) {

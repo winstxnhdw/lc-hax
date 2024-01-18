@@ -1,4 +1,3 @@
-using System;
 using System.Linq;
 using System.Collections.Generic;
 using UnityEngine;
@@ -59,7 +58,7 @@ public class GrabCommand : ICommand {
         Chat.Print($"Grabbing {key.ToTitleCase()}..");
     }
 
-    public void Execute(ReadOnlySpan<string> args) {
+    public void Execute(StringArray args) {
         if (Helper.ShipBuildModeManager is not ShipBuildModeManager shipBuildModeManager) {
             Chat.Print("ShipBuildModeManager not found!");
             return;

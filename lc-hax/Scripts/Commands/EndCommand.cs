@@ -1,10 +1,9 @@
-using System;
 using GameNetcodeStuff;
 using Hax;
 
 [Command("/end")]
 public class EndCommand : ICommand {
-    public void Execute(ReadOnlySpan<string> args) {
+    public void Execute(StringArray args) {
         if (args.Length is 0) {
             Helper.StartOfRound?.EndGameServerRpc(-1);
         }

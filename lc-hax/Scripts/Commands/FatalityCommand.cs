@@ -95,7 +95,7 @@ public class FatalityCommand : ICommand {
         return null;
     }
 
-    public void Execute(ReadOnlySpan<string> args) {
+    public void Execute(StringArray args) {
         if (args.Length < 2) {
             Chat.Print("Usage: /fatality <player> <enemy>");
             return;

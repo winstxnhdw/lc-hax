@@ -1,11 +1,10 @@
-using System;
 using System.Linq;
 using System.Collections.Generic;
 using Hax;
 
 [Command("/buy")]
 public class BuyCommand : ICommand {
-    public void Execute(ReadOnlySpan<string> args) {
+    public void Execute(StringArray args) {
         ushort quantity = 1;
 
         if (args.Length is 0) {

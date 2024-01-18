@@ -1,9 +1,8 @@
-using System;
 using Hax;
 
 [Command("/start")]
 public class StartGameCommand : ICommand {
-    public void Execute(ReadOnlySpan<string> _) {
+    public void Execute(StringArray _) {
         Helper.StartOfRound?.StartGameServerRpc();
     }
 }

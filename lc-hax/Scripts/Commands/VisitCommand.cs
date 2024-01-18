@@ -1,11 +1,10 @@
-using System;
 using System.Linq;
 using System.Collections.Generic;
 using Hax;
 
 [Command("/visit")]
 public class VisitCommand : ICommand {
-    public void Execute(ReadOnlySpan<string> args) {
+    public void Execute(StringArray args) {
         if (args.Length is 0) {
             Chat.Print("Usage: /visit <moon>");
             return;

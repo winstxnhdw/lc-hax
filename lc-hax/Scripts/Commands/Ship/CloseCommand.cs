@@ -1,9 +1,8 @@
-using System;
 using Hax;
 
 [Command("/close")]
 public class CloseCommand : ICommand, IShipDoor {
-    public void Execute(ReadOnlySpan<string> _) {
+    public void Execute(StringArray _) {
         this.SetShipDoorState(true);
     }
 }

@@ -1,9 +1,8 @@
-using System;
 using Hax;
 
 [Command("/explode")]
 public class ExplodeCommand : ICommand {
-    public void Execute(ReadOnlySpan<string> args) {
+    public void Execute(StringArray args) {
         if (args.Length is 0) {
             Helper.FindObjects<JetpackItem>()
                   .ForEach(jetpack => jetpack.ExplodeJetpackServerRpc());

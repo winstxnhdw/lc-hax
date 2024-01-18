@@ -1,4 +1,3 @@
-using System;
 using GameNetcodeStuff;
 using Hax;
 
@@ -20,7 +19,7 @@ public class HealCommand : IStun, ICommand {
         return new Result(true);
     }
 
-    Result HealPlayer(ReadOnlySpan<string> args) {
+    Result HealPlayer(StringArray args) {
         if (Helper.GetActivePlayer(args[0]) is not PlayerControllerB targetPlayer) {
             return new Result(message: "Player not found!");
         }
@@ -31,7 +30,7 @@ public class HealCommand : IStun, ICommand {
         return new Result(true);
     }
 
-    public void Execute(ReadOnlySpan<string> args) {
+    public void Execute(StringArray args) {
         if (Helper.HUDManager is not HUDManager hudManager) return;
 
         Result result = args.Length switch {

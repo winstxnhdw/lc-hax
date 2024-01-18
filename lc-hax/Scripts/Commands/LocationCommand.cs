@@ -1,10 +1,9 @@
-using System;
 using UnityEngine;
 using Hax;
 
 [Command("/xyz")]
 public class LocationCommand : ICommand {
-    public void Execute(ReadOnlySpan<string> _) {
+    public void Execute(StringArray _) {
         if (Helper.CurrentCamera is not Camera camera) return;
 
         Vector3 currentPostion = camera.transform.position;

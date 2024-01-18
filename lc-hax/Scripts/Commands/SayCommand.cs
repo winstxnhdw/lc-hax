@@ -1,10 +1,9 @@
-using System;
 using GameNetcodeStuff;
 using Hax;
 
 [Command("/say")]
 public class SayCommand : ICommand {
-    public void Execute(ReadOnlySpan<string> args) {
+    public void Execute(StringArray args) {
         if (args.Length < 2) {
             Chat.Print("Usage: /say <player> <message>");
         }

@@ -1,4 +1,3 @@
-using System;
 using GameNetcodeStuff;
 using UnityEngine;
 using Hax;
@@ -17,7 +16,7 @@ public class KillCommand : ICommand {
         return new Result(true);
     }
 
-    Result KillTargetPlayer(ReadOnlySpan<string> args) {
+    Result KillTargetPlayer(StringArray args) {
         if (Helper.GetActivePlayer(args[0]) is not PlayerControllerB targetPlayer) {
             return new Result(message: "Player not found!");
         }
@@ -49,7 +48,7 @@ public class KillCommand : ICommand {
         Chat.Print(result.Message);
     }
 
-    public void Execute(ReadOnlySpan<string> args) {
+    public void Execute(StringArray args) {
         if (args.Length is 0) {
             this.HandleResult(this.KillSelf());
             return;
