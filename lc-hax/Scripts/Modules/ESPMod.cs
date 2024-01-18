@@ -137,7 +137,7 @@ public class ESPMod : MonoBehaviour {
     }
 
     Size GetRendererSize(Bounds bounds, Camera camera) {
-        Vector3[] corners = [
+        ReadOnlySpan<Vector3> corners = [
             new(bounds.min.x, bounds.min.y, bounds.min.z),
             new(bounds.max.x, bounds.min.y, bounds.min.z),
             new(bounds.min.x, bounds.max.y, bounds.min.z),
