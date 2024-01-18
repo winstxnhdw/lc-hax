@@ -19,7 +19,13 @@ public sealed class ChatMod : MonoBehaviour {
         Chat.onExecuteCommandAttempt -= this.OnHistoryAdded;
     }
 
-    void OnHistoryAdded(string command) => this.CommandHistory.Add(command);
+    void OnHistoryAdded(string command) {
+        if (this.CommandHistory.Contains(command)) {
+            _ = this.CommandHistory.Remove(command);
+        }
+
+        this.CommandHistory.Add(command);
+    }
 
     void CycleBackInHistory() {
         if (Helper.LocalPlayer?.isTypingChat is not true) return;
