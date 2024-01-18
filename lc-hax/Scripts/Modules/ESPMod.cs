@@ -109,7 +109,8 @@ public class ESPMod : MonoBehaviour {
                 camera,
                 shipBounds.bounds,
                 Color.green,
-                this.RenderLabel("Ship")
+                this.RenderLabel("Ship"),
+                10.0f
             );
         }
     }
@@ -163,10 +164,16 @@ public class ESPMod : MonoBehaviour {
         );
     }
 
-    void RenderBounds(Camera camera, Bounds bounds, Color colour, Action<Color, Vector3>? action) {
+    void RenderBounds(
+        Camera camera,
+        Bounds bounds,
+        Color colour,
+        Action<Color, Vector3>? action,
+        float cutOffDistance = 4.0f
+    ) {
         Vector3 rendererCentrePoint = camera.WorldToEyesPoint(bounds.center);
 
-        if (rendererCentrePoint.z <= 4.0f) {
+        if (rendererCentrePoint.z <= cutOffDistance) {
             return;
         }
 
