@@ -2,8 +2,7 @@ using UnityEngine;
 using System.Collections;
 using GameNetcodeStuff;
 using UnityEngine.AI;
-
-namespace Hax;
+using Hax;
 
 //must be enabled and disabled by phantommod. Or else phantom mod can break, and this break, what nots.
 public sealed class PossessionMod : MonoBehaviour {

@@ -1,4 +1,4 @@
-namespace Hax;
+using Hax;
 
 public interface ISecureGate { }
 

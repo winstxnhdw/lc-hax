@@ -1,6 +1,5 @@
 using UnityEngine;
-
-namespace Hax;
+using Hax;
 
 public class CrosshairMod : MonoBehaviour {
     const float gapSize = 7.0f;

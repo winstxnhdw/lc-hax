@@ -1,7 +1,6 @@
 using System.Collections;
 using UnityEngine;
-
-namespace Hax;
+using Hax;
 
 public sealed class InstantInteractMod : MonoBehaviour {
     IEnumerator SetTimeToHold(object[] args) {

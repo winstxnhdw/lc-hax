@@ -1,8 +1,7 @@
 using System.Collections;
 using UnityEngine;
 using UnityEngine.Rendering.HighDefinition;
-
-namespace Hax;
+using Hax;
 
 public sealed class ClearVisionMod : MonoBehaviour {
     IEnumerator SetNightVision() {

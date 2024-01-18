@@ -1,6 +1,5 @@
 using UnityEngine;
-
-namespace Hax;
+using Hax;
 
 public sealed class StunMod : MonoBehaviour {
     Collider[] Colliders { get; set; } = new Collider[100];

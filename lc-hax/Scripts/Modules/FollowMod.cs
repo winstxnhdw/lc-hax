@@ -2,8 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using GameNetcodeStuff;
 using UnityEngine;
-
-namespace Hax;
+using Hax;
 
 struct CopiedStates {
     public Vector3 position;

@@ -1,7 +1,6 @@
 using UnityEngine;
 using GameNetcodeStuff;
-
-namespace Hax;
+using Hax;
 
 public sealed class PhantomMod : MonoBehaviour {
     bool IsShiftHeld { get; set; } = false;

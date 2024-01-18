@@ -1,8 +1,7 @@
 using System.Collections;
 using GameNetcodeStuff;
 using UnityEngine;
-
-namespace Hax;
+using Hax;
 
 public sealed class SaneMod : MonoBehaviour {
     IEnumerator SetSanity(object[] args) {

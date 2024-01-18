@@ -1,7 +1,6 @@
 using UnityEngine;
 using GameNetcodeStuff;
-
-namespace Hax;
+using Hax;
 
 public sealed class TriggerMod : MonoBehaviour, IEnemyPrompter {
     RaycastHit[] RaycastHits { get; set; } = new RaycastHit[100];

@@ -1,6 +1,5 @@
 using UnityEngine;
-
-namespace Hax;
+using Hax;
 
 public sealed class AntiKickMod : MonoBehaviour {
     void OnEnable() {
