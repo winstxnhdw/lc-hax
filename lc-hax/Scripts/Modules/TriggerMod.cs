@@ -62,7 +62,7 @@ public sealed class TriggerMod : MonoBehaviour, IEnemyPrompter {
             return;
         }
 
-        if (HaxObjects.Instance?.DepositItemsDesk.Object.Unfake() is DepositItemsDesk deposit) {
+        if (HaxObjects.Instance?.DepositItemsDesk?.Object.Unfake() is DepositItemsDesk deposit) {
             deposit.AttackPlayersServerRpc();
             return;
         }

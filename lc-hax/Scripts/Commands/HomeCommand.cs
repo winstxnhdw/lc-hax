@@ -9,7 +9,7 @@ public class HomeCommand : ICommand {
     );
 
     Action TeleportPlayerToBaseLater(PlayerControllerB targetPlayer) => () => {
-        HaxObjects.Instance?.ShipTeleporters.Renew();
+        HaxObjects.Instance?.ShipTeleporters?.Renew();
 
         if (this.Teleporter is not ShipTeleporter teleporter) {
             Chat.Print("ShipTeleporter not found!");
@@ -23,7 +23,7 @@ public class HomeCommand : ICommand {
     };
 
     bool TeleporterExists() {
-        HaxObjects.Instance?.ShipTeleporters.Renew();
+        HaxObjects.Instance?.ShipTeleporters?.Renew();
         return this.Teleporter is not null;
     }
 

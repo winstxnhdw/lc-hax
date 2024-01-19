@@ -10,7 +10,7 @@ public class RandomCommand : ICommand {
     );
 
     bool InverseTeleporterExists() {
-        HaxObjects.Instance?.ShipTeleporters.Renew();
+        HaxObjects.Instance?.ShipTeleporters?.Renew();
         return this.InverseTeleporter is not null;
     }
 

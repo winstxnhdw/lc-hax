@@ -1,6 +1,5 @@
 using Hax;
 
-
 [Command("/block")]
 public class BlockCommand : ICommand {
     string BlockCredit() {

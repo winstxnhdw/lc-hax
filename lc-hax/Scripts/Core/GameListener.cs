@@ -1,7 +1,6 @@
 using System;
 using UnityEngine;
-
-namespace Hax;
+using Hax;
 
 public class GameListener : MonoBehaviour {
     public static event Action? onGameStart;
