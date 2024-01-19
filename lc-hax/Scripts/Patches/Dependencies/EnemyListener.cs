@@ -1,6 +1,5 @@
 #pragma warning disable IDE1006
 
-using GameNetcodeStuff;
 using HarmonyLib;
 using System.Collections.Generic;
 
@@ -8,12 +7,12 @@ using System.Collections.Generic;
 class EnemyListener {
     [HarmonyPatch(nameof(EnemyAI.OnDestroy))]
     static void Prefix(ref EnemyAI __instance) {
-        ActiveEnemies.Remove(__instance);
+        _ = ActiveEnemies.Remove(__instance);
     }
 
     [HarmonyPatch(nameof(EnemyAI.Start))]
     static void Postfix(ref EnemyAI __instance) {
-        ActiveEnemies.Add(__instance);
+        _ = ActiveEnemies.Add(__instance);
     }
 
 
