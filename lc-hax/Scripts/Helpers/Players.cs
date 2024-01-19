@@ -1,5 +1,6 @@
 using UnityEngine;
 using GameNetcodeStuff;
+using System.Linq;
 
 namespace Hax;
 
@@ -14,6 +15,8 @@ public static partial class Helper {
     public static PlayerControllerB? LocalPlayer => GameNetworkManager.Instance.localPlayerController.Unfake();
 
     public static PlayerControllerB[] Players => Helper.StartOfRound?.allPlayerScripts ?? [];
+
+    public static PlayerControllerB[] ActivePlayers => Helper.Players.Where(player => player.isPlayerControlled && !player.isPlayerDead).ToArray();
 
     public static PlayerControllerB? GetPlayer(string playerNameOrId) {
         PlayerControllerB[] players = Helper.Players;

@@ -3,14 +3,13 @@ using Hax;
 
 [Command("/poison")]
 public class PoisonCommand : ICommand {
+    void PoisonPlayer(PlayerControllerB player, int damage, ulong delay, ulong duration) =>
+        Helper.CreateComponent<TransientBehaviour>()
+              .Init(_ => player.DamagePlayerRpc(damage), duration, delay);
+
     public void Execute(StringArray args) {
         if (args.Length < 4) {
             Chat.Print("Usage: /poison <player> <damage> <delay> <duration>");
-            return;
-        }
-
-        if (Helper.GetActivePlayer(args[0]) is not PlayerControllerB player) {
-            Chat.Print("Player not found!");
             return;
         }
 
@@ -29,7 +28,16 @@ public class PoisonCommand : ICommand {
             return;
         }
 
-        _ = Helper.CreateComponent<TransientBehaviour>()
-                  .Init(_ => player.DamagePlayerRpc(damage), duration, delay);
+        if (args[0] is "--all") {
+            Helper.ActivePlayers.ForEach(player => this.PoisonPlayer(player, damage, delay, duration));
+        }
+
+        else if (Helper.GetActivePlayer(args[0]) is PlayerControllerB player) {
+            this.PoisonPlayer(player, damage, delay, duration);
+        }
+
+        else {
+            Chat.Print("Player is not found!");
+        }
     }
 }
