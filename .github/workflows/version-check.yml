@@ -15,6 +15,9 @@ on:
     #       * * * * *
     - cron: 0 0 * * *
 
+env:
+  SUPPORTED_VERSION: 13127601
+
 jobs:
   check-version:
     runs-on: ubuntu-latest
@@ -24,8 +27,6 @@ jobs:
         run: pip install steamctl
 
       - name: Check for new version
-        env:
-          SUPPORTED_VERSION: 13127601
         run: |
           CURRENT_VERSION=$(steamctl --anonymous apps product_info 1966720 --skip-licenses | jq -r .depots.branches.public.buildid)
           echo "Current version: $CURRENT_VERSION"
