@@ -81,7 +81,7 @@ public class ESPMod : MonoBehaviour {
             );
         });
 
-        HaxObjects.Instance?.GrabbableObjects.WhereIsNotNull().ForEach(grabbableObject => {
+        HaxObjects.Instance?.GrabbableObjects?.WhereIsNotNull().ForEach(grabbableObject => {
             Renderer? nullableRenderer = grabbableObject is LungProp lungProp
                 ? lungProp.lungDeviceMesh
                 : grabbableObject.mainObjectRenderer;

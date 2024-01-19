@@ -17,7 +17,7 @@ public class SellCommand : ICommand {
     }
 
     void SellEverything(DepositItemsDesk depositItemsDesk, PlayerControllerB player) {
-        HaxObjects.Instance?.GrabbableObjects.WhereIsNotNull().ForEach(grabbableObject => {
+        HaxObjects.Instance?.GrabbableObjects?.WhereIsNotNull().ForEach(grabbableObject => {
             if (!this.CanBeSold(grabbableObject)) return;
             this.SellObject(depositItemsDesk, player, grabbableObject);
         });
@@ -26,7 +26,7 @@ public class SellCommand : ICommand {
     void SellScrapValue(DepositItemsDesk depositItemsDesk, PlayerControllerB player, StartOfRound startOfRound, ushort targetValue) {
         List<GrabbableObject> sellableScraps = [];
 
-        HaxObjects.Instance?.GrabbableObjects.WhereIsNotNull().ForEach(grabbableObject => {
+        HaxObjects.Instance?.GrabbableObjects?.WhereIsNotNull().ForEach(grabbableObject => {
             if (!this.CanBeSold(grabbableObject)) return;
             sellableScraps.Add(grabbableObject);
         });
@@ -66,7 +66,7 @@ public class SellCommand : ICommand {
     public void Execute(StringArray args) {
         if (Helper.LocalPlayer is not PlayerControllerB player) return;
         if (Helper.StartOfRound is not StartOfRound startOfRound) return;
-        if (HaxObjects.Instance?.DepositItemsDesk.Object.Unfake() is not DepositItemsDesk depositItemsDesk) {
+        if (HaxObjects.Instance?.DepositItemsDesk?.Object is not DepositItemsDesk depositItemsDesk) {
             Chat.Print("You must be at the company to use this command!");
             return;
         }

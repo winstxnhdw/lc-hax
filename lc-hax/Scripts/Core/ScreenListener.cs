@@ -1,8 +1,6 @@
 using System;
 using UnityEngine;
 
-namespace Hax;
-
 public class ScreenListener : MonoBehaviour {
     public static event Action? onScreenSizeChange;
 
