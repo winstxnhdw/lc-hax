@@ -102,6 +102,7 @@ The complete feature set includes the following.
 | Kill all enemies              | `/kill --enemy`                                |
 | Kill player with animation    | `/fatality <player> <enemy>`                   |
 | Poison a player               | `/poison <player> <damage> <delay> <duration>` |
+| Poison all players               | `/poison --all <damage> <delay> <duration>` |
 | Spoof a server message        | `/say <player> <message>`                      |
 | Transmit a signal             | `/signal <message>`                            |
 | Modify shovel damage          | `/shovel <force=1>`                            |
