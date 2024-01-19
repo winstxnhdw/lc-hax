@@ -4,7 +4,7 @@ using UnityEngine.Rendering.HighDefinition;
 using Hax;
 
 public sealed class ClearVisionMod : MonoBehaviour {
-    IEnumerator SetNightVision() {
+    IEnumerator SetNightVision(object[] args) {
         WaitForEndOfFrame waitForEndOfFrame = new();
 
         while (true) {
@@ -93,6 +93,6 @@ public sealed class ClearVisionMod : MonoBehaviour {
         _ = this.StartResilientCoroutine(this.DisableFog);
         _ = this.StartResilientCoroutine(this.DisableSteamValves);
         _ = this.StartResilientCoroutine(this.DisableVisor);
-        _ = this.StartCoroutine(this.SetNightVision());
+        _ = this.StartResilientCoroutine(this.SetNightVision);
     }
 }
