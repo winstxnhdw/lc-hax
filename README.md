@@ -102,7 +102,7 @@ The complete feature set includes the following.
 | Kill all enemies              | `/kill --enemy`                                |
 | Kill player with animation    | `/fatality <player> <enemy>`                   |
 | Poison a player               | `/poison <player> <damage> <delay> <duration>` |
-| Poison all players               | `/poison --all <damage> <delay> <duration>` |
+| Poison all players            | `/poison --all <damage> <delay> <duration>`    |
 | Spoof a server message        | `/say <player> <message>`                      |
 | Transmit a signal             | `/signal <message>`                            |
 | Modify shovel damage          | `/shovel <force=1>`                            |
@@ -111,7 +111,7 @@ The complete feature set includes the following.
 | Buy an item                   | `/buy <item> <quantity=1>`                     |
 | Deposit valuable item(s)      | `/sell <quota?>`                               |
 | Grab scrap(s)                 | `/grab <item?>`                                |
-| Block incoming credits        | `/block credit`                               |
+| Block incoming credits        | `/block credit`                                |
 | Block any radar targets       | `/block radar`                                 |
 | Become untargetable           | `/block enemy`                                 |
 | Place an unlockable           | `/build <unlockable>`                          |
