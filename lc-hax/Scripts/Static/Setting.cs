@@ -2,7 +2,6 @@ namespace Hax;
 
 public static class Setting {
     public static bool EnableGodMode { get; set; } = false;
-    public static bool EnableDemigodMode { get; set; } = false;
     public static bool EnableBlockCredits { get; set; } = false;
     public static bool EnableBlockRadar { get; set; } = false;
     public static bool EnableUntargetable { get; set; } = false;
