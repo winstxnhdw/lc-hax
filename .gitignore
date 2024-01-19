@@ -1,7 +1,7 @@
-bin/
-obj/
 NuGet/
 .vs/
 .vscode/
 .mono/
-*.sln
+bin/
+obj/
+.cr
