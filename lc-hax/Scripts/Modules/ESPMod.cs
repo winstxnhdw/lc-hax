@@ -11,21 +11,24 @@ public class ESPMod : MonoBehaviour {
     Renderer[] EntranceRenderers { get; set; } = [];
 
     bool InGame { get; set; } = false;
+    bool Enabled { get; set; } = true;
 
     void OnEnable() {
         GameListener.onGameStart += this.OnGameJoin;
         GameListener.onGameEnd += this.OnGameEnd;
         GameListener.onShipLand += this.InitialiseRenderers;
+        InputListener.onPausePress += this.ToggleESP;
     }
 
     void OnDisable() {
         GameListener.onGameStart -= this.OnGameJoin;
         GameListener.onGameEnd -= this.OnGameEnd;
         GameListener.onShipLand -= this.InitialiseRenderers;
+        InputListener.onPausePress -= this.ToggleESP;
     }
 
     void OnGUI() {
-        if (!this.InGame || Helper.CurrentCamera is not Camera camera) return;
+        if (!this.Enabled || !this.InGame || Helper.CurrentCamera is not Camera camera) return;
 
         this.PlayerRenderers.ForEach(rendererPair => {
             if (rendererPair.GameObject.isPlayerDead || !rendererPair.GameObject.isPlayerControlled) return;
@@ -119,6 +122,8 @@ public class ESPMod : MonoBehaviour {
     }
 
     void OnGameEnd() => this.InGame = false;
+
+    void ToggleESP() => this.Enabled = !this.Enabled;
 
     Renderer[] GetRenderers<T>() where T : Component =>
         Helper.FindObjects<T>()

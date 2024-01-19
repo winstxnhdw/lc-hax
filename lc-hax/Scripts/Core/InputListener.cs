@@ -11,6 +11,7 @@ public class InputListener : MonoBehaviour {
     public static event Action? onLeftButtonPress;
     public static event Action? onLeftArrowKeyPress;
     public static event Action? onRightArrowKeyPress;
+    public static event Action? onPausePress;
     public static event Action? onEqualsPress;
     public static event Action? onLeftBracketPress;
     public static event Action? onRightBracketPress;
@@ -24,6 +25,7 @@ public class InputListener : MonoBehaviour {
     (Func<bool>, Action)[] InputActions { get; } = [
         (() => Mouse.current.middleButton.wasPressedThisFrame, () => InputListener.onMiddleButtonPress?.Invoke()),
         (() => Mouse.current.leftButton.wasPressedThisFrame, () => InputListener.onLeftButtonPress?.Invoke()),
+        (() => Keyboard.current[Key.Pause].wasPressedThisFrame, () => InputListener.onPausePress?.Invoke()),
         (() => Keyboard.current[Key.Equals].wasPressedThisFrame, () => InputListener.onEqualsPress?.Invoke()),
         (() => Keyboard.current[Key.LeftArrow].wasPressedThisFrame, () => InputListener.onLeftArrowKeyPress?.Invoke()),
         (() => Keyboard.current[Key.RightArrow].wasPressedThisFrame, () => InputListener.onRightArrowKeyPress?.Invoke()),
