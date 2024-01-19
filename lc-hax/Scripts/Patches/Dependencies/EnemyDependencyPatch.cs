@@ -4,17 +4,19 @@ using HarmonyLib;
 using System.Collections.Generic;
 
 [HarmonyPatch(typeof(EnemyAI))]
-class EnemyListener {
+class EnemyDependencyPatch
+{
+    public static HashSet<EnemyAI> ActiveEnemies { get; } = [];
+
     [HarmonyPatch(nameof(EnemyAI.OnDestroy))]
-    static void Prefix(ref EnemyAI __instance) {
+    static void Prefix(EnemyAI __instance)
+    {
         _ = ActiveEnemies.Remove(__instance);
     }
 
     [HarmonyPatch(nameof(EnemyAI.Start))]
-    static void Postfix(ref EnemyAI __instance) {
+    static void Postfix(EnemyAI __instance)
+    {
         _ = ActiveEnemies.Add(__instance);
     }
-
-
-    public static HashSet<EnemyAI> ActiveEnemies = [];
 }
