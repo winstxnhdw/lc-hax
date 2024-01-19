@@ -1,9 +1,6 @@
 using System;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
-
-namespace Hax;
 
 public class InputListener : MonoBehaviour {
     public static event Action<bool>? onShiftButtonHold;
@@ -24,30 +21,30 @@ public class InputListener : MonoBehaviour {
     public static event Action? onUpArrowPress;
     public static event Action? onDownArrowPress;
 
-    Dictionary<Func<bool>, Action> InputActions { get; } = new() {
-        { () => Mouse.current.middleButton.wasPressedThisFrame, () => InputListener.onMiddleButtonPress?.Invoke() },
-        { () => Mouse.current.leftButton.wasPressedThisFrame, () => InputListener.onLeftButtonPress?.Invoke() },
-        { () => true, () => InputListener.onShiftButtonHold?.Invoke(Keyboard.current[Key.LeftShift].isPressed) },
-        { () => true, () => InputListener.onFButtonHold?.Invoke(Keyboard.current[Key.F].isPressed) },
-        { () => true, () => InputListener.onRButtonHold?.Invoke(Keyboard.current[Key.R].isPressed) },
-        { () => true, () => InputListener.onEButtonHold?.Invoke(Keyboard.current[Key.E].isPressed) },
-        { () => Keyboard.current[Key.Equals].wasPressedThisFrame, () => InputListener.onEqualsPress?.Invoke() },
-        { () => Keyboard.current[Key.LeftArrow].wasPressedThisFrame, () => InputListener.onLeftArrowKeyPress?.Invoke() },
-        { () => Keyboard.current[Key.RightArrow].wasPressedThisFrame, () => InputListener.onRightArrowKeyPress?.Invoke() },
-        { () => Keyboard.current[Key.LeftBracket].wasPressedThisFrame, () => InputListener.onLeftBracketPress?.Invoke() },
-        { () => Keyboard.current[Key.RightBracket].wasPressedThisFrame, () => InputListener.onRightBracketPress?.Invoke() },
-        { () => Keyboard.current[Key.Backslash].wasPressedThisFrame, () => InputListener.onBackslashPress?.Invoke() },
-        { () => Keyboard.current[Key.Z].wasPressedThisFrame, () => InputListener.onZPress?.Invoke() },
-        { () => Keyboard.current[Key.X].wasPressedThisFrame, () => InputListener.onXPress?.Invoke() },
-        { () => Keyboard.current[Key.N].wasPressedThisFrame, () => InputListener.onNPress?.Invoke() },
-        { () => Keyboard.current[Key.UpArrow].wasPressedThisFrame, () => InputListener.onUpArrowPress?.Invoke() },
-        { () => Keyboard.current[Key.DownArrow].wasPressedThisFrame, () => InputListener.onDownArrowPress?.Invoke() }
-    };
+    (Func<bool>, Action)[] InputActions { get; } = [
+        ( () => Mouse.current.middleButton.wasPressedThisFrame, () => InputListener.onMiddleButtonPress?.Invoke() ),
+        ( () => Mouse.current.leftButton.wasPressedThisFrame, () => InputListener.onLeftButtonPress?.Invoke() ),
+        ( () => true, () => InputListener.onShiftButtonHold?.Invoke(Keyboard.current[Key.LeftShift].isPressed) ),
+        ( () => true, () => InputListener.onFButtonHold?.Invoke(Keyboard.current[Key.F].isPressed) ),
+        ( () => true, () => InputListener.onRButtonHold?.Invoke(Keyboard.current[Key.R].isPressed) ),
+        ( () => true, () => InputListener.onEButtonHold?.Invoke(Keyboard.current[Key.E].isPressed) ),
+        ( () => Keyboard.current[Key.Equals].wasPressedThisFrame, () => InputListener.onEqualsPress?.Invoke() ),
+        ( () => Keyboard.current[Key.LeftArrow].wasPressedThisFrame, () => InputListener.onLeftArrowKeyPress?.Invoke() ),
+        ( () => Keyboard.current[Key.RightArrow].wasPressedThisFrame, () => InputListener.onRightArrowKeyPress?.Invoke() ),
+        ( () => Keyboard.current[Key.LeftBracket].wasPressedThisFrame, () => InputListener.onLeftBracketPress?.Invoke() ),
+        ( () => Keyboard.current[Key.RightBracket].wasPressedThisFrame, () => InputListener.onRightBracketPress?.Invoke() ),
+        ( () => Keyboard.current[Key.Backslash].wasPressedThisFrame, () => InputListener.onBackslashPress?.Invoke() ),
+        ( () => Keyboard.current[Key.Z].wasPressedThisFrame, () => InputListener.onZPress?.Invoke() ),
+        ( () => Keyboard.current[Key.X].wasPressedThisFrame, () => InputListener.onXPress?.Invoke() ),
+        ( () => Keyboard.current[Key.N].wasPressedThisFrame, () => InputListener.onNPress?.Invoke() ),
+        ( () => Keyboard.current[Key.UpArrow].wasPressedThisFrame, () => InputListener.onUpArrowPress?.Invoke() ),
+        ( () => Keyboard.current[Key.DownArrow].wasPressedThisFrame, () => InputListener.onDownArrowPress?.Invoke())
+    ];
 
     void Update() {
-        foreach (KeyValuePair<Func<bool>, Action> keyAction in this.InputActions) {
-            if (!keyAction.Key()) continue;
-            keyAction.Value();
+        foreach ((Func<bool> keyPressed, Action eventAction) in this.InputActions) {
+            if (!keyPressed()) continue;
+            eventAction();
         }
     }
 }
