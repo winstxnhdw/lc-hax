@@ -85,15 +85,7 @@ public class ESPMod : MonoBehaviour {
         });
 
         HaxObjects.Instance?.GrabbableObjects?.WhereIsNotNull().ForEach(grabbableObject => {
-            Renderer? nullableRenderer = grabbableObject is LungProp lungProp
-                ? lungProp.lungDeviceMesh
-                : grabbableObject.mainObjectRenderer;
-
-            if (nullableRenderer.Unfake() is not Renderer renderer) {
-                return;
-            }
-
-            Vector3 rendererCentrePoint = camera.WorldToEyesPoint(renderer.bounds.center);
+            Vector3 rendererCentrePoint = camera.WorldToEyesPoint(grabbableObject.transform.position);
 
             if (rendererCentrePoint.z <= 2.0f) {
                 return;
