@@ -233,12 +233,12 @@ public static class EnemyPromptMixin {
         bool funnyRevive = false,
         bool willTeleportEnemies = false
     ) {
-        if (Helper.RoundManager is not RoundManager roundManager) return [];
+        if (Helper.LocalPlayer is not PlayerControllerB localPlayer) return [];
 
         List<string> enemyNames = [];
         EnemyPromptHandler enemyPromptHandler = new();
 
-        roundManager.SpawnedEnemies.ForEach((enemy) => {
+        Helper.Enemies.WhereIsNotNull().ForEach((enemy) => {
             if (enemy is DocileLocustBeesAI or DoublewingAI or BlobAI or DressGirlAI or LassoManAI) return;
             if (funnyRevive) {
                 enemy.isEnemyDead = false;
@@ -246,7 +246,7 @@ public static class EnemyPromptMixin {
             }
 
             enemy.targetPlayer = player;
-            enemy.ChangeEnemyOwnerServerRpc(roundManager.playersManager.localPlayerController.actualClientId);
+            enemy.ChangeEnemyOwnerServerRpc(localPlayer.actualClientId);
             enemy.SetMovingTowardsTargetPlayer(player);
             enemyNames.Add(enemy.enemyType.enemyName);
             enemyPromptHandler.HandleEnemy(enemy, player, willTeleportEnemies);
