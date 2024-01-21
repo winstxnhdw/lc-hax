@@ -2,7 +2,6 @@
 
 using HarmonyLib;
 using System.Collections.Generic;
-using Unity.Netcode;
 
 [HarmonyPatch(typeof(GrabbableObject))]
 class GrabbableDependencyPatch {

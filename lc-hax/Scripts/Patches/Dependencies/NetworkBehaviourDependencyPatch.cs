@@ -1,7 +1,6 @@
 #pragma warning disable IDE1006
 
 using HarmonyLib;
-using System.Collections.Generic;
 using Unity.Netcode;
 
 [HarmonyPatch(typeof(NetworkBehaviour))]

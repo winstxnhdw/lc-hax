@@ -23,7 +23,7 @@ internal class HoarderBugAIFixPatch {
             return;
         }
         if (DropItemAndCallDropRPCMethod != null) {
-            object[] parameters = new object[] { item, droppedInNest };
+            object[] parameters = [item, droppedInNest];
             _ = DropItemAndCallDropRPCMethod.Invoke(bug, parameters);
         }
         else {
@@ -31,6 +31,6 @@ internal class HoarderBugAIFixPatch {
         }
     }
 
-    private static MethodInfo? DropItemAndCallDropRPCMethod  => typeof(HoarderBugAI).GetMethod("DropItemAndCallDropRPC", BindingFlags.NonPublic | BindingFlags.Instance);
+    private static MethodInfo? DropItemAndCallDropRPCMethod => typeof(HoarderBugAI).GetMethod("DropItemAndCallDropRPC", BindingFlags.NonPublic | BindingFlags.Instance);
 
 }

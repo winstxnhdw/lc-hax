@@ -1,5 +1,3 @@
-using System.Collections.Generic;
-
 namespace Hax;
 
 public static partial class Helper {
