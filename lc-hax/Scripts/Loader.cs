@@ -72,7 +72,7 @@ public class Loader : MonoBehaviour {
         Loader.AddHaxModules<StaminaMod>();
         Loader.AddHaxModules<PhantomMod>();
         Loader.AddHaxModules<TriggerMod>();
-     //   Loader.AddHaxModules<AntiKickMod>();
+        //   Loader.AddHaxModules<AntiKickMod>();
         Loader.AddHaxModules<CrosshairMod>();
         //Loader.AddHaxModules<MinimalGUIMod>();
         Loader.AddHaxModules<PossessionMod>();
