@@ -64,7 +64,7 @@ public class Loader : MonoBehaviour {
         DontDestroyOnLoad(Loader.HaxModules);
 
         Loader.AddHaxModules<ESPMod>();
-        Loader.AddHaxModules<SaneMod>();
+        //Loader.AddHaxModules<SaneMod>();
         Loader.AddHaxModules<StunMod>();
         Loader.AddHaxModules<ChatMod>();
         Loader.AddHaxModules<FollowMod>();
@@ -72,12 +72,12 @@ public class Loader : MonoBehaviour {
         Loader.AddHaxModules<StaminaMod>();
         Loader.AddHaxModules<PhantomMod>();
         Loader.AddHaxModules<TriggerMod>();
-        Loader.AddHaxModules<AntiKickMod>();
+     //   Loader.AddHaxModules<AntiKickMod>();
         Loader.AddHaxModules<CrosshairMod>();
-        Loader.AddHaxModules<MinimalGUIMod>();
+        //Loader.AddHaxModules<MinimalGUIMod>();
         Loader.AddHaxModules<PossessionMod>();
         Loader.AddHaxModules<ClearVisionMod>();
-        Loader.AddHaxModules<InstantInteractMod>();
+        //Loader.AddHaxModules<InstantInteractMod>();
     }
 
     public static void Unload() {
