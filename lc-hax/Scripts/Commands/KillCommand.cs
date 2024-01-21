@@ -28,7 +28,7 @@ public class KillCommand : ICommand {
     }
 
     Result KillAllEnemies() {
-        Helper.Enemies.ForEach(enemy => {
+        EnemyDependencyPatch.ActiveEnemies.ForEach(enemy => {
             if (Helper.LocalPlayer is PlayerControllerB localPlayer && enemy is NutcrackerEnemyAI nutcracker) {
                 nutcracker.ChangeEnemyOwnerServerRpc(localPlayer.actualClientId);
                 nutcracker.DropGunServerRpc(Vector3.zero);
