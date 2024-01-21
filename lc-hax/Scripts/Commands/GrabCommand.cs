@@ -17,7 +17,7 @@ public class GrabCommand : ICommand {
         Vector3 positionOffset,
         Transform parentObject
     ) {
-        HaxObjects.Instance?.GrabbableObjects?.WhereIsNotNull().ForEach(grabbableObject => {
+        GrabbableDependencyPatch.ActiveProps.WhereIsNotNull().ForEach(grabbableObject => {
             if (!this.CanGrabItem(grabbableObject, currentPlayerPosition)) return;
 
             player.PlaceGrabbableObject(
@@ -37,7 +37,7 @@ public class GrabCommand : ICommand {
         string itemName
     ) {
         Dictionary<string, GrabbableObject> grabbableObjects =
-            HaxObjects.Instance?.GrabbableObjects?
+            GrabbableDependencyPatch.ActiveProps?
                 .WhereIsNotNull()
                 .Where(grabbableObject => this.CanGrabItem(grabbableObject, currentPlayerPosition))
                 .GroupBy(grabbableObject => grabbableObject.itemProperties.name.ToLower())
