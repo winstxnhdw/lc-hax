@@ -80,11 +80,11 @@ public sealed class TriggerMod : MonoBehaviour, IEnemyPrompter {
                         turret.EnterBerserkModeServerRpc(-1);
                     }
                     else {
-                        turret.ToggleTurretEnabled(false);
+                        turret.ToggleTurretServerRpc(false);
                     }
                 }
                 else {
-                    turret.ToggleTurretEnabled(true);
+                    turret.ToggleTurretServerRpc(true);
                 }
             }
 
