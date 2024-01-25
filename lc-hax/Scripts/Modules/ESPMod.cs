@@ -67,25 +67,12 @@ public class ESPMod : MonoBehaviour {
         Helper.ActiveEnemies.WhereIsNotNull().ForEach(enemy => {
             if (enemy.isEnemyDead) return;
             if (enemy is DocileLocustBeesAI or DoublewingAI) return;
-            Renderer? nullableRenderer = null;
 
-            if (enemy is RedLocustBees redLocust) {
-                nullableRenderer = redLocust.meshRenderers.First();
-            }
-            if (enemy is MaskedPlayerEnemy masked) {
-                nullableRenderer = masked.skinnedMeshRenderers.First();
-            }
-
-            if (nullableRenderer == null) {
-                nullableRenderer = enemy.meshRenderers.First();
-            }
-
-            if (nullableRenderer == null) {
-                nullableRenderer = enemy.skinnedMeshRenderers.First();
-            }
+            Renderer? nullableRenderer = enemy is RedLocustBees
+                ? enemy.meshRenderers.First()
+                : enemy.skinnedMeshRenderers.First();
 
             if (nullableRenderer.Unfake() is not Renderer renderer) {
-                Console.WriteLine($"Failed to get renderer for {enemy.enemyType.enemyName}!");
                 return;
             }
 
