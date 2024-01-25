@@ -8,12 +8,12 @@ class EnemyDependencyPatch {
 
     [HarmonyPatch(nameof(EnemyAI.OnDestroy))]
     static void Prefix(EnemyAI __instance) {
-        _ = Helper.ActiveEnemies.Remove(__instance);
+        _ = Helper.Enemies.Remove(__instance);
     }
 
     [HarmonyPatch(nameof(EnemyAI.Start))]
     static void Postfix(EnemyAI __instance) {
-        _ = Helper.ActiveEnemies.Add(__instance);
+        _ = Helper.Enemies.Add(__instance);
     }
 
 }
