@@ -238,7 +238,7 @@ public static class EnemyPromptMixin {
         List<string> enemyNames = [];
         EnemyPromptHandler enemyPromptHandler = new();
 
-        EnemyDependencyPatch.ActiveEnemies.WhereIsNotNull().ForEach((enemy) => {
+        Helper.ActiveEnemies.WhereIsNotNull().ForEach((enemy) => {
             if (enemy is DocileLocustBeesAI or DoublewingAI or BlobAI or DressGirlAI or LassoManAI) return;
             if (funnyRevive) {
                 enemy.isEnemyDead = false;

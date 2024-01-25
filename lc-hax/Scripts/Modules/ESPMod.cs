@@ -64,7 +64,7 @@ public class ESPMod : MonoBehaviour {
             this.RenderLabel("Entrance")
         ));
 
-        EnemyDependencyPatch.ActiveEnemies.WhereIsNotNull().ForEach(enemy => {
+        Helper.ActiveEnemies.WhereIsNotNull().ForEach(enemy => {
             if (enemy.isEnemyDead) return;
             if (enemy is DocileLocustBeesAI or DoublewingAI) return;
             Renderer? nullableRenderer = null;

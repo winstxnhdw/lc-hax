@@ -4,17 +4,16 @@ using HarmonyLib;
 using Hax;
 using System.Collections.Generic;
 
-[HarmonyPatch(typeof(EnemyAI))]
-class EnemyDependencyPatch {
+[HarmonyPatch(typeof(MaskedPlayerEnemy))]
+class MaskedDependencyPatch {
 
-    [HarmonyPatch(nameof(EnemyAI.OnDestroy))]
+    [HarmonyPatch(nameof(MaskedPlayerEnemy.OnDestroy))]
     static void Prefix(EnemyAI __instance) {
         _ = Helper.ActiveEnemies.Remove(__instance);
     }
 
-    [HarmonyPatch(nameof(EnemyAI.Start))]
+    [HarmonyPatch(nameof(MaskedPlayerEnemy.Start))]
     static void Postfix(EnemyAI __instance) {
         _ = Helper.ActiveEnemies.Add(__instance);
     }
-
 }
