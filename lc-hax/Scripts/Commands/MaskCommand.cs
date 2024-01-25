@@ -5,7 +5,7 @@ using Hax;
 public class MaskCommand : ICommand {
 
     public void Execute(StringArray args) {
-        if (args.Length is 0) {
+        if (args.Length == 0) {
             Chat.Print("Usage: /mask self OR /mask <player> (optional) <amount>");
             return;
         }
@@ -14,36 +14,32 @@ public class MaskCommand : ICommand {
             Chat.Print("You are not holding a mask!");
             return;
         }
+        PlayerControllerB targetPlayer;
 
         if (args[0].ToLower() == "self") {
-            int amount = 1; // Default amount
-            if (args.Length >= 2 && int.TryParse(args[1], out int parsedAmount)) {
-                amount = parsedAmount;
+            targetPlayer = Helper.LocalPlayer;
+        }
+        else {
+            if (Helper.GetActivePlayer(args[0]) is not PlayerControllerB player) {
+                Chat.Print("Player not found!");
+                return;
             }
-            for (int i = 0; i < amount; i++) {
-                this.SpawnMimicForPlayer(Helper.LocalPlayer, hauntedMaskItem);
-            }
-            return;
+            targetPlayer = player;
         }
 
-        if (Helper.GetActivePlayer(args[0]) is not PlayerControllerB targetPlayer) {
-            Chat.Print("Player not found!");
-            return;
+        int Amount = 1;
+
+        if (args.Length >= 3 && int.TryParse(args[2], out int parsedTargetAmount) && parsedTargetAmount >= 0) {
+            Amount = parsedTargetAmount;
         }
 
-        int targetAmount = 1; // Default amount
-        if (args.Length >= 3 && int.TryParse(args[2], out int parsedTargetAmount)) {
-            targetAmount = parsedTargetAmount;
-        }
-
-        for (int i = 0; i < targetAmount; i++) {
-            this.SpawnMimicForPlayer(targetPlayer, hauntedMaskItem);
-        }
+        this.SpawnMimicForPlayer(targetPlayer, hauntedMaskItem, Amount);
     }
 
-    public void SpawnMimicForPlayer(PlayerControllerB player, HauntedMaskItem mask) {
+    public void SpawnMimicForPlayer(PlayerControllerB player, HauntedMaskItem mask, int amount) {
         if (player is null || mask is null) return;
-
-        mask.CreateMimicServerRpc(player.isInsideFactory, player.transform.position);
+        for (int i = 0; i < amount; i++) {
+            mask.CreateMimicServerRpc(player.isInsideFactory, player.transform.position);
+        }
     }
 }
