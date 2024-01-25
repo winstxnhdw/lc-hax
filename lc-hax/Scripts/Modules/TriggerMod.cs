@@ -75,17 +75,7 @@ public sealed class TriggerMod : MonoBehaviour, IEnemyPrompter {
             }
 
             if (collider.TryGetComponent(out Turret turret)) {
-                if (turret.turretActive) {
-                    if (turret.turretMode != TurretMode.Berserk) {
-                        turret.EnterBerserkModeServerRpc(-1);
-                    }
-                    else {
-                        turret.ToggleTurretEnabled(false);
-                    }
-                }
-                else {
-                    turret.ToggleTurretEnabled(true);
-                }
+                turret.EnterBerserkModeServerRpc(-1);
             }
 
             if (collider.TryGetComponent(out Landmine landmine)) {
