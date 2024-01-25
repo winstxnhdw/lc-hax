@@ -2,7 +2,6 @@
 
 using HarmonyLib;
 using Hax;
-using System.Collections.Generic;
 
 [HarmonyPatch(typeof(EnemyAI))]
 class EnemyDependencyPatch {
