@@ -60,17 +60,14 @@ public static class Chat {
             return;
         }
 
-        if (Chat.Commands.TryGetValue(args[0], out ICommand command)) {
-            command.Execute(args[1..]);
+        using ICommand? command = Chat.Commands.GetValue(args[0]) ?? Chat.DebugCommands.GetValue(args[0]);
+
+        if (command is null) {
+            Chat.Print("The command is not found!");
             return;
         }
 
-        if (Chat.DebugCommands.TryGetValue(args[0], out ICommand debugCommand)) {
-            debugCommand.Execute(args[1..]);
-            return;
-        }
-
-        Chat.Print("Command not found!");
+        command.Execute(args[1..]);
     }
 }
 
