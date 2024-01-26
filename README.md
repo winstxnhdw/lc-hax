@@ -70,6 +70,7 @@ The complete feature set includes the following.
 - No item usage cooldown
 - No lobby refresh delay
 - No build constraints
+- No character limit
 - Always sane
 - Always lightweight
 - Always show HUD
