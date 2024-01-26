@@ -22,13 +22,8 @@ internal class HoarderBugAIFixPatch {
         if (bug == null || item == null) {
             return;
         }
-        if (DropItemAndCallDropRPCMethod != null) {
             object[] parameters = [item, droppedInNest];
-            _ = DropItemAndCallDropRPCMethod.Invoke(bug, parameters);
-        }
-        else {
-            Console.WriteLine("DropItemAndCallDropRPC Method not found.");
-        }
+            _ = DropItemAndCallDropRPCMethod?.Invoke(bug, parameters);
     }
 
     private static MethodInfo? DropItemAndCallDropRPCMethod => typeof(HoarderBugAI).GetMethod("DropItemAndCallDropRPC", BindingFlags.NonPublic | BindingFlags.Instance);
