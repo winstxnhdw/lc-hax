@@ -19,12 +19,15 @@ A powerful, feature-rich and highly performant portable Windows CLI-only interna
 
 ## Requirements
 
-- [Microsoft .NET 8.0 SDK](https://dotnet.microsoft.com/en-us/download)
+- [Microsoft .NET 8.0 SDK](https://dotnet.microsoft.com/download)
 - [Git](https://git-scm.com/download/win)
 
 ## Installation
 
 Clone the repository.
+
+> [!NOTE]\
+> Cloning will download this project in your current working directory. You should not be downloading this project as a `zip`.
 
 ```bash
 git clone --recursive https://github.com/winstxnhdw/lc-hax.git
