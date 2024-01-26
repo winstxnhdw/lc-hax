@@ -1,7 +1,6 @@
 #pragma warning disable IDE1006
 
 using HarmonyLib;
-using System;
 using System.Reflection;
 using Unity.Netcode;
 
@@ -22,8 +21,8 @@ internal class HoarderBugAIFixPatch {
         if (bug == null || item == null) {
             return;
         }
-            object[] parameters = [item, droppedInNest];
-            _ = DropItemAndCallDropRPCMethod?.Invoke(bug, parameters);
+        object[] parameters = [item, droppedInNest];
+        _ = DropItemAndCallDropRPCMethod?.Invoke(bug, parameters);
     }
 
     private static MethodInfo? DropItemAndCallDropRPCMethod => typeof(HoarderBugAI).GetMethod("DropItemAndCallDropRPC", BindingFlags.NonPublic | BindingFlags.Instance);
