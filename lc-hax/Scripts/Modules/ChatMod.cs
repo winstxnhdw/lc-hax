@@ -47,5 +47,9 @@ public sealed class ChatMod : MonoBehaviour {
 
     void Update() {
         this.HistoryIndex = Helper.LocalPlayer?.isTypingChat is true ? this.HistoryIndex : -1;
+
+        if (Helper.HUDManager is HUDManager hudManager) {
+            hudManager.chatTextField.characterLimit = int.MaxValue;
+        }
     }
 }
