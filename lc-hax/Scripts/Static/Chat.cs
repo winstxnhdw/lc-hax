@@ -1,8 +1,9 @@
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using System.Collections.Generic;
 using UnityEngine.EventSystems;
+using GameNetcodeStuff;
 
 namespace Hax;
 
@@ -30,6 +31,27 @@ public static class Chat {
                 type => type.GetCustomAttribute<DebugCommandAttribute>().Syntax,
                 type => (ICommand)new Debug((ICommand)Activator.CreateInstance(type))
             );
+
+    public static void Announce(string announcement, bool keepHistory = false) {
+        if (Helper.LocalPlayer is not PlayerControllerB player) return;
+        if (Helper.HUDManager is not HUDManager hudManager) return;
+
+        string actualHistory = string.Join('\n', hudManager.ChatMessageHistory.Where(message =>
+            !message.StartsWith("<color=#FF0000>USER</color>: <color=#FFFF00>'") &&
+            !message.StartsWith("<color=#FF0000>SYSTEM</color>: <color=#FFFF00>'")
+        ));
+
+        string chatText = keepHistory ? $"{actualHistory}\n<color=#7069ff>{announcement}</color>" : announcement;
+
+        hudManager.AddTextToChatOnServer(
+            $"</color>\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n{chatText}<color=#FFFFFF00>",
+            (int)player.playerClientId
+        );
+    }
+
+    public static void Clear() {
+        Chat.Announce("");
+    }
 
     public static void Print(string name, string? message, bool isSystem = false) {
         if (string.IsNullOrWhiteSpace(message) || Helper.HUDManager is not HUDManager hudManager) return;
@@ -70,6 +92,3 @@ public static class Chat {
         command.Execute(args[1..]);
     }
 }
-
-
-
