@@ -15,5 +15,4 @@ class EnemyDependencyPatch {
     static void Postfix(EnemyAI __instance) {
         _ = Helper.Enemies.Add(__instance);
     }
-
 }
