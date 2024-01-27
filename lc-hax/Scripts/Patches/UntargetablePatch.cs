@@ -16,13 +16,12 @@ class UntargetableEnemyPatch {
     }
 
     [HarmonyPatch(nameof(EnemyAI.Update))]
-    public static bool Prefix(ref PlayerControllerB? ___targetPlayer, ref bool ___movingTowardsTargetPlayer) {
+    public static bool Prefix(EnemyAI __instance) {
         if (!Setting.EnableUntargetable) return true;
-        if (!___targetPlayer) return true;
-        if (Helper.LocalPlayer?.actualClientId != ___targetPlayer?.actualClientId) return true;
+        if (Helper.LocalPlayer?.actualClientId != __instance.targetPlayer?.actualClientId) return true;
 
-        ___targetPlayer = null;
-        ___movingTowardsTargetPlayer = false;
+        __instance.targetPlayer = null;
+        __instance.movingTowardsTargetPlayer = false;
         return false;
     }
 }
