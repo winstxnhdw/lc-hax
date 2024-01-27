@@ -4,12 +4,14 @@ using System;
 using GameNetcodeStuff;
 using HarmonyLib;
 using Hax;
+using TMPro;
 
 [HarmonyPatch(typeof(HUDManager), "EnableChat_performed")]
 class EnableChatPatch {
-    static void Prefix(ref PlayerControllerB ___localPlayer, ref bool __state) {
+    static void Prefix(ref PlayerControllerB ___localPlayer, ref TMP_InputField __chatTextField, ref bool __state) {
         if (___localPlayer is not PlayerControllerB localPlayer) return;
 
+        __chatTextField.characterLimit = int.MaxValue;
         __state = localPlayer.isPlayerDead;
         localPlayer.isPlayerDead = false;
     }
