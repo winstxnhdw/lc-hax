@@ -3,8 +3,8 @@ using Hax;
 
 [Command("/mask")]
 public class MaskCommand : ICommand {
-    void SpawnMimicOnPlayer(PlayerControllerB player, HauntedMaskItem mask, int amount = 1) {
-        for (int i = 0; i < amount; i++) {
+    void SpawnMimicOnPlayer(PlayerControllerB player, HauntedMaskItem mask, ulong amount = 1) {
+        for (ulong i = 0; i < amount; i++) {
             mask.CreateMimicServerRpc(player.isInsideFactory, player.transform.position);
         }
     }
@@ -28,7 +28,7 @@ public class MaskCommand : ICommand {
             return;
         }
 
-        if (!int.TryParse(args[2], out int amount)) {
+        if (!ulong.TryParse(args[2], out ulong amount)) {
             Chat.Print("Invalid amount!");
             return;
         }
