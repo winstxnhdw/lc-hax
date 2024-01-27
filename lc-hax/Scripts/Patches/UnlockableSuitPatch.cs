@@ -1,7 +1,5 @@
 using HarmonyLib;
 using Hax;
-using System;
-using UnityEngine;
 
 [HarmonyPatch(typeof(UnlockableSuit))]
 public static class UnlockableSuitPatch {
