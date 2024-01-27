@@ -2,8 +2,25 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.Rendering.HighDefinition;
 using Hax;
+using System;
 
 public sealed class ClearVisionMod : MonoBehaviour {
+    float LightIntensity { get; set; } = 2.0f;
+
+    void OnEnable() {
+        InputListener.onF4Press += this.IncreaseLightIntensity;
+        InputListener.onF5Press += this.DecreaseLightIntensity;
+    }
+
+    void OnDisable() {
+        InputListener.onF4Press -= this.IncreaseLightIntensity;
+        InputListener.onF5Press -= this.DecreaseLightIntensity;
+    }
+
+    void IncreaseLightIntensity() => this.LightIntensity = Math.Clamp(this.LightIntensity + 1.0f, 0.0f, 10.0f);
+
+    void DecreaseLightIntensity() => this.LightIntensity = Math.Clamp(this.LightIntensity - 1.0f, 0.0f, 10.0f);
+
     IEnumerator SetNightVision(object[] args) {
         WaitForEndOfFrame waitForEndOfFrame = new();
 
@@ -37,7 +54,7 @@ public sealed class ClearVisionMod : MonoBehaviour {
             timeOfDay.sunIndirect.transform.eulerAngles = new Vector3(90, 0, 0);
             timeOfDay.sunIndirect.transform.position = camera.transform.position;
             timeOfDay.sunIndirect.color = Color.white;
-            timeOfDay.sunIndirect.intensity = 2;
+            timeOfDay.sunIndirect.intensity = this.LightIntensity;
             timeOfDay.sunIndirect.enabled = true;
             timeOfDay.sunDirect.transform.eulerAngles = new Vector3(90, 0, 0);
             timeOfDay.sunDirect.enabled = true;
