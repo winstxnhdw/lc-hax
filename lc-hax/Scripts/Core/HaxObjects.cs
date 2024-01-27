@@ -9,7 +9,6 @@ public class HaxObjects : MonoBehaviour {
     public MultiObjectPool<LocalVolumetricFog>? LocalVolumetricFogs { get; private set; }
     public MultiObjectPool<SteamValveHazard>? SteamValves { get; private set; }
     public MultiObjectPool<InteractTrigger>? InteractTriggers { get; private set; }
-    public MultiObjectPool<GrabbableObject>? GrabbableObjects { get; private set; }
 
     void Awake() {
         this.DepositItemsDesk = new(this, 3.0f);
@@ -17,8 +16,6 @@ public class HaxObjects : MonoBehaviour {
         this.LocalVolumetricFogs = new(this);
         this.InteractTriggers = new(this);
         this.SteamValves = new(this, 5.0f);
-        this.GrabbableObjects = new(this, 4.0f);
-
         HaxObjects.Instance = this;
     }
 }

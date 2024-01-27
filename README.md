@@ -99,7 +99,7 @@ The complete feature set includes the following.
 | Chibaku Tensei                | `/ct <player>`                                 |
 | Play noise on player          | `/noise <player> <duration=30>`                |
 | Lure enemies to player        | `/hate <player>`                               |
-| Spawn masked enemy on player  | `/mask <player>`                               |
+| Spawn masked enemy on player  | `/mask <player?> <amount?>`                    |
 | Heal player                   | `/heal <player?>`                              |
 | Kill player                   | `/kill <player?>`                              |
 | Kill all players              | `/kill --all`                                  |
