@@ -84,7 +84,7 @@ public class ESPMod : MonoBehaviour {
             );
         });
 
-        HaxObjects.Instance?.GrabbableObjects?.WhereIsNotNull().ForEach(grabbableObject => {
+        Helper.Grabbables.WhereIsNotNull().ForEach(grabbableObject => {
             Vector3 rendererCentrePoint = camera.WorldToEyesPoint(grabbableObject.transform.position);
 
             if (rendererCentrePoint.z <= 2.0f) {
