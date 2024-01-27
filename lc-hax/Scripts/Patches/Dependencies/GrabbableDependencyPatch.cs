@@ -9,6 +9,6 @@ class GrabbableDependencyPatch {
 
     [HarmonyPatch(nameof(GrabbableObject.Update))]
     static void Postfix(GrabbableObject __instance) {
-        _ = Helper.Props.Add(__instance);
+        _ = Helper.Grabbables.Add(__instance);
     }
 }

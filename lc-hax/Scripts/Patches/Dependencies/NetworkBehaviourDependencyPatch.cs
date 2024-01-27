@@ -10,6 +10,6 @@ class NetworkBehaviourDependencyPatch {
     [HarmonyPatch(nameof(NetworkBehaviour.OnDestroy))]
     static void Prefix(NetworkBehaviour __instance) {
         if (__instance is GrabbableObject grabbableObject)
-            _ = Helper.Props.Remove(grabbableObject);
+            _ = Helper.Grabbables.Remove(grabbableObject);
     }
 }
