@@ -6,7 +6,6 @@ using Unity.Netcode;
 
 [HarmonyPatch(typeof(NetworkBehaviour))]
 class NetworkBehaviourDependencyPatch {
-
     [HarmonyPatch(nameof(NetworkBehaviour.OnDestroy))]
     static void Prefix(NetworkBehaviour __instance) {
         if (__instance is GrabbableObject grabbableObject)
