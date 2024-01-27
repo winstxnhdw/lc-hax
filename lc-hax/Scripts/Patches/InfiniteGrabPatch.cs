@@ -6,8 +6,8 @@ using UnityEngine;
 
 [HarmonyPatch(typeof(PlayerControllerB), "SetHoverTipAndCurrentInteractTrigger")]
 class InfiniteGrabPatch {
-    static void Postfix(ref int ___interactableObjectsMask, ref float ___grabDistance) {
+    static void Postfix(PlayerControllerB __instance, ref int ___interactableObjectsMask) {
         ___interactableObjectsMask = LayerMask.GetMask(["Props", "InteractableObject"]);
-        ___grabDistance = float.MaxValue;
+        __instance.grabDistance = float.MaxValue;
     }
 }

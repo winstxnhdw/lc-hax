@@ -5,5 +5,5 @@ using Hax;
 
 [HarmonyPatch(typeof(Shovel), nameof(Shovel.HitShovel))]
 class ShovelPatch {
-    static void Prefix(ref int ___shovelHitForce) => ___shovelHitForce = Setting.ShovelHitForce;
+    static void Prefix(Shovel __instance) => __instance.shovelHitForce = Setting.ShovelHitForce;
 }

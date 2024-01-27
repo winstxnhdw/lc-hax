@@ -5,5 +5,5 @@ using HarmonyLib;
 
 [HarmonyPatch(typeof(PlayerControllerB), "LateUpdate")]
 class OneHandedItemPatch {
-    static void Postfix(ref bool ___twoHanded) => ___twoHanded = false;
+    static void Postfix(PlayerControllerB __instance) => __instance.twoHanded = false;
 }

@@ -4,13 +4,13 @@ using HarmonyLib;
 
 [HarmonyPatch(typeof(DepositItemsDesk), nameof(DepositItemsDesk.AttackPlayersServerRpc))]
 class JebPatch {
-    static void Prefix(ref bool ___attacking, ref bool ___inGrabbingObjectsAnimation, ref bool __state) {
-        __state = ___inGrabbingObjectsAnimation;
-        ___attacking = false;
-        ___inGrabbingObjectsAnimation = false;
+    static void Prefix(DepositItemsDesk __instance, ref bool __state) {
+        __state = __instance.inGrabbingObjectsAnimation;
+        __instance.attacking = false;
+        __instance.inGrabbingObjectsAnimation = false;
     }
 
-    static void Postfix(ref bool ___inGrabbingObjectsAnimation, ref bool __state) {
-        ___inGrabbingObjectsAnimation = __state;
+    static void Postfix(DepositItemsDesk __instance, ref bool __state) {
+        __instance.inGrabbingObjectsAnimation = __state;
     }
 }

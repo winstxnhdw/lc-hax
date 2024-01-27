@@ -34,13 +34,13 @@ class InvisiblePatch {
 
     [HarmonyPatch("UpdatePlayerPositionClientRpc")]
     static void Prefix(
-        ulong ___actualClientId,
+        PlayerControllerB __instance,
         ref Vector3 newPos,
         ref bool inElevator,
         ref bool exhausted,
         ref bool isPlayerGrounded
     ) {
-        if (!Setting.EnableInvisible || Helper.LocalPlayer?.actualClientId != ___actualClientId) return;
+        if (!Setting.EnableInvisible || Helper.LocalPlayer?.actualClientId != __instance.actualClientId) return;
 
         newPos = InvisiblePatch.LastNewPos;
         inElevator = InvisiblePatch.LastInElevator;

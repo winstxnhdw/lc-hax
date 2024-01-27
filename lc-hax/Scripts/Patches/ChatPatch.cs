@@ -4,14 +4,13 @@ using System;
 using GameNetcodeStuff;
 using HarmonyLib;
 using Hax;
-using TMPro;
 
 [HarmonyPatch(typeof(HUDManager), "EnableChat_performed")]
 class EnableChatPatch {
-    static void Prefix(ref PlayerControllerB ___localPlayer, ref TMP_InputField __chatTextField, ref bool __state) {
-        if (___localPlayer is not PlayerControllerB localPlayer) return;
+    static void Prefix(HUDManager __instance, ref bool __state) {
+        if (__instance.localPlayer is not PlayerControllerB localPlayer) return;
 
-        __chatTextField.characterLimit = int.MaxValue;
+        __instance.chatTextField.characterLimit = int.MaxValue;
         __state = localPlayer.isPlayerDead;
         localPlayer.isPlayerDead = false;
     }
@@ -21,9 +20,9 @@ class EnableChatPatch {
 
 [HarmonyPatch(typeof(HUDManager), "SubmitChat_performed")]
 class SubmitChatPatch {
-    static bool Prefix(ref PlayerControllerB ___localPlayer, ref bool __state) {
-        __state = ___localPlayer.isPlayerDead;
-        ___localPlayer.isPlayerDead = false;
+    static bool Prefix(HUDManager __instance, ref bool __state) {
+        __state = __instance.localPlayer.isPlayerDead;
+        __instance.localPlayer.isPlayerDead = false;
 
         if (Helper.HUDManager is not HUDManager hudManager) {
             return true;
@@ -40,5 +39,5 @@ class SubmitChatPatch {
         return false;
     }
 
-    static void Postfix(ref PlayerControllerB ___localPlayer, bool __state) => ___localPlayer.isPlayerDead = __state;
+    static void Postfix(HUDManager __instance, bool __state) => __instance.localPlayer.isPlayerDead = __state;
 }

@@ -6,11 +6,11 @@ using HarmonyLib;
 [HarmonyPatch(typeof(EnemyAI))]
 class EnemyPatch {
     [HarmonyPatch(nameof(EnemyAI.SyncPositionToClients))]
-    static void Prefix(ref float ___updatePositionThreshold) => ___updatePositionThreshold = 0.0f;
+    static void Prefix(EnemyAI __instance) => __instance.updatePositionThreshold = 0.0f;
 
     [HarmonyPatch(nameof(EnemyAI.CancelSpecialAnimationWithPlayer))]
-    static void Prefix(ref PlayerControllerB? ___inSpecialAnimationWithPlayer) {
-        if (___inSpecialAnimationWithPlayer is null) return;
-        ___inSpecialAnimationWithPlayer.disableLookInput = false;
+    static void Postfix(EnemyAI __instance) {
+        if (__instance.inSpecialAnimationWithPlayer is not PlayerControllerB player) return;
+        player.disableLookInput = false;
     }
 }

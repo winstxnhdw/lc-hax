@@ -4,10 +4,10 @@ using HarmonyLib;
 
 [HarmonyPatch(typeof(GrabbableObject), nameof(GrabbableObject.LateUpdate))]
 class InfiniteBatteryPatch {
-    static void Postfix(ref Battery? ___insertedBattery) {
-        if (___insertedBattery is null) return;
+    static void Postfix(GrabbableObject __instance) {
+        if (__instance.insertedBattery is not Battery battery) return;
 
-        ___insertedBattery.charge = 1.0f;
-        ___insertedBattery.empty = false;
+        battery.charge = 1.0f;
+        battery.empty = false;
     }
 }
