@@ -5,6 +5,8 @@ using Hax;
 
 [Command("/sell")]
 public class SellCommand : ICommand {
+    float CurrentWeight { get; set; } = 0.0f;
+
     bool CanBeSold(GrabbableObject grabbableObject) =>
         grabbableObject is not HauntedMaskItem &&
         grabbableObject.itemProperties.isScrap &&
@@ -76,6 +78,8 @@ public class SellCommand : ICommand {
             return;
         }
 
+        this.CurrentWeight = player.carryWeight;
+
         if (args.Length is 0) {
             this.SellEverything(depositItemsDesk, player);
             return;
@@ -86,10 +90,13 @@ public class SellCommand : ICommand {
             return;
         }
 
-        float currentWeight = player.carryWeight;
         int result = this.SellScrapValue(depositItemsDesk, player, startOfRound, targetValue);
-        player.carryWeight = currentWeight;
-
         Chat.Print($"Remaining scrap value to reach target is {result}!");
+    }
+
+    public void Dispose() {
+        if (this.CurrentWeight is 0.0f) return;
+        if (Helper.LocalPlayer is not PlayerControllerB player) return;
+        player.carryWeight = this.CurrentWeight;
     }
 }
