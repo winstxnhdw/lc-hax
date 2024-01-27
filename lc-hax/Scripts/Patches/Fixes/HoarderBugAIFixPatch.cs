@@ -1,30 +1,15 @@
 #pragma warning disable IDE1006
 
 using HarmonyLib;
-using System.Reflection;
 using Unity.Netcode;
 
 [HarmonyPatch(typeof(HoarderBugAI))]
-internal class HoarderBugAIFixPatch {
-
+class HoarderBugAIFixPatch {
     [HarmonyPatch(nameof(HoarderBugAI.HitEnemy))]
-    private static void Prefix(ref HoarderBugAI __instance) {
-        if (__instance is null) return;
-        if (__instance.isEnemyDead || __instance.enemyHP <= 0) {
-            if (__instance.heldItem != null) {
-                InvokeDropItemAndCallDropRPC(__instance, __instance.heldItem.itemGrabbableObject.GetComponent<NetworkObject>(), false);
-            }
-        }
+    static void Prefix(ref HoarderBugAI __instance) {
+        if (!__instance.isEnemyDead) return;
+        if (!__instance.heldItem.itemGrabbableObject.TryGetComponent(out NetworkObject networkObject)) return;
+
+        _ = __instance.Reflect().InvokeInternalMethod("DropItemAndCallDropRPC", networkObject, false);
     }
-
-    private static void InvokeDropItemAndCallDropRPC(HoarderBugAI bug, NetworkObject item, bool droppedInNest) {
-        if (bug == null || item == null) {
-            return;
-        }
-        object[] parameters = [item, droppedInNest];
-        _ = DropItemAndCallDropRPCMethod?.Invoke(bug, parameters);
-    }
-
-    private static MethodInfo? DropItemAndCallDropRPCMethod => typeof(HoarderBugAI).GetMethod("DropItemAndCallDropRPC", BindingFlags.NonPublic | BindingFlags.Instance);
-
 }
