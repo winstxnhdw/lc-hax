@@ -70,6 +70,7 @@ The complete feature set includes the following.
 - No item usage cooldown
 - No lobby refresh delay
 - No build constraints
+- No character limit
 - Always sane
 - Always lightweight
 - Always show HUD
@@ -107,6 +108,7 @@ The complete feature set includes the following.
 | Poison a player               | `/poison <player> <damage> <delay> <duration>` |
 | Poison all players            | `/poison --all <damage> <delay> <duration>`    |
 | Spoof a server message        | `/say <player> <message>`                      |
+| Spoof a server announcement   | `/announce <message>`                          |
 | Transmit a signal             | `/signal <message>`                            |
 | Modify shovel damage          | `/shovel <force=1>`                            |
 | Give or take money            | `/money <amount>`                              |
@@ -139,6 +141,7 @@ The complete feature set includes the following.
 | Explode all landmines         | `/explode mine`                                |
 | Upset all turrets             | `/berserk`                                     |
 | Turn invisible to players     | `/invis`                                       |
+| Clear the chat for everyone   | `/clear`                                       |
 
 ### Binds
 
