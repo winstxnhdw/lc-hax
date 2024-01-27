@@ -17,7 +17,7 @@ public class SellCommand : ICommand {
     }
 
     void SellEverything(DepositItemsDesk depositItemsDesk, PlayerControllerB player) {
-        GrabbableDependencyPatch.ActiveProps.WhereIsNotNull().ForEach(grabbableObject => {
+        Helper.Props.WhereIsNotNull().ForEach(grabbableObject => {
             if (!this.CanBeSold(grabbableObject)) return;
             this.SellObject(depositItemsDesk, player, grabbableObject);
         });
@@ -26,7 +26,7 @@ public class SellCommand : ICommand {
     void SellScrapValue(DepositItemsDesk depositItemsDesk, PlayerControllerB player, StartOfRound startOfRound, ushort targetValue) {
         List<GrabbableObject> sellableScraps = [];
 
-        GrabbableDependencyPatch.ActiveProps.WhereIsNotNull().ForEach(grabbableObject => {
+        Helper.Props.WhereIsNotNull().ForEach(grabbableObject => {
             if (!this.CanBeSold(grabbableObject)) return;
             sellableScraps.Add(grabbableObject);
         });

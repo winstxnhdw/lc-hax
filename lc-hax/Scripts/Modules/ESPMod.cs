@@ -84,7 +84,7 @@ public class ESPMod : MonoBehaviour {
             );
         });
 
-        GrabbableDependencyPatch.ActiveProps.WhereIsNotNull().ForEach(grabbableObject => {
+        Helper.Props.WhereIsNotNull().ForEach(grabbableObject => {
             Vector3 rendererCentrePoint = camera.WorldToEyesPoint(grabbableObject.transform.position);
 
             if (rendererCentrePoint.z <= 2.0f) {
