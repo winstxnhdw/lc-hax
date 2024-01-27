@@ -23,7 +23,7 @@ public class SellCommand : ICommand {
         });
     }
 
-    void SellScrapValue(DepositItemsDesk depositItemsDesk, PlayerControllerB player, StartOfRound startOfRound, ushort targetValue) {
+    int SellScrapValue(DepositItemsDesk depositItemsDesk, PlayerControllerB player, StartOfRound startOfRound, ushort targetValue) {
         List<GrabbableObject> sellableScraps = [];
 
         Helper.Grabbables.WhereIsNotNull().ForEach(grabbableObject => {
@@ -60,7 +60,7 @@ public class SellCommand : ICommand {
             w -= scrapValue;
         }
 
-        Chat.Print($"Remaining scrap value to reach target is {result}!");
+        return result;
     }
 
     public void Execute(StringArray args) {
@@ -86,6 +86,10 @@ public class SellCommand : ICommand {
             return;
         }
 
-        this.SellScrapValue(depositItemsDesk, player, startOfRound, targetValue);
+        float currentWeight = player.carryWeight;
+        int result = this.SellScrapValue(depositItemsDesk, player, startOfRound, targetValue);
+        player.carryWeight = currentWeight;
+
+        Chat.Print($"Remaining scrap value to reach target is {result}!");
     }
 }

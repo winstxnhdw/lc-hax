@@ -29,7 +29,7 @@ public class GrabCommand : ICommand {
         });
     }
 
-    void GrabItem(
+    string GrabItem(
         PlayerControllerB player,
         Vector3 currentPlayerPosition,
         Vector3 positionOffset,
@@ -55,23 +55,18 @@ public class GrabCommand : ICommand {
             grabbableObjects[key]
         );
 
-        Chat.Print($"Grabbing {key.ToTitleCase()}..");
+        return key.ToTitleCase();
     }
 
     public void Execute(StringArray args) {
-        if (Helper.ShipBuildModeManager is not ShipBuildModeManager shipBuildModeManager) {
-            Chat.Print("ShipBuildModeManager not found!");
-            return;
-        }
-
-        if (Helper.LocalPlayer is not PlayerControllerB localPlayer) {
-            Chat.Print("Player not found!");
-            return;
-        }
+        if (Helper.ShipBuildModeManager is not ShipBuildModeManager shipBuildModeManager) return;
+        if (Helper.LocalPlayer is not PlayerControllerB localPlayer) return;
 
         Vector3 currentPlayerPosition = localPlayer.transform.position;
         Vector3 microOffset = localPlayer.transform.forward + localPlayer.transform.up;
         Vector3 positionOffset = currentPlayerPosition - shipBuildModeManager.transform.position + microOffset;
+
+        float currentWeight = localPlayer.carryWeight;
 
         if (args.Length is 0) {
             this.GrabAllItems(
@@ -83,13 +78,17 @@ public class GrabCommand : ICommand {
         }
 
         else {
-            this.GrabItem(
+            string item = this.GrabItem(
                 localPlayer,
                 currentPlayerPosition,
                 positionOffset,
                 shipBuildModeManager.transform,
                 string.Join(' ', args.ToArray())
             );
+
+            Chat.Print($"Grabbed {item}!");
         }
+
+        localPlayer.carryWeight = currentWeight;
     }
 }
