@@ -5,12 +5,11 @@ using System.Linq;
 
 [Command("/suit")]
 public class SuitCommand : ICommand {
-
-    public Dictionary<string, Unlockable> SuitUnlockables
-    => Enum.GetValues(typeof(Unlockable))
+    public Dictionary<string, Unlockable> SuitUnlockables =>
+        Enum.GetValues(typeof(Unlockable))
             .Cast<Unlockable>()
             .Where(u => u.ToString().EndsWith("_SUIT"))
-            .ToDictionary(suit => suit.ToString().Replace("_SUIT", string.Empty).ToLower(), suit => suit);
+            .ToDictionary(suit => suit.ToString().Replace("_SUIT", "").ToLower(), suit => suit);
 
     public void Execute(StringArray args) {
         if (Helper.StartOfRound is not StartOfRound startOfRound) return;
