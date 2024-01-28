@@ -2,29 +2,48 @@
 
 using HarmonyLib;
 using Hax;
+using Unity.Netcode;
 
 [HarmonyPatch(typeof(EnemyAI))]
-class EnemyDependencyPatch {
+internal class EnemyDependencyPatch {
+
     [HarmonyPatch(nameof(EnemyAI.OnDestroy))]
-    static void Prefix(EnemyAI __instance) {
+    private static void Prefix(EnemyAI __instance) {
         _ = Helper.Enemies.Remove(__instance);
     }
 
     [HarmonyPatch(nameof(EnemyAI.Start))]
-    static void Postfix(EnemyAI __instance) {
+    private static void Postfix(EnemyAI __instance) {
         _ = Helper.Enemies.Add(__instance);
     }
 }
 
 [HarmonyPatch(typeof(MaskedPlayerEnemy))]
-class MaskedDependencyPatch {
+internal class MaskedDependencyPatch {
+
     [HarmonyPatch(nameof(MaskedPlayerEnemy.OnDestroy))]
-    static void Prefix(MaskedPlayerEnemy __instance) {
+    private static void Prefix(MaskedPlayerEnemy __instance) {
         _ = Helper.Enemies.Remove(__instance);
     }
 
     [HarmonyPatch(nameof(MaskedPlayerEnemy.Start))]
-    static void Postfix(MaskedPlayerEnemy __instance) {
+    private static void Postfix(MaskedPlayerEnemy __instance) {
         _ = Helper.Enemies.Add(__instance);
+    }
+}
+
+[HarmonyPatch(typeof(RoundManager))]
+internal class RoundManagerDependencyPatch {
+
+    [HarmonyPatch(nameof(RoundManager.SpawnEnemyGameObject))]
+    private static void Postfix(NetworkObjectReference __result) {
+        NetworkObject networkObject;
+        if (__result.TryGet(out networkObject)) {
+            // Once you have the NetworkObject, get the EnemyAI component
+            if (!networkObject.TryGetComponent(out EnemyAI AI)) return;
+            if (AI != null) {
+                _ = Helper.Enemies.Add(AI);
+            }
+        }
     }
 }
