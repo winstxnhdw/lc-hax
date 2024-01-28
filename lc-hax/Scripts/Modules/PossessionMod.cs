@@ -161,7 +161,7 @@ public sealed class PossessionMod : MonoBehaviour {
         this.FirstUpdate = true;
 
         // Delayed teleportation to saved position
-        StartCoroutine(TeleportToSavedPositionCoroutine());
+        _ = this.StartCoroutine(this.TeleportToSavedPositionCoroutine());
     }
 
     // Releases possession of the current enemy
