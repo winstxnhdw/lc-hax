@@ -164,6 +164,7 @@ The complete feature set includes the following.
 | Toggle realistic movement  | <kbd> X </kbd>                       |
 | Toggle possession NoClip   | <kbd> N </kbd>                       |
 | Toggle Anti-Kick           | <kbd> \ </kbd>                       |
+| Disconnect from server     | <kbd> Shift </kbd> + <kbd> F4 </kbd> |
 
 ### TriggerMod
 
