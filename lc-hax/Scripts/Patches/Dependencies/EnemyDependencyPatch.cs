@@ -37,8 +37,7 @@ internal class RoundManagerDependencyPatch {
 
     [HarmonyPatch(nameof(RoundManager.SpawnEnemyGameObject))]
     private static void Postfix(NetworkObjectReference __result) {
-        NetworkObject networkObject;
-        if (__result.TryGet(out networkObject)) {
+        if (__result.TryGet(out NetworkObject networkObject)) {
             // Once you have the NetworkObject, get the EnemyAI component
             if (!networkObject.TryGetComponent(out EnemyAI AI)) return;
             if (AI != null) {
