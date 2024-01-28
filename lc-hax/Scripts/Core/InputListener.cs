@@ -21,6 +21,8 @@ public class InputListener : MonoBehaviour {
     public static event Action? onNPress;
     public static event Action? onUpArrowPress;
     public static event Action? onDownArrowPress;
+    public static event Action? onF4Press;
+    public static event Action? onF5Press;
 
     (Func<bool>, Action)[] InputActions { get; } = [
         (() => Mouse.current.middleButton.wasPressedThisFrame, () => InputListener.onMiddleButtonPress?.Invoke()),
@@ -36,7 +38,9 @@ public class InputListener : MonoBehaviour {
         (() => Keyboard.current[Key.X].wasPressedThisFrame, () => InputListener.onXPress?.Invoke()),
         (() => Keyboard.current[Key.N].wasPressedThisFrame, () => InputListener.onNPress?.Invoke()),
         (() => Keyboard.current[Key.UpArrow].wasPressedThisFrame, () => InputListener.onUpArrowPress?.Invoke()),
-        (() => Keyboard.current[Key.DownArrow].wasPressedThisFrame, () => InputListener.onDownArrowPress?.Invoke())
+        (() => Keyboard.current[Key.DownArrow].wasPressedThisFrame, () => InputListener.onDownArrowPress?.Invoke()),
+        (() => Keyboard.current[Key.F4].wasPressedThisFrame, () => InputListener.onF4Press?.Invoke()),
+        (() => Keyboard.current[Key.F5].wasPressedThisFrame, () => InputListener.onF5Press?.Invoke())
     ];
 
     void Update() {

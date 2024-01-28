@@ -1,10 +1,13 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using GameNetcodeStuff;
 using Hax;
 
 [Command("/sell")]
 public class SellCommand : ICommand {
+    float CurrentWeight { get; set; } = 0.0f;
+
     bool CanBeSold(GrabbableObject grabbableObject) =>
         grabbableObject is not HauntedMaskItem &&
         grabbableObject.itemProperties.isScrap &&
@@ -17,19 +20,15 @@ public class SellCommand : ICommand {
     }
 
     void SellEverything(DepositItemsDesk depositItemsDesk, PlayerControllerB player) {
-        Helper.Grabbables.WhereIsNotNull().ForEach(grabbableObject => {
-            if (!this.CanBeSold(grabbableObject)) return;
+        Helper.Grabbables.WhereIsNotNull().Where(this.CanBeSold).ForEach(grabbableObject => {
             this.SellObject(depositItemsDesk, player, grabbableObject);
         });
     }
 
-    void SellScrapValue(DepositItemsDesk depositItemsDesk, PlayerControllerB player, StartOfRound startOfRound, ushort targetValue) {
+    int SellScrapValue(DepositItemsDesk depositItemsDesk, PlayerControllerB player, StartOfRound startOfRound, ushort targetValue) {
         List<GrabbableObject> sellableScraps = [];
 
-        Helper.Grabbables.WhereIsNotNull().ForEach(grabbableObject => {
-            if (!this.CanBeSold(grabbableObject)) return;
-            sellableScraps.Add(grabbableObject);
-        });
+        Helper.Grabbables.WhereIsNotNull().Where(this.CanBeSold).ForEach(sellableScraps.Add);
 
         int sellableScrapsCount = sellableScraps.Count;
         int[,] table = new int[sellableScrapsCount + 1, targetValue + 1];
@@ -60,7 +59,7 @@ public class SellCommand : ICommand {
             w -= scrapValue;
         }
 
-        Chat.Print($"Remaining scrap value to reach target is {result}!");
+        return result;
     }
 
     public void Execute(StringArray args) {
@@ -76,6 +75,8 @@ public class SellCommand : ICommand {
             return;
         }
 
+        this.CurrentWeight = player.carryWeight;
+
         if (args.Length is 0) {
             this.SellEverything(depositItemsDesk, player);
             return;
@@ -86,6 +87,14 @@ public class SellCommand : ICommand {
             return;
         }
 
-        this.SellScrapValue(depositItemsDesk, player, startOfRound, targetValue);
+        int result = this.SellScrapValue(depositItemsDesk, player, startOfRound, targetValue);
+        Chat.Print($"Remaining scrap value to reach target is {result}!");
+    }
+
+    public void Dispose() {
+        if (this.CurrentWeight is 0.0f) return;
+        if (Helper.LocalPlayer is not PlayerControllerB player) return;
+
+        player.carryWeight = this.CurrentWeight;
     }
 }
