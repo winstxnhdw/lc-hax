@@ -4,23 +4,22 @@ using System;
 using System.Collections.Generic;
 using Unity.Netcode;
 using UnityEngine;
-using static UnityEngine.EventSystems.EventTrigger;
 
 [DebugCommand("/spawn")]
 public class SpawnCommand : ICommand {
 
-    
+
 
 
     void SpawnEnemyOnPlayer(PlayerControllerB player, GameObject prefab, ulong amount = 1) {
         if (Helper.RoundManager == null) return;
-        if(player == null) return;
+        if (player == null) return;
         for (ulong i = 0; i < amount; i++) {
-            GameObject enemy = UnityEngine.Object.Instantiate<GameObject>(prefab, player.transform.position, Quaternion.Euler(Vector3.zero));
-            if(enemy  != null) {
+            GameObject enemy = UnityEngine.Object.Instantiate(prefab, player.transform.position, Quaternion.Euler(Vector3.zero));
+            if (enemy != null) {
                 enemy.GetComponent<NetworkObject>().Spawn(true);
                 EnemyAI AI = enemy.GetComponent<EnemyAI>();
-                if(AI != null) {
+                if (AI != null) {
                     _ = Helper.Enemies.Add(AI);
                 }
             }
@@ -30,7 +29,7 @@ public class SpawnCommand : ICommand {
 
     public void Execute(StringArray args) {
         if (Helper.RoundManager == null) return;
-        if(Helper.RoundManager.currentLevel == null) return;
+        if (Helper.RoundManager.currentLevel == null) return;
         // Check for minimum required arguments: player and enemy name
         if (args.Length < 2) {
             Chat.Print("Usage: /spawn <player> <enemy> <amount?>");
