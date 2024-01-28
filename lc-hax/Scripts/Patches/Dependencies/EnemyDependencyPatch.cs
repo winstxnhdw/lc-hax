@@ -31,7 +31,7 @@ internal class MaskedDependencyPatch {
         _ = Helper.Enemies.Add(__instance);
     }
 }
-}
+
 
 [HarmonyPatch(typeof(RoundManager))]
 internal class RoundManagerDependencyPatch {

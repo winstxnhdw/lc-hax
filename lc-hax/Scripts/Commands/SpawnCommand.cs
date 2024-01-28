@@ -5,13 +5,10 @@ using System.Collections.Generic;
 using Unity.Netcode;
 using UnityEngine;
 
-[DebugCommand("/spawn")]
+[Command("/spawn")]
 public class SpawnCommand : ICommand {
 
-
-
-
-    void SpawnEnemyOnPlayer(PlayerControllerB player, GameObject prefab, ulong amount = 1) {
+    private void SpawnEnemyOnPlayer(PlayerControllerB player, GameObject prefab, ulong amount = 1) {
         if (Helper.RoundManager == null) return;
         if (player == null) return;
         for (ulong i = 0; i < amount; i++) {
@@ -23,14 +20,17 @@ public class SpawnCommand : ICommand {
                     _ = Helper.Enemies.Add(AI);
                 }
             }
-
         }
     }
 
     public void Execute(StringArray args) {
         if (Helper.RoundManager == null) return;
+        if (Helper.LocalPlayer == null) return;
         if (Helper.RoundManager.currentLevel == null) return;
-        // Check for minimum required arguments: player and enemy name
+        if (!Helper.LocalPlayer.IsHost) {
+            Chat.Print("This command requires Host to work!"); // lock it behind host because enemies do spawn but no life in them as the network fails.
+        }
+
         if (args.Length < 2) {
             Chat.Print("Usage: /spawn <player> <enemy> <amount?>");
             return;
@@ -66,5 +66,4 @@ public class SpawnCommand : ICommand {
         Chat.Print($"Spawning {amount} {EnemyName} to {targetPlayer.playerUsername}");
         this.SpawnEnemyOnPlayer(targetPlayer, prefab, amount);
     }
-
 }
