@@ -13,7 +13,7 @@ public class SuitCommand : ICommand {
 
     public void Execute(StringArray args) {
         if (Helper.StartOfRound is not StartOfRound startOfRound) return;
-        if (args.Length == 0 || string.IsNullOrWhiteSpace(args[0])) {
+        if (args.Length == 0) {
             Chat.Print("Usage: /suit <name>");
             Chat.Print($"Available Suits: {string.Join(", ", this.SuitUnlockables.Keys)}");
             return;
