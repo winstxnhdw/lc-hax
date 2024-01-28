@@ -23,7 +23,7 @@ public class MaskCommand : ICommand {
             return;
         }
 
-        if (args.Length < 3) {
+        if (args.Length < 2) {
             this.SpawnMimicOnPlayer(targetPlayer, hauntedMaskItem);
             return;
         }
