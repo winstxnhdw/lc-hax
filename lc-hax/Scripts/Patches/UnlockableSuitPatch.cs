@@ -22,12 +22,11 @@ public static class UnlockableSuitPatch {
     }
 
     [HarmonyPatch("SwitchSuitToThis")]
-    static bool Prefix(UnlockableSuit __instance, ref int ___suitID) {
+    static void Prefix(UnlockableSuit __instance, ref int ___suitID) {
         if (overrideSuit) {
             originalSuitID = __instance.suitID;
             ___suitID = customSuitID;
         }
-        return true;
     }
 
     [HarmonyPatch("SwitchSuitToThis")]
