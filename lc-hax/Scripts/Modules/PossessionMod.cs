@@ -4,19 +4,29 @@ using GameNetcodeStuff;
 using UnityEngine.AI;
 using Hax;
 
-//must be enabled and disabled by phantommod. Or else phantom mod can break, and this break, what nots.
 public sealed class PossessionMod : MonoBehaviour {
+    // Singleton instance of the PossessionMod
+    public static PossessionMod? Instance { get; private set; }
+
+    // Nullable property representing the enemy to possess
     EnemyAI? EnemyToPossess { get; set; } = null;
+
+    // Flag to determine if it's the first update after possession
     bool FirstUpdate { get; set; } = true;
+
+    // Nullable properties for various movement components
     RigidbodyMovement? RigidbodyKeyboard { get; set; } = null;
     KeyboardMovement? Keyboard { get; set; } = null;
     MousePan? MousePan { get; set; } = null;
 
-    public static PossessionMod? Instance { get; private set; }
 
+    // Readonly property indicating if possessing an enemy
     public bool IsPossessed => this.EnemyToPossess != null;
-    bool noClip = false;
 
+    // Flag for no clipping mode
+    bool NoClipEnabled { get; set; } = false;
+
+    // Initializes movement components and disables the script initially
     void Awake() {
         this.RigidbodyKeyboard = this.gameObject.AddComponent<RigidbodyMovement>();
         this.Keyboard = this.gameObject.AddComponent<KeyboardMovement>();
@@ -26,6 +36,7 @@ public sealed class PossessionMod : MonoBehaviour {
         PossessionMod.Instance = this;
     }
 
+    // Subscribes to input events and updates components based on the current state
     void OnEnable() {
         InputListener.onNPress += this.ToggleNoClip;
         InputListener.onXPress += this.ToggleRealisticPossession;
@@ -34,6 +45,7 @@ public sealed class PossessionMod : MonoBehaviour {
         this.UpdateComponentsOnCurrentState(true);
     }
 
+    // Unsubscribes from input events
     void OnDisable() {
         InputListener.onNPress -= this.ToggleNoClip;
         InputListener.onXPress -= this.ToggleRealisticPossession;
@@ -42,6 +54,7 @@ public sealed class PossessionMod : MonoBehaviour {
         this.UpdateComponentsOnCurrentState(false);
     }
 
+    // Toggles realistic possession mode
     private void ToggleRealisticPossession() {
         Setting.RealisticPossessionEnabled = !Setting.RealisticPossessionEnabled;
         Chat.Print($"Realistic Possession: {Setting.RealisticPossessionEnabled}");
@@ -54,13 +67,15 @@ public sealed class PossessionMod : MonoBehaviour {
         navMeshAgent.updateRotation = Setting.RealisticPossessionEnabled;
     }
 
+    // Toggles no clipping mode
     private void ToggleNoClip() {
-        this.noClip = !this.noClip;
-        Chat.Print($"Possess NoClip: {this.noClip}");
+        this.NoClipEnabled = !this.NoClipEnabled;
+        Chat.Print($"Possess NoClip: {this.NoClipEnabled}");
 
         this.UpdateComponentsOnCurrentState(this.enabled);
     }
 
+    // Updates movement components based on the current state
     private void UpdateComponentsOnCurrentState(bool thisGameObjectIsEnabled) {
         if (this.MousePan is not MousePan mousePan) {
             return;
@@ -75,28 +90,31 @@ public sealed class PossessionMod : MonoBehaviour {
         }
 
         mousePan.enabled = thisGameObjectIsEnabled;
-        rigidbodyKeyboard.enabled = !this.noClip;
-        keyboard.enabled = this.noClip;
+        rigidbodyKeyboard.enabled = !this.NoClipEnabled;
+        keyboard.enabled = this.NoClipEnabled;
     }
 
+    // Updates position and rotation of possessed enemy
     void Update() {
         _ = this.StartCoroutine(this.EndOfFrameCoroutine());
     }
 
+    // Coroutine for updating at end of frame
     IEnumerator EndOfFrameCoroutine() {
         yield return new WaitForEndOfFrame();
         this.EndOfFrameUpdate();
     }
 
+    // Updates position and rotation of possessed enemy at the end of frame
     private void EndOfFrameUpdate() {
         if (this.RigidbodyKeyboard is not RigidbodyMovement rigidbodyKeyboard) return;
         if (this.EnemyToPossess is not EnemyAI enemy) return;
         if (Helper.CurrentCamera is not Camera camera || !camera.enabled) return;
 
         if (this.FirstUpdate) {
+            // Save enemy's position before possession
             this.SetEnemyColliders(enemy, false);
 
-            //only works if you enable it before FirstUpdate happens
             if (enemy.agent.Unfake() is NavMeshAgent agent) {
                 agent.updatePosition = Setting.RealisticPossessionEnabled;
                 agent.updateRotation = Setting.RealisticPossessionEnabled;
@@ -108,12 +126,13 @@ public sealed class PossessionMod : MonoBehaviour {
         }
 
         this.UpdateEnemyPositionToHere(enemy);
-        camera.transform.position = this.transform.position + (Vector3.up * 2.5f) - (enemy.transform.forward * 2f);
+        camera.transform.position = this.transform.position + (Vector3.up * 3f) - (enemy.transform.forward * 3f);
         camera.transform.rotation = this.transform.rotation;
 
         this.FirstUpdate = false;
     }
 
+    // Updates enemy's position to match the possessed object's position
     void UpdateEnemyPositionToHere(EnemyAI enemy) {
         if (Helper.LocalPlayer is not PlayerControllerB localPlayer) return;
 
@@ -125,10 +144,12 @@ public sealed class PossessionMod : MonoBehaviour {
         enemy.transform.position = this.transform.position;
     }
 
+    // Disables/enables colliders of the possessed enemy
     void SetEnemyColliders(EnemyAI enemy, bool enabled) {
         enemy.GetComponentsInChildren<Collider>().ForEach(collider => collider.enabled = enabled);
     }
 
+    // Possesses the specified enemy
     public void Possess(EnemyAI enemy) {
         this.Unpossess();
 
@@ -136,6 +157,7 @@ public sealed class PossessionMod : MonoBehaviour {
         this.FirstUpdate = true;
     }
 
+    // Releases possession of the current enemy
     public void Unpossess() {
         if (this.EnemyToPossess is EnemyAI previousEnemy) {
             previousEnemy.updatePositionThreshold = 1;
