@@ -1,3 +1,5 @@
+using Steamworks;
+
 namespace Hax;
 
 public static class Setting {
@@ -14,6 +16,8 @@ public static class Setting {
     public static bool EnableFakeDeath { get; set; } = false;
     public static bool DisableFallDamage { get; set; } = false;
     public static int ShovelHitForce { get; set; } = 1;
-    public static bool InvertYAxis => IngamePlayerSettings.Instance.settings.invertYAxis;
     public static bool RealisticPossessionEnabled { get; set; } = false;
+    public static bool InvertYAxis => IngamePlayerSettings.Instance.settings.invertYAxis;
+    public static bool DisconnectedVoluntarily { get; set; } = false;
+    public static SteamId? ConnectedLobbyId { get; set; } = null;
 }
