@@ -10,13 +10,12 @@ public class MaskCommand : ICommand {
     }
 
     public void Execute(StringArray args) {
-        if (Helper.LocalPlayer is not PlayerControllerB localPlayer) return;
-        if (localPlayer.currentlyHeldObjectServer is not HauntedMaskItem hauntedMaskItem) {
+        if (Helper.LocalPlayer?.currentlyHeldObjectServer is not HauntedMaskItem hauntedMaskItem) {
             Chat.Print("You are not holding a mask!");
             return;
         }
 
-        PlayerControllerB? targetPlayer = args.Length is 0 ? localPlayer : Helper.GetActivePlayer(args[0]);
+        PlayerControllerB? targetPlayer = args.Length is 0 ? Helper.LocalPlayer : Helper.GetActivePlayer(args[0]);
 
         if (targetPlayer is null) {
             Chat.Print("Target player is not alive or found!");
@@ -28,7 +27,7 @@ public class MaskCommand : ICommand {
             return;
         }
 
-        if (!ulong.TryParse(args[2], out ulong amount)) {
+        if (!ulong.TryParse(args[1], out ulong amount)) {
             Chat.Print("Invalid amount!");
             return;
         }
