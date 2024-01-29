@@ -1,7 +1,6 @@
 using UnityEngine;
 using GameNetcodeStuff;
 using UnityEngine.InputSystem;
-using System.Collections.Generic;
 
 namespace Hax {
     public class RigidbodyMovement : MonoBehaviour {
@@ -25,8 +24,8 @@ namespace Hax {
 
         // Constructor
         public RigidbodyMovement() {
-            characterController = GetComponent<CharacterController>();
-            keyboard = Keyboard.current;
+            this.characterController = this.GetComponent<CharacterController>();
+            this.keyboard = Keyboard.current;
         }
 
         // Initialize method
@@ -50,105 +49,105 @@ namespace Hax {
         const float adjustedHeight = 0.0f; // Adjust as needed
         const float adjustedDepth = -0.5f; // Adjust as needed
         void Awake() {
-            characterController = gameObject.AddComponent<CharacterController>();
+            this.characterController = this.gameObject.AddComponent<CharacterController>();
 
-            transform.localScale = new Vector3(adjustedWidth, transform.localScale.y, adjustedDepth);
-            characterController.height = 0.0f; // Adjust as needed
-            characterController.center = new Vector3(0f, 0.3f, 0.5f); // Adjust as needed
+            this.transform.localScale = new Vector3(adjustedWidth, this.transform.localScale.y, adjustedDepth);
+            this.characterController.height = 0.0f; // Adjust as needed
+            this.characterController.center = new Vector3(0f, 0.3f, 0.5f); // Adjust as needed
 
-            keyboard = Keyboard.current;
+            this.keyboard = Keyboard.current;
         }
 
         // Update is called once per frame
         void Update() {
             // Read movement input from keyboard
-            Vector2 moveInput = new Vector2(keyboard.dKey.ReadValue() - keyboard.aKey.ReadValue(),
-                                            keyboard.wKey.ReadValue() - keyboard.sKey.ReadValue()).normalized;
+            Vector2 moveInput = new Vector2(this.keyboard.dKey.ReadValue() - this.keyboard.aKey.ReadValue(),
+                                            this.keyboard.wKey.ReadValue() - this.keyboard.sKey.ReadValue()).normalized;
 
             // Apply speed modifier based on left control key
             float speedModifier = 1.0f;
-            if (keyboard.leftCtrlKey.isPressed) {
+            if (this.keyboard.leftCtrlKey.isPressed) {
                 speedModifier = controlSlowdoneMultiplier;
             }
 
             // Calculate movement direction relative to character's forward direction
-            Vector3 forward = Vector3.ProjectOnPlane(transform.forward, Vector3.up).normalized;
-            Vector3 right = Vector3.ProjectOnPlane(transform.right, Vector3.up).normalized;
-            Vector3 moveDirection = forward * moveInput.y + right * moveInput.x;
+            Vector3 forward = Vector3.ProjectOnPlane(this.transform.forward, Vector3.up).normalized;
+            Vector3 right = Vector3.ProjectOnPlane(this.transform.right, Vector3.up).normalized;
+            Vector3 moveDirection = (forward * moveInput.y) + (right * moveInput.x);
             moveDirection.y = 0f; // Remove vertical component from the movement direction
 
             // Apply speed and sprint modifiers
-            moveDirection *= isSprinting ? baseSpeed * sprintSpeedMultiplier * speedModifier : baseSpeed * speedModifier;
+            moveDirection *= this.isSprinting ? baseSpeed * sprintSpeedMultiplier * speedModifier : baseSpeed * speedModifier;
 
             // Apply gravity if enabled
-            if (isGravityEnabled) {
-                ApplyGravity();
+            if (this.isGravityEnabled) {
+                this.ApplyGravity();
             }
 
             // Cap velocity
-            CapVelocity();
+            this.CapVelocity();
 
             // Attempt to move
-            characterController.Move(moveDirection * Time.deltaTime);
+            _ = this.characterController.Move(moveDirection * Time.deltaTime);
 
             // Jump if jump key is pressed
-            if (keyboard.spaceKey.wasPressedThisFrame) {
-                Jump();
+            if (this.keyboard.spaceKey.wasPressedThisFrame) {
+                this.Jump();
             }
 
             // Sprinting mechanic: Hold to sprint
-            if (keyboard.leftShiftKey.isPressed) {
-                if (!isSprintHeld) {
-                    sprintTimer = 0f;
-                    isSprintHeld = true;
+            if (this.keyboard.leftShiftKey.isPressed) {
+                if (!this.isSprintHeld) {
+                    this.sprintTimer = 0f;
+                    this.isSprintHeld = true;
                 }
 
-                if (!isSprinting && sprintTimer >= sprintDuration) {
-                    isSprinting = true;
+                if (!this.isSprinting && this.sprintTimer >= sprintDuration) {
+                    this.isSprinting = true;
                 }
 
-                sprintTimer += Time.deltaTime;
+                this.sprintTimer += Time.deltaTime;
             }
             else {
-                isSprintHeld = false;
+                this.isSprintHeld = false;
 
-                if (isSprinting) {
-                    isSprinting = false;
+                if (this.isSprinting) {
+                    this.isSprinting = false;
                 }
             }
         }
 
         // Cap the velocity magnitude
         void CapVelocity() {
-            if (velocity.magnitude > maxVelocityMagnitude) {
-                velocity = velocity.normalized * maxVelocityMagnitude;
+            if (this.velocity.magnitude > maxVelocityMagnitude) {
+                this.velocity = this.velocity.normalized * maxVelocityMagnitude;
             }
         }
 
         // Apply gravity to the character controller
         void ApplyGravity() {
-            velocity.y -= gravity * Time.deltaTime;
-            characterController.Move(velocity * Time.deltaTime);
+            this.velocity.y -= gravity * Time.deltaTime;
+            _ = this.characterController.Move(this.velocity * Time.deltaTime);
 
-            if (characterController.isGrounded) {
+            if (this.characterController.isGrounded) {
                 // Reset vertical velocity if grounded
-                velocity.y = 0f;
+                this.velocity.y = 0f;
             }
             else {
                 // Apply gravity if not grounded
-                velocity.y -= gravity * Time.deltaTime;
+                this.velocity.y -= gravity * Time.deltaTime;
             }
-            characterController.Move(velocity * Time.deltaTime);
+            _ = this.characterController.Move(this.velocity * Time.deltaTime);
         }
 
         // Jumping action
         void Jump() {
-            velocity.y = jumpForce;
+            this.velocity.y = jumpForce;
         }
 
         // Method to toggle gravity
         public void ToggleGravity() {
-            isGravityEnabled = !isGravityEnabled;
+            this.isGravityEnabled = !this.isGravityEnabled;
         }
     }
 }
