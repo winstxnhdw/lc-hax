@@ -162,8 +162,8 @@ The complete feature set includes the following.
 | Change spectator index     | <kbd> ⇾ </kbd>                      |
 | Increase mouse sensitivity | <kbd> ] </kbd>                       |
 | Decrease mouse sensitivity | <kbd> [ </kbd>                       |
-| Increase light intensity   | <kbd> F4 </kbd>                      |
-| Decrease light intensity   | <kbd> F5 </kbd>                      |
+| Decrease light intensity   | <kbd> F4 </kbd>                      |
+| Increase light intensity   | <kbd> F5 </kbd>                      |
 | Unpossess enemy            | <kbd> Z </kbd>                       |
 | Toggle realistic movement  | <kbd> X </kbd>                       |
 | Toggle possession NoClip   | <kbd> N </kbd>                       |
