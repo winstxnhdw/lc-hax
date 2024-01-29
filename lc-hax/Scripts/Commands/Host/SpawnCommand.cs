@@ -23,6 +23,7 @@ public class SpawnCommand : ICommand {
         }
     }
 
+
     public void Execute(StringArray args) {
         if (Helper.LocalPlayer == null) return;
         if (!Helper.LocalPlayer.IsHost) {

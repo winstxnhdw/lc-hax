@@ -2,7 +2,7 @@ using Hax;
 using System;
 using UnityEngine;
 
-[Command("/enemies")]
+[DebugCommand("/enemies")]
 public class LevelEnemiesCommand : ICommand {
 
     public void Execute(StringArray _) {
