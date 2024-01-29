@@ -72,6 +72,16 @@
       <Private>False</Private>
     </Reference>
 
+    <Reference Include="UnityEngine.AnimationModule">
+      <HintPath>$(ReferencePath)/UnityEngine.AnimationModule.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+
+    <Reference Include="UnityEngine.AudioModule">
+      <HintPath>$(ReferencePath)/UnityEngine.AudioModule.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+
     <Reference Include="Unity.InputSystem">
       <HintPath>$(ReferencePath)/Unity.InputSystem.dll</HintPath>
       <Private>False</Private>
@@ -92,11 +102,6 @@
       <Private>False</Private>
     </Reference>
 
-    <Reference Include="Unity.AnimationModule">
-      <HintPath>$(ReferencePath)/UnityEngine.AnimationModule.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-
     <Reference Include="Unity.Netcode.Runtime">
       <HintPath>$(ReferencePath)/Unity.Netcode.Runtime.dll</HintPath>
       <Private>False</Private>
@@ -104,6 +109,11 @@
 
     <Reference Include="Facepunch.Steamworks.Win64">
       <HintPath>$(ReferencePath)/Facepunch.Steamworks.Win64.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+
+    <Reference Include="DissonanceVoip">
+      <HintPath>$(ReferencePath)/DissonanceVoip.dll</HintPath>
       <Private>False</Private>
     </Reference>
 
