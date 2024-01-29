@@ -24,12 +24,12 @@ public class SpawnCommand : ICommand {
     }
 
     public void Execute(StringArray args) {
-        if (Helper.RoundManager == null) return;
         if (Helper.LocalPlayer == null) return;
-        if (Helper.RoundManager.currentLevel == null) return;
         if (!Helper.LocalPlayer.IsHost) {
             Chat.Print("This command requires Host to work!"); // lock it behind host because enemies do spawn but no life in them as the network fails.
         }
+        if (Helper.RoundManager == null) return;
+        if (Helper.RoundManager.currentLevel == null) return;
 
         if (args.Length < 2) {
             Chat.Print("Usage: /spawn <player> <enemy> <amount?>");
@@ -45,7 +45,7 @@ public class SpawnCommand : ICommand {
 
         string name = args[1];
         string EnemyName = "";
-        GameObject prefab = null;
+        GameObject? prefab = null;
         foreach (KeyValuePair<string, GameObject> enemy in Helper.SpawnableEnemies) {
             if (enemy.Key.Contains(name, StringComparison.OrdinalIgnoreCase)) {
                 EnemyName = enemy.Key;
