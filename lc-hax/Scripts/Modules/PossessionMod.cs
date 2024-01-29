@@ -5,8 +5,8 @@ using UnityEngine.AI;
 using Hax;
 
 public sealed class PossessionMod : MonoBehaviour {
-    // Vector3 to store the enemy's position before possession
-    Vector3 savedEnemyPosition;
+    // Singleton instance of the PossessionMod
+    public static PossessionMod? Instance { get; private set; }
 
     // Nullable property representing the enemy to possess
     EnemyAI? EnemyToPossess { get; set; } = null;
@@ -19,14 +19,12 @@ public sealed class PossessionMod : MonoBehaviour {
     KeyboardMovement? Keyboard { get; set; } = null;
     MousePan? MousePan { get; set; } = null;
 
-    // Singleton instance of the PossessionMod
-    public static PossessionMod? Instance { get; private set; }
 
     // Readonly property indicating if possessing an enemy
     public bool IsPossessed => this.EnemyToPossess != null;
 
     // Flag for no clipping mode
-    bool noClip = false;
+    bool NoClipEnabled { get; set; } = false;
 
     // Initializes movement components and disables the script initially
     void Awake() {
@@ -71,8 +69,8 @@ public sealed class PossessionMod : MonoBehaviour {
 
     // Toggles no clipping mode
     private void ToggleNoClip() {
-        this.noClip = !this.noClip;
-        Chat.Print($"Possess NoClip: {this.noClip}");
+        this.NoClipEnabled = !this.NoClipEnabled;
+        Chat.Print($"Possess NoClip: {this.NoClipEnabled}");
 
         this.UpdateComponentsOnCurrentState(this.enabled);
     }
@@ -92,8 +90,8 @@ public sealed class PossessionMod : MonoBehaviour {
         }
 
         mousePan.enabled = thisGameObjectIsEnabled;
-        rigidbodyKeyboard.enabled = !this.noClip;
-        keyboard.enabled = this.noClip;
+        rigidbodyKeyboard.enabled = !this.NoClipEnabled;
+        keyboard.enabled = this.NoClipEnabled;
     }
 
     // Updates position and rotation of possessed enemy
@@ -115,8 +113,6 @@ public sealed class PossessionMod : MonoBehaviour {
 
         if (this.FirstUpdate) {
             // Save enemy's position before possession
-            this.savedEnemyPosition = enemy.transform.position;
-
             this.SetEnemyColliders(enemy, false);
 
             if (enemy.agent.Unfake() is NavMeshAgent agent) {
@@ -159,9 +155,6 @@ public sealed class PossessionMod : MonoBehaviour {
 
         this.EnemyToPossess = enemy;
         this.FirstUpdate = true;
-
-        // Delayed teleportation to saved position
-        _ = this.StartCoroutine(this.TeleportToSavedPositionCoroutine());
     }
 
     // Releases possession of the current enemy
@@ -180,13 +173,5 @@ public sealed class PossessionMod : MonoBehaviour {
         }
 
         this.EnemyToPossess = null;
-    }
-
-    // Coroutine for delayed teleportation
-    IEnumerator TeleportToSavedPositionCoroutine() {
-        yield return new WaitForSeconds(0.08f); // Adjust the delay as needed
-
-        // Teleport to saved position after delay
-        this.transform.position = this.savedEnemyPosition;
     }
 }
