@@ -1,103 +1,120 @@
 using UnityEngine;
 using GameNetcodeStuff;
 using UnityEngine.InputSystem;
-using System.Collections.Generic;
 
-namespace Hax;
+namespace Hax {
+    public class RigidbodyMovement : MonoBehaviour {
+        // Movement constants
+        const float baseSpeed = 5.0f;
+        const float sprintSpeedMultiplier = 2.8f; // Multiplier for sprinting speed
+        const float walkingSpeed = 0.5f; // Walking speed when left control is held
+        const float sprintDuration = 0.0f; // Duration sprint key must be held for sprinting (adjust as needed)
+        const float jumpForce = 6.5f;
+        const float gravity = 10.0f;
+        const float maxVelocityMagnitude = 12.5f; // Adjust as needed
 
-public class RigidbodyMovement : MonoBehaviour {
-    const float baseSpeed = 25.0f;
-    const float jumpForce = 12.0f;
+        // Components and state variables
+        CharacterController CharacterController { get; set; }
+        float VelocityY { get; set; } = 0.0f;
+        bool IsSprinting { get; set; } = false;
+        bool IsSprintHeld { get; set; } = false;
+        float SprintTimer { get; set; } = 0.0f;
+        Keyboard Keyboard { get; set; } = Keyboard.current;
 
-    Rigidbody? rigidbody;
-    SphereCollider? sphereCollider;
+        // Adjust collision box in Awake
+        const float adjustedWidth = 0.0f; // Adjust as needed
+        const float adjustedHeight = 0.0f; // Adjust as needed
+        const float adjustedDepth = -0.5f; // Adjust as needed
 
-    float SprintMultiplier { get; set; } = 1.0f;
-    List<Collider> CollidedColliders { get; } = [];
-
-    public void Init() {
-        if (Helper.LocalPlayer is not PlayerControllerB localPlayer) return;
-        this.gameObject.layer = localPlayer.gameObject.layer;
-    }
-
-    void Awake() {
-        this.rigidbody = this.gameObject.AddComponent<Rigidbody>();
-        this.rigidbody.collisionDetectionMode = CollisionDetectionMode.ContinuousDynamic;
-        this.rigidbody.constraints = RigidbodyConstraints.FreezeRotation;
-
-        this.sphereCollider = this.gameObject.AddComponent<SphereCollider>();
-        this.sphereCollider.radius = 0.25f;
-    }
-
-    void OnEnable() {
-        if (this.rigidbody.Unfake() is not Rigidbody rigidbody) return;
-        rigidbody.isKinematic = false;
-    }
-
-    void OnDisable() {
-        if (this.rigidbody.Unfake() is not Rigidbody rigidbody) return;
-        rigidbody.isKinematic = true;
-    }
-
-    void OnCollisionEnter(Collision collision) {
-        this.CollidedColliders.Add(collision.collider);
-    }
-
-    void OnCollisionExit(Collision collision) {
-        _ = this.CollidedColliders.Remove(collision.collider);
-    }
-
-    void Update() {
-        Vector3 direction = new(
-            Keyboard.current.dKey.ReadValue() - Keyboard.current.aKey.ReadValue(),
-            Keyboard.current.spaceKey.ReadValue() - Keyboard.current.ctrlKey.ReadValue(),
-            Keyboard.current.wKey.ReadValue() - Keyboard.current.sKey.ReadValue()
-        );
-
-        this.UpdateSprintMultiplier(Keyboard.current);
-        this.Move(direction);
-
-        if (Keyboard.current.spaceKey.wasPressedThisFrame) {
-            this.Jump();
+        public RigidbodyMovement() {
+            this.CharacterController = this.GetComponent<CharacterController>();
         }
 
-        if (Keyboard.current.spaceKey.isPressed) {
-            this.BunnyHop();
+        // Initialize method
+        public void Init() {
+            if (Helper.LocalPlayer is not PlayerControllerB localPlayer) return;
+            this.gameObject.layer = localPlayer.gameObject.layer;
         }
-    }
 
-    void UpdateSprintMultiplier(Keyboard keyboard) {
-        this.SprintMultiplier =
-            keyboard.shiftKey.IsPressed()
-                ? Mathf.Min(this.SprintMultiplier + (5.0f * Time.deltaTime), 5.0f)
-                : 1.0f;
-    }
+        void Awake() {
+            this.CharacterController = this.gameObject.AddComponent<CharacterController>();
 
-    void Move(Vector3 direction) {
-        if (this.rigidbody.Unfake() is not Rigidbody rigidbody) return;
+            this.transform.localScale = new Vector3(adjustedWidth, this.transform.localScale.y, adjustedDepth);
+            this.CharacterController.height = 0.0f; // Adjust as needed
+            this.CharacterController.center = new Vector3(0f, 0.3f, 0.5f); // Adjust as needed
 
-        Vector3 forward = this.transform.forward;
-        Vector3 right = this.transform.right;
+            this.Keyboard = Keyboard.current;
+        }
 
-        forward.y = 0.0f;
-        right.y = 0.0f;
-        forward = forward.normalized;
-        right = right.normalized;
+        // Update is called once per frame
+        void Update() {
+            // Read movement input from keyboard
+            Vector2 moveInput = new Vector2(
+                this.Keyboard.dKey.ReadValue() - this.Keyboard.aKey.ReadValue(),
+                this.Keyboard.wKey.ReadValue() - this.Keyboard.sKey.ReadValue()
+            ).normalized;
 
-        Vector3 translatedDirection = (right * direction.x) + (forward * direction.z);
-        rigidbody.velocity += translatedDirection * Time.deltaTime * RigidbodyMovement.baseSpeed * this.SprintMultiplier;
-    }
+            // Apply speed modifier based on left control key
+            float speedModifier = 1.0f;
 
-    void Jump() {
-        if (this.rigidbody.Unfake() is not Rigidbody rigidbody) return;
+            if (this.Keyboard.leftCtrlKey.isPressed) {
+                speedModifier = walkingSpeed;
+            }
 
-        Vector3 newVelocity = rigidbody.velocity;
-        newVelocity.y = RigidbodyMovement.jumpForce;
-        rigidbody.velocity = newVelocity;
-    }
+            // Calculate movement direction relative to character's forward direction
+            Vector3 forward = Vector3.ProjectOnPlane(this.transform.forward, Vector3.up).normalized;
+            Vector3 right = Vector3.ProjectOnPlane(this.transform.right, Vector3.up).normalized;
+            Vector3 moveDirection = (forward * moveInput.y) + (right * moveInput.x);
+            moveDirection.y = 0.0f; // Remove vertical component from the movement direction
 
-    void BunnyHop() {
-        if (this.CollidedColliders.Count <= 0) return;
-        this.Jump();
+            // Apply speed and sprint modifiers
+            moveDirection *= (this.IsSprinting ? baseSpeed * sprintSpeedMultiplier : baseSpeed) * speedModifier;
+
+            // Apply gravity
+            this.ApplyGravity();
+
+            // Attempt to move
+            _ = this.CharacterController.Move(moveDirection * Time.deltaTime);
+
+            // Jump if jump key is pressed
+            if (this.Keyboard.spaceKey.wasPressedThisFrame) {
+                this.Jump();
+            }
+
+            // Sprinting mechanic: Hold to sprint
+            if (this.Keyboard.leftShiftKey.isPressed) {
+                if (!this.IsSprintHeld) {
+                    this.SprintTimer = 0f;
+                    this.IsSprintHeld = true;
+                }
+
+                if (!this.IsSprinting && this.SprintTimer >= sprintDuration) {
+                    this.IsSprinting = true;
+                }
+
+                this.SprintTimer += Time.deltaTime;
+            }
+
+            else {
+                this.IsSprintHeld = false;
+
+                if (this.IsSprinting) {
+                    this.IsSprinting = false;
+                }
+            }
+        }
+
+        // Apply gravity to the character controller
+        void ApplyGravity() {
+            Vector3 motion = Vector3.zero;
+            this.VelocityY -= gravity * Time.deltaTime;
+            motion.y = this.VelocityY;
+            _ = this.CharacterController.Move(motion * Time.deltaTime);
+        }
+
+        // Jumping action
+        void Jump() {
+            this.VelocityY = jumpForce;
+        }
     }
 }

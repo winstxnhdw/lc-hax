@@ -40,7 +40,7 @@ public class InputListener : MonoBehaviour {
         (() => Keyboard.current[Key.UpArrow].wasPressedThisFrame, () => InputListener.onUpArrowPress?.Invoke()),
         (() => Keyboard.current[Key.DownArrow].wasPressedThisFrame, () => InputListener.onDownArrowPress?.Invoke()),
         (() => Keyboard.current[Key.F4].wasPressedThisFrame, () => InputListener.onF4Press?.Invoke()),
-        (() => Keyboard.current[Key.F5].wasPressedThisFrame, () => InputListener.onF5Press?.Invoke())
+        (() => Keyboard.current[Key.F5].wasPressedThisFrame, () => InputListener.onF5Press?.Invoke()),
     ];
 
     void Update() {

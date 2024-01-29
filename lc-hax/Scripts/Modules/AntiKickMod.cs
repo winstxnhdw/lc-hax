@@ -1,5 +1,6 @@
 using UnityEngine;
 using Hax;
+using Steamworks;
 
 public sealed class AntiKickMod : MonoBehaviour {
     bool HasGameStarted { get; set; } = false;
@@ -15,7 +16,13 @@ public sealed class AntiKickMod : MonoBehaviour {
         GameListener.onGameEnd -= this.OnGameEnd;
     }
 
-    void OnGameEnd() => this.HasAnnouncedGameJoin = false;
+    void OnGameEnd() {
+        this.HasAnnouncedGameJoin = false;
+
+        if (!Setting.DisconnectedVoluntarily && Setting.EnableAntiKick && Setting.ConnectedLobbyId is SteamId lobbyId) {
+            GameNetworkManager.Instance.StartClient(lobbyId);
+        }
+    }
 
     bool FindJoinMessageInHistory() =>
         Helper.HUDManager?.ChatMessageHistory.First(message =>

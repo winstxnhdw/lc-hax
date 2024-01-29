@@ -56,6 +56,9 @@ Execute `launch.bat` when you have launched the game to inject the assembly into
 
 The complete feature set includes the following.
 
+- Anti-kick
+- Auto-reconnect
+- Connection spoofing
 - Infinite stamina
 - Infinite scan range
 - Infinite ammo
@@ -132,6 +135,7 @@ The complete feature set includes the following.
 | Get coordinates               | `/xyz`                                         |
 | Toggle God mode               | `/god`                                         |
 | Toggle rapid item usage       | `/rapid`                                       |
+| Eavesdrop on all players      | `/hear`                                        |
 | Unlock all doors              | `/unlock`                                      |
 | Lock all gates                | `/lock`                                        |
 | Open ship door                | `/open`                                        |
