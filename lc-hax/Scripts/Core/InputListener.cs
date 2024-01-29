@@ -23,8 +23,9 @@ public class InputListener : MonoBehaviour {
     public static event Action? onDownArrowPress;
     public static event Action? onF4Press;
     public static event Action? onF5Press;
+    public static event Action? onQPress;
 
-    (Func<bool>, Action)[] InputActions { get; } = [
+    (Func<bool>, Action)[] InputActions { get; } = {
         (() => Mouse.current.middleButton.wasPressedThisFrame, () => InputListener.onMiddleButtonPress?.Invoke()),
         (() => Mouse.current.leftButton.wasPressedThisFrame, () => InputListener.onLeftButtonPress?.Invoke()),
         (() => Keyboard.current[Key.Pause].wasPressedThisFrame, () => InputListener.onPausePress?.Invoke()),
@@ -40,8 +41,9 @@ public class InputListener : MonoBehaviour {
         (() => Keyboard.current[Key.UpArrow].wasPressedThisFrame, () => InputListener.onUpArrowPress?.Invoke()),
         (() => Keyboard.current[Key.DownArrow].wasPressedThisFrame, () => InputListener.onDownArrowPress?.Invoke()),
         (() => Keyboard.current[Key.F4].wasPressedThisFrame, () => InputListener.onF4Press?.Invoke()),
-        (() => Keyboard.current[Key.F5].wasPressedThisFrame, () => InputListener.onF5Press?.Invoke())
-    ];
+        (() => Keyboard.current[Key.F5].wasPressedThisFrame, () => InputListener.onF5Press?.Invoke()),
+        (() => Keyboard.current[Key.Q].wasPressedThisFrame, () => InputListener.onQPress?.Invoke())
+    };
 
     void Update() {
         InputListener.onShiftButtonHold?.Invoke(Keyboard.current[Key.LeftShift].isPressed);
