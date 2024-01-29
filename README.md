@@ -56,6 +56,9 @@ Execute `launch.bat` when you have launched the game to inject the assembly into
 
 The complete feature set includes the following.
 
+- Anti-kick
+- Auto-reconnect
+- Connection spoofing
 - Infinite stamina
 - Infinite scan range
 - Infinite ammo
