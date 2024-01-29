@@ -12,7 +12,7 @@ internal class EnemyDependencyPatch {
         _ = Helper.Enemies.Remove(__instance);
     }
 
-    [HarmonyPatch(nameof(EnemyAI.Update))]
+    [HarmonyPatch(nameof(EnemyAI.Start))]
     static void Postfix(EnemyAI __instance) {
         _ = Helper.Enemies.Add(__instance);
     }
@@ -26,7 +26,7 @@ internal class MaskedDependencyPatch {
         _ = Helper.Enemies.Remove(__instance);
     }
 
-    [HarmonyPatch(nameof(MaskedPlayerEnemy.Update))]
+    [HarmonyPatch(nameof(MaskedPlayerEnemy.Start))]
     static void Postfix(MaskedPlayerEnemy __instance) {
         _ = Helper.Enemies.Add(__instance);
     }
