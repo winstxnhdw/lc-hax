@@ -1,6 +1,6 @@
-using UnityEngine;
 using GameNetcodeStuff;
 using Hax;
+using UnityEngine;
 
 public sealed class TriggerMod : MonoBehaviour, IEnemyPrompter {
     RaycastHit[] RaycastHits { get; set; } = new RaycastHit[100];
@@ -93,11 +93,35 @@ public sealed class TriggerMod : MonoBehaviour, IEnemyPrompter {
                 break;
             }
             if (collider.TryGetComponent(out NoisemakerProp prop)) {
-                _ = prop.grabbable.Reflect().InvokeInternalMethod("ActivateItemServerRpc", true, true);
+                if (!prop.IsOwner) {
+                    if (Helper.LocalPlayer == null) break;
+                    prop.ChangeOwnershipOfProp(Helper.LocalPlayer.actualClientId);
+                }
+
+                prop.ItemActivate(true, true);
+                //_ = prop.grabbable.Reflect().InvokeInternalMethod("ActivateItemServerRpc", true, true);
                 break;
             }
             if (collider.TryGetComponent(out BoomboxItem boombox)) {
-                _ = boombox.grabbable.Reflect().InvokeInternalMethod("ActivateItemServerRpc", true, true);
+                if (!boombox.IsOwner) {
+                    if (Helper.LocalPlayer == null) break;
+                    boombox.ChangeOwnershipOfProp(Helper.LocalPlayer.actualClientId);
+                }
+                boombox.ItemActivate(true, true);
+                //_ = boombox.grabbable.Reflect().InvokeInternalMethod("ActivateItemServerRpc", true, true);
+                break;
+            }
+            if (collider.TryGetComponent(out WhoopieCushionItem fartcushion)) {
+                fartcushion.Fart();
+                break;
+            }
+
+            if (collider.TryGetComponent(out AnimatedItem animated)) {
+                if (!animated.IsOwner) {
+                    if (Helper.LocalPlayer == null) break;
+                    animated.ChangeOwnershipOfProp(Helper.LocalPlayer.actualClientId);
+                }
+                animated.EquipItem();
                 break;
             }
 
