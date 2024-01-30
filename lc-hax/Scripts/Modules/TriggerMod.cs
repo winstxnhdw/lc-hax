@@ -132,7 +132,7 @@ public sealed class TriggerMod : MonoBehaviour, IEnemyPrompter {
                     || prop.GetComponent<AnimatedItem>() != null
                     || prop.GetComponent<WhoopieCushionItem>() != null) break;
                 prop.FallToGround();
-                prop.PlayDropSFX();
+                prop.DropSFX();
                 break;
             }
 
