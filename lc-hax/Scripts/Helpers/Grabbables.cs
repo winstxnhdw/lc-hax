@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using System.Runtime.CompilerServices;
 using UnityEngine;
 
 namespace Hax;
@@ -8,7 +7,7 @@ public static partial class Helper {
     public static HashSet<GrabbableObject> Grabbables { get; } = [];
 
     public static void DropSFX(this GrabbableObject item) {
-        if(item == null) return;
+        if (item == null) return;
         if (item.itemProperties.dropSFX != null) {
             item.gameObject.GetComponent<AudioSource>().PlayOneShot(item.itemProperties.dropSFX);
             if (item.IsOwner) {
