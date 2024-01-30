@@ -5,6 +5,7 @@ using Steamworks;
 public sealed class AntiKickMod : MonoBehaviour {
     bool HasGameStarted { get; set; } = false;
     bool HasAnnouncedGameJoin { get; set; } = false;
+    bool ClearChatExecuted = false;
 
     void OnEnable() {
         InputListener.onBackslashPress += this.ToggleAntiKick;
@@ -19,9 +20,11 @@ public sealed class AntiKickMod : MonoBehaviour {
     void OnGameEnd() {
         this.HasAnnouncedGameJoin = false;
 
-        if (!Setting.DisconnectedVoluntarily && Setting.EnableAntiKick && Setting.ConnectedLobbyId is SteamId lobbyId) {
+        if (!DisconnectMod.DisconnectionAttempted && !Setting.DisconnectedVoluntarily && Setting.EnableAntiKick && Setting.ConnectedLobbyId is SteamId lobbyId) {
             GameNetworkManager.Instance.StartClient(lobbyId);
+            ClearChatExecuted = true;
         }
+        DisconnectMod.DisconnectionAttempted = false;
     }
 
     bool FindJoinMessageInHistory() =>
@@ -40,6 +43,15 @@ public sealed class AntiKickMod : MonoBehaviour {
             Chat.Announce($"{Helper.LocalPlayer?.playerUsername} disconnected.", true);
             Chat.Print("You are invisible! Do /invis to disable!");
         });
+
+        if (ClearChatExecuted) {
+            ClearChatExecuted = false;
+            Helper.CreateComponent<WaitForBehaviour>().SetPredicate(time => time > 1.0f).Init(() => {
+                for (int i = 0; i < 25; i++) {
+                    Chat.Announce($"", true);
+                }
+            });
+        }
     }
 
     void ToggleAntiKick() {
