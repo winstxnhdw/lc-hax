@@ -11,7 +11,6 @@ public static partial class Helper {
     public static void InteractWithProp(this GrabbableObject item) {
         if(item == null && Helper.LocalPlayer == null) return;
         if (!item.IsOwner) {
-            if (Helper.LocalPlayer == null) break;
             item.ChangeOwnershipOfProp(Helper.LocalPlayer.actualClientId);
         }
         if (item.TryGetComponent(out AnimatedItem animated)) {
