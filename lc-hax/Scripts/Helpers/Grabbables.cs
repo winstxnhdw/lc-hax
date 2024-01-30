@@ -8,7 +8,7 @@ public static partial class Helper {
 
 
     public static void InteractWithProp(this GrabbableObject item) {
-        if (item == null && Helper.LocalPlayer == null) return;
+        if (item == null || Helper.LocalPlayer == null) return;
         if (!item.IsOwner) {
             item.ChangeOwnershipOfProp(Helper.LocalPlayer.actualClientId);
         }
