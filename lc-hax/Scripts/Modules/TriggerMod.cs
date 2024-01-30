@@ -122,14 +122,17 @@ public sealed class TriggerMod : MonoBehaviour, IEnemyPrompter {
                 break;
             }
 
-            if (collider.TryGetComponent(out PhysicsProp prop)) {
+            if (collider.TryGetComponent(out GrabbableObject prop)) {
                 if (!prop.IsOwner) {
                     if (Helper.LocalPlayer == null) break;
                     prop.ChangeOwnershipOfProp(Helper.LocalPlayer.actualClientId);
                 }
-                if (prop.GetComponent<BoomboxItem>() != null || prop.GetComponent<NoisemakerProp>() != null || prop.GetComponent<WhoopieCushionItem>() != null || prop.GetComponent<WhoopieCushionItem>() != null) break;
+                if (prop.GetComponent<BoomboxItem>() != null
+                    || prop.GetComponent<NoisemakerProp>() != null
+                    || prop.GetComponent<AnimatedItem>() != null
+                    || prop.GetComponent<WhoopieCushionItem>() != null) break;
                 prop.FallToGround();
-                _ = prop.Reflect().InvokeInternalMethod("PlayDropSFX");
+                prop.PlayDropSFX();
                 break;
             }
 
