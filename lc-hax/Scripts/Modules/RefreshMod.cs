@@ -9,7 +9,7 @@ public sealed class RefreshMod : MonoBehaviour {
         if (Helper.StartOfRound.shipHasLanded) {
             this.FillEnemyList();
         }
-            this.FillScrapList();
+        this.FillScrapList();
         Destroy(this.gameObject);
     }
 

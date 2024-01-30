@@ -52,7 +52,7 @@ public class Loader : MonoBehaviour {
             else {
                 Logger.Write("Harmony patches already loaded.");
             }
-                
+
         }
 
         catch (Exception exception) {
