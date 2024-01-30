@@ -10,7 +10,7 @@ public sealed class RefreshMod : MonoBehaviour {
             this.FillEnemyList();
         }
         this.FillScrapList();
-        Destroy(this.gameObject);
+        Destroy(this);
     }
 
     private void FillEnemyList() {
