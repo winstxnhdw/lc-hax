@@ -7,12 +7,8 @@ using HarmonyLib;
 namespace Hax;
 
 public class Loader : MonoBehaviour {
-    public static string HarmonyPatchName { get; } = "winstxnhdw.lc-hax";
-    public static string HaxGameObjectsName { get; } = "Hax GameObjects";
-    public static string HaxModulesName { get; } = "Hax Modules";
-
-    static GameObject HaxGameObjects { get; } = new(HaxGameObjectsName);
-    static GameObject HaxModules { get; } = new(HaxModulesName);
+    static GameObject HaxGameObjects { get; } = new("Hax GameObjects");
+    static GameObject HaxModules { get; } = new("Hax Modules");
 
     static void AddHaxModules<T>() where T : Component => Loader.HaxModules.AddComponent<T>();
     static void AddHaxGameObject<T>() where T : Component => Loader.HaxGameObjects.AddComponent<T>();
@@ -46,13 +42,7 @@ public class Loader : MonoBehaviour {
 
     static void LoadHarmonyPatches() {
         try {
-            if (!Harmony.HasAnyPatches(HarmonyPatchName)) {
-                new Harmony(HarmonyPatchName).PatchAll();
-            }
-            else {
-                Logger.Write("Harmony patches already loaded.");
-            }
-
+            new Harmony("winstxnhdw.lc-hax").PatchAll();
         }
 
         catch (Exception exception) {
@@ -62,10 +52,6 @@ public class Loader : MonoBehaviour {
     }
 
     static void LoadHaxGameObjects() {
-        if (GameObject.Find(HaxGameObjectsName)) {
-            Logger.Write("Hax GameObjects already loaded.");
-        }
-
         DontDestroyOnLoad(Loader.HaxGameObjects);
 
         Loader.AddHaxGameObject<HaxObjects>();
@@ -76,10 +62,6 @@ public class Loader : MonoBehaviour {
 
     static void LoadHaxModules() {
 
-        if (GameObject.Find(HaxModulesName)) {
-            Logger.Write("Hax Modules already loaded.");
-            return;
-        }
         DontDestroyOnLoad(Loader.HaxModules);
 
         Loader.AddHaxModules<ESPMod>();
