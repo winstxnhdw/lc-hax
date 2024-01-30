@@ -57,7 +57,7 @@ public sealed class AntiKickMod : MonoBehaviour {
     IEnumerator DelayClearChatToFalse() {
         yield return new WaitForSeconds(6.5f);
         if (Helper.LocalPlayer is null) {
-            ClearChatExecuted = false;
+            this.ClearChatExecuted = false;
         }
     }
 
