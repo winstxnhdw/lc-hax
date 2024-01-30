@@ -1,10 +1,40 @@
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using UnityEngine;
 
 namespace Hax;
 
 public static partial class Helper {
     public static HashSet<GrabbableObject> Grabbables { get; } = [];
+
+
+    public static void InteractWithProp(this GrabbableObject item) {
+        if(item == null && Helper.LocalPlayer == null) return;
+        if (!item.IsOwner) {
+            if (Helper.LocalPlayer == null) break;
+            item.ChangeOwnershipOfProp(Helper.LocalPlayer.actualClientId);
+        }
+        if (item.TryGetComponent(out AnimatedItem animated)) {
+            animated.EquipItem();
+            return;
+        }
+        if (item.TryGetComponent(out NoisemakerProp noiseprop)) {
+            noiseprop.ItemActivate(true, true);
+            return;
+        }
+        if (item.TryGetComponent(out BoomboxItem BoomBox)) {
+            BoomBox.ItemActivate(true, true);
+            return;
+        }
+        if (item.TryGetComponent(out WhoopieCushionItem fartcushion)) {
+            fartcushion.Fart();
+            return;
+        }
+
+        item.FallToGround(false);
+        item.DropSFX();
+
+    }
 
     public static void DropSFX(this GrabbableObject item) {
         if (item == null) return;

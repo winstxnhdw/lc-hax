@@ -92,49 +92,11 @@ public sealed class TriggerMod : MonoBehaviour, IEnemyPrompter {
                 doorLock.UnlockDoorSyncWithServer();
                 break;
             }
-            if (collider.TryGetComponent(out NoisemakerProp NoiseMaker)) {
-                if (!NoiseMaker.IsOwner) {
-                    if (Helper.LocalPlayer == null) break;
-                    NoiseMaker.ChangeOwnershipOfProp(Helper.LocalPlayer.actualClientId);
-                }
-
-                NoiseMaker.ItemActivate(true, true);
-                break;
-            }
-            if (collider.TryGetComponent(out BoomboxItem boombox)) {
-                if (!boombox.IsOwner) {
-                    if (Helper.LocalPlayer == null) break;
-                    boombox.ChangeOwnershipOfProp(Helper.LocalPlayer.actualClientId);
-                }
-                boombox.ItemActivate(true, true);
-                break;
-            }
-            if (collider.TryGetComponent(out WhoopieCushionItem fartcushion)) {
-                fartcushion.Fart();
-                break;
-            }
-            if (collider.TryGetComponent(out AnimatedItem animated)) {
-                if (!animated.IsOwner) {
-                    if (Helper.LocalPlayer == null) break;
-                    animated.ChangeOwnershipOfProp(Helper.LocalPlayer.actualClientId);
-                }
-                animated.EquipItem();
-                break;
-            }
-
             if (collider.TryGetComponent(out GrabbableObject prop)) {
-                if (!prop.IsOwner) {
-                    if (Helper.LocalPlayer == null) break;
-                    prop.ChangeOwnershipOfProp(Helper.LocalPlayer.actualClientId);
-                }
-                if (prop.GetComponent<BoomboxItem>() != null
-                    || prop.GetComponent<NoisemakerProp>() != null
-                    || prop.GetComponent<AnimatedItem>() != null
-                    || prop.GetComponent<WhoopieCushionItem>() != null) break;
-                prop.FallToGround();
-                prop.DropSFX();
+                prop.InteractWithProp();
                 break;
             }
+
 
             if (collider.TryGetComponent(out PlayerControllerB player)) {
                 Helper.GetEnemy<CentipedeAI>()?.ClingToPlayerServerRpc(player.playerClientId);
