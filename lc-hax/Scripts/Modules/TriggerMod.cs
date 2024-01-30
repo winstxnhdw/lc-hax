@@ -92,14 +92,13 @@ public sealed class TriggerMod : MonoBehaviour, IEnemyPrompter {
                 doorLock.UnlockDoorSyncWithServer();
                 break;
             }
-            if (collider.TryGetComponent(out NoisemakerProp prop)) {
-                if (!prop.IsOwner) {
+            if (collider.TryGetComponent(out NoisemakerProp NoiseMaker)) {
+                if (!NoiseMaker.IsOwner) {
                     if (Helper.LocalPlayer == null) break;
-                    prop.ChangeOwnershipOfProp(Helper.LocalPlayer.actualClientId);
+                    NoiseMaker.ChangeOwnershipOfProp(Helper.LocalPlayer.actualClientId);
                 }
 
-                prop.ItemActivate(true, true);
-                //_ = prop.grabbable.Reflect().InvokeInternalMethod("ActivateItemServerRpc", true, true);
+                NoiseMaker.ItemActivate(true, true);
                 break;
             }
             if (collider.TryGetComponent(out BoomboxItem boombox)) {
@@ -108,20 +107,29 @@ public sealed class TriggerMod : MonoBehaviour, IEnemyPrompter {
                     boombox.ChangeOwnershipOfProp(Helper.LocalPlayer.actualClientId);
                 }
                 boombox.ItemActivate(true, true);
-                //_ = boombox.grabbable.Reflect().InvokeInternalMethod("ActivateItemServerRpc", true, true);
                 break;
             }
             if (collider.TryGetComponent(out WhoopieCushionItem fartcushion)) {
                 fartcushion.Fart();
                 break;
             }
-
             if (collider.TryGetComponent(out AnimatedItem animated)) {
                 if (!animated.IsOwner) {
                     if (Helper.LocalPlayer == null) break;
                     animated.ChangeOwnershipOfProp(Helper.LocalPlayer.actualClientId);
                 }
                 animated.EquipItem();
+                break;
+            }
+
+            if (collider.TryGetComponent(out PhysicsProp prop)) {
+                if (!prop.IsOwner) {
+                    if (Helper.LocalPlayer == null) break;
+                    prop.ChangeOwnershipOfProp(Helper.LocalPlayer.actualClientId);
+                }
+                if (prop.GetComponent<BoomboxItem>() != null || prop.GetComponent<NoisemakerProp>() != null || prop.GetComponent<WhoopieCushionItem>() != null || prop.GetComponent<WhoopieCushionItem>() != null) break;
+                prop.FallToGround();
+                _ = prop.Reflect().InvokeInternalMethod("PlayDropSFX");
                 break;
             }
 
