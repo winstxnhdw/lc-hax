@@ -7,8 +7,12 @@ using HarmonyLib;
 namespace Hax;
 
 public class Loader : MonoBehaviour {
-    static GameObject HaxGameObjects { get; } = new();
-    static GameObject HaxModules { get; } = new();
+    public static string HarmonyPatchName { get; } = "winstxnhdw.lc-hax";
+    public static string HaxGameObjectsName { get; } = "Hax GameObjects";
+    public static string HaxModulesName { get; } = "Hax Modules";
+
+    static GameObject HaxGameObjects { get; } = new(HaxGameObjectsName);
+    static GameObject HaxModules { get; } = new(HaxModulesName);
 
     static void AddHaxModules<T>() where T : Component => Loader.HaxModules.AddComponent<T>();
     static void AddHaxGameObject<T>() where T : Component => Loader.HaxGameObjects.AddComponent<T>();
@@ -42,7 +46,13 @@ public class Loader : MonoBehaviour {
 
     static void LoadHarmonyPatches() {
         try {
-            new Harmony("winstxnhdw.lc-hax").PatchAll();
+            if (!Harmony.HasAnyPatches(HarmonyPatchName)) {
+                new Harmony(HarmonyPatchName).PatchAll();
+            }
+            else {
+                Logger.Write("Harmony patches already loaded.");
+            }
+                
         }
 
         catch (Exception exception) {
@@ -52,6 +62,10 @@ public class Loader : MonoBehaviour {
     }
 
     static void LoadHaxGameObjects() {
+        if (GameObject.Find(HaxGameObjectsName)) {
+            Logger.Write("Hax GameObjects already loaded.");
+        }
+
         DontDestroyOnLoad(Loader.HaxGameObjects);
 
         Loader.AddHaxGameObject<HaxObjects>();
@@ -61,6 +75,9 @@ public class Loader : MonoBehaviour {
     }
 
     static void LoadHaxModules() {
+
+        if (GameObject.Find(HaxModulesName)) return;
+
         DontDestroyOnLoad(Loader.HaxModules);
 
         Loader.AddHaxModules<ESPMod>();
@@ -79,6 +96,11 @@ public class Loader : MonoBehaviour {
         Loader.AddHaxModules<DisconnectMod>();
         Loader.AddHaxModules<ClearVisionMod>();
         Loader.AddHaxModules<InstantInteractMod>();
+
+        // Dont Disable this line, it is used to fill the Helper in case is injected during a full loaded level.
+        Loader.AddHaxModules<RefreshMod>();
+
+
     }
 
     public static void Unload() {
