@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using System.Runtime.CompilerServices;
 using UnityEngine;
 
 namespace Hax;
@@ -9,7 +8,7 @@ public static partial class Helper {
 
 
     public static void InteractWithProp(this GrabbableObject item) {
-        if(item == null && Helper.LocalPlayer == null) return;
+        if (item == null && Helper.LocalPlayer == null) return;
         if (!item.IsOwner) {
             if (Helper.LocalPlayer == null) break;
             item.ChangeOwnershipOfProp(Helper.LocalPlayer.actualClientId);
