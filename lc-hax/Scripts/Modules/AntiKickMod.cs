@@ -1,7 +1,6 @@
 using UnityEngine;
 using Hax;
 using Steamworks;
-using System.Collections;
 
 public sealed class AntiKickMod : MonoBehaviour {
     bool HasGameStarted { get; set; } = false;
@@ -24,7 +23,6 @@ public sealed class AntiKickMod : MonoBehaviour {
         if (!DisconnectMod.DisconnectionAttempted && !Setting.DisconnectedVoluntarily && Setting.EnableAntiKick && Setting.ConnectedLobbyId is SteamId lobbyId) {
             GameNetworkManager.Instance.StartClient(lobbyId);
             this.ClearChatExecuted = true;
-            _ = this.StartCoroutine(this.DelayClearChatToFalse());
         }
         DisconnectMod.DisconnectionAttempted = false;
     }
@@ -51,13 +49,6 @@ public sealed class AntiKickMod : MonoBehaviour {
         if (this.ClearChatExecuted) {
             this.ClearChatExecuted = false;
             Helper.CreateComponent<WaitForBehaviour>().SetPredicate(time => time > 1.0f).Init(Chat.Clear);
-        }
-    }
-
-    IEnumerator DelayClearChatToFalse() {
-        yield return new WaitForSeconds(6.5f);
-        if (Helper.LocalPlayer is null) {
-            this.ClearChatExecuted = false;
         }
     }
 
