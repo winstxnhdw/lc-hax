@@ -22,7 +22,7 @@ public sealed class AntiKickMod : MonoBehaviour {
 
         if (!DisconnectMod.DisconnectionAttempted && !Setting.DisconnectedVoluntarily && Setting.EnableAntiKick && Setting.ConnectedLobbyId is SteamId lobbyId) {
             GameNetworkManager.Instance.StartClient(lobbyId);
-            this.ClearChatExecuted = true;
+            ClearChatExecuted = true;
         }
         DisconnectMod.DisconnectionAttempted = false;
     }
@@ -39,17 +39,17 @@ public sealed class AntiKickMod : MonoBehaviour {
 
         this.HasAnnouncedGameJoin = true;
 
-        Helper.CreateComponent<WaitForBehaviour>().SetPredicate(time => time > 1.0f).Init(() => {
-            Chat.Announce($"{Helper.LocalPlayer?.playerUsername} disconnected.", true);
-            Chat.Print("You are invisible! Do /invis to disable!");
-        });
-
-        if (this.ClearChatExecuted) {
-            this.ClearChatExecuted = false;
+        if (!ClearChatExecuted) {
             Helper.CreateComponent<WaitForBehaviour>().SetPredicate(time => time > 1.0f).Init(() => {
-                for (int i = 0; i < 25; i++) {
-                    Chat.Announce($"", true);
-                }
+                Chat.Announce($"{Helper.LocalPlayer?.playerUsername} disconnected.", true);
+                Chat.Print("You are invisible! Do /invis to disable!");
+            });
+        }
+
+        if (ClearChatExecuted) {
+            ClearChatExecuted = false;
+            Helper.CreateComponent<WaitForBehaviour>().SetPredicate(time => time > 1.0f).Init(() => {
+                Chat.Clear();
             });
         }
     }
