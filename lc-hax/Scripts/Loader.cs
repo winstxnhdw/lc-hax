@@ -76,8 +76,10 @@ public class Loader : MonoBehaviour {
 
     static void LoadHaxModules() {
 
-        if (GameObject.Find(HaxModulesName)) return;
-
+        if (GameObject.Find(HaxModulesName)) {
+            Logger.Write("Hax Modules already loaded.");
+            return;
+        }
         DontDestroyOnLoad(Loader.HaxModules);
 
         Loader.AddHaxModules<ESPMod>();
