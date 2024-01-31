@@ -37,7 +37,7 @@ public sealed class AntiKickMod : MonoBehaviour {
         this.HasAnnouncedGameJoin = true;
 
         Helper.CreateComponent<WaitForBehaviour>().SetPredicate(time => time > 1.0f).Init(() => {
-            Chat.Announce($"{Helper.LocalPlayer?.playerUsername} disconnected.", true);
+            Chat.Clear();
             Chat.Print("You are invisible! Do /invis to disable!");
         });
     }
