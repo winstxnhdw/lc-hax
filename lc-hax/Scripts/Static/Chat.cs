@@ -45,7 +45,7 @@ public static class Chat {
 
         hudManager.AddTextToChatOnServer(
             $"</color>\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n{chatText}<color=#FFFFFF00>",
-            player.ClientId()
+            player.PlayerIndex()
         );
     }
 

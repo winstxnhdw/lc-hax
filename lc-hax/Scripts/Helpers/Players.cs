@@ -7,7 +7,7 @@ namespace Hax;
 
 public static partial class Helper {
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static int ClientId(this PlayerControllerB player) => unchecked((int)player.playerClientId);
+    public static int PlayerIndex(this PlayerControllerB player) => unchecked((int)player.playerClientId);
 
     public static void DamagePlayerRpc(this PlayerControllerB player, int damage) =>
         player.DamagePlayerFromOtherClientServerRpc(damage, Vector3.zero, -1);

@@ -8,6 +8,6 @@ class FakeDeathPatch {
         if (!Setting.EnableFakeDeath) return true;
 
         Setting.EnableFakeDeath = false;
-        return Helper.LocalPlayer?.ClientId() != playerId;
+        return Helper.LocalPlayer?.PlayerIndex() != playerId;
     }
 }
