@@ -1,10 +1,14 @@
 using UnityEngine;
 using GameNetcodeStuff;
 using System.Linq;
+using System.Runtime.CompilerServices;
 
 namespace Hax;
 
 public static partial class Helper {
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static int ClientId(this PlayerControllerB player) => unchecked((int)player.playerClientId);
+
     public static void DamagePlayerRpc(this PlayerControllerB player, int damage) =>
         player.DamagePlayerFromOtherClientServerRpc(damage, Vector3.zero, -1);
 
@@ -25,7 +29,7 @@ public static partial class Helper {
                players.First(player => player.playerClientId.ToString() == playerNameOrId);
     }
 
-    public static PlayerControllerB? GetPlayer(int playerClientId) => Helper.Players.First(player => player.playerClientId == (ulong)playerClientId);
+    public static PlayerControllerB? GetPlayer(ulong playerClientId) => Helper.Players.First(player => player.playerClientId == playerClientId);
 
     public static PlayerControllerB? GetActivePlayer(string playerNameOrId) =>
         Helper.GetPlayer(playerNameOrId) is not PlayerControllerB player || !player.isPlayerControlled || player.isPlayerDead

@@ -23,7 +23,7 @@ public class FakeDeathCommand : ICommand {
 
         _ = player.Reflect().InvokeInternalMethod(
             "KillPlayerServerRpc",
-            (int)player.playerClientId,
+            player.ClientId(),
             false,
             Vector3.zero,
             CauseOfDeath.Unknown,
