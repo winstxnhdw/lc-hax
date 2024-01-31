@@ -13,6 +13,6 @@ public class SayCommand : ICommand {
             return;
         }
 
-        Helper.HUDManager?.AddTextToChatOnServer(string.Join(" ", args[1..].ToArray()), (int)player.playerClientId);
+        Helper.HUDManager?.AddTextToChatOnServer(string.Join(" ", args[1..].ToArray()), player.PlayerIndex());
     }
 }
