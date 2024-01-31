@@ -18,6 +18,6 @@ public sealed class DisconnectMod : MonoBehaviour {
     void TryToDisconnect() {
         if (!this.IsShiftHeld) return;
         GameNetworkManager.Instance.Disconnect();
-        DisconnectionAttempted = true;
+        Setting.DisconnectedVoluntarily = true;
     }
 }
