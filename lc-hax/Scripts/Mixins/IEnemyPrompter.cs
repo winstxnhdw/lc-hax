@@ -30,7 +30,7 @@ public class EnemyPromptHandler {
 
     void HandleThumper(CrawlerAI thumper, PlayerControllerB targetPlayer, bool willTeleportEnemy) {
         this.TeleportEnemyToPlayer(thumper, targetPlayer, willTeleportEnemy, allowedInside: true);
-        thumper.BeginChasingPlayerServerRpc(targetPlayer.ClientId());
+        thumper.BeginChasingPlayerServerRpc(targetPlayer.PlayerIndex());
     }
 
     void HandleEyelessDog(MouthDogAI eyelessDog, PlayerControllerB targetPlayer, bool willTeleportEnemy) {
@@ -117,7 +117,7 @@ public class EnemyPromptHandler {
         this.TeleportEnemyToPlayer(nutcracker, targetPlayer, willTeleportEnemy, true, true);
 
         nutcracker.StopInspection();
-        nutcracker.SeeMovingThreatServerRpc(targetPlayer.ClientId());
+        nutcracker.SeeMovingThreatServerRpc(targetPlayer.PlayerIndex());
         nutcracker.AimGunServerRpc(targetPlayer.transform.position);
 
         _ = nutcracker.Reflect()

@@ -9,5 +9,5 @@ public static partial class Helper {
 
     public static void SwitchRadarTarget(int playerClientId) => Helper.ManualCameraRenderer?.SwitchRadarTargetServerRpc(playerClientId);
 
-    public static void SwitchRadarTarget(PlayerControllerB player) => Helper.SwitchRadarTarget(player.ClientId());
+    public static void SwitchRadarTarget(PlayerControllerB player) => Helper.SwitchRadarTarget(player.PlayerIndex());
 }
