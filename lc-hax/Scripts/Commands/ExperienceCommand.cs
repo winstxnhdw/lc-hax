@@ -36,13 +36,13 @@ public class ExperienceCommand : ICommand {
             _ => Rank.BOSS
         };
 
-        hudManager.localPlayerLevel = (int)rank;
+        hudManager.localPlayerLevel = unchecked((int)rank);
 
         ES3.Save("PlayerXPNum", hudManager.localPlayerXP, "LCGeneralSaveData");
         ES3.Save("PlayerLevel", hudManager.localPlayerLevel, "LCGeneralSaveData");
 
         hudManager.SyncPlayerLevelServerRpc(
-            (int)hudManager.localPlayer.playerClientId,
+            hudManager.localPlayer.ClientId(),
             hudManager.localPlayerLevel,
             ES3.Load("playedDuringBeta", "LCGeneralSaveData", true)
         );

@@ -11,7 +11,7 @@ enum BehaviourState {
 }
 
 public class EnemyPromptHandler {
-    void SetBehaviourState(EnemyAI enemy, BehaviourState behaviourState) => enemy.SwitchToBehaviourState((int)behaviourState);
+    void SetBehaviourState(EnemyAI enemy, BehaviourState behaviourState) => enemy.SwitchToBehaviourState(unchecked((int)behaviourState));
 
     void TeleportEnemyToPlayer(
         EnemyAI enemy,
@@ -30,7 +30,7 @@ public class EnemyPromptHandler {
 
     void HandleThumper(CrawlerAI thumper, PlayerControllerB targetPlayer, bool willTeleportEnemy) {
         this.TeleportEnemyToPlayer(thumper, targetPlayer, willTeleportEnemy, allowedInside: true);
-        thumper.BeginChasingPlayerServerRpc((int)targetPlayer.playerClientId);
+        thumper.BeginChasingPlayerServerRpc(targetPlayer.ClientId());
     }
 
     void HandleEyelessDog(MouthDogAI eyelessDog, PlayerControllerB targetPlayer, bool willTeleportEnemy) {
@@ -116,9 +116,8 @@ public class EnemyPromptHandler {
     void HandleNutcracker(NutcrackerEnemyAI nutcracker, PlayerControllerB targetPlayer, bool willTeleportEnemy) {
         this.TeleportEnemyToPlayer(nutcracker, targetPlayer, willTeleportEnemy, true, true);
 
-        int playerId = (int)targetPlayer.playerClientId;
         nutcracker.StopInspection();
-        nutcracker.SeeMovingThreatServerRpc(playerId);
+        nutcracker.SeeMovingThreatServerRpc(targetPlayer.ClientId());
         nutcracker.AimGunServerRpc(targetPlayer.transform.position);
 
         _ = nutcracker.Reflect()
