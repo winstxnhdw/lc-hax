@@ -1,3 +1,4 @@
+using Hax;
 using UnityEngine;
 
 public sealed class DisconnectMod : MonoBehaviour {
@@ -17,6 +18,7 @@ public sealed class DisconnectMod : MonoBehaviour {
 
     void TryToDisconnect() {
         if (!this.IsShiftHeld) return;
+
         GameNetworkManager.Instance.Disconnect();
         Setting.DisconnectedVoluntarily = true;
     }
