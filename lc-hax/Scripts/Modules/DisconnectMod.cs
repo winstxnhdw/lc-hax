@@ -2,7 +2,6 @@ using UnityEngine;
 
 public sealed class DisconnectMod : MonoBehaviour {
     bool IsShiftHeld { get; set; } = false;
-    public static bool DisconnectionAttempted { get; set; } = false;
 
     void OnEnable() {
         InputListener.onShiftButtonHold += this.HoldShift;
