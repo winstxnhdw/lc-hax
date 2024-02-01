@@ -4,7 +4,7 @@ using Hax;
 using UnityEngine;
 
 [HarmonyPatch]
-public class PlayerHealthPatch {
+public class GodModePatch {
 
 
     [HarmonyPrefix]
