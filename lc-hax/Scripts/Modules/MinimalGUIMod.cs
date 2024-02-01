@@ -15,14 +15,10 @@ public class MinimalGUIMod : MonoBehaviour {
     }
 
     void OnGUI() {
-        string labelText;
-        if (!this.InGame) {
-            labelText = $"Lobby Id: {(Setting.ConnectedLobbyId)}" +
-                $"\nAnti-Kick: {(Setting.EnableAntiKick ? "On" : "Off")}";
-        }
-        else {
-            labelText = $"Lobby Id: {(Setting.ConnectedLobbyId)}";
-        }
+        string labelText = !this.InGame
+            ? $"Lobby Id: {Setting.ConnectedLobbyId}" +
+                $"\nAnti-Kick: {(Setting.EnableAntiKick ? "On" : "Off")}"
+            : $"Lobby Id: {Setting.ConnectedLobbyId}";
         GUIStyle labelStyle = GUI.skin.label;
         Vector2 labelSize = labelStyle.CalcSize(new GUIContent(labelText));
         float xPosition = Screen.width - labelSize.x - 10;
