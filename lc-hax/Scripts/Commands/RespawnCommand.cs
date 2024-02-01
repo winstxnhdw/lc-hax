@@ -1,5 +1,3 @@
-using System.Linq;
-using System.Collections.Generic;
 using Hax;
 using GameNetcodeStuff;
 
@@ -93,8 +91,8 @@ public class RespawnCommand : ICommand {
     }
 
     public void Execute(StringArray _) {
-        if(Helper.LocalPlayer == null) return;
-        if(Helper.LocalPlayer.isPlayerDead) {
+        if (Helper.LocalPlayer == null) return;
+        if (Helper.LocalPlayer.isPlayerDead) {
             this.RespawnLocalPlayer();
             Chat.Print("You are Revived, other Players cannot see you.");
         }

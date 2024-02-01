@@ -1,7 +1,6 @@
 using GameNetcodeStuff;
 using HarmonyLib;
 using Hax;
-using UnityEngine;
 
 [HarmonyPatch]
 public class GodModePatch {
@@ -23,7 +22,7 @@ public class GodModePatch {
     [HarmonyPrefix]
     [HarmonyPatch(typeof(PlayerControllerB), nameof(PlayerControllerB.DamagePlayer))]
     public static bool PrefixDamagePlayer(PlayerControllerB __instance, CauseOfDeath causeOfDeath) {
-        if(__instance.isSelf()) {
+        if (__instance.isSelf()) {
             if (Setting.EnableGodMode) return false;
             if (Setting.DisableFallDamage && causeOfDeath == CauseOfDeath.Gravity) return false;
         }
@@ -32,7 +31,7 @@ public class GodModePatch {
 
     [HarmonyPrefix]
     [HarmonyPatch(typeof(PlayerControllerB), nameof(PlayerControllerB.KillPlayer))]
-    public static bool PrefixKillPlayer(PlayerControllerB __instance ,CauseOfDeath causeOfDeath) {
+    public static bool PrefixKillPlayer(PlayerControllerB __instance, CauseOfDeath causeOfDeath) {
         if (__instance.isSelf()) {
             if (Setting.EnableGodMode) return false;
             if (Setting.DisableFallDamage && causeOfDeath == CauseOfDeath.Gravity) return false;
@@ -43,7 +42,7 @@ public class GodModePatch {
     [HarmonyPrefix]
     [HarmonyPatch(typeof(FlowermanAI), nameof(FlowermanAI.KillPlayerAnimationServerRpc))]
     [HarmonyPatch(typeof(FlowermanAI), nameof(FlowermanAI.KillPlayerAnimationClientRpc))]
-    public static bool PrefixFlowermanKill(int playerObjectId, ref bool ___startingKillAnimationLocalClient ) {
+    public static bool PrefixFlowermanKill(int playerObjectId, ref bool ___startingKillAnimationLocalClient) {
         if (!Setting.EnableGodMode) return true;
         if (Helper.IsEnemyAboutToKillLocalPlayer(playerObjectId)) {
             ___startingKillAnimationLocalClient = false;
@@ -57,8 +56,7 @@ public class GodModePatch {
     [HarmonyPatch(typeof(ForestGiantAI), nameof(ForestGiantAI.GrabPlayerClientRpc))]
     public static bool PrefixGiantKill(int playerId) {
         if (!Setting.EnableGodMode) return true;
-        if (Helper.IsEnemyAboutToKillLocalPlayer(playerId)) return false;
-        return true;
+        return !Helper.IsEnemyAboutToKillLocalPlayer(playerId);
     }
 
     [HarmonyPrefix]

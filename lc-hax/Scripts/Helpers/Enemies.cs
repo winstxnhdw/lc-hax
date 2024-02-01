@@ -18,16 +18,14 @@ public static partial class Helper {
 
     public static bool IsEnemyAboutToKillLocalPlayer(int PlayerID) {
         PlayerControllerB? player = Helper.GetPlayerAboutToKilledByEnemy(PlayerID);
-        if(player == null) return false;
-        return player.isSelf();
+        return player == null ? false : player.isSelf();
     }
 
     public static bool IsEnemyAboutToKillLocalPlayer(this EnemyAI instance, Collider other) {
-        if(instance == null) return false;
-        if(other == null) return false;
+        if (instance == null) return false;
+        if (other == null) return false;
         PlayerControllerB playerControllerB = instance.MeetsStandardPlayerCollisionConditions(other, false, false);
-        if (playerControllerB == null) return false;
-        return playerControllerB.isSelf();
+        return playerControllerB == null ? false : playerControllerB.isSelf();
     }
 
 
