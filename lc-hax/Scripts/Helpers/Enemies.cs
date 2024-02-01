@@ -1,3 +1,4 @@
+using GameNetcodeStuff;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -8,6 +9,26 @@ public static partial class Helper {
 
     public static T? GetEnemy<T>() where T : EnemyAI =>
         Helper.Enemies.First(enemy => enemy is T) is T enemy ? enemy : null;
+
+
+    public static PlayerControllerB? GetPlayerAboutToKilledByEnemy(int playerObjectID) {
+        PlayerControllerB[] players = Helper.Players;
+        return players.First(player => (int)player.playerClientId == playerObjectID);
+    }
+
+    public static bool IsEnemyAboutToKillLocalPlayer(int PlayerID) {
+        PlayerControllerB? player = Helper.GetPlayerAboutToKilledByEnemy(PlayerID);
+        if(player == null) return false;
+        return player.isSelf();
+    }
+
+    public static bool IsEnemyAboutToKillLocalPlayer(this EnemyAI instance, Collider other) {
+        if(instance == null) return false;
+        if(other == null) return false;
+        PlayerControllerB playerControllerB = instance.MeetsStandardPlayerCollisionConditions(other, false, false);
+        if (playerControllerB == null) return false;
+        return playerControllerB.isSelf();
+    }
 
 
     public static Dictionary<string, GameObject> SpawnableEnemies {
