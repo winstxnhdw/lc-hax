@@ -89,7 +89,7 @@ public class GodModePatch {
         if (!Setting.EnableGodMode) return true;
         if (Helper.IsEnemyAboutToKillLocalPlayer(playerId)) {
             ___inKillAnimation = false;
-           __instance.StopKillAnimationServerRpc();
+            __instance.StopKillAnimationServerRpc();
             return false;
         }
         return true;
@@ -99,7 +99,7 @@ public class GodModePatch {
     [HarmonyPatch(typeof(RedLocustBees), nameof(RedLocustBees.BeeKillPlayerServerRpc))]
     [HarmonyPatch(typeof(RedLocustBees), nameof(RedLocustBees.BeeKillPlayerClientRpc))]
     public static bool PrefixBeesKill(int playerId) {
-        return !Setting.EnableGodMode ? true : !Helper.IsEnemyAboutToKillLocalPlayer(playerId);
+        return !Setting.EnableGodMode || !Helper.IsEnemyAboutToKillLocalPlayer(playerId);
     }
 
 }
