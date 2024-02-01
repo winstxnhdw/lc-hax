@@ -49,9 +49,6 @@ Execute `launch.bat` when you have launched the game to inject the assembly into
 
 ## Features
 
-> [!NOTE]\
-> There is **no** feature in this mod that require host privileges.
-
 `lc-hax` has an extensive list of features. Features are split into two distinct categories: **mods** and **commands**. Mods are features that are always active, while commands are features that are only active for a limited period of time when invoked.
 
 The complete feature set includes the following.
@@ -146,7 +143,19 @@ The complete feature set includes the following.
 | Upset all turrets             | `/berserk`                                     |
 | Turn invisible to players     | `/invis`                                       |
 | Clear the chat for everyone   | `/clear`                                       |
-| Toggle ship lights            | `/light`                                      |
+| Toggle ship lights            | `/light`                                       |
+| Toggle superuser mode         | `/su`                                          |
+
+## Superuser Commands
+
+> [!IMPORTANT]\
+> All commands under here require host privileges.
+
+These commands are only available when the user is in superuser mode.
+
+| Action                        | Command                                        |
+| ----------------------------- | ---------------------------------------------- |
+| Set the timescale             | `/timescale <scale>`                           |
 
 ### Binds
 
@@ -271,6 +280,13 @@ Despite being compiled from source locally, SharpMonoInjector is occasionally fa
 Add-MpPreference -ExclusionPath $pwd, "$env:TEMP\.net\SharpMonoInjector"
 ```
 
+## Alternatives
+
+If `lc-hax` is not your fancy, here are excellent alternatives that may suit your needs!
+
+- [Project Apparatus](https://github.com/KaylinOwO/Project-Apparatus)
+- [Lethal Menu](https://github.com/IcyRelic/LethalMenu)
+
 ## Credits
 
-Thanks to [Quesoteric](https://github.com/Quesoteric) for the title GIF.
+A big thanks to every contributor of this project and to [Quesoteric](https://github.com/Quesoteric) for the title GIF.

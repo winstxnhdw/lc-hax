@@ -1,6 +1,6 @@
 using Hax;
 
-public class Debug(ICommand command) : ICommand {
+public class DebugCommand(ICommand command) : ICommand {
     ICommand Command { get; } = command;
 
     public void Execute(StringArray args) {
