@@ -4,32 +4,32 @@ using Hax;
 
 public class LobbyID : MonoBehaviour {
     bool IsShiftHeld { get; set; } = false;
-        bool InGame { get; set; } = false;
+    bool InGame { get; set; } = false;
 
     void OnEnable() {
-        InputListener.onShiftButtonHold += HoldShift;
+        InputListener.onShiftButtonHold += this.HoldShift;
         InputListener.onCPress += this.CopyToClipboard;
         InputListener.onVPress += this.PasteFromClipboard;
     }
 
     void OnDisable() {
-        InputListener.onShiftButtonHold -= HoldShift;
+        InputListener.onShiftButtonHold -= this.HoldShift;
         InputListener.onCPress -= this.CopyToClipboard;
         InputListener.onVPress -= this.PasteFromClipboard;
     }
 
-    void HoldShift(bool isHeld) => IsShiftHeld = isHeld;
+    void HoldShift(bool isHeld) => this.IsShiftHeld = isHeld;
 
     void CopyToClipboard() {
-        if (!IsShiftHeld) return;
+        if (!this.IsShiftHeld) return;
         GUIUtility.systemCopyBuffer = Setting.ConnectedLobbyId.ToString();
     }
 
     void PasteFromClipboard() {
-        if (!IsShiftHeld || Helper.LocalPlayer is not null) return;
+        if (!this.IsShiftHeld || Helper.LocalPlayer is not null) return;
         string clipboardText = GUIUtility.systemCopyBuffer;
         if (ulong.TryParse(clipboardText, out ulong lobbyIdValue)) {
-            SteamId lobbyId = new SteamId { Value = lobbyIdValue };
+            SteamId lobbyId = new() { Value = lobbyIdValue };
             Setting.ConnectedLobbyId = lobbyId;
         }
     }
