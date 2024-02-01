@@ -8,27 +8,27 @@ public class MinimalGUIMod : MonoBehaviour {
     void OnEnable() {
         GameListener.onGameStart += this.ToggleInGame;
         GameListener.onGameEnd += this.ToggleNotInGame;
-        InputListener.onF9Press += LobbyInfo;
+        InputListener.onF9Press += this.LobbyInfo;
     }
 
     void OnDisable() {
         GameListener.onGameStart -= this.ToggleInGame;
         GameListener.onGameEnd -= this.ToggleNotInGame;
-        InputListener.onF9Press -= LobbyInfo;
+        InputListener.onF9Press -= this.LobbyInfo;
     }
 
     void OnGUI() {
         GUIStyle labelStyle = GUI.skin.label;
         string lobbyIdText = "";
 
-        if (ShowLobbyInfo) {
-            lobbyIdText = $"Lobby ID: <color=#0EE600>{(Setting.ConnectedLobbyId)}</color><color=#999999>" +
+        if (this.ShowLobbyInfo) {
+            lobbyIdText = $"Lobby ID: <color=#0EE600>{Setting.ConnectedLobbyId}</color><color=#999999>" +
                     $"\nShift F4: Disconnect" +
                     $"\nShift F3: Disconnect + ReJoin" +
                     $"\nF9: Toggle Lobby Info</color>";
         }
-        if (ShowLobbyInfo && !this.InGame) {
-            lobbyIdText = $"Lobby ID: <color=#0EE600>{(Setting.ConnectedLobbyId)}</color><color=#999999>" +
+        if (this.ShowLobbyInfo && !this.InGame) {
+            lobbyIdText = $"Lobby ID: <color=#0EE600>{Setting.ConnectedLobbyId}</color><color=#999999>" +
                 $"\nShift F3: Join ID" +
                 $"\nShift C: Copy ID" +
                 $"\nShift V: Paste Clipboard To ID" +
@@ -39,12 +39,12 @@ public class MinimalGUIMod : MonoBehaviour {
         Vector2 lobbyIdSize = labelStyle.CalcSize(new GUIContent(lobbyIdText));
         float lobbyIdXPosition = 10f;
         float lobbyIdYPosition = 0;
-        Rect lobbyIdRect = new Rect(lobbyIdXPosition, lobbyIdYPosition, lobbyIdSize.x, lobbyIdSize.y);
+        Rect lobbyIdRect = new(lobbyIdXPosition, lobbyIdYPosition, lobbyIdSize.x, lobbyIdSize.y);
 
         Vector2 antiKickSize = labelStyle.CalcSize(new GUIContent(antiKickText));
         float antiKickXPosition = Screen.width - antiKickSize.x - 10;
         float antiKickYPosition = 0;
-        Rect antiKickRect = new Rect(antiKickXPosition, antiKickYPosition, antiKickSize.x, antiKickSize.y);
+        Rect antiKickRect = new(antiKickXPosition, antiKickYPosition, antiKickSize.x, antiKickSize.y);
 
         GUI.Label(lobbyIdRect, lobbyIdText);
 
@@ -54,7 +54,7 @@ public class MinimalGUIMod : MonoBehaviour {
     }
 
     void LobbyInfo() {
-        ShowLobbyInfo = !ShowLobbyInfo;
+        this.ShowLobbyInfo = !this.ShowLobbyInfo;
     }
 
     void ToggleInGame() => this.InGame = true;
