@@ -19,7 +19,7 @@ public class FatalityCommand : ICommand {
             return "Enemy has not yet spawned!";
         }
 
-        forestGiant.GrabPlayerServerRpc((int)targetPlayer.playerClientId);
+        forestGiant.GrabPlayerServerRpc(targetPlayer.PlayerIndex());
         return null;
     }
 
@@ -28,7 +28,7 @@ public class FatalityCommand : ICommand {
             return "Enemy has not yet spawned!";
         }
 
-        jester.KillPlayerServerRpc((int)targetPlayer.playerClientId);
+        jester.KillPlayerServerRpc(targetPlayer.PlayerIndex());
         return null;
     }
 
@@ -37,7 +37,7 @@ public class FatalityCommand : ICommand {
             return "Enemy has not yet spawned!";
         }
 
-        masked.KillPlayerAnimationServerRpc((int)targetPlayer.playerClientId);
+        masked.KillPlayerAnimationServerRpc(targetPlayer.PlayerIndex());
         return null;
     }
 
@@ -46,7 +46,7 @@ public class FatalityCommand : ICommand {
             return "Enemy has not yet spawned!";
         }
 
-        baboonHawk.StabPlayerDeathAnimServerRpc((int)targetPlayer.playerClientId);
+        baboonHawk.StabPlayerDeathAnimServerRpc(targetPlayer.PlayerIndex());
         return null;
     }
 
@@ -55,7 +55,7 @@ public class FatalityCommand : ICommand {
             return "Enemy has not yet spawned!";
         }
 
-        bees.BeeKillPlayerServerRpc((int)targetPlayer.playerClientId);
+        bees.BeeKillPlayerServerRpc(targetPlayer.PlayerIndex());
         return null;
     }
 
@@ -64,7 +64,7 @@ public class FatalityCommand : ICommand {
             return "Enemy has not yet spawned!";
         }
 
-        thumper.EatPlayerBodyServerRpc((int)targetPlayer.playerClientId);
+        thumper.EatPlayerBodyServerRpc(targetPlayer.PlayerIndex());
         return null;
     }
 
@@ -73,7 +73,7 @@ public class FatalityCommand : ICommand {
             return "Enemy has not yet spawned!";
         }
 
-        eyelessDog.KillPlayerServerRpc((int)targetPlayer.playerClientId);
+        eyelessDog.KillPlayerServerRpc(targetPlayer.PlayerIndex());
         return null;
     }
 
@@ -82,7 +82,7 @@ public class FatalityCommand : ICommand {
             return "Enemy has not yet spawned!";
         }
 
-        bracken.KillPlayerAnimationServerRpc((int)targetPlayer.playerClientId);
+        bracken.KillPlayerAnimationServerRpc(targetPlayer.PlayerIndex());
         return null;
     }
 
@@ -91,7 +91,7 @@ public class FatalityCommand : ICommand {
             return "Enemy has not yet spawned!";
         }
 
-        nutcracker.LegKickPlayerServerRpc((int)targetPlayer.playerClientId);
+        nutcracker.LegKickPlayerServerRpc(targetPlayer.PlayerIndex());
         return null;
     }
 
