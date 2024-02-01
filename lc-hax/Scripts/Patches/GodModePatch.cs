@@ -55,8 +55,7 @@ public class GodModePatch {
     [HarmonyPatch(typeof(ForestGiantAI), nameof(ForestGiantAI.GrabPlayerServerRpc))]
     [HarmonyPatch(typeof(ForestGiantAI), nameof(ForestGiantAI.GrabPlayerClientRpc))]
     public static bool PrefixGiantKill(int playerId) {
-        if (!Setting.EnableGodMode) return true;
-        return !Helper.IsEnemyAboutToKillLocalPlayer(playerId);
+        return !Setting.EnableGodMode ? true : !Helper.IsEnemyAboutToKillLocalPlayer(playerId);
     }
 
     [HarmonyPrefix]
