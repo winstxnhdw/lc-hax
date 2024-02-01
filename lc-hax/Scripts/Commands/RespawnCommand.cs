@@ -92,12 +92,7 @@ public class RespawnCommand : ICommand {
 
     public void Execute(StringArray _) {
         if (Helper.LocalPlayer == null) return;
-        if (Helper.LocalPlayer.isPlayerDead) {
-            this.RespawnLocalPlayer();
-            Chat.Print("You are Revived, other Players cannot see you.");
-        }
-        else {
-            Chat.Print("You are not dead.");
-        }
+        this.RespawnLocalPlayer();
+        Chat.Print("You are Revived, other Players cannot see you.");
     }
 }
