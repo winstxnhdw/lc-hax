@@ -79,6 +79,7 @@ public class Loader : MonoBehaviour {
         Loader.AddHaxModules<DisconnectMod>();
         Loader.AddHaxModules<ClearVisionMod>();
         Loader.AddHaxModules<InstantInteractMod>();
+        Loader.AddHaxModules<LobbyID>();
     }
 
     public static void Unload() {
