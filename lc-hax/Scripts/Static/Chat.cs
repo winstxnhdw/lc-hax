@@ -29,7 +29,18 @@ public static class Chat {
             .Where(type => type.GetCustomAttribute<DebugCommandAttribute>() is not null)
             .ToDictionary(
                 type => type.GetCustomAttribute<DebugCommandAttribute>().Syntax,
-                type => (ICommand)new Debug((ICommand)Activator.CreateInstance(type))
+                type => (ICommand)new DebugCommand((ICommand)Activator.CreateInstance(type))
+            );
+
+    static Dictionary<string, ICommand> SuperuserCommands { get; } =
+        Assembly
+            .GetExecutingAssembly()
+            .GetTypes()
+            .Where(type => typeof(ICommand).IsAssignableFrom(type))
+            .Where(type => type.GetCustomAttribute<SuperuserCommandAttribute>() is not null)
+            .ToDictionary(
+                type => type.GetCustomAttribute<SuperuserCommandAttribute>().Syntax,
+                type => (ICommand)new SuperuserCommand((ICommand)Activator.CreateInstance(type))
             );
 
     public static void Announce(string announcement, bool keepHistory = false) {
@@ -82,7 +93,10 @@ public static class Chat {
             return;
         }
 
-        using ICommand? command = Chat.Commands.GetValue(args[0]) ?? Chat.DebugCommands.GetValue(args[0]);
+        using ICommand? command =
+            Chat.Commands.GetValue(args[0]) ??
+            Chat.SuperuserCommands.GetValue(args[0]) ??
+            Chat.DebugCommands.GetValue(args[0]);
 
         if (command is null) {
             Chat.Print("The command is not found!");
