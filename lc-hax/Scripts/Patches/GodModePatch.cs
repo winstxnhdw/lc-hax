@@ -85,9 +85,9 @@ public class GodModePatch {
     [HarmonyPrefix]
     [HarmonyPatch(typeof(MouthDogAI), nameof(MouthDogAI.KillPlayerServerRpc))]
     [HarmonyPatch(typeof(MouthDogAI), nameof(MouthDogAI.KillPlayerClientRpc))]
-    public static bool PrefixDogKill(MouthDogAI __instance, int playerObjectId, ref bool ___inKillAnimation) {
+    public static bool PrefixDogKill(MouthDogAI __instance, int playerId, ref bool ___inKillAnimation) {
         if (!Setting.EnableGodMode) return true;
-        if (Helper.IsEnemyAboutToKillLocalPlayer(playerObjectId)) {
+        if (Helper.IsEnemyAboutToKillLocalPlayer(playerId)) {
             ___inKillAnimation = false;
             return false;
         }
