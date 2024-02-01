@@ -26,6 +26,7 @@ public class InputListener : MonoBehaviour {
     public static event Action? onF3Press;
     public static event Action? onF4Press;
     public static event Action? onF5Press;
+    public static event Action? onF9Press;
 
     (Func<bool>, Action)[] InputActions { get; } = [
         (() => Mouse.current.middleButton.wasPressedThisFrame, () => InputListener.onMiddleButtonPress?.Invoke()),
@@ -47,6 +48,7 @@ public class InputListener : MonoBehaviour {
         (() => Keyboard.current[Key.F3].wasPressedThisFrame, () => InputListener.onF3Press?.Invoke()),
         (() => Keyboard.current[Key.F4].wasPressedThisFrame, () => InputListener.onF4Press?.Invoke()),
         (() => Keyboard.current[Key.F5].wasPressedThisFrame, () => InputListener.onF5Press?.Invoke()),
+        (() => Keyboard.current[Key.F9].wasPressedThisFrame, () => InputListener.onF9Press?.Invoke()),
     ];
 
     void Update() {
