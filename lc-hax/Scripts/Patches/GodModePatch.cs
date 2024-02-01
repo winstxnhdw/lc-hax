@@ -97,7 +97,7 @@ public class GodModePatch {
     [HarmonyPrefix]
     [HarmonyPatch(typeof(RedLocustBees), nameof(RedLocustBees.BeeKillPlayerServerRpc))]
     [HarmonyPatch(typeof(RedLocustBees), nameof(RedLocustBees.BeeKillPlayerClientRpc))]
-    public static bool PrefixDogKill(RedLocustBees __instance, int playerId, ref bool ___inKillAnimation) {
+    public static bool PrefixDogKill(RedLocustBees __instance, int playerId) {
         if (!Setting.EnableGodMode) return true;
         if (Helper.IsEnemyAboutToKillLocalPlayer(playerId)) {
             ___inKillAnimation = false;
