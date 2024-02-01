@@ -73,7 +73,7 @@ public class GodModePatch {
     [HarmonyPrefix]
     [HarmonyPatch(typeof(MaskedPlayerEnemy), nameof(MaskedPlayerEnemy.KillPlayerAnimationServerRpc))]
     [HarmonyPatch(typeof(MaskedPlayerEnemy), nameof(MaskedPlayerEnemy.KillPlayerAnimationServerRpc))]
-    public static bool PrefixMaskedPlayerKill(MaskedPlayerEnemy __instance, int playerObjectId, ref bool ___startingKillAnimationLocalClient) {
+    public static bool PrefixMaskedPlayerKill(int playerObjectId, ref bool ___startingKillAnimationLocalClient) {
         if (!Setting.EnableGodMode) return true;
         if (Helper.IsEnemyAboutToKillLocalPlayer(playerObjectId)) {
             ___startingKillAnimationLocalClient = false;
@@ -85,7 +85,7 @@ public class GodModePatch {
     [HarmonyPrefix]
     [HarmonyPatch(typeof(MouthDogAI), nameof(MouthDogAI.KillPlayerServerRpc))]
     [HarmonyPatch(typeof(MouthDogAI), nameof(MouthDogAI.KillPlayerClientRpc))]
-    public static bool PrefixDogKill(MouthDogAI __instance, int playerId, ref bool ___inKillAnimation) {
+    public static bool PrefixDogKill(int playerId, ref bool ___inKillAnimation) {
         if (!Setting.EnableGodMode) return true;
         if (Helper.IsEnemyAboutToKillLocalPlayer(playerId)) {
             ___inKillAnimation = false;
@@ -97,10 +97,9 @@ public class GodModePatch {
     [HarmonyPrefix]
     [HarmonyPatch(typeof(RedLocustBees), nameof(RedLocustBees.BeeKillPlayerServerRpc))]
     [HarmonyPatch(typeof(RedLocustBees), nameof(RedLocustBees.BeeKillPlayerClientRpc))]
-    public static bool PrefixDogKill(RedLocustBees __instance, int playerId) {
+    public static bool PrefixDogKill(int playerId) {
         if (!Setting.EnableGodMode) return true;
         if (Helper.IsEnemyAboutToKillLocalPlayer(playerId)) {
-            ___inKillAnimation = false;
             return false;
         }
         return true;
