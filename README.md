@@ -146,6 +146,7 @@ The complete feature set includes the following.
 | Upset all turrets             | `/berserk`                                     |
 | Turn invisible to players     | `/invis`                                       |
 | Clear the chat for everyone   | `/clear`                                       |
+| Toggle ship lights            | `/light`                                      |
 
 ### Binds
 
