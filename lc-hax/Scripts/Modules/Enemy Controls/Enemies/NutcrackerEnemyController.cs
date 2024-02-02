@@ -8,7 +8,7 @@ public static class NutcrackerController {
     }
 
     public static void OnMoving(this NutcrackerEnemyAI instance) {
-        if(instance == null) return;
+        if (instance == null) return;
         instance.SetState(NutCrackerState.Walking);
     }
 
@@ -21,7 +21,7 @@ public static class NutcrackerController {
     }
 
     public static void UseSecondarySkill(this NutcrackerEnemyAI instance) {
-        if(instance == null) return;
+        if (instance == null) return;
         instance.SetState(NutCrackerState.Sentry);
     }
 
@@ -55,8 +55,7 @@ public static class NutcrackerController {
     }
 
     public static bool IsInState(this NutcrackerEnemyAI instance, NutCrackerState state) {
-        if (instance == null) return false;
-        return instance.currentBehaviourStateIndex == (int)state;
+        return instance == null ? false : instance.currentBehaviourStateIndex == (int)state;
     }
 
     public enum NutCrackerState {

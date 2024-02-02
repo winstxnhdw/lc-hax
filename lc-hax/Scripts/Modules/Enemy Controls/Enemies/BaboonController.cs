@@ -1,11 +1,11 @@
 using Unity.Netcode;
 using UnityEngine;
 
-public static class BaboonController  {
+public static class BaboonController {
 
 
     public static void UseSecondarySkill(this BaboonBirdAI instance) {
-        if(instance is null) return;
+        if (instance is null) return;
         if (instance.heldScrap == null) {
             instance.GrabNearbyItem();
         }
@@ -15,7 +15,7 @@ public static class BaboonController  {
     }
 
     public static NetworkObject? FindNearbyItem(this BaboonBirdAI instance, float range = 1.5f) {
-        if(instance is null) return null;
+        if (instance is null) return null;
         Collider[] Search = Physics.OverlapSphere(instance.gameObject.transform.position, range);
         for (int i = 0; i < Search.Length; i++) {
             if (Search[i].TryGetComponent(out GrabbableObject item)) {
@@ -33,8 +33,8 @@ public static class BaboonController  {
     }
 
     public static void GrabNearbyItem(this BaboonBirdAI instance) {
-        if(instance is null) return;
-        if(instance.heldScrap != null) return;
+        if (instance is null) return;
+        if (instance.heldScrap != null) return;
         NetworkObject? item = instance.FindNearbyItem();
         if (item != null) {
             instance.SwitchToBehaviourState(1);
@@ -43,9 +43,8 @@ public static class BaboonController  {
     }
 
     public static bool CanGrabScrap(this BaboonBirdAI instance, GrabbableObject item) {
-        if(instance is null) return false;
-        if (item is null) return false;
-        return instance.Reflect().InvokeInternalMethod<bool>("CanGrabScrap", item);
+        if (instance is null) return false;
+        return item is null ? false : instance.Reflect().InvokeInternalMethod<bool>("CanGrabScrap", item);
     }
 
     public static void GrabItemAndSync(this BaboonBirdAI instance, NetworkObject item) {

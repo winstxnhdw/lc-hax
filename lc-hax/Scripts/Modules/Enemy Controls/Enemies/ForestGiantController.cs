@@ -1,5 +1,3 @@
-using static JesterController;
-
 public static class ForestGiantController {
 
 
@@ -15,13 +13,11 @@ public static class ForestGiantController {
 
     }
     public static bool CanMove(this ForestGiantAI instance) {
-        if (instance == null) return true;
-        return !instance.IsEatingPlayer();
+        return instance == null ? true : !instance.IsEatingPlayer();
     }
 
     public static bool IsEatingPlayer(this ForestGiantAI instance) {
-        if (instance == null) return false;
-        return instance.Reflect().GetInternalField<bool>("inEatingPlayerAnimation");
+        return instance == null ? false : instance.Reflect().GetInternalField<bool>("inEatingPlayerAnimation");
     }
     public static void SetState(this ForestGiantAI instance, GiantStates state) {
         if (instance == null) return;
@@ -30,8 +26,7 @@ public static class ForestGiantController {
     }
 
     public static bool isInState(this ForestGiantAI instance, GiantStates state) {
-        if (instance == null) return false;
-        return instance.currentBehaviourStateIndex == (int)state;
+        return instance == null ? false : instance.currentBehaviourStateIndex == (int)state;
     }
 
 

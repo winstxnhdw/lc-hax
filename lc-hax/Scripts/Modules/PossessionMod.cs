@@ -1,10 +1,8 @@
-using System;
 using UnityEngine;
 using System.Collections;
 using GameNetcodeStuff;
 using UnityEngine.AI;
 using Hax;
-using UnityEngine.UI;
 
 public sealed class PossessionMod : MonoBehaviour {
     // Singleton instance of the PossessionMod
@@ -48,7 +46,7 @@ public sealed class PossessionMod : MonoBehaviour {
         InputListener.onNPress += this.ToggleNoClip;
         InputListener.onXPress += this.ToggleRealisticPossession;
         InputListener.onZPress += this.Unpossess;
-        InputListener.onLeftButtonPress  += this.UsePrimarySkill;
+        InputListener.onLeftButtonPress += this.UsePrimarySkill;
         InputListener.onLeftButtonRelease += this.ReleasePrimarySkill;
         InputListener.onRightButtonPress += this.UseSecondarySkill;
         InputListener.onRightButtonRelease += this.ReleaseSecondarySkill;
@@ -117,12 +115,44 @@ public sealed class PossessionMod : MonoBehaviour {
     }
 
     private void HandleEnemyMovements() {
-        
+
         if (this.EnemyToPossess is null) return;
         switch (this.enemyIdentity) {
             case EnemyIdentity.Nutcracker:
-                if(this.isUsingPrimarySkill || this.isUsingSecondarySkill) return; // prevent this from blocking the sentry skill of the nutcracker.
+                if (this.isUsingPrimarySkill || this.isUsingSecondarySkill) return; // prevent this from blocking the sentry skill of the nutcracker.
                 ((NutcrackerEnemyAI)this.EnemyToPossess).OnMoving();
+                break;
+            case EnemyIdentity.Baboon:
+                break;
+            case EnemyIdentity.Centipede:
+                break;
+            case EnemyIdentity.Flowerman:
+                break;
+            case EnemyIdentity.ForestGiant:
+                break;
+            case EnemyIdentity.HoarderBug:
+                break;
+            case EnemyIdentity.Jester:
+                break;
+            case EnemyIdentity.Masked:
+                break;
+            case EnemyIdentity.MouthDog:
+                break;
+            case EnemyIdentity.Puffer:
+                break;
+            case EnemyIdentity.Sandworm:
+                break;
+            case EnemyIdentity.Springman:
+                break;
+            case EnemyIdentity.Blob:
+                break;
+            case EnemyIdentity.ElectricBees:
+                break;
+            case EnemyIdentity.Thumper:
+                break;
+            case EnemyIdentity.Default:
+                break;
+            case EnemyIdentity.None:
                 break;
             default:
                 break;
@@ -134,14 +164,47 @@ public sealed class PossessionMod : MonoBehaviour {
             case EnemyIdentity.Masked:
                 ((MaskedPlayerEnemy)this.EnemyToPossess).Update();
                 break;
+            case EnemyIdentity.Baboon:
+                break;
+            case EnemyIdentity.Centipede:
+                break;
+            case EnemyIdentity.Flowerman:
+                break;
+            case EnemyIdentity.ForestGiant:
+                break;
+            case EnemyIdentity.HoarderBug:
+                break;
+            case EnemyIdentity.Jester:
+                break;
+            case EnemyIdentity.MouthDog:
+                break;
+            case EnemyIdentity.Nutcracker:
+                break;
+            case EnemyIdentity.Puffer:
+                break;
+            case EnemyIdentity.Sandworm:
+                break;
+            case EnemyIdentity.Springman:
+                break;
+            case EnemyIdentity.Blob:
+                break;
+            case EnemyIdentity.ElectricBees:
+                break;
+            case EnemyIdentity.Thumper:
+                break;
+            case EnemyIdentity.Default:
+                break;
+            case EnemyIdentity.None:
+                break;
             default:
                 break;
         }
     }
 
     private bool CanMoveEnemy() {
-        if (this.EnemyToPossess is null) return true;
-        return this.enemyIdentity switch {
+        return this.EnemyToPossess is null
+            ? true
+            : this.enemyIdentity switch {
             EnemyIdentity.Centipede => ((CentipedeAI)this.EnemyToPossess).CanMove(),
             EnemyIdentity.Flowerman => ((FlowermanAI)this.EnemyToPossess).CanMove(),
             EnemyIdentity.ForestGiant => ((ForestGiantAI)this.EnemyToPossess).CanMove(),
@@ -254,6 +317,28 @@ public sealed class PossessionMod : MonoBehaviour {
             case EnemyIdentity.Puffer:
                 ((PufferAI)this.EnemyToPossess).UsePrimarySkill();
                 break;
+            case EnemyIdentity.Baboon:
+                break;
+            case EnemyIdentity.ForestGiant:
+                break;
+            case EnemyIdentity.Masked:
+                break;
+            case EnemyIdentity.MouthDog:
+                break;
+            case EnemyIdentity.Sandworm:
+                break;
+            case EnemyIdentity.Springman:
+                break;
+            case EnemyIdentity.Blob:
+                break;
+            case EnemyIdentity.ElectricBees:
+                break;
+            case EnemyIdentity.Thumper:
+                break;
+            case EnemyIdentity.Default:
+                break;
+            case EnemyIdentity.None:
+                break;
             default:
                 break;
         }
@@ -293,6 +378,20 @@ public sealed class PossessionMod : MonoBehaviour {
             case EnemyIdentity.Sandworm:
                 ((SandWormAI)this.EnemyToPossess).UseSecondarySkill();
                 break;
+            case EnemyIdentity.Masked:
+                break;
+            case EnemyIdentity.Springman:
+                break;
+            case EnemyIdentity.Blob:
+                break;
+            case EnemyIdentity.ElectricBees:
+                break;
+            case EnemyIdentity.Thumper:
+                break;
+            case EnemyIdentity.Default:
+                break;
+            case EnemyIdentity.None:
+                break;
             default:
                 break;
         }
@@ -318,6 +417,32 @@ public sealed class PossessionMod : MonoBehaviour {
             case EnemyIdentity.Nutcracker:
                 ((NutcrackerEnemyAI)this.EnemyToPossess).ReleaseSecondarySkill();
                 break;
+            case EnemyIdentity.Baboon:
+                break;
+            case EnemyIdentity.Centipede:
+                break;
+            case EnemyIdentity.HoarderBug:
+                break;
+            case EnemyIdentity.Masked:
+                break;
+            case EnemyIdentity.MouthDog:
+                break;
+            case EnemyIdentity.Puffer:
+                break;
+            case EnemyIdentity.Sandworm:
+                break;
+            case EnemyIdentity.Springman:
+                break;
+            case EnemyIdentity.Blob:
+                break;
+            case EnemyIdentity.ElectricBees:
+                break;
+            case EnemyIdentity.Thumper:
+                break;
+            case EnemyIdentity.Default:
+                break;
+            case EnemyIdentity.None:
+                break;
             default:
                 break;
         }
@@ -339,6 +464,28 @@ public sealed class PossessionMod : MonoBehaviour {
                 return ((NutcrackerEnemyAI)this.EnemyToPossess).GetPrimarySkillName();
             case EnemyIdentity.Puffer:
                 return ((PufferAI)this.EnemyToPossess).GetPrimarySkillName();
+            case EnemyIdentity.Baboon:
+                break;
+            case EnemyIdentity.ForestGiant:
+                break;
+            case EnemyIdentity.Masked:
+                break;
+            case EnemyIdentity.MouthDog:
+                break;
+            case EnemyIdentity.Sandworm:
+                break;
+            case EnemyIdentity.Springman:
+                break;
+            case EnemyIdentity.Blob:
+                break;
+            case EnemyIdentity.ElectricBees:
+                break;
+            case EnemyIdentity.Thumper:
+                break;
+            case EnemyIdentity.Default:
+                break;
+            case EnemyIdentity.None:
+                break;
             default:
                 return "";
         }
@@ -364,7 +511,24 @@ public sealed class PossessionMod : MonoBehaviour {
                 return ((SandWormAI)this.EnemyToPossess).GetSecondarySkillName();
             case EnemyIdentity.MouthDog:
                 return ((MouthDogAI)this.EnemyToPossess).GetSecondarySkillName();
-
+            case EnemyIdentity.Flowerman:
+                break;
+            case EnemyIdentity.ForestGiant:
+                break;
+            case EnemyIdentity.Masked:
+                break;
+            case EnemyIdentity.Springman:
+                break;
+            case EnemyIdentity.Blob:
+                break;
+            case EnemyIdentity.ElectricBees:
+                break;
+            case EnemyIdentity.Thumper:
+                break;
+            case EnemyIdentity.Default:
+                break;
+            case EnemyIdentity.None:
+                break;
             default:
                 return "";
         }
@@ -372,8 +536,9 @@ public sealed class PossessionMod : MonoBehaviour {
 
 
     public EnemyIdentity IdentifyEnemy(EnemyAI enemy) {
-        if (enemy is null) return EnemyIdentity.None;
-        return enemy switch {
+        return enemy is null
+            ? EnemyIdentity.None
+            : enemy switch {
             CentipedeAI => EnemyIdentity.Centipede,
             BaboonBirdAI => EnemyIdentity.Baboon,
             FlowermanAI => EnemyIdentity.Flowerman,

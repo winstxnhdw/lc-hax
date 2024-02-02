@@ -1,5 +1,3 @@
-using UnityEngine.InputSystem.EnhancedTouch;
-
 public static class PufferController {
 
     public static void UsePrimarySkill(this PufferAI instance) {
@@ -14,7 +12,7 @@ public static class PufferController {
         instance.ShakeTailServerRpc();
     }
 
-    public static  string GetPrimarySkillName(this PufferAI instance) {
+    public static string GetPrimarySkillName(this PufferAI instance) {
         return "Stomp";
     }
 
@@ -29,8 +27,7 @@ public static class PufferController {
     }
 
     public static bool IsInState(this PufferAI instance, PufferState state) {
-        if (instance == null) return false;
-        return instance.currentBehaviourStateIndex == (int)state;
+        return instance == null ? false : instance.currentBehaviourStateIndex == (int)state;
     }
 
     public enum PufferState {

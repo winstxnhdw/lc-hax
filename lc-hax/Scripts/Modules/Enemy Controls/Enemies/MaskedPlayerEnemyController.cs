@@ -18,11 +18,11 @@ public static class MaskedPlayerController {
     public static void UseEntranceDoor(this MaskedPlayerEnemy instance) {
         Vector3 vector = RoundManager.FindMainEntrancePosition(true, !instance.isOutside);
         instance.transform.position = vector;
-        _ = instance.Reflect().InvokeInternalMethod("TeleportMaskedEnemyAndSync", new object[]
-        {
+        _ = instance.Reflect().InvokeInternalMethod("TeleportMaskedEnemyAndSync",
+        [
                 RoundManager.FindMainEntrancePosition(true, !instance.isOutside),
                 !instance.isOutside
-        });
+        ]);
         canUseEntranceDoorOnCollision = false;
     }
 

@@ -1,5 +1,3 @@
-using static NutcrackerController;
-
 public static class CentipedeController {
 
     public static void UsePrimarySkill(this CentipedeAI instance) {
@@ -21,16 +19,15 @@ public static class CentipedeController {
         _ = instance.Reflect().InvokeInternalMethod("RaycastToCeiling");
     }
     public static bool CanMove(this CentipedeAI instance) {
-        if (instance == null) return true;
-        return !instance.IsClingingToSomething();
+        return instance == null ? true : !instance.IsClingingToSomething();
     }
 
     public static bool IsClingingToSomething(this CentipedeAI instance) {
         if (instance == null) return false;
         Reflector reflect = instance.Reflect();
-        if(reflect == null) return false;
-
-        return instance.clingingToPlayer != null
+        return reflect == null
+            ? false
+            : instance.clingingToPlayer != null
                || instance.inSpecialAnimation
                || reflect.GetInternalField<bool>("clingingToDeadBody")
                || reflect.GetInternalField<bool>("clingingToCeiling")

@@ -1,6 +1,5 @@
 using Hax;
 using System;
-using System.Collections.Generic;
 using Unity.Netcode;
 using UnityEngine;
 
@@ -25,14 +24,14 @@ public static class HoardingBugController {
 
     public static void UseHeldItem(this HoarderBugAI instance) {
         if (instance == null) return;
-        if(instance.heldItem == null) return;
+        if (instance.heldItem == null) return;
         GrabbableObject itemGrabbableObject = instance.heldItem.itemGrabbableObject;
-        if(itemGrabbableObject == null) return;
+        if (itemGrabbableObject == null) return;
         Type type = itemGrabbableObject.GetType();
-        if(type == null) return;
+        if (type == null) return;
         if (type == typeof(ShotgunItem)) {
             ShotgunItem gun = (ShotgunItem)itemGrabbableObject;
-            if(gun == null) return;
+            if (gun == null) return;
             gun.ShootShotgun(instance.transform);
         }
         else
@@ -56,20 +55,18 @@ public static class HoardingBugController {
     public static void DropCurrentItem(this HoarderBugAI instance) {
         if (instance == null) return;
         if (instance.heldItem != null)
-            _ = instance.Reflect().InvokeInternalMethod("DropItemAndCallDropRPC", new object[]
-            {
+            _ = instance.Reflect().InvokeInternalMethod("DropItemAndCallDropRPC",
+            [
                 instance.heldItem.itemGrabbableObject.GetComponent<NetworkObject>(),
                 false
-            });
+            ]);
     }
 
     public static string GetPrimarySkillName(this HoarderBugAI instance) {
-        if (instance == null) return "";
-        return (instance.heldItem != null) ? "Use item" : "";
+        return instance == null ? "" : (instance.heldItem != null) ? "Use item" : "";
     }
 
     public static string GetSecondarySkillName(this HoarderBugAI instance) {
-        if (instance == null) return "";
-        return (instance.heldItem == null) ? "Grab item" : "Drop item";
+        return instance == null ? "" : (instance.heldItem == null) ? "Grab item" : "Drop item";
     }
 }

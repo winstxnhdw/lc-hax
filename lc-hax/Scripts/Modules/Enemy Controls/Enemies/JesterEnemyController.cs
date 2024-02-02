@@ -24,8 +24,7 @@ public static class JesterController {
     }
 
     public static bool CanMove(this JesterAI instance) {
-        if (instance == null) return true;
-        return !instance.isInState(JesterState.Cranking);
+        return instance == null ? true : !instance.isInState(JesterState.Cranking);
     }
 
 
@@ -36,8 +35,7 @@ public static class JesterController {
     }
 
     public static bool isInState(this JesterAI instance, JesterState state) {
-        if (instance == null) return false;
-        return instance.currentBehaviourStateIndex == (int)state;
+        return instance == null ? false : instance.currentBehaviourStateIndex == (int)state;
     }
 
     public static float initialWalkSpeed;

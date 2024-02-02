@@ -43,7 +43,7 @@ public static partial class Helper {
     }
 
     public static void ShootShotgun(this ShotgunItem item, Transform origin) {
-        if(item == null || origin == null) return;
+        if (item == null || origin == null) return;
         item.gunShootAudio.volume = 0.15f;
         item.shotgunRayPoint = origin;
         item.ShootGunAndSync(false);
