@@ -14,7 +14,7 @@ public static class MouthDogController {
     public static void Lunge(this MouthDogAI instance) {
         if (instance == null) return;
 
-        instance.SwitchToBehaviourState(2);
+        instance.SwitchToBehaviourServerRpc(2);
     }
 
     public static bool IsLunging(this MouthDogAI instance) {

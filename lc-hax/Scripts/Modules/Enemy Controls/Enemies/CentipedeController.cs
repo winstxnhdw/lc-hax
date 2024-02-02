@@ -3,14 +3,14 @@ public static class CentipedeController {
     public static void UsePrimarySkill(this CentipedeAI instance) {
         if (instance == null) return;
         if (instance.currentBehaviourStateIndex == 1)
-            instance.SwitchToBehaviourState(2);
+            instance.SwitchToBehaviourServerRpc(2);
     }
 
     public static void UseSecondarySkill(this CentipedeAI instance) {
         if (instance == null) return;
         if (!instance.IsClingingToSomething()) {
             instance.RaycastToCeiling();
-            instance.SwitchToBehaviourState(2);
+            instance.SwitchToBehaviourServerRpc(2);
         }
     }
 

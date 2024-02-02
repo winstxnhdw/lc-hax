@@ -4,7 +4,7 @@ public static class FlowermanController {
         if (instance == null) return;
         instance.SetState(FlowerMan.Stand);
         if (instance.currentBehaviourStateIndex != (int)FlowerMan.Stand) {
-            instance.SwitchToBehaviourState((int)FlowerMan.Stand);
+            instance.SwitchToBehaviourServerRpc((int)FlowerMan.Stand);
         }
     }
 
@@ -33,7 +33,7 @@ public static class FlowermanController {
     public static void SetState(this FlowermanAI instance, FlowerMan state) {
         if (instance == null) return;
         if (!instance.isInState(state))
-            instance.SwitchToBehaviourState((int)state);
+            instance.SwitchToBehaviourServerRpc((int)state);
     }
 
     public static bool isInState(this FlowermanAI instance, FlowerMan state) {

@@ -31,7 +31,7 @@ public static class JesterController {
     public static void SetState(this JesterAI instance, JesterState state) {
         if (instance == null) return;
         if (!instance.isInState(state))
-            instance.SwitchToBehaviourState((int)state);
+            instance.SwitchToBehaviourServerRpc((int)state);
     }
 
     public static bool isInState(this JesterAI instance, JesterState state) {

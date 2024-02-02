@@ -51,7 +51,7 @@ public static class NutcrackerController {
     public static void SetState(this NutcrackerEnemyAI instance, NutCrackerState state) {
         if (instance == null) return;
         if (!instance.IsInState(state))
-            instance.SwitchToBehaviourState((int)state);
+            instance.SwitchToBehaviourServerRpc((int)state);
     }
 
     public static bool IsInState(this NutcrackerEnemyAI instance, NutCrackerState state) {

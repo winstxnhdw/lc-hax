@@ -31,7 +31,7 @@ public static class BaboonController {
         if (instance.heldScrap != null) return;
         NetworkObject? item = instance.FindNearbyItem();
         if (item != null) {
-            instance.SwitchToBehaviourState(1);
+            instance.SwitchToBehaviourServerRpc(1);
             instance.GrabItemAndSync(item);
         }
     }
