@@ -9,7 +9,7 @@ public class NoiseCommand : ICommand {
         Helper.RoundManager?.PlayAudibleNoise(position, float.MaxValue, float.MaxValue, 10, false);
 
     void PlayNoiseContinuously(Vector3 position, float duration) =>
-        Helper.CreateComponent<TransientBehaviour>()
+        Helper.CreateComponent<TransientBehaviour>("Noise")
               .Init(this.PlayNoise(position), duration);
 
     public void Execute(StringArray args) {

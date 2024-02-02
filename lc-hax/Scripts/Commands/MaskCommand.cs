@@ -4,7 +4,7 @@ using Hax;
 [Command("/mask")]
 public class MaskCommand : ICommand {
     void SpawnMimicOnPlayer(PlayerControllerB player, HauntedMaskItem mask, ulong amount = 1) {
-        _ = Helper.CreateComponent<TransientBehaviour>().Init(_ => {
+        _ = Helper.CreateComponent<TransientBehaviour>("Mask").Init(_ => {
             mask.CreateMimicServerRpc(player.isInsideFactory, player.transform.position);
         }, amount * 0.1f, 0.1f);
     }
