@@ -7,7 +7,7 @@ public class HornCommand : ICommand {
         ShipAlarmCord? shipAlarmCord = Helper.FindObject<ShipAlarmCord>();
         shipAlarmCord?.PullCordServerRpc(-1);
 
-        Helper.CreateComponent<WaitForBehaviour>()
+        Helper.CreateComponent<WaitForBehaviour>("Stop Pulling Horn")
               .SetPredicate(time => time >= hornDuration)
               .Init(() => shipAlarmCord?.StopPullingCordServerRpc(-1));
     };
@@ -26,7 +26,7 @@ public class HornCommand : ICommand {
         Helper.BuyUnlockable(Unlockable.LOUD_HORN);
         Helper.ReturnUnlockable(Unlockable.LOUD_HORN);
 
-        Helper.CreateComponent<WaitForBehaviour>()
+        Helper.CreateComponent<WaitForBehaviour>("Pull Horn")
               .SetPredicate(time => time >= 0.5f)
               .Init(this.PullHornLater(hornDuration));
     }
