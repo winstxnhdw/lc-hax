@@ -232,10 +232,13 @@ public sealed class PossessionMod : MonoBehaviour {
             this.transform.position = enemy.transform.position;
             this.UpdateComponentsOnCurrentState(true);
         }
-        this.UpdateEnemyPositionToHere(enemy);
-        this.EnemyUpdate();
-        camera.transform.position = this.transform.position + (Vector3.up * 3f) - (enemy.transform.forward * 3f);
-        camera.transform.rotation = this.transform.rotation;
+
+        if (this.CanMoveEnemy()) {
+            this.UpdateEnemyPositionToHere(enemy);
+            this.EnemyUpdate();
+            camera.transform.position = this.transform.position + (Vector3.up * 3f) - (enemy.transform.forward * 3f);
+            camera.transform.rotation = this.transform.rotation;
+        }
 
         this.FirstUpdate = false;
     }
@@ -248,7 +251,6 @@ public sealed class PossessionMod : MonoBehaviour {
     // Updates enemy's position to match the possessed object's position
     void UpdateEnemyPositionToHere(EnemyAI enemy) {
         if (Helper.LocalPlayer is not PlayerControllerB localPlayer) return;
-        if (!this.CanMoveEnemy()) return;
         this.HandleEnemyMovements();
         enemy.ChangeEnemyOwnerServerRpc(localPlayer.actualClientId);
         enemy.updatePositionThreshold = 0;
@@ -489,6 +491,7 @@ public sealed class PossessionMod : MonoBehaviour {
             default:
                 return "";
         }
+        return "";
     }
 
     public string GetSecondarySkillName() {
@@ -532,6 +535,8 @@ public sealed class PossessionMod : MonoBehaviour {
             default:
                 return "";
         }
+
+        return "";
     }
 
 
