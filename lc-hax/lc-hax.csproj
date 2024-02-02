@@ -9,6 +9,7 @@
     <RuntimeIdentifier>win-x64</RuntimeIdentifier>
     <TargetFramework>netstandard2.1</TargetFramework>
     <ReferencePath>./References</ReferencePath>
+    <NuGetPath>./References/NuGet</NuGetPath>
     <RootNamespace>lc-hax</RootNamespace>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <RestorePackagesWithLockFile>true</RestorePackagesWithLockFile>
@@ -121,25 +122,25 @@
       <NoWarn>NU1701</NoWarn>
     </PackageReference>
 
-    <PackageReference Include="RequireNamedArgs" Version="0.0.7" />
-
     <PackageReference Include="Quickenshtein" Version="1.5.1" />
 
-    <EmbeddedResource Include="$(ReferencePath)/NuGet/Quickenshtein/1.5.1/lib/netstandard2.0/Quickenshtein.dll" />
+    <PackageReference Include="RequireNamedArgs" Version="0.0.7" />
 
-    <EmbeddedResource Include="$(ReferencePath)/NuGet/system.memory/4.5.4/lib/netstandard2.0/System.Memory.dll" />
+    <EmbeddedResource Include="$(NuGetPath)/lib.harmony/2.2.2/lib/net48/0Harmony.dll" />
 
-    <EmbeddedResource Include="$(ReferencePath)/NuGet/system.buffers/4.5.1/lib/netstandard2.0/System.Buffers.dll" />
+    <EmbeddedResource Include="$(NuGetPath)/Quickenshtein/1.5.1/lib/netstandard2.0/Quickenshtein.dll" />
 
-    <EmbeddedResource Include="$(ReferencePath)/NuGet/system.runtime.compilerservices.unsafe/4.5.3/lib/netstandard2.0/System.Runtime.CompilerServices.Unsafe.dll" />
+    <EmbeddedResource Include="$(NuGetPath)/system.memory/4.5.4/lib/netstandard2.0/System.Memory.dll" />
 
-    <EmbeddedResource Include="$(ReferencePath)/NuGet/lib.harmony/2.2.2/lib/net48/0Harmony.dll" />
+    <EmbeddedResource Include="$(NuGetPath)/system.buffers/4.5.1/lib/netstandard2.0/System.Buffers.dll" />
+
+    <EmbeddedResource Include="$(NuGetPath)/system.runtime.compilerservices.unsafe/4.5.3/lib/netstandard2.0/System.Runtime.CompilerServices.Unsafe.dll" />
 
   </ItemGroup>
 
   <Target Name="CleanBeforeRestore" BeforeTargets="Restore">
     <RemoveDir Directories="$(BaseIntermediateOutputPath)" />
-    <RemoveDir Directories="$(BaseIntermediateOutputPath)/../References/NuGet" />
+    <RemoveDir Directories="$(NuGetPath)" />
     <RemoveDir Directories="$(OutDir)" />
   </Target>
 
