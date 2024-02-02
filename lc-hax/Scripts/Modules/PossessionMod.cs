@@ -203,14 +203,13 @@ public sealed class PossessionMod : MonoBehaviour {
 
     private bool CanMoveEnemy() {
         return this.EnemyToPossess is null
-            ? true
-            : this.enemyIdentity switch {
-            EnemyIdentity.Centipede => ((CentipedeAI)this.EnemyToPossess).CanMove(),
-            EnemyIdentity.Flowerman => ((FlowermanAI)this.EnemyToPossess).CanMove(),
-            EnemyIdentity.ForestGiant => ((ForestGiantAI)this.EnemyToPossess).CanMove(),
-            EnemyIdentity.Jester => ((JesterAI)this.EnemyToPossess).CanMove(),
-            _ => true,
-        };
+|| this.enemyIdentity switch {
+                EnemyIdentity.Centipede => ((CentipedeAI)this.EnemyToPossess).CanMove(),
+                EnemyIdentity.Flowerman => ((FlowermanAI)this.EnemyToPossess).CanMove(),
+                EnemyIdentity.ForestGiant => ((ForestGiantAI)this.EnemyToPossess).CanMove(),
+                EnemyIdentity.Jester => ((JesterAI)this.EnemyToPossess).CanMove(),
+                _ => true,
+            };
     }
 
     // Updates position and rotation of possessed enemy at the end of frame
@@ -544,20 +543,20 @@ public sealed class PossessionMod : MonoBehaviour {
         return enemy is null
             ? EnemyIdentity.None
             : enemy switch {
-            CentipedeAI => EnemyIdentity.Centipede,
-            BaboonBirdAI => EnemyIdentity.Baboon,
-            FlowermanAI => EnemyIdentity.Flowerman,
-            ForestGiantAI => EnemyIdentity.ForestGiant,
-            HoarderBugAI => EnemyIdentity.HoarderBug,
-            JesterAI => EnemyIdentity.Jester,
-            MaskedPlayerEnemy => EnemyIdentity.Masked,
-            MouthDogAI => EnemyIdentity.MouthDog,
-            NutcrackerEnemyAI => EnemyIdentity.Nutcracker,
-            PufferAI => EnemyIdentity.Puffer,
-            SandWormAI => EnemyIdentity.Sandworm,
-            SpringManAI => EnemyIdentity.Springman,
-            _ => EnemyIdentity.Default,
-        };
+                CentipedeAI => EnemyIdentity.Centipede,
+                BaboonBirdAI => EnemyIdentity.Baboon,
+                FlowermanAI => EnemyIdentity.Flowerman,
+                ForestGiantAI => EnemyIdentity.ForestGiant,
+                HoarderBugAI => EnemyIdentity.HoarderBug,
+                JesterAI => EnemyIdentity.Jester,
+                MaskedPlayerEnemy => EnemyIdentity.Masked,
+                MouthDogAI => EnemyIdentity.MouthDog,
+                NutcrackerEnemyAI => EnemyIdentity.Nutcracker,
+                PufferAI => EnemyIdentity.Puffer,
+                SandWormAI => EnemyIdentity.Sandworm,
+                SpringManAI => EnemyIdentity.Springman,
+                _ => EnemyIdentity.Default,
+            };
     }
 
 }

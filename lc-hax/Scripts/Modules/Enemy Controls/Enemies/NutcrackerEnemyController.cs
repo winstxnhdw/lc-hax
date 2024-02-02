@@ -55,7 +55,7 @@ public static class NutcrackerController {
     }
 
     public static bool IsInState(this NutcrackerEnemyAI instance, NutCrackerState state) {
-        return instance == null ? false : instance.currentBehaviourStateIndex == (int)state;
+        return instance != null && instance.currentBehaviourStateIndex == (int)state;
     }
 
     public enum NutCrackerState {
