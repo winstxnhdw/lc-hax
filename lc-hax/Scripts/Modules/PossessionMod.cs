@@ -49,6 +49,7 @@ public sealed class PossessionMod : MonoBehaviour {
         InputListener.onXPress += this.ToggleRealisticPossession;
         InputListener.onZPress += this.Unpossess;
         InputListener.onLeftButtonPress  += this.UsePrimarySkill;
+        InputListener.onLeftButtonRelease += this.ReleasePrimarySkill;
         InputListener.onRightButtonPress += this.UseSecondarySkill;
         InputListener.onRightButtonRelease += this.ReleaseSecondarySkill;
 
@@ -116,9 +117,11 @@ public sealed class PossessionMod : MonoBehaviour {
     }
 
     private void HandleEnemyMovements() {
+        
         if (this.EnemyToPossess is null) return;
         switch (this.enemyIdentity) {
             case EnemyIdentity.Nutcracker:
+                if(this.isUsingPrimarySkill || this.isUsingSecondarySkill) return; // prevent this from blocking the sentry skill of the nutcracker.
                 ((NutcrackerEnemyAI)this.EnemyToPossess).OnMoving();
                 break;
             default:
@@ -225,11 +228,13 @@ public sealed class PossessionMod : MonoBehaviour {
 
         this.EnemyToPossess = null;
         this.enemyIdentity = EnemyIdentity.None;
+        this.isUsingPrimarySkill = false;
+        this.isUsingSecondarySkill = false;
     }
 
     public void UsePrimarySkill() {
         if (this.EnemyToPossess is null) return;
-
+        this.isUsingPrimarySkill = true;
         switch (this.enemyIdentity) {
             case EnemyIdentity.Centipede:
                 ((CentipedeAI)this.EnemyToPossess).UsePrimarySkill();
@@ -256,7 +261,7 @@ public sealed class PossessionMod : MonoBehaviour {
 
     public void UseSecondarySkill() {
         if (this.EnemyToPossess is null) return;
-
+        this.isUsingSecondarySkill = true;
         switch (this.enemyIdentity) {
             case EnemyIdentity.Centipede:
                 ((CentipedeAI)this.EnemyToPossess).UseSecondarySkill();
@@ -293,6 +298,10 @@ public sealed class PossessionMod : MonoBehaviour {
         }
     }
 
+    public void ReleasePrimarySkill() {
+        if (this.EnemyToPossess is null) return;
+        this.isUsingPrimarySkill = false;
+    }
     public void ReleaseSecondarySkill() {
         if (this.EnemyToPossess is null) return;
 
@@ -313,7 +322,6 @@ public sealed class PossessionMod : MonoBehaviour {
                 break;
         }
     }
-
 
     public string GetPrimarySkillName() {
         if (this.EnemyToPossess is null) return "";
