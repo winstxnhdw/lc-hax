@@ -3,6 +3,7 @@ using System.IO;
 using System.Reflection;
 using UnityEngine;
 using HarmonyLib;
+using System.Linq;
 
 namespace Hax;
 
@@ -13,31 +14,27 @@ public class Loader : MonoBehaviour {
     static void AddHaxModules<T>() where T : Component => Loader.HaxModules.AddComponent<T>();
     static void AddHaxGameObject<T>() where T : Component => Loader.HaxGameObjects.AddComponent<T>();
 
-    static Assembly OnResolveAssembly(object _, ResolveEventArgs args) {
+    static void LoadLibraries() {
         Assembly assembly = Assembly.GetExecutingAssembly();
-        string? resourceName =
+
+        StringArray resourceNames =
             assembly.GetManifestResourceNames()
-                    .First(name => name.EndsWith($"{new AssemblyName(args.Name).Name}.dll"));
+                    .Where(name => name.EndsWith(".dll"))
+                    .ToArray();
 
-        if (string.IsNullOrWhiteSpace(resourceName)) {
-            Logger.Write($"Failed to resolve assembly: {args.Name}");
-            throw new FileNotFoundException();
+        foreach (string resourceName in resourceNames) {
+            using Stream stream = assembly.GetManifestResourceStream(resourceName);
+            using MemoryStream memoryStream = new();
+            stream.CopyTo(memoryStream);
+            _ = AppDomain.CurrentDomain.Load(memoryStream.ToArray());
         }
-
-        using Stream stream = assembly.GetManifestResourceStream(resourceName);
-        using MemoryStream memoryStream = new();
-        stream.CopyTo(memoryStream);
-        return Assembly.Load(memoryStream.ToArray());
     }
 
     public static void Load() {
-        AppDomain.CurrentDomain.AssemblyResolve += Loader.OnResolveAssembly;
-
+        Loader.LoadLibraries();
         Loader.LoadHarmonyPatches();
         Loader.LoadHaxGameObjects();
         Loader.LoadHaxModules();
-
-        AppDomain.CurrentDomain.AssemblyResolve -= Loader.OnResolveAssembly;
     }
 
     static void LoadHarmonyPatches() {

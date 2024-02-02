@@ -20,6 +20,7 @@ public static partial class Helper {
         }
     }
 
+    [RequireNamedArgs]
     public static RaycastHit[] SphereCastForward(this Transform transform, float sphereRadius = 1.0f) {
         try {
             return Physics.SphereCastAll(
