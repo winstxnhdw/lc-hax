@@ -121,6 +121,8 @@
       <NoWarn>NU1701</NoWarn>
     </PackageReference>
 
+    <PackageReference Include="RequireNamedArgs" Version="0.0.7" />
+
     <EmbeddedResource Include="$(ReferencePath)/NuGet/lib.harmony/2.2.2/lib/net48/0Harmony.dll" />
 
   </ItemGroup>
