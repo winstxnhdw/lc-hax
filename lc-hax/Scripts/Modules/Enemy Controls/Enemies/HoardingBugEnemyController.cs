@@ -47,7 +47,7 @@ public static class HoardingBugController {
     public static GrabbableObject? FindNearbyItem(this HoarderBugAI instance, float grabRange = 1.5f) {
         if (instance == null) return null;
         if (instance.heldItem == null) {
-            Collider[] Search = Physics.OverlapSphere(instance.gameObject.transform.position, grabRange);
+            Collider[] Search = Physics.OverlapSphere(instance.transform.position, grabRange);
             for (int i = 0; i < Search.Length; i++) {
                 if (!Search[i].TryGetComponent(out GrabbableObject item)) continue;
                 if (item.TryGetComponent(out NetworkObject network)) {
@@ -62,7 +62,6 @@ public static class HoardingBugController {
     public static void GrabTargetItemIfClose(this HoarderBugAI instance, GrabbableObject item) {
         if (instance == null) return;
         if (instance.heldItem != null) return;
-        if (instance.targetItem == null) return;
         instance.targetItem = item;
         _ = instance.Reflect().InvokeInternalMethod("GrabTargetItemIfClose");
     }

@@ -16,7 +16,7 @@ public static class BaboonController {
 
     public static NetworkObject? FindNearbyItem(this BaboonBirdAI instance, float range = 1.5f) {
         if (instance is null) return null;
-        Collider[] Search = Physics.OverlapSphere(instance.gameObject.transform.position, range);
+        Collider[] Search = Physics.OverlapSphere(instance.transform.position, range);
         for (int i = 0; i < Search.Length; i++) {
             if (!Search[i].TryGetComponent(out GrabbableObject item)) continue;
             if (instance.CanGrabScrap(item))
