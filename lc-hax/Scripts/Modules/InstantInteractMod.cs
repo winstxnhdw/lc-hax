@@ -6,9 +6,10 @@ public sealed class InstantInteractMod : MonoBehaviour {
         WaitForSeconds waitForFiveSeconds = new(5.0f);
 
         while (true) {
-            HaxObjects.Instance?.InteractTriggers?.WhereIsNotNull().ForEach(interactTrigger =>
-                interactTrigger.timeToHold = interactTrigger.name is "EntranceTeleportB(Clone)" ? 0.3f : 0.0f
-            );
+            HaxObjects.Instance?.InteractTriggers?.WhereIsNotNull().ForEach(interactTrigger => {
+                interactTrigger.interactable = true;
+                interactTrigger.timeToHold = interactTrigger.name is "EntranceTeleportB(Clone)" ? 0.3f : 0.0f;
+            });
 
             yield return waitForFiveSeconds;
         }
