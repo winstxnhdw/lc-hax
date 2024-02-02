@@ -30,14 +30,14 @@ public static partial class Helper {
         return result;
     }
 
-    static int GetSimilarityWeight(ReadOnlySpan<char> query, ReadOnlySpan<char> original) {
+    static int GetSimilarityWeight(string query, string original) {
         int distancePenalty = Levenshtein.GetDistance(query, original);
         int commonalityReward = Helper.LongestCommonSubstring(query, original) * -2;
 
         return distancePenalty + commonalityReward;
     }
 
-    public static string FuzzyMatch(ReadOnlySpan<char> query, StringArray strings) {
+    public static string FuzzyMatch(string query, StringArray strings) {
         string closestMatch = strings[0];
         int lowestWeight = Helper.GetSimilarityWeight(query, strings[0]);
 
