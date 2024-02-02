@@ -1,0 +1,75 @@
+using Hax;
+using System;
+using System.Collections.Generic;
+using Unity.Netcode;
+using UnityEngine;
+
+public static class HoardingBugController {
+
+    public static void UsePrimarySkill(this HoarderBugAI instance) {
+        if (instance == null) return;
+        if (instance.heldItem != null) {
+            instance.UseHeldItem();
+        }
+    }
+
+    public static void UseSecondarySkill(this HoarderBugAI instance) {
+        if (instance == null) return;
+        if (instance.heldItem == null) {
+            instance.GrabNearbyItem();
+        }
+        else {
+            instance.DropCurrentItem();
+        }
+    }
+
+    public static void UseHeldItem(this HoarderBugAI instance) {
+        if (instance == null) return;
+        if(instance.heldItem == null) return;
+        GrabbableObject itemGrabbableObject = instance.heldItem.itemGrabbableObject;
+        if(itemGrabbableObject == null) return;
+        Type type = itemGrabbableObject.GetType();
+        if(type == null) return;
+        if (type == typeof(ShotgunItem)) {
+            ShotgunItem gun = (ShotgunItem)itemGrabbableObject;
+            if(gun == null) return;
+            gun.ShootShotgun(instance.transform);
+        }
+        else
+            itemGrabbableObject.InteractWithProp(true);
+    }
+
+    public static void GrabNearbyItem(this HoarderBugAI instance, float grabRange = 1.5f) {
+        if (instance == null) return;
+        if (instance.heldItem == null) {
+            Collider[] array = Physics.OverlapSphere(instance.gameObject.transform.position, grabRange);
+            for (int i = 0; i < array.Length; i++)
+                if (array[i].TryGetComponent(out GrabbableObject grab))
+                    if (grab.TryGetComponent(out NetworkObject network)) {
+                        instance.targetItem = grab;
+                        _ = instance.Reflect().InvokeInternalMethod("GrabTargetItemIfClose");
+                        break;
+                    }
+        }
+    }
+
+    public static void DropCurrentItem(this HoarderBugAI instance) {
+        if (instance == null) return;
+        if (instance.heldItem != null)
+            _ = instance.Reflect().InvokeInternalMethod("DropItemAndCallDropRPC", new object[]
+            {
+                instance.heldItem.itemGrabbableObject.GetComponent<NetworkObject>(),
+                false
+            });
+    }
+
+    public static string GetPrimarySkillName(this HoarderBugAI instance) {
+        if (instance == null) return "";
+        return (instance.heldItem != null) ? "Use item" : "";
+    }
+
+    public static string GetSecondarySkillName(this HoarderBugAI instance) {
+        if (instance == null) return "";
+        return (instance.heldItem == null) ? "Grab item" : "Drop item";
+    }
+}
