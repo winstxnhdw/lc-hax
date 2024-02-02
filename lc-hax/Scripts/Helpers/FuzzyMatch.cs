@@ -4,13 +4,6 @@ using Quickenshtein;
 namespace Hax;
 
 public static partial class Helper {
-    static int GetSimilarityWeight(ReadOnlySpan<char> query, ReadOnlySpan<char> original) {
-        int distancePenalty = Levenshtein.GetDistance(query, original);
-        int commonalityReward = LongestCommonSubstring(query, original) * -2;
-
-        return distancePenalty + commonalityReward;
-    }
-
     static int LongestCommonSubstring(ReadOnlySpan<char> query, ReadOnlySpan<char> original) {
         int originalLength = original.Length;
         int queryLength = query.Length;
@@ -37,12 +30,19 @@ public static partial class Helper {
         return result;
     }
 
+    static int GetSimilarityWeight(ReadOnlySpan<char> query, ReadOnlySpan<char> original) {
+        int distancePenalty = Levenshtein.GetDistance(query, original);
+        int commonalityReward = Helper.LongestCommonSubstring(query, original) * -2;
+
+        return distancePenalty + commonalityReward;
+    }
+
     public static string FuzzyMatch(ReadOnlySpan<char> query, StringArray strings) {
         string closestMatch = strings[0];
-        int lowestWeight = GetSimilarityWeight(query, strings[0]);
+        int lowestWeight = Helper.GetSimilarityWeight(query, strings[0]);
 
         for (int i = 1; i < strings.Length; i++) {
-            int totalWeight = GetSimilarityWeight(query, strings[i]);
+            int totalWeight = Helper.GetSimilarityWeight(query, strings[i]);
 
             if (totalWeight < lowestWeight) {
                 lowestWeight = totalWeight;
