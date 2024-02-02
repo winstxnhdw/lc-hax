@@ -13,11 +13,11 @@ public static class ForestGiantController {
 
     }
     public static bool CanMove(this ForestGiantAI instance) {
-        return instance == null ? true : !instance.IsEatingPlayer();
+        return instance == null || !instance.IsEatingPlayer();
     }
 
     public static bool IsEatingPlayer(this ForestGiantAI instance) {
-        return instance == null ? false : instance.Reflect().GetInternalField<bool>("inEatingPlayerAnimation");
+        return instance != null && instance.Reflect().GetInternalField<bool>("inEatingPlayerAnimation");
     }
     public static void SetState(this ForestGiantAI instance, GiantStates state) {
         if (instance == null) return;
@@ -26,7 +26,7 @@ public static class ForestGiantController {
     }
 
     public static bool isInState(this ForestGiantAI instance, GiantStates state) {
-        return instance == null ? false : instance.currentBehaviourStateIndex == (int)state;
+        return instance != null && instance.currentBehaviourStateIndex == (int)state;
     }
 
 

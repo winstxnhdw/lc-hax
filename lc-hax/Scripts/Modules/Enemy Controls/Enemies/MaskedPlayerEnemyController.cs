@@ -21,7 +21,7 @@ public static class MaskedPlayerController {
         _ = instance.Reflect().InvokeInternalMethod("TeleportMaskedEnemyAndSync",
         [
                 RoundManager.FindMainEntrancePosition(true, !instance.isOutside),
-                !instance.isOutside
+            !instance.isOutside
         ]);
         canUseEntranceDoorOnCollision = false;
     }

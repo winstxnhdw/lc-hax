@@ -22,7 +22,7 @@ public static class FlowermanController {
     }
 
     public static bool CanMove(this FlowermanAI instance) {
-        return instance == null ? true : !instance.inSpecialAnimation;
+        return instance == null || !instance.inSpecialAnimation;
     }
 
 
@@ -37,7 +37,7 @@ public static class FlowermanController {
     }
 
     public static bool isInState(this FlowermanAI instance, FlowerMan state) {
-        return instance == null ? false : instance.currentBehaviourStateIndex == (int)state;
+        return instance != null && instance.currentBehaviourStateIndex == (int)state;
     }
 
 

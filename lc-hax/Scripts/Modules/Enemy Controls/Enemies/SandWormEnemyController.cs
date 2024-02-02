@@ -13,6 +13,6 @@ public static class SandWormController {
     }
 
     public static bool IsEmerged(this SandWormAI instance) {
-        return instance == null ? false : instance.inEmergingState || instance.emerged;
+        return instance != null && (instance.inEmergingState || instance.emerged);
     }
 }

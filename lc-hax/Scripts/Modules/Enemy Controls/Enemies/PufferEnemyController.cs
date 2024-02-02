@@ -27,7 +27,7 @@ public static class PufferController {
     }
 
     public static bool IsInState(this PufferAI instance, PufferState state) {
-        return instance == null ? false : instance.currentBehaviourStateIndex == (int)state;
+        return instance != null && instance.currentBehaviourStateIndex == (int)state;
     }
 
     public enum PufferState {

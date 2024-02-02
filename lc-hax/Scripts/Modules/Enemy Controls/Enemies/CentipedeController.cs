@@ -19,20 +19,19 @@ public static class CentipedeController {
         _ = instance.Reflect().InvokeInternalMethod("RaycastToCeiling");
     }
     public static bool CanMove(this CentipedeAI instance) {
-        return instance == null ? true : !instance.IsClingingToSomething();
+        return instance == null || !instance.IsClingingToSomething();
     }
 
     public static bool IsClingingToSomething(this CentipedeAI instance) {
         if (instance == null) return false;
         Reflector reflect = instance.Reflect();
-        return reflect == null
-            ? false
-            : instance.clingingToPlayer != null
+        return reflect != null
+&& (instance.clingingToPlayer != null
                || instance.inSpecialAnimation
                || reflect.GetInternalField<bool>("clingingToDeadBody")
                || reflect.GetInternalField<bool>("clingingToCeiling")
                || reflect.GetInternalField<bool>("startedCeilingAnimationCoroutine")
-               || reflect.GetInternalField<bool>("inDroppingOffPlayerAnim");
+               || reflect.GetInternalField<bool>("inDroppingOffPlayerAnim"));
     }
 
     public static string GetPrimarySkillName(this CentipedeAI instance) {

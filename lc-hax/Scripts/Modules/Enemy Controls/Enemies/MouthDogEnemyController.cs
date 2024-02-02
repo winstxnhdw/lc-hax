@@ -18,6 +18,6 @@ public static class MouthDogController {
     }
 
     public static bool IsLunging(this MouthDogAI instance) {
-        return instance == null ? false : instance.currentBehaviourStateIndex == 2;
+        return instance != null && instance.currentBehaviourStateIndex == 2;
     }
 }
