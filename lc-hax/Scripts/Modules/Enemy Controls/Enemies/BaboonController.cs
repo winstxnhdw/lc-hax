@@ -18,16 +18,10 @@ public static class BaboonController {
         if (instance is null) return null;
         Collider[] Search = Physics.OverlapSphere(instance.gameObject.transform.position, range);
         for (int i = 0; i < Search.Length; i++) {
-            if (Search[i].TryGetComponent(out GrabbableObject item)) {
-                if (instance.CanGrabScrap(item)) {
-                    if (item.TryGetComponent(out NetworkObject network)) {
-                        float dist = Vector3.Distance(item.transform.position, instance.transform.position);
-                        if (dist < float.PositiveInfinity) {
-                            return network;
-                        }
-                    }
-                }
-            }
+            if (!Search[i].TryGetComponent(out GrabbableObject item)) continue;
+            if (instance.CanGrabScrap(item))
+                if (item.TryGetComponent(out NetworkObject network))
+                    if (Vector3.Distance(item.transform.position, instance.transform.position) < float.PositiveInfinity) return network;
         }
         return null;
     }

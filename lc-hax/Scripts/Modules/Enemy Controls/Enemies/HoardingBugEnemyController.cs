@@ -4,7 +4,6 @@ using Unity.Netcode;
 using UnityEngine;
 
 public static class HoardingBugController {
-
     public static void UsePrimarySkill(this HoarderBugAI instance) {
         if (instance == null) return;
         if (instance.heldItem != null) {
@@ -38,18 +37,34 @@ public static class HoardingBugController {
             itemGrabbableObject.InteractWithProp(true);
     }
 
-    public static void GrabNearbyItem(this HoarderBugAI instance, float grabRange = 1.5f) {
+    public static void GrabNearbyItem(this HoarderBugAI instance) {
         if (instance == null) return;
+        if (instance.heldItem == null) return;
+        GrabbableObject? item = instance.FindNearbyItem();
+        if (item != null) instance.GrabTargetItemIfClose(item);
+    }
+
+    public static GrabbableObject? FindNearbyItem(this HoarderBugAI instance, float grabRange = 1.5f) {
+        if (instance == null) return null;
         if (instance.heldItem == null) {
-            Collider[] array = Physics.OverlapSphere(instance.gameObject.transform.position, grabRange);
-            for (int i = 0; i < array.Length; i++)
-                if (array[i].TryGetComponent(out GrabbableObject grab))
-                    if (grab.TryGetComponent(out NetworkObject network)) {
-                        instance.targetItem = grab;
-                        _ = instance.Reflect().InvokeInternalMethod("GrabTargetItemIfClose");
-                        break;
-                    }
+            Collider[] Search = Physics.OverlapSphere(instance.gameObject.transform.position, grabRange);
+            for (int i = 0; i < Search.Length; i++) {
+                if (!Search[i].TryGetComponent(out GrabbableObject item)) continue;
+                if (item.TryGetComponent(out NetworkObject network)) {
+                    return item;
+                }
+            }
         }
+
+        return null;
+    }
+
+    public static void GrabTargetItemIfClose(this HoarderBugAI instance, GrabbableObject item) {
+        if (instance == null) return;
+        if (instance.heldItem != null) return;
+        if (instance.targetItem == null) return;
+        instance.targetItem = item;
+        _ = instance.Reflect().InvokeInternalMethod("GrabTargetItemIfClose");
     }
 
     public static void DropCurrentItem(this HoarderBugAI instance) {
