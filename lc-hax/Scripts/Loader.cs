@@ -8,8 +8,8 @@ using System.Linq;
 namespace Hax;
 
 public class Loader : MonoBehaviour {
-    static GameObject HaxGameObjects { get; } = new();
-    static GameObject HaxModules { get; } = new();
+    static GameObject HaxGameObjects { get; } = new("Hax GameObjects");
+    static GameObject HaxModules { get; } = new("Hax Modules");
 
     static void AddHaxModules<T>() where T : Component => Loader.HaxModules.AddComponent<T>();
     static void AddHaxGameObject<T>() where T : Component => Loader.HaxGameObjects.AddComponent<T>();
@@ -58,6 +58,7 @@ public class Loader : MonoBehaviour {
     }
 
     static void LoadHaxModules() {
+
         DontDestroyOnLoad(Loader.HaxModules);
 
         Loader.AddHaxModules<ESPMod>();
@@ -76,6 +77,11 @@ public class Loader : MonoBehaviour {
         Loader.AddHaxModules<DisconnectMod>();
         Loader.AddHaxModules<ClearVisionMod>();
         Loader.AddHaxModules<InstantInteractMod>();
+
+        // Dont Disable this line, it is used to fill the Helper in case is injected during a full loaded level.
+        Loader.AddHaxModules<RefreshMod>();
+
+
     }
 
     public static void Unload() {

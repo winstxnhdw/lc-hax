@@ -5,7 +5,7 @@ namespace Hax;
 
 public static partial class Helper {
     public static HashSet<GrabbableObject> Grabbables { get; } = [];
-
+  
     public static void InteractWithProp(this GrabbableObject item, bool playSFX = false) {
         if (item == null || Helper.LocalPlayer == null) return;
         if (!item.IsOwner) {
@@ -27,7 +27,6 @@ public static partial class Helper {
             fartcushion.Fart();
             return;
         }
-
         if (playSFX) item.DropSFX();
         item.UseItemOnClient(true);
     }

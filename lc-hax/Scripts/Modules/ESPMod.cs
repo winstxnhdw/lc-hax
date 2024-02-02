@@ -31,7 +31,7 @@ public class ESPMod : MonoBehaviour {
         if (!this.Enabled || !this.InGame || Helper.CurrentCamera is not Camera camera) return;
 
         this.PlayerRenderers.ForEach(rendererPair => {
-            if (rendererPair.GameObject.isPlayerDead || !rendererPair.GameObject.isPlayerControlled) return;
+            if (rendererPair.GameObject.isPlayerDead || !rendererPair.GameObject.isPlayerControlled || rendererPair.Renderer == null) return;
 
             PlayerControllerB player = rendererPair.GameObject;
             string label = $"#{player.playerClientId} {player.playerUsername}";
@@ -43,21 +43,21 @@ public class ESPMod : MonoBehaviour {
             );
         });
 
-        this.LandmineRenderers.ForEach(renderer => this.RenderBounds(
+        this.LandmineRenderers.WhereIsNotNull().ForEach(renderer => this.RenderBounds(
             camera,
             renderer.bounds,
             Color.yellow,
             this.RenderLabel("Landmine")
         ));
 
-        this.TurretRenderers.ForEach(renderer => this.RenderBounds(
+        this.TurretRenderers.WhereIsNotNull().ForEach(renderer => this.RenderBounds(
             camera,
             renderer.bounds,
             Color.yellow,
             this.RenderLabel("Turret")
         ));
 
-        this.EntranceRenderers.ForEach(renderer => this.RenderBounds(
+        this.EntranceRenderers.WhereIsNotNull().ForEach(renderer => this.RenderBounds(
             camera,
             renderer.bounds,
             Color.yellow,
@@ -166,6 +166,7 @@ public class ESPMod : MonoBehaviour {
         Action<Color, Vector3>? action,
         float cutOffDistance = 4.0f
     ) {
+        if (bounds == null || camera == null) return;
         Vector3 rendererCentrePoint = camera.WorldToEyesPoint(bounds.center);
 
         if (rendererCentrePoint.z <= cutOffDistance) {
