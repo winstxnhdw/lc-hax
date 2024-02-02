@@ -30,6 +30,7 @@ public sealed class DisconnectMod : MonoBehaviour {
 
     void TryToDisconnect() {
         if (!this.IsShiftHeld) return;
+        if (Helper.LocalPlayer is null) return;
 
         GameNetworkManager.Instance.Disconnect();
         Setting.DisconnectedVoluntarily = true;
