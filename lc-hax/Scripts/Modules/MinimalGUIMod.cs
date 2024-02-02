@@ -23,15 +23,15 @@ public class MinimalGUIMod : MonoBehaviour {
 
         if (this.ShowLobbyInfo) {
             lobbyIdText = $"Lobby ID: <color=#0EE600>{Setting.ConnectedLobbyId}</color><color=#999999>" +
-                    $"\nShift F4: Disconnect" +
-                    $"\nShift F3: Disconnect + ReJoin" +
+                    $"\nShift+F4: Disconnect" +
+                    $"\nShift+F3: Disconnect + ReJoin" +
                     $"\nF9: Toggle Lobby Info</color>";
         }
         if (this.ShowLobbyInfo && !this.InGame) {
             lobbyIdText = $"Lobby ID: <color=#0EE600>{Setting.ConnectedLobbyId}</color><color=#999999>" +
-                $"\nShift F3: Join ID" +
-                $"\nShift C: Copy ID" +
-                $"\nShift V: Paste Clipboard To ID" +
+                $"\nShift+F3: Join ID" +
+                $"\nShift+C: Copy ID" +
+                $"\nShift+V: Paste Clipboard To ID" +
                 $"\nF9: Toggle Lobby Info</color>";
         }
         string antiKickText = $"Anti-Kick: {(Setting.EnableAntiKick ? "<color=#0EE600>On</color>" : "<color=#E60000>Off</color>")}";
