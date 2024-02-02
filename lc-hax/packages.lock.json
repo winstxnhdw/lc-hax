@@ -7,6 +7,20 @@
         "requested": "[2.2.2, )",
         "resolved": "2.2.2",
         "contentHash": "70KvWz+DiUELxafsYL/LHxA/jH3PDWeApLo/VwtnrpTvRWQ/eUdPfS/l5funmhZWOy41QXw6UjVv+6C57Nx77A=="
+      },
+      "RequireNamedArgs": {
+        "type": "Direct",
+        "requested": "[0.0.7, )",
+        "resolved": "0.0.7",
+        "contentHash": "NZtTRce3MH7JkBR0uVr7BM/qhOzv1VRt2CrFaRx010nCJ3o9BFLRipYEuoJGMdxAnxV9J+wCoiyoHLJDz0vI0A==",
+        "dependencies": {
+          "FSharp.Core": "4.5.2"
+        }
+      },
+      "FSharp.Core": {
+        "type": "Transitive",
+        "resolved": "4.5.2",
+        "contentHash": "apbdQOjzsjQ637kTWQuW29jqwY18jsHMyNC5A+TPJZKFEIE2cIfQWf3V7+mXrxlbX69BueYkv293/g70wuXuRw=="
       }
     },
     ".NETStandard,Version=v2.1/win-x64": {}
