@@ -37,7 +37,7 @@ public static class BaboonController {
     }
 
     public static bool CanGrabScrap(this BaboonBirdAI instance, GrabbableObject item) {
-        return instance is null ? false : item is not null && instance.Reflect().InvokeInternalMethod<bool>("CanGrabScrap", item);
+        return instance is not null && item is not null && instance.Reflect().InvokeInternalMethod<bool>("CanGrabScrap", item);
     }
 
     public static void GrabItemAndSync(this BaboonBirdAI instance, NetworkObject item) {

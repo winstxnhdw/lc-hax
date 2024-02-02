@@ -204,12 +204,12 @@ public sealed class PossessionMod : MonoBehaviour {
     private bool CanMoveEnemy() {
         return this.EnemyToPossess is null
 || this.enemyIdentity switch {
-                EnemyIdentity.Centipede => ((CentipedeAI)this.EnemyToPossess).CanMove(),
-                EnemyIdentity.Flowerman => ((FlowermanAI)this.EnemyToPossess).CanMove(),
-                EnemyIdentity.ForestGiant => ((ForestGiantAI)this.EnemyToPossess).CanMove(),
-                EnemyIdentity.Jester => ((JesterAI)this.EnemyToPossess).CanMove(),
-                _ => true,
-            };
+    EnemyIdentity.Centipede => ((CentipedeAI)this.EnemyToPossess).CanMove(),
+    EnemyIdentity.Flowerman => ((FlowermanAI)this.EnemyToPossess).CanMove(),
+    EnemyIdentity.ForestGiant => ((ForestGiantAI)this.EnemyToPossess).CanMove(),
+    EnemyIdentity.Jester => ((JesterAI)this.EnemyToPossess).CanMove(),
+    _ => true,
+};
     }
 
     // Updates position and rotation of possessed enemy at the end of frame

@@ -50,7 +50,7 @@ public static class HoardingBugController {
             Collider[] Search = Physics.OverlapSphere(instance.gameObject.transform.position, grabRange);
             for (int i = 0; i < Search.Length; i++) {
                 if (!Search[i].TryGetComponent(out GrabbableObject item)) continue;
-                if (item.TryGetComponent(out NetworkObject network)) {
+                if (item.TryGetComponent(out NetworkObject _)) {
                     return item;
                 }
             }
