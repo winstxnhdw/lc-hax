@@ -1,7 +1,7 @@
 using UnityEngine;
 using Hax;
 
-[SuperuserCommand("/timescale")]
+[PrivilegedCommand("/timescale")]
 public class TimescaleCommand : ICommand {
     public void Execute(StringArray args) {
         if (args.Length is 0) {
