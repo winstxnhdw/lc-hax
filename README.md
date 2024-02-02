@@ -144,9 +144,8 @@ The complete feature set includes the following.
 | Turn invisible to players     | `/invis`                                       |
 | Clear the chat for everyone   | `/clear`                                       |
 | Toggle ship lights            | `/light`                                       |
-| Toggle superuser mode         | `/su`                                          |
 
-## Superuser Commands
+## Privileged Commands
 
 > [!IMPORTANT]\
 > All commands under here require host privileges.
