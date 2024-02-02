@@ -178,6 +178,7 @@ These commands are only available when the user is in superuser mode.
 | Toggle possession NoClip   | <kbd> N </kbd>                       |
 | Toggle Anti-Kick           | <kbd> \ </kbd>                       |
 | Disconnect from server     | <kbd> Shift </kbd> + <kbd> F4 </kbd> |
+| Connect to server          | <kbd> Shift </kbd> + <kbd> F5 </kbd> |
 
 ### TriggerMod
 
