@@ -1,6 +1,5 @@
 using Hax;
 using Unity.Netcode;
-using UnityEngine;
 
 public static class BaboonController {
     public static void UseSecondarySkill(this BaboonBirdAI instance) {

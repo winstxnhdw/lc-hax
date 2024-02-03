@@ -1,7 +1,6 @@
 using Hax;
 using System;
 using Unity.Netcode;
-using UnityEngine;
 
 public static class HoardingBugController {
     public static void UsePrimarySkill(this HoarderBugAI instance) {
