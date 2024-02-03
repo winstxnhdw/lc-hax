@@ -27,10 +27,6 @@ public static partial class Helper {
             grabbable.ChangeOwnershipOfProp(localPlayer.actualClientId);
         }
 
-        if (playSFX) {
-            grabbable.DropSFX();
-        }
-
         if (grabbable.TryGetComponent(out AnimatedItem animatedItem)) {
             animatedItem.EquipItem();
             return;
@@ -49,6 +45,10 @@ public static partial class Helper {
         if (grabbable.TryGetComponent(out WhoopieCushionItem whoopieCushionItem)) {
             whoopieCushionItem.Fart();
             return;
+        }
+
+        if (playSFX) {
+            grabbable.DropSFX();
         }
 
         grabbable.UseItemOnClient(true);
