@@ -2,20 +2,19 @@ public static class CentipedeController {
 
     public static void UsePrimarySkill(this CentipedeAI instance) {
         if (instance == null) return;
-        if (instance.currentBehaviourStateIndex == 1)
-            instance.SwitchToBehaviourServerRpc(2);
+        if (instance.currentBehaviourStateIndex != 1) return;
+
+        instance.SwitchToBehaviourServerRpc(2);
     }
 
     public static void UseSecondarySkill(this CentipedeAI instance) {
-        if (instance == null) return;
-        if (!instance.IsClingingToSomething()) {
-            instance.RaycastToCeiling();
-            instance.SwitchToBehaviourServerRpc(2);
-        }
+        if (instance.IsClingingToSomething()) return;
+
+        instance.RaycastToCeiling();
+        instance.SwitchToBehaviourServerRpc(2);
     }
 
     public static void RaycastToCeiling(this CentipedeAI instance) {
-        if (instance == null) return;
         _ = instance.Reflect().InvokeInternalMethod("RaycastToCeiling");
     }
     public static bool CanMove(this CentipedeAI instance) {
@@ -23,22 +22,21 @@ public static class CentipedeController {
     }
 
     public static bool IsClingingToSomething(this CentipedeAI instance) {
-        if (instance == null) return false;
-        Reflector reflect = instance.Reflect();
-        return reflect != null
-&& (instance.clingingToPlayer != null
+        Reflector centipedeReflector = instance.Reflect();
+
+        return instance.clingingToPlayer != null
                || instance.inSpecialAnimation
-               || reflect.GetInternalField<bool>("clingingToDeadBody")
-               || reflect.GetInternalField<bool>("clingingToCeiling")
-               || reflect.GetInternalField<bool>("startedCeilingAnimationCoroutine")
-               || reflect.GetInternalField<bool>("inDroppingOffPlayerAnim"));
+               || centipedeReflector.GetInternalField<bool>("clingingToDeadBody")
+               || centipedeReflector.GetInternalField<bool>("clingingToCeiling")
+               || centipedeReflector.GetInternalField<bool>("startedCeilingAnimationCoroutine")
+               || centipedeReflector.GetInternalField<bool>("inDroppingOffPlayerAnim");
     }
 
-    public static string GetPrimarySkillName(this CentipedeAI instance) {
+    public static string GetPrimarySkillName(this CentipedeAI _) {
         return "Drop";
     }
 
-    public static string GetSecondarySkillName(this CentipedeAI instance) {
+    public static string GetSecondarySkillName(this CentipedeAI _) {
         return "Attach to ceiling";
     }
 

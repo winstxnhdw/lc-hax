@@ -32,15 +32,13 @@ public static class FlowermanController {
 
     public static void SetState(this FlowermanAI instance, FlowerMan state) {
         if (instance == null) return;
-        if (!instance.isInState(state))
+        if (!instance.IsInState(state))
             instance.SwitchToBehaviourServerRpc((int)state);
     }
 
-    public static bool isInState(this FlowermanAI instance, FlowerMan state) {
+    public static bool IsInState(this FlowermanAI instance, FlowerMan state) {
         return instance != null && instance.currentBehaviourStateIndex == (int)state;
     }
-
-
 
     public enum FlowerMan {
         Default = 0,

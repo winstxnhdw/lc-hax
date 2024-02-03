@@ -1,13 +1,11 @@
 public static class MouthDogController {
 
     public static void UseSecondarySkill(this MouthDogAI instance) {
-        if (instance == null) return;
-        if (!instance.IsLunging()) {
-            instance.Lunge();
-        }
+        if (instance.IsLunging()) return;
+        instance.Lunge();
     }
 
-    public static string GetSecondarySkillName(this MouthDogAI instance) {
+    public static string GetSecondarySkillName(this MouthDogAI _) {
         return "Lunge";
     }
 
