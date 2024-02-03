@@ -46,11 +46,19 @@ public sealed class PossessionMod : MonoBehaviour {
         InputListener.onZPress += this.Unpossess;
         InputListener.onLeftButtonPress += this.UsePrimarySkill;
         InputListener.onLeftButtonRelease += this.ReleasePrimarySkill;
-        InputListener.onRightButtonPress += this.UseSecondarySkill;
-        InputListener.onRightButtonRelease += this.ReleaseSecondarySkill;
-
+        InputListener.onRightButtonHold += this.OnRightMouseButtonHold;
         this.UpdateComponentsOnCurrentState(true);
     }
+
+    void OnRightMouseButtonHold(bool isPressed) {
+        if (isPressed) {
+            this.UseSecondarySkill();
+        }
+        else {
+            this.ReleaseSecondarySkill();
+        }
+    }
+
 
     // Unsubscribes from input events
     void OnDisable() {
