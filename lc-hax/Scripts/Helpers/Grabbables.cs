@@ -22,36 +22,36 @@ public static partial class Helper {
         );
     }
 
-    public static void InteractWithProp(this GrabbableObject item, bool playSFX = false) {
-        if (Helper.LocalPlayer is PlayerControllerB localPlayer && !item.IsOwner) {
-            item.ChangeOwnershipOfProp(localPlayer.actualClientId);
+    public static void InteractWithProp(this GrabbableObject grabbable, bool playSFX = false) {
+        if (Helper.LocalPlayer is PlayerControllerB localPlayer && !grabbable.IsOwner) {
+            grabbable.ChangeOwnershipOfProp(localPlayer.actualClientId);
         }
 
         if (playSFX) {
-            item.DropSFX();
+            grabbable.DropSFX();
         }
 
-        if (item.TryGetComponent(out AnimatedItem animated)) {
-            animated.EquipItem();
+        if (grabbable.TryGetComponent(out AnimatedItem animatedItem)) {
+            animatedItem.EquipItem();
             return;
         }
 
-        if (item.TryGetComponent(out NoisemakerProp noiseprop)) {
-            noiseprop.ItemActivate(true, true);
+        if (grabbable.TryGetComponent(out NoisemakerProp noisemakerProp)) {
+            noisemakerProp.ItemActivate(true, true);
             return;
         }
 
-        if (item.TryGetComponent(out BoomboxItem BoomBox)) {
-            BoomBox.ItemActivate(true, true);
+        if (grabbable.TryGetComponent(out BoomboxItem boomboxItem)) {
+            boomboxItem.ItemActivate(true, true);
             return;
         }
 
-        if (item.TryGetComponent(out WhoopieCushionItem fartcushion)) {
-            fartcushion.Fart();
+        if (grabbable.TryGetComponent(out WhoopieCushionItem whoopieCushionItem)) {
+            whoopieCushionItem.Fart();
             return;
         }
 
-        item.UseItemOnClient(true);
+        grabbable.UseItemOnClient(true);
     }
 
     public static void ShootShotgun(this ShotgunItem item, Transform origin) {

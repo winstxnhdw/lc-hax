@@ -92,11 +92,11 @@ public sealed class TriggerMod : MonoBehaviour, IEnemyPrompter {
                 doorLock.UnlockDoorSyncWithServer();
                 break;
             }
-            if (collider.TryGetComponent(out GrabbableObject prop)) {
-                prop.InteractWithProp(true);
+
+            if (collider.TryGetComponent(out GrabbableObject grabbable)) {
+                grabbable.InteractWithProp(true);
                 break;
             }
-
 
             if (collider.TryGetComponent(out PlayerControllerB player)) {
                 Helper.GetEnemy<CentipedeAI>()?.ClingToPlayerServerRpc(player.playerClientId);
