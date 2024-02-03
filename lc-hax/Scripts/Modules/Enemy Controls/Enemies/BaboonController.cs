@@ -1,3 +1,4 @@
+using Hax;
 using Unity.Netcode;
 using UnityEngine;
 
@@ -11,34 +12,17 @@ public static class BaboonController {
             instance.DropCurrentItem();
         }
     }
-
-    public static NetworkObject? FindNearbyItem(this BaboonBirdAI instance, float range = 1.5f) {
-        Collider[] Search = Physics.OverlapSphere(instance.transform.position, range);
-        for (int i = 0; i < Search.Length; i++) {
-            if (!Search[i].TryGetComponent(out GrabbableObject item)) continue;
-            if (instance.CanGrabScrap(item))
-                if (item.TryGetComponent(out NetworkObject network))
-                    if (Vector3.Distance(item.transform.position, instance.transform.position) < float.PositiveInfinity) return network;
-        }
-
-        return null;
-    }
-
     public static void GrabNearbyItem(this BaboonBirdAI instance) {
         if (instance is null) return;
         if (instance.heldScrap != null) return;
-        if (instance.FindNearbyItem() is not NetworkObject item) return;
-
+        if (instance.FindNearbyItem() is not GrabbableObject item) return;
         instance.SwitchToBehaviourServerRpc(1);
         instance.GrabItemAndSync(item);
     }
 
-    public static bool CanGrabScrap(this BaboonBirdAI instance, GrabbableObject item) {
-        return instance is not null && item is not null && instance.Reflect().InvokeInternalMethod<bool>("CanGrabScrap", item);
-    }
-
-    public static void GrabItemAndSync(this BaboonBirdAI instance, NetworkObject item) {
-        _ = instance.Reflect().InvokeInternalMethod("GrabItemAndSync", item);
+    public static void GrabItemAndSync(this BaboonBirdAI instance, GrabbableObject item) {
+        if (item is null) return;
+        if (item.TryGetComponent(out NetworkObject netItem)) _ = instance.Reflect().InvokeInternalMethod("GrabItemAndSync", netItem);
     }
 
     public static void DropCurrentItem(this BaboonBirdAI instance) {
