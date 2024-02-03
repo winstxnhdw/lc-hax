@@ -1,6 +1,8 @@
 using Hax;
 using System;
 using Unity.Netcode;
+using UnityEngine;
+using UnityEngine.InputSystem.EnhancedTouch;
 
 public static class HoardingBugController {
     public static void UsePrimarySkill(this HoarderBugAI instance) {
@@ -12,7 +14,6 @@ public static class HoardingBugController {
         if (instance.heldItem == null) {
             instance.GrabNearbyItem();
         }
-
         else {
             instance.DropCurrentItem();
         }
@@ -36,7 +37,20 @@ public static class HoardingBugController {
     public static void GrabNearbyItem(this HoarderBugAI instance) {
         if (instance.heldItem == null) return;
         GrabbableObject? item = instance.FindNearbyItem();
-        if (item != null) instance.GrabTargetItemIfClose(item);
+        if (item != null) {
+            instance.GrabItem(item);
+        }
+    }
+
+    public static void GrabItem(this HoarderBugAI instance, GrabbableObject item) {
+        if(item == null) return;
+        if(instance.heldItem != null) return;
+        if (item.TryGetComponent(out NetworkObject netItem)) {
+            instance.SwitchToBehaviourServerRpc(1);
+            _ = instance.Reflect().InvokeInternalMethod("GrabItem", netItem);
+            _ = instance.Reflect().SetInternalField("sendingGrabOrDropRPC", true);
+            instance.GrabItemServerRpc(netItem);
+        }
     }
 
     public static void GrabTargetItemIfClose(this HoarderBugAI instance, GrabbableObject item) {
