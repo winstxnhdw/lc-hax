@@ -231,7 +231,7 @@ public sealed class PossessionMod : MonoBehaviour {
         this.FirstUpdate = false;
     }
     void OpenDoorAsEnemy(DoorLock doorLock) {
-        bool flag = doorLock != null;
+        _ = doorLock != null;
         if (doorLock != null)
             if (doorLock.Reflect().GetInternalField<bool>("isDoorOpened")) {
                 doorLock.OpenDoorAsEnemyServerRpc();
@@ -241,7 +241,7 @@ public sealed class PossessionMod : MonoBehaviour {
 
     void OnControllerColliderHit(ControllerColliderHit hit) {
         if (this.EnemyToPossess == null) return;
-        if(hit.gameObject.TryGetComponent(out DoorLock door))
+        if (hit.gameObject.TryGetComponent(out DoorLock door))
             this.OpenDoorAsEnemy(door);
         if (this.enemyIdentity == EnemyIdentity.Masked) ((MaskedPlayerEnemy)this.EnemyToPossess).OnControllerColliderHit(hit);
     }
