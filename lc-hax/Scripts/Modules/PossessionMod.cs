@@ -6,7 +6,7 @@ using Hax;
 
 public sealed class PossessionMod : MonoBehaviour {
     // Singleton instance of the PossessionMod
-    public static PossessionMod? Instance { get; private set; }
+    public static PossessionMod? Instance { get; set; }
 
     // Nullable property representing the enemy to possess
     EnemyAI? EnemyToPossess { get; set; } = null;
@@ -64,7 +64,7 @@ public sealed class PossessionMod : MonoBehaviour {
     }
 
     // Toggles realistic possession mode
-    private void ToggleRealisticPossession() {
+    void ToggleRealisticPossession() {
         Setting.RealisticPossessionEnabled = !Setting.RealisticPossessionEnabled;
         Chat.Print($"Realistic Possession: {Setting.RealisticPossessionEnabled}");
 
@@ -77,7 +77,7 @@ public sealed class PossessionMod : MonoBehaviour {
     }
 
     // Toggles no clipping mode
-    private void ToggleNoClip() {
+    void ToggleNoClip() {
         this.NoClipEnabled = !this.NoClipEnabled;
         Chat.Print($"Possess NoClip: {this.NoClipEnabled}");
 
@@ -85,7 +85,7 @@ public sealed class PossessionMod : MonoBehaviour {
     }
 
     // Updates movement components based on the current state
-    private void UpdateComponentsOnCurrentState(bool thisGameObjectIsEnabled) {
+    void UpdateComponentsOnCurrentState(bool thisGameObjectIsEnabled) {
         if (this.MousePan is not MousePan mousePan) {
             return;
         }
@@ -114,7 +114,7 @@ public sealed class PossessionMod : MonoBehaviour {
         this.EndOfFrameUpdate();
     }
 
-    private void HandleEnemyMovements() {
+    void HandleEnemyMovements() {
 
         if (this.EnemyToPossess is null) return;
         switch (this.enemyIdentity) {
@@ -158,7 +158,7 @@ public sealed class PossessionMod : MonoBehaviour {
                 break;
         }
     }
-    private void EnemyUpdate() {
+    void EnemyUpdate() {
         if (this.EnemyToPossess is null) return;
         switch (this.enemyIdentity) {
             case EnemyIdentity.Masked:
@@ -201,7 +201,7 @@ public sealed class PossessionMod : MonoBehaviour {
         }
     }
 
-    private bool CanMoveEnemy() {
+    bool CanMoveEnemy() {
         return this.EnemyToPossess is null
 || this.enemyIdentity switch {
     EnemyIdentity.Centipede => ((CentipedeAI)this.EnemyToPossess).CanMove(),
@@ -213,7 +213,7 @@ public sealed class PossessionMod : MonoBehaviour {
     }
 
     // Updates position and rotation of possessed enemy at the end of frame
-    private void EndOfFrameUpdate() {
+    void EndOfFrameUpdate() {
         if (this.RigidbodyKeyboard is not RigidbodyMovement rigidbodyKeyboard) return;
         if (this.EnemyToPossess is not EnemyAI enemy) return;
         if (Helper.CurrentCamera is not Camera camera || !camera.enabled) return;
