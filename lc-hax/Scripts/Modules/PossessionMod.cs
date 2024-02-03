@@ -241,9 +241,19 @@ public sealed class PossessionMod : MonoBehaviour {
 
         this.FirstUpdate = false;
     }
+    void OpenDoorAsEnemy(DoorLock doorLock) {
+        bool flag = doorLock != null;
+        if (doorLock != null)
+            if (doorLock.Reflect().GetInternalField<bool>("isDoorOpened")) {
+                doorLock.OpenDoorAsEnemyServerRpc();
+                if (doorLock.TryGetComponent(out AnimatedObjectTrigger trigger)) trigger.TriggerAnimationNonPlayer(false, true, false);
+            }
+    }
 
-    public void OnControllerColliderHit(ControllerColliderHit hit) {
-        if (this.EnemyToPossess is null) return;
+    void OnControllerColliderHit(ControllerColliderHit hit) {
+        if (this.EnemyToPossess == null) return;
+        if(hit.gameObject.TryGetComponent(out DoorLock door))
+            this.OpenDoorAsEnemy(door);
         if (this.enemyIdentity == EnemyIdentity.Masked) ((MaskedPlayerEnemy)this.EnemyToPossess).OnControllerColliderHit(hit);
     }
 
