@@ -3,13 +3,12 @@ using GameNetcodeStuff;
 
 [Command("/respawn")]
 public class RespawnCommand : ICommand {
+    public void RespawnLocalPlayer(PlayerControllerB localPlayer) {
+        if (Helper.StartOfRound is not StartOfRound startOfRound) return;
+        if (Helper.HUDManager is not HUDManager hudManager) return;
+        if (Helper.SoundManager is not SoundManager soundManager) return;
 
-    public void RespawnLocalPlayer() // This is a modified version of StartOfRound.ReviveDeadPlayers
-       {
-        PlayerControllerB? localPlayer = Helper.LocalPlayer;
-        if (localPlayer == null || Helper.StartOfRound == null || Helper.HUDManager == null || Helper.SoundManager == null) return;
-
-        Helper.StartOfRound.allPlayersDead = false;
+        startOfRound.allPlayersDead = false;
         localPlayer.ResetPlayerBloodObjects(localPlayer.isPlayerDead);
         if (localPlayer.isPlayerDead || localPlayer.isPlayerControlled) {
             localPlayer.isClimbingLadder = false;
@@ -24,10 +23,10 @@ public class RespawnCommand : ICommand {
                 localPlayer.isInHangarShipRoom = true;
                 localPlayer.isInsideFactory = false;
                 localPlayer.wasInElevatorLastFrame = false;
-                Helper.StartOfRound.SetPlayerObjectExtrapolate(false);
-                localPlayer.TeleportPlayer(Helper.StartOfRound.playerSpawnPositions[0].position, false, 0f, false, true);
+                startOfRound.SetPlayerObjectExtrapolate(false);
+                localPlayer.TeleportPlayer(startOfRound.playerSpawnPositions[0].position, false, 0f, false, true);
                 localPlayer.setPositionOfDeadPlayer = false;
-                localPlayer.DisablePlayerModel(Helper.StartOfRound.allPlayerObjects[localPlayer.playerClientId], true, true);
+                localPlayer.DisablePlayerModel(startOfRound.allPlayerObjects[localPlayer.playerClientId], true, true);
                 localPlayer.helmetLight.enabled = false;
                 localPlayer.Crouch(false);
                 localPlayer.criticallyInjured = false;
@@ -48,31 +47,43 @@ public class RespawnCommand : ICommand {
                 localPlayer.health = 100;
                 localPlayer.mapRadarDotAnimator.SetBool("dead", false);
                 if (localPlayer.IsOwner) {
-                    Helper.HUDManager.gasHelmetAnimator.SetBool("gasEmitting", false);
+                    hudManager.gasHelmetAnimator.SetBool("gasEmitting", false);
                     localPlayer.hasBegunSpectating = false;
-                    Helper.HUDManager.RemoveSpectateUI();
-                    Helper.HUDManager.gameOverAnimator.SetTrigger("revive");
+                    hudManager.RemoveSpectateUI();
+                    hudManager.gameOverAnimator.SetTrigger("revive");
                     localPlayer.hinderedMultiplier = 1f;
                     localPlayer.isMovementHindered = 0;
                     localPlayer.sourcesCausingSinking = 0;
-                    localPlayer.reverbPreset = Helper.StartOfRound.shipReverb;
+                    localPlayer.reverbPreset = startOfRound.shipReverb;
                 }
             }
-            Helper.SoundManager.earsRingingTimer = 0f;
+            soundManager.earsRingingTimer = 0f;
             localPlayer.voiceMuffledByEnemy = false;
-            Helper.SoundManager.playerVoicePitchTargets[localPlayer.playerClientId] = 1f;
-            Helper.SoundManager.SetPlayerPitch(1f, (int)localPlayer.playerClientId);
-            if (localPlayer.currentVoiceChatIngameSettings == null) {
-                Helper.StartOfRound.RefreshPlayerVoicePlaybackObjects();
-            }
-            if (localPlayer.currentVoiceChatIngameSettings != null) {
-                if (localPlayer.currentVoiceChatIngameSettings.voiceAudio == null)
-                    localPlayer.currentVoiceChatIngameSettings.InitializeComponents();
+            soundManager.playerVoicePitchTargets[localPlayer.playerClientId] = 1f;
+            soundManager.SetPlayerPitch(1f, (int)localPlayer.playerClientId);
 
-                if (localPlayer.currentVoiceChatIngameSettings.voiceAudio == null)
+            if (localPlayer.currentVoiceChatIngameSettings == null) {
+                startOfRound.RefreshPlayerVoicePlaybackObjects();
+            }
+
+            if (localPlayer.currentVoiceChatIngameSettings != null) {
+                if (localPlayer.currentVoiceChatIngameSettings.voiceAudio == null) {
+                    localPlayer.currentVoiceChatIngameSettings.InitializeComponents();
+                }
+
+                if (localPlayer.currentVoiceChatIngameSettings.voiceAudio == null) {
                     return;
+                }
 
                 localPlayer.currentVoiceChatIngameSettings.voiceAudio.GetComponent<OccludeAudio>().overridingLowPass = false;
             }
         }
-        PlayerControllerB playerControllerB = GameNetworkManager.Instance.localPlayerController;
+    }
+
+    public void Execute(StringArray _) {
+        if (Helper.LocalPlayer is not PlayerControllerB localPlayer) return;
+
+        this.RespawnLocalPlayer(localPlayer);
+        Chat.Print("No one can see you in this state!");
+    }
+}
