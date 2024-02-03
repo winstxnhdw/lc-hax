@@ -4,8 +4,8 @@ using UnityEngine;
 
 enum CoroutineState {
     RUNNING,
-    ERROR,
-    EXHAUSTED
+    EXHAUSTED,
+    ERROR
 }
 
 class InvalidCoroutineState(CoroutineState state) : Exception($"Invalid CoroutineState: {state}") { }
@@ -28,17 +28,22 @@ public static partial class Extensions {
         while (true) {
             CoroutineState state = Extensions.ExecuteCoroutineStep(coroutine);
 
-            object? action = state switch {
-                CoroutineState.RUNNING => coroutine.Current,
-                CoroutineState.ERROR => waitForOneSecond,
-                CoroutineState.EXHAUSTED => null,
-            };
+            switch (state) {
+                case CoroutineState.RUNNING:
+                    yield return coroutine.Current;
+                    break;
 
-            if (action is null) {
-                yield break;
+                case CoroutineState.ERROR:
+                    coroutine = coroutineFactory(args);
+                    yield return waitForOneSecond;
+                    break;
+
+                case CoroutineState.EXHAUSTED:
+                    yield break;
+
+                default:
+                    throw new InvalidCoroutineState(state);
             }
-
-            yield return action;
         }
     }
 

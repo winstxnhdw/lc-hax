@@ -84,11 +84,9 @@ dotnet_analyzer_diagnostic.category-Design.severity = warning
 
 dotnet_diagnostic.IDE0002.severity = none
 dotnet_diagnostic.IDE0044.severity = none
-dotnet_diagnostic.IDE0072.severity = none
 dotnet_diagnostic.IDE0051.severity = none
 dotnet_diagnostic.IDE0021.severity = none
 dotnet_diagnostic.IDE0022.severity = none
 dotnet_diagnostic.IDE0160.severity = none
 dotnet_diagnostic.IDE0130.severity = none
-dotnet_diagnostic.CS8524.severity = none
 dotnet_diagnostic.CA1001.severity = error
