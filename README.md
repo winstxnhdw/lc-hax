@@ -144,6 +144,7 @@ The complete feature set includes the following.
 | Turn invisible to players     | `/invis`                                       |
 | Clear the chat for everyone   | `/clear`                                       |
 | Toggle ship lights            | `/light`                                       |
+| Copy lobby ID to clipboard    | `/lobby`                                       |
 
 ## Privileged Commands
 
