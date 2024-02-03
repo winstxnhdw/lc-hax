@@ -23,10 +23,8 @@ public sealed class PossessionMod : MonoBehaviour {
 
     // Readonly property indicating if possessing an enemy
     public bool IsPossessed => this.EnemyToPossess != null;
-
-    public bool isUsingPrimarySkill { get; set; } = false;
-
-    public bool isUsingSecondarySkill { get; set; } = false;
+    public bool IsUsingPrimarySkill { get; set; } = false;
+    public bool IsUsingSecondarySkill { get; set; } = false;
 
     // Flag for no clipping mode
     bool NoClipEnabled { get; set; } = false;
@@ -86,17 +84,9 @@ public sealed class PossessionMod : MonoBehaviour {
 
     // Updates movement components based on the current state
     void UpdateComponentsOnCurrentState(bool thisGameObjectIsEnabled) {
-        if (this.MousePan is not MousePan mousePan) {
-            return;
-        }
-
-        if (this.RigidbodyKeyboard is not RigidbodyMovement rigidbodyKeyboard) {
-            return;
-        }
-
-        if (this.Keyboard is not KeyboardMovement keyboard) {
-            return;
-        }
+        if (this.MousePan is not MousePan mousePan) return;
+        if (this.RigidbodyKeyboard is not RigidbodyMovement rigidbodyKeyboard) return;
+        if (this.Keyboard is not KeyboardMovement keyboard) return;
 
         mousePan.enabled = thisGameObjectIsEnabled;
         rigidbodyKeyboard.enabled = !this.NoClipEnabled;
@@ -115,12 +105,11 @@ public sealed class PossessionMod : MonoBehaviour {
     }
 
     void HandleEnemyMovements() {
-
         if (this.EnemyToPossess is null) return;
         switch (this.enemyIdentity) {
             case EnemyIdentity.Nutcracker:
-                if (this.isUsingPrimarySkill || this.isUsingSecondarySkill) return; // prevent this from blocking the sentry skill of the nutcracker.
-                ((NutcrackerEnemyAI)this.EnemyToPossess).OnMoving();
+                if (this.IsUsingPrimarySkill || this.IsUsingSecondarySkill) return; // prevent this from blocking the sentry skill of the nutcracker.
+                (this.EnemyToPossess as NutcrackerEnemyAI)?.OnMoving();
                 break;
             case EnemyIdentity.Baboon:
                 break;
@@ -158,6 +147,7 @@ public sealed class PossessionMod : MonoBehaviour {
                 break;
         }
     }
+
     void EnemyUpdate() {
         if (this.EnemyToPossess is null) return;
         switch (this.enemyIdentity) {
@@ -202,14 +192,13 @@ public sealed class PossessionMod : MonoBehaviour {
     }
 
     bool CanMoveEnemy() {
-        return this.EnemyToPossess is null
-|| this.enemyIdentity switch {
-    EnemyIdentity.Centipede => ((CentipedeAI)this.EnemyToPossess).CanMove(),
-    EnemyIdentity.Flowerman => ((FlowermanAI)this.EnemyToPossess).CanMove(),
-    EnemyIdentity.ForestGiant => ((ForestGiantAI)this.EnemyToPossess).CanMove(),
-    EnemyIdentity.Jester => ((JesterAI)this.EnemyToPossess).CanMove(),
-    _ => true,
-};
+        return this.EnemyToPossess is null || this.enemyIdentity switch {
+            EnemyIdentity.Centipede => ((CentipedeAI)this.EnemyToPossess).CanMove(),
+            EnemyIdentity.Flowerman => ((FlowermanAI)this.EnemyToPossess).CanMove(),
+            EnemyIdentity.ForestGiant => ((ForestGiantAI)this.EnemyToPossess).CanMove(),
+            EnemyIdentity.Jester => ((JesterAI)this.EnemyToPossess).CanMove(),
+            _ => true,
+        };
     }
 
     // Updates position and rotation of possessed enemy at the end of frame
@@ -302,13 +291,13 @@ public sealed class PossessionMod : MonoBehaviour {
 
         this.EnemyToPossess = null;
         this.enemyIdentity = EnemyIdentity.None;
-        this.isUsingPrimarySkill = false;
-        this.isUsingSecondarySkill = false;
+        this.IsUsingPrimarySkill = false;
+        this.IsUsingSecondarySkill = false;
     }
 
     public void UsePrimarySkill() {
         if (this.EnemyToPossess is null) return;
-        this.isUsingPrimarySkill = true;
+        this.IsUsingPrimarySkill = true;
         switch (this.enemyIdentity) {
             case EnemyIdentity.Centipede:
                 ((CentipedeAI)this.EnemyToPossess).UsePrimarySkill();
@@ -357,7 +346,7 @@ public sealed class PossessionMod : MonoBehaviour {
 
     public void UseSecondarySkill() {
         if (this.EnemyToPossess is null) return;
-        this.isUsingSecondarySkill = true;
+        this.IsUsingSecondarySkill = true;
         switch (this.enemyIdentity) {
             case EnemyIdentity.Centipede:
                 ((CentipedeAI)this.EnemyToPossess).UseSecondarySkill();
@@ -410,8 +399,9 @@ public sealed class PossessionMod : MonoBehaviour {
 
     public void ReleasePrimarySkill() {
         if (this.EnemyToPossess is null) return;
-        this.isUsingPrimarySkill = false;
+        this.IsUsingPrimarySkill = false;
     }
+
     public void ReleaseSecondarySkill() {
         if (this.EnemyToPossess is null) return;
 
@@ -548,7 +538,6 @@ public sealed class PossessionMod : MonoBehaviour {
         return "";
     }
 
-
     public EnemyIdentity IdentifyEnemy(EnemyAI enemy) {
         return enemy is null
             ? EnemyIdentity.None
@@ -568,5 +557,4 @@ public sealed class PossessionMod : MonoBehaviour {
                 _ => EnemyIdentity.Default,
             };
     }
-
 }

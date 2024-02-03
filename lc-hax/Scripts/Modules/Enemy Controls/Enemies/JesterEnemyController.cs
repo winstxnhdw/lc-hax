@@ -1,41 +1,39 @@
 public static class JesterController {
 
     public static void UsePrimarySkill(this JesterAI instance) {
-        if (instance == null) return;
-        if (!instance.isInState(JesterState.Box)) instance.SetState(JesterState.Box);
+        if (instance.IsInState(JesterState.Box)) return;
+        instance.SetState(JesterState.Box);
     }
 
     public static void UseSecondarySkill(this JesterAI instance) {
-        if (instance == null) return;
-        if (instance.isInState(JesterState.Box)) instance.SetState(JesterState.Cranking);
+        if (!instance.IsInState(JesterState.Box)) return;
+        instance.SetState(JesterState.Cranking);
     }
 
     public static void ReleaseSecondarySkill(this JesterAI instance) {
-        if (instance == null) return;
-        if (instance.isInState(JesterState.Cranking)) instance.SetState(JesterState.PopOut);
+        if (!instance.IsInState(JesterState.Cranking)) return;
+        instance.SetState(JesterState.PopOut);
     }
 
-    public static string GetPrimarySkillName(this JesterAI instance) {
+    public static string GetPrimarySkillName(this JesterAI _) {
         return "Close box";
     }
 
-    public static string GetSecondarySkillName(this JesterAI instance) {
+    public static string GetSecondarySkillName(this JesterAI _) {
         return "(HOLD) Play music";
     }
 
     public static bool CanMove(this JesterAI instance) {
-        return instance == null || !instance.isInState(JesterState.Cranking);
+        return !instance.IsInState(JesterState.Cranking);
     }
-
 
     public static void SetState(this JesterAI instance, JesterState state) {
-        if (instance == null) return;
-        if (!instance.isInState(state))
-            instance.SwitchToBehaviourServerRpc((int)state);
+        if (instance.IsInState(state)) return;
+        instance.SwitchToBehaviourServerRpc((int)state);
     }
 
-    public static bool isInState(this JesterAI instance, JesterState state) {
-        return instance != null && instance.currentBehaviourStateIndex == (int)state;
+    public static bool IsInState(this JesterAI instance, JesterState state) {
+        return instance.currentBehaviourStateIndex == (int)state;
     }
 
     public static float initialWalkSpeed;

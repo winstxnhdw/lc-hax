@@ -1,34 +1,28 @@
 public static class ForestGiantController {
-
-
     public static void UseSecondarySkill(this ForestGiantAI instance) {
-        if (instance == null) return;
         instance.SetState(GiantStates.Chase);
     }
 
     public static void ReleaseSecondarySkill(this ForestGiantAI instance) {
-        if (instance == null) return;
-
         instance.SetState(GiantStates.Default);
 
     }
     public static bool CanMove(this ForestGiantAI instance) {
-        return instance == null || !instance.IsEatingPlayer();
+        return !instance.IsEatingPlayer();
     }
 
     public static bool IsEatingPlayer(this ForestGiantAI instance) {
-        return instance != null && instance.Reflect().GetInternalField<bool>("inEatingPlayerAnimation");
+        return instance.Reflect().GetInternalField<bool>("inEatingPlayerAnimation");
     }
+
     public static void SetState(this ForestGiantAI instance, GiantStates state) {
-        if (instance == null) return;
-        if (!instance.isInState(state))
-            instance.SwitchToBehaviourServerRpc((int)state);
+        if (instance.IsInState(state)) return;
+        instance.SwitchToBehaviourServerRpc(unchecked((int)state));
     }
 
-    public static bool isInState(this ForestGiantAI instance, GiantStates state) {
-        return instance != null && instance.currentBehaviourStateIndex == (int)state;
+    public static bool IsInState(this ForestGiantAI instance, GiantStates state) {
+        return instance.currentBehaviourStateIndex == unchecked((int)state);
     }
-
 
     public enum GiantStates {
         Default = 0,

@@ -45,7 +45,7 @@ public static class MaskedPlayerController {
         }
     }
 
-    public static void ResetCooldown(this MaskedPlayerEnemy instance) {
+    public static void ResetCooldown(this MaskedPlayerEnemy _) {
         useEntranceDoorCooldown = 2f;
         timeSinceLastEntranceDoorUse = 0f;
         canUseEntranceDoorOnCollision = true;

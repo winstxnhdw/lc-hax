@@ -30,11 +30,11 @@ public static class NutcrackerController {
         instance.SetState(NutCrackerState.Walking);
     }
 
-    public static string GetPrimarySkillName(this NutcrackerEnemyAI instance) {
+    public static string GetPrimarySkillName(this NutcrackerEnemyAI _) {
         return "Fire";
     }
 
-    public static string GetSecondarySkillName(this NutcrackerEnemyAI instance) {
+    public static string GetSecondarySkillName(this NutcrackerEnemyAI _) {
         return "(HOLD) Sentry mode";
     }
 

@@ -1,29 +1,25 @@
 public static class PufferController {
-
     public static void UsePrimarySkill(this PufferAI instance) {
-        if (instance == null) return;
         instance.SetState(PufferState.Stomp);
         instance.StompServerRpc();
     }
 
     public static void UseSecondarySkill(this PufferAI instance) {
-        if (instance == null) return;
         instance.SetState(PufferState.Stomp);
         instance.ShakeTailServerRpc();
     }
 
-    public static string GetPrimarySkillName(this PufferAI instance) {
+    public static string GetPrimarySkillName(this PufferAI _) {
         return "Stomp";
     }
 
-    public static string GetSecondarySkillName(this PufferAI instance) {
+    public static string GetSecondarySkillName(this PufferAI _) {
         return "Smoke";
     }
 
     public static void SetState(this PufferAI instance, PufferState state) {
-        if (instance == null) return;
-        if (!instance.IsInState(state))
-            instance.SwitchToBehaviourServerRpc((int)state);
+        if (instance.IsInState(state)) return;
+        instance.SwitchToBehaviourServerRpc((int)state);
     }
 
     public static bool IsInState(this PufferAI instance, PufferState state) {
