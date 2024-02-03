@@ -5,14 +5,14 @@ using Unity.Netcode;
 public static class HoardingBugController {
 
     public static void UsePrimarySkill(this HoarderBugAI instance) {
-        if (instance.heldItem is null) return;
-        instance.UseHeldItem();
-    }
-
-    public static void UseSecondarySkill(this HoarderBugAI instance) {
         if (instance.heldItem == null)
             instance.GrabNearbyItem();
         else
+            instance.UseHeldItem();
+    }
+
+    public static void UseSecondarySkill(this HoarderBugAI instance) {
+        if(instance.heldItem != null)
             instance.DropCurrentItem();
     }
 
@@ -58,10 +58,10 @@ public static class HoardingBugController {
     }
 
     public static string GetPrimarySkillName(this HoarderBugAI instance) {
-        return instance == null ? "" : (instance.heldItem != null) ? "Use item" : "";
+        return instance == null ? "" : (instance.heldItem != null) ? "Use item" : "Grab Item";
     }
 
     public static string GetSecondarySkillName(this HoarderBugAI instance) {
-        return instance.heldItem == null ? "Grab item" : "Drop item";
+        return instance.heldItem == null ? "" : "Drop item";
     }
 }
