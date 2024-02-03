@@ -8,7 +8,12 @@ public static class BaboonController {
             instance.GrabNearbyItem();
         }
         else {
-            instance.heldScrap.InteractWithProp(true);
+            if (instance.heldScrap is ShotgunItem shotgun) {
+                shotgun.ShootShotgun(instance.transform);
+            }
+            else {
+                instance.heldScrap.InteractWithProp(true);
+            }
         }
     }
 
