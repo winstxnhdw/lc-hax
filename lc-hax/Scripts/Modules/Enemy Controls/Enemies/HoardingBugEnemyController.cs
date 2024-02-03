@@ -1,22 +1,19 @@
 using Hax;
 using System;
 using Unity.Netcode;
-using UnityEngine;
-using UnityEngine.InputSystem.EnhancedTouch;
 
 public static class HoardingBugController {
+
     public static void UsePrimarySkill(this HoarderBugAI instance) {
         if (instance.heldItem is null) return;
         instance.UseHeldItem();
     }
 
     public static void UseSecondarySkill(this HoarderBugAI instance) {
-        if (instance.heldItem == null) {
+        if (instance.heldItem == null)
             instance.GrabNearbyItem();
-        }
-        else {
+        else
             instance.DropCurrentItem();
-        }
     }
 
     public static void UseHeldItem(this HoarderBugAI instance) {
@@ -35,28 +32,20 @@ public static class HoardingBugController {
     }
 
     public static void GrabNearbyItem(this HoarderBugAI instance) {
-        if (instance.heldItem == null) return;
+        if (instance.heldItem != null) return;
         GrabbableObject? item = instance.FindNearbyItem();
-        if (item != null) {
-            instance.GrabItem(item);
-        }
+        if (item != null) instance.GrabItem(item);
     }
 
     public static void GrabItem(this HoarderBugAI instance, GrabbableObject item) {
-        if(item == null) return;
-        if(instance.heldItem != null) return;
+        if (item == null) return;
+        if (instance.heldItem != null) return;
         if (item.TryGetComponent(out NetworkObject netItem)) {
             instance.SwitchToBehaviourServerRpc(1);
             _ = instance.Reflect().InvokeInternalMethod("GrabItem", netItem);
             _ = instance.Reflect().SetInternalField("sendingGrabOrDropRPC", true);
             instance.GrabItemServerRpc(netItem);
         }
-    }
-
-    public static void GrabTargetItemIfClose(this HoarderBugAI instance, GrabbableObject item) {
-        if (instance.heldItem != null) return;
-        instance.targetItem = item;
-        _ = instance.Reflect().InvokeInternalMethod("GrabTargetItemIfClose");
     }
 
     public static void DropCurrentItem(this HoarderBugAI instance) {
