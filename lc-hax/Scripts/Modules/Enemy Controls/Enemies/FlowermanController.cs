@@ -1,7 +1,5 @@
 public static class FlowermanController {
-
     public static void UseSecondarySkill(this FlowermanAI instance) {
-        if (instance == null) return;
         instance.SetState(FlowerMan.Stand);
         if (instance.currentBehaviourStateIndex != (int)FlowerMan.Stand) {
             instance.SwitchToBehaviourServerRpc((int)FlowerMan.Stand);
@@ -9,35 +7,30 @@ public static class FlowermanController {
     }
 
     public static void ReleaseSecondarySkill(this FlowermanAI instance) {
-        if (instance == null) return;
         instance.SetState(FlowerMan.Default);
     }
 
     public static void UsePrimarySkill(this FlowermanAI instance) {
-        if (instance == null) return;
-        if (instance.carryingPlayerBody) {
-            _ = instance.Reflect().InvokeInternalMethod("DropPlayerBody");
-            instance.DropPlayerBodyServerRpc();
-        }
+        if (!instance.carryingPlayerBody) return;
+        _ = instance.Reflect().InvokeInternalMethod("DropPlayerBody");
+        instance.DropPlayerBodyServerRpc();
     }
 
     public static bool CanMove(this FlowermanAI instance) {
-        return instance == null || !instance.inSpecialAnimation;
+        return !instance.inSpecialAnimation;
     }
-
 
     public static string GetPrimarySkillName(this FlowermanAI instance) {
         return instance.carryingPlayerBody ? "Drop body" : "";
     }
 
     public static void SetState(this FlowermanAI instance, FlowerMan state) {
-        if (instance == null) return;
-        if (!instance.IsInState(state))
-            instance.SwitchToBehaviourServerRpc((int)state);
+        if (instance.IsInState(state)) return;
+        instance.SwitchToBehaviourServerRpc((int)state);
     }
 
     public static bool IsInState(this FlowermanAI instance, FlowerMan state) {
-        return instance != null && instance.currentBehaviourStateIndex == (int)state;
+        return instance.currentBehaviourStateIndex == (int)state;
     }
 
     public enum FlowerMan {

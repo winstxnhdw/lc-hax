@@ -1,5 +1,4 @@
 public static class CentipedeController {
-
     public static void UsePrimarySkill(this CentipedeAI instance) {
         if (instance == null) return;
         if (instance.currentBehaviourStateIndex != 1) return;
@@ -39,5 +38,4 @@ public static class CentipedeController {
     public static string GetSecondarySkillName(this CentipedeAI _) {
         return "Attach to ceiling";
     }
-
 }
