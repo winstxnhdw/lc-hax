@@ -326,6 +326,7 @@ public sealed class PossessionMod : MonoBehaviour {
                 ((PufferAI)this.EnemyToPossess).UsePrimarySkill();
                 break;
             case EnemyIdentity.Baboon:
+                ((BaboonBirdAI)this.EnemyToPossess).UsePrimarySkill();
                 break;
             case EnemyIdentity.ForestGiant:
                 break;
@@ -474,7 +475,7 @@ public sealed class PossessionMod : MonoBehaviour {
             case EnemyIdentity.Puffer:
                 return ((PufferAI)this.EnemyToPossess).GetPrimarySkillName();
             case EnemyIdentity.Baboon:
-                break;
+                return ((BaboonBirdAI)this.EnemyToPossess).GetPrimarySkillName();
             case EnemyIdentity.ForestGiant:
                 break;
             case EnemyIdentity.Masked:

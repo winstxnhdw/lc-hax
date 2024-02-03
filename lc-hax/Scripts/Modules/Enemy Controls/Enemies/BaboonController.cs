@@ -1,13 +1,16 @@
 using Hax;
 using Unity.Netcode;
+using UnityEngine;
 
 public static class BaboonController {
-    public static void UseSecondarySkill(this BaboonBirdAI instance) {
+
+    public static void UsePrimarySkill(this BaboonBirdAI instance) {
         if (instance.heldScrap == null) {
             instance.GrabNearbyItem();
         }
-
-        else {
+    }
+    public static void UseSecondarySkill(this BaboonBirdAI instance) {
+        if (instance.heldScrap != null) {
             instance.DropCurrentItem();
         }
     }
@@ -33,8 +36,11 @@ public static class BaboonController {
     public static void OnEnemyDeath(this BaboonBirdAI instance) {
         instance.DropCurrentItem();
     }
+    public static string GetPrimarySkillName(this BaboonBirdAI instance) {
+        return instance == null ? "" : (instance.heldScrap != null) ? "" : "Grab Item";
+    }
 
     public static string GetSecondarySkillName(this BaboonBirdAI instance) {
-        return instance.heldScrap is null ? "Grab item" : "Drop item";
+        return instance.heldScrap is null ? "" : "Drop item";
     }
 }
