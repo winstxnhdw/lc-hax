@@ -1,0 +1,19 @@
+public enum EnemyIdentity {
+    Baboon,
+    Centipede,
+    Flowerman,
+    ForestGiant,
+    HoarderBug,
+    Jester,
+    Masked,
+    MouthDog,
+    Nutcracker,
+    Puffer,
+    Sandworm,
+    Springman,
+    Blob,
+    ElectricBees,
+    Thumper,
+    Default,
+    None
+}
