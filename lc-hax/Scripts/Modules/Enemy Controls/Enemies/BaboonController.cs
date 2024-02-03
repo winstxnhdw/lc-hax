@@ -7,7 +7,11 @@ public static class BaboonController {
         if (instance.heldScrap == null) {
             instance.GrabNearbyItem();
         }
+        else {
+            instance.heldScrap.InteractWithProp(true);
+        }
     }
+
     public static void UseSecondarySkill(this BaboonBirdAI instance) {
         if (instance.heldScrap != null) {
             instance.DropCurrentItem();
