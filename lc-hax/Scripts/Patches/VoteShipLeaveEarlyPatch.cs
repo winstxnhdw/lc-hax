@@ -10,8 +10,7 @@ class VoteShipLeaveEarlyPatch {
     static void BlockVoteEarlyHud(ref float ___holdButtonToEndGameEarlyHoldTime, ref UnityEngine.UI.Image ___holdButtonToEndGameEarlyMeter) {
         if (PossessionMod.Instance.IsPossessed) {
             ___holdButtonToEndGameEarlyHoldTime = 0.0f;
-            if (___holdButtonToEndGameEarlyMeter != null)
-                ___holdButtonToEndGameEarlyMeter.gameObject.SetActive(false);
+            ___holdButtonToEndGameEarlyMeter?.gameObject.SetActive(false);
         }
     }
 
