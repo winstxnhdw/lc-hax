@@ -6,7 +6,7 @@ using HarmonyLib;
 class VoteShipLeaveEarlyPatch {
 
     [HarmonyPatch(typeof(HUDManager), "Update")]
-    [HarmonyPostfix]
+    [HarmonyPrefix]
     static void BlockVoteEarlyHud(ref float ___holdButtonToEndGameEarlyHoldTime, ref UnityEngine.UI.Image ___holdButtonToEndGameEarlyMeter) {
         if (PossessionMod.Instance == null) return;
         if (PossessionMod.Instance.IsPossessed) {
@@ -16,7 +16,7 @@ class VoteShipLeaveEarlyPatch {
     }
 
     [HarmonyPatch(typeof(TimeOfDay), nameof(TimeOfDay.VoteShipToLeaveEarly))]
-    [HarmonyPostfix]
+    [HarmonyPrefix]
     static bool BlockVoteEarlyRPC() {
         return PossessionMod.Instance == null ? true : !PossessionMod.Instance.IsPossessed;
     }
