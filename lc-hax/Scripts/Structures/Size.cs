@@ -12,11 +12,11 @@ public readonly ref struct Size {
         this.Height = size;
     }
 
-    public static Size operator +(Size a, Size b) => new Size(a.Width + b.Width, a.Height + b.Height);
+    public static Size operator +(Size a, Size b) => new(a.Width + b.Width, a.Height + b.Height);
 
-    public static Size operator -(Size a, Size b) => new Size(a.Width - b.Width, a.Height - b.Height);
+    public static Size operator -(Size a, Size b) => new(a.Width - b.Width, a.Height - b.Height);
 
-    public static Size operator *(Size size, float multiplier) => new Size(size.Width * multiplier, size.Height * multiplier);
+    public static Size operator *(Size size, float multiplier) => new(size.Width * multiplier, size.Height * multiplier);
 
-    public static Size operator /(Size size, float divider) => new Size(size.Width / divider, size.Height / divider);
+    public static Size operator /(Size size, float divider) => new(size.Width / divider, size.Height / divider);
 }
