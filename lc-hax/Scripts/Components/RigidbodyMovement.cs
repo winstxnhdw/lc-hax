@@ -2,16 +2,17 @@ using UnityEngine;
 using GameNetcodeStuff;
 using UnityEngine.InputSystem;
 
-namespace Hax; 
+namespace Hax;
+
 public class RigidbodyMovement : MonoBehaviour {
     // Movement constants
-    const float baseSpeed = 5.0f;
-    const float sprintSpeedMultiplier = 2.8f; // Multiplier for sprinting speed
-    const float walkingSpeed = 0.5f; // Walking speed when left control is held
-    const float sprintDuration = 0.0f; // Duration sprint key must be held for sprinting (adjust as needed)
-    const float jumpForce = 6.5f;
-    const float gravity = 10.0f;
-    const float maxVelocityMagnitude = 12.5f; // Adjust as needed
+    const float BaseSpeed = 5.0f;
+    const float SprintSpeedMultiplier = 2.8f; // Multiplier for sprinting speed
+    const float WalkingSpeed = 0.5f; // Walking speed when left control is held
+    const float SprintDuration = 0.0f; // Duration sprint key must be held for sprinting (adjust as needed)
+    const float JumpForce = 6.5f;
+    const float Gravity = 10.0f;
+    const float MaxVelocityMagnitude = 12.5f; // Adjust as needed
 
     // Components and state variables
     CharacterController CharacterController { get; set; }
@@ -22,9 +23,9 @@ public class RigidbodyMovement : MonoBehaviour {
     Keyboard Keyboard { get; set; } = Keyboard.current;
 
     // Adjust collision box in Awake
-    const float adjustedWidth = 0.0f; // Adjust as needed
-    const float adjustedHeight = 0.0f; // Adjust as needed
-    const float adjustedDepth = -0.5f; // Adjust as needed
+    const float AdjustedWidth = 0.0f; // Adjust as needed
+    const float AdjustedHeight = 0.0f; // Adjust as needed
+    const float AdjustedDepth = -0.5f; // Adjust as needed
 
     public RigidbodyMovement() => this.CharacterController = this.GetComponent<CharacterController>();
 
@@ -37,7 +38,7 @@ public class RigidbodyMovement : MonoBehaviour {
     void Awake() {
         this.CharacterController = this.gameObject.AddComponent<CharacterController>();
 
-        this.transform.localScale = new Vector3(adjustedWidth, this.transform.localScale.y, adjustedDepth);
+        this.transform.localScale = new Vector3(AdjustedWidth, this.transform.localScale.y, AdjustedDepth);
         this.CharacterController.height = 0.0f; // Adjust as needed
         this.CharacterController.center = new Vector3(0f, 0.3f, 0.5f); // Adjust as needed
 
@@ -56,7 +57,7 @@ public class RigidbodyMovement : MonoBehaviour {
         float speedModifier = 1.0f;
 
         if (this.Keyboard.leftCtrlKey.isPressed) {
-            speedModifier = walkingSpeed;
+            speedModifier = WalkingSpeed;
         }
 
         // Calculate movement direction relative to character's forward direction
@@ -66,7 +67,7 @@ public class RigidbodyMovement : MonoBehaviour {
         moveDirection.y = 0.0f; // Remove vertical component from the movement direction
 
         // Apply speed and sprint modifiers
-        moveDirection *= (this.IsSprinting ? baseSpeed * sprintSpeedMultiplier : baseSpeed) * speedModifier;
+        moveDirection *= (this.IsSprinting ? BaseSpeed * SprintSpeedMultiplier : BaseSpeed) * speedModifier;
 
         // Apply gravity
         this.ApplyGravity();
@@ -86,7 +87,7 @@ public class RigidbodyMovement : MonoBehaviour {
                 this.IsSprintHeld = true;
             }
 
-            if (!this.IsSprinting && this.SprintTimer >= sprintDuration) {
+            if (!this.IsSprinting && this.SprintTimer >= SprintDuration) {
                 this.IsSprinting = true;
             }
 
@@ -105,11 +106,11 @@ public class RigidbodyMovement : MonoBehaviour {
     // Apply gravity to the character controller
     void ApplyGravity() {
         Vector3 motion = Vector3.zero;
-        this.VelocityY -= gravity * Time.deltaTime;
+        this.VelocityY -= Gravity * Time.deltaTime;
         motion.y = this.VelocityY;
         _ = this.CharacterController.Move(motion * Time.deltaTime);
     }
 
     // Jumping action
-    void Jump() => this.VelocityY = jumpForce;
+    void Jump() => this.VelocityY = JumpForce;
 }

@@ -8,17 +8,17 @@ public sealed class PhantomMod : MonoBehaviour {
     int CurrentSpectatorIndex { get; set; } = 0;
 
     void OnEnable() {
-        InputListener.onShiftButtonHold += this.HoldShift;
-        InputListener.onEqualsPress += this.TogglePhantom;
-        InputListener.onRightArrowKeyPress += this.LookAtNextPlayer;
-        InputListener.onLeftArrowKeyPress += this.LookAtPreviousPlayer;
+        InputListener.OnShiftButtonHold += this.HoldShift;
+        InputListener.OnEqualsPress += this.TogglePhantom;
+        InputListener.OnRightArrowKeyPress += this.LookAtNextPlayer;
+        InputListener.OnLeftArrowKeyPress += this.LookAtPreviousPlayer;
     }
 
     void OnDisable() {
-        InputListener.onShiftButtonHold -= this.HoldShift;
-        InputListener.onEqualsPress -= this.TogglePhantom;
-        InputListener.onRightArrowKeyPress -= this.LookAtNextPlayer;
-        InputListener.onLeftArrowKeyPress -= this.LookAtPreviousPlayer;
+        InputListener.OnShiftButtonHold -= this.HoldShift;
+        InputListener.OnEqualsPress -= this.TogglePhantom;
+        InputListener.OnRightArrowKeyPress -= this.LookAtNextPlayer;
+        InputListener.OnLeftArrowKeyPress -= this.LookAtPreviousPlayer;
     }
 
     void Update() {

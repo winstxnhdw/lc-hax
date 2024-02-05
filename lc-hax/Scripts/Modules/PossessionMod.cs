@@ -41,12 +41,12 @@ public sealed class PossessionMod : MonoBehaviour {
 
     // Subscribes to input events and updates components based on the current state
     void OnEnable() {
-        InputListener.onNPress += this.ToggleNoClip;
-        InputListener.onXPress += this.ToggleRealisticPossession;
-        InputListener.onZPress += this.Unpossess;
-        InputListener.onLeftButtonPress += this.UsePrimarySkill;
-        InputListener.onLeftButtonRelease += this.ReleasePrimarySkill;
-        InputListener.onRightButtonHold += this.OnRightMouseButtonHold;
+        InputListener.OnNPress += this.ToggleNoClip;
+        InputListener.OnXPress += this.ToggleRealisticPossession;
+        InputListener.OnZPress += this.Unpossess;
+        InputListener.OnLeftButtonPress += this.UsePrimarySkill;
+        InputListener.OnLeftButtonRelease += this.ReleasePrimarySkill;
+        InputListener.OnRightButtonHold += this.OnRightMouseButtonHold;
         this.UpdateComponentsOnCurrentState(true);
     }
 
@@ -62,9 +62,9 @@ public sealed class PossessionMod : MonoBehaviour {
 
     // Unsubscribes from input events
     void OnDisable() {
-        InputListener.onNPress -= this.ToggleNoClip;
-        InputListener.onXPress -= this.ToggleRealisticPossession;
-        InputListener.onZPress -= this.Unpossess;
+        InputListener.OnNPress -= this.ToggleNoClip;
+        InputListener.OnXPress -= this.ToggleRealisticPossession;
+        InputListener.OnZPress -= this.Unpossess;
 
         this.UpdateComponentsOnCurrentState(false);
     }

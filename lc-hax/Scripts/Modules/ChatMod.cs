@@ -8,14 +8,14 @@ public sealed class ChatMod : MonoBehaviour {
     int HistoryIndex { get; set; } = -1;
 
     void OnEnable() {
-        InputListener.onUpArrowPress += this.CycleBackInHistory;
-        InputListener.onDownArrowPress += this.CycleForwardInHistory;
+        InputListener.OnUpArrowPress += this.CycleBackInHistory;
+        InputListener.OnDownArrowPress += this.CycleForwardInHistory;
         Chat.onExecuteCommandAttempt += this.OnHistoryAdded;
     }
 
     void OnDisable() {
-        InputListener.onUpArrowPress -= this.CycleBackInHistory;
-        InputListener.onDownArrowPress -= this.CycleForwardInHistory;
+        InputListener.OnUpArrowPress -= this.CycleBackInHistory;
+        InputListener.OnDownArrowPress -= this.CycleForwardInHistory;
         Chat.onExecuteCommandAttempt -= this.OnHistoryAdded;
     }
 
