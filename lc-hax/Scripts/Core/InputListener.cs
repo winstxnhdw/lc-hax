@@ -26,7 +26,6 @@ public class InputListener : MonoBehaviour {
     public static event Action? OnDownArrowPress;
     public static event Action? OnF4Press;
     public static event Action? OnF5Press;
-    public static event Action<bool>? OnLeftButtonHold;
     public static event Action<bool>? OnRightButtonHold;
 
     (Func<bool>, Action)[] InputActions { get; } = [
@@ -56,7 +55,6 @@ public class InputListener : MonoBehaviour {
         InputListener.OnFButtonHold?.Invoke(Keyboard.current[Key.F].isPressed);
         InputListener.OnRButtonHold?.Invoke(Keyboard.current[Key.R].isPressed);
         InputListener.OnEButtonHold?.Invoke(Keyboard.current[Key.E].isPressed);
-        InputListener.OnLeftButtonHold?.Invoke(Mouse.current.leftButton.isPressed);
         InputListener.OnRightButtonHold?.Invoke(Mouse.current.rightButton.isPressed);
 
         foreach ((Func<bool> keyPressed, Action eventAction) in this.InputActions) {
