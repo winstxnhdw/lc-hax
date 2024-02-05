@@ -12,9 +12,7 @@ public static partial class Helper {
         );
     }
 
-    public static void ReturnUnlockable(Unlockable unlockable) {
-        Helper.StartOfRound?.ReturnUnlockableFromStorageServerRpc(unchecked((int)unlockable));
-    }
+    public static void ReturnUnlockable(Unlockable unlockable) => Helper.StartOfRound?.ReturnUnlockableFromStorageServerRpc(unchecked((int)unlockable));
 
     public static PlaceableShipObject? GetUnlockable(Unlockable unlockable) =>
         Helper.FindObjects<PlaceableShipObject>()

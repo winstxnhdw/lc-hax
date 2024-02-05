@@ -20,9 +20,7 @@ public class KeyboardMovement : MonoBehaviour {
         this.Move(direction);
     }
 
-    void UpdateSprintMultiplier(Keyboard keyboard) {
-        this.SprintMultiplier = keyboard.shiftKey.IsPressed() ? Mathf.Min(this.SprintMultiplier + (5 * Time.deltaTime), 5) : 1;
-    }
+    void UpdateSprintMultiplier(Keyboard keyboard) => this.SprintMultiplier = keyboard.shiftKey.IsPressed() ? Mathf.Min(this.SprintMultiplier + (5 * Time.deltaTime), 5) : 1;
 
     void Move(Vector3 direction) {
         Vector3 translatedDirection =

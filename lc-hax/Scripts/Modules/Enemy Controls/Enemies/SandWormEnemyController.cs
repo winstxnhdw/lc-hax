@@ -5,11 +5,7 @@ public static class SandWormController {
         instance.StartEmergeAnimation();
     }
 
-    public static string GetSecondarySkillName(this SandWormAI _) {
-        return "Emerge";
-    }
+    public static string GetSecondarySkillName(this SandWormAI _) => "Emerge";
 
-    public static bool IsEmerged(this SandWormAI instance) {
-        return instance.inEmergingState || instance.emerged;
-    }
+    public static bool IsEmerged(this SandWormAI instance) => instance.inEmergingState || instance.emerged;
 }

@@ -17,8 +17,6 @@ class VoteShipLeaveEarlyPatch {
 
     [HarmonyPatch(typeof(TimeOfDay), nameof(TimeOfDay.VoteShipToLeaveEarly))]
     [HarmonyPrefix]
-    static bool BlockVoteEarlyRPC() {
-        return PossessionMod.Instance == null || !PossessionMod.Instance.IsPossessed;
-    }
+    static bool BlockVoteEarlyRPC() => PossessionMod.Instance == null || !PossessionMod.Instance.IsPossessed;
 
 }

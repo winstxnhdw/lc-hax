@@ -15,26 +15,18 @@ public static class JesterController {
         instance.SetState(JesterState.PopOut);
     }
 
-    public static string GetPrimarySkillName(this JesterAI _) {
-        return "Close box";
-    }
+    public static string GetPrimarySkillName(this JesterAI _) => "Close box";
 
-    public static string GetSecondarySkillName(this JesterAI _) {
-        return "(HOLD) Play music";
-    }
+    public static string GetSecondarySkillName(this JesterAI _) => "(HOLD) Play music";
 
-    public static bool CanMove(this JesterAI instance) {
-        return !instance.IsInState(JesterState.Cranking);
-    }
+    public static bool CanMove(this JesterAI instance) => !instance.IsInState(JesterState.Cranking);
 
     public static void SetState(this JesterAI instance, JesterState state) {
         if (instance.IsInState(state)) return;
         instance.SwitchToBehaviourServerRpc((int)state);
     }
 
-    public static bool IsInState(this JesterAI instance, JesterState state) {
-        return instance.currentBehaviourStateIndex == (int)state;
-    }
+    public static bool IsInState(this JesterAI instance, JesterState state) => instance.currentBehaviourStateIndex == (int)state;
 
     public static float initialWalkSpeed;
 

@@ -60,9 +60,7 @@ public static class Chat {
         );
     }
 
-    public static void Clear() {
-        Chat.Announce("");
-    }
+    public static void Clear() => Chat.Announce("");
 
     public static void Print(string name, string? message, bool isSystem = false) {
         if (string.IsNullOrWhiteSpace(message) || Helper.HUDManager is not HUDManager hudManager) return;
@@ -77,9 +75,7 @@ public static class Chat {
         }
     }
 
-    public static void Print(string? message) {
-        Chat.Print("SYSTEM", message, true);
-    }
+    public static void Print(string? message) => Chat.Print("SYSTEM", message, true);
 
     public static void ExecuteCommand(string command) {
         Chat.Print("USER", command);

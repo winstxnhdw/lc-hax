@@ -13,12 +13,8 @@ public static class CentipedeController {
         instance.SwitchToBehaviourServerRpc(2);
     }
 
-    public static void RaycastToCeiling(this CentipedeAI instance) {
-        _ = instance.Reflect().InvokeInternalMethod("RaycastToCeiling");
-    }
-    public static bool CanMove(this CentipedeAI instance) {
-        return instance == null || !instance.IsClingingToSomething();
-    }
+    public static void RaycastToCeiling(this CentipedeAI instance) => _ = instance.Reflect().InvokeInternalMethod("RaycastToCeiling");
+    public static bool CanMove(this CentipedeAI instance) => instance == null || !instance.IsClingingToSomething();
 
     public static bool IsClingingToSomething(this CentipedeAI instance) {
         Reflector centipedeReflector = instance.Reflect();
@@ -31,11 +27,7 @@ public static class CentipedeController {
                || centipedeReflector.GetInternalField<bool>("inDroppingOffPlayerAnim");
     }
 
-    public static string GetPrimarySkillName(this CentipedeAI _) {
-        return "Drop";
-    }
+    public static string GetPrimarySkillName(this CentipedeAI _) => "Drop";
 
-    public static string GetSecondarySkillName(this CentipedeAI _) {
-        return "Attach to ceiling";
-    }
+    public static string GetSecondarySkillName(this CentipedeAI _) => "Attach to ceiling";
 }

@@ -102,9 +102,7 @@ public sealed class PossessionMod : MonoBehaviour {
     }
 
     // Updates position and rotation of possessed enemy
-    void Update() {
-        _ = this.StartCoroutine(this.EndOfFrameCoroutine());
-    }
+    void Update() => _ = this.StartCoroutine(this.EndOfFrameCoroutine());
 
     // Coroutine for updating at end of frame
     IEnumerator EndOfFrameCoroutine() {
@@ -267,9 +265,7 @@ public sealed class PossessionMod : MonoBehaviour {
     }
 
     // Disables/enables colliders of the possessed enemy
-    void SetEnemyColliders(EnemyAI enemy, bool enabled) {
-        enemy.GetComponentsInChildren<Collider>().ForEach(collider => collider.enabled = enabled);
-    }
+    void SetEnemyColliders(EnemyAI enemy, bool enabled) => enemy.GetComponentsInChildren<Collider>().ForEach(collider => collider.enabled = enabled);
 
     // Possesses the specified enemy
     public void Possess(EnemyAI enemy) {

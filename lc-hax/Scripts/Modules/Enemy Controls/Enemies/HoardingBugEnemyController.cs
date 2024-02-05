@@ -57,11 +57,7 @@ public static class HoardingBugController {
             ]);
     }
 
-    public static string GetPrimarySkillName(this HoarderBugAI instance) {
-        return instance == null ? "" : (instance.heldItem != null) ? "Use item" : "Grab Item";
-    }
+    public static string GetPrimarySkillName(this HoarderBugAI instance) => instance == null ? "" : (instance.heldItem != null) ? "Use item" : "Grab Item";
 
-    public static string GetSecondarySkillName(this HoarderBugAI instance) {
-        return instance.heldItem == null ? "" : "Drop item";
-    }
+    public static string GetSecondarySkillName(this HoarderBugAI instance) => instance.heldItem == null ? "" : "Drop item";
 }

@@ -9,22 +9,16 @@ public static class PufferController {
         instance.ShakeTailServerRpc();
     }
 
-    public static string GetPrimarySkillName(this PufferAI _) {
-        return "Stomp";
-    }
+    public static string GetPrimarySkillName(this PufferAI _) => "Stomp";
 
-    public static string GetSecondarySkillName(this PufferAI _) {
-        return "Smoke";
-    }
+    public static string GetSecondarySkillName(this PufferAI _) => "Smoke";
 
     public static void SetState(this PufferAI instance, PufferState state) {
         if (instance.IsInState(state)) return;
         instance.SwitchToBehaviourServerRpc((int)state);
     }
 
-    public static bool IsInState(this PufferAI instance, PufferState state) {
-        return instance != null && instance.currentBehaviourStateIndex == (int)state;
-    }
+    public static bool IsInState(this PufferAI instance, PufferState state) => instance != null && instance.currentBehaviourStateIndex == (int)state;
 
     public enum PufferState {
         Default = 0,

@@ -41,14 +41,8 @@ public static class BaboonController {
         }
     }
 
-    public static void OnEnemyDeath(this BaboonBirdAI instance) {
-        instance.DropCurrentItem();
-    }
-    public static string GetPrimarySkillName(this BaboonBirdAI instance) {
-        return instance == null ? "" : (instance.heldScrap != null) ? "" : "Grab Item";
-    }
+    public static void OnEnemyDeath(this BaboonBirdAI instance) => instance.DropCurrentItem();
+    public static string GetPrimarySkillName(this BaboonBirdAI instance) => instance == null ? "" : (instance.heldScrap != null) ? "" : "Grab Item";
 
-    public static string GetSecondarySkillName(this BaboonBirdAI instance) {
-        return instance.heldScrap is null ? "" : "Drop item";
-    }
+    public static string GetSecondarySkillName(this BaboonBirdAI instance) => instance.heldScrap is null ? "" : "Drop item";
 }

@@ -45,7 +45,5 @@ public sealed class ChatMod : MonoBehaviour {
         hudManager.chatTextField.caretPosition = hudManager.chatTextField.text.Length;
     }
 
-    void Update() {
-        this.HistoryIndex = Helper.LocalPlayer?.isTypingChat is true ? this.HistoryIndex : -1;
-    }
+    void Update() => this.HistoryIndex = Helper.LocalPlayer?.isTypingChat is true ? this.HistoryIndex : -1;
 }
