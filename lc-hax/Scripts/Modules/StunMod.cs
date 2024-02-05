@@ -5,12 +5,12 @@ public sealed class StunMod : MonoBehaviour {
     Collider[] Colliders { get; set; } = new Collider[100];
     RaycastHit[] RaycastHits { get; set; } = new RaycastHit[100];
 
-    void OnEnable() => InputListener.onLeftButtonPress += this.Stun;
-    O
-    void OnDisable() => InputListener.onLeftButtonPress -= this.Stun;
+    void OnEnable() => InputListener.OnLeftButtonPress += this.Stun;
+    void OnDisable() => InputListener.OnLeftButtonPress -= this.Stun;
 
-    bool IsHoldingADefensiveWeapon() => Helper.LocalPlayer?.currentlyHeldObjectServer.Unfake()?.itemProperties.isDefensiveWeapon is true;
-    O
+    bool IsHoldingADefensiveWeapon() =>
+        Helper.LocalPlayer?.currentlyHeldObjectServer.Unfake()?.itemProperties.isDefensiveWeapon is true;
+
     void StunHitJam(Collider collider) {
         if (collider.TryGetComponent(out EnemyAICollisionDetect enemy)) {
             if (Setting.EnableStunOnLeftClick) enemy.mainScript.SetEnemyStunned(true, 5.0f);
