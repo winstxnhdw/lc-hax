@@ -1,8 +1,26 @@
+using Hax;
+
+enum MouthDog {
+    ROAMING = 0,
+    SUSPICIOUS = 1,
+    CHASE = 2,
+    LUNGE = 3
+}
+
 internal class EyelessDogController : IEnemyController<MouthDogAI> {
-    internal void UseSecondarySkill(MouthDogAI enemyInstance) {
-        if (enemyInstance.currentBehaviourStateIndex is 2) return;
-        enemyInstance.SwitchToBehaviourServerRpc(2);
+
+    public void OnMovement(MouthDogAI enemyInstance, bool isMoving, bool isSprinting) {
+        if (!isSprinting) {
+            if (!isMoving) return;
+            enemyInstance.SetBehaviourState(MouthDog.ROAMING);
+        }
+
+        else {
+            enemyInstance.SetBehaviourState(MouthDog.CHASE);
+        }
     }
 
-    internal string GetSecondarySkillName(MouthDogAI _) => "Lunge";
+    public void UseSecondarySkill(MouthDogAI enemyInstance) => enemyInstance.SetBehaviourState(MouthDog.LUNGE);
+
+    public CharArray GetSecondarySkillName(MouthDogAI _) => "Lunge";
 }

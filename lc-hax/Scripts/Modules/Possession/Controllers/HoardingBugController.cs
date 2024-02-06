@@ -25,7 +25,7 @@ internal class HoardingBugController : IEnemyController<HoarderBugAI> {
         }
     }
 
-    internal void UsePrimarySkill(HoarderBugAI enemyInstance) {
+    public void UsePrimarySkill(HoarderBugAI enemyInstance) {
         if (enemyInstance.heldItem is null && enemyInstance.FindNearbyItem() is GrabbableObject grabbable) {
             this.GrabItem(enemyInstance, grabbable);
         }
@@ -35,7 +35,7 @@ internal class HoardingBugController : IEnemyController<HoarderBugAI> {
         }
     }
 
-    internal void UseSecondarySkill(HoarderBugAI enemyInstance) {
+    public void UseSecondarySkill(HoarderBugAI enemyInstance) {
         if (enemyInstance.heldItem.itemGrabbableObject is not GrabbableObject grabbable) return;
         if (!grabbable.TryGetComponent(out NetworkObject networkObject)) return;
 
@@ -46,7 +46,7 @@ internal class HoardingBugController : IEnemyController<HoarderBugAI> {
         );
     }
 
-    internal string GetPrimarySkillName(HoarderBugAI enemyInstance) => enemyInstance.heldItem is not null ? "Use item" : "Grab Item";
+    public CharArray GetPrimarySkillName(HoarderBugAI enemyInstance) => enemyInstance.heldItem is not null ? "Use item" : "Grab Item";
 
-    internal string GetSecondarySkillName(HoarderBugAI enemyInstance) => enemyInstance.heldItem is null ? "" : "Drop item";
+    public CharArray GetSecondarySkillName(HoarderBugAI enemyInstance) => enemyInstance.heldItem is null ? "" : "Drop item";
 }
