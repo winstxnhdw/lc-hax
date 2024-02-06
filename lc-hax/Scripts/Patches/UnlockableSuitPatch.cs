@@ -2,7 +2,7 @@ using HarmonyLib;
 using Hax;
 
 [HarmonyPatch(typeof(UnlockableSuit))]
-public static class UnlockableSuitPatch {
+internal static class UnlockableSuitPatch {
     private static bool overrideSuit = false;
     private static int customSuitID = -1;
     private static int originalSuitID = -1;

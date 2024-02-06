@@ -260,6 +260,19 @@ public sealed class PossessionMod : MonoBehaviour {
             EnemyIdentity.Flowerman => ((FlowermanAI)this.EnemyToPossess).CanMove(),
             EnemyIdentity.ForestGiant => ((ForestGiantAI)this.EnemyToPossess).CanMove(),
             EnemyIdentity.Jester => ((JesterAI)this.EnemyToPossess).CanMove(),
+            EnemyIdentity.Baboon => throw new System.NotImplementedException(),
+            EnemyIdentity.HoarderBug => throw new System.NotImplementedException(),
+            EnemyIdentity.Masked => throw new System.NotImplementedException(),
+            EnemyIdentity.MouthDog => throw new System.NotImplementedException(),
+            EnemyIdentity.Nutcracker => throw new System.NotImplementedException(),
+            EnemyIdentity.Puffer => throw new System.NotImplementedException(),
+            EnemyIdentity.Sandworm => throw new System.NotImplementedException(),
+            EnemyIdentity.Springman => throw new System.NotImplementedException(),
+            EnemyIdentity.Blob => throw new System.NotImplementedException(),
+            EnemyIdentity.ElectricBees => throw new System.NotImplementedException(),
+            EnemyIdentity.Thumper => throw new System.NotImplementedException(),
+            EnemyIdentity.Default => throw new System.NotImplementedException(),
+            EnemyIdentity.None => throw new System.NotImplementedException(),
             _ => true,
         };
     }
@@ -285,7 +298,7 @@ public sealed class PossessionMod : MonoBehaviour {
         }
 
         bool canMove = this.CanMoveEnemy();
-        this.HandleEnemyMovements(rigidbodyKeyboard.IsMoving,rigidbodyKeyboard.IsSprinting, canMove);
+        this.HandleEnemyMovements(rigidbodyKeyboard.IsMoving, rigidbodyKeyboard.IsSprinting, canMove);
         if (canMove) {
             camera.transform.position = this.transform.position + (Vector3.up * 3f) - (enemy.transform.forward * 3f);
             camera.transform.rotation = this.transform.rotation;
@@ -332,7 +345,7 @@ public sealed class PossessionMod : MonoBehaviour {
         this.EnemyToPossess = enemy;
         this.FirstUpdate = true;
         this.enemyIdentity = this.IdentifyEnemy(enemy);
-        if(enemy.TryGetComponent(out Animator anim))
+        if (enemy.TryGetComponent(out Animator anim))
             this.EnemyAnimator = anim;
 
         Chat.Print($"Possessing {this.enemyIdentity}");

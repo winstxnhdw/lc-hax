@@ -1,4 +1,3 @@
-using System.Linq;
 using GameNetcodeStuff;
 using HarmonyLib;
 using Hax;
@@ -39,10 +38,8 @@ public class GodModePatch {
             if (Setting.DisableFallDamage && causeOfDeath == CauseOfDeath.Gravity) return false;
         }
         else {
-            if (Helper.HUDManager != null) {
-                Helper.HUDManager.DisplayTip($"{__instance.playerUsername} Died!",
+            Helper.HUDManager?.DisplayTip($"{__instance.playerUsername} Died!",
                     $"{__instance.playerUsername} Died of {causeOfDeath}!");
-            }
         }
 
         return true;
