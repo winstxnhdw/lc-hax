@@ -6,11 +6,11 @@ using UnityEngine.UI;
 [HarmonyPatch]
 class VoteShipLeaveEarlyPatch {
     [HarmonyPatch(typeof(HUDManager), "Update")]
-    static void Prefix(ref float ___holdButtonToEndGameEarlyHoldTime, ref Image ___holdButtonToEndGameEarlyMeter) {
+    static void Prefix(HUDManager __instance, ref float ___holdButtonToEndGameEarlyHoldTime) {
         if (PossessionMod.Instance?.IsPossessed is false) return;
 
         ___holdButtonToEndGameEarlyHoldTime = 0.0f;
-        ___holdButtonToEndGameEarlyMeter?.gameObject.SetActive(false);
+        __instance.holdButtonToEndGameEarlyMeter?.gameObject.SetActive(false);
     }
 
     [HarmonyPatch(typeof(TimeOfDay), nameof(TimeOfDay.VoteShipToLeaveEarly))]
