@@ -7,7 +7,7 @@ using Hax;
 [HarmonyPatch(typeof(EnemyAI))]
 class UntargetableEnemyPatch {
     [HarmonyPatch(nameof(EnemyAI.PlayerIsTargetable))]
-    internal static bool Prefix(PlayerControllerB playerScript, ref bool __result) {
+    static bool Prefix(PlayerControllerB playerScript, ref bool __result) {
         if (!Setting.EnableUntargetable) return true;
         if (Helper.LocalPlayer?.actualClientId != playerScript.actualClientId) return true;
 
@@ -16,7 +16,7 @@ class UntargetableEnemyPatch {
     }
 
     [HarmonyPatch(nameof(EnemyAI.Update))]
-    internal static bool Prefix(EnemyAI __instance) {
+    static bool Prefix(EnemyAI __instance) {
         if (!Setting.EnableUntargetable) return true;
         if (Helper.LocalPlayer?.actualClientId != __instance.targetPlayer?.actualClientId) return true;
 
