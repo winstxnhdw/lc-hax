@@ -112,7 +112,7 @@ internal sealed class PossessionMod : MonoBehaviour {
         }
     }
 
-    void HandleEnemyMovements(IController controller, EnemyAI enemy) => controller.OnMovement(enemy);
+    void HandleEnemyMovements(IController controller, EnemyAI enemy, bool isMoving, bool isSprinting) => controller.OnMovement(enemy, isMoving, isSprinting);
 
     void EnemyUpdate(IController controller, EnemyAI enemy) => controller.Update(enemy);
 
@@ -145,7 +145,7 @@ internal sealed class PossessionMod : MonoBehaviour {
 
         else if (controller.IsAbleToMove(enemy)) {
             this.UpdateEnemyPositionToHere(enemy);
-            this.HandleEnemyMovements(controller, enemy);
+            this.HandleEnemyMovements(controller, enemy, rigidbodyKeyboard.IsMoving, rigidbodyKeyboard.IsSprinting);
             this.EnemyUpdate(controller, enemy);
         }
 

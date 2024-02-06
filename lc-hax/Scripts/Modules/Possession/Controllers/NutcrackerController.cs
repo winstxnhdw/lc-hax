@@ -6,7 +6,7 @@ enum NutCrackerState {
 }
 
 internal class NutcrackerController : IEnemyController<NutcrackerEnemyAI> {
-    internal void OnMovement(NutcrackerEnemyAI enemyInstance) => enemyInstance.SetBehaviourState(NutCrackerState.WALKING);
+    internal void OnMovement(NutcrackerEnemyAI enemyInstance, bool isMoving, bool isSprinting) => enemyInstance.SetBehaviourState(NutCrackerState.WALKING);
 
     internal void UsePrimarySkill(NutcrackerEnemyAI enemyInstance) {
         if (enemyInstance.gun is not ShotgunItem shotgun) return;
