@@ -12,9 +12,9 @@ internal class BrackenController : IEnemyController<FlowermanAI> {
         if (!enemyInstance.carryingPlayerBody) {
             enemyInstance.SetBehaviourState(FlowerMan.ANGER);
         }
-        else 
+        else
             _ = enemyInstance.Reflect().InvokeInternalMethod("DropPlayerBody");
-            enemyInstance.DropPlayerBodyServerRpc();
+        enemyInstance.DropPlayerBodyServerRpc();
     }
 
     internal void UseSecondarySkill(FlowermanAI enemyInstance) => enemyInstance.SetBehaviourState(FlowerMan.STAND);

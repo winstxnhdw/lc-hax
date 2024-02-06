@@ -16,7 +16,7 @@ internal class EyelessDogController : IEnemyController<MouthDogAI> {
             }
         }
         else {
-            enemyInstance.SetBehaviourState(MouthDog.ChaseMode);    
+            enemyInstance.SetBehaviourState(MouthDog.ChaseMode);
         }
     }
 
