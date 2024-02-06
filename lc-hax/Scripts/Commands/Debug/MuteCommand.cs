@@ -5,7 +5,7 @@ using Hax;
 using UnityEngine;
 
 [DebugCommand("/mute")]
-public class MuteCommand : ICommand {
+internal class MuteCommand : ICommand {
     static Dictionary<string, TransientBehaviour> MutedPlayers { get; } = [];
 
     bool MutedPlayerHasMessaged(string playerUsername) =>

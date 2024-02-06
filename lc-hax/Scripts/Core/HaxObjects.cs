@@ -1,14 +1,14 @@
 using UnityEngine;
 using UnityEngine.Rendering.HighDefinition;
 
-public class HaxObjects : MonoBehaviour {
-    public static HaxObjects? Instance { get; private set; }
+internal class HaxObjects : MonoBehaviour {
+    internal static HaxObjects? Instance { get; private set; }
 
-    public SingleObjectPool<DepositItemsDesk>? DepositItemsDesk { get; private set; }
-    public MultiObjectPool<ShipTeleporter>? ShipTeleporters { get; private set; }
-    public MultiObjectPool<LocalVolumetricFog>? LocalVolumetricFogs { get; private set; }
-    public MultiObjectPool<SteamValveHazard>? SteamValves { get; private set; }
-    public MultiObjectPool<InteractTrigger>? InteractTriggers { get; private set; }
+    internal SingleObjectPool<DepositItemsDesk>? DepositItemsDesk { get; private set; }
+    internal MultiObjectPool<ShipTeleporter>? ShipTeleporters { get; private set; }
+    internal MultiObjectPool<LocalVolumetricFog>? LocalVolumetricFogs { get; private set; }
+    internal MultiObjectPool<SteamValveHazard>? SteamValves { get; private set; }
+    internal MultiObjectPool<InteractTrigger>? InteractTriggers { get; private set; }
 
     void Awake() {
         this.DepositItemsDesk = new(this, 3.0f);

@@ -2,23 +2,23 @@ using UnityEngine;
 using GameNetcodeStuff;
 using Hax;
 
-public sealed class PhantomMod : MonoBehaviour {
+internal sealed class PhantomMod : MonoBehaviour {
     bool IsShiftHeld { get; set; } = false;
     bool EnabledPossession { get; set; } = false;
     int CurrentSpectatorIndex { get; set; } = 0;
 
     void OnEnable() {
-        InputListener.onShiftButtonHold += this.HoldShift;
-        InputListener.onEqualsPress += this.TogglePhantom;
-        InputListener.onRightArrowKeyPress += this.LookAtNextPlayer;
-        InputListener.onLeftArrowKeyPress += this.LookAtPreviousPlayer;
+        InputListener.OnShiftButtonHold += this.HoldShift;
+        InputListener.OnEqualsPress += this.TogglePhantom;
+        InputListener.OnRightArrowKeyPress += this.LookAtNextPlayer;
+        InputListener.OnLeftArrowKeyPress += this.LookAtPreviousPlayer;
     }
 
     void OnDisable() {
-        InputListener.onShiftButtonHold -= this.HoldShift;
-        InputListener.onEqualsPress -= this.TogglePhantom;
-        InputListener.onRightArrowKeyPress -= this.LookAtNextPlayer;
-        InputListener.onLeftArrowKeyPress -= this.LookAtPreviousPlayer;
+        InputListener.OnShiftButtonHold -= this.HoldShift;
+        InputListener.OnEqualsPress -= this.TogglePhantom;
+        InputListener.OnRightArrowKeyPress -= this.LookAtNextPlayer;
+        InputListener.OnLeftArrowKeyPress -= this.LookAtPreviousPlayer;
     }
 
     void Update() {

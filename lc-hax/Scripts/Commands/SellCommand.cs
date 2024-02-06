@@ -5,7 +5,7 @@ using GameNetcodeStuff;
 using Hax;
 
 [Command("/sell")]
-public class SellCommand : ICommand {
+internal class SellCommand : ICommand {
     float CurrentWeight { get; set; } = 0.0f;
 
     bool CanBeSold(GrabbableObject grabbableObject) =>
@@ -91,7 +91,7 @@ public class SellCommand : ICommand {
         Chat.Print($"Remaining scrap value to reach target is {result}!");
     }
 
-    public void Dispose() {
+    internal void Dispose() {
         if (this.CurrentWeight is 0.0f) return;
         if (Helper.LocalPlayer is not PlayerControllerB player) return;
 
