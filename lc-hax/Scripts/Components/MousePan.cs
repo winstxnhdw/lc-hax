@@ -8,22 +8,18 @@ public class MousePan : MonoBehaviour {
     float Pitch { get; set; } = 0.0f;
 
     void OnEnable() {
-        InputListener.onLeftBracketPress += this.DecreaseMouseSensitivity;
-        InputListener.onRightBracketPress += this.IncreaseMouseSensitivity;
+        InputListener.OnLeftBracketPress += this.DecreaseMouseSensitivity;
+        InputListener.OnRightBracketPress += this.IncreaseMouseSensitivity;
     }
 
     void OnDisable() {
-        InputListener.onLeftBracketPress -= this.DecreaseMouseSensitivity;
-        InputListener.onRightBracketPress -= this.IncreaseMouseSensitivity;
+        InputListener.OnLeftBracketPress -= this.DecreaseMouseSensitivity;
+        InputListener.OnRightBracketPress -= this.IncreaseMouseSensitivity;
     }
 
-    void IncreaseMouseSensitivity() {
-        this.Sensitivity += 0.1f;
-    }
+    void IncreaseMouseSensitivity() => this.Sensitivity += 0.1f;
 
-    void DecreaseMouseSensitivity() {
-        this.Sensitivity = Mathf.Max(this.Sensitivity - 0.1f, 0.1f);
-    }
+    void DecreaseMouseSensitivity() => this.Sensitivity = Mathf.Max(this.Sensitivity - 0.1f, 0.1f);
 
     void Update() {
         this.Yaw += Mouse.current.delta.x.ReadValue() * this.Sensitivity;

@@ -10,17 +10,17 @@ public sealed class TriggerMod : MonoBehaviour, IEnemyPrompter {
     bool FunnyReviveEnabled { get; set; } = false;
 
     void OnEnable() {
-        InputListener.onMiddleButtonPress += this.Fire;
-        InputListener.onEButtonHold += this.SetUsingInteractRay;
-        InputListener.onRButtonHold += this.SetFunnyReviveEnabled;
-        InputListener.onFButtonHold += this.SetUsingFollowRay;
+        InputListener.OnMiddleButtonPress += this.Fire;
+        InputListener.OnEButtonHold += this.SetUsingInteractRay;
+        InputListener.OnRButtonHold += this.SetFunnyReviveEnabled;
+        InputListener.OnFButtonHold += this.SetUsingFollowRay;
     }
 
     void OnDisable() {
-        InputListener.onMiddleButtonPress -= this.Fire;
-        InputListener.onEButtonHold -= this.SetUsingInteractRay;
-        InputListener.onRButtonHold -= this.SetFunnyReviveEnabled;
-        InputListener.onFButtonHold -= this.SetUsingFollowRay;
+        InputListener.OnMiddleButtonPress -= this.Fire;
+        InputListener.OnEButtonHold -= this.SetUsingInteractRay;
+        InputListener.OnRButtonHold -= this.SetFunnyReviveEnabled;
+        InputListener.OnFButtonHold -= this.SetUsingFollowRay;
     }
 
     void SetUsingInteractRay(bool isHeld) => this.UsingInteractRay = isHeld;
@@ -90,6 +90,11 @@ public sealed class TriggerMod : MonoBehaviour, IEnemyPrompter {
 
             if (collider.TryGetComponent(out DoorLock doorLock)) {
                 doorLock.UnlockDoorSyncWithServer();
+                break;
+            }
+
+            if (collider.TryGetComponent(out GrabbableObject grabbable)) {
+                grabbable.InteractWithProp(true);
                 break;
             }
 

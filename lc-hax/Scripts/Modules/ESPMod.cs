@@ -17,14 +17,14 @@ public class ESPMod : MonoBehaviour {
         GameListener.onGameStart += this.OnGameJoin;
         GameListener.onGameEnd += this.OnGameEnd;
         GameListener.onShipLand += this.InitialiseRenderers;
-        InputListener.onPausePress += this.ToggleESP;
+        InputListener.OnPausePress += this.ToggleESP;
     }
 
     void OnDisable() {
         GameListener.onGameStart -= this.OnGameJoin;
         GameListener.onGameEnd -= this.OnGameEnd;
         GameListener.onShipLand -= this.InitialiseRenderers;
-        InputListener.onPausePress -= this.ToggleESP;
+        InputListener.OnPausePress -= this.ToggleESP;
     }
 
     void OnGUI() {

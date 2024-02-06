@@ -41,9 +41,8 @@ public static partial class Helper {
         Helper.DrawBox(topLeft, new Size(lineWidth, size.Height), colour);
     }
 
-    public static void DrawOutlineBox(Vector2 centrePosition, Size size, float lineWidth) {
+    public static void DrawOutlineBox(Vector2 centrePosition, Size size, float lineWidth) =>
         Helper.DrawOutlineBox(centrePosition, size, lineWidth, Color.white);
-    }
 
     public static void DrawBox(Vector2 position, Size size, Color colour) {
         Color previousCOlour = GUI.color;

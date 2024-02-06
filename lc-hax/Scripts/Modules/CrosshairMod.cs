@@ -25,9 +25,7 @@ public class CrosshairMod : MonoBehaviour {
         GameListener.onGameEnd -= this.ToggleNotInGame;
     }
 
-    void Start() {
-        this.InitialiseCrosshairPositions();
-    }
+    void Start() => this.InitialiseCrosshairPositions();
 
     void OnGUI() {
         if (!this.InGame) return;
