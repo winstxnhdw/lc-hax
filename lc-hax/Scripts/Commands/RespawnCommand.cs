@@ -4,14 +4,15 @@ using UnityEngine;
 
 [Command("/respawn")]
 public class RespawnCommand : ICommand {
-    public void RespawnLocalPlayer(PlayerControllerB localPlayer, StartOfRound startOfRound) {
+    void RespawnLocalPlayer(PlayerControllerB localPlayer, StartOfRound startOfRound) {
         if (Helper.HUDManager is not HUDManager hudManager) return;
         if (Helper.SoundManager is not SoundManager soundManager) return;
 
         startOfRound.allPlayersDead = false;
+        startOfRound.SetPlayerObjectExtrapolate(false);
         localPlayer.ResetPlayerBloodObjects();
-        localPlayer.isClimbingLadder = false;
         localPlayer.ResetZAndXRotation();
+        localPlayer.isClimbingLadder = false;
         localPlayer.thisController.enabled = true;
         localPlayer.health = 100;
         localPlayer.disableLookInput = false;
@@ -21,9 +22,8 @@ public class RespawnCommand : ICommand {
         localPlayer.isInHangarShipRoom = true;
         localPlayer.isInsideFactory = false;
         localPlayer.wasInElevatorLastFrame = false;
-        startOfRound.SetPlayerObjectExtrapolate(false);
-        localPlayer.TeleportPlayer(startOfRound.playerSpawnPositions[0].position, false, 0f, false, true);
         localPlayer.setPositionOfDeadPlayer = false;
+        localPlayer.TeleportPlayer(startOfRound.playerSpawnPositions[0].position, false, 0.0f, false, true);
         localPlayer.DisablePlayerModel(startOfRound.allPlayerObjects[localPlayer.playerClientId], true, true);
 
         if (localPlayer.TryGetComponent(out Light helmetLight)) {
@@ -31,10 +31,8 @@ public class RespawnCommand : ICommand {
         }
 
         localPlayer.Crouch(false);
-        localPlayer.criticallyInjured = false;
-
         localPlayer.playerBodyAnimator?.SetBool("Limp", false);
-
+        localPlayer.criticallyInjured = false;
         localPlayer.bleedingHeavily = false;
         localPlayer.activatingItem = false;
         localPlayer.twoHanded = false;
@@ -45,7 +43,7 @@ public class RespawnCommand : ICommand {
         localPlayer.speakingToWalkieTalkie = false;
         localPlayer.isSinking = false;
         localPlayer.isUnderwater = false;
-        localPlayer.sinkingValue = 0f;
+        localPlayer.sinkingValue = 0.0f;
 
         if (localPlayer.TryGetComponent(out AudioSource statusEffectAudio)) {
             statusEffectAudio.Stop();
@@ -53,7 +51,6 @@ public class RespawnCommand : ICommand {
 
         localPlayer.DisableJetpackControlsLocally();
         localPlayer.health = 100;
-
         localPlayer.mapRadarDotAnimator?.SetBool("dead", false);
 
         if (localPlayer.IsOwner) {
@@ -63,20 +60,21 @@ public class RespawnCommand : ICommand {
 
             localPlayer.hasBegunSpectating = false;
             hudManager.RemoveSpectateUI();
+
             if (hudManager.TryGetComponent(out Animator gameOverAnimator)) {
                 gameOverAnimator.SetTrigger("revive");
             }
 
-            localPlayer.hinderedMultiplier = 1f;
+            localPlayer.hinderedMultiplier = 1.0f;
             localPlayer.isMovementHindered = 0;
             localPlayer.sourcesCausingSinking = 0;
             localPlayer.reverbPreset = startOfRound.shipReverb;
         }
 
-        soundManager.earsRingingTimer = 0f;
+        soundManager.earsRingingTimer = 0.0f;
         localPlayer.voiceMuffledByEnemy = false;
-        soundManager.playerVoicePitchTargets[localPlayer.playerClientId] = 1f;
-        soundManager.SetPlayerPitch(1f, (int)localPlayer.playerClientId);
+        soundManager.playerVoicePitchTargets[localPlayer.playerClientId] = 1.0f;
+        soundManager.SetPlayerPitch(1.0f, localPlayer.PlayerIndex());
 
         if (localPlayer.currentVoiceChatIngameSettings == null) {
             startOfRound.RefreshPlayerVoicePlaybackObjects();
@@ -87,9 +85,8 @@ public class RespawnCommand : ICommand {
                 localPlayer.currentVoiceChatIngameSettings.InitializeComponents();
             }
 
-            if (localPlayer.currentVoiceChatIngameSettings.voiceAudio != null) {
-                if (localPlayer.currentVoiceChatIngameSettings.voiceAudio
-                    .TryGetComponent(out OccludeAudio occludeAudio)) {
+            if (localPlayer.currentVoiceChatIngameSettings.voiceAudio is AudioSource voiceAudio) {
+                if (voiceAudio.TryGetComponent(out OccludeAudio occludeAudio)) {
                     occludeAudio.overridingLowPass = false;
                 }
             }
