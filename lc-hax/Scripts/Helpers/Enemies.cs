@@ -1,6 +1,7 @@
 using GameNetcodeStuff;
 using System;
 using System.Collections.Generic;
+using Unity.Netcode;
 using UnityEngine;
 
 namespace Hax;
@@ -67,16 +68,16 @@ internal static partial class Helper {
     }
 
     internal static GrabbableObject? FindNearbyItem(this EnemyAI instance, float grabRange = 1f) {
-        Collider[] Search = Physics.OverlapSphere(instance.transform.position, grabRange);
-        for (int i = 0; i < Search.Length; i++) {
-            if (Search[i].TryGetComponent(out GrabbableObject item))
-                return item;
+        foreach (Collider collider in Physics.OverlapSphere(instance.transform.position, grabRange)) {
+            if (!collider.TryGetComponent(out GrabbableObject item)) continue;
+            if (!item.TryGetComponent(out NetworkObject _)) continue;
+
+            return item;
         }
 
         return null;
     }
-
-    public static void MouthDogChasePlayer(this MouthDogAI instance, PlayerControllerB player) {
+    internal static void MouthDogChasePlayer(this MouthDogAI instance, PlayerControllerB player) {
         if (instance == null) return;
         if (player == null) return;
         if (instance.currentBehaviourStateIndex is 0 or 1) {
