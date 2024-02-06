@@ -1,3 +1,12 @@
+public enum CentipedeAIState {
+    Searching = 0,
+    CeilingHiding = 1,
+    Chasing = 2,
+    Clinging = 3
+    // Add more states as needed.
+}
+
+
 internal class SnareFleaController : IEnemyController<CentipedeAI> {
     internal bool IsClingingToSomething(CentipedeAI enemyInstance) {
         Reflector centipedeReflector = enemyInstance.Reflect();

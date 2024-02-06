@@ -1,9 +1,10 @@
 
 using Hax;
 
-internal enum PufferState {
-    DEFAULT = 0,
-    HOSTILE = 1,
+public enum PufferState {
+    Idle = 0,
+    Alerted = 1,
+    Hostile = 2
 }
 
 internal class SporeLizardController : IEnemyController<PufferAI> {
