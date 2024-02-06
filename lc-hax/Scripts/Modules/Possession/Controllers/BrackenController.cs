@@ -6,14 +6,12 @@ enum FlowerMan {
     ANGER = 2,
 }
 
-
 internal class BrackenController : IEnemyController<FlowermanAI> {
     internal void UsePrimarySkill(FlowermanAI enemyInstance) {
         if (!enemyInstance.carryingPlayerBody) {
             enemyInstance.SetBehaviourState(FlowerMan.ANGER);
         }
-        else
-            _ = enemyInstance.Reflect().InvokeInternalMethod("DropPlayerBody");
+
         enemyInstance.DropPlayerBodyServerRpc();
     }
 
