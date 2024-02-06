@@ -14,10 +14,12 @@ internal class RigidbodyMovement : MonoBehaviour {
     const float Gravity = 10.0f;
     const float MaxVelocityMagnitude = 12.5f; // Adjust as needed
 
+    // used to sync with the enemy to make sure it plays the correct animation when it is moving
+    public bool IsMoving { get; private set; } = false;
     // Components and state variables
     CharacterController CharacterController { get; set; }
     float VelocityY { get; set; } = 0.0f;
-    bool IsSprinting { get; set; } = false;
+    public bool IsSprinting { get; private set; } = false;
     bool IsSprintHeld { get; set; } = false;
     float SprintTimer { get; set; } = 0.0f;
     Keyboard Keyboard { get; set; } = Keyboard.current;
@@ -52,6 +54,7 @@ internal class RigidbodyMovement : MonoBehaviour {
             this.Keyboard.dKey.ReadValue() - this.Keyboard.aKey.ReadValue(),
             this.Keyboard.wKey.ReadValue() - this.Keyboard.sKey.ReadValue()
         ).normalized;
+        this.IsMoving = moveInput.magnitude > 0;
 
         // Apply speed modifier based on left control key
         float speedModifier = 1.0f;
@@ -71,7 +74,6 @@ internal class RigidbodyMovement : MonoBehaviour {
 
         // Apply gravity
         this.ApplyGravity();
-
         // Attempt to move
         _ = this.CharacterController.Move(moveDirection * Time.deltaTime);
 
