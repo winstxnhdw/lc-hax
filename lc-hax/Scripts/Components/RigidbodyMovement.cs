@@ -16,10 +16,11 @@ internal class RigidbodyMovement : MonoBehaviour {
 
     // used to sync with the enemy to make sure it plays the correct animation when it is moving
     public bool IsMoving { get; private set; } = false;
+    public bool IsSprinting { get; private set; } = false;
+
     // Components and state variables
     CharacterController CharacterController { get; set; }
     float VelocityY { get; set; } = 0.0f;
-    public bool IsSprinting { get; private set; } = false;
     bool IsSprintHeld { get; set; } = false;
     float SprintTimer { get; set; } = 0.0f;
     Keyboard Keyboard { get; set; } = Keyboard.current;
@@ -54,7 +55,8 @@ internal class RigidbodyMovement : MonoBehaviour {
             this.Keyboard.dKey.ReadValue() - this.Keyboard.aKey.ReadValue(),
             this.Keyboard.wKey.ReadValue() - this.Keyboard.sKey.ReadValue()
         ).normalized;
-        this.IsMoving = moveInput.magnitude > 0;
+
+        this.IsMoving = moveInput.magnitude > 0.0f;
 
         // Apply speed modifier based on left control key
         float speedModifier = 1.0f;

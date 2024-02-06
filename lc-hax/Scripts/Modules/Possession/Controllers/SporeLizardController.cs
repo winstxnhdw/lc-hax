@@ -2,19 +2,19 @@
 using Hax;
 
 public enum PufferState {
-    Idle = 0,
-    Alerted = 1,
-    Hostile = 2
+    IDLE = 0,
+    ALERTED = 1,
+    HOSTILE = 2
 }
 
 internal class SporeLizardController : IEnemyController<PufferAI> {
     internal void UsePrimarySkill(PufferAI enemyInstance) {
-        enemyInstance.SetBehaviourState(PufferState.Hostile);
+        enemyInstance.SetBehaviourState(PufferState.HOSTILE);
         enemyInstance.StompServerRpc();
     }
 
     internal void UseSecondarySkill(PufferAI enemyInstance) {
-        enemyInstance.SetBehaviourState(PufferState.Hostile);
+        enemyInstance.SetBehaviourState(PufferState.HOSTILE);
         enemyInstance.ShakeTailServerRpc();
     }
 

@@ -1,9 +1,10 @@
 using Unity.Netcode;
 using Hax;
-enum Baboon {
-    Scouting = 0,
-    ReturningToCamp = 1,
-    FocusingOnThreat = 2,
+
+enum BaboonState {
+    SCOUTING = 0,
+    RETURNING = 1,
+    AGGRESSIVE = 2,
 }
 
 internal class BaboonHawkController : IEnemyController<BaboonBirdAI> {
