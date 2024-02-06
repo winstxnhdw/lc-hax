@@ -2,11 +2,11 @@ using System;
 using UnityEngine;
 using Hax;
 
-public class GameListener : MonoBehaviour {
-    public static event Action? onGameStart;
-    public static event Action? onGameEnd;
-    public static event Action? onShipLand;
-    public static event Action? onShipLeave;
+internal class GameListener : MonoBehaviour {
+    internal static event Action? onGameStart;
+    internal static event Action? onGameEnd;
+    internal static event Action? onShipLand;
+    internal static event Action? onShipLeave;
 
     bool InGame { get; set; } = false;
     bool ShipLand { get; set; } = false;
