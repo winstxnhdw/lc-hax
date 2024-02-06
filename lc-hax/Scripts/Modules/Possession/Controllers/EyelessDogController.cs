@@ -9,7 +9,7 @@ enum MouthDog {
 
 internal class EyelessDogController : IEnemyController<MouthDogAI> {
 
-    internal void OnMovement(MouthDogAI enemyInstance, bool isMoving, bool isSprinting) {
+    public void OnMovement(MouthDogAI enemyInstance, bool isMoving, bool isSprinting) {
         if (!isSprinting) {
             if (!isMoving) return;
             enemyInstance.SetBehaviourState(MouthDog.ROAMING);
@@ -20,7 +20,7 @@ internal class EyelessDogController : IEnemyController<MouthDogAI> {
         }
     }
 
-    internal void UseSecondarySkill(MouthDogAI enemyInstance) => enemyInstance.SetBehaviourState(MouthDog.LUNGE);
+    public void UseSecondarySkill(MouthDogAI enemyInstance) => enemyInstance.SetBehaviourState(MouthDog.LUNGE);
 
-    internal string GetSecondarySkillName(MouthDogAI _) => "Lunge";
+    public CharArray GetSecondarySkillName(MouthDogAI _) => "Lunge";
 }
