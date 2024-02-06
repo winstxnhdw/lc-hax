@@ -20,9 +20,7 @@ internal class EyelessDogController : IEnemyController<MouthDogAI> {
         }
     }
 
-    internal void UseSecondarySkill(MouthDogAI enemyInstance) {
-            enemyInstance.SetBehaviourState(MouthDog.Lunge);
-    }
+    internal void UseSecondarySkill(MouthDogAI enemyInstance) => enemyInstance.SetBehaviourState(MouthDog.Lunge);
 
     internal string GetSecondarySkillName(MouthDogAI _) => "Lunge";
 }
