@@ -1,6 +1,6 @@
+using UnityEngine;
 using GameNetcodeStuff;
 using Hax;
-using UnityEngine;
 
 public sealed class TriggerMod : MonoBehaviour, IEnemyPrompter {
     RaycastHit[] RaycastHits { get; set; } = new RaycastHit[100];
@@ -92,11 +92,11 @@ public sealed class TriggerMod : MonoBehaviour, IEnemyPrompter {
                 doorLock.UnlockDoorSyncWithServer();
                 break;
             }
-            if (collider.TryGetComponent(out GrabbableObject prop)) {
-                prop.InteractWithProp();
+
+            if (collider.TryGetComponent(out GrabbableObject grabbable)) {
+                grabbable.InteractWithProp(true);
                 break;
             }
-
 
             if (collider.TryGetComponent(out PlayerControllerB player)) {
                 Helper.GetEnemy<CentipedeAI>()?.ClingToPlayerServerRpc(player.playerClientId);

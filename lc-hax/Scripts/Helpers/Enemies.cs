@@ -1,5 +1,6 @@
 using GameNetcodeStuff;
 using System.Collections.Generic;
+using Unity.Netcode;
 using UnityEngine;
 
 namespace Hax;
@@ -16,12 +17,12 @@ public static partial class Helper {
         return players.First(player => (int)player.playerClientId == playerObjectID);
     }
 
-    public static bool IsEnemyAboutToKillLocalPlayer(int PlayerID) {
+    public static bool IsLocalPlayerAboutToGetKilledByEnemy(int PlayerID) {
         PlayerControllerB? player = Helper.GetPlayerAboutToKilledByEnemy(PlayerID);
         return player != null && player.isSelf();
     }
 
-    public static bool IsEnemyAboutToKillLocalPlayer(this EnemyAI instance, Collider other) {
+    public static bool IsLocalPlayerAboutToGetKilledByEnemy(this EnemyAI instance, Collider other) {
         if (instance == null) return false;
         if (other == null) return false;
         PlayerControllerB playerControllerB = instance.MeetsStandardPlayerCollisionConditions(other, false, false);
@@ -59,6 +60,16 @@ public static partial class Helper {
             return result;
 
         }
+    }
+
+    public static GrabbableObject? FindNearbyItem(this EnemyAI instance, float grabRange = 1f) {
+        Collider[] Search = Physics.OverlapSphere(instance.transform.position, grabRange);
+        for (int i = 0; i < Search.Length; i++) {
+            if (Search[i].TryGetComponent(out GrabbableObject item))
+                return item;
+        }
+
+        return null;
     }
 
 }

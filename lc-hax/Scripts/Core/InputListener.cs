@@ -9,6 +9,9 @@ public class InputListener : MonoBehaviour {
     public static event Action<bool>? onRButtonHold;
     public static event Action? onMiddleButtonPress;
     public static event Action? onLeftButtonPress;
+    public static event Action? onLeftButtonRelease;
+    public static event Action? onRightButtonPress;
+    public static event Action? onRightButtonRelease;
     public static event Action? onLeftArrowKeyPress;
     public static event Action? onRightArrowKeyPress;
     public static event Action? onPausePress;
@@ -23,10 +26,15 @@ public class InputListener : MonoBehaviour {
     public static event Action? onDownArrowPress;
     public static event Action? onF4Press;
     public static event Action? onF5Press;
+    public static event Action<bool>? onLeftButtonHold;
+    public static event Action<bool>? onRightButtonHold;
 
     (Func<bool>, Action)[] InputActions { get; } = [
         (() => Mouse.current.middleButton.wasPressedThisFrame, () => InputListener.onMiddleButtonPress?.Invoke()),
         (() => Mouse.current.leftButton.wasPressedThisFrame, () => InputListener.onLeftButtonPress?.Invoke()),
+        (() => Mouse.current.leftButton.wasReleasedThisFrame, () => InputListener.onLeftButtonRelease?.Invoke()),
+        (() => Mouse.current.rightButton.wasPressedThisFrame, () => InputListener.onRightButtonPress?.Invoke()),
+        (() => Mouse.current.rightButton.wasReleasedThisFrame, () => InputListener.onRightButtonRelease?.Invoke()),
         (() => Keyboard.current[Key.Pause].wasPressedThisFrame, () => InputListener.onPausePress?.Invoke()),
         (() => Keyboard.current[Key.Equals].wasPressedThisFrame, () => InputListener.onEqualsPress?.Invoke()),
         (() => Keyboard.current[Key.LeftArrow].wasPressedThisFrame, () => InputListener.onLeftArrowKeyPress?.Invoke()),
@@ -48,6 +56,8 @@ public class InputListener : MonoBehaviour {
         InputListener.onFButtonHold?.Invoke(Keyboard.current[Key.F].isPressed);
         InputListener.onRButtonHold?.Invoke(Keyboard.current[Key.R].isPressed);
         InputListener.onEButtonHold?.Invoke(Keyboard.current[Key.E].isPressed);
+        InputListener.onLeftButtonHold?.Invoke(Mouse.current.leftButton.isPressed);
+        InputListener.onRightButtonHold?.Invoke(Mouse.current.rightButton.isPressed);
 
         foreach ((Func<bool> keyPressed, Action eventAction) in this.InputActions) {
             if (!keyPressed()) continue;

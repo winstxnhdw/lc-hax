@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using Unity.Netcode;
 using UnityEngine;
 
-[SuperuserCommand("/spawn")]
+[PrivilegedCommand("/spawn")]
 public class SpawnCommand : ICommand {
 
     private void SpawnEnemyOnPlayer(PlayerControllerB player, GameObject prefab, ulong amount = 1) {

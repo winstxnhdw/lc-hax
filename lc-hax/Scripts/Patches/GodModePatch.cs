@@ -1,6 +1,8 @@
+using System.Linq;
 using GameNetcodeStuff;
 using HarmonyLib;
 using Hax;
+using UnityEngine;
 
 [HarmonyPatch]
 public class GodModePatch {
@@ -36,6 +38,13 @@ public class GodModePatch {
             if (Setting.EnableGodMode) return false;
             if (Setting.DisableFallDamage && causeOfDeath == CauseOfDeath.Gravity) return false;
         }
+        else {
+            if (Helper.HUDManager != null) {
+                Helper.HUDManager.DisplayTip($"{__instance.playerUsername} Died!",
+                    $"{__instance.playerUsername} Died of {causeOfDeath}!");
+            }
+        }
+
         return true;
     }
 
@@ -44,7 +53,7 @@ public class GodModePatch {
     [HarmonyPatch(typeof(FlowermanAI), nameof(FlowermanAI.KillPlayerAnimationClientRpc))]
     public static bool PrefixFlowermanKill(int playerObjectId, ref bool ___startingKillAnimationLocalClient) {
         if (!Setting.EnableGodMode) return true;
-        if (Helper.IsEnemyAboutToKillLocalPlayer(playerObjectId)) {
+        if (Helper.IsLocalPlayerAboutToGetKilledByEnemy(playerObjectId)) {
             ___startingKillAnimationLocalClient = false;
             return false;
         }
@@ -55,7 +64,7 @@ public class GodModePatch {
     [HarmonyPatch(typeof(ForestGiantAI), nameof(ForestGiantAI.GrabPlayerServerRpc))]
     [HarmonyPatch(typeof(ForestGiantAI), nameof(ForestGiantAI.GrabPlayerClientRpc))]
     public static bool PrefixGiantKill(int playerId) {
-        return !Setting.EnableGodMode || !Helper.IsEnemyAboutToKillLocalPlayer(playerId);
+        return !Setting.EnableGodMode || !Helper.IsLocalPlayerAboutToGetKilledByEnemy(playerId);
     }
 
     [HarmonyPrefix]
@@ -63,7 +72,7 @@ public class GodModePatch {
     [HarmonyPatch(typeof(JesterAI), nameof(JesterAI.KillPlayerClientRpc))]
     public static bool PrefixJesterKill(int playerId, ref bool ___inKillAnimation) {
         if (!Setting.EnableGodMode) return true;
-        if (Helper.IsEnemyAboutToKillLocalPlayer(playerId)) {
+        if (Helper.IsLocalPlayerAboutToGetKilledByEnemy(playerId)) {
             ___inKillAnimation = false;
             return false;
         }
@@ -75,7 +84,7 @@ public class GodModePatch {
     [HarmonyPatch(typeof(MaskedPlayerEnemy), nameof(MaskedPlayerEnemy.KillPlayerAnimationServerRpc))]
     public static bool PrefixMaskedPlayerKill(int playerObjectId, ref bool ___startingKillAnimationLocalClient) {
         if (!Setting.EnableGodMode) return true;
-        if (Helper.IsEnemyAboutToKillLocalPlayer(playerObjectId)) {
+        if (Helper.IsLocalPlayerAboutToGetKilledByEnemy(playerObjectId)) {
             ___startingKillAnimationLocalClient = false;
             return false;
         }
@@ -87,7 +96,7 @@ public class GodModePatch {
     [HarmonyPatch(typeof(MouthDogAI), nameof(MouthDogAI.KillPlayerClientRpc))]
     public static bool PrefixDogKill(MouthDogAI __instance, int playerId, ref bool ___inKillAnimation) {
         if (!Setting.EnableGodMode) return true;
-        if (Helper.IsEnemyAboutToKillLocalPlayer(playerId)) {
+        if (Helper.IsLocalPlayerAboutToGetKilledByEnemy(playerId)) {
             ___inKillAnimation = false;
             __instance.StopKillAnimationServerRpc();
             return false;
@@ -95,11 +104,28 @@ public class GodModePatch {
         return true;
     }
 
+    // needed because the dogs do break the player even on contact, which makes it impossible to grab items,
+    // we patch it to make a controlled interaction for this, avoiding the death under god mode.
+    [HarmonyPrefix]
+    [HarmonyPatch(typeof(MouthDogAI), nameof(MouthDogAI.OnCollideWithPlayer))]
+    public static bool ControlledDogCollision(MouthDogAI __instance, ref Collider other) {
+        if (!Setting.EnableGodMode) return true;
+        if (__instance.IsLocalPlayerAboutToGetKilledByEnemy(other)) {
+            if (Helper.LocalPlayer != null) {
+                // instead let's make it chase the player, but never kill it.
+                __instance.ChasePlayer(Helper.LocalPlayer);
+                return false;
+            }
+        }
+        return true;
+    }
+
+
     [HarmonyPrefix]
     [HarmonyPatch(typeof(RedLocustBees), nameof(RedLocustBees.BeeKillPlayerServerRpc))]
     [HarmonyPatch(typeof(RedLocustBees), nameof(RedLocustBees.BeeKillPlayerClientRpc))]
     public static bool PrefixBeesKill(int playerId) {
-        return !Setting.EnableGodMode || !Helper.IsEnemyAboutToKillLocalPlayer(playerId);
+        return !Setting.EnableGodMode || !Helper.IsLocalPlayerAboutToGetKilledByEnemy(playerId);
     }
 
 }
