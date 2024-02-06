@@ -7,7 +7,7 @@ internal interface IController {
 
     void ReleaseSecondarySkill(EnemyAI enemyInstance);
 
-    void OnMovement(EnemyAI enemyInstance, bool isMoving, bool isSprinting);
+    void OnMovement(EnemyAI enemyInstance);
 
     bool IsAbleToMove(EnemyAI enemyInstance);
 
@@ -25,7 +25,7 @@ internal interface IEnemyController<T> : IController where T : EnemyAI {
 
     void ReleaseSecondarySkill(T enemyInstance) { }
 
-    void OnMovement(T enemyInstance, bool isMoving, bool isSprinting) { }
+    void OnMovement(T enemyInstance) { }
 
     bool IsAbleToMove(T enemyInstance) => true;
 
@@ -41,7 +41,7 @@ internal interface IEnemyController<T> : IController where T : EnemyAI {
 
     void IController.ReleaseSecondarySkill(EnemyAI enemyInstance) => this.ReleaseSecondarySkill((T)enemyInstance);
 
-    void IController.OnMovement(EnemyAI enemyInstance, bool isMoving, bool isSprinting) => this.OnMovement((T)enemyInstance, isMoving, isSprinting);
+    void IController.OnMovement(EnemyAI enemyInstance) => this.OnMovement((T)enemyInstance);
 
     bool IController.IsAbleToMove(EnemyAI enemyInstance) => this.IsAbleToMove((T)enemyInstance);
 
