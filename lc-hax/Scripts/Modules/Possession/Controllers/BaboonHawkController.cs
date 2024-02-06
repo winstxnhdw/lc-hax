@@ -32,7 +32,7 @@ internal class BaboonHawkController : IEnemyController<BaboonBirdAI> {
         _ = enemyInstance.Reflect().InvokeInternalMethod("DropHeldItemAndSync");
     }
 
-    public CharArray GetPrimarySkillName(BaboonBirdAI enemyInstance) => enemyInstance.heldScrap is not null ? "" : "Grab Item";
+    public string GetPrimarySkillName(BaboonBirdAI enemyInstance) => enemyInstance.heldScrap is not null ? "" : "Grab Item";
 
-    public CharArray GetSecondarySkillName(BaboonBirdAI enemyInstance) => enemyInstance.heldScrap is null ? "" : "Drop item";
+    public string GetSecondarySkillName(BaboonBirdAI enemyInstance) => enemyInstance.heldScrap is null ? "" : "Drop item";
 }

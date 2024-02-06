@@ -19,7 +19,7 @@ internal class NutcrackerController : IEnemyController<NutcrackerEnemyAI> {
 
     public void ReleaseSecondarySkill(NutcrackerEnemyAI enemyInstance) => enemyInstance.SetBehaviourState(NutCrackerState.WALKING);
 
-    public CharArray GetPrimarySkillName(NutcrackerEnemyAI enemyInstance) => enemyInstance.gun is null ? "" : "Fire";
+    public string GetPrimarySkillName(NutcrackerEnemyAI enemyInstance) => enemyInstance.gun is null ? "" : "Fire";
 
-    public CharArray GetSecondarySkillName(NutcrackerEnemyAI _) => "(HOLD) Sentry mode";
+    public string GetSecondarySkillName(NutcrackerEnemyAI _) => "(HOLD) Sentry mode";
 }
