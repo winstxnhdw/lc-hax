@@ -4,17 +4,17 @@ using UnityEngine.Rendering.HighDefinition;
 using Hax;
 using System;
 
-public sealed class ClearVisionMod : MonoBehaviour {
+internal sealed class ClearVisionMod : MonoBehaviour {
     float LightIntensity { get; set; } = 2.0f;
 
     void OnEnable() {
-        InputListener.onF4Press += this.DecreaseLightIntensity;
-        InputListener.onF5Press += this.IncreaseLightIntensity;
+        InputListener.OnF4Press += this.DecreaseLightIntensity;
+        InputListener.OnF5Press += this.IncreaseLightIntensity;
     }
 
     void OnDisable() {
-        InputListener.onF4Press -= this.DecreaseLightIntensity;
-        InputListener.onF5Press -= this.IncreaseLightIntensity;
+        InputListener.OnF4Press -= this.DecreaseLightIntensity;
+        InputListener.OnF5Press -= this.IncreaseLightIntensity;
     }
 
     void IncreaseLightIntensity() => this.LightIntensity = Math.Clamp(this.LightIntensity + 1.0f, 0.0f, 10.0f);

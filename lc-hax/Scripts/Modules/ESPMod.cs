@@ -4,7 +4,7 @@ using GameNetcodeStuff;
 using UnityEngine;
 using Hax;
 
-public class ESPMod : MonoBehaviour {
+internal class ESPMod : MonoBehaviour {
     RendererPair<PlayerControllerB, SkinnedMeshRenderer>[] PlayerRenderers { get; set; } = [];
     Renderer[] LandmineRenderers { get; set; } = [];
     Renderer[] TurretRenderers { get; set; } = [];
@@ -17,21 +17,21 @@ public class ESPMod : MonoBehaviour {
         GameListener.onGameStart += this.OnGameJoin;
         GameListener.onGameEnd += this.OnGameEnd;
         GameListener.onShipLand += this.InitialiseRenderers;
-        InputListener.onPausePress += this.ToggleESP;
+        InputListener.OnPausePress += this.ToggleESP;
     }
 
     void OnDisable() {
         GameListener.onGameStart -= this.OnGameJoin;
         GameListener.onGameEnd -= this.OnGameEnd;
         GameListener.onShipLand -= this.InitialiseRenderers;
-        InputListener.onPausePress -= this.ToggleESP;
+        InputListener.OnPausePress -= this.ToggleESP;
     }
 
     void OnGUI() {
         if (!this.Enabled || !this.InGame || Helper.CurrentCamera is not Camera camera) return;
 
         this.PlayerRenderers.ForEach(rendererPair => {
-            if (rendererPair.GameObject.isPlayerDead || !rendererPair.GameObject.isPlayerControlled || rendererPair.Renderer == null) return;
+            if (rendererPair.GameObject.isPlayerDead || !rendererPair.GameObject.isPlayerControlled) return;
 
             PlayerControllerB player = rendererPair.GameObject;
             string label = $"#{player.playerClientId} {player.playerUsername}";
@@ -43,21 +43,21 @@ public class ESPMod : MonoBehaviour {
             );
         });
 
-        this.LandmineRenderers.WhereIsNotNull().ForEach(renderer => this.RenderBounds(
+        this.LandmineRenderers.ForEach(renderer => this.RenderBounds(
             camera,
             renderer.bounds,
             Color.yellow,
             this.RenderLabel("Landmine")
         ));
 
-        this.TurretRenderers.WhereIsNotNull().ForEach(renderer => this.RenderBounds(
+        this.TurretRenderers.ForEach(renderer => this.RenderBounds(
             camera,
             renderer.bounds,
             Color.yellow,
             this.RenderLabel("Turret")
         ));
 
-        this.EntranceRenderers.WhereIsNotNull().ForEach(renderer => this.RenderBounds(
+        this.EntranceRenderers.ForEach(renderer => this.RenderBounds(
             camera,
             renderer.bounds,
             Color.yellow,
@@ -166,7 +166,6 @@ public class ESPMod : MonoBehaviour {
         Action<Color, Vector3>? action,
         float cutOffDistance = 4.0f
     ) {
-        if (bounds == null || camera == null) return;
         Vector3 rendererCentrePoint = camera.WorldToEyesPoint(bounds.center);
 
         if (rendererCentrePoint.z <= cutOffDistance) {
