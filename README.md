@@ -75,6 +75,7 @@ The complete feature set includes the following.
 - Always lightweight
 - Always show HUD
 - Always keep items on teleport
+- Enemy possession with abilities
 - Stable Zap gun
 - Clear vision
 - Crosshair

@@ -4,7 +4,7 @@ using UnityEngine;
 using Hax;
 
 [Command("/kill")]
-public class KillCommand : ICommand {
+internal class KillCommand : ICommand {
     Result KillSelf() {
         bool enableGodMode = Setting.EnableGodMode;
         Setting.EnableGodMode = false;

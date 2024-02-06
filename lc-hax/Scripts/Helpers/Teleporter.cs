@@ -1,5 +1,5 @@
 namespace Hax;
 
-public static partial class Helper {
-    public static ShipTeleporter?[] ShipTeleporters => HaxObjects.Instance?.ShipTeleporters?.Objects ?? [];
+internal static partial class Helper {
+    internal static ShipTeleporter?[] ShipTeleporters => HaxObjects.Instance?.ShipTeleporters?.Objects ?? [];
 }

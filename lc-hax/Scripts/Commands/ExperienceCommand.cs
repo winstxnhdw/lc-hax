@@ -1,7 +1,7 @@
 using Hax;
 
 [Command("/xp")]
-public class ExperienceCommand : ICommand {
+internal class ExperienceCommand : ICommand {
     enum Rank {
         INTERN = 0,
         PART_TIME = 1,

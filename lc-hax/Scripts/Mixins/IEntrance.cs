@@ -1,10 +1,10 @@
 using GameNetcodeStuff;
 using Hax;
 
-public interface IEntrance { }
+internal interface IEntrance { }
 
-public static class IEntranceMixin {
-    public static void EntranceTeleport(this IEntrance _, bool outside) {
+internal static class IEntranceMixin {
+    internal static void EntranceTeleport(this IEntrance _, bool outside) {
         if (Helper.LocalPlayer is not PlayerControllerB player) return;
 
         player.TeleportPlayer(RoundManager.FindMainEntranceScript(outside).entrancePoint.position);

@@ -10,7 +10,7 @@ enum BehaviourState {
     UNKNOWN = 3
 }
 
-public class EnemyPromptHandler {
+internal class EnemyPromptHandler {
     void SetBehaviourState(EnemyAI enemy, BehaviourState behaviourState) => enemy.SwitchToBehaviourState(unchecked((int)behaviourState));
 
     void TeleportEnemyToPlayer(
@@ -154,7 +154,7 @@ public class EnemyPromptHandler {
         this.SetBehaviourState(earthLeviathan, BehaviourState.CHASE);
     }
 
-    public void HandleEnemy(EnemyAI enemy, PlayerControllerB targetPlayer, bool willTeleportEnemy) {
+    internal void HandleEnemy(EnemyAI enemy, PlayerControllerB targetPlayer, bool willTeleportEnemy) {
         switch (enemy) {
             case CrawlerAI thumper:
                 this.HandleThumper(thumper, targetPlayer, willTeleportEnemy);
@@ -223,10 +223,10 @@ public class EnemyPromptHandler {
     }
 }
 
-public interface IEnemyPrompter { }
+internal interface IEnemyPrompter { }
 
-public static class EnemyPromptMixin {
-    public static List<string> PromptEnemiesToTarget(
+internal static class EnemyPromptMixin {
+    internal static List<string> PromptEnemiesToTarget(
         this IEnemyPrompter _,
         PlayerControllerB player,
         bool funnyRevive = false,

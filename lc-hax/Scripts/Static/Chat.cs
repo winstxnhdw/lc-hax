@@ -7,8 +7,8 @@ using GameNetcodeStuff;
 
 namespace Hax;
 
-public static class Chat {
-    public static event Action<string>? onExecuteCommandAttempt;
+internal static class Chat {
+    internal static event Action<string>? OnExecuteCommandAttempt;
 
     static Dictionary<string, ICommand> Commands { get; } =
         Assembly
@@ -43,7 +43,7 @@ public static class Chat {
                 type => (ICommand)new PrivilegedCommand((ICommand)Activator.CreateInstance(type))
             );
 
-    public static void Announce(string announcement, bool keepHistory = false) {
+    internal static void Announce(string announcement, bool keepHistory = false) {
         if (Helper.LocalPlayer is not PlayerControllerB player) return;
         if (Helper.HUDManager is not HUDManager hudManager) return;
 
@@ -60,11 +60,9 @@ public static class Chat {
         );
     }
 
-    public static void Clear() {
-        Chat.Announce("");
-    }
+    internal static void Clear() => Chat.Announce("");
 
-    public static void Print(string name, string? message, bool isSystem = false) {
+    internal static void Print(string name, string? message, bool isSystem = false) {
         if (string.IsNullOrWhiteSpace(message) || Helper.HUDManager is not HUDManager hudManager) return;
         _ = hudManager.Reflect().InvokeInternalMethod("AddChatMessage", message, name);
 
@@ -77,17 +75,15 @@ public static class Chat {
         }
     }
 
-    public static void Print(string? message) {
-        Chat.Print("SYSTEM", message, true);
-    }
+    internal static void Print(string? message) => Chat.Print("SYSTEM", message, true);
 
-    public static void ExecuteCommand(string command) {
+    internal static void ExecuteCommand(string command) {
         Chat.Print("USER", command);
-        Chat.onExecuteCommandAttempt?.Invoke(command);
+        Chat.OnExecuteCommandAttempt?.Invoke(command);
         Chat.ExecuteCommand(command.Split(' '));
     }
 
-    public static void ExecuteCommand(StringArray args) {
+    internal static void ExecuteCommand(StringArray args) {
         if (args.Length is 0) {
             Chat.Print("Usage: /<command> <args>");
             return;

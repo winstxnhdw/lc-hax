@@ -4,10 +4,10 @@ using UnityEngine;
 
 namespace Hax;
 
-public static partial class Helper {
-    public static HashSet<GrabbableObject> Grabbables { get; } = [];
+internal static partial class Helper {
+    internal static HashSet<GrabbableObject> Grabbables { get; } = [];
 
-    static void DropSFX(this GrabbableObject item) {
+    internal static void DropSFX(this GrabbableObject item) {
         if (!item.gameObject.TryGetComponent(out AudioSource audio)) return;
 
         audio.PlayOneShot(item.itemProperties.dropSFX);
@@ -22,7 +22,7 @@ public static partial class Helper {
         );
     }
 
-    public static void InteractWithProp(this GrabbableObject grabbable, bool playSFX = false) {
+    internal static void InteractWithProp(this GrabbableObject grabbable, bool playSFX = false) {
         if (Helper.LocalPlayer is PlayerControllerB localPlayer && !grabbable.IsOwner) {
             grabbable.ChangeOwnershipOfProp(localPlayer.actualClientId);
         }
@@ -55,7 +55,7 @@ public static partial class Helper {
         grabbable.UseItemOnClient(true);
     }
 
-    public static void ShootShotgun(this ShotgunItem item, Transform origin) {
+    internal static void ShootShotgun(this ShotgunItem item, Transform origin) {
         item.gunShootAudio.volume = 0.15f;
         item.shotgunRayPoint = origin;
         item.ShootGunAndSync(false);
