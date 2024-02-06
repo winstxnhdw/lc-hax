@@ -1,7 +1,7 @@
 using System;
 using System.Reflection;
 
-public class Reflector {
+internal class Reflector {
     const BindingFlags privateOrInternal = BindingFlags.NonPublic | BindingFlags.Instance;
     const BindingFlags internalStatic = BindingFlags.NonPublic | BindingFlags.Static;
     const BindingFlags internalField = Reflector.privateOrInternal | BindingFlags.GetField;
@@ -71,35 +71,35 @@ public class Reflector {
         }
     }
 
-    public T? GetInternalField<T>(string variableName) => this.GetField<T>(variableName, Reflector.internalField);
+    internal T? GetInternalField<T>(string variableName) => this.GetField<T>(variableName, Reflector.internalField);
 
-    public T? GetInternalStaticField<T>(string variableName) => this.GetField<T>(variableName, Reflector.internalStaticField);
+    internal T? GetInternalStaticField<T>(string variableName) => this.GetField<T>(variableName, Reflector.internalStaticField);
 
-    public T? GetInternalProperty<T>(string propertyName) => this.GetProperty<T>(propertyName, Reflector.internalProperty);
+    internal T? GetInternalProperty<T>(string propertyName) => this.GetProperty<T>(propertyName, Reflector.internalProperty);
 
-    public T? InvokeInternalMethod<T>(string methodName, params object[] args) => this.InvokeMethod<T>(methodName, Reflector.internalMethod, args);
+    internal T? InvokeInternalMethod<T>(string methodName, params object[] args) => this.InvokeMethod<T>(methodName, Reflector.internalMethod, args);
 
-    public T? InvokeInternalStaticMethod<T>(string methodName, params object[] args) => this.InvokeMethod<T>(methodName, Reflector.internalStaticMethod, args);
+    internal T? InvokeInternalStaticMethod<T>(string methodName, params object[] args) => this.InvokeMethod<T>(methodName, Reflector.internalStaticMethod, args);
 
-    public Reflector? SetInternalField(string variableName, object value) => this.SetField(variableName, value, Reflector.internalField);
+    internal Reflector? SetInternalField(string variableName, object value) => this.SetField(variableName, value, Reflector.internalField);
 
-    public Reflector? SetInternalStaticField(string variableName, object value) => this.SetField(variableName, value, Reflector.internalStaticField);
+    internal Reflector? SetInternalStaticField(string variableName, object value) => this.SetField(variableName, value, Reflector.internalStaticField);
 
-    public Reflector? SetInternalProperty(string propertyName, object value) => this.SetProperty(propertyName, value, Reflector.internalProperty);
+    internal Reflector? SetInternalProperty(string propertyName, object value) => this.SetProperty(propertyName, value, Reflector.internalProperty);
 
-    public Reflector? GetInternalField(string variableName) => this.GetInternalField<object>(variableName)?.Reflect();
+    internal Reflector? GetInternalField(string variableName) => this.GetInternalField<object>(variableName)?.Reflect();
 
-    public Reflector? GetInternalStaticField(string variableName) => this.GetInternalStaticField<object>(variableName)?.Reflect();
+    internal Reflector? GetInternalStaticField(string variableName) => this.GetInternalStaticField<object>(variableName)?.Reflect();
 
-    public Reflector? GetInternalProperty(string propertyName) => this.GetInternalProperty<object>(propertyName)?.Reflect();
+    internal Reflector? GetInternalProperty(string propertyName) => this.GetInternalProperty<object>(propertyName)?.Reflect();
 
-    public Reflector? InvokeInternalMethod(string methodName, params object[] args) => this.InvokeInternalMethod<object>(methodName, args)?.Reflect();
+    internal Reflector? InvokeInternalMethod(string methodName, params object[] args) => this.InvokeInternalMethod<object>(methodName, args)?.Reflect();
 
-    public Reflector? InvokeInternalStaticMethod(string methodName, params object[] args) => this.InvokeInternalStaticMethod<object>(methodName, args)?.Reflect();
+    internal Reflector? InvokeInternalStaticMethod(string methodName, params object[] args) => this.InvokeInternalStaticMethod<object>(methodName, args)?.Reflect();
 
-    public static Reflector Target(object obj) => new(obj);
+    internal static Reflector Target(object obj) => new(obj);
 }
 
-public static class ReflectorExtensions {
-    public static Reflector Reflect(this object obj) => Reflector.Target(obj);
+internal static class ReflectorExtensions {
+    internal static Reflector Reflect(this object obj) => Reflector.Target(obj);
 }

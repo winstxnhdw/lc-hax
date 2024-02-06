@@ -7,7 +7,7 @@ using System.Linq;
 
 namespace Hax;
 
-public class Loader : MonoBehaviour {
+internal class Loader : MonoBehaviour {
     static GameObject HaxGameObjects { get; } = new();
     static GameObject HaxModules { get; } = new();
 
@@ -30,7 +30,7 @@ public class Loader : MonoBehaviour {
         }
     }
 
-    public static void Load() {
+    internal static void Load() {
         Loader.LoadLibraries();
         Loader.LoadHarmonyPatches();
         Loader.LoadHaxGameObjects();
@@ -78,7 +78,7 @@ public class Loader : MonoBehaviour {
         Loader.AddHaxModules<InstantInteractMod>();
     }
 
-    public static void Unload() {
+    internal static void Unload() {
         Destroy(Loader.HaxModules);
         Destroy(Loader.HaxGameObjects);
     }

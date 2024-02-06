@@ -1,7 +1,7 @@
 using Hax;
 using Unity.Netcode;
 
-public class HoardingBugController : IEnemyController<HoarderBugAI> {
+internal class HoardingBugController : IEnemyController<HoarderBugAI> {
     void GrabItem(HoarderBugAI enemyInstance, GrabbableObject item) {
         if (!item.TryGetComponent(out NetworkObject netItem)) return;
 
@@ -25,7 +25,7 @@ public class HoardingBugController : IEnemyController<HoarderBugAI> {
         }
     }
 
-    public void UsePrimarySkill(HoarderBugAI enemyInstance) {
+    internal void UsePrimarySkill(HoarderBugAI enemyInstance) {
         if (enemyInstance.heldItem is null && enemyInstance.FindNearbyItem() is GrabbableObject grabbable) {
             this.GrabItem(enemyInstance, grabbable);
         }
@@ -35,7 +35,7 @@ public class HoardingBugController : IEnemyController<HoarderBugAI> {
         }
     }
 
-    public void UseSecondarySkill(HoarderBugAI enemyInstance) {
+    internal void UseSecondarySkill(HoarderBugAI enemyInstance) {
         if (enemyInstance.heldItem.itemGrabbableObject is not GrabbableObject grabbable) return;
         if (!grabbable.TryGetComponent(out NetworkObject networkObject)) return;
 
@@ -46,7 +46,7 @@ public class HoardingBugController : IEnemyController<HoarderBugAI> {
         );
     }
 
-    public string GetPrimarySkillName(HoarderBugAI enemyInstance) => enemyInstance.heldItem is not null ? "Use item" : "Grab Item";
+    internal string GetPrimarySkillName(HoarderBugAI enemyInstance) => enemyInstance.heldItem is not null ? "Use item" : "Grab Item";
 
-    public string GetSecondarySkillName(HoarderBugAI enemyInstance) => enemyInstance.heldItem is null ? "" : "Drop item";
+    internal string GetSecondarySkillName(HoarderBugAI enemyInstance) => enemyInstance.heldItem is null ? "" : "Drop item";
 }

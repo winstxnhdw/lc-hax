@@ -2,7 +2,7 @@ using UnityEngine;
 using Hax;
 using Steamworks;
 
-public sealed class AntiKickMod : MonoBehaviour {
+internal sealed class AntiKickMod : MonoBehaviour {
     bool HasGameStarted { get; set; } = false;
     bool HasAnnouncedGameJoin { get; set; } = false;
 

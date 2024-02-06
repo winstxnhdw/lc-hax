@@ -2,7 +2,7 @@ using UnityEngine;
 using Hax;
 
 [Command("/stun")]
-public class StunCommand : IStun, ICommand {
+internal class StunCommand : IStun, ICommand {
     public void Execute(StringArray args) {
         if (Helper.CurrentCamera is not Camera camera) return;
         if (args.Length is 0) {

@@ -4,7 +4,7 @@ using GameNetcodeStuff;
 using UnityEngine;
 using Hax;
 
-public class ESPMod : MonoBehaviour {
+internal class ESPMod : MonoBehaviour {
     RendererPair<PlayerControllerB, SkinnedMeshRenderer>[] PlayerRenderers { get; set; } = [];
     Renderer[] LandmineRenderers { get; set; } = [];
     Renderer[] TurretRenderers { get; set; } = [];

@@ -3,7 +3,7 @@ using GameNetcodeStuff;
 using Hax;
 
 [Command("/ct")]
-public class ChibakuTenseiCommand : ICommand {
+internal class ChibakuTenseiCommand : ICommand {
     Vector3 spinningY = new(0, 2, 0);
 
     Result TeleportPlayerToRandom(StringArray args) {

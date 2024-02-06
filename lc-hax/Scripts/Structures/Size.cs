@@ -1,13 +1,13 @@
-public readonly ref struct Size {
-    public readonly float Width { get; }
-    public readonly float Height { get; }
+internal readonly ref struct Size {
+    internal readonly float Width { get; }
+    internal readonly float Height { get; }
 
-    public Size(float width, float height) {
+    internal Size(float width, float height) {
         this.Width = width;
         this.Height = height;
     }
 
-    public Size(float size) {
+    internal Size(float size) {
         this.Width = size;
         this.Height = size;
     }

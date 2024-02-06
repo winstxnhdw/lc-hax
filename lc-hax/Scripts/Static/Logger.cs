@@ -1,11 +1,11 @@
 using System;
 using System.IO;
 
-public static class Logger {
+internal static class Logger {
     const string logFileName = "lc-hax.log";
     static object LockObject { get; } = new();
 
-    public static void Write(string message) {
+    internal static void Write(string message) {
         lock (Logger.LockObject) {
             string timeNow = DateTime.Now.ToString("dd-MM-yy HH:mm:ss");
 
@@ -16,5 +16,5 @@ public static class Logger {
         }
     }
 
-    public static void Write(Exception exception) => Logger.Write(exception.ToString());
+    internal static void Write(Exception exception) => Logger.Write(exception.ToString());
 }

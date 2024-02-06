@@ -4,7 +4,7 @@ using UnityEngine.InputSystem;
 
 namespace Hax;
 
-public class RigidbodyMovement : MonoBehaviour {
+internal class RigidbodyMovement : MonoBehaviour {
     // Movement constants
     const float BaseSpeed = 5.0f;
     const float SprintSpeedMultiplier = 2.8f; // Multiplier for sprinting speed
@@ -27,10 +27,10 @@ public class RigidbodyMovement : MonoBehaviour {
     const float AdjustedHeight = 0.0f; // Adjust as needed
     const float AdjustedDepth = -0.5f; // Adjust as needed
 
-    public RigidbodyMovement() => this.CharacterController = this.GetComponent<CharacterController>();
+    internal RigidbodyMovement() => this.CharacterController = this.GetComponent<CharacterController>();
 
     // Initialize method
-    public void Init() {
+    internal void Init() {
         if (Helper.LocalPlayer is not PlayerControllerB localPlayer) return;
         this.gameObject.layer = localPlayer.gameObject.layer;
     }

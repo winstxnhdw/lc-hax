@@ -5,21 +5,21 @@ enum NutCrackerState {
     SENTRY
 }
 
-public class NutcrackerController : IEnemyController<NutcrackerEnemyAI> {
-    public void OnMovement(NutcrackerEnemyAI enemyInstance) => enemyInstance.SetBehaviourState(NutCrackerState.WALKING);
+internal class NutcrackerController : IEnemyController<NutcrackerEnemyAI> {
+    internal void OnMovement(NutcrackerEnemyAI enemyInstance) => enemyInstance.SetBehaviourState(NutCrackerState.WALKING);
 
-    public void UsePrimarySkill(NutcrackerEnemyAI enemyInstance) {
+    internal void UsePrimarySkill(NutcrackerEnemyAI enemyInstance) {
         if (enemyInstance.gun is not ShotgunItem shotgun) return;
 
         shotgun.gunShootAudio.volume = 0.25f;
         enemyInstance.FireGunServerRpc();
     }
 
-    public void UseSecondarySkill(NutcrackerEnemyAI enemyInstance) => enemyInstance.SetBehaviourState(NutCrackerState.SENTRY);
+    internal void UseSecondarySkill(NutcrackerEnemyAI enemyInstance) => enemyInstance.SetBehaviourState(NutCrackerState.SENTRY);
 
-    public void ReleaseSecondarySkill(NutcrackerEnemyAI enemyInstance) => enemyInstance.SetBehaviourState(NutCrackerState.WALKING);
+    internal void ReleaseSecondarySkill(NutcrackerEnemyAI enemyInstance) => enemyInstance.SetBehaviourState(NutCrackerState.WALKING);
 
-    public CharArray GetPrimarySkillName(NutcrackerEnemyAI enemyInstance) => enemyInstance.gun is null ? "" : "Fire";
+    internal CharArray GetPrimarySkillName(NutcrackerEnemyAI enemyInstance) => enemyInstance.gun is null ? "" : "Fire";
 
-    public CharArray GetSecondarySkillName(NutcrackerEnemyAI _) => "(HOLD) Sentry mode";
+    internal CharArray GetSecondarySkillName(NutcrackerEnemyAI _) => "(HOLD) Sentry mode";
 }

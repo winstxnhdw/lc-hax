@@ -2,8 +2,8 @@ using UnityEngine;
 
 namespace Hax;
 
-public static partial class Helper {
-    public static void DrawLabel(Vector2 position, string label, Color colour) {
+internal static partial class Helper {
+    internal static void DrawLabel(Vector2 position, string label, Color colour) {
         GUIStyle labelStyle = new(GUI.skin.label) {
             fontStyle = FontStyle.Bold
         };
@@ -18,9 +18,9 @@ public static partial class Helper {
         GUI.Label(new Rect(newPosition.x + 1, newPosition.y + 1, size.x, size.y), label, labelStyle);
     }
 
-    public static void DrawLabel(Vector2 position, string label) => Helper.DrawLabel(position, label, Color.white);
+    internal static void DrawLabel(Vector2 position, string label) => Helper.DrawLabel(position, label, Color.white);
 
-    public static void DrawOutlineBox(Vector2 centrePosition, Size size, float lineWidth, Color colour) {
+    internal static void DrawOutlineBox(Vector2 centrePosition, Size size, float lineWidth, Color colour) {
         float halfWidth = 0.5f * size.Width;
         float halfHeight = 0.5f * size.Height;
 
@@ -41,10 +41,10 @@ public static partial class Helper {
         Helper.DrawBox(topLeft, new Size(lineWidth, size.Height), colour);
     }
 
-    public static void DrawOutlineBox(Vector2 centrePosition, Size size, float lineWidth) =>
+    internal static void DrawOutlineBox(Vector2 centrePosition, Size size, float lineWidth) =>
         Helper.DrawOutlineBox(centrePosition, size, lineWidth, Color.white);
 
-    public static void DrawBox(Vector2 position, Size size, Color colour) {
+    internal static void DrawBox(Vector2 position, Size size, Color colour) {
         Color previousCOlour = GUI.color;
         GUI.color = colour;
 
@@ -54,5 +54,5 @@ public static partial class Helper {
         GUI.color = previousCOlour;
     }
 
-    public static void DrawBox(Vector2 position, Size size) => Helper.DrawBox(position, size, Color.white);
+    internal static void DrawBox(Vector2 position, Size size) => Helper.DrawBox(position, size, Color.white);
 }

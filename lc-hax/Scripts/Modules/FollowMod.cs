@@ -5,14 +5,14 @@ using UnityEngine;
 using Hax;
 
 struct CopiedStates {
-    public Vector3 position;
-    public Quaternion rotation;
-    public int[] animationStates;
-    public float animationSpeed;
+    internal Vector3 position;
+    internal Quaternion rotation;
+    internal int[] animationStates;
+    internal float animationSpeed;
 }
 
-public sealed class FollowMod : MonoBehaviour {
-    public static PlayerControllerB? PlayerToFollow { get; set; }
+internal sealed class FollowMod : MonoBehaviour {
+    internal static PlayerControllerB? PlayerToFollow { get; set; }
 
     const float secondsBeforeRealtime = 1.0f;
     const float maxDistanceFromTarget = 1.0f;

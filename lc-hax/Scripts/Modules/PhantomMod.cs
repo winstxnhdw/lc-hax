@@ -2,7 +2,7 @@ using UnityEngine;
 using GameNetcodeStuff;
 using Hax;
 
-public sealed class PhantomMod : MonoBehaviour {
+internal sealed class PhantomMod : MonoBehaviour {
     bool IsShiftHeld { get; set; } = false;
     bool EnabledPossession { get; set; } = false;
     int CurrentSpectatorIndex { get; set; } = 0;
