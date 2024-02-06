@@ -4,24 +4,24 @@ using UnityEngine;
 
 namespace Hax;
 
-public class WaitForBehaviour : MonoBehaviour {
+internal class WaitForBehaviour : MonoBehaviour {
     Action? Action { get; set; }
     Func<float, bool>? TimerPredicate { get; set; }
     Func<bool>? Predicate { get; set; }
 
-    public void Init(Action action) {
+    internal void Init(Action action) {
         this.Action = action;
         _ = this.Predicate is null
             ? this.StartCoroutine(this.WaitForTimerPredicateCoroutine())
             : this.StartCoroutine(this.WaitForPredicateCoroutine());
     }
 
-    public WaitForBehaviour SetPredicate(Func<float, bool> predicate) {
+    internal WaitForBehaviour SetPredicate(Func<float, bool> predicate) {
         this.TimerPredicate = predicate;
         return this;
     }
 
-    public WaitForBehaviour SetPredicate(Func<bool> predicate) {
+    internal WaitForBehaviour SetPredicate(Func<bool> predicate) {
         this.Predicate = predicate;
         return this;
     }

@@ -1,10 +1,10 @@
 using UnityEngine;
 using Hax;
 
-public class CrosshairMod : MonoBehaviour {
-    const float gapSize = 7.0f;
-    const float thickness = 3.0f;
-    const float length = 10.0f;
+internal class CrosshairMod : MonoBehaviour {
+    const float GapSize = 7.0f;
+    const float Thickness = 3.0f;
+    const float Length = 10.0f;
 
     Vector2 TopCrosshairPosition { get; set; }
     Vector2 BottomCrosshairPosition { get; set; }
@@ -25,9 +25,7 @@ public class CrosshairMod : MonoBehaviour {
         GameListener.onGameEnd -= this.ToggleNotInGame;
     }
 
-    void Start() {
-        this.InitialiseCrosshairPositions();
-    }
+    void Start() => this.InitialiseCrosshairPositions();
 
     void OnGUI() {
         if (!this.InGame) return;
@@ -40,20 +38,20 @@ public class CrosshairMod : MonoBehaviour {
 
     void InitialiseCrosshairPositions() {
         Vector2 screenCentre = Helper.GetScreenCentre();
-        float halfWidth = 0.5f * CrosshairMod.thickness;
-        float lengthToCentre = CrosshairMod.gapSize + CrosshairMod.length;
+        float halfWidth = 0.5f * CrosshairMod.Thickness;
+        float lengthToCentre = CrosshairMod.GapSize + CrosshairMod.Length;
         float topLeftX = screenCentre.x - halfWidth;
         float topLeftY = screenCentre.y - halfWidth;
 
         this.TopCrosshairPosition = new Vector2(topLeftX, screenCentre.y - lengthToCentre);
-        this.BottomCrosshairPosition = new Vector2(topLeftX, screenCentre.y + CrosshairMod.gapSize);
-        this.RightCrosshairPosition = new Vector2(screenCentre.x + CrosshairMod.gapSize, topLeftY);
+        this.BottomCrosshairPosition = new Vector2(topLeftX, screenCentre.y + CrosshairMod.GapSize);
+        this.RightCrosshairPosition = new Vector2(screenCentre.x + CrosshairMod.GapSize, topLeftY);
         this.LeftCrosshairPosition = new Vector2(screenCentre.x - lengthToCentre, topLeftY);
     }
 
     void RenderCrosshair() {
-        Size verticalSize = new(CrosshairMod.thickness, CrosshairMod.length);
-        Size horizontalSize = new(CrosshairMod.length, CrosshairMod.thickness);
+        Size verticalSize = new(CrosshairMod.Thickness, CrosshairMod.Length);
+        Size horizontalSize = new(CrosshairMod.Length, CrosshairMod.Thickness);
 
         Helper.DrawBox(this.TopCrosshairPosition, verticalSize);
         Helper.DrawBox(this.BottomCrosshairPosition, verticalSize);

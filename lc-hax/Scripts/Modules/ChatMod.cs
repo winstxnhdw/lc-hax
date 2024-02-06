@@ -3,20 +3,20 @@ using Hax;
 using System;
 using System.Collections.Generic;
 
-public sealed class ChatMod : MonoBehaviour {
+internal sealed class ChatMod : MonoBehaviour {
     List<string> CommandHistory { get; } = [];
     int HistoryIndex { get; set; } = -1;
 
     void OnEnable() {
-        InputListener.onUpArrowPress += this.CycleBackInHistory;
-        InputListener.onDownArrowPress += this.CycleForwardInHistory;
-        Chat.onExecuteCommandAttempt += this.OnHistoryAdded;
+        InputListener.OnUpArrowPress += this.CycleBackInHistory;
+        InputListener.OnDownArrowPress += this.CycleForwardInHistory;
+        Chat.OnExecuteCommandAttempt += this.OnHistoryAdded;
     }
 
     void OnDisable() {
-        InputListener.onUpArrowPress -= this.CycleBackInHistory;
-        InputListener.onDownArrowPress -= this.CycleForwardInHistory;
-        Chat.onExecuteCommandAttempt -= this.OnHistoryAdded;
+        InputListener.OnUpArrowPress -= this.CycleBackInHistory;
+        InputListener.OnDownArrowPress -= this.CycleForwardInHistory;
+        Chat.OnExecuteCommandAttempt -= this.OnHistoryAdded;
     }
 
     void OnHistoryAdded(string command) {
@@ -45,7 +45,5 @@ public sealed class ChatMod : MonoBehaviour {
         hudManager.chatTextField.caretPosition = hudManager.chatTextField.text.Length;
     }
 
-    void Update() {
-        this.HistoryIndex = Helper.LocalPlayer?.isTypingChat is true ? this.HistoryIndex : -1;
-    }
+    void Update() => this.HistoryIndex = Helper.LocalPlayer?.isTypingChat is true ? this.HistoryIndex : -1;
 }

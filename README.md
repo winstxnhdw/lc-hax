@@ -75,6 +75,7 @@ The complete feature set includes the following.
 - Always lightweight
 - Always show HUD
 - Always keep items on teleport
+- Enemy possession with abilities
 - Stable Zap gun
 - Clear vision
 - Crosshair
@@ -145,6 +146,7 @@ The complete feature set includes the following.
 | Turn invisible to players     | `/invis`                                       |
 | Clear the chat for everyone   | `/clear`                                       |
 | Toggle ship lights            | `/light`                                       |
+| Copy lobby ID to clipboard    | `/lobby`                                       |
 
 ## Privileged Commands
 
@@ -179,6 +181,7 @@ These commands are only available when the user is in superuser mode.
 | Toggle possession NoClip   | <kbd> N </kbd>                       |
 | Toggle Anti-Kick           | <kbd> \ </kbd>                       |
 | Disconnect from server     | <kbd> Shift </kbd> + <kbd> F4 </kbd> |
+| Connect to server          | <kbd> Shift </kbd> + <kbd> F5 </kbd> |
 
 ### TriggerMod
 

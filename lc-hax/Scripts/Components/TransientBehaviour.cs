@@ -4,12 +4,12 @@ using UnityEngine;
 
 namespace Hax;
 
-public class TransientBehaviour : MonoBehaviour {
+internal class TransientBehaviour : MonoBehaviour {
     Action<float>? Action { get; set; }
     Action? DisposeAction { get; set; }
     float ExpireTime { get; set; } = 0.0f;
 
-    public TransientBehaviour Init(Action<float> action, float expireTime, float delay = 0.0f) {
+    internal TransientBehaviour Init(Action<float> action, float expireTime, float delay = 0.0f) {
         this.Action = action;
         this.ExpireTime = expireTime;
 
@@ -20,9 +20,7 @@ public class TransientBehaviour : MonoBehaviour {
         return this;
     }
 
-    public void Dispose(Action disposeAction) {
-        this.DisposeAction = disposeAction;
-    }
+    internal void Dispose(Action disposeAction) => this.DisposeAction = disposeAction;
 
     IEnumerator TransientCoroutine(float delay) {
         WaitForSeconds waitForDelay = new(delay);
