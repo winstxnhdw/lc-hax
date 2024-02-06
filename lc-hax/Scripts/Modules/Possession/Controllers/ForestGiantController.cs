@@ -6,11 +6,11 @@ enum GiantState {
 }
 
 internal class ForestGiantController : IEnemyController<ForestGiantAI> {
-    internal void UseSecondarySkill(ForestGiantAI enemyInstance) => enemyInstance.SetBehaviourState(GiantState.CHASE);
+    public void UseSecondarySkill(ForestGiantAI enemyInstance) => enemyInstance.SetBehaviourState(GiantState.CHASE);
 
-    internal void ReleaseSecondarySkill(ForestGiantAI enemyInstance) => enemyInstance.SetBehaviourState(GiantState.DEFAULT);
+    public void ReleaseSecondarySkill(ForestGiantAI enemyInstance) => enemyInstance.SetBehaviourState(GiantState.DEFAULT);
 
-    internal bool IsAbleToMove(ForestGiantAI enemyInstance) => enemyInstance.Reflect().GetInternalField<bool>("inEatingPlayerAnimation");
+    public bool IsAbleToMove(ForestGiantAI enemyInstance) => enemyInstance.Reflect().GetInternalField<bool>("inEatingPlayerAnimation");
 
-    internal string GetSecondarySkillName(ForestGiantAI _) => "(HOLD) Chase";
+    public string GetSecondarySkillName(ForestGiantAI _) => "(HOLD) Chase";
 }

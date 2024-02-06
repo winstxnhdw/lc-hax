@@ -112,7 +112,7 @@ internal sealed class PossessionMod : MonoBehaviour {
         }
     }
 
-    void HandleEnemyMovements(IController controller, EnemyAI enemy) => controller.OnMovement(enemy);
+    void HandleEnemyMovements(IController controller, EnemyAI enemy, bool isMoving, bool isSprinting) => controller.OnMovement(enemy, isMoving, isSprinting);
 
     void EnemyUpdate(IController controller, EnemyAI enemy) => controller.Update(enemy);
 
@@ -141,14 +141,21 @@ internal sealed class PossessionMod : MonoBehaviour {
 
         if (!this.EnemyControllers.TryGetValue(enemy.GetType(), out IController controller)) {
             this.UpdateEnemyPositionToHere(enemy);
+            this.UpdateCameraPosition(camera, enemy);
+            return;
         }
 
         else if (controller.IsAbleToMove(enemy)) {
             this.UpdateEnemyPositionToHere(enemy);
-            this.HandleEnemyMovements(controller, enemy);
+            this.HandleEnemyMovements(controller, enemy, rigidbodyKeyboard.IsMoving, rigidbodyKeyboard.IsSprinting);
             this.EnemyUpdate(controller, enemy);
         }
 
+        localPlayer.cursorTip.text = controller.GetPrimarySkillName(enemy);
+        this.UpdateCameraPosition(camera, enemy);
+    }
+
+    void UpdateCameraPosition(Camera camera, EnemyAI enemy) {
         camera.transform.position = this.transform.position + (3.0f * (Vector3.up - enemy.transform.forward));
         camera.transform.rotation = this.transform.rotation;
     }
