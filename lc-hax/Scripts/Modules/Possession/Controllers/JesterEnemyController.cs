@@ -21,7 +21,7 @@ internal class JesterController : IEnemyController<JesterAI> {
 
     public bool IsAbleToMove(JesterAI enemyInstance) => !enemyInstance.IsBehaviourState(JesterState.CRANKING);
 
-    public CharArray GetPrimarySkillName(JesterAI _) => "Close box";
+    public string GetPrimarySkillName(JesterAI _) => "Close box";
 
-    public CharArray GetSecondarySkillName(JesterAI _) => "(HOLD) Begin cranking";
+    public string GetSecondarySkillName(JesterAI _) => "(HOLD) Begin cranking";
 }

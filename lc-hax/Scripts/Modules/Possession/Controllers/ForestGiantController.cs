@@ -12,5 +12,5 @@ internal class ForestGiantController : IEnemyController<ForestGiantAI> {
 
     public bool IsAbleToMove(ForestGiantAI enemyInstance) => enemyInstance.Reflect().GetInternalField<bool>("inEatingPlayerAnimation");
 
-    public CharArray GetSecondarySkillName(ForestGiantAI _) => "(HOLD) Chase";
+    public string GetSecondarySkillName(ForestGiantAI _) => "(HOLD) Chase";
 }

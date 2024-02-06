@@ -141,6 +141,8 @@ internal sealed class PossessionMod : MonoBehaviour {
 
         if (!this.EnemyControllers.TryGetValue(enemy.GetType(), out IController controller)) {
             this.UpdateEnemyPositionToHere(enemy);
+            this.UpdateCameraPosition(camera, enemy);
+            return;
         }
 
         else if (controller.IsAbleToMove(enemy)) {
@@ -149,6 +151,11 @@ internal sealed class PossessionMod : MonoBehaviour {
             this.EnemyUpdate(controller, enemy);
         }
 
+        localPlayer.cursorTip.text = controller.GetPrimarySkillName(enemy);
+        this.UpdateCameraPosition(camera, enemy);
+    }
+
+    void UpdateCameraPosition(Camera camera, EnemyAI enemy) {
         camera.transform.position = this.transform.position + (3.0f * (Vector3.up - enemy.transform.forward));
         camera.transform.rotation = this.transform.rotation;
     }

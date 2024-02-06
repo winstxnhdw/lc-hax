@@ -30,7 +30,7 @@ internal class SnareFleaController : IEnemyController<CentipedeAI> {
 
     public bool IsAbleToMove(CentipedeAI enemyInstance) => !this.IsClingingToSomething(enemyInstance);
 
-    public CharArray GetPrimarySkillName(CentipedeAI _) => "Drop";
+    public string GetPrimarySkillName(CentipedeAI _) => "Drop";
 
-    public CharArray GetSecondarySkillName(CentipedeAI _) => "Attach to ceiling";
+    public string GetSecondarySkillName(CentipedeAI _) => "Attach to ceiling";
 }

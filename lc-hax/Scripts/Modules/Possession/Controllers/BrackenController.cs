@@ -21,7 +21,7 @@ internal class BrackenController : IEnemyController<FlowermanAI> {
 
     public bool IsAbleToMove(FlowermanAI enemyInstance) => !enemyInstance.inSpecialAnimation;
 
-    public CharArray GetPrimarySkillName(FlowermanAI enemyInstance) => enemyInstance.carryingPlayerBody ? "Drop body" : "";
+    public string GetPrimarySkillName(FlowermanAI enemyInstance) => enemyInstance.carryingPlayerBody ? "Drop body" : "";
 
-    public CharArray GetSecondarySkillName(FlowermanAI _) => "Stand";
+    public string GetSecondarySkillName(FlowermanAI _) => "Stand";
 }

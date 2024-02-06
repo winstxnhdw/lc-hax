@@ -18,7 +18,7 @@ internal class SporeLizardController : IEnemyController<PufferAI> {
         enemyInstance.ShakeTailServerRpc();
     }
 
-    public CharArray GetPrimarySkillName(PufferAI _) => "Stomp";
+    public string GetPrimarySkillName(PufferAI _) => "Stomp";
 
-    public CharArray GetSecondarySkillName(PufferAI _) => "Smoke";
+    public string GetSecondarySkillName(PufferAI _) => "Smoke";
 }

@@ -6,5 +6,5 @@ internal class EarthLeviathanController : IEnemyController<SandWormAI> {
         enemyInstance.StartEmergeAnimation();
     }
 
-    public CharArray GetSecondarySkillName(SandWormAI _) => "Emerge";
+    public string GetSecondarySkillName(SandWormAI _) => "Emerge";
 }
