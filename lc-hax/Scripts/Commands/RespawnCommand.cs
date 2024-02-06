@@ -103,7 +103,7 @@ public class RespawnCommand : ICommand {
 
         this.RespawnLocalPlayer(localPlayer, startOfRound);
 
-        Helper.CreateComponent<WaitForBehaviour>()
+        Helper.CreateComponent<WaitForBehaviour>("Respawn")
               .SetPredicate(() => startOfRound.shipIsLeaving)
               .Init(localPlayer.KillPlayer);
 
