@@ -7,12 +7,12 @@ public sealed class AntiKickMod : MonoBehaviour {
     bool HasAnnouncedGameJoin { get; set; } = false;
 
     void OnEnable() {
-        InputListener.onBackslashPress += this.ToggleAntiKick;
+        InputListener.OnBackslashPress += this.ToggleAntiKick;
         GameListener.onGameEnd += this.OnGameEnd;
     }
 
     void OnDisable() {
-        InputListener.onBackslashPress -= this.ToggleAntiKick;
+        InputListener.OnBackslashPress -= this.ToggleAntiKick;
         GameListener.onGameEnd -= this.OnGameEnd;
     }
 

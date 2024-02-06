@@ -1,10 +1,9 @@
-using System;
 using Quickenshtein;
 
 namespace Hax;
 
 public static partial class Helper {
-    static int LongestCommonSubstring(ReadOnlySpan<char> query, ReadOnlySpan<char> original) {
+    static int LongestCommonSubstring(CharArray query, CharArray original) {
         int originalLength = original.Length;
         int queryLength = query.Length;
 

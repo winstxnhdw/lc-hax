@@ -4,7 +4,7 @@ using UnityEngine.InputSystem;
 namespace Hax;
 
 public class KeyboardMovement : MonoBehaviour {
-    const float baseSpeed = 20;
+    const float BaseSpeed = 20;
     float SprintMultiplier { get; set; } = 1;
 
     void Update() {
@@ -20,9 +20,8 @@ public class KeyboardMovement : MonoBehaviour {
         this.Move(direction);
     }
 
-    void UpdateSprintMultiplier(Keyboard keyboard) {
+    void UpdateSprintMultiplier(Keyboard keyboard) =>
         this.SprintMultiplier = keyboard.shiftKey.IsPressed() ? Mathf.Min(this.SprintMultiplier + (5 * Time.deltaTime), 5) : 1;
-    }
 
     void Move(Vector3 direction) {
         Vector3 translatedDirection =
@@ -30,6 +29,6 @@ public class KeyboardMovement : MonoBehaviour {
             (this.transform.up * direction.y) +
             (this.transform.forward * direction.z);
 
-        this.transform.position += translatedDirection * Time.deltaTime * baseSpeed * this.SprintMultiplier;
+        this.transform.position += translatedDirection * Time.deltaTime * KeyboardMovement.BaseSpeed * this.SprintMultiplier;
     }
 }
