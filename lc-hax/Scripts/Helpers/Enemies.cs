@@ -2,7 +2,6 @@ using GameNetcodeStuff;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
-using static UnityEngine.Rendering.DebugUI;
 
 namespace Hax;
 
@@ -81,7 +80,7 @@ internal static partial class Helper {
         if (instance == null) return;
         if (player == null) return;
         if (instance.currentBehaviourStateIndex is 0 or 1) {
-           _ = instance.Reflect().InvokeInternalMethod("ChaseLocalPlayer");
+            _ = instance.Reflect().InvokeInternalMethod("ChaseLocalPlayer");
         }
         else {
             if (instance.currentBehaviourStateIndex != 2 || instance.Reflect().GetInternalField<bool>("inLunge"))
