@@ -12,7 +12,7 @@ public static class HoardingBugController {
     }
 
     public static void UseSecondarySkill(this HoarderBugAI instance) {
-        if(instance.heldItem != null)
+        if (instance.heldItem != null)
             instance.DropCurrentItem();
     }
 

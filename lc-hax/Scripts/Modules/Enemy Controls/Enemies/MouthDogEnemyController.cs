@@ -1,7 +1,6 @@
 using System.Collections;
 using GameNetcodeStuff;
 using UnityEngine;
-using static NutcrackerController;
 
 public static class MouthDogController {
 
@@ -45,7 +44,7 @@ public static class MouthDogController {
     public static void ChasePlayer(this MouthDogAI instance, PlayerControllerB player) {
         if (instance == null) return;
         if (player == null) return;
-        if (instance.currentBehaviourStateIndex == 0 || instance.currentBehaviourStateIndex == 1) {
+        if (instance.currentBehaviourStateIndex is 0 or 1) {
             instance.ChaseLocalPlayerInternal();
         }
         else {

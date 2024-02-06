@@ -1,9 +1,4 @@
-using GameNetcodeStuff;
 using Hax;
-using System;
-using System.Collections.Generic;
-using Unity.Netcode;
-using UnityEngine;
 
 [PrivilegedCommand("/quota")]
 public class QuotaCommand : ICommand {

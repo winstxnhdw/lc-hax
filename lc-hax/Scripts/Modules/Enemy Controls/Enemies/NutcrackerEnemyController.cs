@@ -5,7 +5,7 @@ public static class NutcrackerController {
     }
 
     public static void OnMoving(this NutcrackerEnemyAI instance, bool isMoving) {
-        if(isMoving) instance.SetState(NutCrackerState.Walking);
+        if (isMoving) instance.SetState(NutCrackerState.Walking);
     }
 
     public static bool IsReloadingGun(this NutcrackerEnemyAI instance) {
