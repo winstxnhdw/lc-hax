@@ -14,8 +14,8 @@ struct CopiedStates {
 internal sealed class FollowMod : MonoBehaviour {
     internal static PlayerControllerB? PlayerToFollow { get; set; }
 
-    const float secondsBeforeRealtime = 1.0f;
-    const float maxDistanceFromTarget = 1.0f;
+    const float SecondsBeforeRealtime = 1.0f;
+    const float MaxDistanceFromTarget = 1.0f;
 
     Queue<CopiedStates> PlayerStates { get; set; } = new();
     Quaternion DeviateRotation { get; set; } = Quaternion.identity;
@@ -43,7 +43,7 @@ internal sealed class FollowMod : MonoBehaviour {
         this.InstantTeleTimer -= Time.deltaTime;
 
         if (targetPlayer.isClimbingLadder) {
-            this.InstantTeleTimer = FollowMod.secondsBeforeRealtime;
+            this.InstantTeleTimer = FollowMod.SecondsBeforeRealtime;
             this.PlayerStates.Clear();
         }
 
@@ -70,7 +70,7 @@ internal sealed class FollowMod : MonoBehaviour {
         });
 
         //if it isn't time to dequeue data, don't do it.
-        if (this.PlayerStates.Count <= secondsBeforeRealtime / Time.deltaTime) {
+        if (this.PlayerStates.Count <= SecondsBeforeRealtime / Time.deltaTime) {
             return;
         }
 
@@ -109,7 +109,7 @@ internal sealed class FollowMod : MonoBehaviour {
             this.AnimationBroadcastTimer = 0.14f;
         }
 
-        if (Vector3.Distance(targetPlayer.thisPlayerBody.position, state.position) < FollowMod.maxDistanceFromTarget) {
+        if (Vector3.Distance(targetPlayer.thisPlayerBody.position, state.position) < FollowMod.MaxDistanceFromTarget) {
             return;
         }
 
