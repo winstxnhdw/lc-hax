@@ -4,10 +4,7 @@ using UnityEngine;
 
 [Command("/respawn")]
 public class RespawnCommand : ICommand {
-
-    public void RespawnLocalPlayer() {
-        if (Helper.LocalPlayer is not PlayerControllerB localPlayer) return;
-        if (Helper.StartOfRound is not StartOfRound startOfRound) return;
+    public void RespawnLocalPlayer(PlayerControllerB localPlayer, StartOfRound startOfRound) {
         if (Helper.HUDManager is not HUDManager hudManager) return;
         if (Helper.SoundManager is not SoundManager soundManager) return;
 
@@ -100,7 +97,19 @@ public class RespawnCommand : ICommand {
     }
 
     public void Execute(StringArray _) {
-        this.RespawnLocalPlayer();
+        if (Helper.LocalPlayer is not PlayerControllerB localPlayer) return;
+        if (Helper.StartOfRound is not StartOfRound startOfRound) return;
+        if (!localPlayer.isPlayerDead) {
+            Chat.Print("You are not yet dead!");
+            return;
+        }
+
+        this.RespawnLocalPlayer(localPlayer, startOfRound);
+
+        Helper.CreateComponent<WaitForBehaviour>()
+              .SetPredicate(() => startOfRound.shipIsLeaving)
+              .Init(localPlayer.KillPlayer);
+
         Chat.Print("No one can see you in this state!");
     }
 }
