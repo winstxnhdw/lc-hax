@@ -26,9 +26,8 @@ internal class TransientBehaviour : MonoBehaviour {
         WaitForSeconds waitForDelay = new(delay);
 
         while (this.ExpireTime > 0.0f) {
-            float deltaTime = Time.deltaTime;
-            this.ExpireTime -= deltaTime;
-            this.Action?.Invoke(deltaTime);
+            this.ExpireTime -= delay;
+            this.Action?.Invoke(delay);
 
             yield return waitForDelay;
         }
