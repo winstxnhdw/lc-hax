@@ -1,7 +1,6 @@
 #pragma warning disable IDE1006
 
 using HarmonyLib;
-using UnityEngine.UI;
 
 [HarmonyPatch]
 class VoteShipLeaveEarlyPatch {
