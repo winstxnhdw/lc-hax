@@ -38,7 +38,5 @@ internal static partial class Helper {
 
     internal static PlayerControllerB? GetActivePlayer(int playerClientId) => Helper.GetActivePlayer(playerClientId.ToString());
 
-    internal static bool isSelf(this PlayerControllerB instance) {
-        return Helper.LocalPlayer != null && instance.actualClientId == Helper.LocalPlayer.actualClientId;
-    }
+    internal static bool isSelf(this PlayerControllerB instance) => Helper.LocalPlayer != null && instance.actualClientId == Helper.LocalPlayer.actualClientId;
 }

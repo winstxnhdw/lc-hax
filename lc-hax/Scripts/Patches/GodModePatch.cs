@@ -58,9 +58,7 @@ class GodModePatch {
     [HarmonyPrefix]
     [HarmonyPatch(typeof(ForestGiantAI), nameof(ForestGiantAI.GrabPlayerServerRpc))]
     [HarmonyPatch(typeof(ForestGiantAI), nameof(ForestGiantAI.GrabPlayerClientRpc))]
-    static bool PrefixGiantKill(int playerId) {
-        return !Setting.EnableGodMode || !Helper.IsLocalPlayerAboutToGetKilledByEnemy(playerId);
-    }
+    static bool PrefixGiantKill(int playerId) => !Setting.EnableGodMode || !Helper.IsLocalPlayerAboutToGetKilledByEnemy(playerId);
 
     [HarmonyPrefix]
     [HarmonyPatch(typeof(JesterAI), nameof(JesterAI.KillPlayerServerRpc))]
@@ -121,7 +119,5 @@ class GodModePatch {
     [HarmonyPrefix]
     [HarmonyPatch(typeof(RedLocustBees), nameof(RedLocustBees.BeeKillPlayerServerRpc))]
     [HarmonyPatch(typeof(RedLocustBees), nameof(RedLocustBees.BeeKillPlayerClientRpc))]
-    static bool PrefixBeesKill(int playerId) {
-        return !Setting.EnableGodMode || !Helper.IsLocalPlayerAboutToGetKilledByEnemy(playerId);
-    }
+    static bool PrefixBeesKill(int playerId) => !Setting.EnableGodMode || !Helper.IsLocalPlayerAboutToGetKilledByEnemy(playerId);
 }

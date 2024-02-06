@@ -3,7 +3,5 @@ internal class MaskedPlayerController : IEnemyController<MaskedPlayerEnemy> {
         enemyInstance.SetCrouchingServerRpc(!enemyInstance.Reflect().GetInternalField<bool>("crouching"));
 
 
-    internal void UsePrimarySkill(MaskedPlayerEnemy enemyInstance) {
-        enemyInstance.SetHandsOutServerRpc(!enemyInstance.creatureAnimator.GetBool("HandsOut"));
-    }
+    internal void UsePrimarySkill(MaskedPlayerEnemy enemyInstance) => enemyInstance.SetHandsOutServerRpc(!enemyInstance.creatureAnimator.GetBool("HandsOut"));
 }
