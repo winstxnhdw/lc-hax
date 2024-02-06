@@ -2,17 +2,17 @@ using UnityEngine;
 using Hax;
 using Steamworks;
 
-public sealed class AntiKickMod : MonoBehaviour {
+internal sealed class AntiKickMod : MonoBehaviour {
     bool HasGameStarted { get; set; } = false;
     bool HasAnnouncedGameJoin { get; set; } = false;
 
     void OnEnable() {
-        InputListener.onBackslashPress += this.ToggleAntiKick;
+        InputListener.OnBackslashPress += this.ToggleAntiKick;
         GameListener.onGameEnd += this.OnGameEnd;
     }
 
     void OnDisable() {
-        InputListener.onBackslashPress -= this.ToggleAntiKick;
+        InputListener.OnBackslashPress -= this.ToggleAntiKick;
         GameListener.onGameEnd -= this.OnGameEnd;
     }
 

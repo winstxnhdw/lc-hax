@@ -3,7 +3,7 @@ using GameNetcodeStuff;
 using Hax;
 
 [Command("/tp")]
-public class TeleportCommand : ICommand {
+internal class TeleportCommand : ICommand {
     Vector3? GetCoordinates(StringArray args) {
         bool isValidX = float.TryParse(args[0], out float x);
         bool isValidY = float.TryParse(args[1], out float y);

@@ -2,7 +2,7 @@ using UnityEngine;
 using GameNetcodeStuff;
 using Hax;
 
-public sealed class TriggerMod : MonoBehaviour, IEnemyPrompter {
+internal sealed class TriggerMod : MonoBehaviour, IEnemyPrompter {
     RaycastHit[] RaycastHits { get; set; } = new RaycastHit[100];
 
     bool UsingInteractRay { get; set; } = false;
@@ -10,17 +10,17 @@ public sealed class TriggerMod : MonoBehaviour, IEnemyPrompter {
     bool FunnyReviveEnabled { get; set; } = false;
 
     void OnEnable() {
-        InputListener.onMiddleButtonPress += this.Fire;
-        InputListener.onEButtonHold += this.SetUsingInteractRay;
-        InputListener.onRButtonHold += this.SetFunnyReviveEnabled;
-        InputListener.onFButtonHold += this.SetUsingFollowRay;
+        InputListener.OnMiddleButtonPress += this.Fire;
+        InputListener.OnEButtonHold += this.SetUsingInteractRay;
+        InputListener.OnRButtonHold += this.SetFunnyReviveEnabled;
+        InputListener.OnFButtonHold += this.SetUsingFollowRay;
     }
 
     void OnDisable() {
-        InputListener.onMiddleButtonPress -= this.Fire;
-        InputListener.onEButtonHold -= this.SetUsingInteractRay;
-        InputListener.onRButtonHold -= this.SetFunnyReviveEnabled;
-        InputListener.onFButtonHold -= this.SetUsingFollowRay;
+        InputListener.OnMiddleButtonPress -= this.Fire;
+        InputListener.OnEButtonHold -= this.SetUsingInteractRay;
+        InputListener.OnRButtonHold -= this.SetFunnyReviveEnabled;
+        InputListener.OnFButtonHold -= this.SetUsingFollowRay;
     }
 
     void SetUsingInteractRay(bool isHeld) => this.UsingInteractRay = isHeld;

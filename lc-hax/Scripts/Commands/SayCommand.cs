@@ -2,7 +2,7 @@ using GameNetcodeStuff;
 using Hax;
 
 [Command("/say")]
-public class SayCommand : ICommand {
+internal class SayCommand : ICommand {
     public void Execute(StringArray args) {
         if (args.Length < 2) {
             Chat.Print("Usage: /say <player> <message>");

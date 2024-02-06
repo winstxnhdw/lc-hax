@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using Hax;
 
 [Command("/buy")]
-public class BuyCommand : ICommand {
+internal class BuyCommand : ICommand {
     public void Execute(StringArray args) {
         ushort quantity = 1;
 

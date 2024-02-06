@@ -2,7 +2,7 @@ using System;
 using Hax;
 
 [Command("/horn")]
-public class HornCommand : ICommand {
+internal class HornCommand : ICommand {
     Action PullHornLater(int hornDuration) => () => {
         ShipAlarmCord? shipAlarmCord = Helper.FindObject<ShipAlarmCord>();
         shipAlarmCord?.PullCordServerRpc(-1);

@@ -10,7 +10,7 @@ enum CoroutineState {
 
 class InvalidCoroutineState(CoroutineState state) : Exception($"Invalid CoroutineState: {state}") { }
 
-public static partial class Extensions {
+internal static partial class Extensions {
     static CoroutineState ExecuteCoroutineStep(IEnumerator coroutine) {
         try {
             return coroutine.MoveNext() ? CoroutineState.RUNNING : CoroutineState.EXHAUSTED;
@@ -47,9 +47,9 @@ public static partial class Extensions {
         }
     }
 
-    public static Coroutine StartResilientCoroutine(this MonoBehaviour self, Func<object[], IEnumerator> coroutineFactory, params object[] args) =>
+    internal static Coroutine StartResilientCoroutine(this MonoBehaviour self, Func<object[], IEnumerator> coroutineFactory, params object[] args) =>
         self.StartCoroutine(Extensions.ResilientCoroutine(coroutineFactory, args));
 
-    public static Coroutine StartResilientCoroutine(this MonoBehaviour self, Func<object[], IEnumerator> coroutineFactory) =>
+    internal static Coroutine StartResilientCoroutine(this MonoBehaviour self, Func<object[], IEnumerator> coroutineFactory) =>
         self.StartResilientCoroutine(coroutineFactory, []);
 }

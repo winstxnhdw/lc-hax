@@ -2,7 +2,7 @@ using GameNetcodeStuff;
 using Hax;
 
 [DebugCommand("/fixcamera")]
-public class FixCameraCommand : ICommand {
+internal class FixCameraCommand : ICommand {
     public void Execute(StringArray _) {
         if (Helper.LocalPlayer is not PlayerControllerB localPlayer) return;
 
