@@ -134,7 +134,7 @@ The complete feature set includes the following.
 | Toggle God mode               | `/god`                                         |
 | Toggle rapid item usage       | `/rapid`                                       |
 | Eavesdrop on all players      | `/hear`                                        |
-| Respawn all players           | `/respawn`                                     |
+| Respawn Player                | `/respawn`                                     |
 | Unlock all doors              | `/unlock`                                      |
 | Lock all gates                | `/lock`                                        |
 | Open ship door                | `/open`                                        |
