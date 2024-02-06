@@ -36,9 +36,7 @@ public class RespawnCommand : ICommand {
         localPlayer.Crouch(false);
         localPlayer.criticallyInjured = false;
 
-        if (localPlayer.playerBodyAnimator != null) {
-            localPlayer.playerBodyAnimator.SetBool("Limp", false);
-        }
+        localPlayer.playerBodyAnimator?.SetBool("Limp", false);
 
         localPlayer.bleedingHeavily = false;
         localPlayer.activatingItem = false;
@@ -59,9 +57,7 @@ public class RespawnCommand : ICommand {
         localPlayer.DisableJetpackControlsLocally();
         localPlayer.health = 100;
 
-        if (localPlayer.mapRadarDotAnimator != null) {
-            localPlayer.mapRadarDotAnimator.SetBool("dead", false);
-        }
+        localPlayer.mapRadarDotAnimator?.SetBool("dead", false);
 
         if (localPlayer.IsOwner) {
             if (hudManager.TryGetComponent(out Animator gasHelmetAnimator)) {
