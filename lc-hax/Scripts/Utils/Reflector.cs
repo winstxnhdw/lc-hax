@@ -2,14 +2,14 @@ using System;
 using System.Reflection;
 
 internal class Reflector {
-    const BindingFlags privateOrInternal = BindingFlags.NonPublic | BindingFlags.Instance;
-    const BindingFlags internalStatic = BindingFlags.NonPublic | BindingFlags.Static;
-    const BindingFlags internalField = Reflector.privateOrInternal | BindingFlags.GetField;
-    const BindingFlags internalProperty = Reflector.privateOrInternal | BindingFlags.GetProperty;
-    const BindingFlags internalMethod = Reflector.privateOrInternal | BindingFlags.InvokeMethod;
-    const BindingFlags internalStaticField = Reflector.internalStatic | BindingFlags.GetField;
-    const BindingFlags internalStaticProperty = Reflector.internalStatic | BindingFlags.GetProperty;
-    const BindingFlags internalStaticMethod = Reflector.internalStatic | BindingFlags.InvokeMethod;
+    const BindingFlags PrivateOrInternal = BindingFlags.NonPublic | BindingFlags.Instance;
+    const BindingFlags InternalStatic = BindingFlags.NonPublic | BindingFlags.Static;
+    const BindingFlags InternalField = Reflector.PrivateOrInternal | BindingFlags.GetField;
+    const BindingFlags InternalProperty = Reflector.PrivateOrInternal | BindingFlags.GetProperty;
+    const BindingFlags InternalMethod = Reflector.PrivateOrInternal | BindingFlags.InvokeMethod;
+    const BindingFlags InternalStaticField = Reflector.InternalStatic | BindingFlags.GetField;
+    const BindingFlags InternalStaticProperty = Reflector.InternalStatic | BindingFlags.GetProperty;
+    const BindingFlags InternalStaticMethod = Reflector.InternalStatic | BindingFlags.InvokeMethod;
 
     object Obj { get; }
     Type ObjType { get; }
@@ -71,21 +71,21 @@ internal class Reflector {
         }
     }
 
-    internal T? GetInternalField<T>(string variableName) => this.GetField<T>(variableName, Reflector.internalField);
+    internal T? GetInternalField<T>(string variableName) => this.GetField<T>(variableName, Reflector.InternalField);
 
-    internal T? GetInternalStaticField<T>(string variableName) => this.GetField<T>(variableName, Reflector.internalStaticField);
+    internal T? GetInternalStaticField<T>(string variableName) => this.GetField<T>(variableName, Reflector.InternalStaticField);
 
-    internal T? GetInternalProperty<T>(string propertyName) => this.GetProperty<T>(propertyName, Reflector.internalProperty);
+    internal T? GetInternalProperty<T>(string propertyName) => this.GetProperty<T>(propertyName, Reflector.InternalProperty);
 
-    internal T? InvokeInternalMethod<T>(string methodName, params object[] args) => this.InvokeMethod<T>(methodName, Reflector.internalMethod, args);
+    internal T? InvokeInternalMethod<T>(string methodName, params object[] args) => this.InvokeMethod<T>(methodName, Reflector.InternalMethod, args);
 
-    internal T? InvokeInternalStaticMethod<T>(string methodName, params object[] args) => this.InvokeMethod<T>(methodName, Reflector.internalStaticMethod, args);
+    internal T? InvokeInternalStaticMethod<T>(string methodName, params object[] args) => this.InvokeMethod<T>(methodName, Reflector.InternalStaticMethod, args);
 
-    internal Reflector? SetInternalField(string variableName, object value) => this.SetField(variableName, value, Reflector.internalField);
+    internal Reflector? SetInternalField(string variableName, object value) => this.SetField(variableName, value, Reflector.InternalField);
 
-    internal Reflector? SetInternalStaticField(string variableName, object value) => this.SetField(variableName, value, Reflector.internalStaticField);
+    internal Reflector? SetInternalStaticField(string variableName, object value) => this.SetField(variableName, value, Reflector.InternalStaticField);
 
-    internal Reflector? SetInternalProperty(string propertyName, object value) => this.SetProperty(propertyName, value, Reflector.internalProperty);
+    internal Reflector? SetInternalProperty(string propertyName, object value) => this.SetProperty(propertyName, value, Reflector.InternalProperty);
 
     internal Reflector? GetInternalField(string variableName) => this.GetInternalField<object>(variableName)?.Reflect();
 
