@@ -1,7 +1,7 @@
 using Hax;
 
 [Command("/block")]
-public class BlockCommand : ICommand {
+internal class BlockCommand : ICommand {
     string BlockCredit() {
         Setting.EnableBlockCredits = !Setting.EnableBlockCredits;
 

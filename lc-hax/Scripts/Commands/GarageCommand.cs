@@ -1,7 +1,7 @@
 using Hax;
 
 [Command("/garage")]
-public class GarageCommand : ICommand {
+internal class GarageCommand : ICommand {
     InteractTrigger? GarageTrigger => HaxObjects.Instance?.InteractTriggers?.WhereIsNotNull().First(
         interactTrigger => interactTrigger.name is "Cube" && interactTrigger.transform.parent.name is "Cutscenes"
     );

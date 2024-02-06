@@ -3,7 +3,7 @@ using GameNetcodeStuff;
 using Hax;
 
 [Command("/mob")]
-public class MobCommand : IEnemyPrompter, ICommand {
+internal class MobCommand : IEnemyPrompter, ICommand {
     public void Execute(StringArray args) {
         if (args.Length is 0) {
             Chat.Print("Usage: /mob <player>");

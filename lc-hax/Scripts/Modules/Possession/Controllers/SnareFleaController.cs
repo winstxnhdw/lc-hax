@@ -1,5 +1,5 @@
-public class SnareFleaController : IEnemyController<CentipedeAI> {
-    public bool IsClingingToSomething(CentipedeAI enemyInstance) {
+internal class SnareFleaController : IEnemyController<CentipedeAI> {
+    internal bool IsClingingToSomething(CentipedeAI enemyInstance) {
         Reflector centipedeReflector = enemyInstance.Reflect();
 
         return enemyInstance.clingingToPlayer != null || enemyInstance.inSpecialAnimation ||
@@ -9,21 +9,21 @@ public class SnareFleaController : IEnemyController<CentipedeAI> {
                centipedeReflector.GetInternalField<bool>("inDroppingOffPlayerAnim");
     }
 
-    public void UsePrimarySkill(CentipedeAI enemyInstance) {
+    internal void UsePrimarySkill(CentipedeAI enemyInstance) {
         if (enemyInstance.currentBehaviourStateIndex is not 1) return;
         enemyInstance.SwitchToBehaviourServerRpc(2);
     }
 
-    public void UseSecondarySkill(CentipedeAI enemyInstance) {
+    internal void UseSecondarySkill(CentipedeAI enemyInstance) {
         if (this.IsClingingToSomething(enemyInstance)) return;
 
         _ = enemyInstance.Reflect().InvokeInternalMethod("RaycastToCeiling");
         enemyInstance.SwitchToBehaviourServerRpc(2);
     }
 
-    public bool IsAbleToMove(CentipedeAI enemyInstance) => !this.IsClingingToSomething(enemyInstance);
+    internal bool IsAbleToMove(CentipedeAI enemyInstance) => !this.IsClingingToSomething(enemyInstance);
 
-    public string GetPrimarySkillName(CentipedeAI _) => "Drop";
+    internal string GetPrimarySkillName(CentipedeAI _) => "Drop";
 
-    public string GetSecondarySkillName(CentipedeAI _) => "Attach to ceiling";
+    internal string GetSecondarySkillName(CentipedeAI _) => "Attach to ceiling";
 }

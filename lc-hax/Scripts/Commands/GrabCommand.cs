@@ -5,7 +5,7 @@ using GameNetcodeStuff;
 using Hax;
 
 [Command("/grab")]
-public class GrabCommand : ICommand {
+internal class GrabCommand : ICommand {
     bool CanGrabItem(GrabbableObject grabbableObject, Vector3 currentPlayerPosition) =>
         !grabbableObject.isHeld &&
         !grabbableObject.isHeldByEnemy &&

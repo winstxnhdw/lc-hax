@@ -1,7 +1,7 @@
 using Hax;
 
 [Command("/explode")]
-public class ExplodeCommand : ICommand {
+internal class ExplodeCommand : ICommand {
     public void Execute(StringArray args) {
         if (args.Length is 0) {
             Helper.FindObjects<JetpackItem>()

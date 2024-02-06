@@ -1,7 +1,7 @@
 using Hax;
 
 [Command("/beta")]
-public class BetaCommand : ICommand {
+internal class BetaCommand : ICommand {
     public void Execute(StringArray _) {
         bool playedDuringBeta = ES3.Load("playedDuringBeta", "LCGeneralSaveData", true);
         ES3.Save("playedDuringBeta", !playedDuringBeta, "LCGeneralSaveData");

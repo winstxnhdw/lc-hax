@@ -3,8 +3,8 @@ using UnityEngine;
 
 namespace Hax;
 
-public static partial class Helper {
-    public static int SphereCastForward(this RaycastHit[] array, Transform transform, float sphereRadius = 1.0f) {
+internal static partial class Helper {
+    internal static int SphereCastForward(this RaycastHit[] array, Transform transform, float sphereRadius = 1.0f) {
         try {
             return Physics.SphereCastNonAlloc(
                 transform.position + (transform.forward * (sphereRadius + 1.75f)),
@@ -21,7 +21,7 @@ public static partial class Helper {
     }
 
     [RequireNamedArgs]
-    public static RaycastHit[] SphereCastForward(this Transform transform, float sphereRadius = 1.0f) {
+    internal static RaycastHit[] SphereCastForward(this Transform transform, float sphereRadius = 1.0f) {
         try {
             return Physics.SphereCastAll(
                 transform.position + (transform.forward * (sphereRadius + 1.75f)),

@@ -1,4 +1,4 @@
-public enum Unlockable {
+internal enum Unlockable {
     ORANGE_SUIT = 0,
     GREEN_SUIT = 1,
     HAZARD_SUIT = 2,

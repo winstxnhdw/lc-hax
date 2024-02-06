@@ -6,9 +6,9 @@ using UnityEngine.AI;
 using GameNetcodeStuff;
 using Hax;
 
-public sealed class PossessionMod : MonoBehaviour {
-    public static PossessionMod? Instance { get; private set; }
-    public bool IsPossessed => this.EnemyToPossess is not null;
+internal sealed class PossessionMod : MonoBehaviour {
+    internal static PossessionMod? Instance { get; private set; }
+    internal bool IsPossessed => this.EnemyToPossess is not null;
 
     EnemyAI? EnemyToPossess { get; set; } = null;
     Coroutine? UpdateCoroutine { get; set; } = null;
@@ -167,7 +167,7 @@ public sealed class PossessionMod : MonoBehaviour {
         enemy.GetComponentsInChildren<Collider>().ForEach(collider => collider.enabled = enabled);
 
     // Possesses the specified enemy
-    public void Possess(EnemyAI enemy) {
+    internal void Possess(EnemyAI enemy) {
         this.Unpossess();
 
         this.EnemyToPossess = enemy;
@@ -175,7 +175,7 @@ public sealed class PossessionMod : MonoBehaviour {
     }
 
     // Releases possession of the current enemy
-    public void Unpossess() {
+    internal void Unpossess() {
         if (this.EnemyToPossess is EnemyAI previousEnemy) {
             previousEnemy.updatePositionThreshold = 1;
 

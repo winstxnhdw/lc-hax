@@ -3,7 +3,7 @@ using GameNetcodeStuff;
 using Hax;
 
 [Command("/hate")]
-public class HateCommand : IEnemyPrompter, ICommand {
+internal class HateCommand : IEnemyPrompter, ICommand {
     public void Execute(StringArray args) {
         if (args.Length is 0) {
             Chat.Print("Usage: /hate <player> <funnyRevive>");

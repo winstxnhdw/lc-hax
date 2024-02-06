@@ -3,7 +3,7 @@ using Hax;
 using System;
 using System.Collections.Generic;
 
-public sealed class ChatMod : MonoBehaviour {
+internal sealed class ChatMod : MonoBehaviour {
     List<string> CommandHistory { get; } = [];
     int HistoryIndex { get; set; } = -1;
 

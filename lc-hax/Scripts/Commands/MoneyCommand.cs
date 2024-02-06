@@ -2,7 +2,7 @@ using System;
 using Hax;
 
 [Command("/money")]
-public class MoneyCommand : ICommand {
+internal class MoneyCommand : ICommand {
     public void Execute(StringArray args) {
         if (Helper.Terminal is not Terminal terminal) return;
         if (args.Length is 0) {

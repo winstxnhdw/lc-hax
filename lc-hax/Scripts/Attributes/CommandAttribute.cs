@@ -1,6 +1,6 @@
 using System;
 
 [AttributeUsage(AttributeTargets.Class)]
-public class CommandAttribute(string syntax) : Attribute {
-    public string Syntax { get; } = syntax;
+internal class CommandAttribute(string syntax) : Attribute {
+    internal string Syntax { get; } = syntax;
 }

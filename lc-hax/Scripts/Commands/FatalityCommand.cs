@@ -5,7 +5,7 @@ using GameNetcodeStuff;
 using Hax;
 
 [Command("/fatality")]
-public class FatalityCommand : ICommand {
+internal class FatalityCommand : ICommand {
     T? GetEnemyOwnership<T>() where T : EnemyAI {
         if (Helper.LocalPlayer is not PlayerControllerB localPlayer) return null;
         if (Helper.GetEnemy<T>() is not T enemy) return null;

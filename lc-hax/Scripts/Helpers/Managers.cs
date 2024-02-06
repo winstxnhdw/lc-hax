@@ -1,11 +1,11 @@
 namespace Hax;
 
-public static partial class Helper {
-    public static HUDManager? HUDManager => HUDManager.Instance.Unfake();
+internal static partial class Helper {
+    internal static HUDManager? HUDManager => HUDManager.Instance.Unfake();
 
-    public static RoundManager? RoundManager => RoundManager.Instance.Unfake();
+    internal static RoundManager? RoundManager => RoundManager.Instance.Unfake();
 
-    public static StartOfRound? StartOfRound => StartOfRound.Instance.Unfake();
+    internal static StartOfRound? StartOfRound => StartOfRound.Instance.Unfake();
 
-    public static Terminal? Terminal => Helper.HUDManager?.Reflect().GetInternalField<Terminal>("terminalScript").Unfake();
+    internal static Terminal? Terminal => Helper.HUDManager?.Reflect().GetInternalField<Terminal>("terminalScript").Unfake();
 }

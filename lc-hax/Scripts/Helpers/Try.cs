@@ -2,8 +2,8 @@ using System;
 
 namespace Hax;
 
-public static partial class Helper {
-    public static T? Try<T>(Func<T> function, Action<Exception>? onError = null) where T : class {
+internal static partial class Helper {
+    internal static T? Try<T>(Func<T> function, Action<Exception>? onError = null) where T : class {
         try {
             return function();
         }
@@ -14,7 +14,7 @@ public static partial class Helper {
         }
     }
 
-    public static bool Try(Func<bool> function, Action<Exception>? onError = null) {
+    internal static bool Try(Func<bool> function, Action<Exception>? onError = null) {
         try {
             return function();
         }
@@ -25,7 +25,7 @@ public static partial class Helper {
         }
     }
 
-    public static void Try(Action function, Action<Exception>? onError = null) {
+    internal static void Try(Action function, Action<Exception>? onError = null) {
         try {
             function();
         }

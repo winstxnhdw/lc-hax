@@ -1,6 +1,6 @@
 using Hax;
 
-public class PrivilegedCommand(ICommand command) : ICommand {
+internal class PrivilegedCommand(ICommand command) : ICommand {
     ICommand Command { get; } = command;
 
     public void Execute(StringArray args) {

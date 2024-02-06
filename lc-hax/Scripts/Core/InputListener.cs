@@ -2,30 +2,30 @@ using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class InputListener : MonoBehaviour {
-    public static event Action<bool>? OnShiftButtonHold;
-    public static event Action<bool>? OnFButtonHold;
-    public static event Action<bool>? OnEButtonHold;
-    public static event Action<bool>? OnRButtonHold;
-    public static event Action? OnMiddleButtonPress;
-    public static event Action? OnLeftButtonPress;
-    public static event Action? OnRightButtonPress;
-    public static event Action? OnRightButtonRelease;
-    public static event Action? OnLeftArrowKeyPress;
-    public static event Action? OnRightArrowKeyPress;
-    public static event Action? OnPausePress;
-    public static event Action? OnEqualsPress;
-    public static event Action? OnLeftBracketPress;
-    public static event Action? OnRightBracketPress;
-    public static event Action? OnBackslashPress;
-    public static event Action? OnZPress;
-    public static event Action? OnXPress;
-    public static event Action? OnNPress;
-    public static event Action? OnUpArrowPress;
-    public static event Action? OnDownArrowPress;
-    public static event Action? OnF4Press;
-    public static event Action? OnF5Press;
-    public static event Action<bool>? OnRightButtonHold;
+internal class InputListener : MonoBehaviour {
+    internal static event Action<bool>? OnShiftButtonHold;
+    internal static event Action<bool>? OnFButtonHold;
+    internal static event Action<bool>? OnEButtonHold;
+    internal static event Action<bool>? OnRButtonHold;
+    internal static event Action? OnMiddleButtonPress;
+    internal static event Action? OnLeftButtonPress;
+    internal static event Action? OnRightButtonPress;
+    internal static event Action? OnRightButtonRelease;
+    internal static event Action? OnLeftArrowKeyPress;
+    internal static event Action? OnRightArrowKeyPress;
+    internal static event Action? OnPausePress;
+    internal static event Action? OnEqualsPress;
+    internal static event Action? OnLeftBracketPress;
+    internal static event Action? OnRightBracketPress;
+    internal static event Action? OnBackslashPress;
+    internal static event Action? OnZPress;
+    internal static event Action? OnXPress;
+    internal static event Action? OnNPress;
+    internal static event Action? OnUpArrowPress;
+    internal static event Action? OnDownArrowPress;
+    internal static event Action? OnF4Press;
+    internal static event Action? OnF5Press;
+    internal static event Action<bool>? OnRightButtonHold;
 
     (Func<bool>, Action)[] InputActions { get; } = [
         (() => Mouse.current.middleButton.wasPressedThisFrame, () => InputListener.OnMiddleButtonPress?.Invoke()),

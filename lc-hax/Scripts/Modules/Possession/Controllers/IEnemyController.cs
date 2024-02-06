@@ -1,4 +1,4 @@
-public interface IController {
+internal interface IController {
     void Update(EnemyAI enemyInstance);
 
     void UsePrimarySkill(EnemyAI enemyInstance);
@@ -16,7 +16,7 @@ public interface IController {
     CharArray GetSecondarySkillName(EnemyAI enemyInstance);
 }
 
-public interface IEnemyController<T> : IController where T : EnemyAI {
+internal interface IEnemyController<T> : IController where T : EnemyAI {
     void Update(T enemyInstance) { }
 
     void UsePrimarySkill(T enemyInstance) { }
