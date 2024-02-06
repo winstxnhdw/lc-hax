@@ -24,7 +24,7 @@ internal class NutcrackerController : IEnemyController<NutcrackerEnemyAI> {
     public void UseSecondarySkill(NutcrackerEnemyAI enemyInstance) {
         if (!this.isSecondarySkillActive)
             enemyInstance.SetBehaviourState(NutCrackerState.SENTRY);
-            this.isSecondarySkillActive = true;
+        this.isSecondarySkillActive = true;
     }
 
 
@@ -32,7 +32,7 @@ internal class NutcrackerController : IEnemyController<NutcrackerEnemyAI> {
     public void ReleaseSecondarySkill(NutcrackerEnemyAI enemyInstance) {
         if (this.isSecondarySkillActive)
             enemyInstance.SetBehaviourState(NutCrackerState.WALKING);
-            this.isSecondarySkillActive = false;
+        this.isSecondarySkillActive = false;
     }
 
     public string GetPrimarySkillName(NutcrackerEnemyAI enemyInstance) => enemyInstance.gun is null ? "" : "Fire";
