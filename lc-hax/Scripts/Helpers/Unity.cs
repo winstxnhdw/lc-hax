@@ -1,20 +1,14 @@
 using System;
 using System.Collections;
 using UnityEngine;
+using Random = System.Random;
 
 namespace Hax;
 
 internal static partial class Helper {
-    internal static void DelayedAction(this Action action, float seconds) {
-        if (Helper.HUDManager != null) {
-            _ = (Helper.HUDManager?.StartCoroutine(DelayedActionRoutine(action, seconds)));
-        }
-    }
-
-    internal static IEnumerator DelayedActionRoutine(Action action, float delay) {
-        yield return new WaitForSeconds(delay);
-        action();
-    }
-
+    internal static void DelayedAction(this Action action, float seconds) =>
+        Helper.CreateComponent<WaitForBehaviour>()
+            .SetPredicate(time => time >= seconds)
+            .Init(() => action.Invoke());
 
 }
