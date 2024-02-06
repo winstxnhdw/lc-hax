@@ -1,5 +1,3 @@
-using System;
-
 internal class EyelessDogController : IEnemyController<MouthDogAI> {
     internal void UseSecondarySkill(MouthDogAI enemyInstance) {
         if (enemyInstance.currentBehaviourStateIndex is 2) return;
