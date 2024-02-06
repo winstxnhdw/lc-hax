@@ -1,15 +1,15 @@
 using Hax;
 
-[Command("/xp")]
-internal class ExperienceCommand : ICommand {
-    enum Rank {
-        INTERN = 0,
-        PART_TIME = 1,
-        EMPLOYEE = 2,
-        LEADER = 3,
-        BOSS = 4
-    }
+enum Rank {
+    INTERN = 0,
+    PART_TIME = 1,
+    EMPLOYEE = 2,
+    LEADER = 3,
+    BOSS = 4
+}
 
+[Command("/xp")]
+internal class ExperienceCommand {
     public void Execute(StringArray args) {
         if (args.Length is 0) {
             Chat.Print("Usage: /xp <amount>");
