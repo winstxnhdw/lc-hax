@@ -8,7 +8,6 @@ enum MouthDog {
 }
 
 internal class EyelessDogController : IEnemyController<MouthDogAI> {
-
     public void OnMovement(MouthDogAI enemyInstance, bool isMoving, bool isSprinting) {
         if (!isSprinting) {
             if (!isMoving) return;
