@@ -7,7 +7,7 @@ namespace Hax;
 internal static partial class Helper {
     internal static HashSet<GrabbableObject> Grabbables { get; } = [];
 
-    internal static void DropSFX(this GrabbableObject item) {
+    static void DropSFX(this GrabbableObject item) {
         if (!item.gameObject.TryGetComponent(out AudioSource audio)) return;
 
         audio.PlayOneShot(item.itemProperties.dropSFX);
@@ -26,7 +26,6 @@ internal static partial class Helper {
         if (Helper.LocalPlayer is PlayerControllerB localPlayer && !grabbable.IsOwner) {
             grabbable.ChangeOwnershipOfProp(localPlayer.actualClientId);
         }
-
 
         if (grabbable.TryGetComponent(out AnimatedItem animatedItem)) {
             animatedItem.EquipItem();
