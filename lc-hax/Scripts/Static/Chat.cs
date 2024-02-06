@@ -8,7 +8,7 @@ using GameNetcodeStuff;
 namespace Hax;
 
 public static class Chat {
-    public static event Action<string>? onExecuteCommandAttempt;
+    public static event Action<string>? OnExecuteCommandAttempt;
 
     static Dictionary<string, ICommand> Commands { get; } =
         Assembly
@@ -79,7 +79,7 @@ public static class Chat {
 
     public static void ExecuteCommand(string command) {
         Chat.Print("USER", command);
-        Chat.onExecuteCommandAttempt?.Invoke(command);
+        Chat.OnExecuteCommandAttempt?.Invoke(command);
         Chat.ExecuteCommand(command.Split(' '));
     }
 

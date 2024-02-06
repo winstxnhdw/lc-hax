@@ -10,13 +10,13 @@ public sealed class ChatMod : MonoBehaviour {
     void OnEnable() {
         InputListener.OnUpArrowPress += this.CycleBackInHistory;
         InputListener.OnDownArrowPress += this.CycleForwardInHistory;
-        Chat.onExecuteCommandAttempt += this.OnHistoryAdded;
+        Chat.OnExecuteCommandAttempt += this.OnHistoryAdded;
     }
 
     void OnDisable() {
         InputListener.OnUpArrowPress -= this.CycleBackInHistory;
         InputListener.OnDownArrowPress -= this.CycleForwardInHistory;
-        Chat.onExecuteCommandAttempt -= this.OnHistoryAdded;
+        Chat.OnExecuteCommandAttempt -= this.OnHistoryAdded;
     }
 
     void OnHistoryAdded(string command) {
