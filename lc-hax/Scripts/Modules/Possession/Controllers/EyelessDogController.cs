@@ -1,6 +1,6 @@
 using Hax;
 
-internal enum MouthDog {
+enum MouthDog {
     Roaming = 0,
     Suspicious = 1,
     ChaseMode = 2,

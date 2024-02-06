@@ -1,6 +1,6 @@
 using Hax;
 
-public enum FlowerMan {
+enum FlowerMan {
     SCOUTING = 0,
     STAND = 1,
     ANGER = 2,

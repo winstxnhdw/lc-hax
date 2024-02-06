@@ -1,9 +1,8 @@
-public enum CentipedeAIState {
+enum CentipedeAiState {
     Searching = 0,
     CeilingHiding = 1,
     Chasing = 2,
     Clinging = 3
-    // Add more states as needed.
 }
 
 

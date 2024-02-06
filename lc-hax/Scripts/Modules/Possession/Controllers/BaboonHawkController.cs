@@ -4,7 +4,6 @@ enum Baboon {
     Scouting = 0,
     ReturningToCamp = 1,
     FocusingOnThreat = 2,
-    // Additional states can be added here if identified in other parts of the code.
 }
 
 internal class BaboonHawkController : IEnemyController<BaboonBirdAI> {
