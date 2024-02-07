@@ -1,10 +1,9 @@
+using System.Linq;
 using Hax;
 
 [Command("/players")]
 internal class PlayersCommand : ICommand {
-    public void Execute(StringArray args) {
-        Helper.StartOfRound?.allPlayerScripts.ForEach(player =>
-            Chat.Print($"{player.playerUsername} ({player.playerClientId})")
-        );
-    }
+    public void Execute(StringArray args) => Chat.Print(
+        string.Join('\n', Helper.Players.Select(player => $"{player.playerClientId}: {player.playerUsername}"))
+    );
 }
