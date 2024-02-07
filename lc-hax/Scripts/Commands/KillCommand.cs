@@ -1,4 +1,3 @@
-using System;
 using GameNetcodeStuff;
 using UnityEngine;
 using Hax;
@@ -9,9 +8,10 @@ internal class KillCommand : ICommand {
         bool enableGodMode = Setting.EnableGodMode;
         Setting.EnableGodMode = false;
         Helper.LocalPlayer?.KillPlayer();
-        new Action(() => {
-            Setting.EnableGodMode = enableGodMode;
-        }).DelayedAction(0.5f);
+
+        Helper.Delay(delay: 0.5f, action: () =>
+            Setting.EnableGodMode = enableGodMode
+        );
 
         return new Result(true);
     }
