@@ -5,7 +5,7 @@ using Hax;
 [HarmonyPatch(typeof(GameNetworkManager), nameof(GameNetworkManager.StartClient))]
 class LobbyDependencyPatch {
     static void Postfix(SteamId id) {
-        Setting.ConnectedLobbyId = id;
-        Setting.DisconnectedVoluntarily = false;
+        State.ConnectedLobbyId = id;
+        State.DisconnectedVoluntarily = false;
     }
 }

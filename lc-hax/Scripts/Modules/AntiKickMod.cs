@@ -17,11 +17,11 @@ internal sealed class AntiKickMod : MonoBehaviour {
     }
 
     void OnGameEnd() {
-        this.HasAnnouncedGameJoin = false;
-
-        if (!Setting.DisconnectedVoluntarily && Setting.EnableAntiKick && Setting.ConnectedLobbyId is SteamId lobbyId) {
-            GameNetworkManager.Instance.StartClient(lobbyId);
+        if (!State.DisconnectedVoluntarily && Setting.EnableAntiKick && State.ConnectedLobbyId is SteamId lobbyId) {
+            Helper.GameNetworkManager?.StartClient(lobbyId);
         }
+
+        this.HasAnnouncedGameJoin = false;
     }
 
     bool FindJoinMessageInHistory() =>
@@ -36,7 +36,7 @@ internal sealed class AntiKickMod : MonoBehaviour {
 
         this.HasAnnouncedGameJoin = true;
 
-        Helper.CreateComponent<WaitForBehaviour>().SetPredicate(time => time > 1.0f).Init(() => {
+        Helper.ShortDelay(() => {
             Chat.Clear();
             Chat.Print("You are invisible! Do /invis to disable!");
         });

@@ -1,5 +1,3 @@
-using Steamworks;
-
 namespace Hax;
 
 internal static class Setting {
@@ -17,9 +15,5 @@ internal static class Setting {
     internal static bool EnableEavesdrop { get; set; } = false;
     internal static bool EnablePlayerDeathNotifications { get; set; } = false;
     internal static bool DisableFallDamage { get; set; } = false;
-    internal static int ShovelHitForce { get; set; } = 1;
-    internal static bool RealisticPossessionEnabled { get; set; } = false;
     internal static bool InvertYAxis => IngamePlayerSettings.Instance.settings.invertYAxis;
-    internal static bool DisconnectedVoluntarily { get; set; } = false;
-    internal static SteamId? ConnectedLobbyId { get; set; } = null;
 }

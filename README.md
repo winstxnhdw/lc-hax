@@ -76,6 +76,7 @@ The complete feature set includes the following.
 - Always show HUD
 - Always keep items on teleport
 - Enemy possession with abilities
+- Notify teammate's death
 - Stable Zap gun
 - Clear vision
 - Crosshair
@@ -162,27 +163,30 @@ These commands are only available when the user is in superuser mode.
 
 ### Binds
 
-| Action                     | Input                                |
-| -------------------------- | ------------------------------------ |
-| Trigger various objects    | <kbd> M3 </kbd>                      |
-| Follow player              | <kbd> M3 </kbd> + <kbd> F </kbd>     |
-| Interact at a distance     | <kbd> M3 </kbd> + <kbd> E </kbd>     |
-| Funny respawn mobs         | <kbd> M3 </kbd> + <kbd> R </kbd>     |
-| Toggle ESP                 | <kbd> Pause </kbd>                   |
-| Toggle Phantom             | <kbd> = </kbd>                       |
-| Teleport to Phantom        | <kbd> + </kbd>                       |
-| Change spectator index     | <kbd> ⇽ </kbd>                      |
-| Change spectator index     | <kbd> ⇾ </kbd>                      |
-| Increase mouse sensitivity | <kbd> ] </kbd>                       |
-| Decrease mouse sensitivity | <kbd> [ </kbd>                       |
-| Decrease light intensity   | <kbd> F4 </kbd>                      |
-| Increase light intensity   | <kbd> F5 </kbd>                      |
-| Unpossess enemy            | <kbd> Z </kbd>                       |
-| Toggle realistic movement  | <kbd> X </kbd>                       |
-| Toggle possession NoClip   | <kbd> N </kbd>                       |
-| Toggle Anti-Kick           | <kbd> \ </kbd>                       |
-| Disconnect from server     | <kbd> Shift </kbd> + <kbd> F4 </kbd> |
-| Connect to server          | <kbd> Shift </kbd> + <kbd> F5 </kbd> |
+> [!TIP]\
+> You can connect to a specific lobby with <kbd> Shift </kbd> + <kbd> F5 </kbd> if your clipboard contains a valid Steam ID!
+
+| Action                        | Input                                |
+| ----------------------------- | ------------------------------------ |
+| Trigger various objects       | <kbd> M3 </kbd>                      |
+| Follow player                 | <kbd> M3 </kbd> + <kbd> F </kbd>     |
+| Interact at a distance        | <kbd> M3 </kbd> + <kbd> E </kbd>     |
+| Funny respawn mobs            | <kbd> M3 </kbd> + <kbd> R </kbd>     |
+| Toggle ESP                    | <kbd> Pause </kbd>                   |
+| Toggle Phantom                | <kbd> = </kbd>                       |
+| Teleport to Phantom           | <kbd> + </kbd>                       |
+| Change spectator index        | <kbd> ⇽ </kbd>                      |
+| Change spectator index        | <kbd> ⇾ </kbd>                      |
+| Increase mouse sensitivity    | <kbd> ] </kbd>                       |
+| Decrease mouse sensitivity    | <kbd> [ </kbd>                       |
+| Decrease light intensity      | <kbd> F4 </kbd>                      |
+| Increase light intensity      | <kbd> F5 </kbd>                      |
+| Unpossess enemy               | <kbd> Z </kbd>                       |
+| Toggle realistic movement     | <kbd> X </kbd>                       |
+| Toggle possession NoClip      | <kbd> N </kbd>                       |
+| Toggle Anti-Kick              | <kbd> \ </kbd>                       |
+| Disconnect from server        | <kbd> Shift </kbd> + <kbd> F4 </kbd> |
+| Connect to last joined server | <kbd> Shift </kbd> + <kbd> F5 </kbd> |
 
 ### TriggerMod
 

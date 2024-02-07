@@ -9,6 +9,9 @@ internal static partial class Helper {
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     internal static int PlayerIndex(this PlayerControllerB player) => unchecked((int)player.playerClientId);
 
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    internal static bool IsSelf(this PlayerControllerB? instance) => Helper.LocalPlayer is PlayerControllerB localPlayer && instance?.actualClientId == localPlayer.actualClientId;
+
     internal static void DamagePlayerRpc(this PlayerControllerB player, int damage) =>
         player.DamagePlayerFromOtherClientServerRpc(damage, Vector3.zero, -1);
 
@@ -21,7 +24,7 @@ internal static partial class Helper {
         player.isInsideFactory = !outside;
     }
 
-    internal static PlayerControllerB? LocalPlayer => GameNetworkManager.Instance.localPlayerController.Unfake();
+    internal static PlayerControllerB? LocalPlayer => Helper.GameNetworkManager?.localPlayerController.Unfake();
 
     internal static PlayerControllerB[] Players => Helper.StartOfRound?.allPlayerScripts ?? [];
 
@@ -37,6 +40,8 @@ internal static partial class Helper {
     }
 
     internal static PlayerControllerB? GetPlayer(ulong playerClientId) => Helper.Players.First(player => player.playerClientId == playerClientId);
+
+    internal static PlayerControllerB? GetPlayer(int playerClientId) => Helper.GetPlayer(unchecked((ulong)playerClientId));
 
     internal static PlayerControllerB? GetActivePlayer(string? playerNameOrId) =>
         Helper.GetPlayer(playerNameOrId) is not PlayerControllerB player || !player.isPlayerControlled || player.isPlayerDead

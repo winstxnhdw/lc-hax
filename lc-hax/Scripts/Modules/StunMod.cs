@@ -14,7 +14,7 @@ internal sealed class StunMod : MonoBehaviour {
     void StunHitJam(Collider collider) {
         if (collider.TryGetComponent(out EnemyAICollisionDetect enemy)) {
             if (Setting.EnableStunOnLeftClick) enemy.mainScript.SetEnemyStunned(true, 5.0f);
-            if (Setting.EnableHitOnLeftClick) enemy.mainScript.HitEnemyServerRpc(Setting.ShovelHitForce, -1, false);
+            if (Setting.EnableHitOnLeftClick) enemy.mainScript.HitEnemyServerRpc(State.ShovelHitForce, -1, false);
         }
 
         if (!Setting.EnableStunOnLeftClick || (!collider.TryGetComponent(out Turret _) && !collider.TryGetComponent(out Landmine _))) {

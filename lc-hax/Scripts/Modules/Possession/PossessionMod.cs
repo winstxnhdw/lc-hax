@@ -12,7 +12,7 @@ internal sealed class PossessionMod : MonoBehaviour {
 
     EnemyAI? EnemyToPossess { get; set; } = null;
     Coroutine? UpdateCoroutine { get; set; } = null;
-    RigidbodyMovement? RigidbodyKeyboard { get; set; } = null;
+    CharacterMovement? RigidbodyKeyboard { get; set; } = null;
     KeyboardMovement? Keyboard { get; set; } = null;
     MousePan? MousePan { get; set; } = null;
 
@@ -34,7 +34,7 @@ internal sealed class PossessionMod : MonoBehaviour {
     };
 
     void Awake() {
-        this.RigidbodyKeyboard = this.gameObject.AddComponent<RigidbodyMovement>();
+        this.RigidbodyKeyboard = this.gameObject.AddComponent<CharacterMovement>();
         this.Keyboard = this.gameObject.AddComponent<KeyboardMovement>();
         this.MousePan = this.gameObject.AddComponent<MousePan>();
         this.enabled = false;
@@ -75,15 +75,15 @@ internal sealed class PossessionMod : MonoBehaviour {
     }
 
     void ToggleRealisticPossession() {
-        Setting.RealisticPossessionEnabled = !Setting.RealisticPossessionEnabled;
-        Chat.Print($"Realistic Possession: {Setting.RealisticPossessionEnabled}");
+        Setting.EnableRealisticPossession = !Setting.EnableRealisticPossession;
+        Chat.Print($"Realistic Possession: {Setting.EnableRealisticPossession}");
 
         if (this.EnemyToPossess?.agent.Unfake() is not NavMeshAgent navMeshAgent) {
             return;
         }
 
-        navMeshAgent.updatePosition = Setting.RealisticPossessionEnabled;
-        navMeshAgent.updateRotation = Setting.RealisticPossessionEnabled;
+        navMeshAgent.updatePosition = Setting.EnableRealisticPossession;
+        navMeshAgent.updateRotation = Setting.EnableRealisticPossession;
     }
 
     void ToggleNoClip() {
@@ -95,7 +95,7 @@ internal sealed class PossessionMod : MonoBehaviour {
 
     void UpdateComponentsOnCurrentState(bool thisGameObjectIsEnabled) {
         if (this.MousePan is not MousePan mousePan) return;
-        if (this.RigidbodyKeyboard is not RigidbodyMovement rigidbodyKeyboard) return;
+        if (this.RigidbodyKeyboard is not CharacterMovement rigidbodyKeyboard) return;
         if (this.Keyboard is not KeyboardMovement keyboard) return;
 
         mousePan.enabled = thisGameObjectIsEnabled;
@@ -118,7 +118,7 @@ internal sealed class PossessionMod : MonoBehaviour {
 
     // Updates position and rotation of possessed enemy at the end of frame
     void EndOfFrameUpdate() {
-        if (this.RigidbodyKeyboard is not RigidbodyMovement rigidbodyKeyboard) return;
+        if (this.RigidbodyKeyboard is not CharacterMovement rigidbodyKeyboard) return;
         if (this.EnemyToPossess is not EnemyAI enemy) return;
         if (Helper.LocalPlayer is not PlayerControllerB localPlayer) return;
         if (Helper.CurrentCamera is not Camera camera || !camera.enabled) return;
@@ -130,8 +130,8 @@ internal sealed class PossessionMod : MonoBehaviour {
             this.SetEnemyColliders(enemy, false);
 
             if (enemy.agent.Unfake() is NavMeshAgent agent) {
-                agent.updatePosition = Setting.RealisticPossessionEnabled;
-                agent.updateRotation = Setting.RealisticPossessionEnabled;
+                agent.updatePosition = Setting.EnableRealisticPossession;
+                agent.updateRotation = Setting.EnableRealisticPossession;
             }
 
             rigidbodyKeyboard.Init();
@@ -183,19 +183,15 @@ internal sealed class PossessionMod : MonoBehaviour {
 
     // Releases possession of the current enemy
     internal void Unpossess() {
-        if (this.EnemyToPossess is EnemyAI previousEnemy) {
-            previousEnemy.updatePositionThreshold = 1;
-
-            if (previousEnemy.agent.Unfake() is NavMeshAgent navMeshAgent) {
-                navMeshAgent.updatePosition = true;
-                navMeshAgent.updateRotation = true;
-                this.UpdateEnemyPositionToHere(previousEnemy);
-                _ = previousEnemy.agent.Warp(previousEnemy.transform.position);
-            }
-
-            this.SetEnemyColliders(previousEnemy, true);
+        if (this.EnemyToPossess is not EnemyAI possessedEnemy) return;
+        if (possessedEnemy.agent.Unfake() is NavMeshAgent navMeshAgent) {
+            navMeshAgent.updatePosition = true;
+            navMeshAgent.updateRotation = true;
+            this.UpdateEnemyPositionToHere(possessedEnemy);
+            _ = possessedEnemy.agent.Warp(possessedEnemy.transform.position);
         }
 
+        this.SetEnemyColliders(possessedEnemy, true);
         this.EnemyToPossess = null;
     }
 

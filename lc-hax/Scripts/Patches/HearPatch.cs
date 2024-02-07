@@ -8,6 +8,7 @@ using Hax;
 class HearPatch {
     static void Postfix(StartOfRound __instance) {
         if (!Setting.EnableEavesdrop || Helper.StartOfRound?.shipIsLeaving is true) return;
+        if (Helper.SoundManager is not SoundManager soundManager) return;
 
         __instance.allPlayerScripts.ForEach(player => {
             AudioSource currentVoiceChatAudioSource = player.currentVoiceChatAudioSource;
@@ -23,8 +24,8 @@ class HearPatch {
             audioLowPassFilter.enabled = false;
             audioHighPassFilter.enabled = false;
             currentVoiceChatAudioSource.panStereo = 0.0f;
-            SoundManager.Instance.playerVoicePitchTargets[player.playerClientId] = 1.0f;
-            SoundManager.Instance.SetPlayerPitch(1.0f, unchecked((int)player.playerClientId));
+            soundManager.playerVoicePitchTargets[player.playerClientId] = 1.0f;
+            soundManager.SetPlayerPitch(1.0f, unchecked((int)player.playerClientId));
 
             currentVoiceChatAudioSource.spatialBlend = 0.0f;
             player.currentVoiceChatIngameSettings.set2D = true;
