@@ -10,21 +10,29 @@ using Hax;
 [HarmonyPatch(typeof(StartOfRound), "EndOfGame")]
 class WaitForShipPatch {
     static IEnumerator Postfix(IEnumerator endOfGame) {
-        while (endOfGame.MoveNext()) yield return endOfGame.Current;
-        yield return new WaitUntil(() => Helper.StartOfRound?.shipIsLeaving is false);
+        if (Helper.StartOfRound is not StartOfRound startOfRound) yield break;
+
+        while (endOfGame.MoveNext()) {
+            yield return endOfGame.Current;
+        }
+
+        yield return new WaitUntil(() => startOfRound.shipIsLeaving is false);
         yield return new WaitForSeconds(5.0f); // Wait a bit to give it a chance to fix itself
         bool isLeverBroken = true;
 
         while (isLeverBroken) {
             yield return new WaitForSeconds(Random.Range(2.0f, 5.0f)); // Make lc-hax users not send it all at the same time
-            if (Helper.StartOfRound?.travellingToNewLevel is true) continue;
+
+            if (Helper.StartOfRound?.travellingToNewLevel is true) {
+                continue;
+            }
 
             isLeverBroken =
-                Helper.StartOfRound?.inShipPhase is true &&
+                startOfRound.inShipPhase is true &&
                 Helper.FindObject<StartMatchLever>()?.triggerScript.interactable is false;
 
             if (isLeverBroken) {
-                Helper.StartOfRound?.PlayerHasRevivedServerRpc();
+                startOfRound.PlayerHasRevivedServerRpc();
             }
         }
     }
