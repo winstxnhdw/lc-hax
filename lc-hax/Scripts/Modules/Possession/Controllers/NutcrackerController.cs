@@ -9,9 +9,8 @@ internal class NutcrackerController : IEnemyController<NutcrackerEnemyAI> {
     private bool isSecondarySkillActive = false;
 
     public void OnMovement(NutcrackerEnemyAI enemyInstance, bool isMoving, bool isSprinting) {
-        if (isMoving || isSprinting) {
-            enemyInstance.SetBehaviourState(NutCrackerState.WALKING);
-        }
+        if (!isMoving && !isSprinting) return;
+        enemyInstance.SetBehaviourState(NutCrackerState.WALKING);
     }
 
     public void UsePrimarySkill(NutcrackerEnemyAI enemyInstance) {

@@ -13,7 +13,7 @@ public class SpawnCommand : ICommand {
         if (player == null) return;
 
         for (ulong i = 0; i < amount; i++) {
-            GameObject enemy = UnityEngine.Object.Instantiate(prefab, player.transform.position, Quaternion.Euler(Vector3.zero));
+            GameObject enemy = UnityObject.Instantiate(prefab, player.transform.position, Quaternion.Euler(Vector3.zero));
             if (enemy.TryGetComponent(out NetworkObject networkObject)) {
                 networkObject.Spawn(true);
                 if (enemy.TryGetComponent(out EnemyAI ai)) {
