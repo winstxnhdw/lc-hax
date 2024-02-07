@@ -29,9 +29,8 @@ internal class EyelessDogController : IEnemyController<MouthDogAI> {
     }
 
     public void ReleaseSecondarySkill(MouthDogAI enemyInstance) {
-        if (this.isSecondarySkillActive) {
-            this.isSecondarySkillActive = false;
-        }
+        if (!this.isSecondarySkillActive) return;
+        this.isSecondarySkillActive = false;
     }
 
     public string GetSecondarySkillName(MouthDogAI _) => "Lunge";

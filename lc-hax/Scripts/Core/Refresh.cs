@@ -2,7 +2,7 @@ using Hax;
 using System.Linq;
 using UnityEngine;
 
-public sealed class Refresh : MonoBehaviour {
+internal sealed class Refresh : MonoBehaviour {
     private void Awake() {
         if (Helper.LocalPlayer == null) return;
         if (Helper.StartOfRound?.shipHasLanded is true) {

@@ -23,12 +23,7 @@ internal class NoiseCommand : ICommand {
             return;
         }
 
-        if (args.Length is 1) {
-            this.PlayNoiseContinuously(player.transform.position, 30.0f);
-            return;
-        }
-
-        if (!ulong.TryParse(args[1], out ulong duration)) {
+        if (!args[1].TryParse(defaultValue: 30, result: out ulong duration)) {
             Chat.Print("Invalid duration!");
             return;
         }

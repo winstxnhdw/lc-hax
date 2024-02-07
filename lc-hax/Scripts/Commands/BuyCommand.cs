@@ -5,20 +5,14 @@ using Hax;
 [Command("/buy")]
 internal class BuyCommand : ICommand {
     public void Execute(StringArray args) {
-        ushort quantity = 1;
-
+        if (Helper.Terminal is not Terminal terminal) return;
         if (args.Length is 0) {
-            Chat.Print("Usage: /buy <item> <quantity>");
+            Chat.Print("Usage: /buy <item> <quantity?>");
             return;
         }
 
-        if (Helper.Terminal is not Terminal terminal) {
-            Chat.Print("Terminal not found!");
-            return;
-        }
-
-        if (args.Length > 1 && ushort.TryParse(args[1], out quantity) is false) {
-            Chat.Print("Quantity must be a number!");
+        if (!args[1].TryParse(defaultValue: 1, result: out ushort quantity)) {
+            Chat.Print("The quantity must be a positive number!");
             return;
         }
 
@@ -27,7 +21,7 @@ internal class BuyCommand : ICommand {
             pair => pair.i
         );
 
-        string key = Helper.FuzzyMatch(args[0].ToLower(), [.. items.Keys]);
+        string key = Helper.FuzzyMatch(args[0]?.ToLower(), [.. items.Keys]);
 
         terminal.orderedItemsFromTerminal.Clear();
         terminal.BuyItemsServerRpc(

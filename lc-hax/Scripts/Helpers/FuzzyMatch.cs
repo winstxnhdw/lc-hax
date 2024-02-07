@@ -1,9 +1,10 @@
+using System;
 using Quickenshtein;
 
 namespace Hax;
 
 internal static partial class Helper {
-    static int LongestCommonSubstring(CharArray query, CharArray original) {
+    static int LongestCommonSubstring(ReadOnlySpan<char> query, ReadOnlySpan<char> original) {
         int originalLength = original.Length;
         int queryLength = query.Length;
 
@@ -36,7 +37,9 @@ internal static partial class Helper {
         return distancePenalty + commonalityReward;
     }
 
-    internal static string FuzzyMatch(string query, StringArray strings) {
+    internal static string FuzzyMatch(string? query, ReadOnlySpan<string> strings) {
+        if (string.IsNullOrWhiteSpace(query)) return strings[0];
+
         string closestMatch = strings[0];
         int lowestWeight = Helper.GetSimilarityWeight(query, strings[0]);
 
