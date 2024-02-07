@@ -13,7 +13,7 @@ public class QuotaCommand : ICommand {
 
     public void Execute(StringArray args) {
         if (args.Length < 2) {
-            Chat.Print("Usage: /quota <amount> <?fulfilled>");
+            Chat.Print("Usage: /quota <amount> <fulfilled?>");
             return;
         }
 
