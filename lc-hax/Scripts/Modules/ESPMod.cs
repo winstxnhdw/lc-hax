@@ -92,7 +92,7 @@ internal class ESPMod : MonoBehaviour {
             }
 
             this.RenderLabel($"{grabbableObject.itemProperties.itemName} ${grabbableObject.scrapValue}").Invoke(
-                new Color(255, 140, 0), // dark orange
+                Color.gray,
                 rendererCentrePoint
             );
         });
