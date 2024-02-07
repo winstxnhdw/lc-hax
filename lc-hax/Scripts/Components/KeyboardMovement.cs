@@ -1,7 +1,6 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
-
-namespace Hax;
+using Hax;
 
 internal class KeyboardMovement : MonoBehaviour {
     const float BaseSpeed = 20;

@@ -2,8 +2,6 @@ using System;
 using System.Collections;
 using UnityEngine;
 
-namespace Hax;
-
 internal class TransientBehaviour : MonoBehaviour {
     Action<float>? Action { get; set; }
     Action? DisposeAction { get; set; }
