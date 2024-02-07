@@ -8,37 +8,31 @@ class GodModePatch {
     [HarmonyPrefix]
     [HarmonyPatch(typeof(PlayerControllerB), nameof(PlayerControllerB.AllowPlayerDeath))]
     static bool PrefixDamagePlayer(PlayerControllerB __instance, ref bool __result) {
-        if (__instance.isSelf())
-            if (Setting.EnableGodMode) {
-                __result = false;
-                return false;
-            }
+        if (!__instance.IsSelf()) return true;
+        if (Setting.EnableGodMode) {
+            __result = false;
+            return false;
+        }
 
         return true;
     }
 
+
     [HarmonyPrefix]
     [HarmonyPatch(typeof(PlayerControllerB), nameof(PlayerControllerB.DamagePlayer))]
     static bool PrefixDamagePlayer(PlayerControllerB __instance, CauseOfDeath causeOfDeath) {
-        if (__instance.isSelf()) {
-            if (Setting.EnableGodMode) return false;
-            if (Setting.DisableFallDamage && causeOfDeath == CauseOfDeath.Gravity) return false;
-        }
-
+        if (!__instance.IsSelf()) return true;
+        if (Setting.EnableGodMode) return false;
+        if (Setting.DisableFallDamage && causeOfDeath == CauseOfDeath.Gravity) return false;
         return true;
     }
 
     [HarmonyPrefix]
     [HarmonyPatch(typeof(PlayerControllerB), nameof(PlayerControllerB.KillPlayer))]
     static bool PrefixKillPlayer(PlayerControllerB __instance, CauseOfDeath causeOfDeath) {
-        if (__instance.isSelf()) {
-            if (Setting.EnableGodMode) return false;
-            if (Setting.DisableFallDamage && causeOfDeath == CauseOfDeath.Gravity) return false;
-        }
-        else
-            Helper.HUDManager?.DisplayTip($"{__instance.playerUsername} Died!",
-                $"{__instance.playerUsername} Died of {causeOfDeath}!");
-
+        if (__instance.IsSelf()) return true;
+        if (Setting.EnableGodMode) return false;
+        if (Setting.DisableFallDamage && causeOfDeath == CauseOfDeath.Gravity) return false;
         return true;
     }
 

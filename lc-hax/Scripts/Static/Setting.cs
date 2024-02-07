@@ -15,6 +15,7 @@ internal static class Setting {
     internal static bool EnablePhantom { get; set; } = false;
     internal static bool EnableFakeDeath { get; set; } = false;
     internal static bool EnableEavesdrop { get; set; } = false;
+    internal static bool EnablePlayerDeathNotifications { get; set; } = false;
     internal static bool DisableFallDamage { get; set; } = false;
     internal static int ShovelHitForce { get; set; } = 1;
     internal static bool RealisticPossessionEnabled { get; set; } = false;

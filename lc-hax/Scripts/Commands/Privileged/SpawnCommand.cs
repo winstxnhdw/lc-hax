@@ -20,6 +20,9 @@ public class SpawnCommand : ICommand {
                         _ = Helper.Enemies.Add(AI);
                     }
                 }
+                else {
+                    UnityEngine.Object.Destroy(enemy);
+                }
             }
         }
     }

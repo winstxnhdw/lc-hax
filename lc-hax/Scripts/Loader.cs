@@ -55,6 +55,7 @@ internal class Loader : MonoBehaviour {
         Loader.AddHaxGameObject<InputListener>();
         Loader.AddHaxGameObject<ScreenListener>();
         Loader.AddHaxGameObject<GameListener>();
+        Loader.AddHaxGameObject<Refresh>();
     }
 
     static void LoadHaxModules() {
@@ -77,11 +78,6 @@ internal class Loader : MonoBehaviour {
         Loader.AddHaxModules<DisconnectMod>();
         Loader.AddHaxModules<ClearVisionMod>();
         Loader.AddHaxModules<InstantInteractMod>();
-
-        // Dont Disable this line, it is used to fill the Helper in case is injected during a full loaded level.
-        Loader.AddHaxModules<RefreshMod>();
-
-
     }
 
     internal static void Unload() {
