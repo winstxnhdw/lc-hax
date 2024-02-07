@@ -89,7 +89,7 @@ internal static class Chat {
             return;
         }
 
-        using ICommand? command =
+        ICommand? command =
             Chat.Commands.GetValue(args[0]) ??
             Chat.PrivilegeCommands.GetValue(args[0]) ??
             Chat.DebugCommands.GetValue(args[0]);
