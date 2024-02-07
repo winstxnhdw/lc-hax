@@ -6,7 +6,6 @@ enum NutCrackerState {
 }
 
 internal class NutcrackerController : IEnemyController<NutcrackerEnemyAI> {
-
     private bool isSecondarySkillActive = false;
 
     public void OnMovement(NutcrackerEnemyAI enemyInstance, bool isMoving, bool isSprinting) {
