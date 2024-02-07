@@ -10,7 +10,7 @@ public class LevelEnemiesCommand : ICommand {
         // Using string.Join to concatenate enemy names
         string levelEnemies = string.Join(", ", Helper.AllSpawnableEnemies.Keys);
 
-        Console.Write(levelEnemies);
+        Logger.Write(levelEnemies);
         Chat.Print(levelEnemies);
     }
 }
