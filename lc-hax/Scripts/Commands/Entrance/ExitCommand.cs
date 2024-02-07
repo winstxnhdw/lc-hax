@@ -1,4 +1,6 @@
+using Hax;
+
 [Command("/exit")]
-internal class ExitCommand : IEntrance, ICommand {
-    public void Execute(StringArray _) => this.EntranceTeleport(true);
+internal class ExitCommand : ICommand {
+    public void Execute(StringArray _) => Helper.LocalPlayer?.EntranceTeleport(true);
 }

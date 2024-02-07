@@ -16,6 +16,11 @@ internal static partial class Helper {
 
     internal static void KillPlayer(this PlayerControllerB player) => player.DamagePlayerRpc(100);
 
+    internal static void EntranceTeleport(this PlayerControllerB player, bool outside) {
+        player.TeleportPlayer(RoundManager.FindMainEntranceScript(outside).entrancePoint.position);
+        player.isInsideFactory = !outside;
+    }
+
     internal static PlayerControllerB? LocalPlayer => GameNetworkManager.Instance.localPlayerController.Unfake();
 
     internal static PlayerControllerB[] Players => Helper.StartOfRound?.allPlayerScripts ?? [];
