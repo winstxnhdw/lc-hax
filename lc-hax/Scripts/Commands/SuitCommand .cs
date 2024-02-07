@@ -27,7 +27,7 @@ internal class SuitCommand : ICommand {
         }
 
         Unlockable selectedSuit = this.SuitUnlockables[key];
-        List<UnlockableSuit> availableSuits = Helper.FindObjects<UnlockableSuit>().ToList();
+        List<UnlockableSuit> availableSuits = [.. Helper.FindObjects<UnlockableSuit>()];
 
         UnlockableSuit? matchingSuit = availableSuits.FirstOrDefault(suit => suit.suitID == (int)selectedSuit);
 
