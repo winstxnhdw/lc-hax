@@ -22,14 +22,14 @@ class GodModePatch {
     [HarmonyPatch(typeof(PlayerControllerB), nameof(PlayerControllerB.DamagePlayer))]
     static bool PrefixDamagePlayer(PlayerControllerB __instance, CauseOfDeath causeOfDeath) {
         return !__instance.IsSelf()
-|| !Setting.EnableGodMode && (!Setting.DisableFallDamage || causeOfDeath != CauseOfDeath.Gravity);
+|| (!Setting.EnableGodMode && (!Setting.DisableFallDamage || causeOfDeath != CauseOfDeath.Gravity));
     }
 
     [HarmonyPrefix]
     [HarmonyPatch(typeof(PlayerControllerB), nameof(PlayerControllerB.KillPlayer))]
     static bool PrefixKillPlayer(PlayerControllerB __instance, CauseOfDeath causeOfDeath) {
         return __instance.IsSelf()
-|| !Setting.EnableGodMode && (!Setting.DisableFallDamage || causeOfDeath != CauseOfDeath.Gravity);
+|| (!Setting.EnableGodMode && (!Setting.DisableFallDamage || causeOfDeath != CauseOfDeath.Gravity));
     }
 
     [HarmonyPrefix]
