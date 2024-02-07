@@ -60,6 +60,8 @@ internal static partial class Helper {
 
                     foreach (List<SpawnableEnemyWithRarity> collection in enemyCollections) {
                         foreach (SpawnableEnemyWithRarity enemy in collection) {
+                            if (enemy.enemyType.enemyName.Contains("Docile Locust Bees", StringComparison.OrdinalIgnoreCase)) continue;
+                            if (enemy.enemyType.enemyName.Contains("Manticoil", StringComparison.OrdinalIgnoreCase)) continue;
                             _ = uniqueEnemies.Add((enemy.enemyType.enemyName, enemy.enemyType.enemyPrefab));
                         }
                     }
