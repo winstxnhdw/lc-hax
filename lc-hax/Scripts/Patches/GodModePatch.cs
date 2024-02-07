@@ -103,7 +103,19 @@ class GodModePatch {
         if (__instance.IsLocalPlayerAboutToGetKilledByEnemy(other))
             if (Helper.LocalPlayer != null) {
                 // instead let's make it chase the player, but never kill it.
-                __instance.MouthDogChasePlayer(Helper.LocalPlayer);
+                if (__instance.currentBehaviourStateIndex is 0 or 1) {
+                    _ = __instance.Reflect().InvokeInternalMethod("ChaseLocalPlayer");
+                }
+                else {
+                    if (__instance.currentBehaviourStateIndex != 2 ||
+                        __instance.Reflect().GetInternalField<bool>("inLunge"))
+                        return false;
+                    __instance.transform.LookAt(Helper.LocalPlayer.transform.position);
+                    __instance.transform.localEulerAngles = new Vector3(0.0f, Helper.LocalPlayer.transform.eulerAngles.y, 0.0f);
+                    _ = __instance.Reflect().SetInternalField("inLunge", true);
+                    _ = __instance.Reflect().InvokeInternalMethod("EnterLunge");
+                }
+
                 return false;
             }
 

@@ -78,18 +78,5 @@ internal static partial class Helper {
         return null;
     }
     internal static void MouthDogChasePlayer(this MouthDogAI instance, PlayerControllerB player) {
-        if (instance == null) return;
-        if (player == null) return;
-        if (instance.currentBehaviourStateIndex is 0 or 1) {
-            _ = instance.Reflect().InvokeInternalMethod("ChaseLocalPlayer");
-        }
-        else {
-            if (instance.currentBehaviourStateIndex != 2 || instance.Reflect().GetInternalField<bool>("inLunge"))
-                return;
-            instance.transform.LookAt(player.transform.position);
-            instance.transform.localEulerAngles = new Vector3(0.0f, player.transform.eulerAngles.y, 0.0f);
-            _ = instance.Reflect().SetInternalField("inLunge", true);
-            _ = instance.Reflect().InvokeInternalMethod("EnterLunge");
-        }
     }
 }
