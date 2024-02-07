@@ -1,7 +1,7 @@
 using Hax;
 
 [PrivilegedCommand("/quota")]
-public class QuotaCommand : ICommand {
+internal class QuotaCommand : ICommand {
     public void Execute(StringArray args) {
         if (Helper.TimeOfDay is not TimeOfDay timeOfDay) return;
         if (args.Length < 1) {
@@ -14,8 +14,9 @@ public class QuotaCommand : ICommand {
             return;
         }
 
-        if (args.Length > 1 && !ushort.TryParse(args[1], out ushort fulfilled)) {
-            Chat.Print("Invalid fulfilled amount, setting to 0.");
+        if (!args[1].TryParse(defaultValue: 0, result: out ushort fulfilled)) {
+            Chat.Print("Invalid fulfilled amount!");
+            return;
         }
 
         timeOfDay.profitQuota = amount;
