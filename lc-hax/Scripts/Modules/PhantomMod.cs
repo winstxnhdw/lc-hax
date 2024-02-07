@@ -28,7 +28,7 @@ internal sealed class PhantomMod : MonoBehaviour {
         if (!camera.gameObject.TryGetComponent(out MousePan mouse)) return;
 
         if (Setting.EnablePhantom) {
-            //if was enabled possession before, but no longer possesing
+            // if possession was enabled before, but no longer possesing
             if (this.EnabledPossession && !possessionMod.IsPossessed) {
                 this.EnabledPossession = false;
                 possessionMod.enabled = false;
@@ -40,7 +40,7 @@ internal sealed class PhantomMod : MonoBehaviour {
                 return;
             }
 
-            // possessing monster in the first frame
+            // possessing monster for the first frame
             if (!this.EnabledPossession) {
                 this.EnabledPossession = true;
                 possessionMod.enabled = true;
@@ -52,11 +52,11 @@ internal sealed class PhantomMod : MonoBehaviour {
         }
 
         else {
-            if (this.EnabledPossession) {
-                possessionMod.Unpossess();
-                this.EnabledPossession = false;
-                possessionMod.enabled = false;
-            }
+            if (!this.EnabledPossession) return;
+
+            possessionMod.Unpossess();
+            this.EnabledPossession = false;
+            possessionMod.enabled = false;
         }
     }
 
@@ -130,22 +130,10 @@ internal sealed class PhantomMod : MonoBehaviour {
         if (Helper.CurrentCamera is not Camera camera || !camera.enabled) return;
 
         Setting.EnablePhantom = !Setting.EnablePhantom;
-
-        //to handle spectate camera.
-        if (player.isPlayerDead) {
-            player.enabled = !Setting.EnablePhantom;
-        }
-
-        else {
-            if (!player.enabled) {
-                player.enabled = true;
-            }
-        }
-
+        player.enabled = !player.isPlayerDead || !Setting.EnablePhantom;
         player.playerBodyAnimator.enabled = !Setting.EnablePhantom;
         player.thisController.enabled = !Setting.EnablePhantom;
         player.isFreeCamera = Setting.EnablePhantom;
-
 
         if (Setting.EnablePhantom) {
             this.PhantomEnabled(camera);
