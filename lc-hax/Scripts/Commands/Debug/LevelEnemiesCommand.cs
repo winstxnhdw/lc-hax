@@ -8,7 +8,7 @@ public class LevelEnemiesCommand : ICommand {
         if (Helper.RoundManager == null || Helper.RoundManager.currentLevel == null) return;
 
         // Using string.Join to concatenate enemy names
-        string levelEnemies = string.Join(", ", Helper.SpawnableEnemies.Keys);
+        string levelEnemies = string.Join(", ", Helper.AllSpawnableEnemies.Keys);
 
         Console.Write(levelEnemies);
         Chat.Print(levelEnemies);
