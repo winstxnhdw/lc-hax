@@ -23,7 +23,7 @@ internal class EyelessDogController : IEnemyController<MouthDogAI> {
     }
 
     public void UseSecondarySkill(MouthDogAI enemyInstance) {
-        if(!this.isSecondarySkillActive) {
+        if (!this.isSecondarySkillActive) {
             enemyInstance.SetBehaviourState(MouthDog.LUNGE);
             this.isSecondarySkillActive = true;
         }
