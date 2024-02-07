@@ -11,8 +11,6 @@ enum BehaviourState {
 }
 
 internal class EnemyPromptHandler {
-    void SetBehaviourState(EnemyAI enemy, BehaviourState behaviourState) => enemy.SwitchToBehaviourState(unchecked((int)behaviourState));
-
     void TeleportEnemyToPlayer(
         EnemyAI enemy,
         PlayerControllerB targetPlayer,
@@ -60,7 +58,7 @@ internal class EnemyPromptHandler {
 
     void HandleForestGiant(ForestGiantAI forestGiant, PlayerControllerB targetPlayer, bool willTeleportEnemy) {
         this.TeleportEnemyToPlayer(forestGiant, targetPlayer, willTeleportEnemy, true);
-        this.SetBehaviourState(forestGiant, BehaviourState.CHASE);
+        forestGiant.SetBehaviourState(BehaviourState.CHASE);
         forestGiant.StopSearch(forestGiant.roamPlanet, false);
         forestGiant.chasingPlayer = targetPlayer;
         forestGiant.investigating = true;
@@ -71,18 +69,18 @@ internal class EnemyPromptHandler {
 
     void HandleSnareFlea(CentipedeAI snareFlea, PlayerControllerB targetPlayer) {
         if (!targetPlayer.isInsideFactory) return;
-        this.SetBehaviourState(snareFlea, BehaviourState.AGGRAVATED);
+        snareFlea.SetBehaviourState(BehaviourState.CHASE);
     }
 
     void HandleBracken(FlowermanAI bracken, PlayerControllerB targetPlayer, bool willTeleportEnemy) {
         this.TeleportEnemyToPlayer(bracken, targetPlayer, willTeleportEnemy, allowedInside: true);
-        this.SetBehaviourState(bracken, BehaviourState.AGGRAVATED);
+        bracken.SetBehaviourState(BehaviourState.AGGRAVATED);
         bracken.EnterAngerModeServerRpc(float.MaxValue);
     }
 
     void HandleBunkerSpider(SandSpiderAI bunkerSpider, PlayerControllerB targetPlayer, bool willTeleportEnemy) {
         this.TeleportEnemyToPlayer(bunkerSpider, targetPlayer, willTeleportEnemy, allowedInside: true);
-        this.SetBehaviourState(bunkerSpider, BehaviourState.AGGRAVATED);
+        bunkerSpider.SetBehaviourState(BehaviourState.AGGRAVATED);
 
         Vector3 playerPosition = targetPlayer.transform.position;
 
@@ -98,13 +96,12 @@ internal class EnemyPromptHandler {
 
     void HandleBee(RedLocustBees bee, PlayerControllerB targetPlayer, bool willTeleportEnemy) {
         this.TeleportEnemyToPlayer(bee, targetPlayer, willTeleportEnemy, true);
-        this.SetBehaviourState(bee, BehaviourState.AGGRAVATED);
+        bee.SetBehaviourState(BehaviourState.AGGRAVATED);
     }
 
     void HandleHoardingBug(HoarderBugAI hoardingBug, PlayerControllerB targetPlayer, bool willTeleportEnemy) {
         this.TeleportEnemyToPlayer(hoardingBug, targetPlayer, willTeleportEnemy, allowedInside: true);
-        this.SetBehaviourState(hoardingBug, BehaviourState.AGGRAVATED);
-
+        hoardingBug.SetBehaviourState(BehaviourState.AGGRAVATED);
         hoardingBug.angryAtPlayer = targetPlayer;
         hoardingBug.angryTimer = float.MaxValue;
 
@@ -127,31 +124,29 @@ internal class EnemyPromptHandler {
 
     void HandleMaskedPlayer(MaskedPlayerEnemy maskedPlayer, PlayerControllerB targetPlayer, bool willTeleportEnemy) {
         this.TeleportEnemyToPlayer(maskedPlayer, targetPlayer, willTeleportEnemy, true, true);
-        this.SetBehaviourState(maskedPlayer, BehaviourState.CHASE);
-
+        maskedPlayer.SetBehaviourState(BehaviourState.CHASE);
         maskedPlayer.SetEnemyOutside(!targetPlayer.isInsideFactory);
     }
 
     void HandleCoilHead(SpringManAI coilHead, PlayerControllerB targetPlayer, bool willTeleportEnemy) {
         this.TeleportEnemyToPlayer(coilHead, targetPlayer, willTeleportEnemy, allowedInside: true);
-        this.SetBehaviourState(coilHead, BehaviourState.CHASE);
-
+        coilHead.SetBehaviourState(BehaviourState.CHASE);
         coilHead.SetAnimationGoServerRpc();
     }
 
     void HandleSporeLizard(PufferAI sporeLizard, PlayerControllerB targetPlayer, bool willTeleportEnemy) {
         this.TeleportEnemyToPlayer(sporeLizard, targetPlayer, willTeleportEnemy, allowedInside: true);
-        this.SetBehaviourState(sporeLizard, BehaviourState.AGGRAVATED);
+        sporeLizard.SetBehaviourState(BehaviourState.AGGRAVATED);
     }
 
     void HandleJester(JesterAI jester, PlayerControllerB targetPlayer, bool willTeleportEnemy) {
         this.TeleportEnemyToPlayer(jester, targetPlayer, willTeleportEnemy, allowedInside: true);
-        this.SetBehaviourState(jester, BehaviourState.AGGRAVATED);
+        jester.SetBehaviourState(BehaviourState.AGGRAVATED);
     }
 
     void HandleEarthLeviathan(SandWormAI earthLeviathan, PlayerControllerB targetPlayer, bool willTeleportEnemy) {
         this.TeleportEnemyToPlayer(earthLeviathan, targetPlayer, willTeleportEnemy, true);
-        this.SetBehaviourState(earthLeviathan, BehaviourState.CHASE);
+        earthLeviathan.SetBehaviourState(BehaviourState.CHASE);
     }
 
     internal void HandleEnemy(EnemyAI enemy, PlayerControllerB targetPlayer, bool willTeleportEnemy) {
@@ -217,7 +212,7 @@ internal class EnemyPromptHandler {
                 break;
 
             default:
-                this.SetBehaviourState(enemy, BehaviourState.CHASE);
+                enemy.SetBehaviourState(BehaviourState.CHASE);
                 break;
         }
     }
