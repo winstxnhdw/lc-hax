@@ -83,7 +83,7 @@ internal class GrabCommand : ICommand {
                 currentPlayerPosition,
                 positionOffset,
                 shipBuildModeManager.transform,
-                string.Join(' ', args.ToArray())
+                string.Join(' ', args)
             );
 
             Chat.Print($"Grabbed {item}!");

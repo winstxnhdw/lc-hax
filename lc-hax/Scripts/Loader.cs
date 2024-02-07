@@ -17,7 +17,7 @@ internal class Loader : MonoBehaviour {
     static void LoadLibraries() {
         Assembly assembly = Assembly.GetExecutingAssembly();
 
-        StringArray resourceNames =
+        ReadOnlySpan<string> resourceNames =
             assembly.GetManifestResourceNames()
                     .Where(name => name.EndsWith(".dll"))
                     .ToArray();

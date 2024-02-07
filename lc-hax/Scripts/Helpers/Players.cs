@@ -27,7 +27,9 @@ internal static partial class Helper {
 
     internal static PlayerControllerB[] ActivePlayers => Helper.Players.Where(player => player.isPlayerControlled && !player.isPlayerDead).ToArray();
 
-    internal static PlayerControllerB? GetPlayer(string playerNameOrId) {
+    internal static PlayerControllerB? GetPlayer(string? playerNameOrId) {
+        if (string.IsNullOrEmpty(playerNameOrId)) return null;
+
         PlayerControllerB[] players = Helper.Players;
 
         return players.First(player => player.playerUsername == playerNameOrId) ??
@@ -36,7 +38,7 @@ internal static partial class Helper {
 
     internal static PlayerControllerB? GetPlayer(ulong playerClientId) => Helper.Players.First(player => player.playerClientId == playerClientId);
 
-    internal static PlayerControllerB? GetActivePlayer(string playerNameOrId) =>
+    internal static PlayerControllerB? GetActivePlayer(string? playerNameOrId) =>
         Helper.GetPlayer(playerNameOrId) is not PlayerControllerB player || !player.isPlayerControlled || player.isPlayerDead
             ? null
             : player;
