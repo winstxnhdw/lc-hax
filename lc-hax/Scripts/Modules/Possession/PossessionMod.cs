@@ -183,19 +183,15 @@ internal sealed class PossessionMod : MonoBehaviour {
 
     // Releases possession of the current enemy
     internal void Unpossess() {
-        if (this.EnemyToPossess is EnemyAI previousEnemy) {
-            previousEnemy.updatePositionThreshold = 1;
-
-            if (previousEnemy.agent.Unfake() is NavMeshAgent navMeshAgent) {
-                navMeshAgent.updatePosition = true;
-                navMeshAgent.updateRotation = true;
-                this.UpdateEnemyPositionToHere(previousEnemy);
-                _ = previousEnemy.agent.Warp(previousEnemy.transform.position);
-            }
-
-            this.SetEnemyColliders(previousEnemy, true);
+        if (this.EnemyToPossess is not EnemyAI possessedEnemy) return;
+        if (possessedEnemy.agent.Unfake() is NavMeshAgent navMeshAgent) {
+            navMeshAgent.updatePosition = true;
+            navMeshAgent.updateRotation = true;
+            this.UpdateEnemyPositionToHere(possessedEnemy);
+            _ = possessedEnemy.agent.Warp(possessedEnemy.transform.position);
         }
 
+        this.SetEnemyColliders(possessedEnemy, true);
         this.EnemyToPossess = null;
     }
 
