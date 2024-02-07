@@ -1,7 +1,7 @@
 using Hax;
 
 [DebugCommand("/enemies")]
-public class LevelEnemiesCommand : ICommand {
+internal class LevelEnemiesCommand : ICommand {
     public void Execute(StringArray _) {
         if (Helper.RoundManager == null || Helper.RoundManager.currentLevel == null) return;
 

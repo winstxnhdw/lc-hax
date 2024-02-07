@@ -7,7 +7,7 @@ using UnityEngine;
 using UnityObject = UnityEngine.Object;
 
 [PrivilegedCommand("/spawn")]
-public class SpawnCommand : ICommand {
+internal class SpawnCommand : ICommand {
     private void SpawnEnemyOnPlayer(PlayerControllerB player, GameObject prefab, ulong amount = 1) {
         if (Helper.RoundManager == null) return;
         if (player == null) return;
@@ -42,7 +42,8 @@ public class SpawnCommand : ICommand {
             return;
         }
 
-        string enemyNamePart = args[1];
+        string? enemyNamePart = args[1];
+        if (enemyNamePart == null) return;
         KeyValuePair<string, GameObject> enemyEntry = Helper.AllSpawnableEnemies
             .First(e => e.Key.Contains(enemyNamePart, StringComparison.OrdinalIgnoreCase));
 
