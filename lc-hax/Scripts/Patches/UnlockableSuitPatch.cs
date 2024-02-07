@@ -5,12 +5,10 @@ using Hax;
 internal static class UnlockableSuitPatch {
     private static bool overrideSuit = false;
     private static int customSuitID = -1;
-    private static int originalSuitID = -1;
 
     public static void SetPlayerSuit(Unlockable suitID) {
         if (Helper.LocalPlayer is null) return;
         customSuitID = (int)suitID;
-        originalSuitID = -1;
         overrideSuit = true;
         UnlockableSuit[] unlockableSuits = UnityEngine.Object.FindObjectsOfType<UnlockableSuit>();
         foreach (UnlockableSuit suit in unlockableSuits) {
@@ -22,18 +20,16 @@ internal static class UnlockableSuitPatch {
     }
 
     [HarmonyPatch("SwitchSuitToThis")]
-    static void Prefix(UnlockableSuit __instance, ref int ___suitID) {
+    static void Prefix(UnlockableSuit __instance, ref int ___suitID, out int __state) {
+        __state = ___suitID;
         if (overrideSuit) {
-            originalSuitID = __instance.suitID;
-            ___suitID = customSuitID;
+            ___suitID = customSuitID; 
         }
     }
 
     [HarmonyPatch("SwitchSuitToThis")]
-    static void Postfix(UnlockableSuit __instance, ref int ___suitID) {
-        if (overrideSuit) {
-            overrideSuit = false;
-            ___suitID = originalSuitID;
-        }
+    static void Postfix(UnlockableSuit __instance, ref int ___suitID, int __state) {
+        ___suitID = __state;
+        overrideSuit = false; 
     }
 }
