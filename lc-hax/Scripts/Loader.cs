@@ -8,8 +8,8 @@ using System.Linq;
 namespace Hax;
 
 internal class Loader : MonoBehaviour {
-    static GameObject HaxGameObjects { get; } = new();
-    static GameObject HaxModules { get; } = new();
+    static GameObject HaxGameObjects { get; } = new("Hax GameObjects");
+    static GameObject HaxModules { get; } = new("Hax Modules");
 
     static void AddHaxModules<T>() where T : Component => Loader.HaxModules.AddComponent<T>();
     static void AddHaxGameObject<T>() where T : Component => Loader.HaxGameObjects.AddComponent<T>();
