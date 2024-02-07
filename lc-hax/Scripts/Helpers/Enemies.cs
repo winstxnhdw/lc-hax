@@ -1,6 +1,8 @@
 using GameNetcodeStuff;
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Xml.Linq;
 using Unity.Netcode;
 using UnityEngine;
 
@@ -44,28 +46,12 @@ internal static partial class Helper {
             if (_AllSpawnableEnemies == null) {
                 _AllSpawnableEnemies = [];
 
-                HashSet<(string Name, GameObject Prefab)> uniqueEnemies = [];
+                EnemyType[] RegisteredEnemies = Resources.FindObjectsOfTypeAll<EnemyType>();
 
-                SelectableLevel[] levels = Resources.FindObjectsOfTypeAll<SelectableLevel>();
-
-                foreach (SelectableLevel level in levels) {
-                    List<List<SpawnableEnemyWithRarity>> enemyCollections = [
-                        level.Enemies,
-                        level.OutsideEnemies,
-                        level.DaytimeEnemies
-                    ];
-
-                    foreach (List<SpawnableEnemyWithRarity> collection in enemyCollections) {
-                        foreach (SpawnableEnemyWithRarity enemy in collection) {
-                            if (enemy.enemyType.enemyName.Contains("Docile Locust Bees", StringComparison.OrdinalIgnoreCase)) continue;
-                            if (enemy.enemyType.enemyName.Contains("Manticoil", StringComparison.OrdinalIgnoreCase)) continue;
-                            _ = uniqueEnemies.Add((enemy.enemyType.enemyName, enemy.enemyType.enemyPrefab));
-                        }
-                    }
-                }
-
-                foreach ((string Name, GameObject Prefab) in uniqueEnemies) {
-                    _ = _AllSpawnableEnemies.TryAdd(Name, Prefab);
+                foreach (EnemyType enemy in RegisteredEnemies) {
+                    if (enemy.enemyName.Contains("Docile Locust Bees", StringComparison.OrdinalIgnoreCase)) continue;
+                    if (enemy.enemyName.Contains("Manticoil", StringComparison.OrdinalIgnoreCase)) continue;
+                    _ = _AllSpawnableEnemies.TryAdd(enemy.enemyName, enemy.enemyPrefab);
                 }
             }
 
