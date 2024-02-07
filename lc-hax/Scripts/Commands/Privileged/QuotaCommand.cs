@@ -20,8 +20,7 @@ public class QuotaCommand : ICommand {
             return;
         }
 
-        ushort fulfilled = 0;
-        if (args.Length > 1 && !ushort.TryParse(args[1], out fulfilled)) {
+        if (args.Length > 1 && !ushort.TryParse(args[1], out ushort fulfilled)) {
             Chat.Print("Invalid fulfilled amount, setting to 0.");
         }
 
