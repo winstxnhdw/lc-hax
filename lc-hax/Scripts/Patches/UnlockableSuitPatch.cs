@@ -23,13 +23,13 @@ internal static class UnlockableSuitPatch {
     static void Prefix(UnlockableSuit __instance, ref int ___suitID, out int __state) {
         __state = ___suitID;
         if (overrideSuit) {
-            ___suitID = customSuitID; 
+            ___suitID = customSuitID;
         }
     }
 
     [HarmonyPatch("SwitchSuitToThis")]
     static void Postfix(UnlockableSuit __instance, ref int ___suitID, int __state) {
         ___suitID = __state;
-        overrideSuit = false; 
+        overrideSuit = false;
     }
 }
