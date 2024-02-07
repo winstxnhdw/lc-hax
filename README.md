@@ -76,6 +76,7 @@ The complete feature set includes the following.
 - Always show HUD
 - Always keep items on teleport
 - Enemy possession with abilities
+- Notify teammate's death
 - Stable Zap gun
 - Clear vision
 - Crosshair
