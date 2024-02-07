@@ -158,6 +158,7 @@ These commands are only available when the user is in superuser mode.
 | Action                        | Command                                        |
 | ----------------------------- | ---------------------------------------------- |
 | Set the timescale             | `/timescale <scale>`                           |
+| Set the quota                 | `/quota <amount> <fulfilled?>`                 |
 
 ### Binds
 
