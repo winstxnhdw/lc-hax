@@ -75,15 +75,15 @@ internal sealed class PossessionMod : MonoBehaviour {
     }
 
     void ToggleRealisticPossession() {
-        Setting.RealisticPossessionEnabled = !Setting.RealisticPossessionEnabled;
-        Chat.Print($"Realistic Possession: {Setting.RealisticPossessionEnabled}");
+        Setting.EnableRealisticPossession = !Setting.EnableRealisticPossession;
+        Chat.Print($"Realistic Possession: {Setting.EnableRealisticPossession}");
 
         if (this.EnemyToPossess?.agent.Unfake() is not NavMeshAgent navMeshAgent) {
             return;
         }
 
-        navMeshAgent.updatePosition = Setting.RealisticPossessionEnabled;
-        navMeshAgent.updateRotation = Setting.RealisticPossessionEnabled;
+        navMeshAgent.updatePosition = Setting.EnableRealisticPossession;
+        navMeshAgent.updateRotation = Setting.EnableRealisticPossession;
     }
 
     void ToggleNoClip() {
@@ -130,8 +130,8 @@ internal sealed class PossessionMod : MonoBehaviour {
             this.SetEnemyColliders(enemy, false);
 
             if (enemy.agent.Unfake() is NavMeshAgent agent) {
-                agent.updatePosition = Setting.RealisticPossessionEnabled;
-                agent.updateRotation = Setting.RealisticPossessionEnabled;
+                agent.updatePosition = Setting.EnableRealisticPossession;
+                agent.updateRotation = Setting.EnableRealisticPossession;
             }
 
             rigidbodyKeyboard.Init();

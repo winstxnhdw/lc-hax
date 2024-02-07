@@ -30,20 +30,20 @@ internal sealed class DisconnectMod : MonoBehaviour {
         if (!this.IsShiftHeld) return;
         if (Helper.LocalPlayer is null) return;
 
-        GameNetworkManager.Instance.Disconnect();
-        Setting.DisconnectedVoluntarily = true;
+        Helper.GameNetworkManager?.Disconnect();
+        State.DisconnectedVoluntarily = true;
     }
 
     void TryToConnect() {
         if (!this.IsShiftHeld) return;
 
-        SteamId? steamId = this.GetSteamIdFromClipboard() ?? Setting.ConnectedLobbyId;
+        SteamId? steamId = this.GetSteamIdFromClipboard() ?? State.ConnectedLobbyId;
 
         if (steamId is not SteamId lobbyId) {
             return;
         }
 
-        GameNetworkManager.Instance.StartClient(lobbyId);
+        Helper.GameNetworkManager?.StartClient(lobbyId);
         GUIUtility.systemCopyBuffer = "";
     }
 }

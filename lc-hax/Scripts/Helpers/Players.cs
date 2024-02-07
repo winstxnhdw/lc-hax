@@ -24,7 +24,7 @@ internal static partial class Helper {
         player.isInsideFactory = !outside;
     }
 
-    internal static PlayerControllerB? LocalPlayer => GameNetworkManager.Instance.localPlayerController.Unfake();
+    internal static PlayerControllerB? LocalPlayer => Helper.GameNetworkManager?.localPlayerController.Unfake();
 
     internal static PlayerControllerB[] Players => Helper.StartOfRound?.allPlayerScripts ?? [];
 

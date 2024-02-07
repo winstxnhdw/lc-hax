@@ -19,8 +19,8 @@ internal sealed class AntiKickMod : MonoBehaviour {
     void OnGameEnd() {
         this.HasAnnouncedGameJoin = false;
 
-        if (!Setting.DisconnectedVoluntarily && Setting.EnableAntiKick && Setting.ConnectedLobbyId is SteamId lobbyId) {
-            GameNetworkManager.Instance.StartClient(lobbyId);
+        if (!State.DisconnectedVoluntarily && Setting.EnableAntiKick && State.ConnectedLobbyId is SteamId lobbyId) {
+            Helper.GameNetworkManager?.StartClient(lobbyId);
         }
     }
 

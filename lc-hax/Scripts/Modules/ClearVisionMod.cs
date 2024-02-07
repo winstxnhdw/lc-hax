@@ -35,7 +35,7 @@ internal sealed class ClearVisionMod : MonoBehaviour {
                 continue;
             }
 
-            if (TimeOfDay.Instance is not TimeOfDay timeOfDay) {
+            if (Helper.TimeOfDay is not TimeOfDay timeOfDay) {
                 yield return waitForEndOfFrame;
                 continue;
             }
