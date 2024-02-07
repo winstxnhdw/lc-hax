@@ -4,7 +4,7 @@ using Quickenshtein;
 namespace Hax;
 
 internal static partial class Helper {
-    static int LongestCommonSubstring(CharArray query, CharArray original) {
+    static int LongestCommonSubstring(ReadOnlySpan<char> query, ReadOnlySpan<char> original) {
         int originalLength = original.Length;
         int queryLength = query.Length;
 
