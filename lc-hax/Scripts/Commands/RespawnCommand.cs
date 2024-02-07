@@ -3,7 +3,7 @@ using Hax;
 using UnityEngine;
 
 [Command("/respawn")]
-public class RespawnCommand : ICommand {
+internal class RespawnCommand : ICommand {
     void RespawnLocalPlayer(PlayerControllerB localPlayer, StartOfRound startOfRound) {
         if (Helper.HUDManager is not HUDManager hudManager) return;
         if (Helper.SoundManager is not SoundManager soundManager) return;

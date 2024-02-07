@@ -8,6 +8,6 @@ internal class AnnounceCommand : ICommand {
             return;
         }
 
-        Chat.Announce(string.Join(' ', args.ToArray()), true);
+        Chat.Announce(string.Join(' ', args), true);
     }
 }

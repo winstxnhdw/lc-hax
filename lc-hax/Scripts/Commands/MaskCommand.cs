@@ -15,19 +15,16 @@ internal class MaskCommand : ICommand {
             return;
         }
 
-        PlayerControllerB? targetPlayer = args.Length is 0 ? Helper.LocalPlayer : Helper.GetActivePlayer(args[0]);
+        PlayerControllerB? targetPlayer = args.Length is 0
+            ? Helper.LocalPlayer
+            : Helper.GetActivePlayer(args[0]);
 
         if (targetPlayer is null) {
             Chat.Print("Target player is not alive or found!");
             return;
         }
 
-        if (args.Length < 2) {
-            this.SpawnMimicOnPlayer(targetPlayer, hauntedMaskItem);
-            return;
-        }
-
-        if (!ulong.TryParse(args[1], out ulong amount)) {
+        if (!args[1].TryParse(defaultValue: 1, result: out ulong amount)) {
             Chat.Print("Invalid amount!");
             return;
         }
