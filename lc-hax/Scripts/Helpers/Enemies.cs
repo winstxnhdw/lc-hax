@@ -7,7 +7,6 @@ using UnityEngine;
 namespace Hax;
 
 internal static partial class Helper {
-
     internal static HashSet<EnemyAI> Enemies { get; } = [];
 
 
