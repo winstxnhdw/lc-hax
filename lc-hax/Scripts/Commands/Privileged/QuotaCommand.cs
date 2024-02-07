@@ -24,6 +24,8 @@ public class QuotaCommand : ICommand {
             Chat.Print("Invalid fulfilled amount, setting to 0.");
         }
 
-        this.SetQuota(timeOfDay, amount, fulfilled);
+        timeOfDay.profitQuota = amount;
+        timeOfDay.quotaFulfilled = fulfilled;
+        timeOfDay.UpdateProfitQuotaCurrentTime();
     }
 }
