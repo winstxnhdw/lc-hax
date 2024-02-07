@@ -45,13 +45,13 @@ internal static partial class Helper {
     internal static Dictionary<string, GameObject> AllSpawnableEnemies {
         get {
             if (_AllSpawnableEnemies == null) {
-                _AllSpawnableEnemies = new Dictionary<string, GameObject>();
+                _AllSpawnableEnemies = [];
 
-                HashSet<(string Name, GameObject Prefab)> uniqueEnemies = new();
+                HashSet<(string Name, GameObject Prefab)> uniqueEnemies = [];
 
                 SelectableLevel[] levels = Resources.FindObjectsOfTypeAll<SelectableLevel>();
 
-                foreach (var level in levels) {
+                foreach (SelectableLevel level in levels) {
                     List<List<SpawnableEnemyWithRarity>> enemyCollections = [
                         level.Enemies,
                         level.OutsideEnemies,
