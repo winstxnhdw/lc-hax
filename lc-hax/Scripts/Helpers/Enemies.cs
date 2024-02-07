@@ -1,12 +1,17 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Unity.Netcode;
 using UnityEngine;
 
 namespace Hax;
 
 internal static partial class Helper {
-    internal static HashSet<EnemyAI> Enemies { get; } = [];
+    internal static HashSet<EnemyAI> Enemies { get; } = Helper.StartOfRound?.inShipPhase is true ? [] :
+        Helper.FindObjects<EnemyAI>()
+              .WhereIsNotNull()
+              .Where(enemy => enemy.IsSpawned)
+              .ToHashSet();
 
     internal static T? GetEnemy<T>() where T : EnemyAI =>
         Helper.Enemies.First(enemy => enemy is T) is T enemy ? enemy : null;
