@@ -15,7 +15,6 @@ internal class StunCommand : IStun, ICommand {
             return;
         }
 
-
         this.Stun(camera.transform.position, float.MaxValue, stunDuration);
     }
 }
