@@ -2,7 +2,6 @@ using Hax;
 
 [PrivilegedCommand("/quota")]
 public class QuotaCommand : ICommand {
-
     private void SetQuota(TimeOfDay timeOfDay, ushort profit, ushort fulfilled = 0) {
         timeOfDay.profitQuota = profit;
         timeOfDay.quotaFulfilled = fulfilled;

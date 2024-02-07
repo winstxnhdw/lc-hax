@@ -8,7 +8,6 @@ using UnityObject = UnityEngine.Object;
 
 [PrivilegedCommand("/spawn")]
 public class SpawnCommand : ICommand {
-
     private void SpawnEnemyOnPlayer(PlayerControllerB player, GameObject prefab, ulong amount = 1) {
         if (Helper.RoundManager == null) return;
         if (player == null) return;
