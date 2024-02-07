@@ -23,8 +23,7 @@ class GodModePatch {
     static bool PrefixDamagePlayer(PlayerControllerB __instance, CauseOfDeath causeOfDeath) {
         if (!__instance.IsSelf()) return true;
         if (Setting.EnableGodMode) return false;
-        if (Setting.DisableFallDamage && causeOfDeath == CauseOfDeath.Gravity) return false;
-        return true;
+        return !Setting.DisableFallDamage || causeOfDeath != CauseOfDeath.Gravity;
     }
 
     [HarmonyPrefix]
@@ -32,8 +31,7 @@ class GodModePatch {
     static bool PrefixKillPlayer(PlayerControllerB __instance, CauseOfDeath causeOfDeath) {
         if (__instance.IsSelf()) return true;
         if (Setting.EnableGodMode) return false;
-        if (Setting.DisableFallDamage && causeOfDeath == CauseOfDeath.Gravity) return false;
-        return true;
+        return !Setting.DisableFallDamage || causeOfDeath != CauseOfDeath.Gravity;
     }
 
     [HarmonyPrefix]

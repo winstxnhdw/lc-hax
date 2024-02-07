@@ -1,6 +1,3 @@
-using System;
-using UnityEngine;
-
 namespace Hax;
 
 internal static partial class Helper {
