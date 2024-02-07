@@ -1,11 +1,16 @@
 using System.Collections.Generic;
+using System.Linq;
 using GameNetcodeStuff;
 using UnityEngine;
 
 namespace Hax;
 
 internal static partial class Helper {
-    internal static HashSet<GrabbableObject> Grabbables { get; } = [];
+    internal static HashSet<GrabbableObject> Grabbables { get; } = Helper.LocalPlayer is null ? [] :
+        Helper.FindObjects<GrabbableObject>()
+              .WhereIsNotNull()
+              .Where(scrap => scrap.IsSpawned)
+              .ToHashSet();
 
     static void PlayDropSFX(this GrabbableObject item) {
         if (!item.gameObject.TryGetComponent(out AudioSource audio)) return;
