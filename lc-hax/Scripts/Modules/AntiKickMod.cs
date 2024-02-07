@@ -17,11 +17,11 @@ internal sealed class AntiKickMod : MonoBehaviour {
     }
 
     void OnGameEnd() {
-        this.HasAnnouncedGameJoin = false;
-
         if (!State.DisconnectedVoluntarily && Setting.EnableAntiKick && State.ConnectedLobbyId is SteamId lobbyId) {
             Helper.GameNetworkManager?.StartClient(lobbyId);
         }
+
+        this.HasAnnouncedGameJoin = false;
     }
 
     bool FindJoinMessageInHistory() =>
