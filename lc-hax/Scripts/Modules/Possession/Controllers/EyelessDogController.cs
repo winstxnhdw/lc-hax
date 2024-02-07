@@ -8,7 +8,6 @@ enum MouthDog {
 }
 
 internal class EyelessDogController : IEnemyController<MouthDogAI> {
-
     private bool isSecondarySkillActive = false;
 
     public void OnMovement(MouthDogAI enemyInstance, bool isMoving, bool isSprinting) {

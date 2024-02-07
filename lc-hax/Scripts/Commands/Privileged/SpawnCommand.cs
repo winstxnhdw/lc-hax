@@ -2,7 +2,6 @@ using GameNetcodeStuff;
 using Hax;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using Unity.Netcode;
 using UnityEngine;
 
@@ -47,7 +46,7 @@ public class SpawnCommand : ICommand {
 
         string enemyNamePart = args[1];
         KeyValuePair<string, GameObject> enemyEntry = Helper.AllSpawnableEnemies
-            .FirstOrDefault(e => e.Key.Contains(enemyNamePart, StringComparison.OrdinalIgnoreCase));
+            .First(e => e.Key.Contains(enemyNamePart, StringComparison.OrdinalIgnoreCase));
 
         if (enemyEntry.Value == null) {
             Chat.Print($"Enemy '{enemyNamePart}' not found.");
