@@ -13,7 +13,7 @@ internal class ShovelCommand : ICommand {
             return;
         }
 
-        Setting.ShovelHitForce = shovelHitForce;
+        State.ShovelHitForce = shovelHitForce;
         Chat.Print($"Shovel hit force is now set to {shovelHitForce}!");
     }
 }

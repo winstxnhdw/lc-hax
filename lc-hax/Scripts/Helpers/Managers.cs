@@ -7,6 +7,8 @@ internal static partial class Helper {
 
     internal static SoundManager? SoundManager => SoundManager.Instance.Unfake();
 
+    internal static GameNetworkManager? GameNetworkManager => GameNetworkManager.Instance.Unfake();
+
     internal static StartOfRound? StartOfRound => StartOfRound.Instance.Unfake();
 
     internal static TimeOfDay? TimeOfDay => TimeOfDay.Instance.Unfake();
