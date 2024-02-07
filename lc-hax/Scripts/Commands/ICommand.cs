@@ -1,7 +1,3 @@
-using System;
-
-internal interface ICommand : IDisposable {
+internal interface ICommand {
     void Execute(StringArray args);
-
-    void IDisposable.Dispose() { }
 }
