@@ -2,8 +2,10 @@ using GameNetcodeStuff;
 using Hax;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Unity.Netcode;
 using UnityEngine;
+using UnityObject = UnityEngine.Object;
 
 [PrivilegedCommand("/spawn")]
 public class SpawnCommand : ICommand {
@@ -21,7 +23,7 @@ public class SpawnCommand : ICommand {
                 }
             }
             else {
-                UnityEngine.Object.Destroy(enemy);
+                UnityObject.Destroy(enemy);
             }
         }
     }
@@ -37,16 +39,14 @@ public class SpawnCommand : ICommand {
             return;
         }
 
-        // Get the target player
-        PlayerControllerB? targetPlayer = Helper.GetActivePlayer(args[0]);
-        if (targetPlayer == null) {
+        if (Helper.GetActivePlayer(args[0]) is not PlayerControllerB targetPlayer) {
             Chat.Print($"Target player '{args[0]}' is not alive or found!");
             return;
         }
 
         string enemyNamePart = args[1];
         KeyValuePair<string, GameObject> enemyEntry = Helper.AllSpawnableEnemies
-            .First(e => e.Key.Contains(enemyNamePart, StringComparison.OrdinalIgnoreCase));
+            .FirstOrDefault(e => e.Key.Contains(enemyNamePart, StringComparison.OrdinalIgnoreCase));
 
         if (enemyEntry.Value == null) {
             Chat.Print($"Enemy '{enemyNamePart}' not found.");

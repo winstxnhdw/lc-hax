@@ -4,8 +4,10 @@ using UnityEngine;
 
 public sealed class Refresh : MonoBehaviour {
     private void Awake() {
-        if (Helper.LocalPlayer == null || Helper.StartOfRound == null) return;
-        if (Helper.StartOfRound.shipHasLanded) this.FillEnemyList();
+        if (Helper.LocalPlayer == null) return;
+        if (Helper.StartOfRound?.shipHasLanded is true) {
+            this.FillEnemyList();
+        }
         this.FillScrapList();
         Destroy(this);
     }
