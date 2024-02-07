@@ -41,6 +41,8 @@ internal static partial class Helper {
 
     internal static PlayerControllerB? GetPlayer(ulong playerClientId) => Helper.Players.First(player => player.playerClientId == playerClientId);
 
+    internal static PlayerControllerB? GetPlayer(int playerClientId) => Helper.GetPlayer(unchecked((ulong)playerClientId));
+
     internal static PlayerControllerB? GetActivePlayer(string? playerNameOrId) =>
         Helper.GetPlayer(playerNameOrId) is not PlayerControllerB player || !player.isPlayerControlled || player.isPlayerDead
             ? null
