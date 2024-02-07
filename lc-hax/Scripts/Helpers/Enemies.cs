@@ -48,10 +48,7 @@ internal static partial class Helper {
         get {
             if (_AllSpawnableEnemies == null) {
                 _AllSpawnableEnemies = [];
-
-                EnemyType[] RegisteredEnemies = Resources.FindObjectsOfTypeAll<EnemyType>();
-
-                foreach (EnemyType enemy in RegisteredEnemies) {
+                foreach (EnemyType enemy in Resources.FindObjectsOfTypeAll<EnemyType>()) {
                     if (enemy.enemyName.Contains("Docile Locust Bees", StringComparison.OrdinalIgnoreCase)) continue;
                     if (enemy.enemyName.Contains("Manticoil", StringComparison.OrdinalIgnoreCase)) continue;
                     _ = _AllSpawnableEnemies.TryAdd(enemy.enemyName, enemy.enemyPrefab);
