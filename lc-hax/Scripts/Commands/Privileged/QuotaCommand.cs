@@ -2,12 +2,6 @@ using Hax;
 
 [PrivilegedCommand("/quota")]
 public class QuotaCommand : ICommand {
-    private void SetQuota(TimeOfDay timeOfDay, ushort profit, ushort fulfilled = 0) {
-        timeOfDay.profitQuota = profit;
-        timeOfDay.quotaFulfilled = fulfilled;
-        timeOfDay.UpdateProfitQuotaCurrentTime();
-    }
-
     public void Execute(StringArray args) {
         if (Helper.TimeOfDay is not TimeOfDay timeOfDay) return;
         if (args.Length < 1) {
