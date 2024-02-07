@@ -2,8 +2,6 @@ using System;
 using System.Collections;
 using UnityEngine;
 
-namespace Hax;
-
 internal class WaitForBehaviour : MonoBehaviour {
     Action? Action { get; set; }
     Func<float, bool>? TimerPredicate { get; set; }

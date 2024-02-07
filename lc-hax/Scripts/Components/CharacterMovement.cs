@@ -1,18 +1,17 @@
 using UnityEngine;
 using GameNetcodeStuff;
 using UnityEngine.InputSystem;
+using Hax;
 
-namespace Hax;
-
-internal class RigidbodyMovement : MonoBehaviour {
+internal class CharacterMovement : MonoBehaviour {
     // Movement constants
     const float BaseSpeed = 5.0f;
     const float SprintSpeedMultiplier = 2.8f; // Multiplier for sprinting speed
     const float WalkingSpeed = 0.5f; // Walking speed when left control is held
     const float SprintDuration = 0.0f; // Duration sprint key must be held for sprinting (adjust as needed)
-    const float JumpForce = 6.5f;
-    const float Gravity = 10.0f;
-    const float MaxVelocityMagnitude = 12.5f; // Adjust as needed
+    const float JumpForce = 9.2f;
+    const float Gravity = 18.0f;
+    const float MaxVelocityMagnitude = 15.0f; // Adjust as needed
 
     // used to sync with the enemy to make sure it plays the correct animation when it is moving
     public bool IsMoving { get; private set; } = false;
@@ -30,7 +29,7 @@ internal class RigidbodyMovement : MonoBehaviour {
     const float AdjustedHeight = 0.0f; // Adjust as needed
     const float AdjustedDepth = -0.5f; // Adjust as needed
 
-    internal RigidbodyMovement() => this.CharacterController = this.GetComponent<CharacterController>();
+    internal CharacterMovement() => this.CharacterController = this.GetComponent<CharacterController>();
 
     // Initialize method
     internal void Init() {
@@ -72,10 +71,15 @@ internal class RigidbodyMovement : MonoBehaviour {
         moveDirection.y = 0.0f; // Remove vertical component from the movement direction
 
         // Apply speed and sprint modifiers
-        moveDirection *= (this.IsSprinting ? BaseSpeed * SprintSpeedMultiplier : BaseSpeed) * speedModifier;
+        moveDirection *= speedModifier * (
+            this.IsSprinting
+                ? CharacterMovement.BaseSpeed * CharacterMovement.SprintSpeedMultiplier
+                : CharacterMovement.BaseSpeed
+            );
 
         // Apply gravity
         this.ApplyGravity();
+
         // Attempt to move
         _ = this.CharacterController.Move(moveDirection * Time.deltaTime);
 
@@ -91,7 +95,7 @@ internal class RigidbodyMovement : MonoBehaviour {
                 this.IsSprintHeld = true;
             }
 
-            if (!this.IsSprinting && this.SprintTimer >= SprintDuration) {
+            if (!this.IsSprinting && this.SprintTimer >= CharacterMovement.SprintDuration) {
                 this.IsSprinting = true;
             }
 
@@ -109,12 +113,15 @@ internal class RigidbodyMovement : MonoBehaviour {
 
     // Apply gravity to the character controller
     void ApplyGravity() {
+        this.VelocityY = !this.CharacterController.isGrounded
+            ? this.VelocityY - (CharacterMovement.Gravity * Time.deltaTime)
+            : 0.0f;
+
         Vector3 motion = Vector3.zero;
-        this.VelocityY -= Gravity * Time.deltaTime;
         motion.y = this.VelocityY;
         _ = this.CharacterController.Move(motion * Time.deltaTime);
     }
 
     // Jumping action
-    void Jump() => this.VelocityY = JumpForce;
+    void Jump() => this.VelocityY = CharacterMovement.JumpForce;
 }
