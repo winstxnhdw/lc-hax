@@ -25,9 +25,6 @@ internal class HornCommand : ICommand {
 
         Helper.BuyUnlockable(Unlockable.LOUD_HORN);
         Helper.ReturnUnlockable(Unlockable.LOUD_HORN);
-
-        Helper.CreateComponent<WaitForBehaviour>("Pull Horn")
-              .SetPredicate(time => time >= 0.5f)
-              .Init(this.PullHornLater(hornDuration));
+        Helper.ShortDelay(this.PullHornLater(hornDuration));
     }
 }

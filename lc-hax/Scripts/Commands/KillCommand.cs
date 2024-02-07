@@ -4,12 +4,10 @@ using Hax;
 
 [Command("/kill")]
 internal class KillCommand : ICommand {
-    Result KillSelf() {
-        bool EnableGodMode = Setting.EnableGodMode;
-        Setting.EnableGodMode = false;
-        Helper.LocalPlayer?.KillPlayer();
-        Setting.EnableGodMode = EnableGodMode;
+    bool EnableGodMode { get; set; }
 
+    Result KillSelf() {
+        Helper.LocalPlayer?.KillPlayer();
         return new Result(true);
     }
 
@@ -51,12 +49,16 @@ internal class KillCommand : ICommand {
             return;
         }
 
+        this.EnableGodMode = Setting.EnableGodMode;
+        Setting.EnableGodMode = false;
+
         Result result = args[0] switch {
             "--all" => this.KillAllPlayers(),
             "--enemy" => this.KillAllEnemies(),
             _ => this.KillTargetPlayer(args)
         };
 
+        Helper.ShortDelay(() => Setting.EnableGodMode = this.EnableGodMode);
         this.HandleResult(result);
     }
 }
