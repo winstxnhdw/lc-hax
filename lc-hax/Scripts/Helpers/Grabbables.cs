@@ -7,7 +7,7 @@ namespace Hax;
 internal static partial class Helper {
     internal static HashSet<GrabbableObject> Grabbables { get; } = [];
 
-    static void DropSFX(this GrabbableObject item) {
+    static void PlayDropSFX(this GrabbableObject item) {
         if (!item.gameObject.TryGetComponent(out AudioSource audio)) return;
 
         audio.PlayOneShot(item.itemProperties.dropSFX);
@@ -48,7 +48,7 @@ internal static partial class Helper {
         }
 
         if (playSFX) {
-            grabbable.DropSFX();
+            grabbable.PlayDropSFX();
         }
 
         grabbable.UseItemOnClient(true);
