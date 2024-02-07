@@ -14,11 +14,11 @@ public class SpawnCommand : ICommand {
         if (player == null) return;
 
         for (ulong i = 0; i < amount; i++) {
-            GameObject enemy = UnityEngine.Object.Instantiate(prefab, player.transform.position + Vector3.up * 2, Quaternion.identity);
+            GameObject enemy = UnityEngine.Object.Instantiate(prefab, player.transform.position, Quaternion.Euler(Vector3.zero));
             if (enemy.TryGetComponent(out NetworkObject networkObject)) {
                 networkObject.Spawn(true);
                 if (enemy.TryGetComponent(out EnemyAI ai)) {
-                    Helper.Enemies.Add(ai);
+                    _ = Helper.Enemies.Add(ai);
                 }
             }
             else {
@@ -39,7 +39,7 @@ public class SpawnCommand : ICommand {
         }
 
         // Get the target player
-        PlayerControllerB targetPlayer = Helper.GetActivePlayer(args[0]);
+        PlayerControllerB? targetPlayer = Helper.GetActivePlayer(args[0]);
         if (targetPlayer == null) {
             Chat.Print($"Target player '{args[0]}' is not alive or found!");
             return;
@@ -61,6 +61,6 @@ public class SpawnCommand : ICommand {
         }
 
         Chat.Print($"Spawning {amount} of {enemyEntry.Key} for {targetPlayer.playerUsername}.");
-        SpawnEnemyOnPlayer(targetPlayer, enemyEntry.Value, amount);
+        this.SpawnEnemyOnPlayer(targetPlayer, enemyEntry.Value, amount);
     }
 }

@@ -40,40 +40,33 @@ internal static partial class Helper {
         return playerControllerB != null && playerControllerB.IsSelf();
     }
 
-    private static Dictionary<string, GameObject> _AllSpawnableEnemies;
+    private static Dictionary<string, GameObject>? _AllSpawnableEnemies;
 
     internal static Dictionary<string, GameObject> AllSpawnableEnemies {
         get {
             if (_AllSpawnableEnemies == null) {
                 _AllSpawnableEnemies = new Dictionary<string, GameObject>();
 
-                // Use HashSet to track unique enemy types by their names
-                HashSet<(string Name, GameObject Prefab)> uniqueEnemies = new HashSet<(string, GameObject)>();
+                HashSet<(string Name, GameObject Prefab)> uniqueEnemies = new();
 
-                // Load all SelectableLevel instances from resources
                 SelectableLevel[] levels = Resources.FindObjectsOfTypeAll<SelectableLevel>();
 
                 foreach (var level in levels) {
-                    var enemyCollections = new List<List<SpawnableEnemyWithRarity>>() {
+                    List<List<SpawnableEnemyWithRarity>> enemyCollections = [
                         level.Enemies,
                         level.OutsideEnemies,
                         level.DaytimeEnemies
-                    };
+                    ];
 
-                    // Aggregate enemies from all collections
-                    foreach (var collection in enemyCollections) {
-                        foreach (var enemy in collection) {
-                            // Add to HashSet to ensure uniqueness, using enemy type's name and prefab
+                    foreach (List<SpawnableEnemyWithRarity> collection in enemyCollections) {
+                        foreach (SpawnableEnemyWithRarity enemy in collection) {
                             _ = uniqueEnemies.Add((enemy.enemyType.enemyName, enemy.enemyType.enemyPrefab));
                         }
                     }
                 }
 
-                // Convert unique enemies to dictionary entries
-                foreach (var (Name, Prefab) in uniqueEnemies) {
-                    if (!_AllSpawnableEnemies.ContainsKey(Name)) {
-                        _AllSpawnableEnemies.Add(Name, Prefab);
-                    }
+                foreach ((string Name, GameObject Prefab) in uniqueEnemies) {
+                    _ = _AllSpawnableEnemies.TryAdd(Name, Prefab);
                 }
             }
 
