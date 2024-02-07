@@ -3,36 +3,35 @@ using Hax;
 [PrivilegedCommand("/quota")]
 public class QuotaCommand : ICommand {
 
-    void SetQuota(uint profit, uint fulfilled = 0) {
+    void SetQuota(ulong profit, ulong fulfilled = 0) {
         if (Helper.TimeOfDay != null) {
-            Helper.TimeOfDay.profitQuota = (int)profit; // Cast to int if necessary
-            Helper.TimeOfDay.quotaFulfilled = (int)fulfilled; // Cast to int if necessary
+            Helper.TimeOfDay.profitQuota = (int)profit;
+            Helper.TimeOfDay.quotaFulfilled = (int)fulfilled;
             Helper.TimeOfDay.UpdateProfitQuotaCurrentTime();
         }
     }
 
     public void Execute(StringArray args) {
-        if (Helper.TimeOfDay == null) return;
-        if (args.Length < 2) {
+        if (Helper.TimeOfDay == null) {
+            Chat.Print("TimeOfDay helper is not available.");
+            return;
+        }
+
+        if (args.Length < 1) {
             Chat.Print("Usage: /quota <amount> <fulfilled?>");
             return;
         }
 
-        if (!uint.TryParse(args[0], out uint amount)) {
+        if (!ulong.TryParse(args[0], out ulong amount)) {
             Chat.Print("Invalid amount!");
             return;
         }
 
-        if (args.Length > 1) {
-            if (!uint.TryParse(args[1], out uint fulfilled)) {
-                Chat.Print("Invalid fulfilled amount!");
-                return;
-            }
-
-            this.SetQuota(amount, fulfilled);
-            return;
+        ulong fulfilled = 0;
+        if (args.Length > 1 && !ulong.TryParse(args[1], out fulfilled)) {
+            Chat.Print("Invalid fulfilled amount, setting to 0.");
         }
 
-        this.SetQuota(amount, 0);
+        this.SetQuota(amount, fulfilled);
     }
 }

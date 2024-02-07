@@ -2,6 +2,7 @@ using GameNetcodeStuff;
 using Hax;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Unity.Netcode;
 using UnityEngine;
 
@@ -11,26 +12,26 @@ public class SpawnCommand : ICommand {
     private void SpawnEnemyOnPlayer(PlayerControllerB player, GameObject prefab, ulong amount = 1) {
         if (Helper.RoundManager == null) return;
         if (player == null) return;
+
         for (ulong i = 0; i < amount; i++) {
-            GameObject enemy = UnityEngine.Object.Instantiate(prefab, player.transform.position, Quaternion.Euler(Vector3.zero));
-            if (enemy != null) {
-                if (enemy.TryGetComponent(out NetworkObject Network)) {
-                    Network.Spawn(true);
-                    if (enemy.TryGetComponent(out EnemyAI AI)) {
-                        _ = Helper.Enemies.Add(AI);
-                    }
+            GameObject enemy = UnityEngine.Object.Instantiate(prefab, player.transform.position + Vector3.up * 2, Quaternion.identity);
+            if (enemy.TryGetComponent(out NetworkObject networkObject)) {
+                networkObject.Spawn(true);
+                if (enemy.TryGetComponent(out EnemyAI ai)) {
+                    Helper.Enemies.Add(ai);
                 }
-                else {
-                    UnityEngine.Object.Destroy(enemy);
-                }
+            }
+            else {
+                UnityEngine.Object.Destroy(enemy);
             }
         }
     }
 
-
     public void Execute(StringArray args) {
-        if (Helper.RoundManager == null) return;
-        if (Helper.RoundManager.currentLevel == null) return;
+        if (Helper.RoundManager == null || Helper.RoundManager.currentLevel == null) {
+            Chat.Print("No round or level found.");
+            return;
+        }
 
         if (args.Length < 2) {
             Chat.Print("Usage: /spawn <player> <enemy> <amount?>");
@@ -38,23 +39,18 @@ public class SpawnCommand : ICommand {
         }
 
         // Get the target player
-        PlayerControllerB? targetPlayer = Helper.GetActivePlayer(args[0]);
-        if (targetPlayer is null) {
+        PlayerControllerB targetPlayer = Helper.GetActivePlayer(args[0]);
+        if (targetPlayer == null) {
             Chat.Print($"Target player '{args[0]}' is not alive or found!");
             return;
         }
 
-        string name = args[1];
-        string EnemyName = "";
-        GameObject? prefab = null;
-        foreach (KeyValuePair<string, GameObject> enemy in Helper.SpawnableEnemies) {
-            if (enemy.Key.Contains(name, StringComparison.OrdinalIgnoreCase)) {
-                EnemyName = enemy.Key;
-                prefab = enemy.Value;
-                break;
-            }
-        }
-        if (prefab == null) {
+        string enemyNamePart = args[1];
+        KeyValuePair<string, GameObject> enemyEntry = Helper.AllSpawnableEnemies
+            .FirstOrDefault(e => e.Key.Contains(enemyNamePart, StringComparison.OrdinalIgnoreCase));
+
+        if (enemyEntry.Value == null) {
+            Chat.Print($"Enemy '{enemyNamePart}' not found.");
             return;
         }
 
@@ -64,7 +60,7 @@ public class SpawnCommand : ICommand {
             Chat.Print("Invalid amount specified. Defaulting to 1.");
         }
 
-        Chat.Print($"Spawning {amount} {EnemyName} to {targetPlayer.playerUsername}");
-        this.SpawnEnemyOnPlayer(targetPlayer, prefab, amount);
+        Chat.Print($"Spawning {amount} of {enemyEntry.Key} for {targetPlayer.playerUsername}.");
+        SpawnEnemyOnPlayer(targetPlayer, enemyEntry.Value, amount);
     }
 }

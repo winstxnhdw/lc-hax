@@ -7,7 +7,10 @@ using UnityEngine;
 namespace Hax;
 
 internal static partial class Helper {
+
     internal static HashSet<EnemyAI> Enemies { get; } = [];
+
+
 
     internal static T? GetEnemy<T>() where T : EnemyAI =>
         Helper.Enemies.First(enemy => enemy is T) is T enemy ? enemy : null;
@@ -37,35 +40,48 @@ internal static partial class Helper {
         return playerControllerB != null && playerControllerB.IsSelf();
     }
 
-    internal static Dictionary<string, GameObject> SpawnableEnemies {
+    private static Dictionary<string, GameObject> _AllSpawnableEnemies;
+
+    internal static Dictionary<string, GameObject> AllSpawnableEnemies {
         get {
-            if (Helper.RoundManager == null) return [];
-            if (Helper.RoundManager.currentLevel == null) return [];
-            Dictionary<string, GameObject> result = [];
-            foreach (SpawnableEnemyWithRarity enemy in Helper.RoundManager.currentLevel.Enemies) {
-                string name = enemy.enemyType.enemyName;
-                GameObject prefab = enemy.enemyType.enemyPrefab;
-                if (!result.ContainsKey(name)) {
-                    result.Add(name, prefab);
+            if (_AllSpawnableEnemies == null) {
+                _AllSpawnableEnemies = new Dictionary<string, GameObject>();
+
+                // Use HashSet to track unique enemy types by their names
+                HashSet<(string Name, GameObject Prefab)> uniqueEnemies = new HashSet<(string, GameObject)>();
+
+                // Load all SelectableLevel instances from resources
+                SelectableLevel[] levels = Resources.FindObjectsOfTypeAll<SelectableLevel>();
+
+                foreach (var level in levels) {
+                    var enemyCollections = new List<List<SpawnableEnemyWithRarity>>() {
+                        level.Enemies,
+                        level.OutsideEnemies,
+                        level.DaytimeEnemies
+                    };
+
+                    // Aggregate enemies from all collections
+                    foreach (var collection in enemyCollections) {
+                        foreach (var enemy in collection) {
+                            // Add to HashSet to ensure uniqueness, using enemy type's name and prefab
+                            _ = uniqueEnemies.Add((enemy.enemyType.enemyName, enemy.enemyType.enemyPrefab));
+                        }
+                    }
+                }
+
+                // Convert unique enemies to dictionary entries
+                foreach (var (Name, Prefab) in uniqueEnemies) {
+                    if (!_AllSpawnableEnemies.ContainsKey(Name)) {
+                        _AllSpawnableEnemies.Add(Name, Prefab);
+                    }
                 }
             }
-            foreach (SpawnableEnemyWithRarity enemy in Helper.RoundManager.currentLevel.OutsideEnemies) {
-                string name = enemy.enemyType.enemyName;
-                GameObject prefab = enemy.enemyType.enemyPrefab;
-                if (!result.ContainsKey(name)) {
-                    result.Add(name, prefab);
-                }
-            }
-            foreach (SpawnableEnemyWithRarity enemy in Helper.RoundManager.currentLevel.DaytimeEnemies) {
-                string name = enemy.enemyType.enemyName;
-                GameObject prefab = enemy.enemyType.enemyPrefab;
-                if (!result.ContainsKey(name)) {
-                    result.Add(name, prefab);
-                }
-            }
-            return result;
+
+            return _AllSpawnableEnemies;
         }
     }
+
+
 
     internal static GrabbableObject? FindNearbyItem(this EnemyAI instance, float grabRange = 1f) {
         foreach (Collider collider in Physics.OverlapSphere(instance.transform.position, grabRange)) {
@@ -76,7 +92,5 @@ internal static partial class Helper {
         }
 
         return null;
-    }
-    internal static void MouthDogChasePlayer(this MouthDogAI instance, PlayerControllerB player) {
     }
 }
