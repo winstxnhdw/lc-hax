@@ -1,5 +1,6 @@
 using System.Linq;
 using System.Collections.Generic;
+using UnityEngine;
 using Hax;
 
 [Command("/buy")]
@@ -30,7 +31,7 @@ internal class BuyCommand : ICommand {
 
         terminal.orderedItemsFromTerminal.Clear();
         terminal.BuyItemsServerRpc(
-            [.. Enumerable.Repeat(items[key], quantity)],
+            [.. Enumerable.Repeat(items[key], Mathf.Clamp(quantity, 0, 12))],
             terminal.groupCredits - 1,
             terminal.numberOfItemsInDropship
         );
