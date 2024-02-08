@@ -21,20 +21,21 @@ internal class SellCommand : ICommand {
             this.SellObject(depositItemsDesk, player, grabbableObject);
         });
 
-    int SellScrapValue(DepositItemsDesk depositItemsDesk, PlayerControllerB player, StartOfRound startOfRound, ushort targetValue) {
+    ulong SellScrapValue(DepositItemsDesk depositItemsDesk, PlayerControllerB player, StartOfRound startOfRound, ulong targetValue) {
         ReadOnlySpan<GrabbableObject> sellableScraps = Helper.Grabbables.WhereIsNotNull().Where(this.CanBeSold).ToArray();
 
         int sellableScrapsCount = sellableScraps.Length;
-        int[,] table = new int[sellableScrapsCount + 1, targetValue + 1];
+        ulong actualTargetValue = unchecked((ulong)(targetValue * startOfRound.companyBuyingRate));
+        ulong[,] table = new ulong[sellableScrapsCount + 1, targetValue + 1];
 
         for (int i = 0; i <= sellableScrapsCount; i++) {
-            for (int w = 0; w <= targetValue; w++) {
-                if (i == 0 || w == 0) {
+            for (ulong w = 0; w <= actualTargetValue; w++) {
+                if (i is 0 || w is 0) {
                     table[i, w] = 0;
                     continue;
                 }
 
-                int scrapValue = unchecked((int)(sellableScraps[i - 1].scrapValue * startOfRound.companyBuyingRate));
+                ulong scrapValue = unchecked((ulong)sellableScraps[i - 1].scrapValue);
 
                 table[i, w] = scrapValue <= w
                     ? Math.Max(scrapValue + table[i - 1, w - scrapValue], table[i - 1, w])
@@ -42,15 +43,17 @@ internal class SellCommand : ICommand {
             }
         }
 
-        int result = table[sellableScrapsCount, targetValue];
+        ulong result = table[sellableScrapsCount, targetValue];
+        ulong remainingValue = actualTargetValue;
 
-        for (int i = sellableScrapsCount, w = targetValue; i > 0 && result > 0; i--) {
-            if (result == table[i - 1, w]) continue;
+        for (int i = sellableScrapsCount; i > 0 && result > 0; i--) {
+            if (result == table[i - 1, remainingValue]) continue;
 
-            this.SellObject(depositItemsDesk, player, sellableScraps[i - 1]);
-            int scrapValue = unchecked((int)(sellableScraps[i - 1].scrapValue * startOfRound.companyBuyingRate));
+            GrabbableObject grabbable = sellableScraps[i - 1];
+            this.SellObject(depositItemsDesk, player, grabbable);
+            ulong scrapValue = unchecked((ulong)grabbable.scrapValue);
             result -= scrapValue;
-            w -= scrapValue;
+            remainingValue -= scrapValue;
         }
 
         return result;
@@ -81,7 +84,7 @@ internal class SellCommand : ICommand {
             return;
         }
 
-        int result = this.SellScrapValue(depositItemsDesk, player, startOfRound, targetValue);
+        ulong result = this.SellScrapValue(depositItemsDesk, player, startOfRound, targetValue);
         Chat.Print($"Remaining scrap value to reach target is {result}!");
 
         player.carryWeight = currentWeight;

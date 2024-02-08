@@ -1,5 +1,4 @@
 using System;
-using System.Globalization;
 using System.Collections.Generic;
 using GameNetcodeStuff;
 using Hax;
@@ -117,8 +116,6 @@ internal class FatalityCommand : ICommand {
             { "Bracken", this.HandleBracken },
             { "Nutcracker", this.HandleNutcracker }
         };
-
-        TextInfo textInfo = new CultureInfo("en-SG").TextInfo;
 
         string key = Helper.FuzzyMatch(
             string.Join(" ", args[1..]).ToTitleCase(),
