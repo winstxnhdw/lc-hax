@@ -38,13 +38,16 @@ internal class CharacterMovement : MonoBehaviour {
     }
 
     void Awake() {
+        this.Keyboard = Keyboard.current;
         this.CharacterController = this.gameObject.AddComponent<CharacterController>();
-
-        this.transform.localScale = new Vector3(AdjustedWidth, this.transform.localScale.y, AdjustedDepth);
         this.CharacterController.height = 0.0f; // Adjust as needed
         this.CharacterController.center = new Vector3(0f, 0.3f, 0.5f); // Adjust as needed
 
-        this.Keyboard = Keyboard.current;
+        this.transform.localScale = new Vector3(
+            CharacterMovement.AdjustedWidth,
+            this.transform.localScale.y,
+            CharacterMovement.AdjustedDepth
+        );
     }
 
     // Update is called once per frame
@@ -65,10 +68,9 @@ internal class CharacterMovement : MonoBehaviour {
         }
 
         // Calculate movement direction relative to character's forward direction
-        Vector3 forward = Vector3.ProjectOnPlane(this.transform.forward, Vector3.up).normalized;
-        Vector3 right = Vector3.ProjectOnPlane(this.transform.right, Vector3.up).normalized;
+        Vector3 forward = Vector3.ProjectOnPlane(this.transform.forward, Vector3.up);
+        Vector3 right = Vector3.ProjectOnPlane(this.transform.right, Vector3.up);
         Vector3 moveDirection = (forward * moveInput.y) + (right * moveInput.x);
-        moveDirection.y = 0.0f; // Remove vertical component from the movement direction
 
         // Apply speed and sprint modifiers
         moveDirection *= speedModifier * (
