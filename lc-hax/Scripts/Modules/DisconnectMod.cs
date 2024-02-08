@@ -9,11 +9,13 @@ internal sealed class DisconnectMod : MonoBehaviour {
     void OnEnable() {
         InputListener.OnShiftButtonHold += this.HoldShift;
         InputListener.OnF4Press += this.TryToDisconnect;
+        InputListener.OnF5Press += this.TryToConnect;
     }
 
     void OnDisable() {
         InputListener.OnShiftButtonHold -= this.HoldShift;
         InputListener.OnF4Press -= this.TryToDisconnect;
+        InputListener.OnF5Press -= this.TryToConnect;
     }
 
     void HoldShift(bool isHeld) => this.IsShiftHeld = isHeld;
