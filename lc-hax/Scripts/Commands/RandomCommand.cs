@@ -94,7 +94,7 @@ internal class RandomCommand : ICommand {
         }
 
         if (Helper.GetActivePlayer(args[0]) is not PlayerControllerB targetPlayer) {
-            Chat.Print("Player not found!");
+            Chat.Print("Target player is not alive or found!");
             return;
         }
 

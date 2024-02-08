@@ -38,7 +38,7 @@ internal class PoisonCommand : ICommand {
         }
 
         else {
-            Chat.Print("Player is not found!");
+            Chat.Print("Target player is not alive or found!");
         }
     }
 }
