@@ -38,6 +38,7 @@ internal static partial class Helper {
     }
 
     internal static string FuzzyMatch(string? query, ReadOnlySpan<string> strings) {
+        if (strings.Length is 0) return "";
         if (string.IsNullOrWhiteSpace(query)) return strings[0];
 
         string closestMatch = strings[0];
