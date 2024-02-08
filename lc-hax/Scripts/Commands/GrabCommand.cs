@@ -11,31 +11,18 @@ internal class GrabCommand : ICommand {
         !grabbableObject.isHeldByEnemy &&
         Vector3.Distance(grabbableObject.transform.position, currentPlayerPosition) >= 20.0f;
 
-    void GrabAllItems(
-        PlayerControllerB player,
-        Vector3 currentPlayerPosition,
-        Vector3 positionOffset,
-        Transform parentObject
-    ) {
-        Helper.Grabbables.WhereIsNotNull().ForEach(grabbableObject => {
-            if (!this.CanGrabItem(grabbableObject, currentPlayerPosition)) return;
+    string GrabAllItems(PlayerControllerB player, Vector3 currentPlayerPosition) {
+        Helper.Grabbables.WhereIsNotNull().ForEach(grabbable => {
+            if (!this.CanGrabItem(grabbable, currentPlayerPosition)) return;
 
-            player.PlaceGrabbableObject(
-                parentObject,
-                positionOffset,
-                true,
-                grabbableObject
-            );
+            player.currentlyHeldObjectServer = grabbable;
+            player.DiscardHeldObject();
         });
+
+        return "Successfully grabbed all items!";
     }
 
-    string GrabItem(
-        PlayerControllerB player,
-        Vector3 currentPlayerPosition,
-        Vector3 positionOffset,
-        Transform parentObject,
-        string itemName
-    ) {
+    string GrabItem(PlayerControllerB player, Vector3 currentPlayerPosition, string itemName) {
         Dictionary<string, GrabbableObject> grabbableObjects =
             Helper.Grabbables?
                 .WhereIsNotNull()
@@ -47,48 +34,24 @@ internal class GrabCommand : ICommand {
                 ) ?? [];
 
         string key = Helper.FuzzyMatch(itemName.ToLower(), [.. grabbableObjects.Keys]);
+        player.currentlyHeldObjectServer = grabbableObjects[key];
+        player.DiscardHeldObject();
 
-        player.PlaceGrabbableObject(
-            parentObject,
-            positionOffset,
-            true,
-            grabbableObjects[key]
-        );
-
-        return key.ToTitleCase();
+        return $"Grabbed a {key.ToTitleCase()}!";
     }
 
     public void Execute(StringArray args) {
-        if (Helper.ShipBuildModeManager is not ShipBuildModeManager shipBuildModeManager) return;
         if (Helper.LocalPlayer is not PlayerControllerB localPlayer) return;
 
-        Vector3 currentPlayerPosition = localPlayer.transform.position;
-        Vector3 microOffset = localPlayer.transform.forward + localPlayer.transform.up;
-        Vector3 positionOffset = currentPlayerPosition - shipBuildModeManager.transform.position + microOffset;
-
         float currentWeight = localPlayer.carryWeight;
+        Vector3 currentPlayerPosition = localPlayer.transform.position;
 
-        if (args.Length is 0) {
-            this.GrabAllItems(
-                localPlayer,
-                currentPlayerPosition,
-                positionOffset,
-                shipBuildModeManager.transform
-            );
-        }
-
-        else {
-            string item = this.GrabItem(
-                localPlayer,
-                currentPlayerPosition,
-                positionOffset,
-                shipBuildModeManager.transform,
-                string.Join(' ', args)
-            );
-
-            Chat.Print($"Grabbed {item}!");
-        }
+        string message = args.Length switch {
+            0 => this.GrabAllItems(localPlayer, currentPlayerPosition),
+            _ => this.GrabItem(localPlayer, currentPlayerPosition, string.Join(' ', args))
+        };
 
         localPlayer.carryWeight = currentWeight;
+        Chat.Print(message);
     }
 }
