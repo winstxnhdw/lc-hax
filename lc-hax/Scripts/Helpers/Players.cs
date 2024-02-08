@@ -50,6 +50,4 @@ internal static partial class Helper {
 
     internal static PlayerControllerB? GetActivePlayer(int playerClientId) => Helper.GetActivePlayer(playerClientId.ToString());
 
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    internal static bool IsSelf(this PlayerControllerB instance) => Helper.LocalPlayer is PlayerControllerB localPlayer && instance.actualClientId == localPlayer.actualClientId;
 }
