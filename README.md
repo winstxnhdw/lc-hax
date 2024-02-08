@@ -100,6 +100,7 @@ The complete feature set includes the following.
 | Inverse teleport a player     | `/random <player>`                             |
 | Chibaku Tensei                | `/ct <player>`                                 |
 | Play noise on player          | `/noise <player> <duration=30>`                |
+| Bomb player                   | `/bomb <player>`                               |
 | Lure enemies to player        | `/hate <player>`                               |
 | Spawn masked enemy on player  | `/mask <player?> <amount?>`                    |
 | Heal player                   | `/heal <player?>`                              |
