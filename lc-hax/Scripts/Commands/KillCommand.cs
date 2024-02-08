@@ -13,7 +13,7 @@ internal class KillCommand : ICommand {
 
     Result KillTargetPlayer(StringArray args) {
         if (Helper.GetActivePlayer(args[0]) is not PlayerControllerB targetPlayer) {
-            return new Result(message: "Player not found!");
+            return new Result(message: "Target player is not alive or found!");
         }
 
         targetPlayer.KillPlayer();

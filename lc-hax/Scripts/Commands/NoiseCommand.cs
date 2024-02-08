@@ -19,7 +19,7 @@ internal class NoiseCommand : ICommand {
         }
 
         if (Helper.GetActivePlayer(args[0]) is not PlayerControllerB player) {
-            Chat.Print("Player not found!");
+            Chat.Print("Target player is not alive or found!");
             return;
         }
 

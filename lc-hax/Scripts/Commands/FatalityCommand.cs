@@ -101,7 +101,7 @@ internal class FatalityCommand : ICommand {
         }
 
         if (Helper.GetActivePlayer(args[0]) is not PlayerControllerB targetPlayer) {
-            Chat.Print($"Unable to find player: {args[0]}!");
+            Chat.Print("Target player is not alive or found!");
             return;
         }
 

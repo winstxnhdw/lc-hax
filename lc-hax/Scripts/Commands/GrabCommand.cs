@@ -2,7 +2,6 @@ using System.Linq;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using Unity.Netcode;
 using GameNetcodeStuff;
 using Hax;
 
@@ -13,20 +12,10 @@ internal class GrabCommand : ICommand {
         !grabbableObject.isHeldByEnemy &&
         Vector3.Distance(grabbableObject.transform.position, currentPlayerPosition) >= 20.0f;
 
-    void GrabObject(PlayerControllerB player, GrabbableObject grabbable) {
-        if (player.ItemSlots.WhereIsNotNull().Count() >= 4) return;
-
-        NetworkObjectReference networkObject = grabbable.NetworkObject;
-        _ = player.Reflect().InvokeInternalMethod("GrabObjectServerRpc", networkObject);
-
-        grabbable.parentObject = player.localItemHolder;
-        grabbable.GrabItemOnClient();
-    }
-
     IEnumerator GrabAllItems(PlayerControllerB player, GrabbableObject[] grabbables) {
         for (int i = 0; i < grabbables.Length; i++) {
             GrabbableObject grabbable = grabbables[i];
-            this.GrabObject(player, grabbable);
+            player.GrabObject(grabbable);
             yield return new WaitUntil(() => player.ItemSlots[player.currentItemSlot] == grabbable);
             player.DiscardHeldObject();
         }
@@ -62,7 +51,7 @@ internal class GrabCommand : ICommand {
         }
 
         GrabbableObject grabbable = grabbableObjects[key];
-        this.GrabObject(player, grabbable);
+        player.GrabObject(grabbable);
 
         Helper.CreateComponent<WaitForBehaviour>()
               .SetPredicate(() => player.ItemSlots[player.currentItemSlot] == grabbable)
