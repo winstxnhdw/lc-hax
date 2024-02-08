@@ -30,7 +30,13 @@ internal class VisitCommand : ICommand {
             level => level.levelID
         );
 
-        string key = Helper.FuzzyMatch(args[0]?.ToLower(), [.. levels.Keys]);
+        string? key = Helper.FuzzyMatch(args[0]?.ToLower(), [.. levels.Keys]);
+
+        if (string.IsNullOrWhiteSpace(key)) {
+            Chat.Print("Failed to find moon!");
+            return;
+        }
+
         startOfRound.ChangeLevelServerRpc(levels[key], terminal.groupCredits);
 
         Chat.Print($"Visiting {key.ToTitleCase()}!");
