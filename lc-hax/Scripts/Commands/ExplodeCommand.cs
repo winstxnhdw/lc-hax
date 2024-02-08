@@ -8,7 +8,7 @@ internal class ExplodeCommand : ICommand {
                   .ForEach(jetpack => jetpack.ExplodeJetpackServerRpc());
         }
 
-        if (args[0] is "mine") {
+        else if (args[0] is "mine") {
             Helper.FindObjects<Landmine>()
                   .ForEach(landmine => landmine.TriggerMine());
         }
