@@ -118,8 +118,6 @@ internal class FatalityCommand : ICommand {
             { "Nutcracker", this.HandleNutcracker }
         };
 
-        TextInfo textInfo = new CultureInfo("en-SG").TextInfo;
-
         string key = Helper.FuzzyMatch(
             string.Join(" ", args[1..]).ToTitleCase(),
             [.. enemyHandlers.Keys]
