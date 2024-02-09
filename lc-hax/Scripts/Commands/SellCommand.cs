@@ -60,49 +60,73 @@ internal class SellCommand : ICommand {
         this.AsyncSell(depositItemsDesk, player, scraps);
     }
 
-    ulong SellScrapValue(DepositItemsDesk depositItemsDesk, PlayerControllerB player, StartOfRound startOfRound,
-        ulong targetValue) {
-        ReadOnlySpan<GrabbableObject> sellableScraps =
-            Helper.Grabbables.WhereIsNotNull().Where(this.CanBeSold).ToArray();
-
+    ulong SellScrapValue(DepositItemsDesk depositItemsDesk, PlayerControllerB player, StartOfRound startOfRound, ulong targetValue) {
+        var sellableScraps = Helper.Grabbables.WhereIsNotNull().Where(this.CanBeSold).ToArray();
         int sellableScrapsCount = sellableScraps.Length;
         ulong actualTargetValue = unchecked((ulong)(targetValue * startOfRound.companyBuyingRate));
-        ulong[,] table = new ulong[sellableScrapsCount + 1, targetValue + 1];
+
+        // Adjust the algorithm to allow going slightly over the target value
+        ulong[,] dpTable = new ulong[sellableScrapsCount + 1, actualTargetValue + 1];
 
         for (int i = 0; i <= sellableScrapsCount; i++) {
             for (ulong w = 0; w <= actualTargetValue; w++) {
-                if (i is 0 || w is 0) {
-                    table[i, w] = 0;
-                    continue;
+                if (i == 0 || w == 0) {
+                    dpTable[i, w] = 0;
                 }
-
-                ulong scrapValue = unchecked((ulong)sellableScraps[i - 1].scrapValue);
-
-                table[i, w] = scrapValue <= w
-                    ? Math.Max(scrapValue + table[i - 1, w - scrapValue], table[i - 1, w])
-                    : table[i - 1, w];
+                else {
+                    ulong itemValue = unchecked((ulong)sellableScraps[i - 1].scrapValue);
+                    if (itemValue <= w) {
+                        dpTable[i, w] = Math.Max(itemValue + dpTable[i - 1, w - itemValue], dpTable[i - 1, w]);
+                    }
+                    else {
+                        dpTable[i, w] = dpTable[i - 1, w];
+                    }
+                }
             }
         }
 
-        ulong result = table[sellableScrapsCount, targetValue];
-        ulong remainingValue = actualTargetValue;
-        List<GrabbableObject> stuffToSell = new();
-        for (int i = sellableScrapsCount; i > 0 && result > 0; i--) {
-            if (result == table[i - 1, remainingValue]) continue;
-
-            GrabbableObject grabbable = sellableScraps[i - 1];
-            stuffToSell.Add(grabbable);
-            ulong scrapValue = unchecked((ulong)grabbable.scrapValue);
-            result -= scrapValue;
-            remainingValue -= scrapValue;
+        ulong[] lastRow = new ulong[actualTargetValue + 1];
+        for (ulong i = 0; i <= actualTargetValue; i++) {
+            lastRow[i] = dpTable[sellableScrapsCount, i];
         }
 
-        Chat.Print($"Selling {stuffToSell.Count} items.");
-        // sell the items
-        this.AsyncSell(depositItemsDesk, player, stuffToSell.ToArray());
+        ulong closestValue = this.FindClosestValue(lastRow, actualTargetValue);
+        List<GrabbableObject> itemsToSell = this.TracebackItemsToSell(dpTable, sellableScraps, closestValue);
 
+        Debug.Log($"Selling {itemsToSell.Count} items. Target value: {targetValue}, Adjusted target: {actualTargetValue}, Achieved: {closestValue}");
+
+        // Async sell items
+        this.AsyncSell(depositItemsDesk, player, itemsToSell.ToArray());
+
+        return closestValue; 
+    }
+
+    ulong FindClosestValue(ulong[] lastRow, ulong targetValue) {
+        ulong closest = 0;
+        ulong length = (ulong)lastRow.Length; 
+        for (ulong i = 0; i < length; i++) {
+            if (lastRow[i] >= targetValue) {
+                closest = i;
+                break;
+            }
+        }
+
+        return closest;
+    }
+
+    List<GrabbableObject> TracebackItemsToSell(ulong[,] dpTable, GrabbableObject[] items, ulong value) {
+        List<GrabbableObject> result = new();
+        int n = items.Length;
+        for (int i = n; i > 0 && value > 0; i--) {
+            if (dpTable[i, value] != dpTable[i - 1, value]) {
+                // Item i-1 was included
+                result.Add(items[i - 1]);
+                value -= unchecked((ulong)items[i - 1].scrapValue); 
+            }
+        }
         return result;
     }
+
 
     public void Execute(StringArray args) {
         if (Helper.LocalPlayer is not PlayerControllerB player) return;
