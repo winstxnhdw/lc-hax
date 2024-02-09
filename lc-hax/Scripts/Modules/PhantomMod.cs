@@ -28,15 +28,12 @@ internal sealed class PhantomMod : MonoBehaviour {
         if (!camera.gameObject.TryGetComponent(out MousePan mouse)) return;
 
         if (Setting.EnablePhantom) {
-            // if possession was enabled before, but no longer possesing
-            if (this.EnabledPossession && !possessionMod.IsPossessed) {
+            if (!possessionMod.IsPossessed) {
                 this.EnabledPossession = false;
                 possessionMod.enabled = false;
+
                 keyboard.enabled = true;
                 mouse.enabled = true;
-            }
-
-            if (!possessionMod.IsPossessed) {
                 return;
             }
 
@@ -45,7 +42,7 @@ internal sealed class PhantomMod : MonoBehaviour {
                 this.EnabledPossession = true;
                 possessionMod.enabled = true;
 
-                //turn off phantom's keyboard and mouse
+                //turn off phantom keyboard and mouse
                 keyboard.enabled = false;
                 mouse.enabled = false;
             }

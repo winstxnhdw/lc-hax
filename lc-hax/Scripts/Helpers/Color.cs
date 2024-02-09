@@ -14,19 +14,18 @@ static partial class Helper {
     }
 
 
-    internal static Color GetLootColor(GrabbableObject scrap) {
-        return scrap == null
-            ? ExtraColors.Transparent
-            : scrap is LungProp
-            ? ExtraColors.LightBlue
-            : scrap is ShotgunItem
-            ? ExtraColors.Khaki
-            : scrap is HauntedMaskItem
-            ? ExtraColors.MediumVioletRed
-            : scrap.itemProperties.isDefensiveWeapon
-            ? ExtraColors.LightGreen
-            : scrap.scrapValue is > 15 and <= 35 ? ExtraColors.LightSalmon : scrap.scrapValue >= 36 ? ExtraColors.Gold : ExtraColors.Silver;
-    }
+    internal static Color GetLootColor(GrabbableObject scrap) =>
+        scrap switch {
+            null => Helper.ExtraColors.Transparent,
+            _ when scrap.itemProperties.itemName.ToLower().Contains("body") => Helper.ExtraColors.HotPink,
+            LungProp => Helper.ExtraColors.LightBlue,
+            ShotgunItem => Helper.ExtraColors.Khaki,
+            HauntedMaskItem => Helper.ExtraColors.MediumVioletRed,
+            _ when scrap.itemProperties.isDefensiveWeapon => Helper.ExtraColors.LightGreen,
+            _ when scrap.scrapValue is > 15 and <= 35 => Helper.ExtraColors.LightSalmon,
+            _ when scrap.scrapValue >= 36 => Helper.ExtraColors.Gold,
+            _ => Helper.ExtraColors.Silver, // Default case for any other scenario
+        };
 
 
     internal readonly struct ExtraColors {

@@ -10,7 +10,7 @@ class DeathNotificationPatch {
 
         Helper.SendNotification(
             title: player.playerUsername,
-            body: $"{player.playerUsername} has been killed by {(CauseOfDeath)causeOfDeath}",
+            body: $"Killed by {(CauseOfDeath)causeOfDeath}",
             isWarning: true
         );
     }
