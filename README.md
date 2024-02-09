@@ -111,7 +111,6 @@ The complete feature set includes the following.
 | Poison a player               | `/poison <player> <damage> <delay> <duration>` |
 | Poison all players            | `/poison --all <damage> <delay> <duration>`    |
 | Spoof a server message        | `/say <player> <message>`                      |
-| Spoof a server announcement   | `/announce <message>`                          |
 | Transmit a signal             | `/signal <message>`                            |
 | Modify shovel damage          | `/shovel <force=1>`                            |
 | Give or take money            | `/money <amount>`                              |

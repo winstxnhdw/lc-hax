@@ -43,24 +43,12 @@ internal static class Chat {
                 type => (ICommand)new PrivilegedCommand((ICommand)Activator.CreateInstance(type))
             );
 
-    internal static void Announce(string announcement, bool keepHistory = false) {
-        if (Helper.LocalPlayer is not PlayerControllerB player) return;
-        if (Helper.HUDManager is not HUDManager hudManager) return;
-
-        string actualHistory = string.Join('\n', hudManager.ChatMessageHistory.Where(message =>
-            !message.StartsWith("<color=#FF0000>USER</color>: <color=#FFFF00>'") &&
-            !message.StartsWith("<color=#FF0000>SYSTEM</color>: <color=#FFFF00>'")
-        ));
-
-        string chatText = keepHistory ? $"{actualHistory}\n<color=#7069ff>{announcement}</color>" : announcement;
-
-        hudManager.AddTextToChatOnServer(
-            $"</color>\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n{chatText}<color=#FFFFFF00>",
-            player.PlayerIndex()
+    internal static void Clear() {
+        Helper.HUDManager?.AddTextToChatOnServer(
+            $"</color>\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n<color=#FFFFFF00>",
+            -1
         );
     }
-
-    internal static void Clear() => Chat.Announce("");
 
     internal static void Print(string name, string? message, bool isSystem = false) {
         if (string.IsNullOrWhiteSpace(message) || Helper.HUDManager is not HUDManager hudManager) return;
