@@ -162,6 +162,7 @@ These commands are only available when the user is in superuser mode.
 | ----------------------------- | ---------------------------------------------- |
 | Set the timescale             | `/timescale <scale>`                           |
 | Set the quota                 | `/quota <amount> <fulfilled?>`                 |
+| Spawn enem(ies) on player     | `/spawn <enemy> <player> <amount?>`            |
 
 ### Binds
 
