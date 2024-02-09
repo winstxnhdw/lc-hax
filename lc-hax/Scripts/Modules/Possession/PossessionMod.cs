@@ -8,8 +8,9 @@ using Hax;
 
 internal sealed class PossessionMod : MonoBehaviour {
     internal static PossessionMod? Instance { get; private set; }
-    internal bool IsPossessed => this.EnemyToPossess is not null;
+    internal bool IsPossessed => this.EnemyPossessed is not null;
 
+    EnemyAI? EnemyPossessed => this.EnemyToPossess.Unfake();
     EnemyAI? EnemyToPossess { get; set; } = null;
     Coroutine? UpdateCoroutine { get; set; } = null;
     CharacterMovement? RigidbodyKeyboard { get; set; } = null;
@@ -78,7 +79,7 @@ internal sealed class PossessionMod : MonoBehaviour {
         Setting.EnableRealisticPossession = !Setting.EnableRealisticPossession;
         Chat.Print($"Realistic Possession: {Setting.EnableRealisticPossession}");
 
-        if (this.EnemyToPossess?.agent.Unfake() is not NavMeshAgent navMeshAgent) {
+        if (this.EnemyPossessed?.agent.Unfake() is not NavMeshAgent navMeshAgent) {
             return;
         }
 
@@ -119,7 +120,7 @@ internal sealed class PossessionMod : MonoBehaviour {
     // Updates position and rotation of possessed enemy at the end of frame
     void EndOfFrameUpdate() {
         if (this.RigidbodyKeyboard is not CharacterMovement rigidbodyKeyboard) return;
-        if (this.EnemyToPossess is not EnemyAI enemy) return;
+        if (this.EnemyPossessed is not EnemyAI enemy) return;
         if (Helper.LocalPlayer is not PlayerControllerB localPlayer) return;
         if (Helper.CurrentCamera is not Camera camera || !camera.enabled) return;
 
@@ -183,10 +184,11 @@ internal sealed class PossessionMod : MonoBehaviour {
 
     // Releases possession of the current enemy
     internal void Unpossess() {
-        if (this.EnemyToPossess is not EnemyAI possessedEnemy) return;
+        if (this.EnemyPossessed is not EnemyAI possessedEnemy) return;
         if (possessedEnemy.agent.Unfake() is NavMeshAgent navMeshAgent) {
             navMeshAgent.updatePosition = true;
             navMeshAgent.updateRotation = true;
+
             this.UpdateEnemyPositionToHere(possessedEnemy);
             _ = possessedEnemy.agent.Warp(possessedEnemy.transform.position);
         }
@@ -196,21 +198,21 @@ internal sealed class PossessionMod : MonoBehaviour {
     }
 
     void UsePrimarySkill() {
-        if (this.EnemyToPossess is not EnemyAI enemy) return;
+        if (this.EnemyPossessed is not EnemyAI enemy) return;
         if (!this.EnemyControllers.TryGetValue(enemy.GetType(), out IController controller)) return;
 
         controller.UsePrimarySkill(enemy);
     }
 
     void UseSecondarySkill() {
-        if (this.EnemyToPossess is not EnemyAI enemy) return;
+        if (this.EnemyPossessed is not EnemyAI enemy) return;
         if (!this.EnemyControllers.TryGetValue(enemy.GetType(), out IController controller)) return;
 
         controller.UseSecondarySkill(enemy);
     }
 
     void ReleaseSecondarySkill() {
-        if (this.EnemyToPossess is not EnemyAI enemy) return;
+        if (this.EnemyPossessed is not EnemyAI enemy) return;
         if (!this.EnemyControllers.TryGetValue(enemy.GetType(), out IController controller)) return;
 
         controller.ReleaseSecondarySkill(enemy);
