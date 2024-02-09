@@ -10,5 +10,5 @@ class JebPatch {
         __instance.inGrabbingObjectsAnimation = false;
     }
 
-    static void Postfix(DepositItemsDesk __instance, ref bool __state) => __instance.inGrabbingObjectsAnimation = __state;
+    static void Postfix(DepositItemsDesk __instance, bool __state) => __instance.inGrabbingObjectsAnimation = __state;
 }
