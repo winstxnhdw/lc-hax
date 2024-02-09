@@ -44,21 +44,21 @@ internal class ESPMod : MonoBehaviour {
             );
         });
 
-        this.LandmineRenderers.ForEach(renderer => this.RenderBounds(
+        this.LandmineRenderers.WhereIsNotNull().ForEach(renderer => this.RenderBounds(
             camera,
             renderer.bounds,
             Color.yellow,
             this.RenderLabel("Landmine")
         ));
 
-        this.TurretRenderers.ForEach(renderer => this.RenderBounds(
+        this.TurretRenderers.WhereIsNotNull().ForEach(renderer => this.RenderBounds(
             camera,
             renderer.bounds,
             Color.yellow,
             this.RenderLabel("Turret")
         ));
 
-        this.EntranceRenderers.ForEach(renderer => this.RenderBounds(
+        this.EntranceRenderers.WhereIsNotNull().ForEach(renderer => this.RenderBounds(
             camera,
             renderer.bounds,
             Color.yellow,
