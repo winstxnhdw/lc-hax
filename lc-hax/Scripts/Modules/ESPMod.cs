@@ -1,5 +1,6 @@
 using System;
 using System.Linq;
+using System.Net;
 using GameNetcodeStuff;
 using UnityEngine;
 using Hax;
@@ -31,9 +32,24 @@ internal class ESPMod : MonoBehaviour {
         if (!this.Enabled || !this.InGame || Helper.CurrentCamera is not Camera camera) return;
 
         this.PlayerRenderers.ForEach(rendererPair => {
-            if (rendererPair.GameObject.isPlayerDead || !rendererPair.GameObject.isPlayerControlled) return;
-
+            if (rendererPair.GameObject == null) return;
             PlayerControllerB player = rendererPair.GameObject;
+
+            if (player.isPlayerDead || !rendererPair.GameObject.isPlayerControlled)
+            {
+
+                Vector3 rendererCentrePoint = camera.WorldToEyesPoint(rendererPair.GameObject.transform.position);
+
+                if (rendererCentrePoint.z <= 2.0f) {
+                    return;
+                }
+                this.RenderLabel($"{rendererPair.GameObject.playerUsername}").Invoke(
+                    Helper.ExtraColors.GreenYellow,
+                    rendererCentrePoint
+                );
+                return;
+            }
+
             string label = $"#{player.playerClientId} {player.playerUsername}";
 
             this.RenderBounds(
@@ -46,21 +62,21 @@ internal class ESPMod : MonoBehaviour {
         this.LandmineRenderers.ForEach(renderer => this.RenderBounds(
             camera,
             renderer.bounds,
-            Color.yellow,
+            Helper.ExtraColors.OrangeRed,
             this.RenderLabel("Landmine")
         ));
 
         this.TurretRenderers.ForEach(renderer => this.RenderBounds(
             camera,
             renderer.bounds,
-            Color.yellow,
+            Helper.ExtraColors.OrangeRed,
             this.RenderLabel("Turret")
         ));
 
         this.EntranceRenderers.ForEach(renderer => this.RenderBounds(
             camera,
             renderer.bounds,
-            Color.yellow,
+            Helper.ExtraColors.LightGreen,
             this.RenderLabel("Entrance")
         ));
 
@@ -92,7 +108,7 @@ internal class ESPMod : MonoBehaviour {
             }
 
             this.RenderLabel($"{grabbableObject.itemProperties.itemName} ${grabbableObject.scrapValue}").Invoke(
-                Color.gray,
+                Helper.GetLootColor(grabbableObject),
                 rendererCentrePoint
             );
         });
@@ -101,7 +117,7 @@ internal class ESPMod : MonoBehaviour {
             this.RenderBounds(
                 camera,
                 shipBounds.bounds,
-                Color.green,
+                Helper.ExtraColors.LightGreen,
                 this.RenderLabel("Ship"),
                 10.0f
             );

@@ -126,6 +126,8 @@
 
     <PackageReference Include="RequireNamedArgs" Version="0.0.7" />
 
+    <PackageReference Include="System.Drawing.Common" Version="8.0.1" />
+
     <EmbeddedResource Include="$(NuGetPath)/lib.harmony/2.2.2/lib/net48/0Harmony.dll" />
 
     <EmbeddedResource Include="$(NuGetPath)/Quickenshtein/1.5.1/lib/netstandard2.0/Quickenshtein.dll" />

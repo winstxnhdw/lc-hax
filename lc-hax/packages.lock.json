@@ -26,6 +26,12 @@
           "FSharp.Core": "4.5.2"
         }
       },
+      "System.Drawing.Common": {
+        "type": "Direct",
+        "requested": "[8.0.1, )",
+        "resolved": "8.0.1",
+        "contentHash": "x0rAZECxIGx/YVjN28YRdpqka0+H7YMN9741FUDzipXPDzesd60gef/LI0ZCOcYSDsacTLTHvMAvxHG+TjbNNQ=="
+      },
       "FSharp.Core": {
         "type": "Transitive",
         "resolved": "4.5.2",
