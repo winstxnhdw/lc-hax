@@ -39,7 +39,7 @@ internal class SellCommand : ICommand {
             y = depositItemsDesk.triggerCollider.bounds.min.y
         };
 
-        if (Physics.Raycast(new Ray(position + Vector3.up * 3f, Vector3.down), out RaycastHit hitInfo, 8f, 1048640, QueryTriggerInteraction.Collide))
+        if (Physics.Raycast(new Ray(position + (Vector3.up * 3f), Vector3.down), out RaycastHit hitInfo, 8f, 1048640, QueryTriggerInteraction.Collide))
             position = hitInfo.point;
 
 
@@ -86,7 +86,7 @@ internal class SellCommand : ICommand {
 
         ulong result = table[sellableScrapsCount, targetValue];
         ulong remainingValue = actualTargetValue;
-        List<GrabbableObject> stuffToSell = new();
+        List<GrabbableObject> stuffToSell = [];
         for (int i = sellableScrapsCount; i > 0 && result > 0; i--) {
             if (result == table[i - 1, remainingValue]) continue;
 
@@ -99,7 +99,7 @@ internal class SellCommand : ICommand {
 
         Chat.Print($"Selling {stuffToSell.Count} items.");
         // sell the items
-        this.AsyncSell(depositItemsDesk, player, stuffToSell.ToArray());
+        this.AsyncSell(depositItemsDesk, player, [.. stuffToSell]);
 
         return result;
     }

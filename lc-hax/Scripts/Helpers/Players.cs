@@ -60,8 +60,6 @@ internal static partial class Helper {
 
     internal static bool IsSelf(this PlayerControllerB? instance) => Helper.LocalPlayer is PlayerControllerB localPlayer && instance?.actualClientId == localPlayer.actualClientId;
 
-    internal static bool IsDead(this PlayerControllerB? instance) {
-        return instance == null ? false : instance.health > 0;
-    }
+    internal static bool IsDead(this PlayerControllerB? instance) => instance != null && instance.health > 0;
 
 }
