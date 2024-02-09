@@ -1,64 +1,61 @@
-using GameNetcodeStuff;
-using Hax;
 using System;
 using System.Collections.Generic;
 using Unity.Netcode;
 using UnityEngine;
 using UnityObject = UnityEngine.Object;
+using GameNetcodeStuff;
+using Hax;
+using System.Linq;
 
 [PrivilegedCommand("/spawn")]
 internal class SpawnCommand : ICommand {
-    private void SpawnEnemyOnPlayer(PlayerControllerB player, GameObject prefab, ulong amount = 1) {
-        if (Helper.RoundManager == null) return;
-        if (player == null) return;
+    static bool IsHostileEnemy(EnemyType enemy) =>
+        !enemy.enemyName.Contains("Docile Locust Bees", StringComparison.OrdinalIgnoreCase) ||
+        !enemy.enemyName.Contains("Manticoil", StringComparison.OrdinalIgnoreCase);
 
+    static Dictionary<string, GameObject> HostileEnemies { get; } =
+        Resources.FindObjectsOfTypeAll<EnemyType>()
+                 .Where(SpawnCommand.IsHostileEnemy)
+                 .ToDictionary(enemy => enemy.enemyName, enemy => enemy.enemyPrefab);
+
+    void SpawnEnemyOnPlayer(PlayerControllerB player, GameObject prefab, ulong amount = 1) {
         for (ulong i = 0; i < amount; i++) {
-            GameObject enemy = UnityObject.Instantiate(prefab, player.transform.position, Quaternion.Euler(Vector3.zero));
-            if (enemy.TryGetComponent(out NetworkObject networkObject)) {
-                networkObject.Spawn(true);
-                if (enemy.TryGetComponent(out EnemyAI ai)) {
-                    _ = Helper.Enemies.Add(ai);
-                }
-            }
-            else {
+            GameObject enemy = UnityObject.Instantiate(prefab, player.transform.position, Quaternion.identity);
+
+            if (!enemy.TryGetComponent(out NetworkObject networkObject)) {
                 UnityObject.Destroy(enemy);
+                continue;
             }
+
+            networkObject.Spawn(true);
         }
     }
 
     public void Execute(StringArray args) {
-        if (Helper.RoundManager == null || Helper.RoundManager.currentLevel == null) {
-            Chat.Print("No round or level found.");
-            return;
-        }
-
+        if (Helper.RoundManager?.currentLevel is null) return;
         if (args.Length < 2) {
-            Chat.Print("Usage: /spawn <player> <enemy> <amount?>");
+            Chat.Print("Usage: /spawn <enemy> <player> <amount?>");
             return;
         }
 
-        if (Helper.GetActivePlayer(args[0]) is not PlayerControllerB targetPlayer) {
-            Chat.Print($"Target player '{args[0]}' is not alive or found!");
+        if (Helper.GetActivePlayer(args[1]) is not PlayerControllerB targetPlayer) {
+            Chat.Print("Player is not alive or found!");
             return;
         }
 
-        string? enemyNamePart = args[1];
-        if (enemyNamePart == null) return;
-        KeyValuePair<string, GameObject> enemyEntry = Helper.AllSpawnableEnemies
-            .First(e => e.Key.Contains(enemyNamePart, StringComparison.OrdinalIgnoreCase));
+        string? key = Helper.FuzzyMatch(args[0], [.. SpawnCommand.HostileEnemies.Keys]);
 
-        if (enemyEntry.Value == null) {
-            Chat.Print($"Enemy '{enemyNamePart}' not found.");
+        if (key is null) {
+            Chat.Print("Invalid enemy!");
             return;
         }
 
-        // Parse amount; default to 1 if not provided or invalid
-        ulong amount = 1;
-        if (args.Length > 2 && !ulong.TryParse(args[2], out amount)) {
+        if (!args[2].TryParse(defaultValue: 1, result: out ulong amount)) {
             Chat.Print("Invalid amount specified. Defaulting to 1.");
+            return;
         }
 
-        Chat.Print($"Spawning {amount} of {enemyEntry.Key} for {targetPlayer.playerUsername}.");
-        this.SpawnEnemyOnPlayer(targetPlayer, enemyEntry.Value, amount);
+        this.SpawnEnemyOnPlayer(targetPlayer, SpawnCommand.HostileEnemies[key], amount);
+        Chat.Print($"Spawning {(amount > 1 ? amount : 'a')} {key} on {targetPlayer.playerUsername}.");
     }
 }
