@@ -66,8 +66,13 @@ internal class ESPMod : MonoBehaviour {
         ));
 
         this.StoryLogVectors.ForEach(vector => {
-            if (vector.z <= 2.0f) return;
-            this.RenderLabel("Log").Invoke(Color.gray, vector);
+            Vector3 rendererCentrePoint = camera.WorldToEyesPoint(vector);
+
+            if (rendererCentrePoint.z <= 2.0f) {
+                return;
+            }
+
+            this.RenderLabel("Log").Invoke(Color.gray, rendererCentrePoint);
         });
 
         Helper.Enemies.WhereIsNotNull().ForEach(enemy => {
