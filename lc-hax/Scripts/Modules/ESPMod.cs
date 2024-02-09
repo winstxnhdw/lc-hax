@@ -74,18 +74,13 @@ internal class ESPMod : MonoBehaviour {
         });
 
         this.StoryLogVectors.ForEach(vector => {
-            if (vector.z <= 2.0f) return;
-            this.RenderLabel("Log").Invoke(Helper.ExtraColors.Silver, vector);
-        });
-
-        this.StoryLogVectors.ForEach(vector => {
             Vector3 rendererCentrePoint = camera.WorldToEyesPoint(vector);
 
             if (rendererCentrePoint.z <= 2.0f) {
                 return;
             }
 
-            this.RenderLabel("Log").Invoke(Color.gray, rendererCentrePoint);
+            this.RenderLabel("Log").Invoke(Helper.ExtraColors.Silver, rendererCentrePoint);
         });
 
         Helper.Enemies.WhereIsNotNull().ForEach(enemy => {
@@ -117,12 +112,12 @@ internal class ESPMod : MonoBehaviour {
                 return;
             }
 
-            string name = grabbableObject.itemProperties.itemName;
+            string Label = grabbableObject.itemProperties.itemName;
             if (grabbableObject is RagdollGrabbableObject ragdollGrabbableObject) {
                 PlayerControllerB? player = ragdollGrabbableObject.GetPlayerFromBody();
-                name = player == null ? name : $"Body of {player.playerUsername}";
+                Label = player == null ? Label : $"Body of {player.playerUsername}";
             }
-            this.RenderLabel($"{name} ${grabbableObject.scrapValue}").Invoke(
+            this.RenderLabel($"{Label} ${grabbableObject.scrapValue}").Invoke(
                 Helper.GetLootColor(grabbableObject),
                 rendererCentrePoint
             );
