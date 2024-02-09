@@ -1,5 +1,4 @@
 using System;
-using UnityEngine;
 using GameNetcodeStuff;
 using Hax;
 
@@ -9,11 +8,11 @@ internal class BombCommand : ICommand {
         Helper.FindObjects<JetpackItem>()
               .First(jetpack => !jetpack.Reflect().GetInternalField<bool>("jetpackBroken"));
 
-    Action BlowUpLocation(PlayerControllerB localPlayer, Transform targetTransform, JetpackItem jetpack) => () => {
-        localPlayer.DiscardHeldObject(placeObject: true, placePosition: targetTransform.position);
+    Action BlowUpLocation(PlayerControllerB localPlayer, PlayerControllerB targetPlayer, JetpackItem jetpack) => () => {
+        localPlayer.DiscardHeldObject(placeObject: true, parentObjectTo: targetPlayer.NetworkObject);
 
         Helper.CreateComponent<WaitForBehaviour>("Explode Jetpack")
-              .SetPredicate(() => Vector3.Distance(jetpack.transform.position, targetTransform.position) <= 0.1f)
+              .SetPredicate(time => time >= 1.0f)
               .Init(() => jetpack.ExplodeJetpackServerRpc());
     };
 
@@ -38,6 +37,6 @@ internal class BombCommand : ICommand {
 
         Helper.CreateComponent<WaitForBehaviour>("Throw Bomb")
               .SetPredicate(() => localPlayer.ItemSlots[localPlayer.currentItemSlot] == jetpack)
-              .Init(this.BlowUpLocation(localPlayer, targetPlayer.transform, jetpack));
+              .Init(this.BlowUpLocation(localPlayer, targetPlayer, jetpack));
     }
 }
