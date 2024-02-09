@@ -45,7 +45,7 @@ class InvisiblePatch {
         ref bool exhausted,
         ref bool isPlayerGrounded
     ) {
-        if (!Setting.EnableInvisible || !__instance.IsSelf()) return;
+        if (!Setting.EnableInvisible || !__instance.IsLocalPlayer) return;
 
         newPos = InvisiblePatch.LastNewPos;
         inElevator = InvisiblePatch.LastInElevator;

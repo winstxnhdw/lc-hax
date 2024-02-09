@@ -9,7 +9,7 @@ class UntargetableEnemyPatch {
     [HarmonyPatch(nameof(EnemyAI.PlayerIsTargetable))]
     static bool Prefix(PlayerControllerB playerScript, ref bool __result) {
         if (!Setting.EnableUntargetable) return true;
-        if (!playerScript.IsSelf()) return true;
+        if (!playerScript.IsLocalPlayer) return true;
 
         __result = false;
         return false;
@@ -18,7 +18,7 @@ class UntargetableEnemyPatch {
     [HarmonyPatch(nameof(EnemyAI.Update))]
     static bool Prefix(EnemyAI __instance) {
         if (!Setting.EnableUntargetable) return true;
-        if (!__instance.targetPlayer.IsSelf()) return true;
+        if (!__instance.targetPlayer.IsLocalPlayer) return true;
 
         __instance.targetPlayer = null;
         __instance.movingTowardsTargetPlayer = false;
