@@ -6,5 +6,13 @@ using Hax;
 
 [HarmonyPatch(typeof(PlayerControllerB), nameof(PlayerControllerB.AllowPlayerDeath))]
 class GodModePatch {
-    static bool Prefix(PlayerControllerB __instance) => !Setting.EnableGodMode || Helper.LocalPlayer?.actualClientId != __instance.actualClientId;
+    static bool Prefix(PlayerControllerB __instance, ref bool __result) {
+        if (!Setting.EnableGodMode || !__instance.IsSelf()) return true;
+
+        __result = false;
+        __instance.inAnimationWithEnemy = null;
+        __instance.inSpecialInteractAnimation = false;
+
+        return false;
+    }
 }
