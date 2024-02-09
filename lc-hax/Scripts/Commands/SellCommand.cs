@@ -64,7 +64,7 @@ internal class SellCommand : ICommand {
 
     ulong SellScrapValue(DepositItemsDesk depositItemsDesk, PlayerControllerB player, StartOfRound startOfRound,
         ulong targetValue) {
-        var sellableScraps = Helper.Grabbables.WhereIsNotNull().Where(this.CanBeSold).ToArray();
+        GrabbableObject[] sellableScraps = Helper.Grabbables.WhereIsNotNull().Where(this.CanBeSold).ToArray();
         int sellableScrapsCount = sellableScraps.Length;
         ulong actualTargetValue = unchecked((ulong)(targetValue * startOfRound.companyBuyingRate));
         ulong[,] dpTable = new ulong[sellableScrapsCount + 1, actualTargetValue + 1];
@@ -90,7 +90,7 @@ internal class SellCommand : ICommand {
             }
         }
 
-        List<GrabbableObject> itemsToSell = new();
+        List<GrabbableObject> itemsToSell = [];
         ulong remainingValue = achievedValue;
         for (int i = sellableScrapsCount; i > 0 && remainingValue > 0; i--) {
             if (dpTable[i, remainingValue] != dpTable[i - 1, remainingValue]) {
@@ -101,7 +101,7 @@ internal class SellCommand : ICommand {
         }
 
         Debug.Log($"Selling {itemsToSell.Count} items. Target value: {targetValue}, Achieved: {achievedValue}");
-        this.AsyncSell(depositItemsDesk, player, itemsToSell.ToArray());
+        this.AsyncSell(depositItemsDesk, player, [.. itemsToSell]);
         return achievedValue;
     }
 
