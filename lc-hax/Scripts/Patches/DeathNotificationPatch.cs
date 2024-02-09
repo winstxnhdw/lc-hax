@@ -6,7 +6,7 @@ using Hax;
 class DeathNotificationPatch {
     static void Postfix(int playerId, int causeOfDeath) {
         if (Helper.GetPlayer(playerId) is not PlayerControllerB player) return;
-        if (player.IsLocalPlayer) return;
+        if (player.IsSelf()) return;
 
         Helper.SendNotification(
             title: player.playerUsername,
