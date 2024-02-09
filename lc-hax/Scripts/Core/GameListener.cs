@@ -13,14 +13,16 @@ internal class GameListener : MonoBehaviour {
     bool HasShipBegunDescent { get; set; } = false;
     bool HasShipLeft { get; set; } = false;
 
-    void OnEnable() => LevelDependencyPatch.OnFinishLevelGeneration += GameListener.OnLevelGenerated;
+    void OnEnable() => LevelDependencyPatch.OnFinishLevelGeneration += this.OnFinishLevelGeneration;
 
-    void OnDisable() => LevelDependencyPatch.OnFinishLevelGeneration -= GameListener.OnLevelGenerated;
+    void OnDisable() => LevelDependencyPatch.OnFinishLevelGeneration -= this.OnFinishLevelGeneration;
 
     void Update() {
         this.InGameListener();
         this.ShipListener();
     }
+
+    void OnFinishLevelGeneration() => GameListener.OnLevelGenerated?.Invoke();
 
     void ShipListener() {
         if (Helper.StartOfRound is not StartOfRound startOfRound) return;
