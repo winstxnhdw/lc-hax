@@ -77,8 +77,8 @@ internal sealed class PossessionMod : MonoBehaviour {
         this.UpdateComponentsOnCurrentState(this.enabled);
 
         Helper.SendNotification(
-            "Possess NoClip:",
-            this.NoClipEnabled ? "Enabled" : "Disabled"
+            title: "Possess NoClip:",
+            body: this.NoClipEnabled ? "Enabled" : "Disabled"
         );
     }
 
