@@ -119,6 +119,8 @@ The complete feature set includes the following.
 | Buy an item                   | `/buy <item> <quantity=1>`                     |
 | Deposit valuable item(s)      | `/sell <quota?>`                               |
 | Grab scrap(s)                 | `/grab <item?>`                                |
+| Destroy held item             | `/destroy`                                     |
+| Destroy all items             | `/destroy --all`                               |
 | Block incoming credits        | `/block credit`                                |
 | Block any radar targets       | `/block radar`                                 |
 | Become untargetable           | `/block enemy`                                 |
