@@ -19,8 +19,9 @@ static partial class Helper {
         if (scrap is LungProp) return ExtraColors.LightBlue;
         if (scrap is ShotgunItem) return ExtraColors.Khaki;
         if (scrap is HauntedMaskItem) return ExtraColors.MediumVioletRed;
-        if (scrap.itemProperties.isDefensiveWeapon) return ExtraColors.LightGreen;
-        return scrap.scrapValue is > 15 and <= 35 ? ExtraColors.LightSalmon : scrap.scrapValue >= 36 ? ExtraColors.Gold : ExtraColors.Silver;
+        return scrap.itemProperties.isDefensiveWeapon
+            ? ExtraColors.LightGreen
+            : scrap.scrapValue is > 15 and <= 35 ? ExtraColors.LightSalmon : scrap.scrapValue >= 36 ? ExtraColors.Gold : ExtraColors.Silver;
     }
 
 
