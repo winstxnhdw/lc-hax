@@ -1,6 +1,5 @@
 using System;
 using System.Linq;
-using System.Net;
 using GameNetcodeStuff;
 using UnityEngine;
 using Hax;
@@ -35,8 +34,7 @@ internal class ESPMod : MonoBehaviour {
             if (rendererPair.GameObject == null) return;
             PlayerControllerB player = rendererPair.GameObject;
 
-            if (player.isPlayerDead || !rendererPair.GameObject.isPlayerControlled)
-            {
+            if (player.isPlayerDead || !rendererPair.GameObject.isPlayerControlled) {
 
                 Vector3 rendererCentrePoint = camera.WorldToEyesPoint(rendererPair.GameObject.transform.position);
 
