@@ -13,12 +13,16 @@ internal class GrabCommand : ICommand {
         Vector3.Distance(grabbableObject.transform.position, currentPlayerPosition) >= 20.0f;
 
     IEnumerator GrabAllItems(PlayerControllerB player, GrabbableObject[] grabbables) {
+        float currentWeight = player.carryWeight;
+
         for (int i = 0; i < grabbables.Length; i++) {
             GrabbableObject grabbable = grabbables[i];
             player.GrabObject(grabbable);
             yield return new WaitUntil(() => player.ItemSlots[player.currentItemSlot] == grabbable);
             player.DiscardHeldObject();
         }
+
+        player.carryWeight = currentWeight;
     }
 
     string GrabAllItems(PlayerControllerB player, Vector3 currentPlayerPosition) {
@@ -63,7 +67,6 @@ internal class GrabCommand : ICommand {
     public void Execute(StringArray args) {
         if (Helper.LocalPlayer is not PlayerControllerB localPlayer) return;
 
-        float currentWeight = localPlayer.carryWeight;
         Vector3 currentPlayerPosition = localPlayer.transform.position;
 
         string message = args.Length switch {
@@ -71,7 +74,6 @@ internal class GrabCommand : ICommand {
             _ => this.GrabItem(localPlayer, currentPlayerPosition, string.Join(' ', args))
         };
 
-        localPlayer.carryWeight = currentWeight;
         Chat.Print(message);
     }
 }
