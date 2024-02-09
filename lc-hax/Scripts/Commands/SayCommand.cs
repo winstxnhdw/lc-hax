@@ -13,6 +13,13 @@ internal class SayCommand : ICommand {
             return;
         }
 
-        Helper.HUDManager?.AddTextToChatOnServer(string.Join(" ", args[1..]), player.PlayerIndex());
+        string message = string.Join(" ", args[1..]);
+
+        if (message.Length > 50) {
+            Chat.Print($"You have exceeded the max message length by {message.Length - 50} characters!");
+            return;
+        }
+
+        Helper.HUDManager?.AddTextToChatOnServer(message, player.PlayerIndex());
     }
 }
