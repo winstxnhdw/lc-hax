@@ -32,13 +32,9 @@ internal class ESPMod : MonoBehaviour {
         if (!this.Enabled || !this.InGame || Helper.CurrentCamera is not Camera camera) return;
 
         this.PlayerRenderers.ForEach(rendererPair => {
-            if (rendererPair.GameObject == null) return;
-
-            PlayerControllerB player = rendererPair.GameObject;
-            if (player == null) return;
-
+            if (rendererPair.GameObject is not PlayerControllerB player) return;
+            if (player.isPlayerDead || !player.isPlayerControlled) return;
             string label = $"#{player.playerClientId} {player.playerUsername}";
-            bool isDead = player.isPlayerDead || !player.isPlayerControlled;
             if (isDead) return;
             this.RenderBounds(
                 camera,
@@ -81,6 +77,11 @@ internal class ESPMod : MonoBehaviour {
         this.StoryLogVectors.ForEach(vector => {
             if (vector.z <= 2.0f) return;
             this.RenderLabel("Log").Invoke(Helper.ExtraColors.Silver, vector);
+        });
+
+        this.StoryLogVectors.ForEach(vector => {
+            if (vector.z <= 2.0f) return;
+            this.RenderLabel("Log").Invoke(Color.gray, vector);
         });
 
         Helper.Enemies.WhereIsNotNull().ForEach(enemy => {
