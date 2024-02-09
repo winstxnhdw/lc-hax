@@ -112,7 +112,6 @@ internal class ESPMod : MonoBehaviour {
                 return;
             }
 
-            // check if is RagdollGrabbableObject
             string name = grabbableObject.itemProperties.itemName;
             if (grabbableObject is RagdollGrabbableObject ragdollGrabbableObject) {
                 PlayerControllerB? player = ragdollGrabbableObject.GetPlayerFromBody();
