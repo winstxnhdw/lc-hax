@@ -54,21 +54,21 @@ internal class ESPMod : MonoBehaviour {
             );
         });
 
-        this.LandmineRenderers.ForEach(renderer => this.RenderBounds(
+        this.LandmineRenderers.WhereIsNotNull().ForEach(renderer => this.RenderBounds(
             camera,
             renderer.bounds,
             Helper.ExtraColors.OrangeRed,
             this.RenderLabel("Landmine")
         ));
 
-        this.TurretRenderers.ForEach(renderer => this.RenderBounds(
+        this.TurretRenderers.WhereIsNotNull().ForEach(renderer => this.RenderBounds(
             camera,
             renderer.bounds,
             Helper.ExtraColors.OrangeRed,
             this.RenderLabel("Turret")
         ));
 
-        this.EntranceRenderers.ForEach(renderer => this.RenderBounds(
+        this.EntranceRenderers.WhereIsNotNull().ForEach(renderer => this.RenderBounds(
             camera,
             renderer.bounds,
             Helper.ExtraColors.LightGreen,
@@ -177,6 +177,7 @@ internal class ESPMod : MonoBehaviour {
         Action<Color, Vector3>? action,
         float cutOffDistance = 4.0f
     ) {
+        if(bounds == null) return;
         Vector3 rendererCentrePoint = camera.WorldToEyesPoint(bounds.center);
 
         if (rendererCentrePoint.z <= cutOffDistance) {
