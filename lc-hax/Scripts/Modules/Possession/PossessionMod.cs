@@ -114,6 +114,12 @@ internal sealed class PossessionMod : MonoBehaviour {
         if (this.FirstUpdate) {
             this.FirstUpdate = false;
             this.SetEnemyColliders(enemy, false);
+
+            if (enemy.agent is NavMeshAgent agent) {
+                agent.updatePosition = false;
+                agent.updateRotation = false;
+            }
+
             rigidbodyKeyboard.Init();
             this.transform.position = enemy.transform.position;
             this.UpdateComponentsOnCurrentState(true);

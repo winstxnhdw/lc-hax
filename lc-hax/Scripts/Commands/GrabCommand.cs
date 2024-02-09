@@ -12,11 +12,10 @@ internal class GrabCommand : ICommand {
         !grabbableObject.isHeldByEnemy &&
         Vector3.Distance(grabbableObject.transform.position, currentPlayerPosition) >= 20.0f;
 
-    IEnumerator GrabAllItems(PlayerControllerB player, GrabbableObject[] grabbables) {
+    IEnumerator GrabAllItemsAsync(PlayerControllerB player, GrabbableObject[] grabbables) {
         float currentWeight = player.carryWeight;
 
-        for (int i = 0; i < grabbables.Length; i++) {
-            GrabbableObject grabbable = grabbables[i];
+        foreach (GrabbableObject grabbable in grabbables) {
             player.GrabObject(grabbable);
             yield return new WaitUntil(() => player.ItemSlots[player.currentItemSlot] == grabbable);
             player.DiscardHeldObject();
@@ -26,13 +25,14 @@ internal class GrabCommand : ICommand {
     }
 
     string GrabAllItems(PlayerControllerB player, Vector3 currentPlayerPosition) {
-        IEnumerable<GrabbableObject> grabbables =
+        GrabbableObject[] grabbables =
             Helper.Grabbables
                 .WhereIsNotNull()
-                .Where(grabbable => this.CanGrabItem(grabbable, currentPlayerPosition));
+                .Where(grabbable => this.CanGrabItem(grabbable, currentPlayerPosition))
+                .ToArray();
 
         Helper.CreateComponent<AsyncBehaviour>()
-              .Init(() => this.GrabAllItems(player, grabbables.ToArray()));
+              .Init(() => this.GrabAllItemsAsync(player, grabbables));
 
         return "Successfully grabbed all items!";
     }
