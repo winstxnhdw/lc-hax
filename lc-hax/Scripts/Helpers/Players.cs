@@ -57,4 +57,12 @@ internal static partial class Helper {
         grabbable.parentObject = player.localItemHolder;
         grabbable.GrabItemOnClient();
     }
+
+    internal static bool IsSelf(this PlayerControllerB? instance) => Helper.LocalPlayer is PlayerControllerB localPlayer && instance?.actualClientId == localPlayer.actualClientId;
+
+    internal static bool IsDead(this PlayerControllerB? instance) {
+        if (instance == null) return false;
+        return instance.health > 0;
+    }
+
 }
