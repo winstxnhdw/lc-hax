@@ -39,7 +39,8 @@ internal class SellCommand : ICommand {
             y = depositItemsDesk.triggerCollider.bounds.min.y
         };
 
-        if (Physics.Raycast(new Ray(position + (Vector3.up * 3f), Vector3.down), out RaycastHit hitInfo, 8f, 1048640, QueryTriggerInteraction.Collide))
+        if (Physics.Raycast(new Ray(position + (Vector3.up * 3f), Vector3.down), out RaycastHit hitInfo, 8f, 1048640,
+                QueryTriggerInteraction.Collide))
             position = hitInfo.point;
 
 
@@ -53,75 +54,56 @@ internal class SellCommand : ICommand {
     }
 
 
-    void AsyncSell(DepositItemsDesk depositItemsDesk, PlayerControllerB player, GrabbableObject[] grabbables) => Helper.CreateComponent<AsyncBehaviour>().Init(() => this.SellItems(depositItemsDesk, player, grabbables));
+    void AsyncSell(DepositItemsDesk depositItemsDesk, PlayerControllerB player, GrabbableObject[] grabbables) => Helper
+        .CreateComponent<AsyncBehaviour>().Init(() => this.SellItems(depositItemsDesk, player, grabbables));
 
     void SellEverything(DepositItemsDesk depositItemsDesk, PlayerControllerB player) {
         GrabbableObject[] scraps = Helper.Grabbables.WhereIsNotNull().Where(this.CanBeSold).ToArray();
         this.AsyncSell(depositItemsDesk, player, scraps);
     }
 
-    ulong SellScrapValue(DepositItemsDesk depositItemsDesk, PlayerControllerB player, StartOfRound startOfRound, ulong targetValue) {
-        GrabbableObject[] sellableScraps = Helper.Grabbables.WhereIsNotNull().Where(this.CanBeSold).ToArray();
+    ulong SellScrapValue(DepositItemsDesk depositItemsDesk, PlayerControllerB player, StartOfRound startOfRound,
+        ulong targetValue) {
+        var sellableScraps = Helper.Grabbables.WhereIsNotNull().Where(this.CanBeSold).ToArray();
         int sellableScrapsCount = sellableScraps.Length;
         ulong actualTargetValue = unchecked((ulong)(targetValue * startOfRound.companyBuyingRate));
-
-        // Adjust the algorithm to allow going slightly over the target value
         ulong[,] dpTable = new ulong[sellableScrapsCount + 1, actualTargetValue + 1];
 
+        // Fill DP table
         for (int i = 0; i <= sellableScrapsCount; i++) {
             for (ulong w = 0; w <= actualTargetValue; w++) {
-                if (i == 0 || w == 0) {
-                    dpTable[i, w] = 0;
-                }
+                if (i == 0 || w == 0) dpTable[i, w] = 0;
                 else {
                     ulong itemValue = unchecked((ulong)sellableScraps[i - 1].scrapValue);
-                    dpTable[i, w] = itemValue <= w ? Math.Max(itemValue + dpTable[i - 1, w - itemValue], dpTable[i - 1, w]) : dpTable[i - 1, w];
+                    dpTable[i, w] = itemValue <= w
+                        ? Math.Max(itemValue + dpTable[i - 1, w - itemValue], dpTable[i - 1, w])
+                        : dpTable[i - 1, w];
                 }
             }
         }
 
-        ulong[] lastRow = new ulong[actualTargetValue + 1];
-        for (ulong i = 0; i <= actualTargetValue; i++) {
-            lastRow[i] = dpTable[sellableScrapsCount, i];
-        }
-
-        ulong closestValue = this.FindClosestValue(lastRow, actualTargetValue);
-        List<GrabbableObject> itemsToSell = this.TracebackItemsToSell(dpTable, sellableScraps, closestValue);
-
-        Debug.Log($"Selling {itemsToSell.Count} items. Target value: {targetValue}, Adjusted target: {actualTargetValue}, Achieved: {closestValue}");
-
-        // Async sell items
-        this.AsyncSell(depositItemsDesk, player, [.. itemsToSell]);
-
-        return closestValue;
-    }
-
-    ulong FindClosestValue(ulong[] lastRow, ulong targetValue) {
-        ulong closest = 0;
-        ulong length = (ulong)lastRow.Length;
-        for (ulong i = 0; i < length; i++) {
-            if (lastRow[i] >= targetValue) {
-                closest = i;
+        ulong achievedValue = 0;
+        for (ulong i = actualTargetValue; i >= 0; i--) {
+            if (dpTable[sellableScrapsCount, i] > 0) {
+                achievedValue = dpTable[sellableScrapsCount, i];
                 break;
             }
         }
 
-        return closest;
-    }
-
-    List<GrabbableObject> TracebackItemsToSell(ulong[,] dpTable, GrabbableObject[] items, ulong value) {
-        List<GrabbableObject> result = [];
-        int n = items.Length;
-        for (int i = n; i > 0 && value > 0; i--) {
-            if (dpTable[i, value] != dpTable[i - 1, value]) {
-                // Item i-1 was included
-                result.Add(items[i - 1]);
-                value -= unchecked((ulong)items[i - 1].scrapValue);
+        List<GrabbableObject> itemsToSell = new();
+        ulong remainingValue = achievedValue;
+        for (int i = sellableScrapsCount; i > 0 && remainingValue > 0; i--) {
+            if (dpTable[i, remainingValue] != dpTable[i - 1, remainingValue]) {
+                GrabbableObject item = sellableScraps[i - 1];
+                itemsToSell.Add(item);
+                remainingValue -= unchecked((ulong)item.scrapValue);
             }
         }
-        return result;
-    }
 
+        Debug.Log($"Selling {itemsToSell.Count} items. Target value: {targetValue}, Achieved: {achievedValue}");
+        this.AsyncSell(depositItemsDesk, player, itemsToSell.ToArray());
+        return achievedValue;
+    }
 
     public void Execute(StringArray args) {
         if (Helper.LocalPlayer is not PlayerControllerB player) return;
