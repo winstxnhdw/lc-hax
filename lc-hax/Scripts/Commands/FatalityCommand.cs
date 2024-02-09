@@ -101,7 +101,7 @@ internal class FatalityCommand : ICommand {
         }
 
         if (Helper.GetActivePlayer(args[0]) is not PlayerControllerB targetPlayer) {
-            Chat.Print($"Unable to find player: {args[0]}!");
+            Chat.Print("Target player is not alive or found!");
             return;
         }
 
@@ -117,10 +117,15 @@ internal class FatalityCommand : ICommand {
             { "Nutcracker", this.HandleNutcracker }
         };
 
-        string key = Helper.FuzzyMatch(
+        string? key = Helper.FuzzyMatch(
             string.Join(" ", args[1..]).ToTitleCase(),
             [.. enemyHandlers.Keys]
         );
+
+        if (string.IsNullOrWhiteSpace(key)) {
+            Chat.Print("Failed to find enemy!");
+            return;
+        }
 
         Chat.Print($"Performing {key} fatality on {targetPlayer.playerUsername}..");
 

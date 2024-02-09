@@ -41,7 +41,7 @@ internal sealed class TriggerMod : MonoBehaviour, IEnemyPrompter {
 
             foreach (int i in this.RaycastHits.SphereCastForward(camera.transform).Range()) {
                 if (!this.RaycastHits[i].collider.TryGetComponent(out PlayerControllerB player)) continue;
-                if (player.IsSelf()) continue;
+                if (player.IsLocalPlayer) continue;
 
                 Chat.Print($"Following #{player.playerClientId} {player.playerUsername}!");
                 FollowMod.PlayerToFollow = player;

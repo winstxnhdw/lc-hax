@@ -9,6 +9,7 @@ using Hax;
 class InvisiblePatch {
     static Vector3 LastNewPos { get; set; }
     static bool LastInElevator { get; set; }
+    static bool LastInShipRoom { get; set; }
     static bool LastExhausted { get; set; }
     static bool LastIsPlayerGrounded { get; set; }
 
@@ -16,6 +17,7 @@ class InvisiblePatch {
     static void Prefix(
         ref Vector3 newPos,
         ref bool inElevator,
+        ref bool inShipRoom,
         ref bool exhausted,
         ref bool isPlayerGrounded
     ) {
@@ -23,11 +25,13 @@ class InvisiblePatch {
 
         InvisiblePatch.LastNewPos = newPos;
         InvisiblePatch.LastInElevator = inElevator;
+        InvisiblePatch.LastInShipRoom = inShipRoom;
         InvisiblePatch.LastExhausted = exhausted;
         InvisiblePatch.LastIsPlayerGrounded = isPlayerGrounded;
 
         newPos = new Vector3(0, -100, 0);
         inElevator = false;
+        inShipRoom = false;
         exhausted = false;
         isPlayerGrounded = true;
     }
@@ -37,13 +41,15 @@ class InvisiblePatch {
         PlayerControllerB __instance,
         ref Vector3 newPos,
         ref bool inElevator,
+        ref bool isInShip,
         ref bool exhausted,
         ref bool isPlayerGrounded
     ) {
-        if (!Setting.EnableInvisible || !__instance.IsSelf()) return;
+        if (!Setting.EnableInvisible || !__instance.IsLocalPlayer) return;
 
         newPos = InvisiblePatch.LastNewPos;
         inElevator = InvisiblePatch.LastInElevator;
+        isInShip = InvisiblePatch.LastInShipRoom;
         exhausted = InvisiblePatch.LastExhausted;
         isPlayerGrounded = InvisiblePatch.LastIsPlayerGrounded;
     }

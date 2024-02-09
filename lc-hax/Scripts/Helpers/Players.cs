@@ -2,15 +2,13 @@ using UnityEngine;
 using GameNetcodeStuff;
 using System.Linq;
 using System.Runtime.CompilerServices;
+using Unity.Netcode;
 
 namespace Hax;
 
 internal static partial class Helper {
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     internal static int PlayerIndex(this PlayerControllerB player) => unchecked((int)player.playerClientId);
-
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    internal static bool IsSelf(this PlayerControllerB? instance) => Helper.LocalPlayer is PlayerControllerB localPlayer && instance?.actualClientId == localPlayer.actualClientId;
 
     internal static void DamagePlayerRpc(this PlayerControllerB player, int damage) =>
         player.DamagePlayerFromOtherClientServerRpc(damage, Vector3.zero, -1);

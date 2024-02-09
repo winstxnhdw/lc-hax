@@ -37,8 +37,8 @@ internal static partial class Helper {
         return distancePenalty + commonalityReward;
     }
 
-    internal static string FuzzyMatch(string? query, ReadOnlySpan<string> strings) {
-        if (string.IsNullOrWhiteSpace(query)) return strings[0];
+    internal static string? FuzzyMatch(string? query, ReadOnlySpan<string> strings) {
+        if (strings.Length is 0 || string.IsNullOrWhiteSpace(query)) return null;
 
         string closestMatch = strings[0];
         int lowestWeight = Helper.GetSimilarityWeight(query, strings[0]);
