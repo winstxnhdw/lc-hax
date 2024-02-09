@@ -177,7 +177,6 @@ internal class ESPMod : MonoBehaviour {
         Action<Color, Vector3>? action,
         float cutOffDistance = 4.0f
     ) {
-        if(bounds == null) return;
         Vector3 rendererCentrePoint = camera.WorldToEyesPoint(bounds.center);
 
         if (rendererCentrePoint.z <= cutOffDistance) {
