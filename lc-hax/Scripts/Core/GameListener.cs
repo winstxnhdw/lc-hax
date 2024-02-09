@@ -7,10 +7,15 @@ internal class GameListener : MonoBehaviour {
     internal static event Action? OnGameEnd;
     internal static event Action? OnShipDescent;
     internal static event Action? OnShipLeave;
+    internal static event Action? OnLevelGenerated;
 
     bool InGame { get; set; } = false;
     bool HasShipBegunDescent { get; set; } = false;
     bool HasShipLeft { get; set; } = false;
+
+    void OnEnable() => LevelDependencyPatch.OnFinishLevelGeneration += GameListener.OnLevelGenerated;
+
+    void OnDisable() => LevelDependencyPatch.OnFinishLevelGeneration -= GameListener.OnLevelGenerated;
 
     void Update() {
         this.InGameListener();
