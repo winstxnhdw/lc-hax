@@ -10,10 +10,7 @@ internal class BombCommand : ICommand {
 
     Action BlowUpLocation(PlayerControllerB localPlayer, PlayerControllerB targetPlayer, JetpackItem jetpack) => () => {
         localPlayer.DiscardHeldObject(placeObject: true, parentObjectTo: targetPlayer.NetworkObject);
-
-        Helper.CreateComponent<WaitForBehaviour>("Explode Jetpack")
-              .SetPredicate(time => time >= 1.0f)
-              .Init(() => jetpack.ExplodeJetpackServerRpc());
+        Helper.ShortDelay(jetpack.ExplodeJetpackServerRpc);
     };
 
     public void Execute(StringArray args) {
