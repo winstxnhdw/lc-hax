@@ -1,9 +1,23 @@
+using System.Collections;
 using System.Linq;
 using GameNetcodeStuff;
 using Hax;
+using UnityEngine;
 
 [Command("/destroy")]
 internal class DestroyCommand : ICommand {
+    IEnumerator DestroyAllItemsAsync(PlayerControllerB player) {
+        float currentWeight = player.carryWeight;
+
+        foreach (GrabbableObject grabbable in Helper.Grabbables.ToArray()) {
+            player.GrabObject(grabbable);
+            yield return new WaitUntil(() => player.ItemSlots[player.currentItemSlot] == grabbable);
+            player.DespawnHeldObject();
+        }
+
+        player.carryWeight = currentWeight;
+    }
+
     Result DestroyHeldItem(PlayerControllerB player) {
         if (player.currentlyHeldObjectServer is null) {
             return new Result(message: "You are not holding anything!");
@@ -14,10 +28,8 @@ internal class DestroyCommand : ICommand {
     }
 
     Result DestroyAllItems(PlayerControllerB player) {
-        Helper.Grabbables.ToArray().ForEach(grabbable => {
-            player.currentlyHeldObjectServer = grabbable;
-            player.DespawnHeldObject();
-        });
+        Helper.CreateComponent<AsyncBehaviour>()
+              .Init(() => this.DestroyAllItemsAsync(player));
 
         return new Result(true);
     }
