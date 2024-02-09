@@ -55,7 +55,7 @@ internal class ESPMod : MonoBehaviour {
         });
 
         this.LandmineRenderers.WhereIsNotNull().ForEach(renderer => {
-            if(renderer == null) return;
+            if (renderer == null) return;
             this.RenderBounds(
                 camera,
                 renderer.bounds,
@@ -85,14 +85,14 @@ internal class ESPMod : MonoBehaviour {
         });
 
         Helper.Enemies.WhereIsNotNull().ForEach(enemy => {
-            if(enemy == null) return;
+            if (enemy == null) return;
             if (enemy.isEnemyDead) return;
             if (enemy is DocileLocustBeesAI or DoublewingAI) return;
 
             Renderer? nullableRenderer = enemy is RedLocustBees
                 ? enemy.meshRenderers.First()
                 : enemy.skinnedMeshRenderers.First();
-            if(nullableRenderer == null) return;
+            if (nullableRenderer == null) return;
             if (nullableRenderer.Unfake() is not Renderer renderer) {
                 return;
             }
@@ -119,7 +119,7 @@ internal class ESPMod : MonoBehaviour {
             );
         });
 
-        if(Helper.StartOfRound != null && Helper.StartOfRound.shipBounds is Collider shipBounds) {
+        if (Helper.StartOfRound != null && Helper.StartOfRound.shipBounds is Collider shipBounds) {
             this.RenderBounds(
                 camera,
                 shipBounds.bounds,
