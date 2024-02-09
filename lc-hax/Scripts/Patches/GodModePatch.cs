@@ -1,7 +1,6 @@
 using GameNetcodeStuff;
 using HarmonyLib;
 using Hax;
-using UnityEngine;
 
 [HarmonyPatch]
 class GodModePatch {
