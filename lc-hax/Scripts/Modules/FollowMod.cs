@@ -120,6 +120,7 @@ internal sealed class FollowMod : MonoBehaviour {
             "UpdatePlayerPositionServerRpc",
             localPlayer.thisPlayerBody.localPosition,
             localPlayer.isInElevator,
+            localPlayer.isInHangarShipRoom,
             localPlayer.isExhausted,
             localPlayer.thisController.isGrounded
         );
