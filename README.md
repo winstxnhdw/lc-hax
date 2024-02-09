@@ -137,6 +137,7 @@ The complete feature set includes the following.
 | Toggle rapid item usage       | `/rapid`                                       |
 | Eavesdrop on all players      | `/hear`                                        |
 | Respawn player                | `/respawn`                                     |
+| Fake player death             | `/fakedeath`                                   |
 | Unlock all doors              | `/unlock`                                      |
 | Lock all gates                | `/lock`                                        |
 | Open ship door                | `/open`                                        |
@@ -161,6 +162,7 @@ These commands are only available when the user is in superuser mode.
 | ----------------------------- | ---------------------------------------------- |
 | Set the timescale             | `/timescale <scale>`                           |
 | Set the quota                 | `/quota <amount> <fulfilled?>`                 |
+| Spawn enem(ies) on player     | `/spawn <enemy> <player> <amount?>`            |
 
 ### Binds
 

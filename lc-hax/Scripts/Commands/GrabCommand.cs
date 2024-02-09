@@ -67,7 +67,6 @@ internal class GrabCommand : ICommand {
     public void Execute(StringArray args) {
         if (Helper.LocalPlayer is not PlayerControllerB localPlayer) return;
 
-        float currentWeight = localPlayer.carryWeight;
         Vector3 currentPlayerPosition = localPlayer.transform.position;
 
         string message = args.Length switch {
@@ -75,7 +74,6 @@ internal class GrabCommand : ICommand {
             _ => this.GrabItem(localPlayer, currentPlayerPosition, string.Join(' ', args))
         };
 
-        localPlayer.carryWeight = currentWeight;
         Chat.Print(message);
     }
 }
