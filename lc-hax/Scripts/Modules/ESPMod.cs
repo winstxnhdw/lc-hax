@@ -32,28 +32,25 @@ internal class ESPMod : MonoBehaviour {
 
         this.PlayerRenderers.ForEach(rendererPair => {
             if (rendererPair.GameObject == null) return;
+
             PlayerControllerB player = rendererPair.GameObject;
-
-            if (player.isPlayerDead || !rendererPair.GameObject.isPlayerControlled) {
-
-                Vector3 rendererCentrePoint = camera.WorldToEyesPoint(rendererPair.GameObject.transform.position);
-
-                if (rendererCentrePoint.z <= 2.0f) {
-                    return;
-                }
-                this.RenderLabel($"{rendererPair.GameObject.playerUsername}").Invoke(
-                    Helper.ExtraColors.GreenYellow,
-                    rendererCentrePoint
-                );
-                return;
-            }
+            if (player == null) return;
 
             string label = $"#{player.playerClientId} {player.playerUsername}";
+            bool isDead = player.IsDead() || !player.isPlayerControlled;
 
-            this.RenderBounds(
-                camera,
-                rendererPair.Renderer.bounds,
-                this.RenderLabel(label)
+            Transform? targetTransform = isDead && player.deadBody != null
+                ? player.deadBody.transform
+                : (!isDead ? player.transform : null);
+            if (targetTransform == null) return;
+
+            Color labelColor = isDead ? Helper.ExtraColors.HotPink : Helper.ExtraColors.LimeGreen;
+            Vector3 rendererCentrePoint = camera.WorldToEyesPoint(targetTransform.position);
+            if (rendererCentrePoint.z <= 2.0f) return;
+
+            this.RenderLabel(label).Invoke(
+                labelColor,
+                rendererCentrePoint
             );
         });
 
@@ -133,8 +130,8 @@ internal class ESPMod : MonoBehaviour {
 
     Renderer[] GetRenderers<T>() where T : Component =>
         Helper.FindObjects<T>()
-              .Select(obj => obj.GetComponent<Renderer>())
-              .ToArray();
+            .Select(obj => obj.GetComponent<Renderer>())
+            .ToArray();
 
     void InitialiseRenderers() {
         this.PlayerRenderers = Helper.Players.Select(player =>
