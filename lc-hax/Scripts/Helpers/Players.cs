@@ -2,7 +2,6 @@ using UnityEngine;
 using GameNetcodeStuff;
 using System.Linq;
 using System.Runtime.CompilerServices;
-using Unity.Netcode;
 
 namespace Hax;
 
