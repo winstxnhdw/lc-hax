@@ -37,7 +37,7 @@ internal class ESPMod : MonoBehaviour {
             if (player == null) return;
 
             string label = $"#{player.playerClientId} {player.playerUsername}";
-            bool isDead = player.IsDead() || !player.isPlayerControlled;
+            bool isDead = player.isPlayerDead || !player.isPlayerControlled;
 
             Transform? targetTransform = isDead && player.deadBody != null
                 ? player.deadBody.transform
@@ -45,12 +45,11 @@ internal class ESPMod : MonoBehaviour {
             if (targetTransform == null) return;
 
             Color labelColor = isDead ? Helper.ExtraColors.HotPink : Helper.ExtraColors.LimeGreen;
-            Vector3 rendererCentrePoint = camera.WorldToEyesPoint(targetTransform.position);
-            if (rendererCentrePoint.z <= 2.0f) return;
-
-            this.RenderLabel(label).Invoke(
+            this.RenderBounds(
+                camera,
+                rendererPair.Renderer.bounds,
                 labelColor,
-                rendererCentrePoint
+                this.RenderLabel(label)
             );
         });
 
