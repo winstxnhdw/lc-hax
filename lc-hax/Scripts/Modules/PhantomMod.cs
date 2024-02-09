@@ -26,34 +26,28 @@ internal sealed class PhantomMod : MonoBehaviour {
         if (Helper.CurrentCamera is not Camera camera || Helper.Try(() => !camera.enabled)) return;
         if (!camera.gameObject.TryGetComponent(out KeyboardMovement keyboard)) return;
         if (!camera.gameObject.TryGetComponent(out MousePan mouse)) return;
-
-        if (Setting.EnablePhantom) {
-            if (!possessionMod.IsPossessed) {
-                this.EnabledPossession = false;
-                possessionMod.enabled = false;
-
-                keyboard.enabled = true;
-                mouse.enabled = true;
-                return;
-            }
-
-            // possessing monster for the first frame
-            if (!this.EnabledPossession) {
-                this.EnabledPossession = true;
-                possessionMod.enabled = true;
-
-                //turn off phantom keyboard and mouse
-                keyboard.enabled = false;
-                mouse.enabled = false;
-            }
-        }
-
-        else {
+        if (!Setting.EnablePhantom) {
             if (!this.EnabledPossession) return;
 
             possessionMod.Unpossess();
             this.EnabledPossession = false;
             possessionMod.enabled = false;
+        }
+
+        else if (!possessionMod.IsPossessed) {
+            this.EnabledPossession = false;
+            possessionMod.enabled = false;
+
+            keyboard.enabled = true;
+            mouse.enabled = true;
+        }
+
+        // possessing monster for the first frame
+        else if (!this.EnabledPossession) {
+            this.EnabledPossession = true;
+            possessionMod.enabled = true;
+            keyboard.enabled = false;
+            mouse.enabled = false;
         }
     }
 

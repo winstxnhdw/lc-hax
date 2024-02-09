@@ -15,16 +15,16 @@ internal class ESPMod : MonoBehaviour {
     bool Enabled { get; set; } = true;
 
     void OnEnable() {
-        GameListener.onGameStart += this.OnGameJoin;
-        GameListener.onGameEnd += this.OnGameEnd;
-        GameListener.onShipLand += this.InitialiseRenderers;
+        GameListener.OnShipDescent += this.Initialise;
+        GameListener.OnGameStart += this.Initialise;
+        GameListener.OnGameEnd += this.OnGameEnd;
         InputListener.OnPausePress += this.ToggleESP;
     }
 
     void OnDisable() {
-        GameListener.onGameStart -= this.OnGameJoin;
-        GameListener.onGameEnd -= this.OnGameEnd;
-        GameListener.onShipLand -= this.InitialiseRenderers;
+        GameListener.OnShipDescent -= this.Initialise;
+        GameListener.OnGameStart -= this.Initialise;
+        GameListener.OnGameEnd -= this.OnGameEnd;
         InputListener.OnPausePress -= this.ToggleESP;
     }
 
@@ -79,8 +79,13 @@ internal class ESPMod : MonoBehaviour {
         });
 
         this.StoryLogVectors.ForEach(vector => {
-            if (vector.z <= 2.0f) return;
-            this.RenderLabel("Log").Invoke(Color.gray, vector);
+            Vector3 rendererCentrePoint = camera.WorldToEyesPoint(vector);
+
+            if (rendererCentrePoint.z <= 2.0f) {
+                return;
+            }
+
+            this.RenderLabel("Log").Invoke(Color.gray, rendererCentrePoint);
         });
 
         Helper.Enemies.WhereIsNotNull().ForEach(enemy => {
@@ -134,8 +139,9 @@ internal class ESPMod : MonoBehaviour {
         }
     }
 
-    void OnGameJoin() {
+    void Initialise() {
         this.InitialiseRenderers();
+        this.InitialiseCoordinates();
         this.InGame = true;
     }
 

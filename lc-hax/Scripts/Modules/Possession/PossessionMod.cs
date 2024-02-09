@@ -8,10 +8,9 @@ using Hax;
 
 internal sealed class PossessionMod : MonoBehaviour {
     internal static PossessionMod? Instance { get; private set; }
-    internal bool IsPossessed => this.EnemyPossessed is not null;
+    internal bool IsPossessed => this.Possession.IsPossessed;
 
-    EnemyAI? EnemyPossessed => this.EnemyToPossess.Unfake();
-    EnemyAI? EnemyToPossess { get; set; } = null;
+    Possession Possession { get; } = new();
     Coroutine? UpdateCoroutine { get; set; } = null;
     CharacterMovement? RigidbodyKeyboard { get; set; } = null;
     KeyboardMovement? Keyboard { get; set; } = null;
@@ -45,7 +44,6 @@ internal sealed class PossessionMod : MonoBehaviour {
 
     void OnEnable() {
         InputListener.OnNPress += this.ToggleNoClip;
-        InputListener.OnXPress += this.ToggleRealisticPossession;
         InputListener.OnZPress += this.Unpossess;
         InputListener.OnLeftButtonPress += this.UsePrimarySkill;
         InputListener.OnRightButtonHold += this.OnRightMouseButtonHold;
@@ -56,7 +54,6 @@ internal sealed class PossessionMod : MonoBehaviour {
 
     void OnDisable() {
         InputListener.OnNPress -= this.ToggleNoClip;
-        InputListener.OnXPress -= this.ToggleRealisticPossession;
         InputListener.OnZPress -= this.Unpossess;
         InputListener.OnLeftButtonPress -= this.UsePrimarySkill;
         InputListener.OnRightButtonHold -= this.OnRightMouseButtonHold;
@@ -73,18 +70,6 @@ internal sealed class PossessionMod : MonoBehaviour {
         else {
             this.ReleaseSecondarySkill();
         }
-    }
-
-    void ToggleRealisticPossession() {
-        Setting.EnableRealisticPossession = !Setting.EnableRealisticPossession;
-        Chat.Print($"Realistic Possession: {Setting.EnableRealisticPossession}");
-
-        if (this.EnemyPossessed?.agent.Unfake() is not NavMeshAgent navMeshAgent) {
-            return;
-        }
-
-        navMeshAgent.updatePosition = Setting.EnableRealisticPossession;
-        navMeshAgent.updateRotation = Setting.EnableRealisticPossession;
     }
 
     void ToggleNoClip() {
@@ -120,7 +105,7 @@ internal sealed class PossessionMod : MonoBehaviour {
     // Updates position and rotation of possessed enemy at the end of frame
     void EndOfFrameUpdate() {
         if (this.RigidbodyKeyboard is not CharacterMovement rigidbodyKeyboard) return;
-        if (this.EnemyPossessed is not EnemyAI enemy) return;
+        if (this.Possession.Enemy is not EnemyAI enemy) return;
         if (Helper.LocalPlayer is not PlayerControllerB localPlayer) return;
         if (Helper.CurrentCamera is not Camera camera || !camera.enabled) return;
 
@@ -129,12 +114,6 @@ internal sealed class PossessionMod : MonoBehaviour {
         if (this.FirstUpdate) {
             this.FirstUpdate = false;
             this.SetEnemyColliders(enemy, false);
-
-            if (enemy.agent.Unfake() is NavMeshAgent agent) {
-                agent.updatePosition = Setting.EnableRealisticPossession;
-                agent.updateRotation = Setting.EnableRealisticPossession;
-            }
-
             rigidbodyKeyboard.Init();
             this.transform.position = enemy.transform.position;
             this.UpdateComponentsOnCurrentState(true);
@@ -178,41 +157,41 @@ internal sealed class PossessionMod : MonoBehaviour {
     internal void Possess(EnemyAI enemy) {
         this.Unpossess();
 
-        this.EnemyToPossess = enemy;
+        this.Possession.SetEnemy(enemy);
         this.FirstUpdate = true;
     }
 
     // Releases possession of the current enemy
     internal void Unpossess() {
-        if (this.EnemyPossessed is not EnemyAI possessedEnemy) return;
-        if (possessedEnemy.agent.Unfake() is NavMeshAgent navMeshAgent) {
+        if (this.Possession.Enemy is not EnemyAI enemy) return;
+        if (enemy.agent.Unfake() is NavMeshAgent navMeshAgent) {
             navMeshAgent.updatePosition = true;
             navMeshAgent.updateRotation = true;
 
-            this.UpdateEnemyPositionToHere(possessedEnemy);
-            _ = possessedEnemy.agent.Warp(possessedEnemy.transform.position);
+            this.UpdateEnemyPositionToHere(enemy);
+            _ = enemy.agent.Warp(enemy.transform.position);
         }
 
-        this.SetEnemyColliders(possessedEnemy, true);
-        this.EnemyToPossess = null;
+        this.SetEnemyColliders(enemy, true);
+        this.Possession.Clear();
     }
 
     void UsePrimarySkill() {
-        if (this.EnemyPossessed is not EnemyAI enemy) return;
+        if (this.Possession.Enemy is not EnemyAI enemy) return;
         if (!this.EnemyControllers.TryGetValue(enemy.GetType(), out IController controller)) return;
 
         controller.UsePrimarySkill(enemy);
     }
 
     void UseSecondarySkill() {
-        if (this.EnemyPossessed is not EnemyAI enemy) return;
+        if (this.Possession.Enemy is not EnemyAI enemy) return;
         if (!this.EnemyControllers.TryGetValue(enemy.GetType(), out IController controller)) return;
 
         controller.UseSecondarySkill(enemy);
     }
 
     void ReleaseSecondarySkill() {
-        if (this.EnemyPossessed is not EnemyAI enemy) return;
+        if (this.Possession.Enemy is not EnemyAI enemy) return;
         if (!this.EnemyControllers.TryGetValue(enemy.GetType(), out IController controller)) return;
 
         controller.ReleaseSecondarySkill(enemy);
