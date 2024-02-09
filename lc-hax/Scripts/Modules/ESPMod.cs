@@ -54,35 +54,45 @@ internal class ESPMod : MonoBehaviour {
             );
         });
 
-        this.LandmineRenderers.WhereIsNotNull().ForEach(renderer => this.RenderBounds(
-            camera,
-            renderer.bounds,
-            Helper.ExtraColors.OrangeRed,
-            this.RenderLabel("Landmine")
-        ));
+        this.LandmineRenderers.WhereIsNotNull().ForEach(renderer => {
+            if(renderer == null) return;
+            this.RenderBounds(
+                camera,
+                renderer.bounds,
+                Helper.ExtraColors.OrangeRed,
+                this.RenderLabel("Landmine")
+            );
+        });
 
-        this.TurretRenderers.WhereIsNotNull().ForEach(renderer => this.RenderBounds(
-            camera,
-            renderer.bounds,
-            Helper.ExtraColors.OrangeRed,
-            this.RenderLabel("Turret")
-        ));
+        this.TurretRenderers.WhereIsNotNull().ForEach(renderer => {
+            if (renderer == null) return;
+            this.RenderBounds(
+                camera,
+                renderer.bounds,
+                Helper.ExtraColors.OrangeRed,
+                this.RenderLabel("Turret")
+            );
+        });
 
-        this.EntranceRenderers.WhereIsNotNull().ForEach(renderer => this.RenderBounds(
-            camera,
-            renderer.bounds,
-            Helper.ExtraColors.LightGreen,
-            this.RenderLabel("Entrance")
-        ));
+        this.EntranceRenderers.WhereIsNotNull().ForEach(renderer => {
+            if (renderer == null) return;
+            this.RenderBounds(
+                camera,
+                renderer.bounds,
+                Helper.ExtraColors.LightGreen,
+                this.RenderLabel("Entrance")
+            );
+        });
 
         Helper.Enemies.WhereIsNotNull().ForEach(enemy => {
+            if(enemy == null) return;
             if (enemy.isEnemyDead) return;
             if (enemy is DocileLocustBeesAI or DoublewingAI) return;
 
             Renderer? nullableRenderer = enemy is RedLocustBees
                 ? enemy.meshRenderers.First()
                 : enemy.skinnedMeshRenderers.First();
-
+            if(nullableRenderer == null) return;
             if (nullableRenderer.Unfake() is not Renderer renderer) {
                 return;
             }
@@ -96,6 +106,7 @@ internal class ESPMod : MonoBehaviour {
         });
 
         Helper.Grabbables.WhereIsNotNull().ForEach(grabbableObject => {
+            if (grabbableObject == null) return;
             Vector3 rendererCentrePoint = camera.WorldToEyesPoint(grabbableObject.transform.position);
 
             if (rendererCentrePoint.z <= 2.0f) {
@@ -108,7 +119,7 @@ internal class ESPMod : MonoBehaviour {
             );
         });
 
-        if (Helper.StartOfRound?.shipBounds is Collider shipBounds) {
+        if(Helper.StartOfRound != null && Helper.StartOfRound.shipBounds is Collider shipBounds) {
             this.RenderBounds(
                 camera,
                 shipBounds.bounds,
@@ -177,7 +188,6 @@ internal class ESPMod : MonoBehaviour {
         Action<Color, Vector3>? action,
         float cutOffDistance = 4.0f
     ) {
-        if (bounds == null) return;
         Vector3 rendererCentrePoint = camera.WorldToEyesPoint(bounds.center);
 
         if (rendererCentrePoint.z <= cutOffDistance) {
