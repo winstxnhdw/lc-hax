@@ -7,7 +7,7 @@ static partial class Helper {
     internal static Color HexToColor(string hexColor) {
         if (hexColor.IndexOf('#') != -1) hexColor = hexColor.Replace("#", "");
 
-        float r = int.Parse(hexColor.Substring(0, 2), NumberStyles.AllowHexSpecifier) / 255f;
+        float r = int.Parse(hexColor[..2], NumberStyles.AllowHexSpecifier) / 255f;
         float g = int.Parse(hexColor.Substring(2, 2), NumberStyles.AllowHexSpecifier) / 255f;
         float b = int.Parse(hexColor.Substring(4, 2), NumberStyles.AllowHexSpecifier) / 255f;
         return new Color(r, g, b);
@@ -15,15 +15,14 @@ static partial class Helper {
 
 
     internal static Color GetLootColor(GrabbableObject scrap) {
-        if(scrap == null) return ExtraColors.Transparent;
+        if (scrap == null) return ExtraColors.Transparent;
         if (scrap is LungProp) return ExtraColors.LightBlue;
         if (scrap is ShotgunItem) return ExtraColors.Orange;
-        if(scrap is HauntedMaskItem) return ExtraColors.Cyan;
-        if(scrap.itemProperties.isDefensiveWeapon) return ExtraColors.LightGreen;
+        if (scrap is HauntedMaskItem) return ExtraColors.Cyan;
+        if (scrap.itemProperties.isDefensiveWeapon) return ExtraColors.LightGreen;
         if (scrap.scrapValue is > 15 and <= 35)
             return ExtraColors.LightSalmon;
-        if (scrap.scrapValue >= 36) return ExtraColors.Gold;
-        else return ExtraColors.LightCoral;
+        return scrap.scrapValue >= 36 ? ExtraColors.Gold : ExtraColors.LightCoral;
     }
 
 
