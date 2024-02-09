@@ -1,11 +1,7 @@
+using System;
+using System.Linq;
 using GameNetcodeStuff;
 using Hax;
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using Unity.Netcode;
-using UnityEngine;
 
 [Command("/sell")]
 internal class SellCommand : ICommand {
@@ -15,94 +11,52 @@ internal class SellCommand : ICommand {
         !grabbableObject.itemProperties.isDefensiveWeapon &&
         !grabbableObject.isHeld;
 
-    IEnumerator SellItems(DepositItemsDesk depositItemsDesk, PlayerControllerB player, GrabbableObject[] grabbables) {
-        for (int i = 0; i < grabbables.Length; i++) {
-            GrabbableObject grabbable = grabbables[i];
-            player.GrabObject(grabbable);
-            yield return new WaitUntil(() => player.ItemSlots[player.currentItemSlot] == grabbable);
-            this.PlaceItemOnCounter(depositItemsDesk, grabbable, player);
-        }
+    void SellObject(DepositItemsDesk depositItemsDesk, PlayerControllerB player, GrabbableObject item) {
+        player.currentlyHeldObjectServer = item;
+        depositItemsDesk.PlaceItemOnCounter(player);
     }
 
-    void PlaceItemOnCounter(DepositItemsDesk depositItemsDesk, GrabbableObject item,
-        PlayerControllerB player) {
-        if (depositItemsDesk == null || item == null || player == null) {
-            Debug.LogError("Invalid arguments passed to PlaceItemOnCounter.");
-            return;
-        }
+    void SellEverything(DepositItemsDesk depositItemsDesk, PlayerControllerB player) =>
+        Helper.Grabbables.WhereIsNotNull().Where(this.CanBeSold).ForEach(grabbableObject => {
+            this.SellObject(depositItemsDesk, player, grabbableObject);
+        });
 
-        if (player.currentlyHeldObjectServer != item) {
-            player.currentlyHeldObjectServer = item;
-        }
+    ulong SellScrapValue(DepositItemsDesk depositItemsDesk, PlayerControllerB player, StartOfRound startOfRound, ulong targetValue) {
+        ReadOnlySpan<GrabbableObject> sellableScraps = Helper.Grabbables.WhereIsNotNull().Where(this.CanBeSold).ToArray();
 
-        Vector3 position = RoundManager.RandomPointInBounds(depositItemsDesk.triggerCollider.bounds) with {
-            y = depositItemsDesk.triggerCollider.bounds.min.y
-        };
-
-        if (Physics.Raycast(new Ray(position + (Vector3.up * 3f), Vector3.down), out RaycastHit hitInfo, 8f, 1048640,
-                QueryTriggerInteraction.Collide))
-            position = hitInfo.point;
-
-
-        position.y += item.itemProperties.verticalOffset;
-
-        Vector3 placePosition = depositItemsDesk.deskObjectsContainer.transform.InverseTransformPoint(position);
-        depositItemsDesk.AddObjectToDeskServerRpc(
-            (NetworkObjectReference)item.gameObject.GetComponent<NetworkObject>());
-
-        player.DiscardHeldObject(true, depositItemsDesk.deskObjectsContainer, placePosition, false);
-    }
-
-
-    void AsyncSell(DepositItemsDesk depositItemsDesk, PlayerControllerB player, GrabbableObject[] grabbables) => Helper
-        .CreateComponent<AsyncBehaviour>().Init(() => this.SellItems(depositItemsDesk, player, grabbables));
-
-    void SellEverything(DepositItemsDesk depositItemsDesk, PlayerControllerB player) {
-        GrabbableObject[] scraps = Helper.Grabbables.WhereIsNotNull().Where(this.CanBeSold).ToArray();
-        this.AsyncSell(depositItemsDesk, player, scraps);
-    }
-
-    ulong SellScrapValue(DepositItemsDesk depositItemsDesk, PlayerControllerB player, StartOfRound startOfRound,
-        ulong targetValue) {
-        GrabbableObject[] sellableScraps = Helper.Grabbables.WhereIsNotNull().Where(this.CanBeSold).ToArray();
         int sellableScrapsCount = sellableScraps.Length;
         ulong actualTargetValue = unchecked((ulong)(targetValue * startOfRound.companyBuyingRate));
-        ulong[,] dpTable = new ulong[sellableScrapsCount + 1, actualTargetValue + 1];
+        ulong[,] table = new ulong[sellableScrapsCount + 1, targetValue + 1];
 
-        // Fill DP table
         for (int i = 0; i <= sellableScrapsCount; i++) {
             for (ulong w = 0; w <= actualTargetValue; w++) {
-                if (i == 0 || w == 0) dpTable[i, w] = 0;
-                else {
-                    ulong itemValue = unchecked((ulong)sellableScraps[i - 1].scrapValue);
-                    dpTable[i, w] = itemValue <= w
-                        ? Math.Max(itemValue + dpTable[i - 1, w - itemValue], dpTable[i - 1, w])
-                        : dpTable[i - 1, w];
+                if (i is 0 || w is 0) {
+                    table[i, w] = 0;
+                    continue;
                 }
+
+                ulong scrapValue = unchecked((ulong)sellableScraps[i - 1].scrapValue);
+
+                table[i, w] = scrapValue <= w
+                    ? Math.Max(scrapValue + table[i - 1, w - scrapValue], table[i - 1, w])
+                    : table[i - 1, w];
             }
         }
 
-        ulong achievedValue = 0;
-        for (ulong i = actualTargetValue; i >= 0; i--) {
-            if (dpTable[sellableScrapsCount, i] > 0) {
-                achievedValue = dpTable[sellableScrapsCount, i];
-                break;
-            }
+        ulong result = table[sellableScrapsCount, targetValue];
+        ulong remainingValue = actualTargetValue;
+
+        for (int i = sellableScrapsCount; i > 0 && result > 0; i--) {
+            if (result == table[i - 1, remainingValue]) continue;
+
+            GrabbableObject grabbable = sellableScraps[i - 1];
+            this.SellObject(depositItemsDesk, player, grabbable);
+            ulong scrapValue = unchecked((ulong)grabbable.scrapValue);
+            result -= scrapValue;
+            remainingValue -= scrapValue;
         }
 
-        List<GrabbableObject> itemsToSell = [];
-        ulong remainingValue = achievedValue;
-        for (int i = sellableScrapsCount; i > 0 && remainingValue > 0; i--) {
-            if (dpTable[i, remainingValue] != dpTable[i - 1, remainingValue]) {
-                GrabbableObject item = sellableScraps[i - 1];
-                itemsToSell.Add(item);
-                remainingValue -= unchecked((ulong)item.scrapValue);
-            }
-        }
-
-        Debug.Log($"Selling {itemsToSell.Count} items. Target value: {targetValue}, Achieved: {achievedValue}");
-        this.AsyncSell(depositItemsDesk, player, [.. itemsToSell]);
-        return achievedValue;
+        return result;
     }
 
     public void Execute(StringArray args) {
