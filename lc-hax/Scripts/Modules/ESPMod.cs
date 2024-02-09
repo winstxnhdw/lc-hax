@@ -35,7 +35,6 @@ internal class ESPMod : MonoBehaviour {
             if (rendererPair.GameObject is not PlayerControllerB player) return;
             if (player.isPlayerDead || !player.isPlayerControlled) return;
             string label = $"#{player.playerClientId} {player.playerUsername}";
-            if (isDead) return;
             this.RenderBounds(
                 camera,
                 rendererPair.Renderer.bounds,
@@ -159,6 +158,7 @@ internal class ESPMod : MonoBehaviour {
         this.LandmineRenderers = this.GetRenderers<Landmine>();
         this.TurretRenderers = this.GetRenderers<Turret>();
         this.EntranceRenderers = this.GetRenderers<EntranceTeleport>();
+        this.InitialiseCoordinates();
     }
 
     void InitialiseCoordinates() => this.StoryLogVectors = Helper.FindObjects<StoryLog>().Select(log => log.transform.position).ToArray();
