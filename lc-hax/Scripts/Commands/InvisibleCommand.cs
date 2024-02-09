@@ -6,7 +6,7 @@ internal class InvisibleCommand : ICommand {
     void ImmediatelyUpdatePlayerPosition() =>
         Helper.LocalPlayer?
               .Reflect()
-              .InvokeInternalMethod("UpdatePlayerPositionServerRpc", Vector3.zero, true, false, true);
+              .InvokeInternalMethod("UpdatePlayerPositionServerRpc", Vector3.zero, true, true, false, true);
 
     public void Execute(StringArray _) {
         Setting.EnableInvisible = !Setting.EnableInvisible;
