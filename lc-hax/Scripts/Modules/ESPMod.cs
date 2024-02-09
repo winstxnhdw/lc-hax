@@ -157,7 +157,6 @@ internal class ESPMod : MonoBehaviour {
         this.LandmineRenderers = this.GetRenderers<Landmine>();
         this.TurretRenderers = this.GetRenderers<Turret>();
         this.EntranceRenderers = this.GetRenderers<EntranceTeleport>();
-        this.InitialiseCoordinates();
     }
 
     void InitialiseCoordinates() => this.StoryLogVectors = Helper.FindObjects<StoryLog>().Select(log => log.transform.position).ToArray();
