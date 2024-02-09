@@ -5,13 +5,16 @@ using Hax;
 
 [Command("/bomb")]
 internal class BombCommand : ICommand {
-    JetpackItem? GetAvailableJetpack(PlayerControllerB localPlayer) =>
+    JetpackItem? GetAvailableJetpack() =>
         Helper.FindObjects<JetpackItem>()
-              .First(jetpack => !jetpack.isHeld || jetpack.playerHeldBy == localPlayer);
+              .First(jetpack => !jetpack.Reflect().GetInternalField<bool>("jetpackBroken"));
 
-    Action BlowUpLocation(PlayerControllerB localPlayer, Vector3 targetPosition, JetpackItem jetpack) => () => {
-        localPlayer.DiscardHeldObject(placePosition: targetPosition);
-        jetpack.ExplodeJetpackServerRpc();
+    Action BlowUpLocation(PlayerControllerB localPlayer, Transform targetTransform, JetpackItem jetpack) => () => {
+        localPlayer.DiscardHeldObject(placeObject: true, placePosition: targetTransform.position);
+
+        Helper.CreateComponent<WaitForBehaviour>("Explode Jetpack")
+              .SetPredicate(() => Vector3.Distance(jetpack.transform.position, targetTransform.position) <= 0.1f)
+              .Init(() => jetpack.ExplodeJetpackServerRpc());
     };
 
     public void Execute(StringArray args) {
@@ -26,13 +29,15 @@ internal class BombCommand : ICommand {
             return;
         }
 
-        if (this.GetAvailableJetpack(localPlayer) is not JetpackItem jetpack) {
+        if (this.GetAvailableJetpack() is not JetpackItem jetpack) {
             Chat.Print("A free jetpack is required to use this command!");
             return;
         }
 
-        Helper.CreateComponent<WaitForBehaviour>()
+        localPlayer.GrabObject(jetpack);
+
+        Helper.CreateComponent<WaitForBehaviour>("Throw Bomb")
               .SetPredicate(() => localPlayer.ItemSlots[localPlayer.currentItemSlot] == jetpack)
-              .Init(this.BlowUpLocation(localPlayer, targetPlayer.transform.position, jetpack));
+              .Init(this.BlowUpLocation(localPlayer, targetPlayer.transform, jetpack));
     }
 }
