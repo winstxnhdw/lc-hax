@@ -32,52 +32,66 @@ internal class ESPMod : MonoBehaviour {
         if (!this.Enabled || !this.InGame || Helper.CurrentCamera is not Camera camera) return;
 
         this.PlayerRenderers.ForEach(rendererPair => {
-            if (rendererPair.GameObject is not PlayerControllerB player) return;
-            if (player.isPlayerDead || !player.isPlayerControlled) return;
+            if (rendererPair.GameObject == null) return;
+
+            PlayerControllerB player = rendererPair.GameObject;
+            if (player == null) return;
 
             string label = $"#{player.playerClientId} {player.playerUsername}";
-
+            bool isDead = player.isPlayerDead || !player.isPlayerControlled;
+            if (isDead) return;
             this.RenderBounds(
                 camera,
                 rendererPair.Renderer.bounds,
+                Helper.ExtraColors.LimeGreen,
                 this.RenderLabel(label)
             );
         });
 
-        this.LandmineRenderers.ForEach(renderer => this.RenderBounds(
-            camera,
-            renderer.bounds,
-            Color.yellow,
-            this.RenderLabel("Landmine")
-        ));
+        this.LandmineRenderers.WhereIsNotNull().ForEach(renderer => {
+            if (renderer == null) return;
+            this.RenderBounds(
+                camera,
+                renderer.bounds,
+                Helper.ExtraColors.OrangeRed,
+                this.RenderLabel("Landmine")
+            );
+        });
 
-        this.TurretRenderers.ForEach(renderer => this.RenderBounds(
-            camera,
-            renderer.bounds,
-            Color.yellow,
-            this.RenderLabel("Turret")
-        ));
+        this.TurretRenderers.WhereIsNotNull().ForEach(renderer => {
+            if (renderer == null) return;
+            this.RenderBounds(
+                camera,
+                renderer.bounds,
+                Helper.ExtraColors.OrangeRed,
+                this.RenderLabel("Turret")
+            );
+        });
 
-        this.EntranceRenderers.ForEach(renderer => this.RenderBounds(
-            camera,
-            renderer.bounds,
-            Color.yellow,
-            this.RenderLabel("Entrance")
-        ));
+        this.EntranceRenderers.WhereIsNotNull().ForEach(renderer => {
+            if (renderer == null) return;
+            this.RenderBounds(
+                camera,
+                renderer.bounds,
+                Helper.ExtraColors.LightGreen,
+                this.RenderLabel("Entrance")
+            );
+        });
 
         this.StoryLogVectors.ForEach(vector => {
             if (vector.z <= 2.0f) return;
-            this.RenderLabel("Log").Invoke(Color.gray, vector);
+            this.RenderLabel("Log").Invoke(Helper.ExtraColors.Silver, vector);
         });
 
         Helper.Enemies.WhereIsNotNull().ForEach(enemy => {
+            if (enemy == null) return;
             if (enemy.isEnemyDead) return;
             if (enemy is DocileLocustBeesAI or DoublewingAI) return;
 
             Renderer? nullableRenderer = enemy is RedLocustBees
                 ? enemy.meshRenderers.First()
                 : enemy.skinnedMeshRenderers.First();
-
+            if (nullableRenderer == null) return;
             if (nullableRenderer.Unfake() is not Renderer renderer) {
                 return;
             }
@@ -91,14 +105,22 @@ internal class ESPMod : MonoBehaviour {
         });
 
         Helper.Grabbables.WhereIsNotNull().ForEach(grabbableObject => {
+            if (grabbableObject == null) return;
             Vector3 rendererCentrePoint = camera.WorldToEyesPoint(grabbableObject.transform.position);
 
             if (rendererCentrePoint.z <= 2.0f) {
                 return;
             }
 
-            this.RenderLabel($"{grabbableObject.itemProperties.itemName} ${grabbableObject.scrapValue}").Invoke(
-                Color.gray,
+            string name = grabbableObject.itemProperties.itemName;
+            // check if the item name is body
+            if (name.ToLower() == "body") {
+                PlayerControllerB? player = grabbableObject.GetPlayerFromBody();
+                name = player == null ? name : $"Body of {player.playerUsername}";
+            }
+
+            this.RenderLabel($"{name} ${grabbableObject.scrapValue}").Invoke(
+                Helper.GetLootColor(grabbableObject),
                 rendererCentrePoint
             );
         });
