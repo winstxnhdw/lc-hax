@@ -17,7 +17,7 @@ static partial class Helper {
     internal static Color GetLootColor(GrabbableObject scrap) =>
         scrap switch {
             null => Helper.ExtraColors.Transparent,
-            _ when scrap.itemProperties.itemName.ToLower().Contains("body") => Helper.ExtraColors.HotPink,
+            RagdollGrabbableObject => Helper.ExtraColors.HotPink,
             LungProp => Helper.ExtraColors.LightBlue,
             ShotgunItem => Helper.ExtraColors.Khaki,
             HauntedMaskItem => Helper.ExtraColors.MediumVioletRed,

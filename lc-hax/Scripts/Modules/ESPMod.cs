@@ -112,13 +112,12 @@ internal class ESPMod : MonoBehaviour {
                 return;
             }
 
+            // check if is RagdollGrabbableObject
             string name = grabbableObject.itemProperties.itemName;
-            // check if the item name is body
-            if (name.ToLower() == "body") {
-                PlayerControllerB? player = grabbableObject.GetPlayerFromBody();
+            if (grabbableObject is RagdollGrabbableObject ragdollGrabbableObject) {
+                PlayerControllerB? player = ragdollGrabbableObject.GetPlayerFromBody();
                 name = player == null ? name : $"Body of {player.playerUsername}";
             }
-
             this.RenderLabel($"{name} ${grabbableObject.scrapValue}").Invoke(
                 Helper.GetLootColor(grabbableObject),
                 rendererCentrePoint
