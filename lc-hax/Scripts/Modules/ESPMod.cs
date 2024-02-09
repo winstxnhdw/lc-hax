@@ -15,16 +15,16 @@ internal class ESPMod : MonoBehaviour {
     bool Enabled { get; set; } = true;
 
     void OnEnable() {
-        GameListener.onGameStart += this.OnGameJoin;
-        GameListener.onGameEnd += this.OnGameEnd;
-        GameListener.onShipLand += this.InitialiseRenderers;
+        GameListener.OnShipDescent += this.Initialise;
+        GameListener.OnGameStart += this.Initialise;
+        GameListener.OnGameEnd += this.OnGameEnd;
         InputListener.OnPausePress += this.ToggleESP;
     }
 
     void OnDisable() {
-        GameListener.onGameStart -= this.OnGameJoin;
-        GameListener.onGameEnd -= this.OnGameEnd;
-        GameListener.onShipLand -= this.InitialiseRenderers;
+        GameListener.OnShipDescent -= this.Initialise;
+        GameListener.OnGameStart -= this.Initialise;
+        GameListener.OnGameEnd -= this.OnGameEnd;
         InputListener.OnPausePress -= this.ToggleESP;
     }
 
@@ -114,8 +114,9 @@ internal class ESPMod : MonoBehaviour {
         }
     }
 
-    void OnGameJoin() {
+    void Initialise() {
         this.InitialiseRenderers();
+        this.InitialiseCoordinates();
         this.InGame = true;
     }
 
