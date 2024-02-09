@@ -137,6 +137,7 @@ The complete feature set includes the following.
 | Toggle rapid item usage       | `/rapid`                                       |
 | Eavesdrop on all players      | `/hear`                                        |
 | Respawn player                | `/respawn`                                     |
+| Fake player death             | `/fakedeath`                                   |
 | Unlock all doors              | `/unlock`                                      |
 | Lock all gates                | `/lock`                                        |
 | Open ship door                | `/open`                                        |
