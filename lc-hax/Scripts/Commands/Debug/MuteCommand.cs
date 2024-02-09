@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using System.Linq;
 using GameNetcodeStuff;
 using Hax;
 using UnityEngine;
@@ -33,12 +32,7 @@ internal class MuteCommand : ICommand {
 
         TransientBehaviour playerMuterObject = Helper.CreateComponent<TransientBehaviour>().Init(_ => {
             if (!this.MutedPlayerHasMessaged(player.playerUsername)) return;
-
-            string newChatText = string.Join('\n', Helper.HUDManager?.ChatMessageHistory.Where(message =>
-                message.StartsWith($"<color=#FF0000>{player.playerUsername}</color>: <color=#FFFF00>'"
-            )));
-
-            Chat.Announce(newChatText, true);
+            Chat.Clear();
         }, 10000.0f);
 
         MuteCommand.MutedPlayers.Add(player.playerUsername, playerMuterObject);
