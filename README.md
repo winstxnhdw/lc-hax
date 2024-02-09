@@ -183,7 +183,6 @@ These commands are only available when the user is in superuser mode.
 | Decrease light intensity      | <kbd> F4 </kbd>                      |
 | Increase light intensity      | <kbd> F5 </kbd>                      |
 | Unpossess enemy               | <kbd> Z </kbd>                       |
-| Toggle realistic movement     | <kbd> X </kbd>                       |
 | Toggle possession NoClip      | <kbd> N </kbd>                       |
 | Toggle Anti-Kick              | <kbd> \ </kbd>                       |
 | Disconnect from server        | <kbd> Shift </kbd> + <kbd> F4 </kbd> |

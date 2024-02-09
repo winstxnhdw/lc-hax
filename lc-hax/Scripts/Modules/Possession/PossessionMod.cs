@@ -44,7 +44,6 @@ internal sealed class PossessionMod : MonoBehaviour {
 
     void OnEnable() {
         InputListener.OnNPress += this.ToggleNoClip;
-        InputListener.OnXPress += this.ToggleRealisticPossession;
         InputListener.OnZPress += this.Unpossess;
         InputListener.OnLeftButtonPress += this.UsePrimarySkill;
         InputListener.OnRightButtonHold += this.OnRightMouseButtonHold;
@@ -55,7 +54,6 @@ internal sealed class PossessionMod : MonoBehaviour {
 
     void OnDisable() {
         InputListener.OnNPress -= this.ToggleNoClip;
-        InputListener.OnXPress -= this.ToggleRealisticPossession;
         InputListener.OnZPress -= this.Unpossess;
         InputListener.OnLeftButtonPress -= this.UsePrimarySkill;
         InputListener.OnRightButtonHold -= this.OnRightMouseButtonHold;
@@ -72,18 +70,6 @@ internal sealed class PossessionMod : MonoBehaviour {
         else {
             this.ReleaseSecondarySkill();
         }
-    }
-
-    void ToggleRealisticPossession() {
-        Setting.EnableRealisticPossession = !Setting.EnableRealisticPossession;
-        Chat.Print($"Realistic Possession: {Setting.EnableRealisticPossession}");
-
-        if (this.Possession.Enemy?.agent is not NavMeshAgent navMeshAgent) {
-            return;
-        }
-
-        navMeshAgent.updatePosition = Setting.EnableRealisticPossession;
-        navMeshAgent.updateRotation = Setting.EnableRealisticPossession;
     }
 
     void ToggleNoClip() {
@@ -128,12 +114,6 @@ internal sealed class PossessionMod : MonoBehaviour {
         if (this.FirstUpdate) {
             this.FirstUpdate = false;
             this.SetEnemyColliders(enemy, false);
-
-            if (enemy.agent.Unfake() is NavMeshAgent agent) {
-                agent.updatePosition = Setting.EnableRealisticPossession;
-                agent.updateRotation = Setting.EnableRealisticPossession;
-            }
-
             rigidbodyKeyboard.Init();
             this.transform.position = enemy.transform.position;
             this.UpdateComponentsOnCurrentState(true);
