@@ -5,13 +5,13 @@ internal class MinimalGUIMod : MonoBehaviour {
     bool InGame { get; set; } = false;
 
     void OnEnable() {
-        GameListener.onGameStart += this.ToggleInGame;
-        GameListener.onGameEnd += this.ToggleNotInGame;
+        GameListener.OnGameStart += this.ToggleInGame;
+        GameListener.OnGameEnd += this.ToggleNotInGame;
     }
 
     void OnDisable() {
-        GameListener.onGameStart -= this.ToggleInGame;
-        GameListener.onGameEnd -= this.ToggleNotInGame;
+        GameListener.OnGameStart -= this.ToggleInGame;
+        GameListener.OnGameEnd -= this.ToggleNotInGame;
     }
 
     void OnGUI() {

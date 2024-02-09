@@ -8,12 +8,12 @@ internal sealed class AntiKickMod : MonoBehaviour {
 
     void OnEnable() {
         InputListener.OnBackslashPress += this.ToggleAntiKick;
-        GameListener.onGameEnd += this.OnGameEnd;
+        GameListener.OnGameEnd += this.OnGameEnd;
     }
 
     void OnDisable() {
         InputListener.OnBackslashPress -= this.ToggleAntiKick;
-        GameListener.onGameEnd -= this.OnGameEnd;
+        GameListener.OnGameEnd -= this.OnGameEnd;
     }
 
     void OnGameEnd() {
