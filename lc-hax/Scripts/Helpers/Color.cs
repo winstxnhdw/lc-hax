@@ -17,6 +17,8 @@ static partial class Helper {
     internal static Color GetLootColor(GrabbableObject scrap) {
         if(scrap == null) return ExtraColors.Transparent;
         if (scrap is LungProp) return ExtraColors.LightBlue;
+        if (scrap is ShotgunItem) return ExtraColors.Orange;
+        if(scrap is HauntedMaskItem) return ExtraColors.Cyan;
         if(scrap.itemProperties.isDefensiveWeapon) return ExtraColors.LightGreen;
         if (scrap.scrapValue is > 15 and <= 35)
             return ExtraColors.LightSalmon;
