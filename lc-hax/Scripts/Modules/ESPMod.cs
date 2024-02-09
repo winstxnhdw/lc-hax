@@ -15,14 +15,14 @@ internal class ESPMod : MonoBehaviour {
     bool Enabled { get; set; } = true;
 
     void OnEnable() {
-        GameListener.OnShipDescent += this.Initialise;
+        GameListener.OnLevelGenerated += this.Initialise;
         GameListener.OnGameStart += this.Initialise;
         GameListener.OnGameEnd += this.OnGameEnd;
         InputListener.OnPausePress += this.ToggleESP;
     }
 
     void OnDisable() {
-        GameListener.OnShipDescent -= this.Initialise;
+        GameListener.OnLevelGenerated -= this.Initialise;
         GameListener.OnGameStart -= this.Initialise;
         GameListener.OnGameEnd -= this.OnGameEnd;
         InputListener.OnPausePress -= this.ToggleESP;
