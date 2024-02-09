@@ -124,6 +124,7 @@ The complete feature set includes the following.
 | Block any radar targets       | `/block radar`                                 |
 | Become untargetable           | `/block enemy`                                 |
 | Place an unlockable           | `/build <unlockable>`                          |
+| Wear a suit                   | `/suit <suit>`                                 |
 | Change moons                  | `/visit <moon>`                                |
 | Stun enemies                  | `/stun <duration>`                             |
 | Pull the ship's horn          | `/horn <duration>`                             |
