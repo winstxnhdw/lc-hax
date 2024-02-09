@@ -20,6 +20,11 @@ internal class VisitCommand : ICommand {
             return;
         }
 
+        if (!startOfRound.inShipPhase) {
+            Chat.Print("You cannot use this command outside of the ship phase!");
+            return;
+        }
+
         if (startOfRound.travellingToNewLevel) {
             Chat.Print("You cannot use this command while travelling to a new level!");
             return;
