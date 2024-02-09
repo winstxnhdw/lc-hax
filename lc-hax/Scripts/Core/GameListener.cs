@@ -1,4 +1,5 @@
 using System;
+using System.Runtime.CompilerServices;
 using UnityEngine;
 using Hax;
 
@@ -24,6 +25,7 @@ internal class GameListener : MonoBehaviour {
 
     void OnFinishLevelGeneration() => GameListener.OnLevelGenerated?.Invoke();
 
+    [MethodImpl(MethodImplOptions.NoInlining)]
     void ShipListener() {
         if (Helper.StartOfRound is not StartOfRound startOfRound) return;
         if (!startOfRound.inShipPhase && !this.HasShipBegunDescent) {
@@ -39,6 +41,7 @@ internal class GameListener : MonoBehaviour {
         }
     }
 
+    [MethodImpl(MethodImplOptions.NoInlining)]
     void InGameListener() {
         bool inGame = Helper.LocalPlayer is not null;
 
