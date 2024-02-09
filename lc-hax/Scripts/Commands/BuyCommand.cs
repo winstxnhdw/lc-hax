@@ -17,6 +17,8 @@ internal class BuyCommand : ICommand {
             return;
         }
 
+        int clampedQuantity = Mathf.Clamp(quantity, 1, 12);
+
         Dictionary<string, int> items = terminal.buyableItemsList.Select((item, i) => (item, i)).ToDictionary(
             pair => pair.item.itemName.ToLower(),
             pair => pair.i
@@ -31,7 +33,7 @@ internal class BuyCommand : ICommand {
 
         terminal.orderedItemsFromTerminal.Clear();
         terminal.BuyItemsServerRpc(
-            [.. Enumerable.Repeat(items[key], Mathf.Clamp(quantity, 0, 12))],
+            [.. Enumerable.Repeat(items[key], clampedQuantity)],
             terminal.groupCredits - 1,
             terminal.numberOfItemsInDropship
         );
