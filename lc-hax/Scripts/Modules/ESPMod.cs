@@ -9,6 +9,7 @@ internal class ESPMod : MonoBehaviour {
     Renderer[] LandmineRenderers { get; set; } = [];
     Renderer[] TurretRenderers { get; set; } = [];
     Renderer[] EntranceRenderers { get; set; } = [];
+    Vector3[] StoryLogVectors { get; set; } = [];
 
     bool InGame { get; set; } = false;
     bool Enabled { get; set; } = true;
@@ -31,9 +32,9 @@ internal class ESPMod : MonoBehaviour {
         if (!this.Enabled || !this.InGame || Helper.CurrentCamera is not Camera camera) return;
 
         this.PlayerRenderers.ForEach(rendererPair => {
-            if (rendererPair.GameObject.isPlayerDead || !rendererPair.GameObject.isPlayerControlled) return;
+            if (rendererPair.GameObject is not PlayerControllerB player) return;
+            if (player.isPlayerDead || !player.isPlayerControlled) return;
 
-            PlayerControllerB player = rendererPair.GameObject;
             string label = $"#{player.playerClientId} {player.playerUsername}";
 
             this.RenderBounds(
@@ -63,6 +64,11 @@ internal class ESPMod : MonoBehaviour {
             Color.yellow,
             this.RenderLabel("Entrance")
         ));
+
+        this.StoryLogVectors.ForEach(vector => {
+            if (vector.z <= 2.0f) return;
+            this.RenderLabel("Log").Invoke(Color.gray, vector);
+        });
 
         Helper.Enemies.WhereIsNotNull().ForEach(enemy => {
             if (enemy.isEnemyDead) return;
@@ -131,6 +137,8 @@ internal class ESPMod : MonoBehaviour {
         this.TurretRenderers = this.GetRenderers<Turret>();
         this.EntranceRenderers = this.GetRenderers<EntranceTeleport>();
     }
+
+    void InitialiseCoordinates() => this.StoryLogVectors = Helper.FindObjects<StoryLog>().Select(log => log.transform.position).ToArray();
 
     Size GetRendererSize(Bounds bounds, Camera camera) {
         ReadOnlySpan<Vector3> corners = [
