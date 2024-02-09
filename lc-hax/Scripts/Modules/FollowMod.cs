@@ -34,12 +34,11 @@ internal sealed class FollowMod : MonoBehaviour {
                 Chat.Print("Stopped following!");
             }
 
-            Setting.DisableFallDamage = false;
             this.PlayerStates.Clear();
             return;
         }
 
-        Setting.DisableFallDamage = true;
+        localPlayer.ResetFallGravity();
         this.InstantTeleTimer -= Time.deltaTime;
 
         if (targetPlayer.isClimbingLadder) {
