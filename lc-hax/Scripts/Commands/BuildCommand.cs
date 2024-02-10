@@ -3,13 +3,13 @@ using System.Collections.Generic;
 using UnityEngine;
 using Hax;
 
-[Command("/build")]
+[Command("build")]
 internal class BuildCommand : ICommand {
     public void Execute(StringArray args) {
         if (Helper.StartOfRound is not StartOfRound startOfRound) return;
         if (Helper.CurrentCamera is not Camera camera) return;
         if (args.Length is 0) {
-            Chat.Print("Usage: /build <unlockable>");
+            Chat.Print("Usage: build <unlockable>");
             return;
         }
 

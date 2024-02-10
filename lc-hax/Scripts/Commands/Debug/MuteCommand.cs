@@ -3,18 +3,18 @@ using GameNetcodeStuff;
 using Hax;
 using UnityEngine;
 
-[DebugCommand("/mute")]
+[DebugCommand("mute")]
 internal class MuteCommand : ICommand {
     static Dictionary<string, TransientBehaviour> MutedPlayers { get; } = [];
 
     bool MutedPlayerHasMessaged(string playerUsername) =>
         Helper.HUDManager?.ChatMessageHistory.First(message =>
-            message.StartsWith($"<color=#FF0000>{playerUsername}</color>: <color=#FFFF00>'"
+            message.StartsWith($"<color=#FF0000>{playerUsername}<color>: <color=#FFFF00>'"
         )) is not null;
 
     public void Execute(StringArray args) {
         if (args.Length is 0) {
-            Chat.Print("Usage: /mute <player>");
+            Chat.Print("Usage: mute <player>");
             return;
         }
 

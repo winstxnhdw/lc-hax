@@ -1,7 +1,7 @@
 using GameNetcodeStuff;
 using Hax;
 
-[Command("/end")]
+[Command("end")]
 internal class EndCommand : ICommand {
     public void Execute(StringArray args) {
         if (args.Length is 0) {

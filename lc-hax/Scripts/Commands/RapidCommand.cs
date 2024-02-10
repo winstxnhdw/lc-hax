@@ -1,6 +1,6 @@
 using Hax;
 
-[Command("/rapid")]
+[Command("rapid")]
 internal class RapidCommand : ICommand {
     public void Execute(StringArray _) {
         Setting.EnableNoCooldown = !Setting.EnableNoCooldown;

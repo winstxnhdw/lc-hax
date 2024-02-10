@@ -1,6 +1,6 @@
 using Hax;
 
-[DebugCommand("/scraps")]
+[DebugCommand("scraps")]
 internal class ScrapsCommand : ICommand {
     public void Execute(StringArray _) {
         Helper.RoundManager?.currentLevel.spawnableScrap.ForEach((i, spawnableScrap) =>

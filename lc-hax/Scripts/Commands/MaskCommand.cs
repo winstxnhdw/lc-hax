@@ -1,7 +1,7 @@
 using GameNetcodeStuff;
 using Hax;
 
-[Command("/mask")]
+[Command("mask")]
 internal class MaskCommand : ICommand {
     void SpawnMimicOnPlayer(PlayerControllerB player, HauntedMaskItem mask, ulong amount = 1) {
         _ = Helper.CreateComponent<TransientBehaviour>("Mask").Init(_ => {

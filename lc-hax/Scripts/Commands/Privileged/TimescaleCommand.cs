@@ -1,11 +1,11 @@
 using UnityEngine;
 using Hax;
 
-[PrivilegedCommand("/timescale")]
+[PrivilegedCommand("timescale")]
 internal class TimescaleCommand : ICommand {
     public void Execute(StringArray args) {
         if (args.Length is 0) {
-            Chat.Print("Usage: /timescale <scale>");
+            Chat.Print("Usage: timescale <scale>");
             return;
         }
 

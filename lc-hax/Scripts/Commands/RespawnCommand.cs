@@ -2,7 +2,7 @@ using GameNetcodeStuff;
 using Hax;
 using UnityEngine;
 
-[Command("/respawn")]
+[Command("respawn")]
 internal class RespawnCommand : ICommand {
     void RespawnLocalPlayer(PlayerControllerB localPlayer, StartOfRound startOfRound) {
         if (Helper.HUDManager is not HUDManager hudManager) return;

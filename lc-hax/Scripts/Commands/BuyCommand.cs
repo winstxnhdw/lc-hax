@@ -3,12 +3,12 @@ using System.Collections.Generic;
 using UnityEngine;
 using Hax;
 
-[Command("/buy")]
+[Command("buy")]
 internal class BuyCommand : ICommand {
     public void Execute(StringArray args) {
         if (Helper.Terminal is not Terminal terminal) return;
         if (args.Length is 0) {
-            Chat.Print("Usage: /buy <item> <quantity?>");
+            Chat.Print("Usage: buy <item> <quantity?>");
             return;
         }
 

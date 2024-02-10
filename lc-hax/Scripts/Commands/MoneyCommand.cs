@@ -1,12 +1,12 @@
 using System;
 using Hax;
 
-[Command("/money")]
+[Command("money")]
 internal class MoneyCommand : ICommand {
     public void Execute(StringArray args) {
         if (Helper.Terminal is not Terminal terminal) return;
         if (args.Length is 0) {
-            Chat.Print("Usage: /money <amount>");
+            Chat.Print("Usage: money <amount>");
             return;
         }
 

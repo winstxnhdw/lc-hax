@@ -3,7 +3,7 @@ using GameNetcodeStuff;
 using UnityEngine;
 using Hax;
 
-[Command("/noise")]
+[Command("noise")]
 internal class NoiseCommand : ICommand {
     Action<float> PlayNoise(Vector3 position) => (_) =>
         Helper.RoundManager?.PlayAudibleNoise(position, float.MaxValue, float.MaxValue, 10, false);
@@ -14,7 +14,7 @@ internal class NoiseCommand : ICommand {
 
     public void Execute(StringArray args) {
         if (args.Length is 0) {
-            Chat.Print("Usage: /noise <player> <duration=30>");
+            Chat.Print("Usage: noise <player> <duration=30>");
             return;
         }
 

@@ -1,6 +1,6 @@
 using Hax;
 
-[Command("/unlock")]
+[Command("unlock")]
 internal class UnlockCommand : ICommand, ISecureGate {
     public void Execute(StringArray _) {
         this.SetSecureDoorState(true);

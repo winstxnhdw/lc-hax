@@ -1,6 +1,6 @@
 using UnityEngine;
 
-[DebugCommand("/enemies")]
+[DebugCommand("enemies")]
 internal class EnemiesCommand : ICommand {
     public void Execute(StringArray _) {
         Resources.FindObjectsOfTypeAll<EnemyType>().ForEach(enemy =>

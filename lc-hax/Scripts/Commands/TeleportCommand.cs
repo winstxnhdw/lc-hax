@@ -2,7 +2,7 @@ using UnityEngine;
 using GameNetcodeStuff;
 using Hax;
 
-[Command("/tp")]
+[Command("tp")]
 internal class TeleportCommand : ICommand {
     Vector3? GetCoordinates(StringArray args) {
         bool isValidX = float.TryParse(args[0], out float x);
@@ -37,8 +37,8 @@ internal class TeleportCommand : ICommand {
 
     public void Execute(StringArray args) {
         if (args.Length is 0) {
-            Chat.Print("Usage: /tp <player>");
-            Chat.Print("Usage: /tp <x> <y> <z>");
+            Chat.Print("Usage: tp <player>");
+            Chat.Print("Usage: tp <x> <y> <z>");
             return;
         }
 

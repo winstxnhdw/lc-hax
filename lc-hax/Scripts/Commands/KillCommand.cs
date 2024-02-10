@@ -2,7 +2,7 @@ using GameNetcodeStuff;
 using UnityEngine;
 using Hax;
 
-[Command("/kill")]
+[Command("kill")]
 internal class KillCommand : ICommand {
     bool EnableGodMode { get; set; }
 

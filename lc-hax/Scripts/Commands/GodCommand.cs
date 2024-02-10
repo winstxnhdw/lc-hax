@@ -1,6 +1,6 @@
 using Hax;
 
-[Command("/god")]
+[Command("god")]
 internal class GodCommand : ICommand {
     public void Execute(StringArray _) {
         Setting.EnableGodMode = !Setting.EnableGodMode;

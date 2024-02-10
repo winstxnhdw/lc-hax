@@ -1,6 +1,6 @@
 using Hax;
 
-[Command("/explode")]
+[Command("explode")]
 internal class ExplodeCommand : ICommand {
     public void Execute(StringArray args) {
         if (args.Length is 0) {

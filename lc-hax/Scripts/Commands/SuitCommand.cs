@@ -3,7 +3,7 @@ using System.Linq;
 using System.Collections.Generic;
 using Hax;
 
-[Command("/suit")]
+[Command("suit")]
 internal class SuitCommand : ICommand {
     internal Dictionary<string, Unlockable> SuitUnlockables =>
         Enum.GetValues(typeof(Unlockable))
@@ -13,7 +13,7 @@ internal class SuitCommand : ICommand {
 
     public void Execute(StringArray args) {
         if (args.Length is 0) {
-            Chat.Print("Usage: /suit <suit>");
+            Chat.Print("Usage: suit <suit>");
             return;
         }
 

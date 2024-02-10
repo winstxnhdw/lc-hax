@@ -1,10 +1,10 @@
 using Hax;
 
-[Command("/signal")]
+[Command("signal")]
 internal class SignalCommand : ICommand {
     public void Execute(StringArray args) {
         if (args.Length is 0) {
-            Chat.Print("Usage: /signal <message>");
+            Chat.Print("Usage: signal <message>");
             return;
         }
 

@@ -1,7 +1,7 @@
 using UnityEngine;
 using Hax;
 
-[Command("/xyz")]
+[Command("xyz")]
 internal class LocationCommand : ICommand {
     public void Execute(StringArray _) {
         if (Helper.CurrentCamera is not Camera camera) return;

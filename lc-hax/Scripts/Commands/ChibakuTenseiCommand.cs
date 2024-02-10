@@ -2,7 +2,7 @@ using UnityEngine;
 using GameNetcodeStuff;
 using Hax;
 
-[Command("/ct")]
+[Command("ct")]
 internal class ChibakuTenseiCommand : ICommand {
     Vector3 spinningY = new(0, 2, 0);
 
@@ -95,7 +95,7 @@ internal class ChibakuTenseiCommand : ICommand {
 
     public void Execute(StringArray args) {
         if (args.Length is 0) {
-            Chat.Print("Usage: /ct <player>");
+            Chat.Print("Usage: ct <player>");
             return;
         }
 

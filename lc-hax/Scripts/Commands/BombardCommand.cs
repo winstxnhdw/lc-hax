@@ -4,7 +4,7 @@ using GameNetcodeStuff;
 using Hax;
 using UnityEngine;
 
-[Command("/bombard")]
+[Command("bombard")]
 internal class BombardCommand : ICommand {
     JetpackItem[] GetAvailableJetpacks() =>
         Helper.FindObjects<JetpackItem>()
@@ -33,7 +33,7 @@ internal class BombardCommand : ICommand {
     public void Execute(StringArray args) {
         if (Helper.LocalPlayer is not PlayerControllerB localPlayer) return;
         if (args.Length is 0) {
-            Chat.Print("Usage: /bombard <player>");
+            Chat.Print("Usage: bombard <player>");
             return;
         }
 
