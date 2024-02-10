@@ -1,10 +1,18 @@
 #pragma warning disable IDE1006
 
+using Unity.Netcode;
 using HarmonyLib;
 using Hax;
 
-[HarmonyPatch(typeof(GrabbableObject))]
+[HarmonyPatch]
 class GrabbableDependencyPatch {
-    [HarmonyPatch(nameof(GrabbableObject.Update))]
+    [HarmonyPatch(typeof(GrabbableObject), nameof(GrabbableObject.Update))]
     static void Postfix(GrabbableObject __instance) => _ = Helper.Grabbables.Add(__instance);
+
+    [HarmonyPatch(typeof(NetworkBehaviour), nameof(NetworkBehaviour.OnDestroy))]
+    static void Prefix(NetworkBehaviour __instance) {
+        if (__instance is GrabbableObject grabbableObject) {
+            _ = Helper.Grabbables.Remove(grabbableObject);
+        }
+    }
 }
