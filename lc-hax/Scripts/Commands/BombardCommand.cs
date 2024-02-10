@@ -15,7 +15,7 @@ internal class BombardCommand : ICommand {
         float currentWeight = player.carryWeight;
 
         foreach (JetpackItem jetpack in jetpacks) {
-            player.GrabObject(jetpack);
+            if (!player.GrabObject(jetpack)) continue;
             yield return new WaitUntil(() => player.ItemSlots[player.currentItemSlot] == jetpack);
 
             const float bombardRadius = 10.0f;
@@ -34,6 +34,11 @@ internal class BombardCommand : ICommand {
         if (Helper.LocalPlayer is not PlayerControllerB localPlayer) return;
         if (args.Length is 0) {
             Chat.Print("Usage: bombard <player>");
+            return;
+        }
+
+        if (localPlayer.ItemSlots.WhereIsNotNull().Count() >= 4) {
+            Chat.Print("You must have an empty inventory slot!");
             return;
         }
 

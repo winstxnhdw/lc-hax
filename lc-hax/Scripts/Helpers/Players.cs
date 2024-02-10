@@ -51,13 +51,15 @@ internal static partial class Helper {
 
     internal static PlayerControllerB? GetActivePlayer(int playerClientId) => Helper.GetActivePlayer(playerClientId.ToString());
 
-    internal static void GrabObject(this PlayerControllerB player, GrabbableObject grabbable) {
-        if (player.ItemSlots.WhereIsNotNull().Count() >= 4) return;
+    internal static bool GrabObject(this PlayerControllerB player, GrabbableObject grabbable) {
+        if (player.ItemSlots.WhereIsNotNull().Count() >= 4) return false;
 
         NetworkObjectReference networkObject = grabbable.NetworkObject;
         _ = player.Reflect().InvokeInternalMethod("GrabObjectServerRpc", networkObject);
 
         grabbable.parentObject = player.localItemHolder;
         grabbable.GrabItemOnClient();
+
+        return true;
     }
 }
