@@ -2,7 +2,7 @@ using GameNetcodeStuff;
 using UnityEngine;
 using Hax;
 
-[Command("/fakedeath")]
+[Command("fakedeath")]
 internal class FakeDeathCommand : ICommand {
     public void Execute(StringArray args) {
         if (Helper.LocalPlayer is not PlayerControllerB player) return;

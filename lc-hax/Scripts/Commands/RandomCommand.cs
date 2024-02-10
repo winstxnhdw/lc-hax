@@ -3,7 +3,7 @@ using UnityEngine;
 using GameNetcodeStuff;
 using Hax;
 
-[Command("/random")]
+[Command("random")]
 internal class RandomCommand : ICommand {
     internal ShipTeleporter? InverseTeleporter => Helper.ShipTeleporters.First(
         teleporter => teleporter is not null && teleporter.isInverseTeleporter
@@ -89,7 +89,7 @@ internal class RandomCommand : ICommand {
 
     public void Execute(StringArray args) {
         if (args.Length is 0) {
-            Chat.Print("Usage: /random <player>");
+            Chat.Print("Usage: random <player>");
             return;
         }
 

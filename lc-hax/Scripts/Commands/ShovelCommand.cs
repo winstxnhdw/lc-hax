@@ -1,10 +1,10 @@
 using Hax;
 
-[Command("/shovel")]
+[Command("shovel")]
 internal class ShovelCommand : ICommand {
     public void Execute(StringArray args) {
         if (args.Length is 0) {
-            Chat.Print("Usage: /shovel <force=1>");
+            Chat.Print("Usage: shovel <force=1>");
             return;
         }
 

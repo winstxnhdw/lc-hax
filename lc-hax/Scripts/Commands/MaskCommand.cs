@@ -1,7 +1,7 @@
 using GameNetcodeStuff;
 using Hax;
 
-[Command("/mask")]
+[Command("mask")]
 internal class MaskCommand : ICommand {
     void SpawnMimicOnPlayer(PlayerControllerB player, HauntedMaskItem mask, ulong amount = 1) {
         _ = Helper.CreateComponent<TransientBehaviour>("Mask").Init(_ => {
@@ -10,13 +10,19 @@ internal class MaskCommand : ICommand {
     }
 
     public void Execute(StringArray args) {
-        if (Helper.LocalPlayer?.currentlyHeldObjectServer is not HauntedMaskItem hauntedMaskItem) {
-            Chat.Print("You are not holding a mask!");
+        if (Helper.LocalPlayer is not PlayerControllerB localPlayer) return;
+        if (Helper.Grabbables.First(grabbable => grabbable is HauntedMaskItem) is not HauntedMaskItem hauntedMaskItem) {
+            Chat.Print("No mask found!");
+            return;
+        }
+
+        if (!localPlayer.GrabObject(hauntedMaskItem)) {
+            Chat.Print("You must have an empty inventory slot!");
             return;
         }
 
         PlayerControllerB? targetPlayer = args.Length is 0
-            ? Helper.LocalPlayer
+            ? localPlayer
             : Helper.GetActivePlayer(args[0]);
 
         if (targetPlayer is null) {

@@ -2,7 +2,7 @@ using System;
 using GameNetcodeStuff;
 using Hax;
 
-[Command("/bomb")]
+[Command("bomb")]
 internal class BombCommand : ICommand {
     JetpackItem? GetAvailableJetpack() =>
         Helper.FindObjects<JetpackItem>()
@@ -16,7 +16,7 @@ internal class BombCommand : ICommand {
     public void Execute(StringArray args) {
         if (Helper.LocalPlayer is not PlayerControllerB localPlayer) return;
         if (args.Length is 0) {
-            Chat.Print("Usage: /bomb <player>");
+            Chat.Print("Usage: bomb <player>");
             return;
         }
 
@@ -30,7 +30,10 @@ internal class BombCommand : ICommand {
             return;
         }
 
-        localPlayer.GrabObject(jetpack);
+        if (!localPlayer.GrabObject(jetpack)) {
+            Chat.Print("You must have an empty inventory slot!");
+            return;
+        }
 
         Helper.CreateComponent<WaitForBehaviour>("Throw Bomb")
               .SetPredicate(() => localPlayer.ItemSlots[localPlayer.currentItemSlot] == jetpack)

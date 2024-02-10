@@ -1,7 +1,7 @@
 using System;
 using Hax;
 
-[Command("/horn")]
+[Command("horn")]
 internal class HornCommand : ICommand {
     Action PullHornLater(int hornDuration) => () => {
         ShipAlarmCord? shipAlarmCord = Helper.FindObject<ShipAlarmCord>();
@@ -14,7 +14,7 @@ internal class HornCommand : ICommand {
 
     public void Execute(StringArray args) {
         if (args.Length is 0) {
-            Chat.Print("Usage: /horn <duration>");
+            Chat.Print("Usage: horn <duration>");
             return;
         }
 

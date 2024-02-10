@@ -5,7 +5,7 @@ using UnityEngine;
 using GameNetcodeStuff;
 using Hax;
 
-[Command("/grab")]
+[Command("grab")]
 internal class GrabCommand : ICommand {
     bool CanGrabItem(GrabbableObject grabbableObject, Vector3 currentPlayerPosition) =>
         !grabbableObject.isHeld &&
@@ -16,7 +16,7 @@ internal class GrabCommand : ICommand {
         float currentWeight = player.carryWeight;
 
         foreach (GrabbableObject grabbable in grabbables) {
-            player.GrabObject(grabbable);
+            if (!player.GrabObject(grabbable)) continue;
             yield return new WaitUntil(() => player.ItemSlots[player.currentItemSlot] == grabbable);
             player.DiscardHeldObject();
         }
@@ -55,7 +55,10 @@ internal class GrabCommand : ICommand {
         }
 
         GrabbableObject grabbable = grabbableObjects[key];
-        player.GrabObject(grabbable);
+
+        if (player.GrabObject(grabbable)) {
+            return "You must have an empty inventory slot!";
+        }
 
         Helper.CreateComponent<WaitForBehaviour>()
               .SetPredicate(() => player.ItemSlots[player.currentItemSlot] == grabbable)
@@ -66,6 +69,10 @@ internal class GrabCommand : ICommand {
 
     public void Execute(StringArray args) {
         if (Helper.LocalPlayer is not PlayerControllerB localPlayer) return;
+        if (localPlayer.ItemSlots.WhereIsNotNull().Count() >= 4) {
+            Chat.Print("You must have an empty inventory slot!");
+            return;
+        }
 
         Vector3 currentPlayerPosition = localPlayer.transform.position;
 

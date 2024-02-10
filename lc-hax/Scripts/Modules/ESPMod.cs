@@ -43,35 +43,26 @@ internal class ESPMod : MonoBehaviour {
             );
         });
 
-        this.LandmineRenderers.WhereIsNotNull().ForEach(renderer => {
-            if (renderer == null) return;
-            this.RenderBounds(
-                camera,
-                renderer.bounds,
-                Helper.ExtraColors.OrangeRed,
-                this.RenderLabel("Landmine")
-            );
-        });
+        this.LandmineRenderers.WhereIsNotNull().ForEach(renderer => this.RenderBounds(
+            camera,
+            renderer.bounds,
+            Color.yellow,
+            this.RenderLabel("Landmine")
+        ));
 
-        this.TurretRenderers.WhereIsNotNull().ForEach(renderer => {
-            if (renderer == null) return;
-            this.RenderBounds(
-                camera,
-                renderer.bounds,
-                Helper.ExtraColors.OrangeRed,
-                this.RenderLabel("Turret")
-            );
-        });
+        this.TurretRenderers.WhereIsNotNull().ForEach(renderer => this.RenderBounds(
+            camera,
+            renderer.bounds,
+            Color.yellow,
+            this.RenderLabel("Turret")
+        ));
 
-        this.EntranceRenderers.WhereIsNotNull().ForEach(renderer => {
-            if (renderer == null) return;
-            this.RenderBounds(
-                camera,
-                renderer.bounds,
-                Helper.ExtraColors.LightGreen,
-                this.RenderLabel("Entrance")
-            );
-        });
+        this.EntranceRenderers.WhereIsNotNull().ForEach(renderer => this.RenderBounds(
+            camera,
+            renderer.bounds,
+            Color.yellow,
+            this.RenderLabel("Entrance")
+        ));
 
         this.StoryLogVectors.ForEach(vector => {
             Vector3 rendererCentrePoint = camera.WorldToEyesPoint(vector);

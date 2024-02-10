@@ -1,6 +1,6 @@
 using Hax;
 
-[Command("/stunclick")]
+[Command("stunclick")]
 internal class StunOnClickCommand : ICommand {
     public void Execute(StringArray _) {
         Setting.EnableStunOnLeftClick = !Setting.EnableStunOnLeftClick;

@@ -7,7 +7,7 @@ using GameNetcodeStuff;
 using Hax;
 using System.Linq;
 
-[PrivilegedCommand("/spawn")]
+[PrivilegedCommand("spawn")]
 internal class SpawnCommand : ICommand {
     static bool IsHostileEnemy(EnemyType enemy) =>
         !enemy.enemyName.Contains("Docile Locust Bees", StringComparison.OrdinalIgnoreCase) ||
@@ -34,7 +34,7 @@ internal class SpawnCommand : ICommand {
     public void Execute(StringArray args) {
         if (Helper.RoundManager?.currentLevel is null) return;
         if (args.Length < 2) {
-            Chat.Print("Usage: /spawn <enemy> <player> <amount?>");
+            Chat.Print("Usage: spawn <enemy> <player> <amount?>");
             return;
         }
 

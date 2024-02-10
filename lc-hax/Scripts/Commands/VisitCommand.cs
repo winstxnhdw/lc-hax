@@ -2,11 +2,11 @@ using System.Linq;
 using System.Collections.Generic;
 using Hax;
 
-[Command("/visit")]
+[Command("visit")]
 internal class VisitCommand : ICommand {
     public void Execute(StringArray args) {
         if (args.Length is 0) {
-            Chat.Print("Usage: /visit <moon>");
+            Chat.Print("Usage: visit <moon>");
             return;
         }
 
