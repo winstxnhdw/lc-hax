@@ -101,7 +101,7 @@ The complete feature set includes the following.
 | Chibaku Tensei                | `/ct <player>`                                 |
 | Play noise on player          | `/noise <player> <duration=30>`                |
 | Bomb player                   | `/bomb <player>`                               |
-| Inefficient bombard on player | `/bombard <player>`                            |
+| Bombard player                | `/bombard <player>`                            |
 | Lure enemies to player        | `/hate <player>`                               |
 | Spawn masked enemy on player  | `/mask <player?> <amount?>`                    |
 | Heal player                   | `/heal <player?>`                              |
