@@ -76,7 +76,10 @@ internal sealed class PossessionMod : MonoBehaviour {
         this.NoClipEnabled = !this.NoClipEnabled;
         this.UpdateComponentsOnCurrentState(this.enabled);
 
-        Chat.Print($"Possess NoClip: {this.NoClipEnabled}");
+        Helper.SendNotification(
+            title: "Possess NoClip:",
+            body: this.NoClipEnabled ? "Enabled" : "Disabled"
+        );
     }
 
     void UpdateComponentsOnCurrentState(bool thisGameObjectIsEnabled) {

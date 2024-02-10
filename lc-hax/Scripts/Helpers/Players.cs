@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using GameNetcodeStuff;
 using System.Linq;
@@ -36,7 +37,7 @@ internal static partial class Helper {
 
         PlayerControllerB[] players = Helper.Players;
 
-        return players.First(player => player.playerUsername == playerNameOrId) ??
+        return players.First(player => player.playerUsername.ToLower().Contains(playerNameOrId.ToLower(), StringComparison.InvariantCultureIgnoreCase)) ??
                players.First(player => player.playerClientId.ToString() == playerNameOrId);
     }
 
@@ -44,10 +45,15 @@ internal static partial class Helper {
 
     internal static PlayerControllerB? GetPlayer(int playerClientId) => Helper.GetPlayer(unchecked((ulong)playerClientId));
 
-    internal static PlayerControllerB? GetActivePlayer(string? playerNameOrId) =>
-        Helper.GetPlayer(playerNameOrId) is not PlayerControllerB player || !player.isPlayerControlled || player.isPlayerDead
-            ? null
-            : player;
+    internal static PlayerControllerB? GetActivePlayer(string? playerNameOrId)
+    {
+        PlayerControllerB? player = Helper.GetPlayer(playerNameOrId);
+        if(player == null || player.IsDead())
+        {
+            return null;
+        }
+        return player;
+    }
 
     internal static PlayerControllerB? GetActivePlayer(int playerClientId) => Helper.GetActivePlayer(playerClientId.ToString());
 
@@ -62,4 +68,14 @@ internal static partial class Helper {
 
         return true;
     }
+
+    internal static bool IsDead(this PlayerControllerB? instance) {
+        if (instance is null) return false;
+        return !instance.isPlayerControlled || instance.health <= 0;
+    }
+
+    internal static PlayerControllerB? GetPlayerFromBody(this RagdollGrabbableObject body) => Helper.GetPlayer(body.bodyID.Value);
+
 }
+
+

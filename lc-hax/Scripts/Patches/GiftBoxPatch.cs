@@ -1,5 +1,4 @@
 #pragma warning disable IDE1006
-#pragma warning disable IDE0060
 
 using HarmonyLib;
 using Unity.Netcode;
@@ -23,6 +22,7 @@ class GiftBoxPatch {
         return skipFlag;
     }
 
+    [HarmonyPrefix]
     [HarmonyPatch(nameof(GiftBoxItem.OpenGiftBoxNoPresentClientRpc))]
     static bool Prefix() => false;
 }

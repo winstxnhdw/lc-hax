@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using GameNetcodeStuff;
 using UnityEngine;
 
 namespace Hax;
@@ -10,6 +11,36 @@ internal static partial class Helper {
               .WhereIsNotNull()
               .Where(scrap => scrap.IsSpawned)
               .ToHashSet();
+
+
+    internal static void InteractWithProp(this GrabbableObject grabbable) {
+        if (Helper.LocalPlayer is PlayerControllerB localPlayer && !grabbable.IsOwner) {
+            grabbable.ChangeOwnershipOfProp(localPlayer.actualClientId);
+        }
+
+        if (grabbable.TryGetComponent(out AnimatedItem animatedItem)) {
+            animatedItem.EquipItem();
+            return;
+        }
+
+        if (grabbable.TryGetComponent(out NoisemakerProp noisemakerProp)) {
+            noisemakerProp.ItemActivate(true, true);
+            return;
+        }
+
+        if (grabbable.TryGetComponent(out BoomboxItem boomboxItem)) {
+            boomboxItem.ItemActivate(true, true);
+            return;
+        }
+
+        if (grabbable.TryGetComponent(out WhoopieCushionItem whoopieCushionItem)) {
+            whoopieCushionItem.Fart();
+            return;
+        }
+
+
+        grabbable.UseItemOnClient(true);
+    }
 
     internal static void ShootShotgun(this ShotgunItem item, Transform origin) {
         item.gunShootAudio.volume = 0.15f;

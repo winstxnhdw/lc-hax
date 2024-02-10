@@ -39,7 +39,7 @@ internal class SpawnCommand : ICommand {
         }
 
         if (Helper.GetActivePlayer(args[1]) is not PlayerControllerB targetPlayer) {
-            Chat.Print("Player is not alive or found!");
+            Chat.Print($"{args[1]} is not alive or found!");
             return;
         }
 
@@ -52,10 +52,9 @@ internal class SpawnCommand : ICommand {
 
         if (!args[2].TryParse(defaultValue: 1, result: out ulong amount)) {
             Chat.Print("Invalid amount specified. Defaulting to 1.");
-            return;
         }
 
         this.SpawnEnemyOnPlayer(targetPlayer, SpawnCommand.HostileEnemies[key], amount);
-        Chat.Print($"Spawning {(amount > 1 ? amount : 'a')} {key} on {targetPlayer.playerUsername}.");
+        Helper.SendNotification("Spawner", $"Spawning {(amount > 1 ? amount.ToString() : "a")} {(amount > 1 ? key + "s" : key)} on {targetPlayer.playerUsername}.", false);
     }
 }

@@ -96,7 +96,7 @@ internal class RespawnCommand : ICommand {
     public void Execute(StringArray _) {
         if (Helper.LocalPlayer is not PlayerControllerB localPlayer) return;
         if (Helper.StartOfRound is not StartOfRound startOfRound) return;
-        if (localPlayer.health > 0) {
+        if (!localPlayer.IsDead()) {
             Chat.Print("You are not yet dead!");
             return;
         }

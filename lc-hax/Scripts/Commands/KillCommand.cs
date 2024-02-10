@@ -7,7 +7,14 @@ internal class KillCommand : ICommand {
     bool EnableGodMode { get; set; }
 
     Result KillSelf() {
+        bool enableGodMode = Setting.EnableGodMode;
+        Setting.EnableGodMode = false;
         Helper.LocalPlayer?.KillPlayer();
+
+        Helper.Delay(delay: 0.5f, action: () =>
+            Setting.EnableGodMode = enableGodMode
+        );
+
         return new Result(true);
     }
 
