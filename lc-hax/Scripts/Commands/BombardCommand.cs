@@ -19,11 +19,12 @@ internal class BombardCommand : ICommand {
             yield return new WaitUntil(() => player.ItemSlots[player.currentItemSlot] == jetpack);
 
             const float bombardRadius = 10.0f;
-            Vector3 randomDirection = Random.insideUnitSphere * bombardRadius;
-            player.DiscardHeldObject(placeObject: true, placePosition: targetTransform.position + randomDirection);
+            Vector2 randomDirection = Random.insideUnitCircle * bombardRadius;
+            Vector3 randomDirectionXZ = new(randomDirection.x, 0.0f, randomDirection.y);
+            player.DiscardHeldObject(placeObject: true, placePosition: targetTransform.position + randomDirectionXZ);
 
             Helper.CreateComponent<WaitForBehaviour>()
-                  .SetPredicate(time => time > 1.5f)
+                  .SetPredicate(() => Vector3.Distance(jetpack.transform.position, targetTransform.position) < 5.0f)
                   .Init(() => Helper.ShortDelay(jetpack.ExplodeJetpackServerRpc));
         }
 
