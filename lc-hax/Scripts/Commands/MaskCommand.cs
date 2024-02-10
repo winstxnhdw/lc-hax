@@ -16,7 +16,7 @@ internal class MaskCommand : ICommand {
             return;
         }
 
-        if (!localPlayer.GrabObject(hauntedMaskItem) is false) {
+        if (!localPlayer.GrabObject(hauntedMaskItem)) {
             Chat.Print("You must have an empty inventory slot!");
             return;
         }
