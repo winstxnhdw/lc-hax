@@ -10,7 +10,7 @@ internal class DestroyCommand : ICommand {
         float currentWeight = player.carryWeight;
 
         foreach (GrabbableObject grabbable in Helper.Grabbables.ToArray()) {
-            player.GrabObject(grabbable);
+            if (!player.GrabObject(grabbable)) continue;
             yield return new WaitUntil(() => player.ItemSlots[player.currentItemSlot] == grabbable);
             player.DespawnHeldObject();
         }
@@ -36,6 +36,11 @@ internal class DestroyCommand : ICommand {
 
     public void Execute(StringArray args) {
         if (Helper.LocalPlayer is not PlayerControllerB player) return;
+
+        if (player.ItemSlots.WhereIsNotNull().Count() >= 4) {
+            Chat.Print("You must have an empty inventory slot!");
+            return;
+        }
 
         Result result = args[0] switch {
             null => this.DestroyHeldItem(player),

@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using GameNetcodeStuff;
 using Hax;
 
@@ -30,7 +31,10 @@ internal class BombCommand : ICommand {
             return;
         }
 
-        localPlayer.GrabObject(jetpack);
+        if (!localPlayer.GrabObject(jetpack)) {
+            Chat.Print("You must have an empty inventory slot!");
+            return;
+        }
 
         Helper.CreateComponent<WaitForBehaviour>("Throw Bomb")
               .SetPredicate(() => localPlayer.ItemSlots[localPlayer.currentItemSlot] == jetpack)
