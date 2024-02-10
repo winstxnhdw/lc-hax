@@ -1,6 +1,9 @@
 #pragma warning disable IDE1006
+#pragma warning disable IDE0060
 
 using HarmonyLib;
+using Unity.Netcode;
+using UnityEngine;
 
 [HarmonyPatch(typeof(GiftBoxItem))]
 class GiftBoxPatch {
@@ -14,13 +17,12 @@ class GiftBoxPatch {
     }
 
     [HarmonyPatch(nameof(GiftBoxItem.OpenGiftBoxClientRpc))]
-    static bool Prefix() {
+    static bool Prefix(NetworkObjectReference netObjectRef, int presentValue, Vector3 startFallingPos) {
         bool skipFlag = !GiftBoxPatch.LocalPlayerActivated;
         GiftBoxPatch.LocalPlayerActivated = false;
         return skipFlag;
     }
 
-    [HarmonyPrefix]
     [HarmonyPatch(nameof(GiftBoxItem.OpenGiftBoxNoPresentClientRpc))]
-    static bool NoPresentPrefix() => false;
+    static bool Prefix() => false;
 }
