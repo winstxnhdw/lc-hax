@@ -1,6 +1,6 @@
 using Hax;
 
-[Command("/hitclick")]
+[Command("hitclick")]
 internal class HitOnClickCommand : ICommand {
     public void Execute(StringArray _) {
         Setting.EnableHitOnLeftClick = !Setting.EnableHitOnLeftClick;

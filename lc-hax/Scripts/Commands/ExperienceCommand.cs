@@ -8,11 +8,11 @@ enum Rank {
     BOSS = 4
 }
 
-[Command("/xp")]
+[Command("xp")]
 internal class ExperienceCommand {
     public void Execute(StringArray args) {
         if (args.Length is 0) {
-            Chat.Print("Usage: /xp <amount>");
+            Chat.Print("Usage: xp <amount>");
             return;
         }
 

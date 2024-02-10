@@ -2,7 +2,7 @@ using System;
 using GameNetcodeStuff;
 using Hax;
 
-[Command("/bomb")]
+[Command("bomb")]
 internal class BombCommand : ICommand {
     JetpackItem? GetAvailableJetpack() =>
         Helper.FindObjects<JetpackItem>()
@@ -16,7 +16,7 @@ internal class BombCommand : ICommand {
     public void Execute(StringArray args) {
         if (Helper.LocalPlayer is not PlayerControllerB localPlayer) return;
         if (args.Length is 0) {
-            Chat.Print("Usage: /bomb <player>");
+            Chat.Print("Usage: bomb <player>");
             return;
         }
 

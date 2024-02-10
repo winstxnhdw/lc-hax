@@ -1,6 +1,6 @@
 using Hax;
 
-[Command("/block")]
+[Command("block")]
 internal class BlockCommand : ICommand {
     string BlockCredit() {
         Setting.EnableBlockCredits = !Setting.EnableBlockCredits;
@@ -28,7 +28,7 @@ internal class BlockCommand : ICommand {
 
     public void Execute(StringArray args) {
         if (args.Length is 0) {
-            Chat.Print("Usage: /block <property>");
+            Chat.Print("Usage: block <property>");
             return;
         }
 

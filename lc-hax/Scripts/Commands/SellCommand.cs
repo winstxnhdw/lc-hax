@@ -3,7 +3,7 @@ using System.Linq;
 using GameNetcodeStuff;
 using Hax;
 
-[Command("/sell")]
+[Command("sell")]
 internal class SellCommand : ICommand {
     bool CanBeSold(GrabbableObject grabbableObject) =>
         grabbableObject is not HauntedMaskItem &&

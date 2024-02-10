@@ -1,6 +1,6 @@
 using Hax;
 
-[Command("/berserk")]
+[Command("berserk")]
 internal class BerserkCommand : ICommand {
     public void Execute(StringArray _) =>
         Helper.FindObjects<Turret>()

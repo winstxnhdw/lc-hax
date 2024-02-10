@@ -1,11 +1,11 @@
 using Hax;
 
-[PrivilegedCommand("/quota")]
+[PrivilegedCommand("quota")]
 internal class QuotaCommand : ICommand {
     public void Execute(StringArray args) {
         if (Helper.TimeOfDay is not TimeOfDay timeOfDay) return;
         if (args.Length < 1) {
-            Chat.Print("Usage: /quota <amount> <fulfilled?>");
+            Chat.Print("Usage: quota <amount> <fulfilled?>");
             return;
         }
 

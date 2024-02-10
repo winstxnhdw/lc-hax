@@ -2,11 +2,11 @@ using System.Collections.Generic;
 using GameNetcodeStuff;
 using Hax;
 
-[Command("/mob")]
+[Command("mob")]
 internal class MobCommand : IEnemyPrompter, ICommand {
     public void Execute(StringArray args) {
         if (args.Length is 0) {
-            Chat.Print("Usage: /mob <player>");
+            Chat.Print("Usage: mob <player>");
             return;
         }
 

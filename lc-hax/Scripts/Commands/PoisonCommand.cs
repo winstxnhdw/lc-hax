@@ -1,7 +1,7 @@
 using GameNetcodeStuff;
 using Hax;
 
-[Command("/poison")]
+[Command("poison")]
 internal class PoisonCommand : ICommand {
     void PoisonPlayer(PlayerControllerB player, int damage, ulong delay, ulong duration) =>
         Helper.CreateComponent<TransientBehaviour>()
@@ -9,8 +9,8 @@ internal class PoisonCommand : ICommand {
 
     public void Execute(StringArray args) {
         if (args.Length < 4) {
-            Chat.Print("Usage: /poison <player> <damage> <delay> <duration>");
-            Chat.Print("Usage: /poison --all <damage> <delay> <duration>");
+            Chat.Print("Usage: poison <player> <damage> <delay> <duration>");
+            Chat.Print("Usage: poison --all <damage> <delay> <duration>");
             return;
         }
 

@@ -5,7 +5,7 @@ using UnityEngine;
 using GameNetcodeStuff;
 using Hax;
 
-[Command("/grab")]
+[Command("grab")]
 internal class GrabCommand : ICommand {
     bool CanGrabItem(GrabbableObject grabbableObject, Vector3 currentPlayerPosition) =>
         !grabbableObject.isHeld &&

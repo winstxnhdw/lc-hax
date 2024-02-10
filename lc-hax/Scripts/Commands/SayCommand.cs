@@ -1,11 +1,11 @@
 using GameNetcodeStuff;
 using Hax;
 
-[Command("/say")]
+[Command("say")]
 internal class SayCommand : ICommand {
     public void Execute(StringArray args) {
         if (args.Length < 2) {
-            Chat.Print("Usage: /say <player> <message>");
+            Chat.Print("Usage: say <player> <message>");
         }
 
         if (Helper.GetPlayer(args[0]) is not PlayerControllerB player) {

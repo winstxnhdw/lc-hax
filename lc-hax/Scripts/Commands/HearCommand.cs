@@ -1,6 +1,6 @@
 using Hax;
 
-[Command("/hear")]
+[Command("hear")]
 internal class HearCommand : ICommand {
     public void Execute(StringArray args) {
         Setting.EnableEavesdrop = !Setting.EnableEavesdrop;

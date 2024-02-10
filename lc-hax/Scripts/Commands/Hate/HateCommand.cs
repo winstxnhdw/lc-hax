@@ -2,11 +2,11 @@ using System.Collections.Generic;
 using GameNetcodeStuff;
 using Hax;
 
-[Command("/hate")]
+[Command("hate")]
 internal class HateCommand : IEnemyPrompter, ICommand {
     public void Execute(StringArray args) {
         if (args.Length is 0) {
-            Chat.Print("Usage: /hate <player> <funnyRevive>");
+            Chat.Print("Usage: hate <player> <funnyRevive>");
             return;
         }
 

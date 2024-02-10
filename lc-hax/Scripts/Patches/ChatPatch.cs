@@ -20,6 +20,8 @@ class EnableChatPatch {
 
 [HarmonyPatch(typeof(HUDManager), "SubmitChat_performed")]
 class SubmitChatPatch {
+    const char commandPrefix = '/';
+
     static bool Prefix(HUDManager __instance, ref bool __state) {
         __state = __instance.localPlayer.isPlayerDead;
         __instance.localPlayer.isPlayerDead = false;
@@ -28,11 +30,11 @@ class SubmitChatPatch {
             return true;
         }
 
-        if (!hudManager.chatTextField.text.StartsWith("/")) {
+        if (!hudManager.chatTextField.text.StartsWith(commandPrefix)) {
             return true;
         }
 
-        Helper.Try(() => Chat.ExecuteCommand(hudManager.chatTextField.text),
+        Helper.Try(() => Chat.ExecuteCommand(hudManager.chatTextField.text[1..]),
             (Exception exception) => Logger.Write(exception.ToString())
         );
 

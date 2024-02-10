@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using GameNetcodeStuff;
 using Hax;
 
-[Command("/fatality")]
+[Command("fatality")]
 internal class FatalityCommand : ICommand {
     T? GetEnemyOwnership<T>() where T : EnemyAI {
         if (Helper.LocalPlayer is not PlayerControllerB localPlayer) return null;
@@ -96,7 +96,7 @@ internal class FatalityCommand : ICommand {
 
     public void Execute(StringArray args) {
         if (args.Length < 2) {
-            Chat.Print("Usage: /fatality <player> <enemy>");
+            Chat.Print("Usage: fatality <player> <enemy>");
             return;
         }
 
