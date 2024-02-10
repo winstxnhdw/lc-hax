@@ -46,21 +46,21 @@ internal class ESPMod : MonoBehaviour {
         this.LandmineRenderers.WhereIsNotNull().ForEach(renderer => this.RenderBounds(
             camera,
             renderer.bounds,
-            Color.yellow,
+            Helper.ExtraColors.OrangeRed,
             this.RenderLabel("Landmine")
         ));
 
         this.TurretRenderers.WhereIsNotNull().ForEach(renderer => this.RenderBounds(
             camera,
             renderer.bounds,
-            Color.yellow,
+            Helper.ExtraColors.OrangeRed,
             this.RenderLabel("Turret")
         ));
 
         this.EntranceRenderers.WhereIsNotNull().ForEach(renderer => this.RenderBounds(
             camera,
             renderer.bounds,
-            Color.yellow,
+            Helper.ExtraColors.LightGoldenrodYellow,
             this.RenderLabel("Entrance")
         ));
 
@@ -118,7 +118,7 @@ internal class ESPMod : MonoBehaviour {
             this.RenderBounds(
                 camera,
                 shipBounds.bounds,
-                Color.green,
+                Helper.ExtraColors.LimeGreen,
                 this.RenderLabel("Ship"),
                 10.0f
             );
