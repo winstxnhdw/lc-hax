@@ -64,11 +64,10 @@ internal static class Chat {
 
     internal static void Print(string? message) => Chat.Print("SYSTEM", message, true);
 
-    static void ExecuteCommand(StringArray args) {
-        if (args.Length is 0) {
-            Chat.Print("Usage: <command> <args>");
-            return;
-        }
+    internal static void ExecuteCommand(string commandString) {
+        Chat.Print("USER", commandString);
+        Chat.OnExecuteCommandAttempt?.Invoke(commandString);
+        StringArray args = commandString[1..].Split(' ');
 
         ICommand? command =
             Chat.Commands.GetValue(args[0]) ??
@@ -81,11 +80,5 @@ internal static class Chat {
         }
 
         command.Execute(args[1..]);
-    }
-
-    internal static void ExecuteCommand(string command) {
-        Chat.Print("USER", command);
-        Chat.OnExecuteCommandAttempt?.Invoke(command);
-        Chat.ExecuteCommand(command.Split(' '));
     }
 }
