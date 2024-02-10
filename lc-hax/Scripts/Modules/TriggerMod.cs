@@ -93,8 +93,8 @@ internal sealed class TriggerMod : MonoBehaviour, IEnemyPrompter {
                 break;
             }
 
-            if (collider.TryGetComponent(out GrabbableObject grabbable)) {
-                grabbable.InteractWithProp(true);
+            if (collider.GetComponentInParent<EnemyAI>().Unfake() is EnemyAI enemy && Setting.EnablePhantom) {
+                PossessionMod.Instance?.Possess(enemy);
                 break;
             }
 
@@ -102,11 +102,6 @@ internal sealed class TriggerMod : MonoBehaviour, IEnemyPrompter {
                 Helper.GetEnemy<CentipedeAI>()?.ClingToPlayerServerRpc(player.playerClientId);
                 this.PromptEnemiesToTarget(player, this.FunnyReviveEnabled)
                     .ForEach(enemy => Chat.Print($"{enemy} prompted!"));
-                break;
-            }
-
-            if (collider.GetComponentInParent<EnemyAI>().Unfake() is EnemyAI enemy && Setting.EnablePhantom) {
-                PossessionMod.Instance?.Possess(enemy);
                 break;
             }
         }

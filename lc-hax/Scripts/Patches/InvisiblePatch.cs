@@ -29,7 +29,7 @@ class InvisiblePatch {
         InvisiblePatch.LastExhausted = exhausted;
         InvisiblePatch.LastIsPlayerGrounded = isPlayerGrounded;
 
-        newPos = new Vector3(0, -100, 0);
+        newPos = new Vector3(0.0f, -100.0f, 0.0f);
         inElevator = false;
         inShipRoom = false;
         exhausted = false;
