@@ -62,7 +62,7 @@ internal class Loader : MonoBehaviour {
         DontDestroyOnLoad(Loader.HaxModules);
 
         Loader.AddHaxModules<ESPMod>();
-        //Loader.AddHaxModules<SaneMod>();
+        Loader.AddHaxModules<SaneMod>();
         Loader.AddHaxModules<StunMod>();
         Loader.AddHaxModules<ChatMod>();
         Loader.AddHaxModules<FollowMod>();
