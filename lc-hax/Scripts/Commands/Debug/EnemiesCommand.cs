@@ -11,15 +11,14 @@ internal class EnemiesCommand : ICommand {
         !enemy.enemyName.Contains("Docile Locust Bees", StringComparison.OrdinalIgnoreCase) ||
         !enemy.enemyName.Contains("Manticoil", StringComparison.OrdinalIgnoreCase);
 
-    static List<string> HostileEnemies { get; } =
+    string[] HostileEnemies { get; } =
         Resources.FindObjectsOfTypeAll<EnemyType>()
             .Where(EnemiesCommand.IsHostileEnemy)
             .Select(enemy => enemy.enemyName)
-            .ToList();
+            .ToArray();
 
     public void Execute(StringArray _) {
-        EnemyType[] enemies = Resources.FindObjectsOfTypeAll<EnemyType>();
-        string enemy = string.Join(", ", enemies.Select(e => e.enemyName));
+        string enemy = string.Join(", ", HostileEnemies);
         Helper.SendNotification("Available Enemies", enemy, false);
         Logger.Write(enemy);
     }
