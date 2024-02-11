@@ -7,7 +7,7 @@ using Hax;
 [HarmonyPatch(typeof(StartOfRound), nameof(StartOfRound.UpdatePlayerVoiceEffects))]
 class HearPatch {
     static void Postfix(StartOfRound __instance) {
-        if (!Setting.EnableEavesdrop || Helper.StartOfRound?.shipIsLeaving is true) return;
+        if (!Setting.EnableEavesdrop || Helper.StartOfRound?.shipIsLeaving is not false) return;
         if (Helper.SoundManager is not SoundManager soundManager) return;
 
         __instance.allPlayerScripts.ForEach(player => {

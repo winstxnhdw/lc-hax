@@ -11,27 +11,24 @@ using Hax;
 class WaitForShipFixPatch {
     static IEnumerator Postfix(IEnumerator endOfGame) {
         if (Helper.StartOfRound is not StartOfRound startOfRound) yield break;
+        if (Helper.FindObject<StartMatchLever>() is not StartMatchLever startMatchLever) yield break;
 
         while (endOfGame.MoveNext()) {
             yield return endOfGame.Current;
         }
 
-        yield return new WaitUntil(() => startOfRound.shipIsLeaving is false);
+        yield return new WaitUntil(() => !startOfRound.shipIsLeaving);
         yield return new WaitForSeconds(5.0f); // Wait a bit to give it a chance to fix itself
         bool isLeverBroken = true;
 
         while (isLeverBroken) {
             yield return new WaitForSeconds(Random.Range(2.0f, 5.0f)); // Make lc-hax users not send it all at the same time
 
-            if (Helper.StartOfRound?.travellingToNewLevel is true) {
+            if (startOfRound.travellingToNewLevel) {
                 continue;
             }
 
-            isLeverBroken =
-                startOfRound.inShipPhase is true &&
-                Helper.FindObject<StartMatchLever>()?.triggerScript.interactable is false;
-
-            if (isLeverBroken) {
+            if (startOfRound.inShipPhase && !startMatchLever.triggerScript.interactable) {
                 startOfRound.PlayerHasRevivedServerRpc();
             }
         }
