@@ -1,11 +1,11 @@
 using System;
+using System.Linq;
 using System.Collections.Generic;
 using Unity.Netcode;
 using UnityEngine;
 using UnityObject = UnityEngine.Object;
 using GameNetcodeStuff;
 using Hax;
-using System.Linq;
 
 [PrivilegedCommand("spawn")]
 internal class SpawnCommand : ICommand {
@@ -16,7 +16,8 @@ internal class SpawnCommand : ICommand {
     static Dictionary<string, GameObject> HostileEnemies { get; } =
         Resources.FindObjectsOfTypeAll<EnemyType>()
                  .Where(SpawnCommand.IsHostileEnemy)
-                 .ToDictionary(enemy => enemy.enemyName, enemy => enemy.enemyPrefab);
+                 .GroupBy(enemy => enemy.enemyName)
+                 .ToDictionary(enemyGroup => enemyGroup.Key, enemy => Enumerable.First(enemy).enemyPrefab);
 
     void SpawnEnemyOnPlayer(PlayerControllerB player, GameObject prefab, ulong amount = 1) {
         for (ulong i = 0; i < amount; i++) {
