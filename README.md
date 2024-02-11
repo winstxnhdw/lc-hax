@@ -137,6 +137,7 @@ The complete feature set includes the following.
 | Toggle the Beta badge         | `/beta`                                        |
 | Get coordinates               | `/xyz`                                         |
 | Toggle God mode               | `/god`                                         |
+| Toggle NoClip                 | `/noclip`                                      |
 | Toggle rapid item usage       | `/rapid`                                       |
 | Eavesdrop on all players      | `/hear`                                        |
 | Respawn player                | `/respawn`                                     |

@@ -5,8 +5,11 @@ using Hax;
 internal class KeyboardMovement : MonoBehaviour {
     const float BaseSpeed = 20;
     float SprintMultiplier { get; set; } = 1;
+    Vector3 LastPosition { get; set; }
 
-    void Update() {
+    void OnEnable() => this.LastPosition = this.transform.position;
+
+    void LateUpdate() {
         if (Helper.LocalPlayer?.isTypingChat is true) return;
 
         Vector3 direction = new(
@@ -20,7 +23,9 @@ internal class KeyboardMovement : MonoBehaviour {
     }
 
     void UpdateSprintMultiplier(Keyboard keyboard) =>
-        this.SprintMultiplier = keyboard.shiftKey.IsPressed() ? Mathf.Min(this.SprintMultiplier + (5 * Time.deltaTime), 5) : 1;
+        this.SprintMultiplier = keyboard.shiftKey.IsPressed()
+            ? Mathf.Min(this.SprintMultiplier + (5.0f * Time.deltaTime), 5.0f)
+            : 1.0f;
 
     void Move(Vector3 direction) {
         Vector3 translatedDirection =
@@ -28,6 +33,7 @@ internal class KeyboardMovement : MonoBehaviour {
             (this.transform.up * direction.y) +
             (this.transform.forward * direction.z);
 
-        this.transform.position += translatedDirection * Time.deltaTime * KeyboardMovement.BaseSpeed * this.SprintMultiplier;
+        this.LastPosition += translatedDirection * Time.deltaTime * KeyboardMovement.BaseSpeed * this.SprintMultiplier;
+        this.transform.position = this.LastPosition;
     }
 }
