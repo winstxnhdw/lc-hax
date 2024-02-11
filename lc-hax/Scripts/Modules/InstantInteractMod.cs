@@ -15,5 +15,5 @@ internal sealed class InstantInteractMod : MonoBehaviour {
         }
     }
 
-    void Start() => _ = this.StartResilientCoroutine(this.SetTimeToHold);
+    void Start() => this.StartResilientCoroutine(this.SetTimeToHold);
 }

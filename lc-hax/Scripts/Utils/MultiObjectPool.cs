@@ -5,7 +5,7 @@ using UnityObject = UnityEngine.Object;
 internal class MultiObjectPool<T> where T : UnityObject {
     internal T?[] Objects { get; private set; } = [];
 
-    internal MultiObjectPool(MonoBehaviour self, float renewInterval = 1.0f) => _ = self.StartCoroutine(this.RenewObjects(renewInterval));
+    internal MultiObjectPool(MonoBehaviour self, float renewInterval = 1.0f) => self.StartCoroutine(this.RenewObjects(renewInterval));
 
     internal void Renew() => this.Objects = UnityObject.FindObjectsByType<T>(FindObjectsSortMode.None);
 

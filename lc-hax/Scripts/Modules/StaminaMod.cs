@@ -23,5 +23,5 @@ internal sealed class StaminaMod : MonoBehaviour {
         }
     }
 
-    void Start() => _ = this.StartResilientCoroutine(this.SetSprint);
+    void Start() => this.StartResilientCoroutine(this.SetSprint);
 }
