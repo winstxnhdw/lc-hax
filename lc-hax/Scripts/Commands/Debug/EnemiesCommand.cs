@@ -18,7 +18,7 @@ internal class EnemiesCommand : ICommand {
             .ToArray();
 
     public void Execute(StringArray _) {
-        string enemy = string.Join(", ", HostileEnemies);
+        string enemy = string.Join(", ", this.HostileEnemies);
         Helper.SendNotification("Available Enemies", enemy, false);
         Logger.Write(enemy);
     }
