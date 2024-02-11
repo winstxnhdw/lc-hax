@@ -6,7 +6,6 @@ internal class InputListener : MonoBehaviour {
     internal static event Action<bool>? OnShiftButtonHold;
     internal static event Action<bool>? OnFButtonHold;
     internal static event Action<bool>? OnEButtonHold;
-    internal static event Action<bool>? OnRButtonHold;
     internal static event Action? OnMiddleButtonPress;
     internal static event Action? OnLeftButtonPress;
     internal static event Action? OnRightButtonPress;
@@ -51,7 +50,6 @@ internal class InputListener : MonoBehaviour {
     void Update() {
         InputListener.OnShiftButtonHold?.Invoke(Keyboard.current[Key.LeftShift].isPressed);
         InputListener.OnFButtonHold?.Invoke(Keyboard.current[Key.F].isPressed);
-        InputListener.OnRButtonHold?.Invoke(Keyboard.current[Key.R].isPressed);
         InputListener.OnEButtonHold?.Invoke(Keyboard.current[Key.E].isPressed);
         InputListener.OnRightButtonHold?.Invoke(Mouse.current.rightButton.isPressed);
 

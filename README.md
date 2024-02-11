@@ -182,7 +182,6 @@ These commands are only available when the user is in superuser mode.
 | Trigger various objects       | <kbd> M3 </kbd>                      |
 | Follow player                 | <kbd> M3 </kbd> + <kbd> F </kbd>     |
 | Interact at a distance        | <kbd> M3 </kbd> + <kbd> E </kbd>     |
-| Funny respawn mobs            | <kbd> M3 </kbd> + <kbd> R </kbd>     |
 | Toggle ESP                    | <kbd> Pause </kbd>                   |
 | Toggle Phantom                | <kbd> = </kbd>                       |
 | Teleport to Phantom           | <kbd> + </kbd>                       |

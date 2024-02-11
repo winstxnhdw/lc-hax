@@ -7,27 +7,22 @@ internal sealed class TriggerMod : MonoBehaviour, IEnemyPrompter {
 
     bool UsingInteractRay { get; set; } = false;
     bool UsingFollowRay { get; set; } = false;
-    bool FunnyReviveEnabled { get; set; } = false;
 
     void OnEnable() {
         InputListener.OnMiddleButtonPress += this.Fire;
         InputListener.OnEButtonHold += this.SetUsingInteractRay;
-        InputListener.OnRButtonHold += this.SetFunnyReviveEnabled;
         InputListener.OnFButtonHold += this.SetUsingFollowRay;
     }
 
     void OnDisable() {
         InputListener.OnMiddleButtonPress -= this.Fire;
         InputListener.OnEButtonHold -= this.SetUsingInteractRay;
-        InputListener.OnRButtonHold -= this.SetFunnyReviveEnabled;
         InputListener.OnFButtonHold -= this.SetUsingFollowRay;
     }
 
     void SetUsingInteractRay(bool isHeld) => this.UsingInteractRay = isHeld;
 
     void SetUsingFollowRay(bool isHeld) => this.UsingFollowRay = isHeld;
-
-    void SetFunnyReviveEnabled(bool isHeld) => this.FunnyReviveEnabled = isHeld;
 
     void Fire() {
         if (Helper.CurrentCamera is not Camera camera) return;
@@ -100,7 +95,7 @@ internal sealed class TriggerMod : MonoBehaviour, IEnemyPrompter {
 
             if (collider.TryGetComponent(out PlayerControllerB player)) {
                 Helper.GetEnemy<CentipedeAI>()?.ClingToPlayerServerRpc(player.playerClientId);
-                this.PromptEnemiesToTarget(player, this.FunnyReviveEnabled)
+                this.PromptEnemiesToTarget(targetPlayer: player)
                     .ForEach(enemy => Chat.Print($"{enemy} prompted!"));
                 break;
             }
