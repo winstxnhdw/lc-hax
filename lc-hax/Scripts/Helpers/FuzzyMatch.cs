@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using Quickenshtein;
 
 namespace Hax;
@@ -39,7 +38,7 @@ internal static partial class Helper {
         return distancePenalty + commonalityReward;
     }
 
-    internal static string? FuzzyMatchInternal(string? query, ReadOnlySpan<string> strings) {
+    internal static string? FuzzyMatch(string? query, ReadOnlySpan<string> strings) {
         if (strings.Length is 0 || string.IsNullOrWhiteSpace(query)) return null;
 
         string closestMatch = strings[0];
@@ -57,5 +56,5 @@ internal static partial class Helper {
         return closestMatch;
     }
 
-    internal static string? FuzzyMatch(string? query, IEnumerable<string> strings) => Helper.FuzzyMatchInternal(query, strings.ToArray());
+    internal static string? FuzzyMatch(string? query, IEnumerable<string> strings) => Helper.FuzzyMatch(query, [.. strings]);
 }
