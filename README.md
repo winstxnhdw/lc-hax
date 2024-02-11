@@ -121,7 +121,6 @@ The complete feature set includes the following.
 | Grab scrap(s)                 | `/grab <item?>`                                |
 | Destroy held item             | `/destroy`                                     |
 | Destroy all items             | `/destroy --all`                               |
-| Block incoming credits        | `/block credit`                                |
 | Block any radar targets       | `/block radar`                                 |
 | Become untargetable           | `/block enemy`                                 |
 | Place an unlockable           | `/build <unlockable>`                          |

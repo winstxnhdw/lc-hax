@@ -2,14 +2,6 @@ using Hax;
 
 [Command("block")]
 internal class BlockCommand : ICommand {
-    string BlockCredit() {
-        Setting.EnableBlockCredits = !Setting.EnableBlockCredits;
-
-        return $"{(Setting.EnableBlockCredits
-            ? "Blocking all incoming credits!"
-            : "No longer blocking credits!")}";
-    }
-
     string BlockEnemy() {
         Setting.EnableUntargetable = !Setting.EnableUntargetable;
 
@@ -33,7 +25,6 @@ internal class BlockCommand : ICommand {
         }
 
         string result = args[0] switch {
-            "credit" => this.BlockCredit(),
             "enemy" => this.BlockEnemy(),
             "radar" => this.BlockRadar(),
             _ => "Invalid property!"
