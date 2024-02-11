@@ -9,6 +9,7 @@ internal class HealCommand : IStun, ICommand {
     void RespawnLocalPlayer(PlayerControllerB localPlayer, StartOfRound startOfRound, HUDManager hudManager) {
         if (Helper.SoundManager is not SoundManager soundManager) return;
 
+        hudManager.localPlayer.health = 100;
         startOfRound.allPlayersDead = false;
         startOfRound.SetPlayerObjectExtrapolate(false);
         localPlayer.ResetPlayerBloodObjects();
