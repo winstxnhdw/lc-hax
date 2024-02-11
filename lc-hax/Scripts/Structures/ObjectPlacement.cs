@@ -1,3 +1,5 @@
+using UnityEngine;
+
 internal readonly struct ObjectPlacement<T, M>(
     T targetObject,
     M gameObject,

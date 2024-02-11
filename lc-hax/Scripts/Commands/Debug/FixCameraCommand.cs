@@ -1,3 +1,4 @@
+using GameNetcodeStuff;
 using Hax;
 
 [DebugCommand("fixcamera")]

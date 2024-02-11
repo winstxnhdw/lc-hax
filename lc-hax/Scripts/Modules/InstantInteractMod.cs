@@ -1,4 +1,5 @@
 using System.Collections;
+using UnityEngine;
 
 internal sealed class InstantInteractMod : MonoBehaviour {
     IEnumerator SetTimeToHold(object[] args) {

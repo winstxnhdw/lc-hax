@@ -1,6 +1,8 @@
 #pragma warning disable IDE1006
 
 using HarmonyLib;
+using Unity.Netcode;
+using UnityEngine;
 
 [HarmonyPatch(typeof(GiftBoxItem))]
 class GiftBoxPatch {

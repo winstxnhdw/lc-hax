@@ -1,5 +1,7 @@
 using System;
+using GameNetcodeStuff;
 using Hax;
+using UnityEngine;
 
 [Command("noise")]
 internal class NoiseCommand : ICommand {

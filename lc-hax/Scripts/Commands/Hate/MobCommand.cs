@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using GameNetcodeStuff;
 using Hax;
 
 [Command("mob")]

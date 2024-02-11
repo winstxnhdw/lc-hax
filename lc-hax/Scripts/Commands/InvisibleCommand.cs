@@ -1,4 +1,5 @@
 using Hax;
+using UnityEngine;
 
 [Command("invis")]
 internal class InvisibleCommand : ICommand {

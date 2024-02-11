@@ -3,6 +3,7 @@ using System.IO;
 using System.Reflection;
 using System.Linq;
 using HarmonyLib;
+using UnityEngine;
 
 namespace Hax;
 

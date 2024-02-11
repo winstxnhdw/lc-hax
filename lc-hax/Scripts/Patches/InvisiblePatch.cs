@@ -1,7 +1,9 @@
 #pragma warning disable IDE1006
 
+using GameNetcodeStuff;
 using HarmonyLib;
 using Hax;
+using UnityEngine;
 
 [HarmonyPatch(typeof(PlayerControllerB))]
 class InvisiblePatch {

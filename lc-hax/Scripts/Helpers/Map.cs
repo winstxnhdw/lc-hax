@@ -1,3 +1,5 @@
+using GameNetcodeStuff;
+
 namespace Hax;
 
 internal static partial class Helper {

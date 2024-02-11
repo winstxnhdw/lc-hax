@@ -1,4 +1,5 @@
 using Hax;
+using UnityEngine;
 
 [Command("lobby")]
 internal class LobbyCommand : ICommand {

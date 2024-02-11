@@ -1,6 +1,7 @@
 using System.Linq;
 using System.Collections.Generic;
 using Hax;
+using UnityEngine;
 
 [Command("buy")]
 internal class BuyCommand : ICommand {

@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using UnityEngine;
 
 internal class TransientBehaviour : MonoBehaviour {
     Action<float>? Action { get; set; }

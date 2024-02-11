@@ -1,7 +1,9 @@
 using System.Linq;
 using System.Collections;
 using System.Collections.Generic;
+using GameNetcodeStuff;
 using Hax;
+using UnityEngine;
 
 [Command("grab")]
 internal class GrabCommand : ICommand {

@@ -1,6 +1,8 @@
 using System;
 using System.Linq;
+using GameNetcodeStuff;
 using Hax;
+using UnityEngine;
 
 internal class ESPMod : MonoBehaviour {
     RendererPair<PlayerControllerB, SkinnedMeshRenderer>[] PlayerRenderers { get; set; } = [];
