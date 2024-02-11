@@ -48,7 +48,7 @@ internal class GrabCommand : ICommand {
                     group => Enumerable.First(group)
                 ) ?? [];
 
-        string? key = Helper.FuzzyMatch(itemName.ToLower(), [.. grabbableObjects.Keys]);
+        string? key = Helper.FuzzyMatch(itemName.ToLower(), grabbableObjects.Keys);
 
         if (string.IsNullOrWhiteSpace(key)) {
             return "Failed to find item!";

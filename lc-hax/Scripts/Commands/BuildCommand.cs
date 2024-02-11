@@ -19,7 +19,7 @@ internal class BuildCommand : ICommand {
                 pair => pair.i
             );
 
-        string? key = Helper.FuzzyMatch(args[0]?.ToLower(), [.. unlockables.Keys]);
+        string? key = Helper.FuzzyMatch(args[0]?.ToLower(), unlockables.Keys);
 
         if (string.IsNullOrWhiteSpace(key)) {
             Chat.Print("Failed to find unlockable!");

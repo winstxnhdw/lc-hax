@@ -17,7 +17,7 @@ internal class SuitCommand : ICommand {
             return;
         }
 
-        string? key = Helper.FuzzyMatch(args[0], [.. this.SuitUnlockables.Keys]);
+        string? key = Helper.FuzzyMatch(args[0], this.SuitUnlockables.Keys);
 
         if (key == null) {
             Chat.Print($"Suit is not found!");
