@@ -104,7 +104,7 @@ The complete feature set includes the following.
 | Bombard player                | `/bombard <player>`                            |
 | Lure enemies to player        | `/hate <player>`                               |
 | Spawn masked enemy on player  | `/mask <player?> <amount=1>`                   |
-| Heal player                   | `/heal <player?>`                              |
+| Heal the player               | `/heal <player?>`                              |
 | Kill player                   | `/kill <player?>`                              |
 | Kill all players              | `/kill --all`                                  |
 | Kill all enemies              | `/kill --enemy`                                |
@@ -139,7 +139,6 @@ The complete feature set includes the following.
 | Toggle NoClip                 | `/noclip`                                      |
 | Toggle rapid item usage       | `/rapid`                                       |
 | Eavesdrop on all players      | `/hear`                                        |
-| Respawn player                | `/respawn`                                     |
 | Fake player death             | `/fakedeath`                                   |
 | Unlock all doors              | `/unlock`                                      |
 | Lock all gates                | `/lock`                                        |
