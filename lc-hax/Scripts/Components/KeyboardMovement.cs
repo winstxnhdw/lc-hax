@@ -10,7 +10,7 @@ internal class KeyboardMovement : MonoBehaviour {
     void OnEnable() => this.LastPosition = this.transform.position;
 
     void LateUpdate() {
-        if (Helper.LocalPlayer?.isTypingChat is true) return;
+        if (Helper.LocalPlayer?.isTypingChat is not false) return;
 
         Vector3 direction = new(
             Keyboard.current.dKey.ReadValue() - Keyboard.current.aKey.ReadValue(),

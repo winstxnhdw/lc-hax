@@ -34,7 +34,7 @@ internal class WaitForBehaviour : MonoBehaviour {
         float timer = 0.0f;
 
         while (true) {
-            if (this.TimerPredicate?.Invoke(timer) is true) break;
+            if (this.TimerPredicate?.Invoke(timer) is not false) break;
             timer += Time.deltaTime;
             yield return waitForEndOfFrame;
         }
