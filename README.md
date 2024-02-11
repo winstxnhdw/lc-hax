@@ -167,6 +167,12 @@ These commands are only available when the user is in superuser mode.
 | Set the quota                 | `/quota <amount> <fulfilled?>`                 |
 | Spawn enem(ies) on player     | `/spawn <enemy> <player> <amount?>`            |
 
+## Special Commands
+
+| Action                          | Command                                      |
+| ------------------------------- | -------------------------------------------- |
+| Set the prefix for all commands | `!prefix <prefix>`                           |
+
 ### Binds
 
 > [!TIP]\

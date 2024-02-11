@@ -1,6 +1,7 @@
 #pragma warning disable IDE1006
 
 using System;
+using System.Linq;
 using GameNetcodeStuff;
 using HarmonyLib;
 using Hax;
@@ -20,8 +21,6 @@ class EnableChatPatch {
 
 [HarmonyPatch(typeof(HUDManager), "SubmitChat_performed")]
 class SubmitChatPatch {
-    const char commandPrefix = '/';
-
     static bool Prefix(HUDManager __instance, ref bool __state) {
         __state = __instance.localPlayer.isPlayerDead;
         __instance.localPlayer.isPlayerDead = false;
@@ -30,7 +29,7 @@ class SubmitChatPatch {
             return true;
         }
 
-        if (!hudManager.chatTextField.text.StartsWith(commandPrefix)) {
+        if (!new[] { '!', State.CommandPrefix }.Any(hudManager.chatTextField.text.StartsWith)) {
             return true;
         }
 
