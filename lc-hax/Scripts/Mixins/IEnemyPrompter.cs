@@ -221,10 +221,10 @@ internal class EnemyPromptHandler {
 internal interface IEnemyPrompter { }
 
 internal static class EnemyPromptMixin {
+    [RequireNamedArgs]
     internal static List<string> PromptEnemiesToTarget(
         this IEnemyPrompter _,
-        PlayerControllerB player,
-        bool funnyRevive = false,
+        PlayerControllerB targetPlayer,
         bool willTeleportEnemies = false
     ) {
         if (Helper.LocalPlayer is not PlayerControllerB localPlayer) return [];
@@ -234,16 +234,12 @@ internal static class EnemyPromptMixin {
 
         Helper.Enemies.WhereIsNotNull().ForEach((enemy) => {
             if (enemy is DocileLocustBeesAI or DoublewingAI or BlobAI or DressGirlAI or LassoManAI) return;
-            if (funnyRevive) {
-                enemy.isEnemyDead = false;
-                enemy.enemyHP = enemy.enemyHP <= 0 ? 1 : enemy.enemyHP;
-            }
 
-            enemy.targetPlayer = player;
+            enemy.targetPlayer = targetPlayer;
             enemy.ChangeEnemyOwnerServerRpc(localPlayer.actualClientId);
-            enemy.SetMovingTowardsTargetPlayer(player);
+            enemy.SetMovingTowardsTargetPlayer(targetPlayer);
             enemyNames.Add(enemy.enemyType.enemyName);
-            enemyPromptHandler.HandleEnemy(enemy, player, willTeleportEnemies);
+            enemyPromptHandler.HandleEnemy(enemy, targetPlayer, willTeleportEnemies);
         });
 
         return enemyNames;
