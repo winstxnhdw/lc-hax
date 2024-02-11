@@ -1,7 +1,5 @@
 using System;
-using GameNetcodeStuff;
 using Hax;
-using UnityEngine;
 
 [Command("random")]
 internal class RandomCommand : ICommand {

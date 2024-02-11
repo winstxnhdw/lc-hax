@@ -1,5 +1,4 @@
 using Hax;
-using UnityEngine;
 
 [PrivilegedCommand("timescale")]
 internal class TimescaleCommand : ICommand {
