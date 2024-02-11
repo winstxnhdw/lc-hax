@@ -7,12 +7,9 @@ using Hax;
 [HarmonyPatch(typeof(EnemyAI))]
 class UntargetableEnemyPatch {
     [HarmonyPatch(nameof(EnemyAI.PlayerIsTargetable))]
-    static bool Prefix(PlayerControllerB playerScript, ref bool __result) {
-        if (!Setting.EnableUntargetable) return true;
-        if (!playerScript.IsSelf()) return true;
-
+    static void Postfix(PlayerControllerB playerScript, ref bool __result) {
+        if (!Setting.EnableUntargetable || !playerScript.IsSelf()) return;
         __result = false;
-        return false;
     }
 
     [HarmonyPatch(nameof(EnemyAI.Update))]

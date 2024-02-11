@@ -8,11 +8,9 @@ using Hax;
 [HarmonyPatch]
 class NoCooldownPatch {
     [HarmonyPatch(typeof(GrabbableObject), nameof(GrabbableObject.RequireCooldown))]
-    static bool Prefix(ref bool __result) {
-        if (!Setting.EnableNoCooldown) return true;
-
+    static void Postfix(ref bool __result) {
+        if (!Setting.EnableNoCooldown) return;
         __result = false;
-        return false;
     }
 
     [HarmonyPatch(typeof(Shovel), "reelUpShovel")]
