@@ -15,7 +15,7 @@ internal class MobCommand : IEnemyPrompter, ICommand {
             return;
         }
 
-        List<string> mobs = this.PromptEnemiesToTarget(targetPlayer, willTeleportEnemies: true);
+        List<string> mobs = this.PromptEnemiesToTarget(targetPlayer: targetPlayer, willTeleportEnemies: true);
 
         if (mobs.Count is 0) {
             Chat.Print("No mobs found!");

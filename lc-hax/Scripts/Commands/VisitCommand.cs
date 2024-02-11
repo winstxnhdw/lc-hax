@@ -5,18 +5,10 @@ using Hax;
 [Command("visit")]
 internal class VisitCommand : ICommand {
     public void Execute(StringArray args) {
+        if (Helper.Terminal is not Terminal terminal) return;
+        if (Helper.StartOfRound is not StartOfRound startOfRound) return;
         if (args.Length is 0) {
             Chat.Print("Usage: visit <moon>");
-            return;
-        }
-
-        if (Helper.Terminal is not Terminal terminal) {
-            Chat.Print("Terminal not found!");
-            return;
-        }
-
-        if (Helper.StartOfRound is not StartOfRound startOfRound) {
-            Chat.Print("StartOfRound not found!");
             return;
         }
 

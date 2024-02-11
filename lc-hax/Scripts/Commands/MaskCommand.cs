@@ -3,11 +3,10 @@ using Hax;
 
 [Command("mask")]
 internal class MaskCommand : ICommand {
-    void SpawnMimicOnPlayer(PlayerControllerB player, HauntedMaskItem mask, ulong amount = 1) {
-        _ = Helper.CreateComponent<TransientBehaviour>("Mask").Init(_ => {
+    void SpawnMimicOnPlayer(PlayerControllerB player, HauntedMaskItem mask, ulong amount = 1) =>
+        Helper.CreateComponent<TransientBehaviour>("Mask").Init(_ => {
             mask.CreateMimicServerRpc(player.isInsideFactory, player.transform.position);
         }, amount * 0.1f, 0.1f);
-    }
 
     public void Execute(StringArray args) {
         if (Helper.LocalPlayer is not PlayerControllerB localPlayer) return;

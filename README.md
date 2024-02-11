@@ -103,8 +103,8 @@ The complete feature set includes the following.
 | Bomb player                   | `/bomb <player>`                               |
 | Bombard player                | `/bombard <player>`                            |
 | Lure enemies to player        | `/hate <player>`                               |
-| Spawn masked enemy on player  | `/mask <player?> <amount?>`                    |
-| Heal player                   | `/heal <player?>`                              |
+| Spawn masked enemy on player  | `/mask <player?> <amount=1>`                   |
+| Heal the player               | `/heal <player?>`                              |
 | Kill player                   | `/kill <player?>`                              |
 | Kill all players              | `/kill --all`                                  |
 | Kill all enemies              | `/kill --enemy`                                |
@@ -114,14 +114,12 @@ The complete feature set includes the following.
 | Spoof a server message        | `/say <player> <message>`                      |
 | Transmit a signal             | `/signal <message>`                            |
 | Modify shovel damage          | `/shovel <force=1>`                            |
-| Give or take money            | `/money <amount>`                              |
 | Add or remove experience      | `/xp <amount>`                                 |
 | Buy an item                   | `/buy <item> <quantity=1>`                     |
 | Deposit valuable item(s)      | `/sell <quota?>`                               |
 | Grab scrap(s)                 | `/grab <item?>`                                |
 | Destroy held item             | `/destroy`                                     |
 | Destroy all items             | `/destroy --all`                               |
-| Block incoming credits        | `/block credit`                                |
 | Block any radar targets       | `/block radar`                                 |
 | Become untargetable           | `/block enemy`                                 |
 | Place an unlockable           | `/build <unlockable>`                          |
@@ -137,9 +135,9 @@ The complete feature set includes the following.
 | Toggle the Beta badge         | `/beta`                                        |
 | Get coordinates               | `/xyz`                                         |
 | Toggle God mode               | `/god`                                         |
+| Toggle NoClip                 | `/noclip`                                      |
 | Toggle rapid item usage       | `/rapid`                                       |
 | Eavesdrop on all players      | `/hear`                                        |
-| Respawn player                | `/respawn`                                     |
 | Fake player death             | `/fakedeath`                                   |
 | Unlock all doors              | `/unlock`                                      |
 | Lock all gates                | `/lock`                                        |
@@ -164,8 +162,9 @@ These commands are only available when the user is in superuser mode.
 | Action                        | Command                                        |
 | ----------------------------- | ---------------------------------------------- |
 | Set the timescale             | `/timescale <scale>`                           |
-| Set the quota                 | `/quota <amount> <fulfilled?>`                 |
-| Spawn enem(ies) on player     | `/spawn <enemy> <player> <amount?>`            |
+| Set the quota                 | `/quota <amount> <fulfilled=0>`                |
+| Spawn enem(ies) on player     | `/spawn <enemy> <player> <amount=1>`           |
+| Give or take credit(s)        | `/credit <amount>`                             |
 
 ## Special Commands
 
@@ -183,7 +182,6 @@ These commands are only available when the user is in superuser mode.
 | Trigger various objects       | <kbd> M3 </kbd>                      |
 | Follow player                 | <kbd> M3 </kbd> + <kbd> F </kbd>     |
 | Interact at a distance        | <kbd> M3 </kbd> + <kbd> E </kbd>     |
-| Funny respawn mobs            | <kbd> M3 </kbd> + <kbd> R </kbd>     |
 | Toggle ESP                    | <kbd> Pause </kbd>                   |
 | Toggle Phantom                | <kbd> = </kbd>                       |
 | Teleport to Phantom           | <kbd> + </kbd>                       |
@@ -303,8 +301,13 @@ Add-MpPreference -ExclusionPath $pwd, "$env:TEMP\.net\SharpMonoInjector"
 
 If `lc-hax` is not your fancy, here are excellent alternatives that may suit your needs!
 
-- [Project Apparatus](https://github.com/KaylinOwO/Project-Apparatus)
-- [Lethal Menu](https://github.com/IcyRelic/LethalMenu)
+### Project Apparatus
+
+[Project Apparatus](https://github.com/KaylinOwO/Project-Apparatus) is a popular GUI-first internal cheat based on Infinite Company.
+
+### Lethal Menu
+
+[Lethal Menu](https://github.com/IcyRelic/LethalMenu) is a powerful GUI-first internal cheat based on `Project Apparatus` and `lc-hax`. It supports chams, super speed, fast climbing and more.
 
 ## Credits
 

@@ -15,7 +15,7 @@ internal class HateCommand : IEnemyPrompter, ICommand {
             return;
         }
 
-        List<string> promptedEnemies = this.PromptEnemiesToTarget(targetPlayer);
+        List<string> promptedEnemies = this.PromptEnemiesToTarget(targetPlayer: targetPlayer);
 
         if (promptedEnemies.Count is 0) {
             Chat.Print("No enemies found!");
