@@ -27,7 +27,7 @@ internal class CharacterMovement : MonoBehaviour {
     // Adjust collision box in Awake
     const float AdjustedWidth = 0.0f; // Adjust as needed
     const float AdjustedHeight = 0.0f; // Adjust as needed
-    const float AdjustedDepth = -0.5f; // Adjust as needed
+    const float AdjustedDepth = 0.0f; // Adjust as needed
 
     internal CharacterMovement() => this.CharacterController = this.GetComponent<CharacterController>();
 
