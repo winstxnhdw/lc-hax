@@ -24,7 +24,7 @@ internal class BuyCommand : ICommand {
             pair => pair.i
         );
 
-        string? key = Helper.FuzzyMatch(args[0]?.ToLower(), [.. items.Keys]);
+        string? key = Helper.FuzzyMatch(args[0]?.ToLower(), items.Keys);
 
         if (string.IsNullOrWhiteSpace(key)) {
             Chat.Print("Failed to find purchase!");
