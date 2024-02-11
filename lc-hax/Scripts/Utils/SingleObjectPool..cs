@@ -1,5 +1,4 @@
 using System.Collections;
-using UnityEngine;
 using UnityObject = UnityEngine.Object;
 
 internal class SingleObjectPool<T> where T : UnityObject {

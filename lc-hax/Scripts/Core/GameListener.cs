@@ -1,7 +1,6 @@
 using System;
 using System.Runtime.CompilerServices;
 using Hax;
-using UnityEngine;
 
 internal class GameListener : MonoBehaviour {
     internal static event Action? OnGameStart;

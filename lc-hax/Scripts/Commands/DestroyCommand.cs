@@ -1,8 +1,6 @@
 using System.Collections;
 using System.Linq;
-using GameNetcodeStuff;
 using Hax;
-using UnityEngine;
 
 [Command("destroy")]
 internal class DestroyCommand : ICommand {

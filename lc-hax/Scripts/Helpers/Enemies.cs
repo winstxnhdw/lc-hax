@@ -1,9 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using GameNetcodeStuff;
-using Unity.Netcode;
-using UnityEngine;
 
 namespace Hax;
 

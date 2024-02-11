@@ -3,7 +3,6 @@
 using System.Collections;
 using HarmonyLib;
 using Hax;
-using UnityEngine;
 
 [HarmonyPatch]
 class NoCooldownPatch {

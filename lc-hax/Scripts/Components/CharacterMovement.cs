@@ -1,7 +1,4 @@
-using GameNetcodeStuff;
 using Hax;
-using UnityEngine;
-using UnityEngine.InputSystem;
 
 internal class CharacterMovement : MonoBehaviour {
     // Movement constants

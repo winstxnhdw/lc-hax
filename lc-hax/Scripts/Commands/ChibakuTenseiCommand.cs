@@ -1,6 +1,4 @@
-using GameNetcodeStuff;
 using Hax;
-using UnityEngine;
 
 [Command("ct")]
 internal class ChibakuTenseiCommand : ICommand {

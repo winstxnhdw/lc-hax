@@ -1,11 +1,8 @@
 using System;
 using System.Linq;
 using System.Collections.Generic;
-using GameNetcodeStuff;
 using UnityObject = UnityEngine.Object;
 using Hax;
-using Unity.Netcode;
-using UnityEngine;
 
 [PrivilegedCommand("spawn")]
 internal class SpawnCommand : ICommand {
