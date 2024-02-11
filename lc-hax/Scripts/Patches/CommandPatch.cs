@@ -6,7 +6,7 @@ using HarmonyLib;
 using Hax;
 
 [HarmonyPatch(typeof(HUDManager), "EnableChat_performed")]
-class EnableChatDependencyPatch {
+class EnableChatPatch {
     static void Prefix(HUDManager __instance, ref bool __state) {
         if (__instance.localPlayer is not PlayerControllerB localPlayer) return;
 
@@ -19,7 +19,7 @@ class EnableChatDependencyPatch {
 }
 
 [HarmonyPatch(typeof(HUDManager), "SubmitChat_performed")]
-class SubmitChatDependencyPatch {
+class SubmitChatPatch {
     const char commandPrefix = '/';
 
     static bool Prefix(HUDManager __instance, ref bool __state) {
