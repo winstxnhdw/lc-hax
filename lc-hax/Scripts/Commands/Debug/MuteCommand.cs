@@ -1,7 +1,5 @@
 using System.Collections.Generic;
-using GameNetcodeStuff;
 using Hax;
-using UnityEngine;
 
 [DebugCommand("mute")]
 internal class MuteCommand : ICommand {

@@ -1,5 +1,4 @@
 using HarmonyLib;
-using Steamworks;
 using Hax;
 
 [HarmonyPatch(typeof(GameNetworkManager), nameof(GameNetworkManager.StartClient))]

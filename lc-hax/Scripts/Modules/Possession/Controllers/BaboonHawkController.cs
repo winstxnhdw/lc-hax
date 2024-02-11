@@ -1,4 +1,3 @@
-using Unity.Netcode;
 using Hax;
 
 enum BaboonState {
@@ -12,7 +11,7 @@ internal class BaboonHawkController : IEnemyController<BaboonBirdAI> {
 
     void GrabItemAndSync(BaboonBirdAI enemyInstance, GrabbableObject item) {
         if (!item.TryGetComponent(out NetworkObject netItem)) return;
-        _= enemyInstance.Reflect().SetInternalField("restingAtCamp", false);
+        _ = enemyInstance.Reflect().SetInternalField("restingAtCamp", false);
         _ = enemyInstance.Reflect().InvokeInternalMethod("GrabItemAndSync", netItem);
     }
 

@@ -1,10 +1,7 @@
 using System;
 using System.Linq;
 using System.Collections.Generic;
-using Unity.Netcode;
-using UnityEngine;
 using UnityObject = UnityEngine.Object;
-using GameNetcodeStuff;
 using Hax;
 
 [PrivilegedCommand("spawn")]

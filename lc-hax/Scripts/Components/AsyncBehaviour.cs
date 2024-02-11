@@ -1,6 +1,5 @@
 using System;
 using System.Collections;
-using UnityEngine;
 
 internal class AsyncBehaviour : MonoBehaviour {
     Func<IEnumerator>? Func { get; set; }

@@ -1,9 +1,6 @@
 using System;
-using UnityEngine;
-using GameNetcodeStuff;
 using System.Linq;
 using System.Runtime.CompilerServices;
-using Unity.Netcode;
 
 namespace Hax;
 
@@ -45,14 +42,9 @@ internal static partial class Helper {
 
     internal static PlayerControllerB? GetPlayer(int playerClientId) => Helper.GetPlayer(unchecked((ulong)playerClientId));
 
-    internal static PlayerControllerB? GetActivePlayer(string? playerNameOrId)
-    {
+    internal static PlayerControllerB? GetActivePlayer(string? playerNameOrId) {
         PlayerControllerB? player = Helper.GetPlayer(playerNameOrId);
-        if(player == null || player.IsDead())
-        {
-            return null;
-        }
-        return player;
+        return player == null || player.IsDead() ? null : player;
     }
 
     internal static PlayerControllerB? GetActivePlayer(int playerClientId) => Helper.GetActivePlayer(playerClientId.ToString());
@@ -70,8 +62,7 @@ internal static partial class Helper {
     }
 
     internal static bool IsDead(this PlayerControllerB? instance) {
-        if (instance is null) return false;
-        return !instance.isPlayerControlled || instance.health <= 0;
+        return instance is null ? false : !instance.isPlayerControlled || instance.health <= 0;
     }
 
     internal static PlayerControllerB? GetPlayerFromBody(this RagdollGrabbableObject body) => Helper.GetPlayer(body.bodyID.Value);

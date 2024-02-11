@@ -1,6 +1,4 @@
-using UnityEngine;
 using Hax;
-using Steamworks;
 
 internal sealed class AntiKickMod : MonoBehaviour {
     bool HasGameStarted { get; set; } = false;

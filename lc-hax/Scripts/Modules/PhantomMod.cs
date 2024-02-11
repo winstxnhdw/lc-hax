@@ -1,5 +1,3 @@
-using UnityEngine;
-using GameNetcodeStuff;
 using Hax;
 
 internal sealed class PhantomMod : MonoBehaviour {

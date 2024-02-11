@@ -1,9 +1,6 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using UnityEngine;
-using UnityEngine.AI;
-using GameNetcodeStuff;
 using Hax;
 
 internal sealed class PossessionMod : MonoBehaviour {

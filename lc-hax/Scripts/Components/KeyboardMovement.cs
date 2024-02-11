@@ -1,5 +1,3 @@
-using UnityEngine;
-using UnityEngine.InputSystem;
 using Hax;
 
 internal class KeyboardMovement : MonoBehaviour {

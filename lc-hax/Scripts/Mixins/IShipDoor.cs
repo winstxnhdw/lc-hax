@@ -1,4 +1,3 @@
-using UnityEngine;
 using Hax;
 
 internal interface IShipDoor { }

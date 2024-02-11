@@ -1,6 +1,4 @@
 using System.Collections;
-using GameNetcodeStuff;
-using UnityEngine;
 using Hax;
 
 internal sealed class SaneMod : MonoBehaviour {

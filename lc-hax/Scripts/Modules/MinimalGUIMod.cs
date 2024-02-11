@@ -1,4 +1,3 @@
-using UnityEngine;
 using Hax;
 
 internal class MinimalGUIMod : MonoBehaviour {

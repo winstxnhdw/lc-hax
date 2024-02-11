@@ -1,6 +1,4 @@
 using System.Collections;
-using UnityEngine;
-using UnityEngine.Rendering.HighDefinition;
 using Hax;
 using System;
 

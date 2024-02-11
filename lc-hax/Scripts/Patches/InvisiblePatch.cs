@@ -1,8 +1,6 @@
 #pragma warning disable IDE1006
 
-using GameNetcodeStuff;
 using HarmonyLib;
-using UnityEngine;
 using Hax;
 
 [HarmonyPatch(typeof(PlayerControllerB))]

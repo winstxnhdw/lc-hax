@@ -1,5 +1,3 @@
-using GameNetcodeStuff;
-using UnityEngine;
 using Hax;
 
 [Command("fakedeath")]

@@ -1,6 +1,4 @@
 using System.Text.RegularExpressions;
-using UnityEngine;
-using Steamworks;
 using Hax;
 
 internal sealed class DisconnectMod : MonoBehaviour {

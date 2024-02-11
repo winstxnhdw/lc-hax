@@ -1,6 +1,4 @@
 using System;
-using GameNetcodeStuff;
-using UnityEngine;
 using Hax;
 
 [Command("noise")]

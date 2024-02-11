@@ -1,6 +1,5 @@
 using System.Collections;
 using UnityObject = UnityEngine.Object;
-using UnityEngine;
 
 internal class SingleObjectPool<T> where T : UnityObject {
     internal T? Object { get; private set; }

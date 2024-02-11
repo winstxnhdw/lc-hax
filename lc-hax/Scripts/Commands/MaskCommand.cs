@@ -1,4 +1,3 @@
-using GameNetcodeStuff;
 using Hax;
 
 [Command("mask")]

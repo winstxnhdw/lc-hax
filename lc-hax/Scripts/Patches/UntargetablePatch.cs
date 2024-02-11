@@ -1,6 +1,5 @@
 #pragma warning disable IDE1006
 
-using GameNetcodeStuff;
 using HarmonyLib;
 using Hax;
 

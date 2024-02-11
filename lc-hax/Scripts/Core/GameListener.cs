@@ -1,6 +1,5 @@
 using System;
 using System.Runtime.CompilerServices;
-using UnityEngine;
 using Hax;
 
 internal class GameListener : MonoBehaviour {
