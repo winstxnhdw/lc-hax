@@ -1,7 +1,7 @@
-using UnityEngine;
-using Hax;
 using System;
 using System.Collections.Generic;
+using UnityEngine;
+using Hax;
 
 internal sealed class ChatMod : MonoBehaviour {
     List<string> CommandHistory { get; } = [];
