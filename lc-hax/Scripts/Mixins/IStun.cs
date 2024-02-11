@@ -1,3 +1,5 @@
+using UnityEngine;
+
 internal interface IStun { }
 
 internal static class IStunMixin {

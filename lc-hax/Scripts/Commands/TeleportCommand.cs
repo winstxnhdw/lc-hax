@@ -1,4 +1,6 @@
+using GameNetcodeStuff;
 using Hax;
+using UnityEngine;
 
 [Command("tp")]
 internal class TeleportCommand : ICommand {

@@ -1,5 +1,7 @@
 using System.Collections;
+using GameNetcodeStuff;
 using Hax;
+using UnityEngine;
 
 internal sealed class WeightMod : MonoBehaviour {
     IEnumerator SetWeight(object[] args) {

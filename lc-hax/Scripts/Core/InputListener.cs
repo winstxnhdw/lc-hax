@@ -1,4 +1,6 @@
 using System;
+using UnityEngine;
+using UnityEngine.InputSystem;
 
 internal class InputListener : MonoBehaviour {
     internal static event Action<bool>? OnShiftButtonHold;

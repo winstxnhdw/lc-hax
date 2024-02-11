@@ -1,4 +1,5 @@
 using System;
+using UnityEngine;
 
 internal class ScreenListener : MonoBehaviour {
     internal static event Action? onScreenSizeChange;

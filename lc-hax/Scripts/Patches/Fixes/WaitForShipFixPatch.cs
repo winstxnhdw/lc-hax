@@ -1,6 +1,7 @@
 using System.Collections;
 using HarmonyLib;
 using Hax;
+using UnityEngine;
 
 // Sometimes, especially in bigger lobbies, the ship stays forever deadlocked on "Wait for ship to land" because the server failed to receive a
 // PlayerHasRevivedServerRpc from one of the players at end of round. This patch sends another RPC a few seconds after round end, which increments

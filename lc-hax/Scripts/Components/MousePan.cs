@@ -1,4 +1,6 @@
 using Hax;
+using UnityEngine;
+using UnityEngine.InputSystem;
 
 internal class MousePan : MonoBehaviour {
     float Sensitivity { get; set; } = 0.2f;

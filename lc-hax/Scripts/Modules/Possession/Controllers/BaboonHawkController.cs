@@ -1,4 +1,5 @@
 using Hax;
+using Unity.Netcode;
 
 enum BaboonState {
     SCOUTING = 0,

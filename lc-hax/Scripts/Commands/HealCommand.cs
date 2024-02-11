@@ -1,4 +1,6 @@
+using GameNetcodeStuff;
 using Hax;
+using UnityEngine;
 
 [Command("heal")]
 internal class HealCommand : IStun, ICommand {

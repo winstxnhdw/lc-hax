@@ -1,4 +1,6 @@
+using GameNetcodeStuff;
 using Hax;
+using UnityEngine;
 
 [Command("fakedeath")]
 internal class FakeDeathCommand : ICommand {

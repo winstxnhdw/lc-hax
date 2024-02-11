@@ -1,5 +1,6 @@
 using HarmonyLib;
 using Hax;
+using Steamworks;
 
 [HarmonyPatch(typeof(GameNetworkManager), nameof(GameNetworkManager.StartClient))]
 class LobbyDependencyPatch {

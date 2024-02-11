@@ -1,4 +1,5 @@
 using Hax;
+using UnityEngine;
 
 internal class MinimalGUIMod : MonoBehaviour {
     bool InGame { get; set; } = false;

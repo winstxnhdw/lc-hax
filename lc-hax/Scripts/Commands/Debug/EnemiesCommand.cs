@@ -2,6 +2,7 @@ using Hax;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using UnityEngine;
 
 [DebugCommand("enemies")]
 internal class EnemiesCommand : ICommand {

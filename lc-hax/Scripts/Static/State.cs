@@ -1,3 +1,5 @@
+using Steamworks;
+
 namespace Hax;
 
 internal static class State {

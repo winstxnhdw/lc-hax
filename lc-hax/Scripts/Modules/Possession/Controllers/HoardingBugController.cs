@@ -1,4 +1,5 @@
 using Hax;
+using Unity.Netcode;
 
 internal class HoardingBugController : IEnemyController<HoarderBugAI> {
     void GrabItem(HoarderBugAI enemyInstance, GrabbableObject item) {
