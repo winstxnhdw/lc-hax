@@ -34,9 +34,13 @@ class SubmitChatPatch {
             return true;
         }
 
-        Helper.Try(() => Chat.ExecuteCommand(hudManager.chatTextField.text),
-            (Exception exception) => Logger.Write(exception.ToString())
-        );
+        try {
+            Chat.ExecuteCommand(hudManager.chatTextField.text);
+        }
+
+        catch (Exception exception) {
+            Logger.Write(exception.ToString());
+        }
 
         return false;
     }
