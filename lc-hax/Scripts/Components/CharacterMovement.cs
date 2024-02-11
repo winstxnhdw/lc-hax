@@ -33,8 +33,8 @@ internal class CharacterMovement : MonoBehaviour {
         this.Keyboard = Keyboard.current;
         this.CharacterController = this.gameObject.AddComponent<CharacterController>();
         this.CharacterController.height = 0.0f; // Adjust as needed
-        this.CharacterController.center = new Vector3(0f, 0.3f, 0.5f); // Adjust as needed
-        this.transform.localScale = new Vector3(0.0f, 0.0f, 0.1f);
+        this.CharacterController.center = new Vector3(0.0f, 0.3f, 0.5f); // Adjust as needed
+        this.transform.localScale = new Vector3(0.0f, 0.0f, -0.1f);
     }
 
     // Update is called once per frame
@@ -102,12 +102,11 @@ internal class CharacterMovement : MonoBehaviour {
 
     // Apply gravity to the character controller
     void ApplyGravity() {
-        this.VelocityY = this.CharacterController?.isGrounded is not false
+        this.VelocityY = this.CharacterController?.isGrounded is not true
             ? this.VelocityY - (CharacterMovement.Gravity * Time.deltaTime)
             : 0.0f;
 
-        Vector3 motion = Vector3.zero;
-        motion.y = this.VelocityY;
+        Vector3 motion = new(0.0f, this.VelocityY, 0.0f);
         _ = this.CharacterController?.Move(motion * Time.deltaTime);
     }
 
