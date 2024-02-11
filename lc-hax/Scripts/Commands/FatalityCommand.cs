@@ -119,7 +119,7 @@ internal class FatalityCommand : ICommand {
 
         string? key = Helper.FuzzyMatch(
             string.Join(" ", args[1..]).ToTitleCase(),
-            [.. enemyHandlers.Keys]
+            enemyHandlers.Keys
         );
 
         if (string.IsNullOrWhiteSpace(key)) {

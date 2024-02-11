@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using Quickenshtein;
 
 namespace Hax;
@@ -54,4 +55,6 @@ internal static partial class Helper {
 
         return closestMatch;
     }
+
+    internal static string? FuzzyMatch(string? query, IEnumerable<string> strings) => Helper.FuzzyMatch(query, strings);
 }

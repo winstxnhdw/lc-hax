@@ -44,7 +44,7 @@ internal class SpawnCommand : ICommand {
             return;
         }
 
-        string? key = Helper.FuzzyMatch(args[0], [.. SpawnCommand.HostileEnemies.Keys]);
+        string? key = Helper.FuzzyMatch(args[0], SpawnCommand.HostileEnemies.Keys);
 
         if (key is null) {
             Chat.Print("Invalid enemy!");
