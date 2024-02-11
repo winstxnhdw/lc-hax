@@ -11,27 +11,17 @@ internal class CharacterMovement : MonoBehaviour {
     const float SprintDuration = 0.0f; // Duration sprint key must be held for sprinting (adjust as needed)
     const float JumpForce = 9.2f;
     const float Gravity = 18.0f;
-    const float MaxVelocityMagnitude = 15.0f; // Adjust as needed
 
     // used to sync with the enemy to make sure it plays the correct animation when it is moving
     public bool IsMoving { get; private set; } = false;
     public bool IsSprinting { get; private set; } = false;
 
     // Components and state variables
-    CharacterController CharacterController { get; set; }
+    CharacterController? CharacterController { get; set; }
     float VelocityY { get; set; } = 0.0f;
     bool IsSprintHeld { get; set; } = false;
     float SprintTimer { get; set; } = 0.0f;
     Keyboard Keyboard { get; set; } = Keyboard.current;
-
-    // Adjust collision box in Awake
-    const float AdjustedWidth = 0.0f; // Adjust as needed
-    const float AdjustedHeight = 0.0f; // Adjust as needed
-    const float AdjustedDepth = 0.0f; // Adjust as needed
-
-    Vector3 velocity;
-
-    internal CharacterMovement() => this.CharacterController = this.GetComponent<CharacterController>();
 
     // Initialize method
     internal void Init() {
@@ -43,13 +33,8 @@ internal class CharacterMovement : MonoBehaviour {
         this.Keyboard = Keyboard.current;
         this.CharacterController = this.gameObject.AddComponent<CharacterController>();
         this.CharacterController.height = 0.0f; // Adjust as needed
-        this.CharacterController.center = new Vector3(0f, 0.3f, 0.5f); // Adjust as needed
-
-        this.transform.localScale = new Vector3(
-            CharacterMovement.AdjustedWidth,
-            this.transform.localScale.y,
-            CharacterMovement.AdjustedDepth
-        );
+        this.CharacterController.center = new Vector3(0.0f, 0.3f, 0.5f); // Adjust as needed
+        this.transform.localScale = new Vector3(0.0f, 0.0f, -0.1f);
     }
 
     // Update is called once per frame
@@ -85,7 +70,7 @@ internal class CharacterMovement : MonoBehaviour {
         this.ApplyGravity();
 
         // Attempt to move
-        _ = this.CharacterController.Move(moveDirection * Time.deltaTime);
+        _ = this.CharacterController?.Move(moveDirection * Time.deltaTime);
 
         // Jump if jump key is pressed
         if (this.Keyboard.spaceKey.wasPressedThisFrame) {
@@ -117,18 +102,14 @@ internal class CharacterMovement : MonoBehaviour {
 
     // Apply gravity to the character controller
     void ApplyGravity() {
-        if (!CharacterController.isGrounded) {
-            velocity.y -= Gravity * Time.deltaTime;
-        }
-        else if (velocity.y < 0) {
-            velocity.y = 0f;
-        }
-        Vector3 motion = velocity * Time.deltaTime;
-        _ = CharacterController.Move(motion);
+        this.VelocityY = this.CharacterController?.isGrounded is not true
+            ? this.VelocityY - (CharacterMovement.Gravity * Time.deltaTime)
+            : 0.0f;
+
+        Vector3 motion = new(0.0f, this.VelocityY, 0.0f);
+        _ = this.CharacterController?.Move(motion * Time.deltaTime);
     }
 
     // Jumping action
-    void Jump() {
-        velocity.y = JumpForce;
-    }
+    void Jump() => this.VelocityY = CharacterMovement.JumpForce;
 }
