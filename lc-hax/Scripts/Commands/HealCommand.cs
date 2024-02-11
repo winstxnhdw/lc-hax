@@ -13,7 +13,6 @@ internal class HealCommand : IStun, ICommand {
         localPlayer.ResetZAndXRotation();
         localPlayer.isClimbingLadder = false;
         localPlayer.thisController.enabled = true;
-        localPlayer.health = 100;
         localPlayer.disableLookInput = false;
         localPlayer.isPlayerDead = false;
         localPlayer.isPlayerControlled = true;
@@ -30,9 +29,6 @@ internal class HealCommand : IStun, ICommand {
         }
 
         localPlayer.Crouch(false);
-        localPlayer.playerBodyAnimator?.SetBool("Limp", false);
-        localPlayer.criticallyInjured = false;
-        localPlayer.bleedingHeavily = false;
         localPlayer.activatingItem = false;
         localPlayer.twoHanded = false;
         localPlayer.inSpecialInteractAnimation = false;
@@ -99,8 +95,6 @@ internal class HealCommand : IStun, ICommand {
             Helper.CreateComponent<WaitForBehaviour>("Respawn")
                   .SetPredicate(() => startOfRound.shipIsLeaving)
                   .Init(hudManager.localPlayer.KillPlayer);
-
-            return new Result(true);
         }
 
         hudManager.localPlayer.health = 100;
