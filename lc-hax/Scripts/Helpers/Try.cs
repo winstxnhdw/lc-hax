@@ -24,14 +24,4 @@ internal static partial class Helper {
             return false;
         }
     }
-
-    internal static void Try(Action function, Action<Exception>? onError = null) {
-        try {
-            function();
-        }
-
-        catch (Exception exception) {
-            onError?.Invoke(exception);
-        }
-    }
 }
