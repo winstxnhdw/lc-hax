@@ -27,10 +27,10 @@ internal class BuildCommand : ICommand {
         }
 
         Unlockable unlockable = (Unlockable)unlockables[key];
-
-        Chat.Print($"Attempting to build a {string.Join(' ', unlockable.ToString().Split('_')).ToTitleCase()}!");
         Helper.BuyUnlockable(unlockable);
         Helper.ReturnUnlockable(unlockable);
+
+        Chat.Print($"Attempting to build a {string.Join(' ', unlockable.ToString().Split('_')).ToTitleCase()}!");
 
         if (Helper.GetUnlockable(unlockable) is not PlaceableShipObject shipObject) {
             Chat.Print("Unlockable is not found or placeable!");

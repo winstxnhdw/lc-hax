@@ -24,5 +24,5 @@ internal sealed class SaneMod : MonoBehaviour {
         }
     }
 
-    void Start() => _ = this.StartResilientCoroutine(this.SetSanity);
+    void Start() => this.StartResilientCoroutine(this.SetSanity);
 }
