@@ -114,7 +114,7 @@ The complete feature set includes the following.
 | Spoof a server message        | `/say <player> <message>`                      |
 | Transmit a signal             | `/signal <message>`                            |
 | Modify shovel damage          | `/shovel <force=1>`                            |
-| Give or take money            | `/money <amount>`                              |
+| Give or take credit(s)        | `/credit <amount>`                             |
 | Add or remove experience      | `/xp <amount>`                                 |
 | Buy an item                   | `/buy <item> <quantity=1>`                     |
 | Deposit valuable item(s)      | `/sell <quota?>`                               |

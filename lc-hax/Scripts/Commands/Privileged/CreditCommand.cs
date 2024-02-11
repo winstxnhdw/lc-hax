@@ -1,8 +1,8 @@
 using System;
 using Hax;
 
-[Command("money")]
-internal class MoneyCommand : ICommand {
+[PrivilegedCommand("credit")]
+internal class CreditCommand : ICommand {
     public void Execute(StringArray args) {
         if (Helper.Terminal is not Terminal terminal) return;
         if (args.Length is 0) {
