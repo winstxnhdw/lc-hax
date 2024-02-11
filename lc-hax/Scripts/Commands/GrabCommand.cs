@@ -56,7 +56,7 @@ internal class GrabCommand : ICommand {
 
         GrabbableObject grabbable = grabbableObjects[key];
 
-        if (player.GrabObject(grabbable)) {
+        if (!player.GrabObject(grabbable)) {
             return "You must have an empty inventory slot!";
         }
 
