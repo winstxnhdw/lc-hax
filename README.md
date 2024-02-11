@@ -301,8 +301,13 @@ Add-MpPreference -ExclusionPath $pwd, "$env:TEMP\.net\SharpMonoInjector"
 
 If `lc-hax` is not your fancy, here are excellent alternatives that may suit your needs!
 
-- [Project Apparatus](https://github.com/KaylinOwO/Project-Apparatus)
-- [Lethal Menu](https://github.com/IcyRelic/LethalMenu)
+### Project Apparatus
+
+[Project Apparatus](https://github.com/KaylinOwO/Project-Apparatus) is a popular GUI-first internal cheat based on Infinite Company.
+
+### Lethal Menu
+
+[Lethal Menu](https://github.com/IcyRelic/LethalMenu) is a powerful GUI-first internal cheat based on `Project Apparatus` and `lc-hax`. It supports chams, super speed, fast climbing and more.
 
 ## Credits
 
