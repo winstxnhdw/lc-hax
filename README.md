@@ -103,7 +103,7 @@ The complete feature set includes the following.
 | Bomb player                   | `/bomb <player>`                               |
 | Bombard player                | `/bombard <player>`                            |
 | Lure enemies to player        | `/hate <player>`                               |
-| Spawn masked enemy on player  | `/mask <player?> <amount?>`                    |
+| Spawn masked enemy on player  | `/mask <player?> <amount=1>`                   |
 | Heal player                   | `/heal <player?>`                              |
 | Kill player                   | `/kill <player?>`                              |
 | Kill all players              | `/kill --all`                                  |
@@ -164,8 +164,8 @@ These commands are only available when the user is in superuser mode.
 | Action                        | Command                                        |
 | ----------------------------- | ---------------------------------------------- |
 | Set the timescale             | `/timescale <scale>`                           |
-| Set the quota                 | `/quota <amount> <fulfilled?>`                 |
-| Spawn enem(ies) on player     | `/spawn <enemy> <player> <amount?>`            |
+| Set the quota                 | `/quota <amount> <fulfilled=0>`                |
+| Spawn enem(ies) on player     | `/spawn <enemy> <player> <amount=1>`           |
 
 ## Special Commands
 
