@@ -19,6 +19,7 @@ class EnableChatPatch {
     static void Postfix(ref PlayerControllerB ___localPlayer, bool __state) => ___localPlayer.isPlayerDead = __state;
 }
 
+[HarmonyBefore]
 [HarmonyPatch(typeof(HUDManager), "SubmitChat_performed")]
 class SubmitChatPatch {
     static bool Prefix(HUDManager __instance, ref bool __state) {
