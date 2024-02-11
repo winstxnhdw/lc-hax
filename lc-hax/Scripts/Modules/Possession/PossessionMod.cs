@@ -12,7 +12,7 @@ internal sealed class PossessionMod : MonoBehaviour {
 
     Possession Possession { get; } = new();
     Coroutine? UpdateCoroutine { get; set; } = null;
-    CharacterMovement? RigidbodyKeyboard { get; set; } = null;
+    CharacterMovement? CharacterMovement { get; set; } = null;
     KeyboardMovement? Keyboard { get; set; } = null;
     MousePan? MousePan { get; set; } = null;
 
@@ -34,7 +34,7 @@ internal sealed class PossessionMod : MonoBehaviour {
     };
 
     void Awake() {
-        this.RigidbodyKeyboard = this.gameObject.AddComponent<CharacterMovement>();
+        this.CharacterMovement = this.gameObject.AddComponent<CharacterMovement>();
         this.Keyboard = this.gameObject.AddComponent<KeyboardMovement>();
         this.MousePan = this.gameObject.AddComponent<MousePan>();
         this.enabled = false;
@@ -81,7 +81,7 @@ internal sealed class PossessionMod : MonoBehaviour {
 
     void UpdateComponentsOnCurrentState(bool thisGameObjectIsEnabled) {
         if (this.MousePan is not MousePan mousePan) return;
-        if (this.RigidbodyKeyboard is not CharacterMovement rigidbodyKeyboard) return;
+        if (this.CharacterMovement is not CharacterMovement rigidbodyKeyboard) return;
         if (this.Keyboard is not KeyboardMovement keyboard) return;
 
         mousePan.enabled = thisGameObjectIsEnabled;
@@ -104,7 +104,7 @@ internal sealed class PossessionMod : MonoBehaviour {
 
     // Updates position and rotation of possessed enemy at the end of frame
     void EndOfFrameUpdate() {
-        if (this.RigidbodyKeyboard is not CharacterMovement rigidbodyKeyboard) return;
+        if (this.CharacterMovement is not CharacterMovement characterMovement) return;
         if (this.Possession.Enemy is not EnemyAI enemy) return;
         if (Helper.LocalPlayer is not PlayerControllerB localPlayer) return;
         if (Helper.CurrentCamera is not Camera camera || !camera.enabled) return;
@@ -120,7 +120,7 @@ internal sealed class PossessionMod : MonoBehaviour {
                 agent.updateRotation = false;
             }
 
-            rigidbodyKeyboard.Init();
+            characterMovement.Init();
             this.transform.position = enemy.transform.position;
             this.UpdateComponentsOnCurrentState(true);
         }
@@ -133,7 +133,7 @@ internal sealed class PossessionMod : MonoBehaviour {
 
         else if (controller.IsAbleToMove(enemy)) {
             this.UpdateEnemyPositionToHere(enemy);
-            this.HandleEnemyMovements(controller, enemy, rigidbodyKeyboard.IsMoving, rigidbodyKeyboard.IsSprinting);
+            this.HandleEnemyMovements(controller, enemy, characterMovement.IsMoving, characterMovement.IsSprinting);
             this.EnemyUpdate(controller, enemy);
         }
 
