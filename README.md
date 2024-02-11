@@ -104,7 +104,7 @@ The complete feature set includes the following.
 | Bombard player                | `/bombard <player>`                            |
 | Lure enemies to player        | `/hate <player>`                               |
 | Spawn masked enemy on player  | `/mask <player?> <amount=1>`                   |
-| Heal the player               | `/heal <player?>`                              |
+| Heal or revive the player     | `/heal <player?>`                              |
 | Kill player                   | `/kill <player?>`                              |
 | Kill all players              | `/kill --all`                                  |
 | Kill all enemies              | `/kill --enemy`                                |
