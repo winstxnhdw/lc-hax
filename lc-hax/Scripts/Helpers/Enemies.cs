@@ -60,7 +60,7 @@ internal static partial class Helper {
     }
 
     internal static EnemyAI? SpawnEnemy(Vector3 position, GameObject prefab) {
-        if(prefab == null) return null;
+        if (prefab == null) return null;
         GameObject enemy = Object.Instantiate(prefab, position, Quaternion.identity);
 
         if (!enemy.TryGetComponent(out NetworkObject networkObject)) {
