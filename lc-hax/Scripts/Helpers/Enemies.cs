@@ -4,6 +4,7 @@ using System.Linq;
 using GameNetcodeStuff;
 using Unity.Netcode;
 using UnityEngine;
+using Object = UnityEngine.Object;
 
 namespace Hax;
 
@@ -42,23 +43,39 @@ internal static partial class Helper {
         return playerControllerB != null && playerControllerB.IsSelf();
     }
 
-    private static Dictionary<string, GameObject>? _AllSpawnableEnemies;
+    internal static bool IsHostileEnemy(EnemyType enemy) =>
+        !enemy.enemyName.Contains("Docile Locust Bees", StringComparison.OrdinalIgnoreCase) ||
+        !enemy.enemyName.Contains("Manticoil", StringComparison.OrdinalIgnoreCase);
 
-    internal static Dictionary<string, GameObject> AllSpawnableEnemies {
-        get {
-            if (_AllSpawnableEnemies == null) {
-                _AllSpawnableEnemies = [];
-                foreach (EnemyType enemy in Resources.FindObjectsOfTypeAll<EnemyType>()) {
-                    if (enemy.enemyName.Contains("Docile Locust Bees", StringComparison.OrdinalIgnoreCase)) continue;
-                    if (enemy.enemyName.Contains("Manticoil", StringComparison.OrdinalIgnoreCase)) continue;
-                    _ = _AllSpawnableEnemies.TryAdd(enemy.enemyName, enemy.enemyPrefab);
-                }
-            }
+    internal static Dictionary<string, GameObject> HostileEnemies { get; } =
+        Resources.FindObjectsOfTypeAll<EnemyType>()
+            .Where(Helper.IsHostileEnemy)
+            .GroupBy(enemy => enemy.enemyName)
+            .ToDictionary(enemyGroup => enemyGroup.Key, enemy => Enumerable.First(enemy).enemyPrefab);
 
-            return _AllSpawnableEnemies;
+    internal static void SpawnEnemies(Vector3 position, GameObject prefab, ulong amount = 1) {
+        for (ulong i = 0; i < amount; i++) {
+            _ = Helper.SpawnEnemy(position, prefab);
         }
     }
 
+    internal static EnemyAI? SpawnEnemy(Vector3 position, GameObject prefab) {
+        if(prefab == null) return null;
+        GameObject enemy = Object.Instantiate(prefab, position, Quaternion.identity);
+
+        if (!enemy.TryGetComponent(out NetworkObject networkObject)) {
+            Object.Destroy(enemy);
+            return null;
+        }
+
+        networkObject.Spawn(true);
+        // get the enemy ai component
+        if (!enemy.TryGetComponent(out EnemyAI enemyAI)) {
+            Object.Destroy(enemy);
+            return null;
+        }
+        return enemyAI;
+    }
 
 
     internal static GrabbableObject? FindNearbyItem(this EnemyAI instance, float grabRange = 1f) {
