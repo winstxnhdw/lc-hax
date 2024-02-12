@@ -5,7 +5,7 @@ using Hax;
 internal class KeyboardMovement : MonoBehaviour {
     const float BaseSpeed = 20;
     float SprintMultiplier { get; set; } = 1;
-    Vector3 LastPosition { get; set; }
+    internal Vector3 LastPosition { get; set; }
 
     void OnEnable() => this.LastPosition = this.transform.position;
 
