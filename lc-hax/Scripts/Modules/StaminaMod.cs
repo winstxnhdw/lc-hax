@@ -1,7 +1,5 @@
 using System.Collections;
-using GameNetcodeStuff;
 using Hax;
-using UnityEngine;
 
 internal sealed class StaminaMod : MonoBehaviour {
     IEnumerator SetSprint(object[] args) {

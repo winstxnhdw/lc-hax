@@ -1,7 +1,5 @@
 using System;
 using System.Linq;
-using GameNetcodeStuff;
-using UnityEngine;
 using Hax;
 
 internal class ESPMod : MonoBehaviour {

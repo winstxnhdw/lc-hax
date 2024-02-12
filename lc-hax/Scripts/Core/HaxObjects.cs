@@ -1,6 +1,3 @@
-using UnityEngine;
-using UnityEngine.Rendering.HighDefinition;
-
 internal class HaxObjects : MonoBehaviour {
     internal static HaxObjects? Instance { get; private set; }
 

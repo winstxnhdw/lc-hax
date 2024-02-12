@@ -2,7 +2,6 @@
 
 using HarmonyLib;
 using Hax;
-using UnityEngine;
 
 [HarmonyPatch(typeof(StartOfRound), nameof(StartOfRound.UpdatePlayerVoiceEffects))]
 class HearPatch {

@@ -1,8 +1,5 @@
 using System.Collections.Generic;
 using System.Linq;
-using GameNetcodeStuff;
-using UnityEngine;
-using UnityEngine.UIElements;
 
 namespace Hax;
 
@@ -53,16 +50,11 @@ internal static partial class Helper {
     internal static GrabbableObject? GetGrabbableFromGift(this GiftBoxItem giftBox) {
         GameObject? content = giftBox.Reflect().GetInternalField<GameObject>("objectInPresent");
         if (content == null) return null;
-        if (content.TryGetComponent(out GrabbableObject grabbable)) {
-            return grabbable;
-        }
-
-        return null;
+        return content.TryGetComponent(out GrabbableObject grabbable) ? grabbable : (GrabbableObject?)null;
     }
 
     internal static int GetGiftBoxActualValue(this GiftBoxItem giftBox) {
-        if (giftBox == null) return 0;
-        return giftBox.Reflect().GetInternalField<int>("objectInPresentValue");
+        return giftBox == null ? 0 : giftBox.Reflect().GetInternalField<int>("objectInPresentValue");
     }
 
     internal static string ToEspLabel(this GrabbableObject grabbable) {

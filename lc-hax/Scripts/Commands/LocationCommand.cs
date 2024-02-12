@@ -1,5 +1,4 @@
 using Hax;
-using UnityEngine;
 
 [Command("xyz")]
 internal class LocationCommand : ICommand {

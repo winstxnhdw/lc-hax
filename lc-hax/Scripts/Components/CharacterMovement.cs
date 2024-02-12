@@ -1,6 +1,3 @@
-using UnityEngine;
-using GameNetcodeStuff;
-using UnityEngine.InputSystem;
 using Hax;
 
 internal class CharacterMovement : MonoBehaviour {

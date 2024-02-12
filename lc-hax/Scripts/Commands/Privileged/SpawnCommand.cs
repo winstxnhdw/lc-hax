@@ -1,6 +1,4 @@
-using GameNetcodeStuff;
 using Hax;
-using UnityEngine;
 
 [PrivilegedCommand("spawn")]
 internal class SpawnCommand : ICommand {

@@ -1,5 +1,3 @@
-using UnityEngine;
-
 internal static partial class Extensions {
     internal static Vector3 Copy(this Vector3 vector) {
         return new Vector3(
