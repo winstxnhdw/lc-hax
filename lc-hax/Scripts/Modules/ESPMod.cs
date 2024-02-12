@@ -62,7 +62,7 @@ internal class ESPMod : MonoBehaviour {
                 return;
             }
 
-            this.RenderLabel($"{grabbableObject.ToEspLabel()} ${grabbableObject.scrapValue}").Invoke(
+            this.RenderLabel($"{grabbableObject.ToEspLabel()} ${grabbableObject.GetScrapValue()}").Invoke(
                 Helper.GetLootColor(grabbableObject),
                 rendererCentrePoint
             );
