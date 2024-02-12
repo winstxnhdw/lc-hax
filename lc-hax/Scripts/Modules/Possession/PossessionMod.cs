@@ -13,6 +13,7 @@ internal sealed class PossessionMod : MonoBehaviour {
     Possession Possession { get; } = new();
     Coroutine? UpdateCoroutine { get; set; } = null;
     CharacterMovement? CharacterMovement { get; set; } = null;
+    KeyboardMovement? Keyboard { get; set; } = null;
     MousePan? MousePan { get; set; } = null;
 
     bool FirstUpdate { get; set; } = true;
@@ -34,6 +35,7 @@ internal sealed class PossessionMod : MonoBehaviour {
 
     void Awake() {
         this.CharacterMovement = this.gameObject.AddComponent<CharacterMovement>();
+        this.Keyboard = this.gameObject.AddComponent<KeyboardMovement>();
         this.MousePan = this.gameObject.AddComponent<MousePan>();
         this.enabled = false;
 
@@ -80,9 +82,11 @@ internal sealed class PossessionMod : MonoBehaviour {
     void UpdateComponentsOnCurrentState(bool thisGameObjectIsEnabled) {
         if (this.MousePan is not MousePan mousePan) return;
         if (this.CharacterMovement is not CharacterMovement rigidbodyKeyboard) return;
+        if (this.Keyboard is not KeyboardMovement keyboard) return;
 
         mousePan.enabled = thisGameObjectIsEnabled;
         rigidbodyKeyboard.enabled = !this.NoClipEnabled;
+        keyboard.enabled = this.NoClipEnabled;
     }
 
     IEnumerator EndOfFrameCoroutine() {
@@ -115,10 +119,9 @@ internal sealed class PossessionMod : MonoBehaviour {
                 agent.updatePosition = false;
                 agent.updateRotation = false;
             }
-            characterMovement.enabled = false;
-            this.transform.position = enemy.transform.position;
-            characterMovement.enabled = true;
+
             characterMovement.Init();
+            this.transform.position = enemy.transform.position;
             this.UpdateComponentsOnCurrentState(true);
         }
 
@@ -160,8 +163,8 @@ internal sealed class PossessionMod : MonoBehaviour {
     internal void Possess(EnemyAI enemy) {
         this.Unpossess();
 
-        this.FirstUpdate = true;
         this.Possession.SetEnemy(enemy);
+        this.FirstUpdate = true;
     }
 
     // Releases possession of the current enemy
