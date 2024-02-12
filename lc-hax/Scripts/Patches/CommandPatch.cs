@@ -35,7 +35,7 @@ class SubmitChatPatch {
         }
 
         try {
-            Chat.ExecuteCommand(hudManager.chatTextField.text);
+            Chat.ExecuteCommand(hudManager.chatTextField.text.TrimEnd());
         }
 
         catch (Exception exception) {
