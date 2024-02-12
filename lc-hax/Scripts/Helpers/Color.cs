@@ -22,9 +22,9 @@ static partial class Helper {
             ShotgunItem => Helper.ExtraColors.Khaki,
             HauntedMaskItem => Helper.ExtraColors.MediumVioletRed,
             _ when scrap.itemProperties.isDefensiveWeapon => Helper.ExtraColors.LawnGreen,
+            _ when scrap.GetScrapValue() > 50 => Helper.ExtraColors.Gold, 
             _ when scrap.GetScrapValue() is > 15 and <= 35 => Helper.ExtraColors.LightSalmon,
             _ when scrap.GetScrapValue() >= 36 => Helper.ExtraColors.GreenYellow,
-            _ when scrap.GetScrapValue() > 50 => Helper.ExtraColors.Gold,
             _ => Helper.ExtraColors.Silver,
         };
 
