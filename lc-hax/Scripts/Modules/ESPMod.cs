@@ -12,12 +12,15 @@ internal class ESPMod : MonoBehaviour {
     Vector3[] StoryLogVectors { get; set; } = [];
 
     bool InGame { get; set; } = false;
+    bool IsMapLoaded { get; set; } = false;
     bool Enabled { get; set; } = true;
 
     void OnEnable() {
         GameListener.OnLevelGenerated += this.Initialise;
         GameListener.OnGameStart += this.Initialise;
         GameListener.OnGameEnd += this.OnGameEnd;
+        GameListener.OnLevelGenerated += this.OnMapLoaded;
+        GameListener.OnShipLeave += this.OnShipLeave;
         InputListener.OnPausePress += this.ToggleESP;
     }
 
@@ -25,12 +28,19 @@ internal class ESPMod : MonoBehaviour {
         GameListener.OnLevelGenerated -= this.Initialise;
         GameListener.OnGameStart -= this.Initialise;
         GameListener.OnGameEnd -= this.OnGameEnd;
+        GameListener.OnLevelGenerated -= this.OnMapLoaded;
+        GameListener.OnShipLeave -= this.OnShipLeave;
         InputListener.OnPausePress -= this.ToggleESP;
     }
 
     void OnGUI() {
         if (!this.Enabled || !this.InGame || Helper.CurrentCamera is not Camera camera) return;
 
+        this.RenderAlways(camera);
+        this.RenderWhenMapLoads(camera);
+    }
+
+    void RenderAlways(Camera camera) {
         this.PlayerRenderers.ForEach(rendererPair => {
             if (rendererPair.GameObject is not PlayerControllerB player) return;
             if (player.isPlayerDead || !player.isPlayerControlled) return;
@@ -44,21 +54,38 @@ internal class ESPMod : MonoBehaviour {
             );
         });
 
-        this.LandmineRenderers.WhereIsNotNull().ForEach(renderer => this.RenderBounds(
+        Helper.Grabbables.WhereIsNotNull().ForEach(grabbableObject => {
+            Vector3 rendererCentrePoint = camera.WorldToEyesPoint(grabbableObject.transform.position);
+
+            if (rendererCentrePoint.z <= 2.0f) {
+                return;
+            }
+
+            this.RenderLabel($"{grabbableObject.itemProperties.itemName} ${grabbableObject.scrapValue}").Invoke(
+                Color.gray,
+                rendererCentrePoint
+            );
+        });
+    }
+
+    void RenderWhenMapLoads(Camera camera) {
+        if (!this.IsMapLoaded) return;
+
+        this.LandmineRenderers.ForEach(renderer => this.RenderBounds(
             camera,
             renderer.bounds,
             Color.yellow,
             this.RenderLabel("Landmine")
         ));
 
-        this.TurretRenderers.WhereIsNotNull().ForEach(renderer => this.RenderBounds(
+        this.TurretRenderers.ForEach(renderer => this.RenderBounds(
             camera,
             renderer.bounds,
             Color.yellow,
             this.RenderLabel("Turret")
         ));
 
-        this.EntranceRenderers.WhereIsNotNull().ForEach(renderer => this.RenderBounds(
+        this.EntranceRenderers.ForEach(renderer => this.RenderBounds(
             camera,
             renderer.bounds,
             Color.yellow,
@@ -95,19 +122,6 @@ internal class ESPMod : MonoBehaviour {
             );
         });
 
-        Helper.Grabbables.WhereIsNotNull().ForEach(grabbableObject => {
-            Vector3 rendererCentrePoint = camera.WorldToEyesPoint(grabbableObject.transform.position);
-
-            if (rendererCentrePoint.z <= 2.0f) {
-                return;
-            }
-
-            this.RenderLabel($"{grabbableObject.itemProperties.itemName} ${grabbableObject.scrapValue}").Invoke(
-                Color.gray,
-                rendererCentrePoint
-            );
-        });
-
         if (Helper.StartOfRound?.shipBounds is Collider shipBounds) {
             this.RenderBounds(
                 camera,
@@ -126,6 +140,10 @@ internal class ESPMod : MonoBehaviour {
     }
 
     void OnGameEnd() => this.InGame = false;
+
+    void OnShipLeave() => this.IsMapLoaded = false;
+
+    void OnMapLoaded() => this.IsMapLoaded = true;
 
     void ToggleESP() => this.Enabled = !this.Enabled;
 
