@@ -12,8 +12,8 @@ internal sealed class PossessionMod : MonoBehaviour {
 
     Possession Possession { get; } = new();
     Coroutine? UpdateCoroutine { get; set; } = null;
+    GameObject? CharacterMovementInstance { get; set; } = null;
     CharacterMovement? CharacterMovement { get; set; } = null;
-    KeyboardMovement? Keyboard { get; set; } = null;
     MousePan? MousePan { get; set; } = null;
 
     bool FirstUpdate { get; set; } = true;
@@ -34,12 +34,25 @@ internal sealed class PossessionMod : MonoBehaviour {
     };
 
     void Awake() {
-        this.CharacterMovement = this.gameObject.AddComponent<CharacterMovement>();
-        this.Keyboard = this.gameObject.AddComponent<KeyboardMovement>();
+        this.InitCharacterMovement();
         this.MousePan = this.gameObject.AddComponent<MousePan>();
         this.enabled = false;
 
         PossessionMod.Instance = this;
+    }
+
+    void InitCharacterMovement(Vector3 initPos = default) {
+        this.CharacterMovementInstance = new GameObject("Hax_CharacterMovement");
+        this.CharacterMovementInstance.transform.position = initPos;
+        this.CharacterMovement = this.CharacterMovementInstance.AddComponent<CharacterMovement>();
+        this.CharacterMovement.Init();
+        DontDestroyOnLoad(this.CharacterMovementInstance);
+    }
+
+    void UnInitCharacterMovement() {
+        if (this.CharacterMovementInstance is not GameObject characterMovementInstance) return;
+
+        Destroy(characterMovementInstance);
     }
 
     void OnEnable() {
@@ -84,12 +97,11 @@ internal sealed class PossessionMod : MonoBehaviour {
 
     void UpdateComponentsOnCurrentState(bool thisGameObjectIsEnabled) {
         if (this.MousePan is not MousePan mousePan) return;
-        if (this.CharacterMovement is not CharacterMovement rigidbodyKeyboard) return;
-        if (this.Keyboard is not KeyboardMovement keyboard) return;
+        if (this.CharacterMovement is not CharacterMovement characterMovement) return;
 
         mousePan.enabled = thisGameObjectIsEnabled;
-        rigidbodyKeyboard.enabled = !this.NoClipEnabled;
-        keyboard.enabled = this.NoClipEnabled;
+        characterMovement.gameObject.SetActive(thisGameObjectIsEnabled);
+        characterMovement.SetNoClipMode(this.NoClipEnabled);
     }
 
     IEnumerator EndOfFrameCoroutine() {
@@ -123,19 +135,18 @@ internal sealed class PossessionMod : MonoBehaviour {
                 agent.updateRotation = false;
             }
 
-            characterMovement.Init();
-            this.transform.position = enemy.transform.position;
+            this.InitCharacterMovement(enemy.transform.position);
             this.UpdateComponentsOnCurrentState(true);
         }
 
         if (!this.EnemyControllers.TryGetValue(enemy.GetType(), out IController controller)) {
-            this.UpdateEnemyPositionToHere(enemy);
+            this.UpdateEnemyPosition(enemy);
             this.UpdateCameraPosition(camera, enemy);
             return;
         }
 
         else if (controller.IsAbleToMove(enemy)) {
-            this.UpdateEnemyPositionToHere(enemy);
+            this.UpdateEnemyPosition(enemy);
             this.HandleEnemyMovements(controller, enemy, characterMovement.IsMoving, characterMovement.IsSprinting);
             this.EnemyUpdate(controller, enemy);
         }
@@ -145,17 +156,22 @@ internal sealed class PossessionMod : MonoBehaviour {
     }
 
     void UpdateCameraPosition(Camera camera, EnemyAI enemy) {
-        camera.transform.position = this.transform.position + (3.0f * (Vector3.up - enemy.transform.forward));
+        if (this.CharacterMovement is not CharacterMovement characterMovement) return;
+
+        camera.transform.position = characterMovement.transform.position + (3.0f * (Vector3.up - enemy.transform.forward));
         camera.transform.rotation = this.transform.rotation;
+        characterMovement.transform.rotation = this.transform.rotation;
     }
 
     // Updates enemy's position to match the possessed object's position
-    void UpdateEnemyPositionToHere(EnemyAI enemy) {
+    void UpdateEnemyPosition(EnemyAI enemy) {
+        if (this.CharacterMovement is not CharacterMovement characterMovement) return;
+
         enemy.updatePositionThreshold = 0;
         Vector3 enemyEuler = enemy.transform.eulerAngles;
         enemyEuler.y = this.transform.eulerAngles.y;
         enemy.transform.eulerAngles = enemyEuler;
-        enemy.transform.position = this.transform.position;
+        enemy.transform.position = characterMovement.transform.position;
     }
 
     // Disables/enables colliders of the possessed enemy
@@ -166,18 +182,19 @@ internal sealed class PossessionMod : MonoBehaviour {
     internal void Possess(EnemyAI enemy) {
         this.Unpossess();
 
-        this.Possession.SetEnemy(enemy);
         this.FirstUpdate = true;
+        this.Possession.SetEnemy(enemy);
     }
 
     // Releases possession of the current enemy
     internal void Unpossess() {
+        this.UnInitCharacterMovement();
         if (this.Possession.Enemy is not EnemyAI enemy) return;
         if (enemy.agent.Unfake() is NavMeshAgent navMeshAgent) {
             navMeshAgent.updatePosition = true;
             navMeshAgent.updateRotation = true;
 
-            this.UpdateEnemyPositionToHere(enemy);
+            this.UpdateEnemyPosition(enemy);
             _ = enemy.agent.Warp(enemy.transform.position);
         }
 
