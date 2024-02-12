@@ -22,13 +22,10 @@ internal static partial class Helper {
 
     internal static GrabbableObject? GetGrabbableFromGift(this GiftBoxItem giftBox) {
         GameObject? content = giftBox.Reflect().GetInternalField<GameObject>("objectInPresent");
-        if (content == null) return null;
-        return content.TryGetComponent(out GrabbableObject grabbable) ? grabbable : null;
+        return content == null ? null : content.TryGetComponent(out GrabbableObject grabbable) ? grabbable : null;
     }
 
-    internal static int GetGiftBoxActualValue(this GiftBoxItem giftBox) {
-        return giftBox == null ? 0 : giftBox.Reflect().GetInternalField<int>("objectInPresentValue");
-    }
+    internal static int GetGiftBoxActualValue(this GiftBoxItem giftBox) => giftBox == null ? 0 : giftBox.Reflect().GetInternalField<int>("objectInPresentValue");
 
     internal static string ToEspLabel(this GrabbableObject grabbable) {
         if (grabbable == null) return "";
