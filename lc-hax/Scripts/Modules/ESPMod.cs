@@ -50,6 +50,7 @@ internal class ESPMod : MonoBehaviour {
             this.RenderBounds(
                 camera,
                 rendererPair.Renderer.bounds,
+                Helper.ExtraColors.Aquamarine,
                 this.RenderLabel(label)
             );
         });
