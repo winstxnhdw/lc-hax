@@ -1,10 +1,5 @@
-using System;
-using System.Linq;
-using System.Collections.Generic;
 using GameNetcodeStuff;
-using UnityObject = UnityEngine.Object;
 using Hax;
-using Unity.Netcode;
 using UnityEngine;
 
 [PrivilegedCommand("spawn")]
@@ -51,11 +46,11 @@ internal class SpawnCommand : ICommand {
             string? key = Helper.FuzzyMatch(args[0], Helper.HostileEnemies.Keys);
             if (key is null) {
                 Chat.Print("Invalid enemy!");
+                return;
             }
 
-            EnemyAI enemy = Helper.SpawnEnemy(camera.transform.position, Helper.HostileEnemies[key]);
+            EnemyAI? enemy = Helper.SpawnEnemy(camera.transform.position, Helper.HostileEnemies[key]);
 
-            // possess the enemy
             if (enemy is not null) {
                 PossessionMod.Instance?.Possess(enemy);
                 Helper.SendNotification("Spawner", $"Spawning {key} and possessing it.", false);

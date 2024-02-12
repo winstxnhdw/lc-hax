@@ -55,14 +55,15 @@ internal class ESPMod : MonoBehaviour {
         });
 
         Helper.Grabbables.WhereIsNotNull().ForEach(grabbableObject => {
+            if (grabbableObject == null) return;
             Vector3 rendererCentrePoint = camera.WorldToEyesPoint(grabbableObject.transform.position);
 
             if (rendererCentrePoint.z <= 2.0f) {
                 return;
             }
 
-            this.RenderLabel($"{grabbableObject.itemProperties.itemName} ${grabbableObject.scrapValue}").Invoke(
-                Color.gray,
+            this.RenderLabel($"{grabbableObject.ToEspLabel()} ${grabbableObject.scrapValue}").Invoke(
+                Helper.GetLootColor(grabbableObject),
                 rendererCentrePoint
             );
         });
@@ -74,21 +75,21 @@ internal class ESPMod : MonoBehaviour {
         this.LandmineRenderers.ForEach(renderer => this.RenderBounds(
             camera,
             renderer.bounds,
-            Color.yellow,
+            Helper.ExtraColors.OrangeRed,
             this.RenderLabel("Landmine")
         ));
 
         this.TurretRenderers.ForEach(renderer => this.RenderBounds(
             camera,
             renderer.bounds,
-            Color.yellow,
+            Helper.ExtraColors.OrangeRed,
             this.RenderLabel("Turret")
         ));
 
         this.EntranceRenderers.ForEach(renderer => this.RenderBounds(
             camera,
             renderer.bounds,
-            Color.yellow,
+            Helper.ExtraColors.LightGoldenrodYellow,
             this.RenderLabel("Entrance")
         ));
 
@@ -99,7 +100,7 @@ internal class ESPMod : MonoBehaviour {
                 return;
             }
 
-            this.RenderLabel("Log").Invoke(Color.gray, rendererCentrePoint);
+            this.RenderLabel("Log").Invoke(Helper.ExtraColors.Silver, rendererCentrePoint);
         });
 
         Helper.Enemies.WhereIsNotNull().ForEach(enemy => {

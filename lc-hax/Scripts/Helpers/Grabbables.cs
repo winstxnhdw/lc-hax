@@ -47,4 +47,29 @@ internal static partial class Helper {
         item.shotgunRayPoint = origin;
         item.ShootGunAndSync(false);
     }
+
+    internal static GrabbableObject? GetGrabbableFromGift(this GiftBoxItem giftBox) {
+        GameObject? content = giftBox.Reflect().GetInternalField<GameObject>("objectInPresent");
+        if(content == null) return null;
+        if(content.TryGetComponent(out GrabbableObject grabbable)) {
+            return grabbable;
+        }
+        return null;
+    }
+
+
+    internal static string ToEspLabel(this GrabbableObject grabbable) {
+        if(grabbable == null) return "";
+        if (grabbable is RagdollGrabbableObject ragdollGrabbableObject) {
+            PlayerControllerB? player = ragdollGrabbableObject.GetPlayerFromBody();
+            return player == null ? "Body" : $"Body of {player.playerUsername}";
+        }
+        else if (grabbable is GiftBoxItem giftBox) {
+            GrabbableObject? content = giftBox.GetGrabbableFromGift();
+            if (content != null) {
+                return $"Gift : ({content.itemProperties.itemName})";
+            }
+        }
+        return grabbable.itemProperties.itemName;
+    }
 }

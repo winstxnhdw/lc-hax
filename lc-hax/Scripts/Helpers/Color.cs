@@ -21,6 +21,7 @@ static partial class Helper {
             LungProp => Helper.ExtraColors.LightBlue,
             ShotgunItem => Helper.ExtraColors.Khaki,
             HauntedMaskItem => Helper.ExtraColors.MediumVioletRed,
+            GiftBoxItem giftBox => giftBox.GetGrabbableFromGift() is GrabbableObject giftContent ? GetLootColor(giftContent) : Helper.ExtraColors.Silver,
             _ when scrap.itemProperties.isDefensiveWeapon => Helper.ExtraColors.LightGreen,
             _ when scrap.scrapValue is > 15 and <= 35 => Helper.ExtraColors.LightSalmon,
             _ when scrap.scrapValue >= 36 => Helper.ExtraColors.Gold,
