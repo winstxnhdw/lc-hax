@@ -58,6 +58,7 @@ internal sealed class PossessionMod : MonoBehaviour {
     void OnEnable() {
         InputListener.OnNPress += this.ToggleNoClip;
         InputListener.OnZPress += this.Unpossess;
+        InputListener.OnDelPress += this.KillEnemyAndUnposses;
         InputListener.OnLeftButtonPress += this.UsePrimarySkill;
         InputListener.OnRightButtonHold += this.OnRightMouseButtonHold;
 
@@ -65,9 +66,11 @@ internal sealed class PossessionMod : MonoBehaviour {
         this.UpdateComponentsOnCurrentState(true);
     }
 
+
     void OnDisable() {
         InputListener.OnNPress -= this.ToggleNoClip;
         InputListener.OnZPress -= this.Unpossess;
+        InputListener.OnDelPress -= this.KillEnemyAndUnposses;
         InputListener.OnLeftButtonPress -= this.UsePrimarySkill;
         InputListener.OnRightButtonHold -= this.OnRightMouseButtonHold;
 
@@ -185,6 +188,18 @@ internal sealed class PossessionMod : MonoBehaviour {
         this.FirstUpdate = true;
         this.Possession.SetEnemy(enemy);
     }
+
+    void KillEnemyAndUnposses() {
+        if (this.Possession.Enemy is NutcrackerEnemyAI nutcracker) {
+            if (Helper.LocalPlayer is PlayerControllerB localPlayer) {
+                nutcracker.ChangeEnemyOwnerServerRpc(localPlayer.actualClientId);
+                nutcracker.DropGunServerRpc(Vector3.zero);
+            }
+        }
+        this.Possession.Enemy.KillEnemyServerRpc(true);
+        this.Unpossess();
+    }
+
 
     // Releases possession of the current enemy
     internal void Unpossess() {
