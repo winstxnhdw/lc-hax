@@ -31,18 +31,6 @@ internal static partial class Helper {
         return players.First(player => (int)player.playerClientId == playerObjectID);
     }
 
-    internal static bool IsLocalPlayerAboutToGetKilledByEnemy(int PlayerID) {
-        PlayerControllerB? player = Helper.GetPlayerAboutToKilledByEnemy(PlayerID);
-        return player != null && player.IsSelf();
-    }
-
-    internal static bool IsLocalPlayerAboutToGetKilledByEnemy(this EnemyAI instance, Collider other) {
-        if (instance == null) return false;
-        if (other == null) return false;
-        PlayerControllerB playerControllerB = instance.MeetsStandardPlayerCollisionConditions(other, false, false);
-        return playerControllerB != null && playerControllerB.IsSelf();
-    }
-
     internal static bool IsHostileEnemy(EnemyType enemy) =>
         !enemy.enemyName.Contains("Docile Locust Bees", StringComparison.OrdinalIgnoreCase) ||
         !enemy.enemyName.Contains("Manticoil", StringComparison.OrdinalIgnoreCase);
