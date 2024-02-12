@@ -22,6 +22,9 @@ internal class CharacterMovement : MonoBehaviour {
     bool IsSprintHeld { get; set; } = false;
     float SprintTimer { get; set; } = 0.0f;
     Keyboard Keyboard { get; set; } = Keyboard.current;
+    KeyboardMovement? NoClipKeyboard { get; set; } = null;
+
+    internal void SetNoClipMode(bool enabled) => this.NoClipKeyboard!.enabled = enabled;
 
     // Initialize method
     internal void Init() {
@@ -31,6 +34,7 @@ internal class CharacterMovement : MonoBehaviour {
 
     void Awake() {
         this.Keyboard = Keyboard.current;
+        this.NoClipKeyboard = this.gameObject.AddComponent<KeyboardMovement>();
         this.CharacterController = this.gameObject.AddComponent<CharacterController>();
         this.CharacterController.height = 0.0f; // Adjust as needed
         this.CharacterController.center = new Vector3(0.0f, 0.3f, 0.5f); // Adjust as needed
@@ -39,6 +43,8 @@ internal class CharacterMovement : MonoBehaviour {
 
     // Update is called once per frame
     void Update() {
+        if (this.NoClipKeyboard!.enabled) return;
+
         // Read movement input from keyboard
         Vector2 moveInput = new Vector2(
             this.Keyboard.dKey.ReadValue() - this.Keyboard.aKey.ReadValue(),
