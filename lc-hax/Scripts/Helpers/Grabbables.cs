@@ -82,11 +82,9 @@ internal static partial class Helper {
     }
 
     internal static int GetScrapValue(this GrabbableObject grabbable) =>
-
         grabbable switch {
             null => 0,
-            GiftBoxItem Gift => Gift.GetGiftBoxActualValue(),
+            GiftBoxItem gift => gift.GetGiftBoxActualValue(),
             _ => grabbable.scrapValue,
         };
-    
 }
