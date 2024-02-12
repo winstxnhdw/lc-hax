@@ -93,7 +93,7 @@ internal class ESPMod : MonoBehaviour {
             this.RenderLabel("Entrance")
         ));
 
-        this.StoryLog.ForEach(renderer => this.RenderBounds(
+        this.StoryLog.Where(x => x.enabled).ForEach(renderer => this.RenderBounds(
             camera,
             renderer.bounds,
             Helper.ExtraColors.BlueViolet,
