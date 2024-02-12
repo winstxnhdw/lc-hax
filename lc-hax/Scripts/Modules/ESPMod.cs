@@ -1,8 +1,8 @@
 using System;
 using System.Linq;
 using GameNetcodeStuff;
-using Hax;
 using UnityEngine;
+using Hax;
 
 internal class ESPMod : MonoBehaviour {
     RendererPair<PlayerControllerB, SkinnedMeshRenderer>[] PlayerRenderers { get; set; } = [];
@@ -12,12 +12,15 @@ internal class ESPMod : MonoBehaviour {
     Vector3[] StoryLogVectors { get; set; } = [];
 
     bool InGame { get; set; } = false;
+    bool IsMapLoaded { get; set; } = false;
     bool Enabled { get; set; } = true;
 
     void OnEnable() {
         GameListener.OnLevelGenerated += this.Initialise;
         GameListener.OnGameStart += this.Initialise;
         GameListener.OnGameEnd += this.OnGameEnd;
+        GameListener.OnLevelGenerated += this.OnMapLoaded;
+        GameListener.OnShipLeave += this.OnShipLeave;
         InputListener.OnPausePress += this.ToggleESP;
     }
 
@@ -25,42 +28,67 @@ internal class ESPMod : MonoBehaviour {
         GameListener.OnLevelGenerated -= this.Initialise;
         GameListener.OnGameStart -= this.Initialise;
         GameListener.OnGameEnd -= this.OnGameEnd;
+        GameListener.OnLevelGenerated -= this.OnMapLoaded;
+        GameListener.OnShipLeave -= this.OnShipLeave;
         InputListener.OnPausePress -= this.ToggleESP;
     }
 
     void OnGUI() {
         if (!this.Enabled || !this.InGame || Helper.CurrentCamera is not Camera camera) return;
 
+        this.RenderAlways(camera);
+        this.RenderWhenMapLoads(camera);
+    }
+
+    void RenderAlways(Camera camera) {
         this.PlayerRenderers.ForEach(rendererPair => {
             if (rendererPair.GameObject is not PlayerControllerB player) return;
             if (player.isPlayerDead || !player.isPlayerControlled) return;
+
             string label = $"#{player.playerClientId} {player.playerUsername}";
+
             this.RenderBounds(
                 camera,
                 rendererPair.Renderer.bounds,
-                Helper.ExtraColors.LimeGreen,
                 this.RenderLabel(label)
             );
         });
 
-        this.LandmineRenderers.WhereIsNotNull().ForEach(renderer => this.RenderBounds(
+        Helper.Grabbables.WhereIsNotNull().ForEach(grabbableObject => {
+            Vector3 rendererCentrePoint = camera.WorldToEyesPoint(grabbableObject.transform.position);
+
+            if (rendererCentrePoint.z <= 2.0f) {
+                return;
+            }
+
+            this.RenderLabel($"{grabbableObject.itemProperties.itemName} ${grabbableObject.scrapValue}").Invoke(
+                Color.gray,
+                rendererCentrePoint
+            );
+        });
+    }
+
+    void RenderWhenMapLoads(Camera camera) {
+        if (!this.IsMapLoaded) return;
+
+        this.LandmineRenderers.ForEach(renderer => this.RenderBounds(
             camera,
             renderer.bounds,
-            Helper.ExtraColors.OrangeRed,
+            Color.yellow,
             this.RenderLabel("Landmine")
         ));
 
-        this.TurretRenderers.WhereIsNotNull().ForEach(renderer => this.RenderBounds(
+        this.TurretRenderers.ForEach(renderer => this.RenderBounds(
             camera,
             renderer.bounds,
-            Helper.ExtraColors.OrangeRed,
+            Color.yellow,
             this.RenderLabel("Turret")
         ));
 
-        this.EntranceRenderers.WhereIsNotNull().ForEach(renderer => this.RenderBounds(
+        this.EntranceRenderers.ForEach(renderer => this.RenderBounds(
             camera,
             renderer.bounds,
-            Helper.ExtraColors.LightGoldenrodYellow,
+            Color.yellow,
             this.RenderLabel("Entrance")
         ));
 
@@ -71,18 +99,17 @@ internal class ESPMod : MonoBehaviour {
                 return;
             }
 
-            this.RenderLabel("Log").Invoke(Helper.ExtraColors.Silver, rendererCentrePoint);
+            this.RenderLabel("Log").Invoke(Color.gray, rendererCentrePoint);
         });
 
         Helper.Enemies.WhereIsNotNull().ForEach(enemy => {
-            if (enemy == null) return;
             if (enemy.isEnemyDead) return;
             if (enemy is DocileLocustBeesAI or DoublewingAI) return;
 
             Renderer? nullableRenderer = enemy is RedLocustBees
                 ? enemy.meshRenderers.First()
                 : enemy.skinnedMeshRenderers.First();
-            if (nullableRenderer == null) return;
+
             if (nullableRenderer.Unfake() is not Renderer renderer) {
                 return;
             }
@@ -95,30 +122,11 @@ internal class ESPMod : MonoBehaviour {
             );
         });
 
-        Helper.Grabbables.WhereIsNotNull().ForEach(grabbableObject => {
-            if (grabbableObject == null) return;
-            Vector3 rendererCentrePoint = camera.WorldToEyesPoint(grabbableObject.transform.position);
-
-            if (rendererCentrePoint.z <= 2.0f) {
-                return;
-            }
-
-            string Label = grabbableObject.itemProperties.itemName;
-            if (grabbableObject is RagdollGrabbableObject ragdollGrabbableObject) {
-                PlayerControllerB? player = ragdollGrabbableObject.GetPlayerFromBody();
-                Label = player == null ? Label : $"Body of {player.playerUsername}";
-            }
-            this.RenderLabel($"{Label} ${grabbableObject.scrapValue}").Invoke(
-                Helper.GetLootColor(grabbableObject),
-                rendererCentrePoint
-            );
-        });
-
         if (Helper.StartOfRound?.shipBounds is Collider shipBounds) {
             this.RenderBounds(
                 camera,
                 shipBounds.bounds,
-                Helper.ExtraColors.LimeGreen,
+                Color.green,
                 this.RenderLabel("Ship"),
                 10.0f
             );
@@ -132,6 +140,10 @@ internal class ESPMod : MonoBehaviour {
     }
 
     void OnGameEnd() => this.InGame = false;
+
+    void OnShipLeave() => this.IsMapLoaded = false;
+
+    void OnMapLoaded() => this.IsMapLoaded = true;
 
     void ToggleESP() => this.Enabled = !this.Enabled;
 
