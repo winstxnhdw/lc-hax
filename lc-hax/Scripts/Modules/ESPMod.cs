@@ -105,7 +105,7 @@ internal class ESPMod : MonoBehaviour {
             if (enemy.isEnemyDead) return;
             if (enemy is DocileLocustBeesAI or DoublewingAI) return;
 
-            Renderer? nullableRenderer = enemy is RedLocustBees
+            Renderer? nullableRenderer = enemy is RedLocustBees or TestEnemy
                 ? enemy.meshRenderers.First()
                 : enemy.skinnedMeshRenderers.First();
 
