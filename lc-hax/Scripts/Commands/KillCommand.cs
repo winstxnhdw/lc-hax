@@ -1,5 +1,4 @@
 using GameNetcodeStuff;
-using UnityEngine;
 using Hax;
 
 [Command("kill")]
@@ -26,15 +25,7 @@ internal class KillCommand : ICommand {
     }
 
     Result KillAllEnemies() {
-        Helper.Enemies.ForEach(enemy => {
-            if (Helper.LocalPlayer is PlayerControllerB localPlayer && enemy is NutcrackerEnemyAI nutcracker) {
-                nutcracker.ChangeEnemyOwnerServerRpc(localPlayer.actualClientId);
-                nutcracker.DropGunServerRpc(Vector3.zero);
-            }
-
-            enemy.KillEnemyServerRpc(true);
-        });
-
+        Helper.Enemies.ForEach(Helper.Kill);
         return new Result(true);
     }
 

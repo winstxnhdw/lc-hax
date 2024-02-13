@@ -62,7 +62,6 @@ internal class Loader : MonoBehaviour {
 
         Loader.AddHaxModules<ESPMod>();
         Loader.AddHaxModules<SaneMod>();
-        Loader.AddHaxModules<StunMod>();
         Loader.AddHaxModules<ChatMod>();
         Loader.AddHaxModules<FollowMod>();
         Loader.AddHaxModules<WeightMod>();
@@ -70,6 +69,8 @@ internal class Loader : MonoBehaviour {
         Loader.AddHaxModules<PhantomMod>();
         Loader.AddHaxModules<TriggerMod>();
         Loader.AddHaxModules<AntiKickMod>();
+        Loader.AddHaxModules<StunClickMod>();
+        Loader.AddHaxModules<KillClickMod>();
         Loader.AddHaxModules<CrosshairMod>();
         Loader.AddHaxModules<MinimalGUIMod>();
         Loader.AddHaxModules<PossessionMod>();
