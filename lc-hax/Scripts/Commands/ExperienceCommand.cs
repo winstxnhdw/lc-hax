@@ -1,16 +1,17 @@
 using Hax;
 
 enum Rank {
-    INTERN = 0,
-    PART_TIME = 1,
-    EMPLOYEE = 2,
-    LEADER = 3,
-    BOSS = 4
+    INTERN,
+    PART_TIME,
+    EMPLOYEE,
+    LEADER,
+    BOSS
 }
 
 [Command("xp")]
 internal class ExperienceCommand {
     public void Execute(StringArray args) {
+        if (Helper.HUDManager is not HUDManager hudManager) return;
         if (args.Length is 0) {
             Chat.Print("Usage: xp <amount>");
             return;
@@ -18,11 +19,6 @@ internal class ExperienceCommand {
 
         if (!int.TryParse(args[0], out int amount)) {
             Chat.Print("Invalid amount!");
-            return;
-        }
-
-        if (Helper.HUDManager is not HUDManager hudManager) {
-            Chat.Print("HUDManager is not found");
             return;
         }
 
