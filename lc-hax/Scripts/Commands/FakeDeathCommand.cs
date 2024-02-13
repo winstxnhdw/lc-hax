@@ -17,5 +17,9 @@ internal class FakeDeathCommand : ICommand {
             CauseOfDeath.Unknown,
             0
         );
+
+        Helper.CreateComponent<WaitForBehaviour>("Respawn")
+              .SetPredicate(() => player.playersManager.shipIsLeaving)
+              .Init(player.KillPlayer);
     }
 }
