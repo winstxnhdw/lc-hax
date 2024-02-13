@@ -5,6 +5,11 @@ using Hax;
 
 [Command("fatality")]
 internal class FatalityCommand : ICommand {
+    /// <summary>
+    /// Teleports the enemy to the target player and perform the fatality.
+    /// Teleporting certain enemies outside of the factory can lag the user, so this burden is passed to the target player.
+    /// </summary>
+    /// <returns>an error string if any</returns>
     string? HandleEnemy<T>(PlayerControllerB targetPlayer, Action<PlayerControllerB, T> enemyHandler) where T : EnemyAI {
         if (Helper.LocalPlayer is not PlayerControllerB localPlayer || Helper.GetEnemy<T>() is not T enemy) {
             return "Enemy has not yet spawned!";

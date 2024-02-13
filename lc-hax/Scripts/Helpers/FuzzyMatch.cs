@@ -5,6 +5,10 @@ using Quickenshtein;
 namespace Hax;
 
 internal static partial class Helper {
+    /// <summary>
+    /// Find the longest common substring between two strings.
+    /// </summary>
+    /// <returns>the length of the longest common substring</returns>
     static int LongestCommonSubstring(ReadOnlySpan<char> query, ReadOnlySpan<char> original) {
         int originalLength = original.Length;
         int queryLength = query.Length;
@@ -31,6 +35,11 @@ internal static partial class Helper {
         return result;
     }
 
+    /// <summary>
+    /// The similarity is calculated by first, penalising the Levenshtein distance between the two strings.
+    /// This alone is often not enough, so a reward is given for each character in the longest common substring.
+    /// </summary>
+    /// <returns>the total similarity weight</returns>
     static int GetSimilarityWeight(string query, string original) {
         int distancePenalty = Levenshtein.GetDistance(query, original);
         int commonalityReward = Helper.LongestCommonSubstring(query, original) * -2;
@@ -38,6 +47,11 @@ internal static partial class Helper {
         return distancePenalty + commonalityReward;
     }
 
+    /// <summary>
+    /// Find the closest match to the query from a list of strings.
+    /// If the string is empty or the list is empty, we return null.
+    /// </summary>
+    /// <returns>the string with closest match to the query or null</returns>
     internal static string? FuzzyMatch(string? query, ReadOnlySpan<string> strings) {
         if (strings.Length is 0 || string.IsNullOrWhiteSpace(query)) return null;
 

@@ -6,7 +6,7 @@ using Hax;
 internal class ChibakuTenseiCommand : ICommand {
     Vector3 spinningY = new(0, 2, 0);
 
-    Result TeleportPlayerToRandom(StringArray args) {
+    Result AttractAndSpin(StringArray args) {
         if (Helper.GetActivePlayer(args[0]) is not PlayerControllerB targetPlayer) {
             return new Result(message: "Target player is not alive or found!");
         }
@@ -99,7 +99,7 @@ internal class ChibakuTenseiCommand : ICommand {
             return;
         }
 
-        Result result = this.TeleportPlayerToRandom(args);
+        Result result = this.AttractAndSpin(args);
 
         if (!result.Success) {
             Chat.Print(result.Message);
