@@ -12,7 +12,6 @@ internal sealed class KillClickMod : MonoBehaviour {
         if (!Setting.EnableKillOnLeftClick) return;
         if (Helper.CurrentCamera is not Camera camera) return;
         if (Helper.LocalPlayer is not PlayerControllerB localPlayer) return;
-        if (localPlayer.currentlyHeldObjectServer?.itemProperties.isDefensiveWeapon is not false) return;
 
         this.RaycastHits.SphereCastForward(camera.transform).Range().ForEach(i => {
             if (!this.RaycastHits[i].collider.TryGetComponent(out EnemyAICollisionDetect enemy)) return;
