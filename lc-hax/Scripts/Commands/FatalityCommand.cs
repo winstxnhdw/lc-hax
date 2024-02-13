@@ -11,7 +11,10 @@ internal class FatalityCommand : ICommand {
         }
 
         enemy.ChangeEnemyOwnerServerRpc(localPlayer.actualClientId);
+        enemy.transform.position = targetPlayer.transform.position;
+        enemy.SyncPositionToClients();
         enemyHandler(targetPlayer, enemy);
+        enemy.ChangeEnemyOwnerServerRpc(targetPlayer.actualClientId);
         return null;
     }
 
