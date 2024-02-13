@@ -9,8 +9,11 @@ internal class PoisonCommand : ICommand {
 
     public void Execute(StringArray args) {
         if (args.Length < 4) {
-            Chat.Print("Usage: poison <player> <damage> <delay> <duration>");
-            Chat.Print("Usage: poison --all <damage> <delay> <duration>");
+            Chat.Print("Usages:",
+                "poison <player> <damage> <duration> <delay=1>",
+                "poison --all <damage> <duration> <delay=1>"
+            );
+
             return;
         }
 
@@ -19,13 +22,13 @@ internal class PoisonCommand : ICommand {
             return;
         }
 
-        if (!ulong.TryParse(args[2], out ulong delay)) {
-            Chat.Print("Invalid delay!");
+        if (!ulong.TryParse(args[2], out ulong duration)) {
+            Chat.Print("Invalid duration!");
             return;
         }
 
-        if (!ulong.TryParse(args[3], out ulong duration)) {
-            Chat.Print("Invalid duration!");
+        if (!args[3].TryParse(defaultValue: 1, result: out ulong delay)) {
+            Chat.Print("Invalid delay!");
             return;
         }
 
