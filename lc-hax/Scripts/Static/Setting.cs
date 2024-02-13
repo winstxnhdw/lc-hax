@@ -6,7 +6,7 @@ internal static class Setting {
     internal static bool EnableBlockRadar { get; set; } = false;
     internal static bool EnableUntargetable { get; set; } = false;
     internal static bool EnableStunOnLeftClick { get; set; } = false;
-    internal static bool EnableHitOnLeftClick { get; set; } = false;
+    internal static bool EnableKillOnLeftClick { get; set; } = false;
     internal static bool EnableInvisible { get; set; } = false;
     internal static bool EnableNoCooldown { get; set; } = false;
     internal static bool EnableAntiKick { get; set; } = false;

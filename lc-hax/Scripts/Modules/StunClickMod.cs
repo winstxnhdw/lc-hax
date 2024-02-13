@@ -1,7 +1,7 @@
 using Hax;
 using UnityEngine;
 
-internal sealed class StunMod : MonoBehaviour {
+internal sealed class StunClickMod : MonoBehaviour {
     Collider[] Colliders { get; set; } = new Collider[100];
     RaycastHit[] RaycastHits { get; set; } = new RaycastHit[100];
 
@@ -11,32 +11,35 @@ internal sealed class StunMod : MonoBehaviour {
     bool IsHoldingADefensiveWeapon() =>
         Helper.LocalPlayer?.currentlyHeldObjectServer.itemProperties.isDefensiveWeapon is not false;
 
-    void StunHitJam(Collider collider) {
+    void StunJam(Collider collider) {
         if (collider.TryGetComponent(out EnemyAICollisionDetect enemy)) {
-            if (Setting.EnableStunOnLeftClick) enemy.mainScript.SetEnemyStunned(true, 5.0f);
-            if (Setting.EnableHitOnLeftClick) enemy.mainScript.HitEnemyServerRpc(State.ShovelHitForce, -1, false);
+            enemy.mainScript.SetEnemyStunned(true, 5.0f);
         }
 
-        if (!Setting.EnableStunOnLeftClick || (!collider.TryGetComponent(out Turret _) && !collider.TryGetComponent(out Landmine _))) {
+        if (!collider.TryGetComponent(out Turret _) && !collider.TryGetComponent(out Landmine _)) {
             return;
         }
 
-        collider.GetComponent<TerminalAccessibleObject>().Unfake()?.CallFunctionFromTerminal();
+        if (!collider.TryGetComponent(out TerminalAccessibleObject terminalAccessibleObject)) {
+            return;
+        }
+
+        terminalAccessibleObject.CallFunctionFromTerminal();
     }
 
     void Stun() {
-        if (!Setting.EnableStunOnLeftClick && !Setting.EnableHitOnLeftClick) return;
+        if (!Setting.EnableStunOnLeftClick) return;
         if (Helper.CurrentCamera is not Camera camera) return;
         if (this.IsHoldingADefensiveWeapon()) return;
 
         this.RaycastHits.SphereCastForward(camera.transform).Range().ForEach(i => {
             Collider collider = this.RaycastHits[i].collider;
-            this.StunHitJam(collider);
+            this.StunJam(collider);
         });
 
         Physics.OverlapSphereNonAlloc(camera.transform.position, 5.0f, this.Colliders).Range().ForEach(i => {
             Collider collider = this.Colliders[i];
-            this.StunHitJam(collider);
+            this.StunJam(collider);
         });
     }
 }
