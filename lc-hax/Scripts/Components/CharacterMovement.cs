@@ -24,7 +24,10 @@ internal class CharacterMovement : MonoBehaviour {
     Keyboard Keyboard { get; set; } = Keyboard.current;
     KeyboardMovement? NoClipKeyboard { get; set; } = null;
 
-    internal void SetNoClipMode(bool enabled) => this.NoClipKeyboard!.enabled = enabled;
+    internal void SetNoClipMode(bool enabled) {
+        if (this.NoClipKeyboard is null) return;
+        this.NoClipKeyboard.enabled = enabled;
+    }
 
     // Initialize method
     internal void Init() {
@@ -43,7 +46,7 @@ internal class CharacterMovement : MonoBehaviour {
 
     // Update is called once per frame
     void Update() {
-        if (this.NoClipKeyboard!.enabled) return;
+        if (this.NoClipKeyboard?.enabled is not true) return;
 
         // Read movement input from keyboard
         Vector2 moveInput = new Vector2(

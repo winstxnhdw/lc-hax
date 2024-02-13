@@ -8,6 +8,12 @@
         "resolved": "2.2.2",
         "contentHash": "70KvWz+DiUELxafsYL/LHxA/jH3PDWeApLo/VwtnrpTvRWQ/eUdPfS/l5funmhZWOy41QXw6UjVv+6C57Nx77A=="
       },
+      "Nullable.Extended.Analyzer": {
+        "type": "Direct",
+        "requested": "[1.15.6169, )",
+        "resolved": "1.15.6169",
+        "contentHash": "ywYUOukrgjzwGIAJEW8k/Cc98Y61xvM0JFt9LHrblz2wFwl0aVk31rdYh6Y+guFJQtzIwHrM4IY++0szJjLvQg=="
+      },
       "Quickenshtein": {
         "type": "Direct",
         "requested": "[1.5.1, )",
