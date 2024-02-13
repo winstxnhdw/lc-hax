@@ -28,7 +28,6 @@ internal class CharacterMovement : MonoBehaviour {
         if (this.NoClipKeyboard is null) return;
         this.NoClipKeyboard.enabled = enabled;
     }
-
     // Initialize method
     internal void Init() {
         if (Helper.LocalPlayer is not PlayerControllerB localPlayer) return;
@@ -46,9 +45,10 @@ internal class CharacterMovement : MonoBehaviour {
 
     // Update is called once per frame
     void Update() {
-        if (this.NoClipKeyboard?.enabled) return;
-
-        // Read movement input from keyboard
+        if(this.NoClipKeyboard != null)
+        {
+            if(this.NoClipKeyboard.enabled) return;
+        }
         Vector2 moveInput = new Vector2(
             this.Keyboard.dKey.ReadValue() - this.Keyboard.aKey.ReadValue(),
             this.Keyboard.wKey.ReadValue() - this.Keyboard.sKey.ReadValue()
