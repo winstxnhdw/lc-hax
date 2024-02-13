@@ -86,7 +86,7 @@ internal class EnemyPromptHandler {
 
         bunkerSpider.SpawnWebTrapServerRpc(
             playerPosition,
-            playerPosition + (targetPlayer.transform.forward * 3.0f)
+            playerPosition + (targetPlayer.transform.forward * 5.0f)
         );
 
         _ = bunkerSpider.Reflect()
@@ -132,6 +132,9 @@ internal class EnemyPromptHandler {
         this.TeleportEnemyToPlayer(coilHead, targetPlayer, willTeleportEnemy, allowedInside: true);
         coilHead.SetBehaviourState(BehaviourState.CHASE);
         coilHead.SetAnimationGoServerRpc();
+        coilHead.creatureAnimator.SetFloat("walkSpeed", 5.0f);
+        coilHead.mainCollider.isTrigger = true;
+        coilHead.agent.speed = 5.0f;
     }
 
     void HandleSporeLizard(PufferAI sporeLizard, PlayerControllerB targetPlayer, bool willTeleportEnemy) {
