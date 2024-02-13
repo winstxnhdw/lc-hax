@@ -9,7 +9,7 @@ internal class EndCommand : ICommand {
         }
 
         else if (Helper.GetPlayer(args[0]) is PlayerControllerB player) {
-            Helper.StartOfRound?.EndGameServerRpc(player.PlayerIndex());
+            player.playersManager.EndGameServerRpc(player.PlayerIndex());
         }
     }
 }

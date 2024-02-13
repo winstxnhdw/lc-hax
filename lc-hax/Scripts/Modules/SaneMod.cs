@@ -8,13 +8,12 @@ internal sealed class SaneMod : MonoBehaviour {
         WaitForEndOfFrame waitForEndOfFrame = new();
 
         while (true) {
-            if (Helper.StartOfRound is not StartOfRound startOfRound) {
+            if (Helper.LocalPlayer is not PlayerControllerB localPlayer) {
                 yield return waitForEndOfFrame;
                 continue;
             }
 
-            PlayerControllerB localPlayer = startOfRound.localPlayerController;
-            startOfRound.gameStats.allPlayerStats[localPlayer.playerClientId].turnAmount = 0;
+            localPlayer.playersManager.gameStats.allPlayerStats[localPlayer.playerClientId].turnAmount = 0;
             localPlayer.playersManager.fearLevel = 0.0f;
             localPlayer.playersManager.fearLevelIncreasing = false;
             localPlayer.insanityLevel = 0.0f;
