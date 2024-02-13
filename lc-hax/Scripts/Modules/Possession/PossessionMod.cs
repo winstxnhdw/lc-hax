@@ -196,7 +196,7 @@ internal sealed class PossessionMod : MonoBehaviour {
                 nutcracker.DropGunServerRpc(Vector3.zero);
             }
         }
-        this.Possession.Enemy.KillEnemyServerRpc(true);
+        this.Possession?.Enemy?.KillEnemyServerRpc(true);
         this.Unpossess();
     }
 
