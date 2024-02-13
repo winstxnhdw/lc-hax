@@ -61,7 +61,6 @@ internal class SellCommand : ICommand {
 
     public void Execute(StringArray args) {
         if (Helper.LocalPlayer is not PlayerControllerB player) return;
-        if (Helper.StartOfRound is not StartOfRound startOfRound) return;
         if (HaxObjects.Instance?.DepositItemsDesk?.Object is not DepositItemsDesk depositItemsDesk) {
             Chat.Print("You must be at the company to use this command!");
             return;
@@ -84,7 +83,7 @@ internal class SellCommand : ICommand {
             return;
         }
 
-        ulong result = this.SellScrapValue(depositItemsDesk, player, startOfRound, targetValue);
+        ulong result = this.SellScrapValue(depositItemsDesk, player, player.playersManager, targetValue);
         Chat.Print($"Remaining scrap value to reach target is {result}!");
 
         player.carryWeight = currentWeight;
