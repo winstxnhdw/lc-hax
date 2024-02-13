@@ -51,26 +51,24 @@ internal class HealCommand : IStun, ICommand {
         localPlayer.health = 100;
         localPlayer.mapRadarDotAnimator?.SetBool("dead", false);
 
-        if (localPlayer.IsOwner) {
-            if (hudManager.TryGetComponent(out Animator gasHelmetAnimator)) {
-                gasHelmetAnimator.SetBool("gasEmitting", false);
-            }
-
-            localPlayer.hasBegunSpectating = false;
-            hudManager.RemoveSpectateUI();
-
-            if (hudManager.TryGetComponent(out Animator gameOverAnimator)) {
-                gameOverAnimator.SetTrigger("revive");
-            }
-
-            localPlayer.hinderedMultiplier = 1.0f;
-            localPlayer.isMovementHindered = 0;
-            localPlayer.sourcesCausingSinking = 0;
-            localPlayer.reverbPreset = startOfRound.shipReverb;
+        if (hudManager.TryGetComponent(out Animator gasHelmetAnimator)) {
+            gasHelmetAnimator.SetBool("gasEmitting", false);
         }
 
-        soundManager.earsRingingTimer = 0.0f;
+        localPlayer.hasBegunSpectating = false;
+        hudManager.RemoveSpectateUI();
+
+        if (hudManager.TryGetComponent(out Animator gameOverAnimator)) {
+            gameOverAnimator.SetTrigger("revive");
+        }
+
+        localPlayer.hinderedMultiplier = 1.0f;
+        localPlayer.isMovementHindered = 0;
+        localPlayer.sourcesCausingSinking = 0;
+        localPlayer.reverbPreset = startOfRound.shipReverb;
         localPlayer.voiceMuffledByEnemy = false;
+
+        soundManager.earsRingingTimer = 0.0f;
         soundManager.playerVoicePitchTargets[localPlayer.playerClientId] = 1.0f;
         soundManager.SetPlayerPitch(1.0f, localPlayer.PlayerIndex());
 
@@ -78,17 +76,13 @@ internal class HealCommand : IStun, ICommand {
             startOfRound.RefreshPlayerVoicePlaybackObjects();
         }
 
-        if (localPlayer.currentVoiceChatIngameSettings != null) {
-            if (localPlayer.currentVoiceChatIngameSettings.voiceAudio == null) {
-                localPlayer.currentVoiceChatIngameSettings.InitializeComponents();
-            }
+        localPlayer.currentVoiceChatIngameSettings?.InitializeComponents();
 
-            if (localPlayer.currentVoiceChatIngameSettings.voiceAudio is AudioSource voiceAudio) {
-                if (voiceAudio.TryGetComponent(out OccludeAudio occludeAudio)) {
-                    occludeAudio.overridingLowPass = false;
-                }
-            }
+        if (localPlayer.currentVoiceChatIngameSettings?.voiceAudio?.TryGetComponent(out OccludeAudio occludeAudio) is not true) {
+            return;
         }
+
+        occludeAudio.overridingLowPass = false;
     }
 
     Result HealLocalPlayer(HUDManager hudManager, StartOfRound startOfRound) {
