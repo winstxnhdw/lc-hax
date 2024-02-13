@@ -46,7 +46,7 @@ internal class CharacterMovement : MonoBehaviour {
 
     // Update is called once per frame
     void Update() {
-        if (this.NoClipKeyboard?.enabled is not true) return;
+        if (this.NoClipKeyboard?.enabled) return;
 
         // Read movement input from keyboard
         Vector2 moveInput = new Vector2(
