@@ -85,12 +85,12 @@ internal class HealCommand : IStun, ICommand {
         occludeAudio.overridingLowPass = false;
     }
 
-    Result HealLocalPlayer(HUDManager hudManager, StartOfRound startOfRound) {
+    Result HealLocalPlayer(HUDManager hudManager) {
         if (hudManager.localPlayer.health <= 0) {
-            this.RespawnLocalPlayer(hudManager.localPlayer, startOfRound, hudManager);
+            this.RespawnLocalPlayer(hudManager.localPlayer, hudManager.localPlayer.playersManager, hudManager);
 
             Helper.CreateComponent<WaitForBehaviour>("Respawn")
-                  .SetPredicate(() => startOfRound.shipIsLeaving)
+                  .SetPredicate(() => hudManager.localPlayer.playersManager.shipIsLeaving)
                   .Init(hudManager.localPlayer.KillPlayer);
         }
 
@@ -119,11 +119,10 @@ internal class HealCommand : IStun, ICommand {
     }
 
     public void Execute(StringArray args) {
-        if (Helper.StartOfRound is not StartOfRound startOfRound) return;
         if (Helper.HUDManager is not HUDManager hudManager) return;
 
         Result result = args.Length switch {
-            0 => this.HealLocalPlayer(hudManager, startOfRound),
+            0 => this.HealLocalPlayer(hudManager),
             _ => this.HealPlayer(args)
         };
 
