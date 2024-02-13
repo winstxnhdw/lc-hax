@@ -37,8 +37,11 @@ internal class TeleportCommand : ICommand {
 
     public void Execute(StringArray args) {
         if (args.Length is 0) {
-            Chat.Print("Usage: tp <player>");
-            Chat.Print("Usage: tp <x> <y> <z>");
+            Chat.Print("Usages:",
+                "tp <player>",
+                "tp <x> <y> <z>"
+            );
+
             return;
         }
 
