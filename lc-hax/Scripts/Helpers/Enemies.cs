@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using GameNetcodeStuff;
 using Unity.Netcode;
 using UnityEngine;
 
@@ -15,6 +16,20 @@ internal static partial class Helper {
 
     internal static T? GetEnemy<T>() where T : EnemyAI =>
         Helper.Enemies.First(enemy => enemy is T) is T enemy ? enemy : null;
+
+    internal static void Kill(this EnemyAI enemyInstance, ulong actualClientId) {
+        if (enemyInstance is NutcrackerEnemyAI nutcracker) {
+            nutcracker.ChangeEnemyOwnerServerRpc(actualClientId);
+            nutcracker.DropGunServerRpc(Vector3.zero);
+        }
+
+        enemyInstance.KillEnemyServerRpc(true);
+    }
+
+    internal static void Kill(EnemyAI enemyInstance) {
+        if (Helper.LocalPlayer is not PlayerControllerB localPlayer) return;
+        enemyInstance.Kill(localPlayer.actualClientId);
+    }
 
     internal static bool IsBehaviourState(this EnemyAI enemyInstance, Enum state) =>
         enemyInstance.currentBehaviourStateIndex == Convert.ToInt32(state);
