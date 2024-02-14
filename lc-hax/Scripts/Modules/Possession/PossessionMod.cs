@@ -131,10 +131,6 @@ internal sealed class PossessionMod : MonoBehaviour {
         enemy.ChangeEnemyOwnerServerRpc(localPlayer.actualClientId);
 
         if (this.FirstUpdate) {
-            if (this.EnemyControllers.TryGetValue(enemy.GetType(), out IController value)) {
-                this.HandleEnemyOnPossess(value, enemy);
-            }
-
             this.FirstUpdate = false;
             this.SetEnemyColliders(enemy, false);
 
@@ -215,6 +211,9 @@ internal sealed class PossessionMod : MonoBehaviour {
 
         this.FirstUpdate = true;
         this.Possession.SetEnemy(enemy);
+        if (this.EnemyControllers.TryGetValue(enemy.GetType(), out IController value)) {
+            this.HandleEnemyOnPossess(value, enemy);
+        }
     }
 
     void KillEnemyAndUnposses() {
