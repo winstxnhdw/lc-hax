@@ -21,6 +21,11 @@ internal class SellCommand : ICommand {
             this.SellObject(depositItemsDesk, player, grabbableObject);
         });
 
+    /// <summary>
+    /// Uses the 0-1 knapsack algorithm to sell scraps to reach the target value.
+    /// The actual scrap value is usually lower than the displayed value due to the company buying rate.
+    /// </summary>
+    /// <returns>the remaining amount left to reach the target value</returns>
     ulong SellScrapValue(DepositItemsDesk depositItemsDesk, PlayerControllerB player, StartOfRound startOfRound, ulong targetValue) {
         ReadOnlySpan<GrabbableObject> sellableScraps = Helper.Grabbables.WhereIsNotNull().Where(this.CanBeSold).ToArray();
 

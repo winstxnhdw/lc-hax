@@ -5,93 +5,42 @@ using Hax;
 
 [Command("fatality")]
 internal class FatalityCommand : ICommand {
-    T? GetEnemyOwnership<T>() where T : EnemyAI {
-        if (Helper.LocalPlayer is not PlayerControllerB localPlayer) return null;
-        if (Helper.GetEnemy<T>() is not T enemy) return null;
+    /// <summary>
+    /// Teleports the enemy to the target player and perform the fatality.
+    /// Teleporting certain enemies outside of the factory can lag the user, so this burden is passed to the target player.
+    /// </summary>
+    /// <returns>an error string if any</returns>
+    string? HandleEnemy<T>(PlayerControllerB targetPlayer, Action<PlayerControllerB, T> enemyHandler) where T : EnemyAI {
+        if (Helper.LocalPlayer is not PlayerControllerB localPlayer || Helper.GetEnemy<T>() is not T enemy) {
+            return "Enemy has not yet spawned!";
+        }
 
         enemy.ChangeEnemyOwnerServerRpc(localPlayer.actualClientId);
-        return enemy;
-    }
-
-    string? HandleGiant(PlayerControllerB targetPlayer) {
-        if (this.GetEnemyOwnership<ForestGiantAI>() is not ForestGiantAI forestGiant) {
-            return "Enemy has not yet spawned!";
-        }
-
-        forestGiant.GrabPlayerServerRpc(targetPlayer.PlayerIndex());
+        enemy.transform.position = targetPlayer.transform.position;
+        enemy.SyncPositionToClients();
+        enemyHandler(targetPlayer, enemy);
+        enemy.ChangeEnemyOwnerServerRpc(targetPlayer.actualClientId);
         return null;
     }
 
-    string? HandleJester(PlayerControllerB targetPlayer) {
-        if (this.GetEnemyOwnership<JesterAI>() is not JesterAI jester) {
-            return "Enemy has not yet spawned!";
-        }
+    void GiantFatality(PlayerControllerB targetPlayer, ForestGiantAI forestGiant) => forestGiant.GrabPlayerServerRpc(targetPlayer.PlayerIndex());
 
-        jester.KillPlayerServerRpc(targetPlayer.PlayerIndex());
-        return null;
-    }
+    void JesterFatality(PlayerControllerB targetPlayer, JesterAI jester) => jester.KillPlayerServerRpc(targetPlayer.PlayerIndex());
 
-    string? HandleMasked(PlayerControllerB targetPlayer) {
-        if (this.GetEnemyOwnership<MaskedPlayerEnemy>() is not MaskedPlayerEnemy masked) {
-            return "Enemy has not yet spawned!";
-        }
+    void MaskedFatality(PlayerControllerB targetPlayer, MaskedPlayerEnemy masked) => masked.KillPlayerAnimationServerRpc(targetPlayer.PlayerIndex());
 
-        masked.KillPlayerAnimationServerRpc(targetPlayer.PlayerIndex());
-        return null;
-    }
+    void BaboonHawkFatality(PlayerControllerB targetPlayer, BaboonBirdAI baboonHawk) => baboonHawk.StabPlayerDeathAnimServerRpc(targetPlayer.PlayerIndex());
 
-    string? HandleBaboonHawk(PlayerControllerB targetPlayer) {
-        if (this.GetEnemyOwnership<BaboonBirdAI>() is not BaboonBirdAI baboonHawk) {
-            return "Enemy has not yet spawned!";
-        }
+    void BeesFatality(PlayerControllerB targetPlayer, RedLocustBees bees) => bees.BeeKillPlayerServerRpc(targetPlayer.PlayerIndex());
 
-        baboonHawk.StabPlayerDeathAnimServerRpc(targetPlayer.PlayerIndex());
-        return null;
-    }
+    void EyelessDogFatality(PlayerControllerB targetPlayer, MouthDogAI eyelessDog) => eyelessDog.KillPlayerServerRpc(targetPlayer.PlayerIndex());
 
-    string? HandleBees(PlayerControllerB targetPlayer) {
-        if (this.GetEnemyOwnership<RedLocustBees>() is not RedLocustBees bees) {
-            return "Enemy has not yet spawned!";
-        }
+    void BrackenFatality(PlayerControllerB targetPlayer, FlowermanAI bracken) => bracken.KillPlayerAnimationServerRpc(targetPlayer.PlayerIndex());
 
-        bees.BeeKillPlayerServerRpc(targetPlayer.PlayerIndex());
-        return null;
-    }
-
-    string? HandleThumper(PlayerControllerB targetPlayer) {
-        if (this.GetEnemyOwnership<CrawlerAI>() is not CrawlerAI thumper) {
-            return "Enemy has not yet spawned!";
-        }
-
-        thumper.EatPlayerBodyServerRpc(targetPlayer.PlayerIndex());
-        return null;
-    }
-
-    string? HandleEyelessDog(PlayerControllerB targetPlayer) {
-        if (this.GetEnemyOwnership<MouthDogAI>() is not MouthDogAI eyelessDog) {
-            return "Enemy has not yet spawned!";
-        }
-
-        eyelessDog.KillPlayerServerRpc(targetPlayer.PlayerIndex());
-        return null;
-    }
-
-    string? HandleBracken(PlayerControllerB targetPlayer) {
-        if (this.GetEnemyOwnership<FlowermanAI>() is not FlowermanAI bracken) {
-            return "Enemy has not yet spawned!";
-        }
-
-        bracken.KillPlayerAnimationServerRpc(targetPlayer.PlayerIndex());
-        return null;
-    }
-
-    string? HandleNutcracker(PlayerControllerB targetPlayer) {
-        if (this.GetEnemyOwnership<NutcrackerEnemyAI>() is not NutcrackerEnemyAI nutcracker) {
-            return "Enemy has not yet spawned!";
-        }
-
+    void NutcrackerFatality(PlayerControllerB targetPlayer, NutcrackerEnemyAI nutcracker) {
+        nutcracker.AimGunServerRpc(targetPlayer.transform.position);
+        nutcracker.FireGunServerRpc();
         nutcracker.LegKickPlayerServerRpc(targetPlayer.PlayerIndex());
-        return null;
     }
 
     public void Execute(StringArray args) {
@@ -105,16 +54,15 @@ internal class FatalityCommand : ICommand {
             return;
         }
 
-        Dictionary<string, Func<PlayerControllerB, string?>> enemyHandlers = new() {
-            { "Forest Giant", this.HandleGiant },
-            { "Jester", this.HandleJester },
-            { "Masked", this.HandleMasked },
-            { "Baboon Hawk", this.HandleBaboonHawk },
-            { "Circuit Bees", this.HandleBees },
-            { "Thumper", this.HandleThumper },
-            { "Eyeless Dog", this.HandleEyelessDog },
-            { "Bracken", this.HandleBracken },
-            { "Nutcracker", this.HandleNutcracker }
+        Dictionary<string, Func<string?>> enemyHandlers = new() {
+            { "Forest Giant", () => this.HandleEnemy<ForestGiantAI>(targetPlayer, this.GiantFatality) },
+            { "Jester",       () => this.HandleEnemy<JesterAI>(targetPlayer, this.JesterFatality) },
+            { "Masked",       () => this.HandleEnemy<MaskedPlayerEnemy>(targetPlayer, this.MaskedFatality) },
+            { "Baboon Hawk",  () => this.HandleEnemy<BaboonBirdAI>(targetPlayer, this.BaboonHawkFatality) },
+            { "Circuit Bees", () => this.HandleEnemy<RedLocustBees>(targetPlayer, this.BeesFatality) },
+            { "Eyeless Dog",  () => this.HandleEnemy<MouthDogAI>(targetPlayer, this.EyelessDogFatality) },
+            { "Bracken",      () => this.HandleEnemy<FlowermanAI>(targetPlayer, this.BrackenFatality) },
+            { "Nutcracker",   () => this.HandleEnemy<NutcrackerEnemyAI>(targetPlayer, this.NutcrackerFatality) }
         };
 
         string? key = Helper.FuzzyMatch(
@@ -129,7 +77,7 @@ internal class FatalityCommand : ICommand {
 
         Chat.Print($"Performing {key} fatality on {targetPlayer.playerUsername}..");
 
-        if (enemyHandlers[key](targetPlayer) is string message) {
+        if (enemyHandlers[key]() is string message) {
             Chat.Print(message);
         }
     }
