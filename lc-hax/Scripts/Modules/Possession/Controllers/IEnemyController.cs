@@ -44,7 +44,7 @@ internal interface IEnemyController<T> : IController where T : EnemyAI {
 
     bool IsAbleToRotate(T enemyInstance) => true;
 
-    bool CanUseEntranceDoors(T enemyInstance) => false;
+    bool CanUseEntranceDoors(T enemyInstance) => true;
 
     string? GetPrimarySkillName(T enemyInstance) => null;
 

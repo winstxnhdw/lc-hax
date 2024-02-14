@@ -34,8 +34,5 @@ internal class SpringManEnemyController : IEnemyController<SpringManAI> {
 
         return true;
     }
-
-    public bool CanUseEntranceDoors(SpringManAI _) => true;
-
 }
 

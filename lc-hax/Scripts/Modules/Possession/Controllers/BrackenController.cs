@@ -25,6 +25,4 @@ internal class BrackenController : IEnemyController<FlowermanAI> {
 
     public string GetSecondarySkillName(FlowermanAI _) => "Stand";
 
-    public bool CanUseEntranceDoors(FlowermanAI _) => true;
-
 }

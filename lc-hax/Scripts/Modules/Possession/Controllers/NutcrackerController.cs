@@ -40,6 +40,4 @@ internal class NutcrackerController : IEnemyController<NutcrackerEnemyAI> {
 
     public string GetSecondarySkillName(NutcrackerEnemyAI _) => "(HOLD) Sentry mode";
 
-    public bool CanUseEntranceDoors(NutcrackerEnemyAI _) => true;
-
 }

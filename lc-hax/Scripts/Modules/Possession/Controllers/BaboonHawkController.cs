@@ -15,7 +15,6 @@ internal class BaboonHawkController : IEnemyController<BaboonBirdAI> {
     Vector3 customCamp = new(1000, 1000, 1000);
 
     Vector3 originalCamp = new(0, 0, 0);
-    public bool CanUseEntranceDoors(BaboonBirdAI _) => true;
 
     public void OnDeath(BaboonBirdAI enemyInstance) {
         if (enemyInstance.heldScrap is not null) {

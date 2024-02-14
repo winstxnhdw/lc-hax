@@ -3,6 +3,4 @@ internal class MaskedPlayerController : IEnemyController<MaskedPlayerEnemy> {
 
     public void UseSecondarySkill(MaskedPlayerEnemy enemyInstance) => enemyInstance.SetCrouchingServerRpc(!enemyInstance.creatureAnimator.GetBool("Crouching"));
 
-    public bool CanUseEntranceDoors(MaskedPlayerEnemy _) => true;
-
 }

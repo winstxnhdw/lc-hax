@@ -35,6 +35,4 @@ internal class EyelessDogController : IEnemyController<MouthDogAI> {
 
     public string GetSecondarySkillName(MouthDogAI _) => "Lunge";
 
-    public bool CanUseEntranceDoors(MouthDogAI _) => true;
-
 }
