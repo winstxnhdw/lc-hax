@@ -18,8 +18,9 @@ internal static partial class Helper {
         Helper.Enemies.First(enemy => enemy is T) is T enemy ? enemy : null;
 
     internal static void Kill(this EnemyAI enemyInstance, ulong actualClientId) {
+        enemyInstance.ChangeEnemyOwnerServerRpc(actualClientId);
+        
         if (enemyInstance is NutcrackerEnemyAI nutcracker) {
-            nutcracker.ChangeEnemyOwnerServerRpc(actualClientId);
             nutcracker.KillEnemy();
         }
 
