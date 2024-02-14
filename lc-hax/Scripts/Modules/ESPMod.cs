@@ -137,6 +137,7 @@ internal class ESPMod : MonoBehaviour {
         this.InitialiseRenderers();
         this.InitialiseCoordinates();
         this.InGame = true;
+        this.IsMapLoaded = Helper.StartOfRound?.inShipPhase is not false;
     }
 
     void OnGameEnd() => this.InGame = false;

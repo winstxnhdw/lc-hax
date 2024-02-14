@@ -33,8 +33,8 @@ internal class Loader : MonoBehaviour {
     internal static void Load() {
         Loader.LoadLibraries();
         Loader.LoadHarmonyPatches();
-        Loader.LoadHaxGameObjects();
         Loader.LoadHaxModules();
+        Loader.LoadHaxGameObjects();
     }
 
     static void LoadHarmonyPatches() {

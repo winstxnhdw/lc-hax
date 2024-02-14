@@ -2,7 +2,7 @@ using System;
 using UnityEngine;
 
 internal class ScreenListener : MonoBehaviour {
-    internal static event Action? onScreenSizeChange;
+    internal static event Action? OnScreenSizeChange;
 
     int LastScreenWidth { get; set; } = Screen.width;
     int LastScreenHeight { get; set; } = Screen.height;
@@ -14,6 +14,6 @@ internal class ScreenListener : MonoBehaviour {
 
         this.LastScreenWidth = Screen.width;
         this.LastScreenHeight = Screen.height;
-        ScreenListener.onScreenSizeChange?.Invoke();
+        ScreenListener.OnScreenSizeChange?.Invoke();
     }
 }
