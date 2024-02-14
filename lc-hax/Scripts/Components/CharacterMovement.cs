@@ -36,13 +36,60 @@ internal class CharacterMovement : MonoBehaviour {
         this.gameObject.layer = localPlayer.gameObject.layer;
     }
 
-    void Awake() {
+    // method to set the position of the character controller
+    internal void SetPosition(Vector3 position) {
+        if (this.CharacterController is null) return;
+        this.CharacterController.enabled = false;
+        this.transform.position = position;
+        this.CharacterController.enabled = true;
+    }
+
+
+    internal void CalibrateCollision(EnemyAI instance) {
+        if (this.CharacterController == null) return;
+        if (instance == null) return;
+
+        // Initialize bounds to an invalid value so it can be expanded upon.
+        Bounds combinedBounds = new Bounds(Vector3.zero, Vector3.negativeInfinity);
+
+        Collider[] colliders = instance.GetComponentsInChildren<Collider>();
+        foreach (var collider in colliders) {
+            if (combinedBounds.extents == Vector3.negativeInfinity) {
+                combinedBounds = collider.bounds;
+            }
+            else {
+                combinedBounds.Encapsulate(collider.bounds);
+            }
+        }
+
+        // Check if bounds are valid before proceeding.
+        if (combinedBounds.extents == Vector3.negativeInfinity) return;
+
+        // Calculate height and radius from combined bounds
+        float baseHeight = combinedBounds.size.y;
+        float baseRadius = Mathf.Max(combinedBounds.size.x, combinedBounds.size.z) / 2f;
+
+        // Adjust the CharacterController dimensions
+        this.CharacterController.height = baseHeight;
+        this.CharacterController.center = new Vector3(0, baseHeight / 2, 0);
+        this.CharacterController.radius = baseRadius;
+
+        foreach (Collider col in colliders) {
+            if (col != this.CharacterController) {
+                // Ensure you don't ignore the CharacterController itself
+                Physics.IgnoreCollision(this.CharacterController, col);
+            }
+
+        }
+    }
+
+        void Awake() {
         this.Keyboard = Keyboard.current;
         this.NoClipKeyboard = this.gameObject.AddComponent<KeyboardMovement>();
         this.CharacterController = this.gameObject.AddComponent<CharacterController>();
-        this.CharacterController.height = 0.0f; // Adjust as needed
-        this.CharacterController.center = new Vector3(0.0f, 0.3f, 0.5f); // Adjust as needed
-        this.transform.localScale = new Vector3(0.0f, 0.0f, -0.1f);
+        this.CharacterController.height = 1.0f;
+        this.CharacterController.center = new Vector3(0.0f, 0.5f, 0.0f);
+        this.transform.localScale = new Vector3(0.5f, 0.5f, 0.5f);
     }
 
     // Update is called once per frame

@@ -93,9 +93,16 @@ internal sealed class PhantomMod : MonoBehaviour {
             player.TeleportPlayer(camera.transform.position);
         }
 
+        if (PossessionMod.Instance != null) {
+            if (PossessionMod.Instance.IsPossessed) {
+                PossessionMod.Instance.Unpossess();
+            }
+        }
+
         camera.transform.SetParent(cameraParent, false);
         camera.transform.localPosition = Vector3.zero;
         camera.transform.localRotation = Quaternion.identity;
+
 
         if (camera.gameObject.TryGetComponent(out KeyboardMovement keyboard)) {
             keyboard.enabled = false;
@@ -116,6 +123,7 @@ internal sealed class PhantomMod : MonoBehaviour {
         if (gameplayCamera.TryGetComponent(out MousePan gameplayMouse)) {
             gameplayMouse.enabled = false;
         }
+
     }
 
     void TogglePhantom() {
