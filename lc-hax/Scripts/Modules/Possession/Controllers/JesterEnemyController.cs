@@ -27,4 +27,6 @@ internal class JesterController : IEnemyController<JesterAI> {
     public string GetPrimarySkillName(JesterAI _) => "Close box";
 
     public string GetSecondarySkillName(JesterAI _) => "(HOLD) Begin cranking";
+
+    public float? InteractRange(JesterAI _) => 1f;
 }

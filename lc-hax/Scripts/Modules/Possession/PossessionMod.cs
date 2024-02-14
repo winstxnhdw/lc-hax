@@ -270,13 +270,24 @@ internal sealed class PossessionMod : MonoBehaviour {
         return false;
     }
 
+
+    float InteractRange(EnemyAI enemy) {
+        if (enemy is not EnemyAI enemyAI) return 0;
+        if (this.EnemyControllers.TryGetValue(enemy.GetType(), out IController value)) {
+            return value.InteractRange(enemyAI).GetValueOrDefault(1.0f);
+        }
+        return 1.0f;
+    }
+
+
+
     void InteractWithAmbient() {
         if (this.doorCooldownRemaining > 0) this.doorCooldownRemaining -= Time.deltaTime;
         if (this.teleportCooldownRemaining > 0) this.teleportCooldownRemaining -= Time.deltaTime;
         if (this.Possession.Enemy is not EnemyAI enemy) return;
 
-        float rayLength = 1f;
-        if (Physics.Raycast(enemy.transform.position, enemy.transform.forward, out RaycastHit hit, rayLength)) {
+        
+        if (Physics.Raycast(enemy.transform.position, enemy.transform.forward, out RaycastHit hit, this.InteractRange(enemy))) {
             if (hit.collider.gameObject.TryGetComponent(out DoorLock doorLock) && this.doorCooldownRemaining <= 0) {
                 this.OpenDoorAsEnemy(doorLock);
                 this.doorCooldownRemaining = DoorInteractionCooldown; 

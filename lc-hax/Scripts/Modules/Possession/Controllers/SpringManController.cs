@@ -34,5 +34,7 @@ internal class SpringManEnemyController : IEnemyController<SpringManAI> {
 
         return true;
     }
+
+    public float? InteractRange(SpringManAI _) => 1.5f;
 }
 

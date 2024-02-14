@@ -16,4 +16,5 @@ internal class ForestGiantController : IEnemyController<ForestGiantAI> {
 
     public bool CanUseEntranceDoors(ForestGiantAI _) => false;
 
+    public float? InteractRange(ForestGiantAI _) => 0f;
 }

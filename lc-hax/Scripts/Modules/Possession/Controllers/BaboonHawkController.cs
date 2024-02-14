@@ -62,4 +62,6 @@ internal class BaboonHawkController : IEnemyController<BaboonBirdAI> {
     public string GetPrimarySkillName(BaboonBirdAI enemyInstance) => enemyInstance.heldScrap is not null ? "" : "Grab Item";
 
     public string GetSecondarySkillName(BaboonBirdAI enemyInstance) => enemyInstance.heldScrap is null ? "" : "Drop item";
+
+    public float? InteractRange(BaboonBirdAI _) => 1.5f;
 }

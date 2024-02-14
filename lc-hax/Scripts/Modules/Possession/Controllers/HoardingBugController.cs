@@ -61,4 +61,6 @@ internal class HoardingBugController : IEnemyController<HoarderBugAI> {
 
     public string GetSecondarySkillName(HoarderBugAI enemyInstance) => enemyInstance.heldItem is null ? "" : "Drop item";
 
+    public float? InteractRange(HoarderBugAI _) => 1f;
+
 }

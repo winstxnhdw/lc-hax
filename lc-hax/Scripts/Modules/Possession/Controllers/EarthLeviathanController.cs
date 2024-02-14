@@ -11,5 +11,6 @@ internal class EarthLeviathanController : IEnemyController<SandWormAI> {
 
     public bool CanUseEntranceDoors(SandWormAI _) => false;
 
+    public float? InteractRange(SandWormAI _) => 0f;
 
 }

@@ -22,4 +22,5 @@ internal class SporeLizardController : IEnemyController<PufferAI> {
 
     public string GetSecondarySkillName(PufferAI _) => "Smoke";
 
+    public float? InteractRange(PufferAI _) => 2.5f;
 }
