@@ -21,7 +21,7 @@ internal static partial class Helper {
     internal static void Kill(this EnemyAI enemyInstance, ulong actualClientId) {
         if (enemyInstance is NutcrackerEnemyAI nutcracker) {
             nutcracker.ChangeEnemyOwnerServerRpc(actualClientId);
-            nutcracker.DropGunServerRpc(Vector3.zero);
+            nutcracker.KillEnemy();
         }
 
         enemyInstance.KillEnemyServerRpc(true);

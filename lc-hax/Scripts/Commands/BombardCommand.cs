@@ -11,6 +11,11 @@ internal class BombardCommand : ICommand {
               .Where(jetpack => !jetpack.Reflect().GetInternalField<bool>("jetpackBroken"))
               .ToArray();
 
+    /// <summary>
+    /// Grab and discard jetpacks to a random location of the same elevation near the target player.
+    /// If the target player is far away, it may take a while for the jetpacks to reach the player.
+    /// The jetpacks will only explode if they within 5 units of the target player.
+    /// </summary>
     IEnumerator BombardAsync(PlayerControllerB player, Transform targetTransform, JetpackItem[] jetpacks) {
         float currentWeight = player.carryWeight;
 

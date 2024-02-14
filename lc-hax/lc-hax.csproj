@@ -122,9 +122,14 @@
       <NoWarn>NU1701</NoWarn>
     </PackageReference>
 
-    <PackageReference Include="Quickenshtein" Version="1.5.1" />
+    <PackageReference Include="Nullable.Extended.Analyzer" Version="1.15.6169">
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
 
     <PackageReference Include="RequireNamedArgs" Version="0.0.7" />
+
+    <PackageReference Include="Quickenshtein" Version="1.5.1" />
 
     <EmbeddedResource Include="$(NuGetPath)/lib.harmony/2.2.2/lib/net48/0Harmony.dll" />
 
