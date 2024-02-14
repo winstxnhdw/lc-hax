@@ -23,7 +23,9 @@ internal static partial class Helper {
             nutcracker.KillEnemy();
         }
 
-        enemyInstance.KillEnemyServerRpc(true);
+        else {
+            enemyInstance.KillEnemyServerRpc(true);
+        }
     }
 
     internal static void Kill(EnemyAI enemyInstance) {
