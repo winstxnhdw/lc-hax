@@ -6,6 +6,7 @@ internal sealed class KillClickMod : MonoBehaviour {
     RaycastHit[] RaycastHits { get; set; } = new RaycastHit[100];
 
     void OnEnable() => InputListener.OnLeftButtonPress += this.Kill;
+
     void OnDisable() => InputListener.OnLeftButtonPress -= this.Kill;
 
     void Kill() {
@@ -13,9 +14,11 @@ internal sealed class KillClickMod : MonoBehaviour {
         if (Helper.CurrentCamera is not Camera camera) return;
         if (Helper.LocalPlayer is not PlayerControllerB localPlayer) return;
 
-        this.RaycastHits.SphereCastForward(camera.transform).Range().ForEach(i => {
-            if (!this.RaycastHits[i].collider.TryGetComponent(out EnemyAICollisionDetect enemy)) return;
+        for (int i = 0; i < this.RaycastHits.SphereCastForward(camera.transform); i++) {
+            if (!this.RaycastHits[i].collider.TryGetComponent(out EnemyAICollisionDetect enemy)) continue;
+
             enemy.mainScript.Kill(localPlayer.actualClientId);
-        });
+            break;
+        }
     }
 }

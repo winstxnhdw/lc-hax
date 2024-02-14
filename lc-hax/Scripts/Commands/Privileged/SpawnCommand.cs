@@ -57,6 +57,6 @@ internal class SpawnCommand : ICommand {
         }
 
         this.SpawnEnemyOnPlayer(targetPlayer, SpawnCommand.HostileEnemies[key], amount);
-        Chat.Print($"Spawning {(amount > 1 ? amount : 'a')} {key} on {targetPlayer.playerUsername}.");
+        Chat.Print($"Spawning {amount}x {key} on {targetPlayer.playerUsername}.");
     }
 }
