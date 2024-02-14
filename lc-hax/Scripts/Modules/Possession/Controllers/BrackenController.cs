@@ -24,4 +24,7 @@ internal class BrackenController : IEnemyController<FlowermanAI> {
     public string GetPrimarySkillName(FlowermanAI enemyInstance) => enemyInstance.carryingPlayerBody ? "Drop body" : "";
 
     public string GetSecondarySkillName(FlowermanAI _) => "Stand";
+
+    public bool CanUseEntranceDoors(FlowermanAI _) => true;
+
 }

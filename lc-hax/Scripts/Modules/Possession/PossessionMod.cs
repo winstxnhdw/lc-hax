@@ -255,31 +255,41 @@ internal sealed class PossessionMod : MonoBehaviour {
     }
 
     const float TeleportDoorCooldown = 2.5f;
-    const float DoorInteractionCooldown = 1.5f;
+    const float DoorInteractionCooldown = 0.7f;
 
     float doorCooldownRemaining = 0f;
     float teleportCooldownRemaining = 0f;
 
 
+    bool CanUseEntranceDoors(EnemyAI enemy)
+    {
+        if (enemy is not EnemyAI enemyAI) return false;
+        if (this.EnemyControllers.TryGetValue(enemy.GetType(), out IController value)) {
+            return value.CanUseEntranceDoors(enemyAI);
+        }
+        return false;
+    }
+
     void InteractWithAmbient() {
         if (this.doorCooldownRemaining > 0) this.doorCooldownRemaining -= Time.deltaTime;
         if (this.teleportCooldownRemaining > 0) this.teleportCooldownRemaining -= Time.deltaTime;
-
         if (this.Possession.Enemy is not EnemyAI enemy) return;
 
         float rayLength = 1f;
         if (Physics.Raycast(enemy.transform.position, enemy.transform.forward, out RaycastHit hit, rayLength)) {
             if (hit.collider.gameObject.TryGetComponent(out DoorLock doorLock) && this.doorCooldownRemaining <= 0) {
                 this.OpenDoorAsEnemy(doorLock);
-                this.doorCooldownRemaining = DoorInteractionCooldown; // Reset the cooldown
+                this.doorCooldownRemaining = DoorInteractionCooldown; 
                 return;
             }
 
-            if (hit.collider.gameObject.TryGetComponent(out EntranceTeleport entrance) &&
-                this.teleportCooldownRemaining <= 0) {
-                this.InteractWithTeleport(enemy, entrance);
-                this.teleportCooldownRemaining = TeleportDoorCooldown; // Reset the cooldown
-                return;
+            if (this.CanUseEntranceDoors(enemy)) {
+                if (hit.collider.gameObject.TryGetComponent(out EntranceTeleport entrance) &&
+                    this.teleportCooldownRemaining <= 0) {
+                    this.InteractWithTeleport(enemy, entrance);
+                    this.teleportCooldownRemaining = TeleportDoorCooldown; 
+                    return;
+                }
             }
         }
     }

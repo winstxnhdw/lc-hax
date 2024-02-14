@@ -60,4 +60,7 @@ internal class HoardingBugController : IEnemyController<HoarderBugAI> {
     public string GetPrimarySkillName(HoarderBugAI enemyInstance) => enemyInstance.heldItem is not null ? "Use item" : "Grab Item";
 
     public string GetSecondarySkillName(HoarderBugAI enemyInstance) => enemyInstance.heldItem is null ? "" : "Drop item";
+
+    public bool CanUseEntranceDoors(HoarderBugAI _) => true;
+
 }

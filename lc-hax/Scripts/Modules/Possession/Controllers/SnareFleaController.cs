@@ -33,4 +33,7 @@ internal class SnareFleaController : IEnemyController<CentipedeAI> {
     public string GetPrimarySkillName(CentipedeAI _) => "Drop";
 
     public string GetSecondarySkillName(CentipedeAI _) => "Attach to ceiling";
+
+    public bool CanUseEntranceDoors(CentipedeAI _) => false;
+
 }

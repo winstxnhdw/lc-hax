@@ -39,4 +39,7 @@ internal class NutcrackerController : IEnemyController<NutcrackerEnemyAI> {
     public string GetPrimarySkillName(NutcrackerEnemyAI enemyInstance) => enemyInstance.gun is null ? "" : "Fire";
 
     public string GetSecondarySkillName(NutcrackerEnemyAI _) => "(HOLD) Sentry mode";
+
+    public bool CanUseEntranceDoors(NutcrackerEnemyAI _) => true;
+
 }

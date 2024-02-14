@@ -17,11 +17,11 @@ internal interface IController {
     bool IsAbleToMove(EnemyAI enemyInstance);
 
     bool IsAbleToRotate(EnemyAI enemyInstance);
+    bool CanUseEntranceDoors(EnemyAI enemyInstance);
 
     string? GetPrimarySkillName(EnemyAI enemyInstance);
 
     string? GetSecondarySkillName(EnemyAI enemyInstance);
-
 
 
 }
@@ -44,6 +44,8 @@ internal interface IEnemyController<T> : IController where T : EnemyAI {
 
     bool IsAbleToRotate(T enemyInstance) => true;
 
+    bool CanUseEntranceDoors(T enemyInstance) => false;
+
     string? GetPrimarySkillName(T enemyInstance) => null;
 
     string? GetSecondarySkillName(T enemyInstance) => null;
@@ -65,6 +67,7 @@ internal interface IEnemyController<T> : IController where T : EnemyAI {
     bool IController.IsAbleToMove(EnemyAI enemyInstance) => this.IsAbleToMove((T)enemyInstance);
 
     bool IController.IsAbleToRotate(EnemyAI enemyInstance) => this.IsAbleToRotate((T)enemyInstance);
+    bool IController.CanUseEntranceDoors(EnemyAI enemyInstance) => this.CanUseEntranceDoors((T)enemyInstance);
 
     string? IController.GetPrimarySkillName(EnemyAI enemyInstance) => this.GetPrimarySkillName((T)enemyInstance);
 

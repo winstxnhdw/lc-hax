@@ -21,4 +21,7 @@ internal class SporeLizardController : IEnemyController<PufferAI> {
     public string GetPrimarySkillName(PufferAI _) => "Stomp";
 
     public string GetSecondarySkillName(PufferAI _) => "Smoke";
+
+    public bool CanUseEntranceDoors(PufferAI _) => true;
+
 }
