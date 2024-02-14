@@ -14,7 +14,7 @@ internal class SpringManEnemyController : IEnemyController<SpringManAI> {
     void SetStoppingMovement(SpringManAI enemyInstance, bool value) =>
         enemyInstance.Reflect().SetInternalField("stoppingMovement", value);
 
-    void Update(SpringManAI enemyInstance) {
+    public void Update(SpringManAI enemyInstance) {
         if (this.HoldingForceMove) {
             this.SetHasStopped(enemyInstance, false);
             this.SetStoppingMovement(enemyInstance, false);

@@ -1,10 +1,5 @@
 internal interface IController {
 
-    void OnPossess(EnemyAI enemyInstance);
-
-    void OnUnpossess(EnemyAI enemyInstance);
-    void OnDeath(EnemyAI enemyInstance);
-
     void Update(EnemyAI enemyInstance);
 
     void UsePrimarySkill(EnemyAI enemyInstance);
@@ -23,14 +18,9 @@ internal interface IController {
 
     string? GetSecondarySkillName(EnemyAI enemyInstance);
 
-    void UpdateCharacter(EnemyAI instance, CharacterMovement movement);
 }
 
 internal interface IEnemyController<T> : IController where T : EnemyAI {
-    void OnPossess(T enemyInstance) { }
-    void OnUnpossess(T enemyInstance) { }
-    void OnDeath(T enemyInstance) { }
-
     void Update(T enemyInstance) { }
 
     void UsePrimarySkill(T enemyInstance) { }
@@ -48,9 +38,6 @@ internal interface IEnemyController<T> : IController where T : EnemyAI {
     string? GetPrimarySkillName(T enemyInstance) => null;
 
     string? GetSecondarySkillName(T enemyInstance) => null;
-    void IController.OnPossess(EnemyAI enemyInstance) => this.OnPossess((T)enemyInstance);
-    void IController.OnUnpossess(EnemyAI enemyInstance) => this.OnUnpossess((T)enemyInstance);
-    void IController.OnDeath(EnemyAI enemyInstance) => this.OnDeath((T)enemyInstance);
 
     void IController.Update(EnemyAI enemyInstance) => this.Update((T)enemyInstance);
 
@@ -69,6 +56,4 @@ internal interface IEnemyController<T> : IController where T : EnemyAI {
     string? IController.GetPrimarySkillName(EnemyAI enemyInstance) => this.GetPrimarySkillName((T)enemyInstance);
 
     string? IController.GetSecondarySkillName(EnemyAI enemyInstance) => this.GetSecondarySkillName((T)enemyInstance);
-
-    void IController.UpdateCharacter(EnemyAI instance, CharacterMovement movement) => this.UpdateCharacter((T)instance, movement);
 }
