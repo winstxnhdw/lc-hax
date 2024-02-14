@@ -1,5 +1,8 @@
+using System.Numerics;
 using Hax;
 using Unity.Netcode;
+using UnityEngine;
+using Vector3 = UnityEngine.Vector3;
 
 enum BaboonState {
     SCOUTING = 0,
@@ -9,10 +12,31 @@ enum BaboonState {
 
 internal class BaboonHawkController : IEnemyController<BaboonBirdAI> {
 
+    Vector3 customCamp = new(1000, 1000, 1000);
+
+    Vector3 originalCamp = new(0, 0, 0);
+
+    public void OnDeath(BaboonBirdAI enemyInstance) {
+        if (enemyInstance.heldScrap is not null) {
+            _ = enemyInstance.Reflect().InvokeInternalMethod("DropHeldItemAndSync");
+        }
+    }
+
+    public void OnPossess(BaboonBirdAI enemyInstance) {
+        if (BaboonBirdAI.baboonCampPosition != this.customCamp) return;
+        this.originalCamp = BaboonBirdAI.baboonCampPosition;
+        BaboonBirdAI.baboonCampPosition = this.customCamp;
+    }
+
+    public void OnUnpossess(BaboonBirdAI enemyInstance) {
+        if (BaboonBirdAI.baboonCampPosition != this.customCamp) {
+            BaboonBirdAI.baboonCampPosition = this.originalCamp;
+        }
+    }
+
 
     void GrabItemAndSync(BaboonBirdAI enemyInstance, GrabbableObject item) {
         if (!item.TryGetComponent(out NetworkObject netItem)) return;
-        _ = enemyInstance.Reflect().SetInternalField("restingAtCamp", false);
         _ = enemyInstance.Reflect().InvokeInternalMethod("GrabItemAndSync", netItem);
     }
 

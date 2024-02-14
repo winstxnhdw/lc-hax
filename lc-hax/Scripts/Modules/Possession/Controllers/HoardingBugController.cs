@@ -13,6 +13,17 @@ internal class HoardingBugController : IEnemyController<HoarderBugAI> {
         enemyInstance.GrabItemServerRpc(netItem);
     }
 
+    public void OnDeath(HoarderBugAI enemyInstance) {
+        if (enemyInstance.heldItem.itemGrabbableObject is not GrabbableObject grabbable) return;
+        if (!grabbable.TryGetComponent(out NetworkObject networkObject)) return;
+
+        _ = enemyInstance.Reflect().InvokeInternalMethod(
+            "DropItemAndCallDropRPC",
+            networkObject,
+            false
+        );
+    }
+
     void UseHeldItem(HoarderBugAI enemyInstance) {
         switch (enemyInstance.heldItem.itemGrabbableObject) {
             case ShotgunItem gun:

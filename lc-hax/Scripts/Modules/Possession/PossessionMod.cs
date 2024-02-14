@@ -62,7 +62,6 @@ internal sealed class PossessionMod : MonoBehaviour {
         InputListener.OnLeftButtonPress += this.UsePrimarySkill;
         InputListener.OnRightButtonHold += this.OnRightMouseButtonHold;
 
-        this.UpdateCoroutine = this.StartCoroutine(this.EndOfFrameCoroutine());
         this.UpdateComponentsOnCurrentState(true);
     }
 
@@ -107,21 +106,23 @@ internal sealed class PossessionMod : MonoBehaviour {
         characterMovement.SetNoClipMode(this.NoClipEnabled);
     }
 
-    IEnumerator EndOfFrameCoroutine() {
-        WaitForEndOfFrame waitForEndOfFrame = new();
-
-        while (true) {
-            yield return waitForEndOfFrame;
-            this.EndOfFrameUpdate();
-        }
-    }
-
     void HandleEnemyMovements(IController controller, EnemyAI enemy, bool isMoving, bool isSprinting) => controller.OnMovement(enemy, isMoving, isSprinting);
+
+    void HandleEnemyOnPossess(IController controller, EnemyAI enemy) =>
+        controller.OnPossess(enemy);
+
+    void HandleEnemyOnUnpossess(IController controller, EnemyAI enemy) =>
+        controller.OnUnpossess(enemy);
+
+    void HandleEnemyOnDeath(IController controller, EnemyAI enemy) =>
+        controller.OnDeath(enemy);
+
+
+    void UpdateCharacter(IController controller, EnemyAI enemy, CharacterMovement character) => controller.UpdateCharacter(enemy, character);
 
     void EnemyUpdate(IController controller, EnemyAI enemy) => controller.Update(enemy);
 
-    // Updates position and rotation of possessed enemy at the end of frame
-    void EndOfFrameUpdate() {
+    void Update() {
         if (this.CharacterMovement is not CharacterMovement characterMovement) return;
         if (this.Possession.Enemy is not EnemyAI enemy) return;
         if (Helper.LocalPlayer is not PlayerControllerB localPlayer) return;
@@ -130,38 +131,65 @@ internal sealed class PossessionMod : MonoBehaviour {
         enemy.ChangeEnemyOwnerServerRpc(localPlayer.actualClientId);
 
         if (this.FirstUpdate) {
+            if (this.EnemyControllers.TryGetValue(enemy.GetType(), out IController value)) {
+                this.HandleEnemyOnPossess(value, enemy);
+            }
+
             this.FirstUpdate = false;
             this.SetEnemyColliders(enemy, false);
 
             if (enemy.agent is NavMeshAgent agent) {
                 agent.updatePosition = false;
                 agent.updateRotation = false;
+                agent.isStopped = true;
             }
 
             this.InitCharacterMovement(enemy.transform.position);
             this.UpdateComponentsOnCurrentState(true);
         }
 
+        if (enemy.isEnemyDead) {
+            if (this.EnemyControllers.TryGetValue(enemy.GetType(), out IController value)) {
+                this.HandleEnemyOnDeath(value, enemy);
+            }
+            this.Unpossess();
+            return;
+        }
+
+        // this updates the character's movement speed to match the enemy speeds (sprinting, walking, etc)
+        this.CharacterMovement.CharacterSpeed = enemy.agent.speed;
+
+
         if (!this.EnemyControllers.TryGetValue(enemy.GetType(), out IController controller)) {
             this.UpdateEnemyPosition(enemy);
             this.UpdateCameraPosition(camera, enemy);
+            this.UpdateCameraRotation(camera, enemy);
             return;
         }
 
         else if (controller.IsAbleToMove(enemy)) {
+            this.UpdateCharacter(controller, enemy, characterMovement);
             this.UpdateEnemyPosition(enemy);
             this.HandleEnemyMovements(controller, enemy, characterMovement.IsMoving, characterMovement.IsSprinting);
             this.EnemyUpdate(controller, enemy);
+            this.UpdateCameraPosition(camera, enemy);
+            if (controller.IsAbleToRotate(enemy)) {
+                this.UpdateCameraRotation(camera, enemy);
+            }
         }
 
         localPlayer.cursorTip.text = controller.GetPrimarySkillName(enemy);
-        this.UpdateCameraPosition(camera, enemy);
     }
 
     void UpdateCameraPosition(Camera camera, EnemyAI enemy) {
         if (this.CharacterMovement is not CharacterMovement characterMovement) return;
 
         camera.transform.position = characterMovement.transform.position + (3.0f * (Vector3.up - enemy.transform.forward));
+    }
+
+    void UpdateCameraRotation(Camera camera, EnemyAI enemy) {
+        if (this.CharacterMovement is not CharacterMovement characterMovement) return;
+
         camera.transform.rotation = this.transform.rotation;
         characterMovement.transform.rotation = this.transform.rotation;
     }
@@ -190,24 +218,34 @@ internal sealed class PossessionMod : MonoBehaviour {
     }
 
     void KillEnemyAndUnposses() {
-        if (this.Possession.Enemy is NutcrackerEnemyAI nutcracker) {
-            if (Helper.LocalPlayer is PlayerControllerB localPlayer) {
-                nutcracker.ChangeEnemyOwnerServerRpc(localPlayer.actualClientId);
-                nutcracker.DropGunServerRpc(Vector3.zero);
-            }
-        }
-        this.Possession?.Enemy?.KillEnemyServerRpc(true);
+        this.Possession?.Enemy?.KillEnemy();
         this.Unpossess();
     }
+    void OnControllerColliderHit(ControllerColliderHit hit) {
+        if (hit.collider == null) return;
+        if (this.Possession.Enemy is not EnemyAI enemy) return;
 
-
+        if (hit.collider.gameObject.TryGetComponent(out DoorLock doorLock)) {
+            if (!doorLock.Reflect().GetInternalField<bool>("isDoorOpened")) {
+                doorLock.OpenDoorAsEnemyServerRpc();
+                if(doorLock.gameObject.TryGetComponent(out AnimatedObjectTrigger trigger))
+                {
+                    trigger.TriggerAnimationNonPlayer(false, true, false);
+                }
+            }
+        }
+    }
     // Releases possession of the current enemy
     internal void Unpossess() {
         this.UnInitCharacterMovement();
         if (this.Possession.Enemy is not EnemyAI enemy) return;
+        if (this.EnemyControllers.TryGetValue(enemy.GetType(), out IController value)) {
+            this.HandleEnemyOnUnpossess(value, enemy);
+        }
         if (enemy.agent.Unfake() is NavMeshAgent navMeshAgent) {
             navMeshAgent.updatePosition = true;
             navMeshAgent.updateRotation = true;
+            navMeshAgent.isStopped = false;
 
             this.UpdateEnemyPosition(enemy);
             _ = enemy.agent.Warp(enemy.transform.position);
