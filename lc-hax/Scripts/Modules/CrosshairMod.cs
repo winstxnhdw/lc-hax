@@ -14,13 +14,13 @@ internal class CrosshairMod : MonoBehaviour {
     bool InGame { get; set; } = false;
 
     void OnEnable() {
-        ScreenListener.onScreenSizeChange += this.InitialiseCrosshairPositions;
+        ScreenListener.OnScreenSizeChange += this.InitialiseCrosshairPositions;
         GameListener.OnGameStart += this.ToggleInGame;
         GameListener.OnGameEnd += this.ToggleNotInGame;
     }
 
     void OnDisable() {
-        ScreenListener.onScreenSizeChange -= this.InitialiseCrosshairPositions;
+        ScreenListener.OnScreenSizeChange -= this.InitialiseCrosshairPositions;
         GameListener.OnGameStart -= this.ToggleInGame;
         GameListener.OnGameEnd -= this.ToggleNotInGame;
     }
