@@ -45,7 +45,7 @@ internal class CharacterMovement : MonoBehaviour {
     }
 
 
-    internal void CalibrateCollision(EnemyAI instance) {
+    internal void CalibrateCollision(EnemyAI instance, float shrinkFactor = 0.2f) {
         if (this.CharacterController == null) return;
         if (instance == null) return;
 
@@ -66,8 +66,9 @@ internal class CharacterMovement : MonoBehaviour {
         if (combinedBounds.extents == Vector3.negativeInfinity) return;
 
         // Calculate height and radius from combined bounds
-        float baseHeight = combinedBounds.size.y;
-        float baseRadius = Mathf.Max(combinedBounds.size.x, combinedBounds.size.z) / 2f;
+        float baseHeight = combinedBounds.size.y * shrinkFactor; // Apply shrink factor
+        float baseRadius =
+            (Mathf.Max(combinedBounds.size.x, combinedBounds.size.z) / 2f) * shrinkFactor; // Apply shrink factor
 
         // Adjust the CharacterController dimensions
         this.CharacterController.height = baseHeight;
@@ -76,14 +77,12 @@ internal class CharacterMovement : MonoBehaviour {
 
         foreach (Collider col in colliders) {
             if (col != this.CharacterController) {
-                // Ensure you don't ignore the CharacterController itself
                 Physics.IgnoreCollision(this.CharacterController, col);
             }
-
         }
     }
 
-        void Awake() {
+    void Awake() {
         this.Keyboard = Keyboard.current;
         this.NoClipKeyboard = this.gameObject.AddComponent<KeyboardMovement>();
         this.CharacterController = this.gameObject.AddComponent<CharacterController>();
