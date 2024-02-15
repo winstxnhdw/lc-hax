@@ -1,7 +1,5 @@
-using System.Numerics;
 using Hax;
 using Unity.Netcode;
-using UnityEngine;
 using Vector3 = UnityEngine.Vector3;
 
 enum BaboonState {

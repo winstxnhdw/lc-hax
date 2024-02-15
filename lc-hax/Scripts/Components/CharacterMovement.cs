@@ -50,10 +50,10 @@ internal class CharacterMovement : MonoBehaviour {
         if (instance == null) return;
 
         // Initialize bounds to an invalid value so it can be expanded upon.
-        Bounds combinedBounds = new Bounds(Vector3.zero, Vector3.negativeInfinity);
+        Bounds combinedBounds = new(Vector3.zero, Vector3.negativeInfinity);
 
         Collider[] colliders = instance.GetComponentsInChildren<Collider>();
-        foreach (var collider in colliders) {
+        foreach (Collider collider in colliders) {
             if (combinedBounds.extents == Vector3.negativeInfinity) {
                 combinedBounds = collider.bounds;
             }
@@ -68,7 +68,7 @@ internal class CharacterMovement : MonoBehaviour {
         // Calculate height and radius from combined bounds
         float baseHeight = combinedBounds.size.y * shrinkFactor; // Apply shrink factor
         float baseRadius =
-            (Mathf.Max(combinedBounds.size.x, combinedBounds.size.z) / 2f) * shrinkFactor; // Apply shrink factor
+            Mathf.Max(combinedBounds.size.x, combinedBounds.size.z) / 2f * shrinkFactor; // Apply shrink factor
 
         // Adjust the CharacterController dimensions
         this.CharacterController.height = baseHeight;
@@ -93,9 +93,8 @@ internal class CharacterMovement : MonoBehaviour {
 
     // Update is called once per frame
     void Update() {
-        if(this.NoClipKeyboard != null)
-        {
-            if(this.NoClipKeyboard.enabled) return;
+        if (this.NoClipKeyboard != null) {
+            if (this.NoClipKeyboard.enabled) return;
         }
         Vector2 moveInput = new Vector2(
             this.Keyboard.dKey.ReadValue() - this.Keyboard.aKey.ReadValue(),
