@@ -8,6 +8,8 @@ using System.Linq;
 namespace Hax;
 
 internal class Loader : MonoBehaviour {
+    const string HarmonyID = "winstxnhdw.lc-hax";
+
     static GameObject HaxGameObjects { get; } = new("Hax GameObjects");
     static GameObject HaxModules { get; } = new("Hax Modules");
 
@@ -32,10 +34,12 @@ internal class Loader : MonoBehaviour {
 
     internal static void Load() {
         Loader.LoadLibraries();
-        if (Harmony.HasAnyPatches("winstxnhdw.lc-hax")) {
-            Console.WriteLine("lc-hax is already loaded.");
+
+        if (Harmony.HasAnyPatches(HarmonyID)) {
+            Console.WriteLine("lc-hax has already loaded!");
             return;
         }
+
         Loader.LoadHarmonyPatches();
         Loader.LoadHaxModules();
         Loader.LoadHaxGameObjects();
@@ -43,7 +47,7 @@ internal class Loader : MonoBehaviour {
 
     static void LoadHarmonyPatches() {
         try {
-            new Harmony("winstxnhdw.lc-hax").PatchAll();
+            new Harmony(HarmonyID).PatchAll();
         }
 
         catch (Exception exception) {
