@@ -26,14 +26,15 @@ internal class SpringManEnemyController : IEnemyController<SpringManAI> {
     public void ReleaseSecondarySkill(SpringManAI enemyInstance) => this.HoldingForceMove = false;
 
 
-    public bool IsAbleToMove(SpringManAI enemyInstance) {
-        if (!this.HoldingForceMove) {
-            return !this.GetHasStopped(enemyInstance) ||
-                   !this.GetStoppingMovement(enemyInstance);
-        }
+    public bool IsAbleToMove(SpringManAI enemyInstance) =>
+        this.HoldingForceMove
+        || !this.GetHasStopped(enemyInstance) ||
+        !this.GetStoppingMovement(enemyInstance);
 
-        return true;
-    }
+    public bool IsAbleToRotate(SpringManAI enemyInstance) =>
+        this.HoldingForceMove
+        || !this.GetHasStopped(enemyInstance) ||
+        !this.GetStoppingMovement(enemyInstance);
 
     public float? InteractRange(SpringManAI _) => 1.5f;
 }
