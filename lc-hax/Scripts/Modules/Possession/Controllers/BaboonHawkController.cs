@@ -50,8 +50,6 @@ internal class BaboonHawkController : IEnemyController<BaboonBirdAI> {
             shotgun.ShootShotgun(enemyInstance.transform);
             return;
         }
-
-        enemyInstance.heldScrap?.InteractWithProp();
     }
 
     public void UseSecondarySkill(BaboonBirdAI enemyInstance) {
