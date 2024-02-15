@@ -42,7 +42,7 @@ internal sealed class PossessionMod : MonoBehaviour {
     }
 
     void InitCharacterMovement(Vector3 initPos = default) {
-        this.CharacterMovementInstance = new GameObject("Hax_CharacterMovement");
+        this.CharacterMovementInstance = new GameObject("Hax CharacterMovement");
         this.CharacterMovementInstance.transform.position = initPos;
         this.CharacterMovement = this.CharacterMovementInstance.AddComponent<CharacterMovement>();
         this.CharacterMovement.Init();
