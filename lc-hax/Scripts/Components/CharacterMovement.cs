@@ -37,7 +37,7 @@ internal class CharacterMovement : MonoBehaviour {
         this.gameObject.layer = localPlayer.gameObject.layer;
     }
 
-    internal void SetPosition(EnemyAI enemy, Vector3 newPosition) {
+    internal void SetPosition(Vector3 newPosition) {
         this.CharacterController.enabled = false;
         this.transform.position = newPosition;
         this.CharacterController.enabled = true;
