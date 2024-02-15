@@ -12,6 +12,8 @@ internal class CharacterMovement : MonoBehaviour {
     const float JumpForce = 9.2f;
     const float Gravity = 18.0f;
 
+    public float CharacterSpeed { get; set; } = BaseSpeed;
+
     // used to sync with the enemy to make sure it plays the correct animation when it is moving
     public bool IsMoving { get; private set; } = false;
     public bool IsSprinting { get; private set; } = false;
@@ -28,27 +30,73 @@ internal class CharacterMovement : MonoBehaviour {
         if (this.NoClipKeyboard is null) return;
         this.NoClipKeyboard.enabled = enabled;
     }
-
     // Initialize method
     internal void Init() {
         if (Helper.LocalPlayer is not PlayerControllerB localPlayer) return;
         this.gameObject.layer = localPlayer.gameObject.layer;
     }
 
+    // method to set the position of the character controller
+    internal void SetPosition(Vector3 position) {
+        if (this.CharacterController is null) return;
+        this.CharacterController.enabled = false;
+        this.transform.position = position;
+        this.CharacterController.enabled = true;
+    }
+
+
+    internal void CalibrateCollision(EnemyAI instance, float shrinkFactor = 0.2f) {
+        if (this.CharacterController == null) return;
+        if (instance == null) return;
+
+        // Initialize bounds to an invalid value so it can be expanded upon.
+        Bounds combinedBounds = new Bounds(Vector3.zero, Vector3.negativeInfinity);
+
+        Collider[] colliders = instance.GetComponentsInChildren<Collider>();
+        foreach (var collider in colliders) {
+            if (combinedBounds.extents == Vector3.negativeInfinity) {
+                combinedBounds = collider.bounds;
+            }
+            else {
+                combinedBounds.Encapsulate(collider.bounds);
+            }
+        }
+
+        // Check if bounds are valid before proceeding.
+        if (combinedBounds.extents == Vector3.negativeInfinity) return;
+
+        // Calculate height and radius from combined bounds
+        float baseHeight = combinedBounds.size.y * shrinkFactor; // Apply shrink factor
+        float baseRadius =
+            (Mathf.Max(combinedBounds.size.x, combinedBounds.size.z) / 2f) * shrinkFactor; // Apply shrink factor
+
+        // Adjust the CharacterController dimensions
+        this.CharacterController.height = baseHeight;
+        this.CharacterController.center = new Vector3(0, baseHeight / 2, 0);
+        this.CharacterController.radius = baseRadius;
+
+        foreach (Collider col in colliders) {
+            if (col != this.CharacterController) {
+                Physics.IgnoreCollision(this.CharacterController, col);
+            }
+        }
+    }
+
     void Awake() {
         this.Keyboard = Keyboard.current;
         this.NoClipKeyboard = this.gameObject.AddComponent<KeyboardMovement>();
         this.CharacterController = this.gameObject.AddComponent<CharacterController>();
-        this.CharacterController.height = 0.0f; // Adjust as needed
-        this.CharacterController.center = new Vector3(0.0f, 0.3f, 0.5f); // Adjust as needed
-        this.transform.localScale = new Vector3(0.0f, 0.0f, -0.1f);
+        this.CharacterController.height = 1.0f;
+        this.CharacterController.center = new Vector3(0.0f, 0.5f, 0.0f);
+        this.transform.localScale = new Vector3(0.5f, 0.5f, 0.5f);
     }
 
     // Update is called once per frame
     void Update() {
-        if (this.NoClipKeyboard?.enabled is not true) return;
-
-        // Read movement input from keyboard
+        if(this.NoClipKeyboard != null)
+        {
+            if(this.NoClipKeyboard.enabled) return;
+        }
         Vector2 moveInput = new Vector2(
             this.Keyboard.dKey.ReadValue() - this.Keyboard.aKey.ReadValue(),
             this.Keyboard.wKey.ReadValue() - this.Keyboard.sKey.ReadValue()
@@ -71,8 +119,8 @@ internal class CharacterMovement : MonoBehaviour {
         // Apply speed and sprint modifiers
         moveDirection *= speedModifier * (
             this.IsSprinting
-                ? CharacterMovement.BaseSpeed * CharacterMovement.SprintSpeedMultiplier
-                : CharacterMovement.BaseSpeed
+                ? this.CharacterSpeed * CharacterMovement.SprintSpeedMultiplier
+                : this.CharacterSpeed
             );
 
         // Apply gravity

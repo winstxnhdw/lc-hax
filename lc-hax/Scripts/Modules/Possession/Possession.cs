@@ -1,3 +1,6 @@
+using UnityEngine;
+using UnityEngine.AI;
+
 internal class Possession() {
     EnemyAI? enemy = null;
 

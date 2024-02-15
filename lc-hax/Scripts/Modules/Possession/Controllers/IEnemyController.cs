@@ -1,4 +1,9 @@
 internal interface IController {
+
+    void OnPossess(EnemyAI instance);
+    void OnUnpossess(EnemyAI instance);
+    void OnDeath(EnemyAI instance);
+
     void Update(EnemyAI enemyInstance);
 
     void UsePrimarySkill(EnemyAI enemyInstance);
@@ -11,12 +16,22 @@ internal interface IController {
 
     bool IsAbleToMove(EnemyAI enemyInstance);
 
+    bool IsAbleToRotate(EnemyAI enemyInstance);
+    bool CanUseEntranceDoors(EnemyAI enemyInstance);
+
     string? GetPrimarySkillName(EnemyAI enemyInstance);
 
     string? GetSecondarySkillName(EnemyAI enemyInstance);
+
+    float? InteractRange(EnemyAI enemyInstance);
+
+
 }
 
 internal interface IEnemyController<T> : IController where T : EnemyAI {
+    void OnPossess(T instance) { }
+    void OnUnpossess(T instance) { }
+    void OnDeath(T instance) { }
     void Update(T enemyInstance) { }
 
     void UsePrimarySkill(T enemyInstance) { }
@@ -29,9 +44,18 @@ internal interface IEnemyController<T> : IController where T : EnemyAI {
 
     bool IsAbleToMove(T enemyInstance) => true;
 
+    bool IsAbleToRotate(T enemyInstance) => true;
+
+    bool CanUseEntranceDoors(T enemyInstance) => true;
+
     string? GetPrimarySkillName(T enemyInstance) => null;
 
     string? GetSecondarySkillName(T enemyInstance) => null;
+    float? InteractRange(T enemyInstance) => 2.5f;
+
+    void IController.OnPossess(EnemyAI instance) => this.OnPossess((T)instance);
+    void IController.OnUnpossess(EnemyAI instance) => this.OnUnpossess((T)instance);
+    void IController.OnDeath(EnemyAI instance) => this.OnDeath((T)instance);
 
     void IController.Update(EnemyAI enemyInstance) => this.Update((T)enemyInstance);
 
@@ -45,7 +69,13 @@ internal interface IEnemyController<T> : IController where T : EnemyAI {
 
     bool IController.IsAbleToMove(EnemyAI enemyInstance) => this.IsAbleToMove((T)enemyInstance);
 
+    bool IController.IsAbleToRotate(EnemyAI enemyInstance) => this.IsAbleToRotate((T)enemyInstance);
+    bool IController.CanUseEntranceDoors(EnemyAI enemyInstance) => this.CanUseEntranceDoors((T)enemyInstance);
+
     string? IController.GetPrimarySkillName(EnemyAI enemyInstance) => this.GetPrimarySkillName((T)enemyInstance);
 
     string? IController.GetSecondarySkillName(EnemyAI enemyInstance) => this.GetSecondarySkillName((T)enemyInstance);
+
+    float? IController.InteractRange(EnemyAI enemyInstance) => this.InteractRange((T)enemyInstance);
+
 }
