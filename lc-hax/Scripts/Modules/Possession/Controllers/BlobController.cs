@@ -1,6 +1,3 @@
-using Hax;
-using UnityEngine;
-
 internal class BlobController : IEnemyController<BlobAI> {
 
     public void SetTamedTimer(BlobAI instance, float time) => _ = instance.Reflect().SetInternalField("tamedTimer", time);
