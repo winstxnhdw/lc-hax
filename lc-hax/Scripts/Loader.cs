@@ -32,6 +32,10 @@ internal class Loader : MonoBehaviour {
 
     internal static void Load() {
         Loader.LoadLibraries();
+        if (Harmony.HasAnyPatches("winstxnhdw.lc-hax")) {
+            Console.WriteLine("lc-hax is already loaded.");
+            return;
+        }
         Loader.LoadHarmonyPatches();
         Loader.LoadHaxModules();
         Loader.LoadHaxGameObjects();
