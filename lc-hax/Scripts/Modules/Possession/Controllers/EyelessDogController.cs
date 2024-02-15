@@ -36,4 +36,7 @@ internal class EyelessDogController : IEnemyController<MouthDogAI> {
     }
 
     public string GetSecondarySkillName(MouthDogAI _) => "Lunge";
+
+    public float? InteractRange(MouthDogAI _) => 2.5f;
+
 }
