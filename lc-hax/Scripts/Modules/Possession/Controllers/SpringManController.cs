@@ -24,10 +24,9 @@ internal class SpringManEnemyController : IEnemyController<SpringManAI> {
 
 
     public bool IsAbleToMove(SpringManAI enemyInstance) {
-        return !this.HoldingForceMove
-            ? !this.GetHasStopped(enemyInstance) ||
-                   !this.GetStoppingMovement(enemyInstance)
-            : true;
+        return this.HoldingForceMove
+|| !this.GetHasStopped(enemyInstance) ||
+                   !this.GetStoppingMovement(enemyInstance);
     }
 
     public float? InteractRange(SpringManAI _) => 1.5f;
