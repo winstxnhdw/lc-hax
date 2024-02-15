@@ -1,7 +1,9 @@
+using System.Collections;
 using UnityEngine;
 using GameNetcodeStuff;
 using UnityEngine.InputSystem;
 using Hax;
+using UnityEngine.UIElements;
 
 internal class CharacterMovement : MonoBehaviour {
     // Movement constants
@@ -30,50 +32,31 @@ internal class CharacterMovement : MonoBehaviour {
         if (this.NoClipKeyboard is null) return;
         this.NoClipKeyboard.enabled = enabled;
     }
-    // Initialize method
     internal void Init() {
         if (Helper.LocalPlayer is not PlayerControllerB localPlayer) return;
         this.gameObject.layer = localPlayer.gameObject.layer;
     }
 
-    // method to set the position of the character controller
-    internal void SetPosition(Vector3 position) {
-        if (this.CharacterController is null) return;
+    internal void SetPosition(EnemyAI enemy, Vector3 newPosition) {
         this.CharacterController.enabled = false;
-        this.transform.position = position;
+        this.transform.position = newPosition;
         this.CharacterController.enabled = true;
     }
 
 
-    internal void CalibrateCollision(EnemyAI instance, float shrinkFactor = 0.2f) {
+    internal void CalibrateCollision(EnemyAI instance) {
         if (this.CharacterController == null) return;
         if (instance == null) return;
 
-        // Initialize bounds to an invalid value so it can be expanded upon.
-        Bounds combinedBounds = new(Vector3.zero, Vector3.negativeInfinity);
-
         Collider[] colliders = instance.GetComponentsInChildren<Collider>();
-        foreach (Collider collider in colliders) {
-            if (combinedBounds.extents == Vector3.negativeInfinity) {
-                combinedBounds = collider.bounds;
-            }
-            else {
-                combinedBounds.Encapsulate(collider.bounds);
-            }
-        }
 
-        // Check if bounds are valid before proceeding.
-        if (combinedBounds.extents == Vector3.negativeInfinity) return;
+        // Set minimal height and radius for the CharacterController
+        this.CharacterController.height = 0.1f;
+        this.CharacterController.radius = 0.1f;
+        this.CharacterController.center = new Vector3(0, 0.05f, 0);
 
-        // Calculate height and radius from combined bounds
-        float baseHeight = combinedBounds.size.y * shrinkFactor; // Apply shrink factor
-        float baseRadius =
-            Mathf.Max(combinedBounds.size.x, combinedBounds.size.z) / 2f * shrinkFactor; // Apply shrink factor
-
-        // Adjust the CharacterController dimensions
-        this.CharacterController.height = baseHeight;
-        this.CharacterController.center = new Vector3(0, baseHeight / 2, 0);
-        this.CharacterController.radius = baseRadius;
+        float maxStepOffset = this.CharacterController.height + (this.CharacterController.radius * 2);
+        this.CharacterController.stepOffset = Mathf.Min(this.CharacterController.stepOffset, maxStepOffset);
 
         foreach (Collider col in colliders) {
             if (col != this.CharacterController) {
@@ -86,16 +69,16 @@ internal class CharacterMovement : MonoBehaviour {
         this.Keyboard = Keyboard.current;
         this.NoClipKeyboard = this.gameObject.AddComponent<KeyboardMovement>();
         this.CharacterController = this.gameObject.AddComponent<CharacterController>();
-        this.CharacterController.height = 1.0f;
-        this.CharacterController.center = new Vector3(0.0f, 0.5f, 0.0f);
-        this.transform.localScale = new Vector3(0.5f, 0.5f, 0.5f);
     }
 
     // Update is called once per frame
     void Update() {
-        if (this.NoClipKeyboard != null) {
-            if (this.NoClipKeyboard.enabled) return;
+        if(this.NoClipKeyboard != null)
+        {
+            if(this.NoClipKeyboard.enabled) return;
         }
+        if (this.CharacterController != null && !this.CharacterController.enabled) return;
+
         Vector2 moveInput = new Vector2(
             this.Keyboard.dKey.ReadValue() - this.Keyboard.aKey.ReadValue(),
             this.Keyboard.wKey.ReadValue() - this.Keyboard.sKey.ReadValue()
