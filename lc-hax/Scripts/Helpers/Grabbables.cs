@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using GameNetcodeStuff;
@@ -87,4 +88,8 @@ internal static partial class Helper {
             GiftBoxItem gift => gift.GetGiftBoxActualValue(),
             _ => grabbable.scrapValue,
         };
+
+    internal static Item[] Items { get; } = Resources.FindObjectsOfTypeAll<Item>();
+
+    internal static Item? GetItem(string itemName) => Items.First(item => item.itemName.Contains(itemName, StringComparison.InvariantCultureIgnoreCase));
 }

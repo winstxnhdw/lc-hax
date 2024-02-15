@@ -10,14 +10,22 @@ internal class MaskCommand : ICommand {
 
     public void Execute(StringArray args) {
         if (Helper.LocalPlayer is not PlayerControllerB localPlayer) return;
-        if (Helper.Grabbables.First(grabbable => grabbable is HauntedMaskItem) is not HauntedMaskItem hauntedMaskItem) {
-            Chat.Print("No mask found!");
-            return;
-        }
+        HauntedMaskItem? hauntedMaskItem;
+        if (Helper.LocalPlayer?.currentlyHeldObjectServer is not HauntedMaskItem held) {
+            if (Helper.Grabbables.First(grabbable => grabbable is HauntedMaskItem) is not HauntedMaskItem Map) {
+                Chat.Print("No mask found!");
+                return;
+            }
 
-        if (!localPlayer.GrabObject(hauntedMaskItem)) {
-            Chat.Print("You must have an empty inventory slot!");
-            return;
+            if (!localPlayer.GrabObject(Map)) {
+                Chat.Print("You must have an empty inventory slot!");
+                return;
+            }
+
+            hauntedMaskItem = Map;
+        }
+        else {
+            hauntedMaskItem = held;
         }
 
         PlayerControllerB? targetPlayer = args.Length is 0

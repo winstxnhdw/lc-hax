@@ -4,6 +4,9 @@ using Hax;
 using UnityEngine;
 
 internal sealed class WeightMod : MonoBehaviour {
+    Coroutine? WeightCoroutine { get; set; }
+
+
     IEnumerator SetWeight(object[] args) {
         WaitForEndOfFrame waitForEndOfFrame = new();
         WaitForSeconds waitForOneSecond = new(1.0f);
@@ -19,5 +22,12 @@ internal sealed class WeightMod : MonoBehaviour {
         }
     }
 
-    void Start() => this.StartResilientCoroutine(this.SetWeight);
+    void StartRoutine() => this.WeightCoroutine ??= this.StartResilientCoroutine(this.SetWeight);
+
+    void Start() => this.StartRoutine();
+
+    void OnDisable()=> this.StopCoroutine(this.WeightCoroutine);
+
+    void OnEnable() => this.StartRoutine();
+    void OnDestroy() => this.StopCoroutine(this.WeightCoroutine);
 }
