@@ -14,7 +14,7 @@ internal class BlobController : IEnemyController<BlobAI> {
 
     public void ReleaseSecondarySkill(BlobAI enemyInstance) => this.SetTamedTimer(enemyInstance, 0f);
 
-    public void UsePrimarySkill(BlobAI enemyInstance) => this.SetAngeredTimer(enemyInstance, 10f);
+    public void UsePrimarySkill(BlobAI enemyInstance) => this.SetAngeredTimer(enemyInstance, 18f);
 
 
     public float? InteractRange(BlobAI _) => 3.5f;

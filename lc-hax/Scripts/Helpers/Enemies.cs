@@ -61,8 +61,8 @@ internal static partial class Helper {
     }
 
     internal static bool IsHostileEnemy(EnemyType enemy) =>
-        !enemy.enemyName.Contains("Docile Locust Bees", StringComparison.OrdinalIgnoreCase) ||
-        !enemy.enemyName.Contains("Manticoil", StringComparison.OrdinalIgnoreCase);
+        !enemy.enemyName.Contains("Docile Locust Bees", StringComparison.InvariantCultureIgnoreCase) &&
+        !enemy.enemyName.Contains("Manticoil", StringComparison.InvariantCultureIgnoreCase);
 
     internal static Dictionary<string, GameObject> HostileEnemies { get; } =
         Resources.FindObjectsOfTypeAll<EnemyType>()
