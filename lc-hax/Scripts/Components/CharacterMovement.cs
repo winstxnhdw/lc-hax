@@ -15,6 +15,7 @@ internal class CharacterMovement : MonoBehaviour {
     const float Gravity = 18.0f;
 
     public float CharacterSpeed { get; set; } = BaseSpeed;
+    public float CharacterSprintSpeed { get; set; } = SprintSpeedMultiplier;
 
     // used to sync with the enemy to make sure it plays the correct animation when it is moving
     public bool IsMoving { get; private set; } = false;
@@ -102,7 +103,7 @@ internal class CharacterMovement : MonoBehaviour {
         // Apply speed and sprint modifiers
         moveDirection *= speedModifier * (
             this.IsSprinting
-                ? this.CharacterSpeed * CharacterMovement.SprintSpeedMultiplier
+                ? this.CharacterSpeed * this.CharacterSprintSpeed
                 : this.CharacterSpeed
             );
 

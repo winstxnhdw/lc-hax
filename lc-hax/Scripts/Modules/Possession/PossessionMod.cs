@@ -31,7 +31,8 @@ internal sealed class PossessionMod : MonoBehaviour {
         { typeof(SandWormAI), new EarthLeviathanController() },
         { typeof(MouthDogAI), new EyelessDogController() },
         { typeof(MaskedPlayerEnemy), new MaskedPlayerController() },
-        { typeof(SpringManAI), new SpringManEnemyController() }
+        { typeof(SpringManAI), new SpringManEnemyController() },
+        { typeof(BlobAI), new BlobController()}
 
     };
     void Awake() {
@@ -47,7 +48,10 @@ internal sealed class PossessionMod : MonoBehaviour {
         this.CharacterMovementInstance.transform.position = enemy == null ? default : enemy.transform.position;
         this.CharacterMovement = this.CharacterMovementInstance.AddComponent<CharacterMovement>();
         this.CharacterMovement.Init();
-        if (enemy != null) this.CharacterMovement.CalibrateCollision(enemy);
+        if (enemy != null) {
+            this.CharacterMovement.CalibrateCollision(enemy);
+            this.CharacterMovement.CharacterSprintSpeed = this.SprintMultiplier(enemy);
+        }
         DontDestroyOnLoad(this.CharacterMovementInstance);
     }
 
@@ -274,11 +278,19 @@ internal sealed class PossessionMod : MonoBehaviour {
     float InteractRange(EnemyAI enemy) {
         if (enemy is not EnemyAI enemyAI) return 0;
         if (this.EnemyControllers.TryGetValue(enemy.GetType(), out IController value)) {
-            return value.InteractRange(enemyAI).GetValueOrDefault(1.0f);
+            return value.InteractRange(enemyAI).GetValueOrDefault(2.5f);
         }
-        return 1.0f;
+        return 2.5f;
     }
 
+    float SprintMultiplier(EnemyAI enemy) {
+        if (enemy is not EnemyAI enemyAI) return 0;
+        if (this.EnemyControllers.TryGetValue(enemy.GetType(), out IController value)) {
+            return value.SprintMultiplier(enemyAI).GetValueOrDefault(2.8f);
+        }
+
+        return 2.8f;
+    }
 
 
     void InteractWithAmbient() {

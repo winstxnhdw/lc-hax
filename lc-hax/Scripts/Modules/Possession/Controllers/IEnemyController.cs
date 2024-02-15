@@ -25,6 +25,7 @@ internal interface IController {
 
     float? InteractRange(EnemyAI enemyInstance);
 
+    float? SprintMultiplier(EnemyAI enemyInstance);
 
 }
 
@@ -52,6 +53,7 @@ internal interface IEnemyController<T> : IController where T : EnemyAI {
 
     string? GetSecondarySkillName(T enemyInstance) => null;
     float? InteractRange(T enemyInstance) => 2.5f;
+    float? SprintMultiplier(T enemyInstance) => 2.8f;
 
     void IController.OnPossess(EnemyAI instance) => this.OnPossess((T)instance);
     void IController.OnUnpossess(EnemyAI instance) => this.OnUnpossess((T)instance);
@@ -77,5 +79,7 @@ internal interface IEnemyController<T> : IController where T : EnemyAI {
     string? IController.GetSecondarySkillName(EnemyAI enemyInstance) => this.GetSecondarySkillName((T)enemyInstance);
 
     float? IController.InteractRange(EnemyAI enemyInstance) => this.InteractRange((T)enemyInstance);
+
+    float? IController.SprintMultiplier(EnemyAI enemyInstance) => this.SprintMultiplier((T)enemyInstance);
 
 }
