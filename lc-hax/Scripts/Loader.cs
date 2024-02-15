@@ -16,6 +16,8 @@ internal class Loader : MonoBehaviour {
     static void AddHaxModules<T>() where T : Component => Loader.HaxModules.AddComponent<T>();
     static void AddHaxGameObject<T>() where T : Component => Loader.HaxGameObjects.AddComponent<T>();
 
+    static bool HasLoaded => Harmony.HasAnyPatches(Loader.HarmonyID);
+
     static void LoadLibraries() {
         Assembly assembly = Assembly.GetExecutingAssembly();
 
@@ -35,8 +37,8 @@ internal class Loader : MonoBehaviour {
     internal static void Load() {
         Loader.LoadLibraries();
 
-        if (Harmony.HasAnyPatches(HarmonyID)) {
-            Console.WriteLine("lc-hax has already loaded!");
+        if (Loader.HasLoaded) {
+            Logger.Write("lc-hax has already loaded!");
             return;
         }
 
@@ -45,9 +47,10 @@ internal class Loader : MonoBehaviour {
         Loader.LoadHaxGameObjects();
     }
 
+
     static void LoadHarmonyPatches() {
         try {
-            new Harmony(HarmonyID).PatchAll();
+            new Harmony(Loader.HarmonyID).PatchAll();
         }
 
         catch (Exception exception) {
