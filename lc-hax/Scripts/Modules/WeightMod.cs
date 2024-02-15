@@ -24,10 +24,20 @@ internal sealed class WeightMod : MonoBehaviour {
 
     void StartRoutine() => this.WeightCoroutine ??= this.StartResilientCoroutine(this.SetWeight);
 
-    void Start() => this.StartRoutine();
+    void OnStopRoutine() {
+        if (this.WeightCoroutine != null) {
+            this.StopCoroutine(this.WeightCoroutine);
+            this.WeightCoroutine = null;
+        }
 
-    void OnDisable()=> this.StopCoroutine(this.WeightCoroutine);
+        if (Helper.LocalPlayer is not PlayerControllerB player) return;
+        player.carryWeight = 1.0f;
+    }
 
-    void OnEnable() => this.StartRoutine();
-    void OnDestroy() => this.StopCoroutine(this.WeightCoroutine);
+    public void Start() => this.StartRoutine();
+
+    public void OnDisable()=> this.OnStopRoutine();
+
+    public void OnEnable() => this.StartRoutine();
+    public void OnDestroy() => this.OnStopRoutine();
 }
