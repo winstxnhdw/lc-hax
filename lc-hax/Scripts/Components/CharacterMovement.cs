@@ -1,7 +1,9 @@
+using System.Collections;
 using UnityEngine;
 using GameNetcodeStuff;
 using UnityEngine.InputSystem;
 using Hax;
+using UnityEngine.UIElements;
 
 internal class CharacterMovement : MonoBehaviour {
     // Movement constants
@@ -36,6 +38,7 @@ internal class CharacterMovement : MonoBehaviour {
     }
 
     internal void SetPosition(Vector3 newPosition) {
+        if(this.CharacterController is null) return;
         this.CharacterController.enabled = false;
         this.transform.position = newPosition;
         this.CharacterController.enabled = true;
@@ -71,8 +74,9 @@ internal class CharacterMovement : MonoBehaviour {
 
     // Update is called once per frame
     void Update() {
-        if (this.NoClipKeyboard != null) {
-            if (this.NoClipKeyboard.enabled) return;
+        if(this.NoClipKeyboard != null)
+        {
+            if(this.NoClipKeyboard.enabled) return;
         }
         if (this.CharacterController != null && !this.CharacterController.enabled) return;
 
