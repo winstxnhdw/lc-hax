@@ -1,6 +1,3 @@
-using Hax;
-using UnityEngine;
-
 internal class SpringManEnemyController : IEnemyController<SpringManAI> {
 
     bool HoldingForceMove = false;
