@@ -1,9 +1,11 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 using GameNetcodeStuff;
 using Hax;
+using static UnityEngine.EventSystems.EventTrigger;
 
 internal sealed class PossessionMod : MonoBehaviour {
     internal static PossessionMod? Instance { get; private set; }
@@ -29,7 +31,8 @@ internal sealed class PossessionMod : MonoBehaviour {
         { typeof(SandWormAI), new EarthLeviathanController() },
         { typeof(MouthDogAI), new EyelessDogController() },
         { typeof(MaskedPlayerEnemy), new MaskedPlayerController() },
-        { typeof(SpringManAI), new SpringManEnemyController() }
+        { typeof(SpringManAI), new SpringManEnemyController() },
+        { typeof(BlobAI), new BlobController()}
 
     };
     void Awake() {
@@ -45,7 +48,10 @@ internal sealed class PossessionMod : MonoBehaviour {
         this.CharacterMovementInstance.transform.position = enemy == null ? default : enemy.transform.position;
         this.CharacterMovement = this.CharacterMovementInstance.AddComponent<CharacterMovement>();
         this.CharacterMovement.Init();
-        if (enemy != null) this.CharacterMovement.CalibrateCollision(enemy);
+        if (enemy != null) {
+            this.CharacterMovement.CalibrateCollision(enemy);
+            this.CharacterMovement.CharacterSprintSpeed = this.SprintMultiplier(enemy);
+        }
         DontDestroyOnLoad(this.CharacterMovementInstance);
     }
 
@@ -259,20 +265,32 @@ internal sealed class PossessionMod : MonoBehaviour {
     float teleportCooldownRemaining = 0f;
 
 
-    bool CanUseEntranceDoors(EnemyAI enemy) {
-        return enemy is EnemyAI enemyAI
-&& this.EnemyControllers.TryGetValue(enemy.GetType(), out IController value) && value.CanUseEntranceDoors(enemyAI);
+    bool CanUseEntranceDoors(EnemyAI enemy)
+    {
+        if (enemy is not EnemyAI enemyAI) return false;
+        if (this.EnemyControllers.TryGetValue(enemy.GetType(), out IController value)) {
+            return value.CanUseEntranceDoors(enemyAI);
+        }
+        return false;
     }
 
 
     float InteractRange(EnemyAI enemy) {
-        return enemy is not EnemyAI enemyAI
-            ? 0
-            : this.EnemyControllers.TryGetValue(enemy.GetType(), out IController value)
-            ? value.InteractRange(enemyAI).GetValueOrDefault(1.0f)
-            : 1.0f;
+        if (enemy is not EnemyAI enemyAI) return 0;
+        if (this.EnemyControllers.TryGetValue(enemy.GetType(), out IController value)) {
+            return value.InteractRange(enemyAI).GetValueOrDefault(2.5f);
+        }
+        return 2.5f;
     }
 
+    float SprintMultiplier(EnemyAI enemy) {
+        if (enemy is not EnemyAI enemyAI) return 0;
+        if (this.EnemyControllers.TryGetValue(enemy.GetType(), out IController value)) {
+            return value.SprintMultiplier(enemyAI).GetValueOrDefault(2.8f);
+        }
+
+        return 2.8f;
+    }
 
 
     void InteractWithAmbient() {
@@ -280,11 +298,11 @@ internal sealed class PossessionMod : MonoBehaviour {
         if (this.teleportCooldownRemaining > 0) this.teleportCooldownRemaining -= Time.deltaTime;
         if (this.Possession.Enemy is not EnemyAI enemy) return;
 
-
+        
         if (Physics.Raycast(enemy.transform.position, enemy.transform.forward, out RaycastHit hit, this.InteractRange(enemy))) {
             if (hit.collider.gameObject.TryGetComponent(out DoorLock doorLock) && this.doorCooldownRemaining <= 0) {
                 this.OpenDoorAsEnemy(doorLock);
-                this.doorCooldownRemaining = DoorInteractionCooldown;
+                this.doorCooldownRemaining = DoorInteractionCooldown; 
                 return;
             }
 
@@ -292,14 +310,15 @@ internal sealed class PossessionMod : MonoBehaviour {
                 if (hit.collider.gameObject.TryGetComponent(out EntranceTeleport entrance) &&
                     this.teleportCooldownRemaining <= 0) {
                     this.InteractWithTeleport(enemy, entrance);
-                    this.teleportCooldownRemaining = TeleportDoorCooldown;
+                    this.teleportCooldownRemaining = TeleportDoorCooldown; 
                     return;
                 }
             }
         }
     }
 
-    void OpenDoorAsEnemy(DoorLock door) {
+    void OpenDoorAsEnemy(DoorLock door)
+    {
         if (!door.Reflect().GetInternalField<bool>("isDoorOpened")) {
             door.OpenDoorAsEnemyServerRpc();
             if (door.gameObject.TryGetComponent(out AnimatedObjectTrigger trigger)) {
@@ -331,7 +350,7 @@ internal sealed class PossessionMod : MonoBehaviour {
         if (this.CharacterMovement is not CharacterMovement characterMovement) return;
         Transform? exitPoint = this.GetExitPointFromDoor(teleport);
         if (exitPoint == null) return;
-        Enemy.isOutside = !teleport.isEntranceToBuilding;
+        Enemy.isOutside = !teleport.isEntranceToBuilding; 
         Enemy.allAINodes = Enemy.isOutside ? GameObject.FindGameObjectsWithTag("OutsideAINode") : GameObject.FindGameObjectsWithTag("AINode");
         characterMovement.SetPosition(exitPoint.position);
         Enemy.EnableEnemyMesh(true, false);

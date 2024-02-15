@@ -1,3 +1,6 @@
+using Hax;
+using UnityEngine;
+
 internal class SpringManEnemyController : IEnemyController<SpringManAI> {
 
     bool HoldingForceMove = false;
@@ -24,9 +27,12 @@ internal class SpringManEnemyController : IEnemyController<SpringManAI> {
 
 
     public bool IsAbleToMove(SpringManAI enemyInstance) {
-        return this.HoldingForceMove
-|| !this.GetHasStopped(enemyInstance) ||
+        if (!this.HoldingForceMove) {
+            return !this.GetHasStopped(enemyInstance) ||
                    !this.GetStoppingMovement(enemyInstance);
+        }
+
+        return true;
     }
 
     public float? InteractRange(SpringManAI _) => 1.5f;

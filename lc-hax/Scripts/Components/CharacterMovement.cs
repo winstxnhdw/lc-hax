@@ -1,7 +1,9 @@
+using System.Collections;
 using UnityEngine;
 using GameNetcodeStuff;
 using UnityEngine.InputSystem;
 using Hax;
+using UnityEngine.UIElements;
 
 internal class CharacterMovement : MonoBehaviour {
     // Movement constants
@@ -13,6 +15,7 @@ internal class CharacterMovement : MonoBehaviour {
     const float Gravity = 18.0f;
 
     public float CharacterSpeed { get; set; } = BaseSpeed;
+    public float CharacterSprintSpeed { get; set; } = SprintSpeedMultiplier;
 
     // used to sync with the enemy to make sure it plays the correct animation when it is moving
     public bool IsMoving { get; private set; } = false;
@@ -36,7 +39,7 @@ internal class CharacterMovement : MonoBehaviour {
     }
 
     internal void SetPosition(Vector3 newPosition) {
-        if (this.CharacterController is null) return;
+        if(this.CharacterController is null) return;
         this.CharacterController.enabled = false;
         this.transform.position = newPosition;
         this.CharacterController.enabled = true;
@@ -72,8 +75,9 @@ internal class CharacterMovement : MonoBehaviour {
 
     // Update is called once per frame
     void Update() {
-        if (this.NoClipKeyboard != null) {
-            if (this.NoClipKeyboard.enabled) return;
+        if(this.NoClipKeyboard != null)
+        {
+            if(this.NoClipKeyboard.enabled) return;
         }
         if (this.CharacterController != null && !this.CharacterController.enabled) return;
 
@@ -99,7 +103,7 @@ internal class CharacterMovement : MonoBehaviour {
         // Apply speed and sprint modifiers
         moveDirection *= speedModifier * (
             this.IsSprinting
-                ? this.CharacterSpeed * CharacterMovement.SprintSpeedMultiplier
+                ? this.CharacterSpeed * this.CharacterSprintSpeed
                 : this.CharacterSpeed
             );
 
