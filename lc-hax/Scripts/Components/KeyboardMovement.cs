@@ -1,6 +1,5 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
-using Hax;
 
 internal class KeyboardMovement : MonoBehaviour {
     const float BaseSpeed = 20;
@@ -10,8 +9,6 @@ internal class KeyboardMovement : MonoBehaviour {
     void OnEnable() => this.LastPosition = this.transform.position;
 
     void LateUpdate() {
-        if (Helper.LocalPlayer?.isTypingChat is not false) return;
-
         Vector3 direction = new(
             Keyboard.current.dKey.ReadValue() - Keyboard.current.aKey.ReadValue(),
             Keyboard.current.spaceKey.ReadValue() - Keyboard.current.ctrlKey.ReadValue(),
