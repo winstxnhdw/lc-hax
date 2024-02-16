@@ -2,12 +2,12 @@ using Hax;
 using Unity.Netcode;
 
 public enum HoarderBugState {
-    IDLE, 
+    IDLE,
     SEARCHING_FOR_ITEMS,
-    RETURNING_TO_NEST, 
-    CHASING_PLAYER, 
-    WATCHING_PLAYER, 
-    AT_NEST 
+    RETURNING_TO_NEST,
+    CHASING_PLAYER,
+    WATCHING_PLAYER,
+    AT_NEST
 }
 
 internal class HoardingBugController : IEnemyController<HoarderBugAI> {
