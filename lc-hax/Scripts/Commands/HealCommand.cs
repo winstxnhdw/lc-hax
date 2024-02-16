@@ -4,8 +4,6 @@ using UnityEngine;
 
 [Command("heal")]
 internal class HealCommand : IStun, ICommand {
-    void StunAtPlayerPosition(PlayerControllerB player) => this.Stun(player.transform.position, 5.0f, 1.0f);
-
     void RespawnLocalPlayer(PlayerControllerB localPlayer, StartOfRound startOfRound, HUDManager hudManager) {
         if (Helper.SoundManager is not SoundManager soundManager) return;
 
@@ -85,7 +83,7 @@ internal class HealCommand : IStun, ICommand {
         occludeAudio.overridingLowPass = false;
     }
 
-    Result HealLocalPlayer(HUDManager hudManager) {
+    PlayerControllerB HealLocalPlayer(HUDManager hudManager) {
         if (hudManager.localPlayer.health <= 0) {
             this.RespawnLocalPlayer(hudManager.localPlayer, hudManager.localPlayer.playersManager, hudManager);
 
@@ -103,31 +101,29 @@ internal class HealCommand : IStun, ICommand {
         hudManager.HUDAnimator.SetTrigger("HealFromCritical");
         hudManager.UpdateHealthUI(hudManager.localPlayer.health, false);
 
-        this.StunAtPlayerPosition(hudManager.localPlayer);
-        return new Result(true);
+        return hudManager.localPlayer;
     }
 
-    Result HealPlayer(StringArray args) {
-        if (Helper.GetActivePlayer(args[0]) is not PlayerControllerB targetPlayer) {
-            return new Result(message: "Target player is not alive or found!");
-        }
+    PlayerControllerB? HealPlayer(string? playerNameOrId) {
+        PlayerControllerB? targetPlayer = Helper.GetActivePlayer(playerNameOrId);
+        targetPlayer?.HealPlayer();
 
-        targetPlayer.HealPlayer();
-        this.StunAtPlayerPosition(targetPlayer);
-
-        return new Result(true);
+        return targetPlayer;
     }
 
     public void Execute(StringArray args) {
         if (Helper.HUDManager is not HUDManager hudManager) return;
 
-        Result result = args.Length switch {
+        PlayerControllerB? healedPlayer = args.Length switch {
             0 => this.HealLocalPlayer(hudManager),
-            _ => this.HealPlayer(args)
+            _ => this.HealPlayer(args[0])
         };
 
-        if (!result.Success) {
-            Chat.Print(result.Message);
+        if (healedPlayer is null) {
+            Chat.Print("Target player is not alive or found!");
+            return;
         }
+
+        this.Stun(healedPlayer.transform.position, 5.0f, 1.0f);
     }
 }
