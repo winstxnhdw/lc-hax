@@ -5,6 +5,7 @@ using UnityEngine.AI;
 using GameNetcodeStuff;
 using Hax;
 using Unity.Netcode;
+using System.Linq;
 
 internal sealed class PossessionMod : MonoBehaviour {
     internal static PossessionMod? Instance { get; private set; }
@@ -39,10 +40,20 @@ internal sealed class PossessionMod : MonoBehaviour {
         { typeof(CrawlerAI), new CrawlerController()}
     };
 
+
+    const float TeleportDoorCooldown = 2.5f;
+    const float DoorInteractionCooldown = 0.7f;
+
+    float doorCooldownRemaining = 0f;
+    float teleportCooldownRemaining = 0f;
+    EntranceTeleport? mainEntrance;
+
+
     void Awake() {
         this.InitCharacterMovement();
         this.MousePan = this.gameObject.AddComponent<MousePan>();
         this.enabled = false;
+
 
         PossessionMod.Instance = this;
     }
@@ -60,6 +71,10 @@ internal sealed class PossessionMod : MonoBehaviour {
         DontDestroyOnLoad(this.CharacterMovementInstance);
     }
 
+
+
+
+
     void UnInitCharacterMovement() {
         if (this.CharacterMovementInstance is not GameObject characterMovementInstance) return;
 
@@ -73,7 +88,6 @@ internal sealed class PossessionMod : MonoBehaviour {
         InputListener.OnRightButtonHold += this.OnRightMouseButtonHold;
         InputListener.OnDelPress += this.KillEnemyAndUnposses;
         InputListener.OnF9Press += this.ToggleAiControl;
-
         this.UpdateComponentsOnCurrentState(true);
     }
 
@@ -84,7 +98,6 @@ internal sealed class PossessionMod : MonoBehaviour {
         InputListener.OnRightButtonHold -= this.OnRightMouseButtonHold;
         InputListener.OnDelPress -= this.KillEnemyAndUnposses;
         InputListener.OnF9Press -= this.ToggleAiControl;
-
         this.UpdateComponentsOnCurrentState(false);
     }
 
@@ -105,6 +118,7 @@ internal sealed class PossessionMod : MonoBehaviour {
             body: this.NoClipEnabled ? "Enabled" : "Disabled"
         );
     }
+
 
     void UpdateComponentsOnCurrentState(bool thisGameObjectIsEnabled) {
         if (this.MousePan == null) return;
@@ -143,7 +157,11 @@ internal sealed class PossessionMod : MonoBehaviour {
             this.InitCharacterMovement(enemy);
             this.UpdateComponentsOnCurrentState(true);
             this.SetAiControl(false);
+            if (this.mainEntrance == null) this.mainEntrance = FindObjectsOfType<EntranceTeleport>().FirstOrDefault(entrance => entrance.entranceId == 0);
         }
+
+        if (this.mainEntrance != null)
+            enemy.SetOutsideStatus(enemy.transform.position.y > this.mainEntrance.transform.position.y + 5f);
 
         if (!this.IsAiControlled) {
             if (this.SyncAnimationSpeedEnabled(enemy)) characterMovement.CharacterSpeed = nav.speed;
@@ -194,6 +212,7 @@ internal sealed class PossessionMod : MonoBehaviour {
         this.Unpossess();
         if (enemy.isEnemyDead) return;
 
+        this.mainEntrance = null;
         this.FirstUpdate = true;
         this.Possession.SetEnemy(enemy);
         if (this.EnemyControllers.TryGetValue(enemy.GetType(), out IController value))
@@ -270,38 +289,36 @@ internal sealed class PossessionMod : MonoBehaviour {
         this.doorCooldownRemaining = -TeleportDoorCooldown;
     }
 
-    const float TeleportDoorCooldown = 2.5f;
-    const float DoorInteractionCooldown = 0.7f;
-
-    float doorCooldownRemaining = 0f;
-    float teleportCooldownRemaining = 0f;
-
 
     bool CanUseEntranceDoors(EnemyAI enemy) {
-        return enemy is EnemyAI enemyAI
-&& this.EnemyControllers.TryGetValue(enemy.GetType(), out IController value) && value.CanUseEntranceDoors(enemyAI);
+        if (enemy is not EnemyAI enemyAI) return false;
+        if (this.EnemyControllers.TryGetValue(enemy.GetType(), out IController value))
+            return value.CanUseEntranceDoors(enemyAI);
+        return false;
     }
 
     bool SyncAnimationSpeedEnabled(EnemyAI enemy) {
-        return enemy is EnemyAI enemyAI
-&& this.EnemyControllers.TryGetValue(enemy.GetType(), out IController value) && value.SyncAnimationSpeedEnabled(enemyAI);
+        if (enemy is not EnemyAI enemyAI) return false;
+        if (this.EnemyControllers.TryGetValue(enemy.GetType(), out IController value))
+            return value.SyncAnimationSpeedEnabled(enemyAI);
+
+        return false;
     }
 
 
     float InteractRange(EnemyAI enemy) {
-        return enemy is not EnemyAI enemyAI
-            ? 0
-            : this.EnemyControllers.TryGetValue(enemy.GetType(), out IController value)
-            ? value.InteractRange(enemyAI).GetValueOrDefault(2.5f)
-            : 2.5f;
+        if (enemy is not EnemyAI enemyAI) return 0;
+        if (this.EnemyControllers.TryGetValue(enemy.GetType(), out IController value))
+            return value.InteractRange(enemyAI).GetValueOrDefault(2.5f);
+        return 2.5f;
     }
 
     float SprintMultiplier(EnemyAI enemy) {
-        return enemy is not EnemyAI enemyAI
-            ? 0
-            : this.EnemyControllers.TryGetValue(enemy.GetType(), out IController value)
-            ? value.SprintMultiplier(enemyAI).GetValueOrDefault(2.8f)
-            : 2.8f;
+        if (enemy is not EnemyAI enemyAI) return 0;
+        if (this.EnemyControllers.TryGetValue(enemy.GetType(), out IController value))
+            return value.SprintMultiplier(enemyAI).GetValueOrDefault(2.8f);
+
+        return 2.8f;
     }
 
 
@@ -356,7 +373,6 @@ internal sealed class PossessionMod : MonoBehaviour {
         if (this.CharacterMovement is not CharacterMovement characterMovement) return;
         Transform? exitPoint = this.GetExitPointFromDoor(teleport);
         if (exitPoint == null) return;
-        Enemy.SetOutsideStatus(!teleport.isEntranceToBuilding);
         characterMovement.SetPosition(exitPoint.position);
         Enemy.EnableEnemyMesh(true, false);
     }
@@ -381,4 +397,7 @@ internal sealed class PossessionMod : MonoBehaviour {
 
         controller.ReleaseSecondarySkill(enemy);
     }
+
+
+
 }
