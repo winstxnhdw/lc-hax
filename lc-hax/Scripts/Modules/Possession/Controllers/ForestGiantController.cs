@@ -37,4 +37,6 @@ internal class ForestGiantController : IEnemyController<ForestGiantAI> {
     public void OnUnpossess(ForestGiantAI enemyInstance) {
         this.isUsingSecondarySkill = false;
     }
+
+    public bool SyncAnimationSpeedEnabled(ForestGiantAI _) => false;
 }

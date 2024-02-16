@@ -27,6 +27,7 @@ internal interface IController {
 
     float? SprintMultiplier(EnemyAI enemyInstance);
 
+    bool SyncAnimationSpeedEnabled(EnemyAI enemyInstance);
 }
 
 internal interface IEnemyController<T> : IController where T : EnemyAI {
@@ -55,6 +56,8 @@ internal interface IEnemyController<T> : IController where T : EnemyAI {
     float? InteractRange(T enemyInstance) => 2.5f;
     float? SprintMultiplier(T enemyInstance) => 2.8f;
 
+    bool SyncAnimationSpeedEnabled(T enemyInstance) => true;
+
     void IController.OnPossess(EnemyAI instance) => this.OnPossess((T)instance);
     void IController.OnUnpossess(EnemyAI instance) => this.OnUnpossess((T)instance);
     void IController.OnDeath(EnemyAI instance) => this.OnDeath((T)instance);
@@ -81,5 +84,8 @@ internal interface IEnemyController<T> : IController where T : EnemyAI {
     float? IController.InteractRange(EnemyAI enemyInstance) => this.InteractRange((T)enemyInstance);
 
     float? IController.SprintMultiplier(EnemyAI enemyInstance) => this.SprintMultiplier((T)enemyInstance);
+
+    bool IController.SyncAnimationSpeedEnabled(EnemyAI enemyInstance) => this.SyncAnimationSpeedEnabled((T)enemyInstance);
+
 
 }

@@ -30,6 +30,11 @@ internal static partial class Helper {
         }
     }
 
+    internal static void SetOutsideStatus(this EnemyAI enemy, bool isOutside) {
+        if (enemy == null) return;
+        enemy.isOutside = isOutside;
+        enemy.allAINodes = GameObject.FindGameObjectsWithTag(enemy.isOutside ? "OutsideAINode" : "AINode");
+    }
     internal static void Kill(EnemyAI enemyInstance) {
         if (Helper.LocalPlayer is not PlayerControllerB localPlayer) return;
         enemyInstance.Kill(localPlayer.actualClientId);

@@ -2,8 +2,11 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using GameNetcodeStuff;
+using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.UIElements;
+using Object = UnityEngine.Object;
+using Random = System.Random;
 
 namespace Hax;
 
@@ -91,5 +94,31 @@ internal static partial class Helper {
 
     internal static Item[] Items { get; } = Resources.FindObjectsOfTypeAll<Item>();
 
-    internal static Item? GetItem(string itemName) => Items.First(item => item.itemName.Contains(itemName, StringComparison.InvariantCultureIgnoreCase));
+    internal static Item? GetItem(string itemName) =>
+        Items.First(item =>
+            item.itemName.Contains(itemName, StringComparison.InvariantCultureIgnoreCase)) ?? Items.First(item =>
+            item.name.Contains(itemName, StringComparison.InvariantCultureIgnoreCase));
+
+
+    internal static GrabbableObject? SpawnItem(Vector3 position, Item prefab) {
+        if (prefab == null) return null;
+        if(Helper.RoundManager == null) return null;
+        GameObject Item = Object.Instantiate(prefab.spawnPrefab, position, Quaternion.identity);
+
+        if (!Item.TryGetComponent(out NetworkObject networkObject)) {
+            Object.Destroy(Item);
+            return null;
+        }
+
+        networkObject.Spawn(false);
+        if (!Item.TryGetComponent(out GrabbableObject Grab)) {
+            Object.Destroy(Item);
+            return null;
+        }
+
+        Random random = new((int)position.x + (int)position.y);
+        Grab.SetScrapValue((int)(random.Next(prefab.minValue + 25, prefab.maxValue + 35) * Helper.RoundManager.scrapValueMultiplier));
+        return Grab;
+    }
+
 }
