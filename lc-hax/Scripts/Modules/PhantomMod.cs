@@ -1,6 +1,6 @@
-using UnityEngine;
 using GameNetcodeStuff;
 using Hax;
+using UnityEngine;
 
 internal sealed class PhantomMod : MonoBehaviour {
     bool IsShiftHeld { get; set; } = false;
@@ -50,7 +50,9 @@ internal sealed class PhantomMod : MonoBehaviour {
             mouse.enabled = false;
         }
 
-        keyboard.enabled = Helper.LocalPlayer?.isTypingChat is not true;
+        if (!possessionMod.IsPossessed && Setting.EnablePhantom) {
+            keyboard.enabled = Helper.LocalPlayer?.isTypingChat is not true;
+        }
     }
 
     void HoldShift(bool isHeld) => this.IsShiftHeld = isHeld;
@@ -91,13 +93,20 @@ internal sealed class PhantomMod : MonoBehaviour {
 
     void PhantomDisabled(PlayerControllerB player, Camera camera) {
         if (player.cameraContainerTransform is not Transform cameraParent) return;
+        if (PossessionMod.Instance is not PossessionMod possessionMod) return;
+
         if (this.IsShiftHeld) {
             player.TeleportPlayer(camera.transform.position);
+        }
+
+        if (possessionMod.IsPossessed) {
+            possessionMod.Unpossess();
         }
 
         camera.transform.SetParent(cameraParent, false);
         camera.transform.localPosition = Vector3.zero;
         camera.transform.localRotation = Quaternion.identity;
+
 
         if (camera.gameObject.TryGetComponent(out KeyboardMovement keyboard)) {
             keyboard.enabled = false;
@@ -118,6 +127,7 @@ internal sealed class PhantomMod : MonoBehaviour {
         if (gameplayCamera.TryGetComponent(out MousePan gameplayMouse)) {
             gameplayMouse.enabled = false;
         }
+
     }
 
     void TogglePhantom() {
