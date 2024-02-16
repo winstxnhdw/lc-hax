@@ -82,13 +82,14 @@ internal class HoardingBugController : IEnemyController<HoarderBugAI> {
         }
         else {
             if (enemyInstance.heldItem.itemGrabbableObject.TryGetComponent(out NetworkObject networkObject)) {
-                _ = enemyInstance.Reflect().InvokeInternalMethod(
+                _  = enemyInstance.Reflect().InvokeInternalMethod(
                     "DropItemAndCallDropRPC",
                     networkObject,
                     false
                 );
-
             }
+
+            enemyInstance.Reflect().InvokeInternalMethod("SyncNestPositionServerRpc", enemyInstance.transform.position);
         }
     }
 
