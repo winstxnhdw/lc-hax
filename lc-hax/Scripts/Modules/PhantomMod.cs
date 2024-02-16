@@ -50,7 +50,7 @@ internal sealed class PhantomMod : MonoBehaviour {
             mouse.enabled = false;
         }
 
-        if (!possessionMod.IsPossessed) {
+        if (!possessionMod.IsPossessed && Setting.EnablePhantom) {
             keyboard.enabled = Helper.LocalPlayer?.isTypingChat is not true;
         }
     }
@@ -93,14 +93,14 @@ internal sealed class PhantomMod : MonoBehaviour {
 
     void PhantomDisabled(PlayerControllerB player, Camera camera) {
         if (player.cameraContainerTransform is not Transform cameraParent) return;
+        if (PossessionMod.Instance is not PossessionMod possessionMod) return;
+
         if (this.IsShiftHeld) {
             player.TeleportPlayer(camera.transform.position);
         }
 
-        if (PossessionMod.Instance != null) {
-            if (PossessionMod.Instance.IsPossessed) {
-                PossessionMod.Instance.Unpossess();
-            }
+        if (possessionMod.IsPossessed) {
+            possessionMod.Unpossess();
         }
 
         camera.transform.SetParent(cameraParent, false);
