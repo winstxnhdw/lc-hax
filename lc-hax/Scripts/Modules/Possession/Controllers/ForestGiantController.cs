@@ -6,9 +6,25 @@ enum GiantState {
 }
 
 internal class ForestGiantController : IEnemyController<ForestGiantAI> {
-    public void UseSecondarySkill(ForestGiantAI enemyInstance) => enemyInstance.SetBehaviourState(GiantState.CHASE);
 
-    public void ReleaseSecondarySkill(ForestGiantAI enemyInstance) => enemyInstance.SetBehaviourState(GiantState.DEFAULT);
+    bool isUsingSecondarySkill = false;
+
+    public void OnMovement(ForestGiantAI enemyInstance, bool isMoving, bool isSprinting) {
+        if (!this.isUsingSecondarySkill) {
+            enemyInstance.SetBehaviourState(GiantState.DEFAULT);
+        }
+    }
+
+    public void UseSecondarySkill(ForestGiantAI enemyInstance) {
+        this.isUsingSecondarySkill = true;
+        enemyInstance.SetBehaviourState(GiantState.CHASE);
+    }
+
+
+    public void ReleaseSecondarySkill(ForestGiantAI enemyInstance) {
+        this.isUsingSecondarySkill = false;
+        enemyInstance.SetBehaviourState(GiantState.DEFAULT);
+    }
 
     public bool IsAbleToMove(ForestGiantAI enemyInstance) => !enemyInstance.Reflect().GetInternalField<bool>("inEatingPlayerAnimation");
 
@@ -17,4 +33,10 @@ internal class ForestGiantController : IEnemyController<ForestGiantAI> {
     public bool CanUseEntranceDoors(ForestGiantAI _) => false;
 
     public float? InteractRange(ForestGiantAI _) => 0f;
+
+    public void OnUnpossess(ForestGiantAI enemyInstance) {
+        this.isUsingSecondarySkill = false;
+    }
+
+    public bool SyncAnimationSpeedEnabled(ForestGiantAI _) => false;
 }

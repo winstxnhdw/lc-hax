@@ -37,4 +37,6 @@ internal class SnareFleaController : IEnemyController<CentipedeAI> {
     public float? InteractRange(CentipedeAI _) => 1.5f;
 
     public bool CanUseEntranceDoors(CentipedeAI _) => false;
+
+    public bool SyncAnimationSpeedEnabled(CentipedeAI _) => false;
 }
