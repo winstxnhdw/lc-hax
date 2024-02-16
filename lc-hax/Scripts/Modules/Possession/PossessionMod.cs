@@ -40,11 +40,20 @@ internal sealed class PossessionMod : MonoBehaviour {
         { typeof(CrawlerAI), new CrawlerController()}
     };
 
+
+    const float TeleportDoorCooldown = 2.5f;
+    const float DoorInteractionCooldown = 0.7f;
+
+    float doorCooldownRemaining = 0f;
+    float teleportCooldownRemaining = 0f;
+    EntranceTeleport? mainEntrance;
+
+
     void Awake() {
         this.InitCharacterMovement();
         this.MousePan = this.gameObject.AddComponent<MousePan>();
         this.enabled = false;
-        
+
 
         PossessionMod.Instance = this;
     }
@@ -62,38 +71,9 @@ internal sealed class PossessionMod : MonoBehaviour {
         DontDestroyOnLoad(this.CharacterMovementInstance);
     }
 
-    float CalculateIsOutsideThreshold() {
-        // Step 1: Gather Y Values for inside doors
-        List<float> insideYValues = new List<float>();
-
-        EntranceTeleport[] allTeleports = FindObjectsOfType<EntranceTeleport>();
-        foreach (EntranceTeleport teleport in allTeleports) {
-            if (teleport.isEntranceToBuilding) {
-                insideYValues.Add(teleport.entrancePoint.position.y);
-            }
-        }
-
-        // Find the highest Y value among inside doors
-        float highestInsideY = insideYValues.Max();
-
-        // Define the threshold by adding a buffer to the highest inside Y value
-        // Adjust the buffer (e.g., 7f) based on your game's specific needs
-        return highestInsideY + 7f;
-    }
 
 
 
-
-    float insideTreshold = 0;
-
-    void OnLevelGenerated() {
-        this.insideTreshold = this.CalculateIsOutsideThreshold();
-        Console.WriteLine("Inside Position Treshold Updated : " + this.insideTreshold);
-    }
-
-    void OnShipLeave() {
-        this.insideTreshold = 0;
-    }
 
     void UnInitCharacterMovement() {
         if (this.CharacterMovementInstance is not GameObject characterMovementInstance) return;
@@ -108,9 +88,6 @@ internal sealed class PossessionMod : MonoBehaviour {
         InputListener.OnRightButtonHold += this.OnRightMouseButtonHold;
         InputListener.OnDelPress += this.KillEnemyAndUnposses;
         InputListener.OnF9Press += this.ToggleAiControl;
-
-        GameListener.OnLevelGenerated += this.OnLevelGenerated;
-        GameListener.OnShipLeave += this.OnShipLeave;
         this.UpdateComponentsOnCurrentState(true);
     }
 
@@ -121,9 +98,6 @@ internal sealed class PossessionMod : MonoBehaviour {
         InputListener.OnRightButtonHold -= this.OnRightMouseButtonHold;
         InputListener.OnDelPress -= this.KillEnemyAndUnposses;
         InputListener.OnF9Press -= this.ToggleAiControl;
-        GameListener.OnLevelGenerated -= this.OnLevelGenerated;
-        GameListener.OnShipLeave -= this.OnShipLeave;
-
         this.UpdateComponentsOnCurrentState(false);
     }
 
@@ -144,6 +118,7 @@ internal sealed class PossessionMod : MonoBehaviour {
             this.NoClipEnabled ? "Enabled" : "Disabled"
         );
     }
+
 
     void UpdateComponentsOnCurrentState(bool thisGameObjectIsEnabled) {
         if (this.MousePan == null) return;
@@ -182,14 +157,12 @@ internal sealed class PossessionMod : MonoBehaviour {
             this.InitCharacterMovement(enemy);
             this.UpdateComponentsOnCurrentState(true);
             this.SetAiControl(false);
+            if (this.mainEntrance == null) this.mainEntrance = FindObjectsOfType<EntranceTeleport>().FirstOrDefault(entrance => entrance.entranceId == 0);
         }
-        // analyze if a enemy is outside or inside based off it's Y position and the threshold
-        if (enemy.transform.position.y > this.insideTreshold) {
-            enemy.SetOutsideStatus(true);
-        }
-        else {
-            enemy.SetOutsideStatus(false);
-        }
+
+        if (this.mainEntrance != null)
+            enemy.SetOutsideStatus(enemy.transform.position.y > this.mainEntrance.transform.position.y + 5f);
+
         if (!this.IsAiControlled) {
             if (this.SyncAnimationSpeedEnabled(enemy)) characterMovement.CharacterSpeed = nav.speed;
 
@@ -239,6 +212,7 @@ internal sealed class PossessionMod : MonoBehaviour {
         this.Unpossess();
         if (enemy.isEnemyDead) return;
 
+        this.mainEntrance = null;
         this.FirstUpdate = true;
         this.Possession.SetEnemy(enemy);
         if (this.EnemyControllers.TryGetValue(enemy.GetType(), out IController value))
@@ -314,12 +288,6 @@ internal sealed class PossessionMod : MonoBehaviour {
         this.teleportCooldownRemaining = -DoorInteractionCooldown;
         this.doorCooldownRemaining = -TeleportDoorCooldown;
     }
-
-    const float TeleportDoorCooldown = 2.5f;
-    const float DoorInteractionCooldown = 0.7f;
-
-    float doorCooldownRemaining = 0f;
-    float teleportCooldownRemaining = 0f;
 
 
     bool CanUseEntranceDoors(EnemyAI enemy) {
@@ -405,7 +373,6 @@ internal sealed class PossessionMod : MonoBehaviour {
         if (this.CharacterMovement is not CharacterMovement characterMovement) return;
         Transform? exitPoint = this.GetExitPointFromDoor(teleport);
         if (exitPoint == null) return;
-        Enemy.SetOutsideStatus(!teleport.isEntranceToBuilding);
         characterMovement.SetPosition(exitPoint.position);
         Enemy.EnableEnemyMesh(true, false);
     }
@@ -430,4 +397,7 @@ internal sealed class PossessionMod : MonoBehaviour {
 
         controller.ReleaseSecondarySkill(enemy);
     }
+
+
+
 }
