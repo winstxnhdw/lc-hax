@@ -87,8 +87,6 @@ internal class HoardingBugController : IEnemyController<HoarderBugAI> {
                     false
                 );
             }
-
-            _ = enemyInstance.Reflect().InvokeInternalMethod("SyncNestPositionServerRpc", enemyInstance.transform.position);
         }
     }
 
