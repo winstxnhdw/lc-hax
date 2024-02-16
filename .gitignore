@@ -6,3 +6,4 @@ NuGet/
 .mono/
 .cr/
 *.sln
+lc-hax/Scripts/Loader.cs
