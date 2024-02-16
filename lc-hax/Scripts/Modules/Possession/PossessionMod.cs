@@ -114,8 +114,8 @@ internal sealed class PossessionMod : MonoBehaviour {
         this.UpdateComponentsOnCurrentState(this.enabled);
 
         Helper.SendNotification(
-            title: "Possess NoClip:",
-            body: this.NoClipEnabled ? "Enabled" : "Disabled"
+            "Possess NoClip:",
+            this.NoClipEnabled ? "Enabled" : "Disabled"
         );
     }
 
@@ -180,7 +180,7 @@ internal sealed class PossessionMod : MonoBehaviour {
         }
 
         this.UpdateCameraPosition(camera, enemy);
-        this.UpdateCameraRotation(camera);
+        this.UpdateCameraRotation(camera, enemy);
         this.InteractWithAmbient();
     }
 
@@ -188,7 +188,16 @@ internal sealed class PossessionMod : MonoBehaviour {
         camera.transform.position = enemy.transform.position + (3.0f * (Vector3.up - enemy.transform.forward));
 
 
-    void UpdateCameraRotation(Camera camera) => camera.transform.rotation = this.transform.rotation;
+    void UpdateCameraRotation(Camera camera, EnemyAI enemy) {
+        if (enemy == null) return;
+        if (!this.IsAiControlled) {
+            camera.transform.rotation = this.transform.rotation;
+        }
+        else {
+            camera.transform.rotation = Quaternion.LookRotation(enemy.transform.forward);
+        }
+    }
+
 
 
     void UpdateEnemyRotation() {
@@ -274,11 +283,12 @@ internal sealed class PossessionMod : MonoBehaviour {
         navMeshAgent.updatePosition = EnableAI;
         navMeshAgent.updateRotation = EnableAI;
         navMeshAgent.isStopped = !EnableAI;
+        characterMovement.SetPosition(enemy.transform.position);
         characterMovement.enabled = !EnableAI;
         if (DisplayNotification) {
             Helper.SendNotification(
-                title: "AI Control:",
-                body: this.IsAiControlled ? "Enabled" : "Disabled"
+                "AI Control:",
+                this.IsAiControlled ? "Enabled" : "Disabled"
             );
         }
 
@@ -291,30 +301,34 @@ internal sealed class PossessionMod : MonoBehaviour {
 
 
     bool CanUseEntranceDoors(EnemyAI enemy) {
-        return enemy is EnemyAI enemyAI
-&& this.EnemyControllers.TryGetValue(enemy.GetType(), out IController value) && value.CanUseEntranceDoors(enemyAI);
+        if (enemy is not EnemyAI enemyAI) return false;
+        if (this.EnemyControllers.TryGetValue(enemy.GetType(), out IController value))
+            return value.CanUseEntranceDoors(enemyAI);
+        return false;
     }
 
     bool SyncAnimationSpeedEnabled(EnemyAI enemy) {
-        return enemy is EnemyAI enemyAI
-&& this.EnemyControllers.TryGetValue(enemy.GetType(), out IController value) && value.SyncAnimationSpeedEnabled(enemyAI);
+        if (enemy is not EnemyAI enemyAI) return false;
+        if (this.EnemyControllers.TryGetValue(enemy.GetType(), out IController value))
+            return value.SyncAnimationSpeedEnabled(enemyAI);
+
+        return false;
     }
 
 
     float InteractRange(EnemyAI enemy) {
-        return enemy is not EnemyAI enemyAI
-            ? 0
-            : this.EnemyControllers.TryGetValue(enemy.GetType(), out IController value)
-            ? value.InteractRange(enemyAI).GetValueOrDefault(2.5f)
-            : 2.5f;
+        if (enemy is not EnemyAI enemyAI) return 0;
+        if (this.EnemyControllers.TryGetValue(enemy.GetType(), out IController value))
+            return value.InteractRange(enemyAI).GetValueOrDefault(2.5f);
+        return 2.5f;
     }
 
     float SprintMultiplier(EnemyAI enemy) {
-        return enemy is not EnemyAI enemyAI
-            ? 0
-            : this.EnemyControllers.TryGetValue(enemy.GetType(), out IController value)
-            ? value.SprintMultiplier(enemyAI).GetValueOrDefault(2.8f)
-            : 2.8f;
+        if (enemy is not EnemyAI enemyAI) return 0;
+        if (this.EnemyControllers.TryGetValue(enemy.GetType(), out IController value))
+            return value.SprintMultiplier(enemyAI).GetValueOrDefault(2.8f);
+
+        return 2.8f;
     }
 
 
