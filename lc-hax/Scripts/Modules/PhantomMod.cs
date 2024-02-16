@@ -50,7 +50,7 @@ internal sealed class PhantomMod : MonoBehaviour {
             mouse.enabled = false;
         }
 
-        keyboard.enabled = Helper.LocalPlayer?.isTypingChat is not true;
+        keyboard.IsPaused = Helper.LocalPlayer?.isTypingChat is not false;
     }
 
     void HoldShift(bool isHeld) => this.IsShiftHeld = isHeld;
