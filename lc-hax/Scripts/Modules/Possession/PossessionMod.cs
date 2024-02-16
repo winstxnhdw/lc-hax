@@ -161,15 +161,13 @@ internal sealed class PossessionMod : MonoBehaviour {
             }
         }
 
-        this.UpdateCameraPosition(camera, enemy, characterMovement);
+        this.UpdateCameraPosition(camera, enemy);
         this.UpdateCameraRotation(camera);
         this.InteractWithAmbient();
     }
 
-    void UpdateCameraPosition(Camera camera, EnemyAI enemy, CharacterMovement movement) =>
-        camera.transform.position = movement == null || !movement.enabled
-            ? enemy.transform.position + (3.0f * (Vector3.up - enemy.transform.forward))
-            : movement.transform.position + (3.0f * (Vector3.up - enemy.transform.forward));
+    void UpdateCameraPosition(Camera camera, EnemyAI enemy) =>
+        camera.transform.position = enemy.transform.position + (3.0f * (Vector3.up - enemy.transform.forward));
 
 
     void UpdateCameraRotation(Camera camera) => camera.transform.rotation = this.transform.rotation;
