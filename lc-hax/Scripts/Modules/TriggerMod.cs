@@ -57,11 +57,6 @@ internal sealed class TriggerMod : MonoBehaviour, IEnemyPrompter {
             return;
         }
 
-        if (HaxObjects.Instance?.DepositItemsDesk?.Object.Unfake() is DepositItemsDesk deposit) {
-            deposit.AttackPlayersServerRpc();
-            return;
-        }
-
         foreach (RaycastHit raycastHit in camera.transform.SphereCastForward()) {
             Collider collider = raycastHit.collider;
 
@@ -97,6 +92,11 @@ internal sealed class TriggerMod : MonoBehaviour, IEnemyPrompter {
                 Helper.GetEnemy<CentipedeAI>()?.ClingToPlayerServerRpc(player.playerClientId);
                 this.PromptEnemiesToTarget(targetPlayer: player)
                     .ForEach(enemy => Chat.Print($"{enemy} prompted!"));
+                break;
+            }
+
+            if (collider.TryGetComponent(out DepositItemsDesk depositItemDesk)) {
+                depositItemDesk.AttackPlayersServerRpc();
                 break;
             }
         }
