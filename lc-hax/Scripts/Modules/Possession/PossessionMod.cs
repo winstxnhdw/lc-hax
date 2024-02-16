@@ -180,7 +180,7 @@ internal sealed class PossessionMod : MonoBehaviour {
         }
 
         this.UpdateCameraPosition(camera, enemy);
-        this.UpdateCameraRotation(camera);
+        this.UpdateCameraRotation(camera, enemy);
         this.InteractWithAmbient();
     }
 
@@ -188,7 +188,16 @@ internal sealed class PossessionMod : MonoBehaviour {
         camera.transform.position = enemy.transform.position + (3.0f * (Vector3.up - enemy.transform.forward));
 
 
-    void UpdateCameraRotation(Camera camera) => camera.transform.rotation = this.transform.rotation;
+    void UpdateCameraRotation(Camera camera, EnemyAI enemy) {
+        if (enemy == null) return;
+        if (!this.IsAiControlled) {
+            camera.transform.rotation = this.transform.rotation;
+        }
+        else {
+            camera.transform.rotation = Quaternion.LookRotation(enemy.transform.forward);
+        }
+    }
+
 
 
     void UpdateEnemyRotation() {
@@ -274,6 +283,7 @@ internal sealed class PossessionMod : MonoBehaviour {
         navMeshAgent.updatePosition = EnableAI;
         navMeshAgent.updateRotation = EnableAI;
         navMeshAgent.isStopped = !EnableAI;
+        characterMovement.SetPosition(enemy.transform.position);
         characterMovement.enabled = !EnableAI;
         if (DisplayNotification) {
             Helper.SendNotification(

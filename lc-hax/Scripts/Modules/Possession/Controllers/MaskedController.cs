@@ -4,4 +4,6 @@ internal class MaskedPlayerController : IEnemyController<MaskedPlayerEnemy> {
     public void UseSecondarySkill(MaskedPlayerEnemy enemyInstance) => enemyInstance.SetCrouchingServerRpc(!enemyInstance.creatureAnimator.GetBool("Crouching"));
     public float? InteractRange(MaskedPlayerEnemy _) => 1f;
 
+    public bool SyncAnimationSpeedEnabled(MaskedPlayerEnemy _) => false;
+
 }
