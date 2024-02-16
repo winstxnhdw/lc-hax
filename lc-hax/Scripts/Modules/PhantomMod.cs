@@ -50,7 +50,7 @@ internal sealed class PhantomMod : MonoBehaviour {
             mouse.enabled = false;
         }
 
-        if (!possessionMod.IsPossessed && Setting.EnablePhantom) {
+        if (!possessionMod.IsPossessed) {
             keyboard.enabled = Helper.LocalPlayer?.isTypingChat is not true;
         }
     }
