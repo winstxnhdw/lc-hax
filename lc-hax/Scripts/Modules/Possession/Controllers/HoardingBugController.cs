@@ -50,7 +50,6 @@ internal class HoardingBugController : IEnemyController<HoarderBugAI> {
                     break;
 
                 default:
-                    enemyInstance.heldItem.itemGrabbableObject?.InteractWithProp();
                     break;
             }
         }
