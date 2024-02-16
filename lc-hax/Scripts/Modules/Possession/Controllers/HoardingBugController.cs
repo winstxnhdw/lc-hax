@@ -2,12 +2,12 @@ using Hax;
 using Unity.Netcode;
 
 public enum HoarderBugState {
-    IDLE,
+    IDLE, 
     SEARCHING_FOR_ITEMS,
-    RETURNING_TO_NEST,
-    CHASING_PLAYER,
-    WATCHING_PLAYER,
-    AT_NEST
+    RETURNING_TO_NEST, 
+    CHASING_PLAYER, 
+    WATCHING_PLAYER, 
+    AT_NEST 
 }
 
 internal class HoardingBugController : IEnemyController<HoarderBugAI> {
@@ -72,20 +72,23 @@ internal class HoardingBugController : IEnemyController<HoarderBugAI> {
     }
 
     public void UseSecondarySkill(HoarderBugAI enemyInstance) {
-        if (enemyInstance.heldItem.itemGrabbableObject is not GrabbableObject grabbable) {
+        if (enemyInstance.heldItem == null || enemyInstance.heldItem.itemGrabbableObject == null) {
             if (enemyInstance.angryTimer <= 0f) {
                 enemyInstance.angryTimer = 15f;
                 enemyInstance.SetBehaviourState(HoarderBugState.CHASING_PLAYER);
             }
-            return;
         }
-        if (!grabbable.TryGetComponent(out NetworkObject networkObject)) return;
+        else {
+            if (!enemyInstance.heldItem.itemGrabbableObject.TryGetComponent(out NetworkObject networkObject)) return;
 
-        _ = enemyInstance.Reflect().InvokeInternalMethod(
-            "DropItemAndCallDropRPC",
-            networkObject,
-            false
-        );
+            _ = enemyInstance.Reflect().InvokeInternalMethod(
+                "DropItemAndCallDropRPC",
+                networkObject,
+                false
+            );
+
+        }
+
     }
 
     public string GetPrimarySkillName(HoarderBugAI enemyInstance) => enemyInstance.heldItem is not null ? "Use item" : "Grab Item";
