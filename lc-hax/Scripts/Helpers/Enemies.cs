@@ -28,7 +28,7 @@ internal static partial class Helper {
             enemyInstance.KillEnemyServerRpc(true);
         }
     }
-    
+
     internal static void SetOutsideStatus(this EnemyAI enemy, bool isOutside) {
         if (enemy == null) return;
         enemy.isOutside = isOutside;

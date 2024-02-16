@@ -34,9 +34,7 @@ internal class ForestGiantController : IEnemyController<ForestGiantAI> {
 
     public float? InteractRange(ForestGiantAI _) => 0f;
 
-    public void OnUnpossess(ForestGiantAI enemyInstance) {
-        this.isUsingSecondarySkill = false;
-    }
+    public void OnUnpossess(ForestGiantAI enemyInstance) => this.isUsingSecondarySkill = false;
 
     public bool SyncAnimationSpeedEnabled(ForestGiantAI _) => false;
 }
