@@ -4,11 +4,15 @@ using UnityEngine.InputSystem;
 internal class KeyboardMovement : MonoBehaviour {
     const float BaseSpeed = 20;
     float SprintMultiplier { get; set; } = 1;
+
     internal Vector3 LastPosition { get; set; }
+    internal bool IsPaused { get; set; } = false;
 
     void OnEnable() => this.LastPosition = this.transform.position;
 
     void LateUpdate() {
+        if (this.IsPaused) return;
+
         Vector3 direction = new(
             Keyboard.current.dKey.ReadValue() - Keyboard.current.aKey.ReadValue(),
             Keyboard.current.spaceKey.ReadValue() - Keyboard.current.ctrlKey.ReadValue(),
