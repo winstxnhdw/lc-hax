@@ -291,26 +291,28 @@ internal sealed class PossessionMod : MonoBehaviour {
 
 
     bool CanUseEntranceDoors(EnemyAI enemy) {
-        if (enemy is not EnemyAI enemyAI) return false;
-        return this.EnemyControllers.TryGetValue(enemy.GetType(), out IController value) ? value.CanUseEntranceDoors(enemyAI) : false;
+        return enemy is EnemyAI enemyAI
+&& this.EnemyControllers.TryGetValue(enemy.GetType(), out IController value) && value.CanUseEntranceDoors(enemyAI);
     }
 
     bool SyncAnimationSpeedEnabled(EnemyAI enemy) {
-        if (enemy is not EnemyAI enemyAI) return false;
-        return this.EnemyControllers.TryGetValue(enemy.GetType(), out IController value) ? value.SyncAnimationSpeedEnabled(enemyAI) : false;
+        return enemy is EnemyAI enemyAI
+&& this.EnemyControllers.TryGetValue(enemy.GetType(), out IController value) && value.SyncAnimationSpeedEnabled(enemyAI);
     }
 
 
     float InteractRange(EnemyAI enemy) {
-        if (enemy is not EnemyAI enemyAI) return 0;
-        return this.EnemyControllers.TryGetValue(enemy.GetType(), out IController value)
+        return enemy is not EnemyAI enemyAI
+            ? 0
+            : this.EnemyControllers.TryGetValue(enemy.GetType(), out IController value)
             ? value.InteractRange(enemyAI).GetValueOrDefault(2.5f)
             : 2.5f;
     }
 
     float SprintMultiplier(EnemyAI enemy) {
-        if (enemy is not EnemyAI enemyAI) return 0;
-        return this.EnemyControllers.TryGetValue(enemy.GetType(), out IController value)
+        return enemy is not EnemyAI enemyAI
+            ? 0
+            : this.EnemyControllers.TryGetValue(enemy.GetType(), out IController value)
             ? value.SprintMultiplier(enemyAI).GetValueOrDefault(2.8f)
             : 2.8f;
     }
