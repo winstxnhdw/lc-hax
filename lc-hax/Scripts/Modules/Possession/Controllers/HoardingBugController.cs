@@ -2,18 +2,20 @@ using Hax;
 using Unity.Netcode;
 
 public enum HoarderBugState {
-    IDLE,
+    IDLE, 
     SEARCHING_FOR_ITEMS,
-    RETURNING_TO_NEST,
-    CHASING_PLAYER,
-    WATCHING_PLAYER,
-    AT_NEST
+    RETURNING_TO_NEST, 
+    CHASING_PLAYER, 
+    WATCHING_PLAYER, 
+    AT_NEST 
 }
 
 internal class HoardingBugController : IEnemyController<HoarderBugAI> {
 
 
     public void OnMovement(HoarderBugAI enemyInstance, bool isMoving, bool isSprinting) {
+        if (enemyInstance.heldItem == null) return;
+        if (enemyInstance.heldItem.itemGrabbableObject == null) return;
         if (enemyInstance.heldItem.itemGrabbableObject) {
             enemyInstance.angryTimer = 0f;
             enemyInstance.angryAtPlayer = null;
@@ -49,6 +51,7 @@ internal class HoardingBugController : IEnemyController<HoarderBugAI> {
                 break;
 
             default:
+                enemyInstance.heldItem.itemGrabbableObject.InteractWithProp();
                 break;
         }
     }
