@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Dissonance;
 using GameNetcodeStuff;
 using Unity.Netcode;
 using UnityEngine;
@@ -32,8 +33,11 @@ internal static partial class Helper {
 
     internal static void SetOutsideStatus(this EnemyAI enemy, bool isOutside) {
         if (enemy == null) return;
+        if (enemy.isOutside == isOutside) return;
         enemy.isOutside = isOutside;
         enemy.allAINodes = GameObject.FindGameObjectsWithTag(enemy.isOutside ? "OutsideAINode" : "AINode");
+
+        Logger.Write($"SetOutsideStatus: {enemy.name} is now {(isOutside ? "Outside" : "Inside")}");
     }
     internal static void Kill(EnemyAI enemyInstance) {
         if (Helper.LocalPlayer is not PlayerControllerB localPlayer) return;
