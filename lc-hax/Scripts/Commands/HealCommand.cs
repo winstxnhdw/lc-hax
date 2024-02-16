@@ -121,6 +121,7 @@ internal class HealCommand : IStun, ICommand {
 
         if (healedPlayer is null) {
             Chat.Print("Target player is not alive or found!");
+            return;
         }
 
         this.Stun(healedPlayer.transform.position, 5.0f, 1.0f);
