@@ -47,9 +47,9 @@ internal class CharacterMovement : MonoBehaviour {
     internal void CalibrateCollision(EnemyAI instance) {
         if (this.CharacterController == null) return;
 
-        this.CharacterController.height = 1.0f; 
-        this.CharacterController.radius = 0.5f; 
-        this.CharacterController.center = new Vector3(0, 0.5f, 0); 
+        this.CharacterController.height = 1.0f;
+        this.CharacterController.radius = 0.5f;
+        this.CharacterController.center = new Vector3(0, 0.5f, 0);
 
         float maxStepOffset = 0.25f;
         this.CharacterController.stepOffset = Mathf.Min(this.CharacterController.stepOffset, maxStepOffset);
