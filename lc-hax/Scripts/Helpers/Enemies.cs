@@ -30,8 +30,8 @@ internal static partial class Helper {
     }
 
     internal static void SetOutsideStatus(this EnemyAI enemy, bool isOutside) {
-        if (enemy == null) return;
         if (enemy.isOutside == isOutside) return;
+
         enemy.isOutside = isOutside;
         enemy.allAINodes = GameObject.FindGameObjectsWithTag(enemy.isOutside ? "OutsideAINode" : "AINode");
     }
@@ -49,7 +49,7 @@ internal static partial class Helper {
         enemyInstance.SwitchToBehaviourServerRpc(Convert.ToInt32(state));
     }
 
-    internal static GrabbableObject? FindNearbyItem(this EnemyAI instance, float grabRange = 1f) {
+    internal static GrabbableObject? FindNearbyItem(this EnemyAI instance, float grabRange = 1.0f) {
         foreach (Collider collider in Physics.OverlapSphere(instance.transform.position, grabRange)) {
             if (!collider.TryGetComponent(out GrabbableObject item)) continue;
             if (!item.TryGetComponent(out NetworkObject _)) continue;

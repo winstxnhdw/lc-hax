@@ -1,9 +1,9 @@
 using Hax;
 
 enum FlowerMan {
-    SCOUTING = 0,
-    STAND = 1,
-    ANGER = 2,
+    SCOUTING,
+    STAND,
+    ANGER
 }
 
 internal class BrackenController : IEnemyController<FlowermanAI> {
@@ -24,7 +24,8 @@ internal class BrackenController : IEnemyController<FlowermanAI> {
     public string GetPrimarySkillName(FlowermanAI enemyInstance) => enemyInstance.carryingPlayerBody ? "Drop body" : "";
 
     public string GetSecondarySkillName(FlowermanAI _) => "Stand";
-    public float? InteractRange(FlowermanAI _) => 1.5f;
+
+    public float InteractRange(FlowermanAI _) => 1.5f;
 
     public bool SyncAnimationSpeedEnabled(FlowermanAI _) => false;
 }
