@@ -1,3 +1,5 @@
+using Hax;
+
 enum CentipedeAiState {
     SEARCHING = 0,
     HIDING = 1,
@@ -6,10 +8,10 @@ enum CentipedeAiState {
 }
 
 internal class SnareFleaController : IEnemyController<CentipedeAI> {
-    public bool IsClingingToSomething(CentipedeAI enemyInstance) {
+    bool IsClingingToSomething(CentipedeAI enemyInstance) {
         Reflector centipedeReflector = enemyInstance.Reflect();
 
-        return enemyInstance.clingingToPlayer != null || enemyInstance.inSpecialAnimation ||
+        return enemyInstance.clingingToPlayer is not null || enemyInstance.inSpecialAnimation ||
                centipedeReflector.GetInternalField<bool>("clingingToDeadBody") ||
                centipedeReflector.GetInternalField<bool>("clingingToCeiling") ||
                centipedeReflector.GetInternalField<bool>("startedCeilingAnimationCoroutine") ||
@@ -25,7 +27,7 @@ internal class SnareFleaController : IEnemyController<CentipedeAI> {
         if (this.IsClingingToSomething(enemyInstance)) return;
 
         _ = enemyInstance.Reflect().InvokeInternalMethod("RaycastToCeiling");
-        enemyInstance.SwitchToBehaviourServerRpc(2);
+        enemyInstance.SetBehaviourState(CentipedeAiState.CHASING);
     }
 
     public bool IsAbleToMove(CentipedeAI enemyInstance) => !this.IsClingingToSomething(enemyInstance);
@@ -34,7 +36,7 @@ internal class SnareFleaController : IEnemyController<CentipedeAI> {
 
     public string GetSecondarySkillName(CentipedeAI _) => "Attach to ceiling";
 
-    public float? InteractRange(CentipedeAI _) => 1.5f;
+    public float InteractRange(CentipedeAI _) => 1.5f;
 
     public bool CanUseEntranceDoors(CentipedeAI _) => false;
 
