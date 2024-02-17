@@ -8,23 +8,23 @@ enum GiantState {
 internal class ForestGiantController : IEnemyController<ForestGiantAI> {
     bool IsUsingSecondarySkill { get; set; } = false;
 
-    public void OnMovement(ForestGiantAI enemyInstance, bool isMoving, bool isSprinting) {
+    public void OnMovement(ForestGiantAI enemy, bool isMoving, bool isSprinting) {
         if (!this.IsUsingSecondarySkill) {
-            enemyInstance.SetBehaviourState(GiantState.DEFAULT);
+            enemy.SetBehaviourState(GiantState.DEFAULT);
         }
     }
 
-    public void UseSecondarySkill(ForestGiantAI enemyInstance) {
+    public void UseSecondarySkill(ForestGiantAI enemy) {
         this.IsUsingSecondarySkill = true;
-        enemyInstance.SetBehaviourState(GiantState.CHASE);
+        enemy.SetBehaviourState(GiantState.CHASE);
     }
 
-    public void ReleaseSecondarySkill(ForestGiantAI enemyInstance) {
+    public void ReleaseSecondarySkill(ForestGiantAI enemy) {
         this.IsUsingSecondarySkill = false;
-        enemyInstance.SetBehaviourState(GiantState.DEFAULT);
+        enemy.SetBehaviourState(GiantState.DEFAULT);
     }
 
-    public bool IsAbleToMove(ForestGiantAI enemyInstance) => !enemyInstance.Reflect().GetInternalField<bool>("inEatingPlayerAnimation");
+    public bool IsAbleToMove(ForestGiantAI enemy) => !enemy.Reflect().GetInternalField<bool>("inEatingPlayerAnimation");
 
     public string GetSecondarySkillName(ForestGiantAI _) => "(HOLD) Chase";
 
@@ -32,7 +32,7 @@ internal class ForestGiantController : IEnemyController<ForestGiantAI> {
 
     public float InteractRange(ForestGiantAI _) => 0.0f;
 
-    public void OnUnpossess(ForestGiantAI enemyInstance) => this.IsUsingSecondarySkill = false;
+    public void OnUnpossess(ForestGiantAI enemy) => this.IsUsingSecondarySkill = false;
 
     public bool SyncAnimationSpeedEnabled(ForestGiantAI _) => false;
 }

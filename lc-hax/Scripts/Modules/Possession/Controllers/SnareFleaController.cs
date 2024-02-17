@@ -8,29 +8,29 @@ enum CentipedeAiState {
 }
 
 internal class SnareFleaController : IEnemyController<CentipedeAI> {
-    bool IsClingingToSomething(CentipedeAI enemyInstance) {
-        Reflector centipedeReflector = enemyInstance.Reflect();
+    bool IsClingingToSomething(CentipedeAI enemy) {
+        Reflector centipedeReflector = enemy.Reflect();
 
-        return enemyInstance.clingingToPlayer is not null || enemyInstance.inSpecialAnimation ||
+        return enemy.clingingToPlayer is not null || enemy.inSpecialAnimation ||
                centipedeReflector.GetInternalField<bool>("clingingToDeadBody") ||
                centipedeReflector.GetInternalField<bool>("clingingToCeiling") ||
                centipedeReflector.GetInternalField<bool>("startedCeilingAnimationCoroutine") ||
                centipedeReflector.GetInternalField<bool>("inDroppingOffPlayerAnim");
     }
 
-    public void UsePrimarySkill(CentipedeAI enemyInstance) {
-        if (enemyInstance.currentBehaviourStateIndex is not 1) return;
-        enemyInstance.SwitchToBehaviourServerRpc(2);
+    public void UsePrimarySkill(CentipedeAI enemy) {
+        if (enemy.currentBehaviourStateIndex is not 1) return;
+        enemy.SwitchToBehaviourServerRpc(2);
     }
 
-    public void UseSecondarySkill(CentipedeAI enemyInstance) {
-        if (this.IsClingingToSomething(enemyInstance)) return;
+    public void UseSecondarySkill(CentipedeAI enemy) {
+        if (this.IsClingingToSomething(enemy)) return;
 
-        _ = enemyInstance.Reflect().InvokeInternalMethod("RaycastToCeiling");
-        enemyInstance.SetBehaviourState(CentipedeAiState.CHASING);
+        _ = enemy.Reflect().InvokeInternalMethod("RaycastToCeiling");
+        enemy.SetBehaviourState(CentipedeAiState.CHASING);
     }
 
-    public bool IsAbleToMove(CentipedeAI enemyInstance) => !this.IsClingingToSomething(enemyInstance);
+    public bool IsAbleToMove(CentipedeAI enemy) => !this.IsClingingToSomething(enemy);
 
     public string GetPrimarySkillName(CentipedeAI _) => "Drop";
 

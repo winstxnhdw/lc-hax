@@ -7,21 +7,21 @@ enum FlowerMan {
 }
 
 internal class BrackenController : IEnemyController<FlowermanAI> {
-    public void UsePrimarySkill(FlowermanAI enemyInstance) {
-        if (!enemyInstance.carryingPlayerBody) {
-            enemyInstance.SetBehaviourState(FlowerMan.ANGER);
+    public void UsePrimarySkill(FlowermanAI enemy) {
+        if (!enemy.carryingPlayerBody) {
+            enemy.SetBehaviourState(FlowerMan.ANGER);
         }
 
-        enemyInstance.DropPlayerBodyServerRpc();
+        enemy.DropPlayerBodyServerRpc();
     }
 
-    public void UseSecondarySkill(FlowermanAI enemyInstance) => enemyInstance.SetBehaviourState(FlowerMan.STAND);
+    public void UseSecondarySkill(FlowermanAI enemy) => enemy.SetBehaviourState(FlowerMan.STAND);
 
-    public void ReleaseSecondarySkill(FlowermanAI enemyInstance) => enemyInstance.SetBehaviourState(FlowerMan.SCOUTING);
+    public void ReleaseSecondarySkill(FlowermanAI enemy) => enemy.SetBehaviourState(FlowerMan.SCOUTING);
 
-    public bool IsAbleToMove(FlowermanAI enemyInstance) => !enemyInstance.inSpecialAnimation;
+    public bool IsAbleToMove(FlowermanAI enemy) => !enemy.inSpecialAnimation;
 
-    public string GetPrimarySkillName(FlowermanAI enemyInstance) => enemyInstance.carryingPlayerBody ? "Drop body" : "";
+    public string GetPrimarySkillName(FlowermanAI enemy) => enemy.carryingPlayerBody ? "Drop body" : "";
 
     public string GetSecondarySkillName(FlowermanAI _) => "Stand";
 

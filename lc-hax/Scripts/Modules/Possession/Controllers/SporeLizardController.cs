@@ -8,14 +8,14 @@ public enum PufferState {
 }
 
 internal class SporeLizardController : IEnemyController<PufferAI> {
-    public void UsePrimarySkill(PufferAI enemyInstance) {
-        enemyInstance.SetBehaviourState(PufferState.HOSTILE);
-        enemyInstance.StompServerRpc();
+    public void UsePrimarySkill(PufferAI enemy) {
+        enemy.SetBehaviourState(PufferState.HOSTILE);
+        enemy.StompServerRpc();
     }
 
-    public void UseSecondarySkill(PufferAI enemyInstance) {
-        enemyInstance.SetBehaviourState(PufferState.HOSTILE);
-        enemyInstance.ShakeTailServerRpc();
+    public void UseSecondarySkill(PufferAI enemy) {
+        enemy.SetBehaviourState(PufferState.HOSTILE);
+        enemy.ShakeTailServerRpc();
     }
 
     public string GetPrimarySkillName(PufferAI _) => "Stomp";

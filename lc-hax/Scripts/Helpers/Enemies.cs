@@ -17,15 +17,15 @@ internal static partial class Helper {
     internal static T? GetEnemy<T>() where T : EnemyAI =>
         Helper.Enemies.First(enemy => enemy is T) is T enemy ? enemy : null;
 
-    internal static void Kill(this EnemyAI enemyInstance, ulong actualClientId) {
-        enemyInstance.ChangeEnemyOwnerServerRpc(actualClientId);
+    internal static void Kill(this EnemyAI enemy, ulong actualClientId) {
+        enemy.ChangeEnemyOwnerServerRpc(actualClientId);
 
-        if (enemyInstance is NutcrackerEnemyAI nutcracker) {
+        if (enemy is NutcrackerEnemyAI nutcracker) {
             nutcracker.KillEnemy();
         }
 
         else {
-            enemyInstance.KillEnemyServerRpc(true);
+            enemy.KillEnemyServerRpc(true);
         }
     }
 
@@ -36,21 +36,21 @@ internal static partial class Helper {
         enemy.allAINodes = GameObject.FindGameObjectsWithTag(enemy.isOutside ? "OutsideAINode" : "AINode");
     }
 
-    internal static void Kill(EnemyAI enemyInstance) {
+    internal static void Kill(EnemyAI enemy) {
         if (Helper.LocalPlayer is not PlayerControllerB localPlayer) return;
-        enemyInstance.Kill(localPlayer.actualClientId);
+        enemy.Kill(localPlayer.actualClientId);
     }
 
-    internal static bool IsBehaviourState(this EnemyAI enemyInstance, Enum state) =>
-        enemyInstance.currentBehaviourStateIndex == Convert.ToInt32(state);
+    internal static bool IsBehaviourState(this EnemyAI enemy, Enum state) =>
+        enemy.currentBehaviourStateIndex == Convert.ToInt32(state);
 
-    internal static void SetBehaviourState(this EnemyAI enemyInstance, Enum state) {
-        if (enemyInstance.IsBehaviourState(state)) return;
-        enemyInstance.SwitchToBehaviourServerRpc(Convert.ToInt32(state));
+    internal static void SetBehaviourState(this EnemyAI enemy, Enum state) {
+        if (enemy.IsBehaviourState(state)) return;
+        enemy.SwitchToBehaviourServerRpc(Convert.ToInt32(state));
     }
 
-    internal static GrabbableObject? FindNearbyItem(this EnemyAI instance, float grabRange = 1.0f) {
-        foreach (Collider collider in Physics.OverlapSphere(instance.transform.position, grabRange)) {
+    internal static GrabbableObject? FindNearbyItem(this EnemyAI enemy, float grabRange = 1.0f) {
+        foreach (Collider collider in Physics.OverlapSphere(enemy.transform.position, grabRange)) {
             if (!collider.TryGetComponent(out GrabbableObject item)) continue;
             if (!item.TryGetComponent(out NetworkObject _)) continue;
 
