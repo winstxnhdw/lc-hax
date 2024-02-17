@@ -296,15 +296,13 @@ internal sealed class PossessionMod : MonoBehaviour {
 
 
     bool CanUseEntranceDoors(EnemyAI enemy) {
-        return enemy is not EnemyAI enemyAI
-            ? false
-            : this.EnemyControllers.TryGetValue(enemy.GetType(), out IController value) && value.CanUseEntranceDoors(enemyAI);
+        return enemy is EnemyAI enemyAI
+&& this.EnemyControllers.TryGetValue(enemy.GetType(), out IController value) && value.CanUseEntranceDoors(enemyAI);
     }
 
     bool SyncAnimationSpeedEnabled(EnemyAI enemy) {
-        return enemy is not EnemyAI enemyAI
-            ? false
-            : this.EnemyControllers.TryGetValue(enemy.GetType(), out IController value) && value.SyncAnimationSpeedEnabled(enemyAI);
+        return enemy is EnemyAI enemyAI
+&& this.EnemyControllers.TryGetValue(enemy.GetType(), out IController value) && value.SyncAnimationSpeedEnabled(enemyAI);
     }
 
 
