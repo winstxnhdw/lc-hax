@@ -8,10 +8,10 @@ internal class EarthLeviathanController : IEnemyController<SandWormAI> {
 
     public string GetSecondarySkillName(SandWormAI _) => "Emerge";
 
-
     public bool CanUseEntranceDoors(SandWormAI _) => false;
 
-    public float? InteractRange(SandWormAI _) => 0f;
+    public float InteractRange(SandWormAI _) => 0.0f;
+
     public bool SyncAnimationSpeedEnabled(SandWormAI _) => false;
 
 }
