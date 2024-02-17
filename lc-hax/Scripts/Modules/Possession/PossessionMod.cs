@@ -109,12 +109,11 @@ internal sealed class PossessionMod : MonoBehaviour {
     }
 
     void UpdateComponentsOnCurrentState(bool thisGameObjectIsEnabled) {
-        if (this.MousePan == null) return;
-        if (this.CharacterMovement == null) return;
+        if (this.MousePan is null) return;
 
         this.MousePan.enabled = thisGameObjectIsEnabled;
-        this.CharacterMovement.gameObject.SetActive(thisGameObjectIsEnabled);
-        this.CharacterMovement.SetNoClipMode(this.NoClipEnabled);
+        this.CharacterMovement?.gameObject.SetActive(thisGameObjectIsEnabled);
+        this.CharacterMovement?.SetNoClipMode(this.NoClipEnabled);
     }
 
     void HandleEnemyMovements(IController controller, EnemyAI enemy, bool isMoving, bool isSprinting) =>
