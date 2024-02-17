@@ -9,10 +9,8 @@ enum BaboonState {
 }
 
 internal class BaboonHawkController : IEnemyController<BaboonBirdAI> {
-
-    Vector3 customCamp = new(1000, 1000, 1000);
-
-    Vector3 originalCamp = new(0, 0, 0);
+    Vector3 CustomCamp { get; } = new Vector3(1000.0f, 0.0f, 0.0f);
+    Vector3 OriginalCamp { get; set; } = Vector3.zero;
 
     public void OnDeath(BaboonBirdAI enemyInstance) {
         if (enemyInstance.heldScrap is not null) {
@@ -20,18 +18,17 @@ internal class BaboonHawkController : IEnemyController<BaboonBirdAI> {
         }
     }
 
-    public void OnPossess(BaboonBirdAI enemyInstance) {
-        if (BaboonBirdAI.baboonCampPosition != this.customCamp) return;
-        this.originalCamp = BaboonBirdAI.baboonCampPosition;
-        BaboonBirdAI.baboonCampPosition = this.customCamp;
+    public void OnPossess(BaboonBirdAI _) {
+        if (BaboonBirdAI.baboonCampPosition != this.CustomCamp) return;
+
+        this.OriginalCamp = BaboonBirdAI.baboonCampPosition;
+        BaboonBirdAI.baboonCampPosition = this.CustomCamp;
     }
 
-    public void OnUnpossess(BaboonBirdAI enemyInstance) {
-        if (BaboonBirdAI.baboonCampPosition != this.customCamp) {
-            BaboonBirdAI.baboonCampPosition = this.originalCamp;
-        }
+    public void OnUnpossess(BaboonBirdAI _) {
+        if (BaboonBirdAI.baboonCampPosition == this.OriginalCamp) return;
+        BaboonBirdAI.baboonCampPosition = this.OriginalCamp;
     }
-
 
     void GrabItemAndSync(BaboonBirdAI enemyInstance, GrabbableObject item) {
         if (!item.TryGetComponent(out NetworkObject netItem)) return;
@@ -59,5 +56,5 @@ internal class BaboonHawkController : IEnemyController<BaboonBirdAI> {
 
     public string GetSecondarySkillName(BaboonBirdAI enemyInstance) => enemyInstance.heldScrap is null ? "" : "Drop item";
 
-    public float? InteractRange(BaboonBirdAI _) => 1.5f;
+    public float InteractRange(BaboonBirdAI _) => 1.5f;
 }
