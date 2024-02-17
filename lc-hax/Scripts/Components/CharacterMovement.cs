@@ -46,24 +46,24 @@ internal class CharacterMovement : MonoBehaviour {
 
     internal void CalibrateCollision(EnemyAI instance) {
         if (this.CharacterController == null) return;
-        if (instance == null) return;
 
-        Collider[] colliders = instance.GetComponentsInChildren<Collider>();
+        this.CharacterController.height = 1.0f; 
+        this.CharacterController.radius = 0.5f; 
+        this.CharacterController.center = new Vector3(0, 0.5f, 0); 
 
-        // Set minimal height and radius for the CharacterController
-        this.CharacterController.height = 0.1f;
-        this.CharacterController.radius = 0.1f;
-        this.CharacterController.center = new Vector3(0, 0.05f, 0);
-
-        float maxStepOffset = this.CharacterController.height + (this.CharacterController.radius * 2);
+        float maxStepOffset = 0.25f;
         this.CharacterController.stepOffset = Mathf.Min(this.CharacterController.stepOffset, maxStepOffset);
 
-        foreach (Collider col in colliders) {
-            if (col != this.CharacterController) {
-                Physics.IgnoreCollision(this.CharacterController, col);
+        if (instance != null) {
+            Collider[] colliders = instance.GetComponentsInChildren<Collider>();
+            foreach (Collider col in colliders) {
+                if (col != this.CharacterController) {
+                    Physics.IgnoreCollision(this.CharacterController, col);
+                }
             }
         }
     }
+
 
     void Awake() {
         this.Keyboard = Keyboard.current;

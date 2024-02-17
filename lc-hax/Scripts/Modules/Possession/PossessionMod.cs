@@ -213,8 +213,8 @@ internal sealed class PossessionMod : MonoBehaviour {
 
     // Possesses the specified enemy
     internal void Possess(EnemyAI enemy) {
-        this.Unpossess();
         if (enemy.isEnemyDead) return;
+        this.Unpossess();
 
         this.mainEntrance = null;
         this.FirstUpdate = true;
