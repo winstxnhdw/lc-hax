@@ -6,37 +6,33 @@ enum GiantState {
 }
 
 internal class ForestGiantController : IEnemyController<ForestGiantAI> {
+    bool IsUsingSecondarySkill { get; set; } = false;
 
-    bool isUsingSecondarySkill = false;
-
-    public void OnMovement(ForestGiantAI enemyInstance, bool isMoving, bool isSprinting) {
-        if (!this.isUsingSecondarySkill) {
-            enemyInstance.SetBehaviourState(GiantState.DEFAULT);
+    public void OnMovement(ForestGiantAI enemy, bool isMoving, bool isSprinting) {
+        if (!this.IsUsingSecondarySkill) {
+            enemy.SetBehaviourState(GiantState.DEFAULT);
         }
     }
 
-    public void UseSecondarySkill(ForestGiantAI enemyInstance) {
-        this.isUsingSecondarySkill = true;
-        enemyInstance.SetBehaviourState(GiantState.CHASE);
+    public void UseSecondarySkill(ForestGiantAI enemy) {
+        this.IsUsingSecondarySkill = true;
+        enemy.SetBehaviourState(GiantState.CHASE);
     }
 
-
-    public void ReleaseSecondarySkill(ForestGiantAI enemyInstance) {
-        this.isUsingSecondarySkill = false;
-        enemyInstance.SetBehaviourState(GiantState.DEFAULT);
+    public void ReleaseSecondarySkill(ForestGiantAI enemy) {
+        this.IsUsingSecondarySkill = false;
+        enemy.SetBehaviourState(GiantState.DEFAULT);
     }
 
-    public bool IsAbleToMove(ForestGiantAI enemyInstance) => !enemyInstance.Reflect().GetInternalField<bool>("inEatingPlayerAnimation");
+    public bool IsAbleToMove(ForestGiantAI enemy) => !enemy.Reflect().GetInternalField<bool>("inEatingPlayerAnimation");
 
     public string GetSecondarySkillName(ForestGiantAI _) => "(HOLD) Chase";
 
     public bool CanUseEntranceDoors(ForestGiantAI _) => false;
 
-    public float? InteractRange(ForestGiantAI _) => 0f;
+    public float InteractRange(ForestGiantAI _) => 0.0f;
 
-    public void OnUnpossess(ForestGiantAI enemyInstance) {
-        this.isUsingSecondarySkill = false;
-    }
+    public void OnUnpossess(ForestGiantAI enemy) => this.IsUsingSecondarySkill = false;
 
     public bool SyncAnimationSpeedEnabled(ForestGiantAI _) => false;
 }

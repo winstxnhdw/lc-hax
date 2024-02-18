@@ -1,91 +1,102 @@
 internal interface IController {
+    const float DefaultSprintMultiplier = 2.8f;
+    const float DefaultInteractRange = 2.5f;
 
-    void OnPossess(EnemyAI instance);
-    void OnUnpossess(EnemyAI instance);
-    void OnDeath(EnemyAI instance);
+    void OnPossess(EnemyAI enemy);
 
-    void Update(EnemyAI enemyInstance);
+    void OnUnpossess(EnemyAI enemy);
 
-    void UsePrimarySkill(EnemyAI enemyInstance);
+    void OnDeath(EnemyAI enemy);
 
-    void UseSecondarySkill(EnemyAI enemyInstance);
+    void Update(EnemyAI enemy);
 
-    void ReleaseSecondarySkill(EnemyAI enemyInstance);
+    void UsePrimarySkill(EnemyAI enemy);
 
-    void OnMovement(EnemyAI enemyInstance, bool isMoving, bool isSprinting);
+    void UseSecondarySkill(EnemyAI enemy);
 
-    bool IsAbleToMove(EnemyAI enemyInstance);
+    void ReleaseSecondarySkill(EnemyAI enemy);
 
-    bool IsAbleToRotate(EnemyAI enemyInstance);
-    bool CanUseEntranceDoors(EnemyAI enemyInstance);
+    void OnMovement(EnemyAI enemy, bool isMoving, bool isSprinting);
 
-    string? GetPrimarySkillName(EnemyAI enemyInstance);
+    bool IsAbleToMove(EnemyAI enemy);
 
-    string? GetSecondarySkillName(EnemyAI enemyInstance);
+    bool IsAbleToRotate(EnemyAI enemy);
 
-    float? InteractRange(EnemyAI enemyInstance);
+    bool CanUseEntranceDoors(EnemyAI enemy);
 
-    float? SprintMultiplier(EnemyAI enemyInstance);
+    string? GetPrimarySkillName(EnemyAI enemy);
 
-    bool SyncAnimationSpeedEnabled(EnemyAI enemyInstance);
+    string? GetSecondarySkillName(EnemyAI enemy);
+
+    float InteractRange(EnemyAI enemy);
+
+    float SprintMultiplier(EnemyAI enemy);
+
+    bool SyncAnimationSpeedEnabled(EnemyAI enemy);
 }
 
 internal interface IEnemyController<T> : IController where T : EnemyAI {
-    void OnPossess(T instance) { }
-    void OnUnpossess(T instance) { }
-    void OnDeath(T instance) { }
-    void Update(T enemyInstance) { }
+    void OnPossess(T enemy) { }
 
-    void UsePrimarySkill(T enemyInstance) { }
+    void OnUnpossess(T enemy) { }
 
-    void UseSecondarySkill(T enemyInstance) { }
+    void OnDeath(T enemy) { }
 
-    void ReleaseSecondarySkill(T enemyInstance) { }
+    void Update(T enemy) { }
 
-    void OnMovement(T enemyInstance, bool isMoving, bool isSprinting) { }
+    void UsePrimarySkill(T enemy) { }
 
-    bool IsAbleToMove(T enemyInstance) => true;
+    void UseSecondarySkill(T enemy) { }
 
-    bool IsAbleToRotate(T enemyInstance) => true;
+    void ReleaseSecondarySkill(T enemy) { }
 
-    bool CanUseEntranceDoors(T enemyInstance) => true;
+    void OnMovement(T enemy, bool isMoving, bool isSprinting) { }
 
-    string? GetPrimarySkillName(T enemyInstance) => null;
+    bool IsAbleToMove(T enemy) => true;
 
-    string? GetSecondarySkillName(T enemyInstance) => null;
-    float? InteractRange(T enemyInstance) => 2.5f;
-    float? SprintMultiplier(T enemyInstance) => 2.8f;
+    bool IsAbleToRotate(T enemy) => true;
 
-    bool SyncAnimationSpeedEnabled(T enemyInstance) => true;
+    bool CanUseEntranceDoors(T enemy) => true;
 
-    void IController.OnPossess(EnemyAI instance) => this.OnPossess((T)instance);
-    void IController.OnUnpossess(EnemyAI instance) => this.OnUnpossess((T)instance);
-    void IController.OnDeath(EnemyAI instance) => this.OnDeath((T)instance);
+    string? GetPrimarySkillName(T enemy) => null;
 
-    void IController.Update(EnemyAI enemyInstance) => this.Update((T)enemyInstance);
+    string? GetSecondarySkillName(T enemy) => null;
 
-    void IController.UsePrimarySkill(EnemyAI enemyInstance) => this.UsePrimarySkill((T)enemyInstance);
+    float InteractRange(T enemy) => IController.DefaultInteractRange;
 
-    void IController.UseSecondarySkill(EnemyAI enemyInstance) => this.UseSecondarySkill((T)enemyInstance);
+    float SprintMultiplier(T enemy) => IController.DefaultSprintMultiplier;
 
-    void IController.ReleaseSecondarySkill(EnemyAI enemyInstance) => this.ReleaseSecondarySkill((T)enemyInstance);
+    bool SyncAnimationSpeedEnabled(T enemy) => true;
 
-    void IController.OnMovement(EnemyAI enemyInstance, bool isMoving, bool isSprinting) => this.OnMovement((T)enemyInstance, isMoving, isSprinting);
+    void IController.OnPossess(EnemyAI enemy) => this.OnPossess((T)enemy);
 
-    bool IController.IsAbleToMove(EnemyAI enemyInstance) => this.IsAbleToMove((T)enemyInstance);
+    void IController.OnUnpossess(EnemyAI enemy) => this.OnUnpossess((T)enemy);
 
-    bool IController.IsAbleToRotate(EnemyAI enemyInstance) => this.IsAbleToRotate((T)enemyInstance);
-    bool IController.CanUseEntranceDoors(EnemyAI enemyInstance) => this.CanUseEntranceDoors((T)enemyInstance);
+    void IController.OnDeath(EnemyAI enemy) => this.OnDeath((T)enemy);
 
-    string? IController.GetPrimarySkillName(EnemyAI enemyInstance) => this.GetPrimarySkillName((T)enemyInstance);
+    void IController.Update(EnemyAI enemy) => this.Update((T)enemy);
 
-    string? IController.GetSecondarySkillName(EnemyAI enemyInstance) => this.GetSecondarySkillName((T)enemyInstance);
+    void IController.UsePrimarySkill(EnemyAI enemy) => this.UsePrimarySkill((T)enemy);
 
-    float? IController.InteractRange(EnemyAI enemyInstance) => this.InteractRange((T)enemyInstance);
+    void IController.UseSecondarySkill(EnemyAI enemy) => this.UseSecondarySkill((T)enemy);
 
-    float? IController.SprintMultiplier(EnemyAI enemyInstance) => this.SprintMultiplier((T)enemyInstance);
+    void IController.ReleaseSecondarySkill(EnemyAI enemy) => this.ReleaseSecondarySkill((T)enemy);
 
-    bool IController.SyncAnimationSpeedEnabled(EnemyAI enemyInstance) => this.SyncAnimationSpeedEnabled((T)enemyInstance);
+    void IController.OnMovement(EnemyAI enemy, bool isMoving, bool isSprinting) => this.OnMovement((T)enemy, isMoving, isSprinting);
 
+    bool IController.IsAbleToMove(EnemyAI enemy) => this.IsAbleToMove((T)enemy);
 
+    bool IController.IsAbleToRotate(EnemyAI enemy) => this.IsAbleToRotate((T)enemy);
+
+    bool IController.CanUseEntranceDoors(EnemyAI enemy) => this.CanUseEntranceDoors((T)enemy);
+
+    string? IController.GetPrimarySkillName(EnemyAI enemy) => this.GetPrimarySkillName((T)enemy);
+
+    string? IController.GetSecondarySkillName(EnemyAI enemy) => this.GetSecondarySkillName((T)enemy);
+
+    float IController.InteractRange(EnemyAI enemy) => this.InteractRange((T)enemy);
+
+    float IController.SprintMultiplier(EnemyAI enemy) => this.SprintMultiplier((T)enemy);
+
+    bool IController.SyncAnimationSpeedEnabled(EnemyAI enemy) => this.SyncAnimationSpeedEnabled((T)enemy);
 }

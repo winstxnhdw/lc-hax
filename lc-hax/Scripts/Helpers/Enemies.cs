@@ -1,11 +1,9 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Dissonance;
 using GameNetcodeStuff;
 using Unity.Netcode;
 using UnityEngine;
-using Object = UnityEngine.Object;
 
 namespace Hax;
 
@@ -15,59 +13,6 @@ internal static partial class Helper {
               .WhereIsNotNull()
               .Where(enemy => enemy.IsSpawned)
               .ToHashSet();
-
-    internal static T? GetEnemy<T>() where T : EnemyAI =>
-        Helper.Enemies.First(enemy => enemy is T) is T enemy ? enemy : null;
-
-    internal static void Kill(this EnemyAI enemyInstance, ulong actualClientId) {
-        enemyInstance.ChangeEnemyOwnerServerRpc(actualClientId);
-
-        if (enemyInstance is NutcrackerEnemyAI nutcracker) {
-            nutcracker.KillEnemy();
-        }
-
-        else {
-            enemyInstance.KillEnemyServerRpc(true);
-        }
-    }
-
-    internal static void SetOutsideStatus(this EnemyAI enemy, bool isOutside) {
-        if (enemy == null) return;
-        if (enemy.isOutside == isOutside) return;
-        enemy.isOutside = isOutside;
-        enemy.allAINodes = GameObject.FindGameObjectsWithTag(enemy.isOutside ? "OutsideAINode" : "AINode");
-
-        Logger.Write($"SetOutsideStatus: {enemy.name} is now {(isOutside ? "Outside" : "Inside")}");
-    }
-    internal static void Kill(EnemyAI enemyInstance) {
-        if (Helper.LocalPlayer is not PlayerControllerB localPlayer) return;
-        enemyInstance.Kill(localPlayer.actualClientId);
-    }
-
-    internal static bool IsBehaviourState(this EnemyAI enemyInstance, Enum state) =>
-        enemyInstance.currentBehaviourStateIndex == Convert.ToInt32(state);
-
-    internal static void SetBehaviourState(this EnemyAI enemyInstance, Enum state) {
-        if (enemyInstance.IsBehaviourState(state)) return;
-        enemyInstance.SwitchToBehaviourServerRpc(Convert.ToInt32(state));
-    }
-
-    internal static PlayerControllerB? GetPlayerAboutToKilledByEnemy(int playerObjectID) {
-        PlayerControllerB[] players = Helper.Players;
-        return players.First(player => (int)player.playerClientId == playerObjectID);
-    }
-
-    internal static bool IsLocalPlayerAboutToGetKilledByEnemy(int PlayerID) {
-        PlayerControllerB? player = Helper.GetPlayerAboutToKilledByEnemy(PlayerID);
-        return player != null && player.IsSelf();
-    }
-
-    internal static bool IsLocalPlayerAboutToGetKilledByEnemy(this EnemyAI instance, Collider other) {
-        if (instance == null) return false;
-        if (other == null) return false;
-        PlayerControllerB playerControllerB = instance.MeetsStandardPlayerCollisionConditions(other, false, false);
-        return playerControllerB != null && playerControllerB.IsSelf();
-    }
 
     internal static bool IsHostileEnemy(EnemyType enemy) =>
         !enemy.enemyName.Contains("Docile Locust Bees", StringComparison.InvariantCultureIgnoreCase) &&
@@ -79,33 +24,43 @@ internal static partial class Helper {
             .GroupBy(enemy => enemy.enemyName)
             .ToDictionary(enemyGroup => enemyGroup.Key, enemy => Enumerable.First(enemy).enemyPrefab);
 
-    internal static void SpawnEnemies(Vector3 position, GameObject prefab, ulong amount = 1) {
-        for (ulong i = 0; i < amount; i++) {
-            _ = Helper.SpawnEnemy(position, prefab);
+    internal static T? GetEnemy<T>() where T : EnemyAI =>
+        Helper.Enemies.First(enemy => enemy is T) is T enemy ? enemy : null;
+
+    internal static void Kill(this EnemyAI enemy, ulong actualClientId) {
+        enemy.ChangeEnemyOwnerServerRpc(actualClientId);
+
+        if (enemy is NutcrackerEnemyAI nutcracker) {
+            nutcracker.KillEnemy();
+        }
+
+        else {
+            enemy.KillEnemyServerRpc(true);
         }
     }
 
-    internal static EnemyAI? SpawnEnemy(Vector3 position, GameObject prefab) {
-        if(prefab == null) return null;
-        GameObject enemy = Object.Instantiate(prefab, position, Quaternion.identity);
+    internal static void SetOutsideStatus(this EnemyAI enemy, bool isOutside) {
+        if (enemy.isOutside == isOutside) return;
 
-        if (!enemy.TryGetComponent(out NetworkObject networkObject)) {
-            Object.Destroy(enemy);
-            return null;
-        }
-
-        networkObject.Spawn(true);
-        // get the enemy ai component
-        if (!enemy.TryGetComponent(out EnemyAI enemyAI)) {
-            Object.Destroy(enemy);
-            return null;
-        }
-        return enemyAI;
+        enemy.isOutside = isOutside;
+        enemy.allAINodes = GameObject.FindGameObjectsWithTag(enemy.isOutside ? "OutsideAINode" : "AINode");
     }
 
+    internal static void Kill(EnemyAI enemy) {
+        if (Helper.LocalPlayer is not PlayerControllerB localPlayer) return;
+        enemy.Kill(localPlayer.actualClientId);
+    }
 
-    internal static GrabbableObject? FindNearbyItem(this EnemyAI instance, float grabRange = 1f) {
-        foreach (Collider collider in Physics.OverlapSphere(instance.transform.position, grabRange)) {
+    internal static bool IsBehaviourState(this EnemyAI enemy, Enum state) =>
+        enemy.currentBehaviourStateIndex == Convert.ToInt32(state);
+
+    internal static void SetBehaviourState(this EnemyAI enemy, Enum state) {
+        if (enemy.IsBehaviourState(state)) return;
+        enemy.SwitchToBehaviourServerRpc(Convert.ToInt32(state));
+    }
+
+    internal static GrabbableObject? FindNearbyItem(this EnemyAI enemy, float grabRange = 1.0f) {
+        foreach (Collider collider in Physics.OverlapSphere(enemy.transform.position, grabRange)) {
             if (!collider.TryGetComponent(out GrabbableObject item)) continue;
             if (!item.TryGetComponent(out NetworkObject _)) continue;
 
@@ -114,4 +69,24 @@ internal static partial class Helper {
 
         return null;
     }
+    internal static void SpawnEnemies(Vector3 position, GameObject prefab, ulong amount = 1) {
+        for (ulong i = 0; i < amount; i++) {
+            _ = Helper.SpawnEnemy(position, prefab);
+        }
+    }
+    internal static EnemyAI? SpawnEnemy(Vector3 position, GameObject prefab) {
+        if(prefab == null) return null;
+        GameObject enemy = Object.Instantiate(prefab, position, Quaternion.identity);
+
+        if (!enemy.TryGetComponent(out NetworkObject networkObject)) {
+            Object.Destroy(enemy);
+            return null;
+        }
+        networkObject.Spawn(true);
+        // get the enemy ai component
+        if (!enemy.TryGetComponent(out EnemyAI enemyAI)) {
+            Object.Destroy(enemy);
+            return null;
+        }
+        return enemyAI;
 }

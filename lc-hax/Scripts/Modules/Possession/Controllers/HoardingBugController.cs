@@ -1,3 +1,4 @@
+using GameNetcodeStuff;
 using Hax;
 using Unity.Netcode;
 
@@ -10,92 +11,79 @@ public enum HoarderBugState {
     AT_NEST
 }
 internal class HoardingBugController : IEnemyController<HoarderBugAI> {
+    void UseHeldItem(HoarderBugAI enemy) {
+        if (enemy.heldItem?.itemGrabbableObject is not GrabbableObject grabbable) return;
 
+        switch (grabbable) {
+            case ShotgunItem gun:
+                gun.ShootShotgun(enemy.transform);
+                break;
 
-    public void OnMovement(HoarderBugAI enemyInstance, bool isMoving, bool isSprinting) {
-        if (enemyInstance.heldItem == null) return;
-        if (enemyInstance.heldItem.itemGrabbableObject == null) return;
-        if (enemyInstance.heldItem.itemGrabbableObject) {
-            enemyInstance.angryTimer = 0f;
+            default:
+                grabbable.InteractWithProp();
+                break;
         }
     }
 
-    void GrabItem(HoarderBugAI enemyInstance, GrabbableObject item) {
+    void GrabItem(HoarderBugAI enemy, GrabbableObject item) {
         if (!item.TryGetComponent(out NetworkObject netItem)) return;
 
-        _ = enemyInstance.Reflect()
-                         .InvokeInternalMethod("GrabItem", netItem)?
-                         .SetInternalField("sendingGrabOrDropRPC", true);
+        _ = enemy.Reflect()
+            .InvokeInternalMethod("GrabItem", netItem)?
+            .SetInternalField("sendingGrabOrDropRPC", true);
 
-        enemyInstance.SwitchToBehaviourServerRpc(1);
-        enemyInstance.GrabItemServerRpc(netItem);
+        enemy.SwitchToBehaviourServerRpc(1);
+        enemy.GrabItemServerRpc(netItem);
     }
 
-    public void OnDeath(HoarderBugAI enemyInstance) {
-        if (enemyInstance.heldItem.itemGrabbableObject is not GrabbableObject grabbable) return;
-        if (!grabbable.TryGetComponent(out NetworkObject networkObject)) return;
+    public void OnMovement(HoarderBugAI enemy, bool isMoving, bool isSprinting) {
+        if (enemy.heldItem?.itemGrabbableObject is null) return;
+        enemy.angryTimer = 0.0f;
+    }
 
-        _ = enemyInstance.Reflect().InvokeInternalMethod(
+    public void OnDeath(HoarderBugAI enemy) {
+        if (enemy.heldItem.itemGrabbableObject.TryGetComponent(out NetworkObject networkObject)) return;
+
+        _ = enemy.Reflect().InvokeInternalMethod(
             "DropItemAndCallDropRPC",
             networkObject,
             false
         );
     }
 
-    void UseHeldItem(HoarderBugAI enemyInstance) {
-        if (enemyInstance.heldItem?.itemGrabbableObject != null) {
-            switch (enemyInstance.heldItem.itemGrabbableObject) {
-                case ShotgunItem gun:
-                    gun.ShootShotgun(enemyInstance.transform);
-                    break;
-
-                default:
-                    enemyInstance.heldItem.itemGrabbableObject?.InteractWithProp();
-                    break;
-            }
+    public void UsePrimarySkill(HoarderBugAI enemy) {
+        if (enemy.angryTimer > 0.0f) {
+            enemy.angryTimer = 0.0f;
+            enemy.angryAtPlayer = null;
         }
-    }
 
-
-    public void UsePrimarySkill(HoarderBugAI enemyInstance) {
-        if (enemyInstance.angryTimer > 0f) {
-            enemyInstance.angryTimer = 0f;
-            enemyInstance.angryAtPlayer = null;
-        }
-        if (enemyInstance.heldItem is null && enemyInstance.FindNearbyItem() is GrabbableObject grabbable) {
-            this.GrabItem(enemyInstance, grabbable);
+        if (enemy.heldItem is null && enemy.FindNearbyItem() is GrabbableObject grabbable) {
+            this.GrabItem(enemy, grabbable);
         }
 
         else {
-            this.UseHeldItem(enemyInstance);
+            this.UseHeldItem(enemy);
         }
     }
 
-    public void UseSecondarySkill(HoarderBugAI enemyInstance) {
-        if (enemyInstance.heldItem == null || enemyInstance.heldItem.itemGrabbableObject == null) {
-            if (enemyInstance.angryTimer <= 0f) {
-                enemyInstance.watchingPlayer = Helper.LocalPlayer;
-                enemyInstance.angryAtPlayer = Helper.LocalPlayer; // anger it to self just to trigger it.
-                enemyInstance.angryTimer = 15f;
-                enemyInstance.SetBehaviourState(HoarderBugState.CHASING_PLAYER);
-            }
+    public void UseSecondarySkill(HoarderBugAI enemy) {
+        if (enemy.heldItem?.itemGrabbableObject is null) {
+            PlayerControllerB hostPlayer = Helper.Players[0];
+            enemy.watchingPlayer = hostPlayer;
+            enemy.angryAtPlayer = hostPlayer;
+            enemy.angryTimer = 15.0f;
+            enemy.SetBehaviourState(HoarderBugState.CHASING_PLAYER);
+            return;
         }
-        else {
-            if (enemyInstance.heldItem.itemGrabbableObject.TryGetComponent(out NetworkObject networkObject)) {
-                _ = enemyInstance.Reflect().InvokeInternalMethod(
-                    "DropItemAndCallDropRPC",
-                    networkObject,
-                    false
-                );
-            }
 
+        if (enemy.heldItem.itemGrabbableObject.TryGetComponent(out NetworkObject networkObject)) {
+            _ = enemy.Reflect().InvokeInternalMethod("DropItemAndCallDropRPC", networkObject, false);
         }
     }
 
-    public string GetPrimarySkillName(HoarderBugAI enemyInstance) => enemyInstance.heldItem is not null ? "Use item" : "Grab Item";
+    public string GetPrimarySkillName(HoarderBugAI enemy) => enemy.heldItem is not null ? "Use item" : "Grab Item";
 
-    public string GetSecondarySkillName(HoarderBugAI enemyInstance) => enemyInstance.heldItem is null ? "" : "Drop item";
+    public string GetSecondarySkillName(HoarderBugAI enemy) => enemy.heldItem is null ? "" : "Drop item";
 
-    public float? InteractRange(HoarderBugAI _) => 1f;
-
+    public float InteractRange(HoarderBugAI _) => 1.0f;
 }
