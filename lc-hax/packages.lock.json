@@ -8,6 +8,12 @@
         "resolved": "2.2.2",
         "contentHash": "70KvWz+DiUELxafsYL/LHxA/jH3PDWeApLo/VwtnrpTvRWQ/eUdPfS/l5funmhZWOy41QXw6UjVv+6C57Nx77A=="
       },
+      "Newtonsoft.Json": {
+        "type": "Direct",
+        "requested": "[13.0.3, )",
+        "resolved": "13.0.3",
+        "contentHash": "HrC5BXdl00IP9zeV+0Z848QWPAoCr9P3bDEZguI+gkLcBKAOxix/tLEAAHC+UvDNPv4a2d18lOReHMOagPa+zQ=="
+      },
       "Nullable.Extended.Analyzer": {
         "type": "Direct",
         "requested": "[1.15.6169, )",
