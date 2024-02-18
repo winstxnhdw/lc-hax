@@ -28,8 +28,8 @@ internal class HoardingBugController : IEnemyController<HoarderBugAI> {
         if (!item.TryGetComponent(out NetworkObject netItem)) return;
 
         _ = enemy.Reflect()
-                         .InvokeInternalMethod("GrabItem", netItem)?
-                         .SetInternalField("sendingGrabOrDropRPC", true);
+            .InvokeInternalMethod("GrabItem", netItem)?
+            .SetInternalField("sendingGrabOrDropRPC", true);
 
         enemy.SwitchToBehaviourServerRpc(1);
         enemy.GrabItemServerRpc(netItem);

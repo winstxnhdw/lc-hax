@@ -16,7 +16,7 @@ internal class SpringManEnemyController : IEnemyController<SpringManAI> {
         this.SetStoppingMovement(enemy, false);
     }
 
-    public void UseSecondarySkill(SpringManAI enemy) => this.HoldingForceMove = true;
+    public void OnSecondarySkillHold(SpringManAI enemy) => this.HoldingForceMove = true;
 
     public void ReleaseSecondarySkill(SpringManAI enemy) => this.HoldingForceMove = false;
 

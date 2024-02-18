@@ -11,6 +11,7 @@ internal interface IController {
     void Update(EnemyAI enemy);
 
     void UsePrimarySkill(EnemyAI enemy);
+    void OnSecondarySkillHold(EnemyAI enemy);
 
     void UseSecondarySkill(EnemyAI enemy);
 
@@ -46,6 +47,8 @@ internal interface IEnemyController<T> : IController where T : EnemyAI {
 
     void UsePrimarySkill(T enemy) { }
 
+    void OnSecondarySkillHold(T enemy) { }
+
     void UseSecondarySkill(T enemy) { }
 
     void ReleaseSecondarySkill(T enemy) { }
@@ -77,6 +80,8 @@ internal interface IEnemyController<T> : IController where T : EnemyAI {
     void IController.Update(EnemyAI enemy) => this.Update((T)enemy);
 
     void IController.UsePrimarySkill(EnemyAI enemy) => this.UsePrimarySkill((T)enemy);
+
+    void IController.OnSecondarySkillHold(EnemyAI enemy) => this.OnSecondarySkillHold((T)enemy);
 
     void IController.UseSecondarySkill(EnemyAI enemy) => this.UseSecondarySkill((T)enemy);
 

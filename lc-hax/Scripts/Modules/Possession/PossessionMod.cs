@@ -38,7 +38,10 @@ internal sealed class PossessionMod : MonoBehaviour {
         { typeof(SpringManAI), new SpringManEnemyController() },
         { typeof(BlobAI), new BlobController() },
         { typeof(TestEnemy), new TestEnemyController() },
-        { typeof(CrawlerAI), new CrawlerController() }
+        { typeof(LassoManAI), new LassoManController() },
+        { typeof(CrawlerAI), new CrawlerController() },
+        { typeof(SandSpiderAI), new SandSpiderController() },
+        { typeof(RedLocustBees), new RedLocustBeesController() }
     };
 
     float DoorCooldownRemaining { get; set; } = 0.0f;
@@ -69,6 +72,7 @@ internal sealed class PossessionMod : MonoBehaviour {
         InputListener.OnNPress += this.ToggleNoClip;
         InputListener.OnZPress += this.Unpossess;
         InputListener.OnLeftButtonPress += this.UsePrimarySkill;
+        InputListener.OnRightButtonPress += this.UseSecondarySkill;
         InputListener.OnRightButtonHold += this.OnRightMouseButtonHold;
         InputListener.OnDelPress += this.KillEnemyAndUnposses;
         InputListener.OnF9Press += this.ToggleAIControl;
@@ -79,6 +83,7 @@ internal sealed class PossessionMod : MonoBehaviour {
         InputListener.OnNPress -= this.ToggleNoClip;
         InputListener.OnZPress -= this.Unpossess;
         InputListener.OnLeftButtonPress -= this.UsePrimarySkill;
+        InputListener.OnRightButtonPress -= this.UseSecondarySkill;
         InputListener.OnRightButtonHold -= this.OnRightMouseButtonHold;
         InputListener.OnDelPress -= this.KillEnemyAndUnposses;
         InputListener.OnF9Press -= this.ToggleAIControl;
@@ -87,7 +92,7 @@ internal sealed class PossessionMod : MonoBehaviour {
 
     void OnRightMouseButtonHold(bool isPressed) {
         if (isPressed) {
-            this.UseSecondarySkill();
+            this.OnSecondarySkillHold();
         }
 
         else {
@@ -367,6 +372,13 @@ internal sealed class PossessionMod : MonoBehaviour {
         if (!this.EnemyControllers.TryGetValue(enemy.GetType(), out IController controller)) return;
 
         controller.UseSecondarySkill(enemy);
+    }
+
+    void OnSecondarySkillHold() {
+        if (this.Possession.Enemy is not EnemyAI enemy) return;
+        if (!this.EnemyControllers.TryGetValue(enemy.GetType(), out IController controller)) return;
+
+        controller.OnSecondarySkillHold(enemy);
     }
 
     void ReleaseSecondarySkill() {
