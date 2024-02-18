@@ -17,22 +17,22 @@ internal class SandSpiderController : IEnemyController<SandSpiderAI> {
 
 
     void PlaceWebTrap(SandSpiderAI enemy) {
-        if(Helper.StartOfRound is not StartOfRound startOfRound) return; 
+        if (Helper.StartOfRound is not StartOfRound startOfRound) return;
         Vector3 randomDirection = Vector3.Scale(UnityEngine.Random.onUnitSphere,
             new Vector3(1f, UnityEngine.Random.Range(0.5f, 1f), 1f));
-        randomDirection.y = Mathf.Min(0f, randomDirection.y); 
-        Ray ray = new Ray(enemy.abdomen.position + Vector3.up * 0.4f, randomDirection);
+        randomDirection.y = Mathf.Min(0f, randomDirection.y);
+        Ray ray = new(enemy.abdomen.position + (Vector3.up * 0.4f), randomDirection);
 
         if (Physics.Raycast(ray, out RaycastHit rayHit1, 7f, startOfRound.collidersAndRoomMask)) {
             if (rayHit1.distance < 2f) {
-                return; 
+                return;
             }
 
-            Vector3 point = rayHit1.point; 
+            Vector3 point = rayHit1.point;
             if (Physics.Raycast(enemy.abdomen.position, Vector3.down, out RaycastHit rayHit2, 10f,
                     startOfRound.collidersAndRoomMask)) {
-                Vector3 floorPosition = rayHit2.point + Vector3.up * 0.2f; 
-                enemy.SpawnWebTrapServerRpc(floorPosition, point); 
+                Vector3 floorPosition = rayHit2.point + (Vector3.up * 0.2f);
+                enemy.SpawnWebTrapServerRpc(floorPosition, point);
             }
         }
     }
