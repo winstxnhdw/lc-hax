@@ -286,8 +286,8 @@ internal sealed class PossessionMod : MonoBehaviour {
         agent.updatePosition = enableAI;
         agent.updateRotation = enableAI;
         agent.isStopped = !enableAI;
-        characterMovement.enabled = !enableAI;
         characterMovement.SetPosition(enemy.transform.position);
+        characterMovement.enabled = !enableAI;
     }
 
     void ResetInteractionCooldowns() {
