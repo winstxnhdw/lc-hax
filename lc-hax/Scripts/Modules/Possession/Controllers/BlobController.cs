@@ -3,7 +3,7 @@ internal class BlobController : IEnemyController<BlobAI> {
 
     public void SetAngeredTimer(BlobAI enemy, float time) => _ = enemy.Reflect().SetInternalField("angeredTimer", time);
 
-    public void UseSecondarySkill(BlobAI enemy) {
+    public void OnSecondarySkillHold(BlobAI enemy) {
         this.SetAngeredTimer(enemy, 0.0f);
         this.SetTamedTimer(enemy, 2.0f);
     }

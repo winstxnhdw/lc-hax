@@ -14,7 +14,7 @@ internal class ForestGiantController : IEnemyController<ForestGiantAI> {
         }
     }
 
-    public void UseSecondarySkill(ForestGiantAI enemy) {
+    public void OnSecondarySkillHold(ForestGiantAI enemy) {
         this.IsUsingSecondarySkill = true;
         enemy.SetBehaviourState(GiantState.CHASE);
     }

@@ -4,15 +4,17 @@ using System.Linq;
 using GameNetcodeStuff;
 using Unity.Netcode;
 using UnityEngine;
+using Object = UnityEngine.Object;
 
 namespace Hax;
 
 internal static partial class Helper {
-    internal static HashSet<EnemyAI> Enemies { get; } = Helper.StartOfRound?.inShipPhase is not false ? [] :
-        Helper.FindObjects<EnemyAI>()
-              .WhereIsNotNull()
-              .Where(enemy => enemy.IsSpawned)
-              .ToHashSet();
+    internal static HashSet<EnemyAI> Enemies { get; } = Helper.StartOfRound?.inShipPhase is not false
+        ? []
+        : Helper.FindObjects<EnemyAI>()
+            .WhereIsNotNull()
+            .Where(enemy => enemy.IsSpawned)
+            .ToHashSet();
 
     internal static bool IsHostileEnemy(EnemyType enemy) =>
         !enemy.enemyName.Contains("Docile Locust Bees", StringComparison.InvariantCultureIgnoreCase) &&
@@ -69,24 +71,47 @@ internal static partial class Helper {
 
         return null;
     }
+
     internal static void SpawnEnemies(Vector3 position, GameObject prefab, ulong amount = 1) {
         for (ulong i = 0; i < amount; i++) {
             _ = Helper.SpawnEnemy(position, prefab);
         }
     }
+
     internal static EnemyAI? SpawnEnemy(Vector3 position, GameObject prefab) {
-        if(prefab == null) return null;
+        if (prefab == null) return null;
         GameObject enemy = Object.Instantiate(prefab, position, Quaternion.identity);
 
         if (!enemy.TryGetComponent(out NetworkObject networkObject)) {
             Object.Destroy(enemy);
             return null;
         }
+
         networkObject.Spawn(true);
         // get the enemy ai component
         if (!enemy.TryGetComponent(out EnemyAI enemyAI)) {
             Object.Destroy(enemy);
             return null;
         }
+
         return enemyAI;
+    }
+
+    internal static bool IsLocalPlayerAboutToGetKilledByEnemy(this EnemyAI instance, Collider other) {
+        if (instance == null) return false;
+        if (other == null) return false;
+        PlayerControllerB playerControllerB = instance.MeetsStandardPlayerCollisionConditions(other, false, false);
+        return playerControllerB != null && playerControllerB.IsSelf();
+    }
+
+
+    internal static bool IsLocalPlayerAboutToGetKilledByEnemy(int PlayerID) {
+        PlayerControllerB? player = Helper.GetPlayerAboutToKilledByEnemy(PlayerID);
+        return player != null && player.IsSelf();
+    }
+
+    internal static PlayerControllerB? GetPlayerAboutToKilledByEnemy(int playerObjectID) {
+        PlayerControllerB[] players = Helper.Players;
+        return players.First(player => (int)player.playerClientId == playerObjectID);
+    }
 }

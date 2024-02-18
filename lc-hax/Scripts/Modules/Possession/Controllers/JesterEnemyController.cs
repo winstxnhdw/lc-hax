@@ -9,7 +9,7 @@ enum JesterState {
 internal class JesterController : IEnemyController<JesterAI> {
     public void UsePrimarySkill(JesterAI enemy) => enemy.SetBehaviourState(JesterState.CLOSED);
 
-    public void UseSecondarySkill(JesterAI enemy) {
+    public void OnSecondarySkillHold(JesterAI enemy) {
         if (!enemy.IsBehaviourState(JesterState.CLOSED)) return;
         enemy.SetBehaviourState(JesterState.CRANKING);
     }

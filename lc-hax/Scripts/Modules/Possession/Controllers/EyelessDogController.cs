@@ -8,7 +8,6 @@ enum MouthDog {
 }
 
 internal class EyelessDogController : IEnemyController<MouthDogAI> {
-    bool IsSecondarySkillActive { get; set; } = false;
 
     public void OnMovement(MouthDogAI enemy, bool isMoving, bool isSprinting) {
         if (!isSprinting) {
@@ -22,17 +21,7 @@ internal class EyelessDogController : IEnemyController<MouthDogAI> {
     }
 
     public void UseSecondarySkill(MouthDogAI enemy) {
-        if (this.IsSecondarySkillActive) return;
-
-        this.IsSecondarySkillActive = true;
         enemy.SetBehaviourState(MouthDog.LUNGE);
-    }
-
-    public void ReleaseSecondarySkill(MouthDogAI enemy) {
-        if (!this.IsSecondarySkillActive) return;
-
-        this.IsSecondarySkillActive = false;
-        enemy.SetBehaviourState(MouthDog.CHASE);
     }
 
     public string GetSecondarySkillName(MouthDogAI _) => "Lunge";

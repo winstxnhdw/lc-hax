@@ -6,12 +6,15 @@ enum NutCrackerState {
 }
 
 internal class NutcrackerController : IEnemyController<NutcrackerEnemyAI> {
-    bool IsSecondarySkillActive { get; set; } = false;
 
     public void OnMovement(NutcrackerEnemyAI enemy, bool isMoving, bool isSprinting) {
         if (!isMoving && !isSprinting) return;
         enemy.SetBehaviourState(NutCrackerState.WALKING);
     }
+
+    public bool IsAbleToRotate(NutcrackerEnemyAI enemy) => !enemy.IsBehaviourState(NutCrackerState.SENTRY);
+
+    public bool IsAbleToMove(NutcrackerEnemyAI enemy) => !enemy.IsBehaviourState(NutCrackerState.SENTRY);
 
     public void UsePrimarySkill(NutcrackerEnemyAI enemy) {
         if (enemy.gun is not ShotgunItem shotgun) return;
@@ -20,17 +23,9 @@ internal class NutcrackerController : IEnemyController<NutcrackerEnemyAI> {
         enemy.FireGunServerRpc();
     }
 
-    public void UseSecondarySkill(NutcrackerEnemyAI enemy) {
-        if (this.IsSecondarySkillActive) return;
+    public void OnSecondarySkillHold(NutcrackerEnemyAI enemy) => enemy.SetBehaviourState(NutCrackerState.SENTRY);
 
-        enemy.SetBehaviourState(NutCrackerState.SENTRY);
-        this.IsSecondarySkillActive = true;
-    }
-
-    public void ReleaseSecondarySkill(NutcrackerEnemyAI enemy) {
-        enemy.SetBehaviourState(NutCrackerState.WALKING);
-        this.IsSecondarySkillActive = false;
-    }
+    public void ReleaseSecondarySkill(NutcrackerEnemyAI enemy) => enemy.SetBehaviourState(NutCrackerState.WALKING);
 
     public string GetPrimarySkillName(NutcrackerEnemyAI enemy) => enemy.gun is null ? "" : "Fire";
 
