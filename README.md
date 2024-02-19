@@ -192,11 +192,22 @@ These commands are only available when the user is in superuser mode.
 | Decrease mouse sensitivity    | <kbd> [ </kbd>                       |
 | Decrease light intensity      | <kbd> F4 </kbd>                      |
 | Increase light intensity      | <kbd> F5 </kbd>                      |
-| Unpossess enemy               | <kbd> Z </kbd>                       |
-| Toggle possession NoClip      | <kbd> N </kbd>                       |
 | Toggle Anti-Kick              | <kbd> \ </kbd>                       |
 | Disconnect from server        | <kbd> Shift </kbd> + <kbd> F4 </kbd> |
 | Connect to last joined server | <kbd> Shift </kbd> + <kbd> F5 </kbd> |
+
+### PossessionMod
+
+`PossessionMod` has its own set of keybinds.
+
+| Action                        | Input                                |
+| ----------------------------- | ------------------------------------ |
+| Use primary ability           | <kbd> M1 </kbd>                      |
+| Use secondary ability         | <kbd> M2 </kbd>                      |
+| Toggle AI control             | <kbd> F9 </kbd>                      |
+| Toggle possession NoClip      | <kbd> N </kbd>                       |
+| Unpossess enemy               | <kbd> Z </kbd>                       |
+| Despawn and unpossess enemy   | <kbd> Del </kbd>                     |
 
 ### TriggerMod
 
