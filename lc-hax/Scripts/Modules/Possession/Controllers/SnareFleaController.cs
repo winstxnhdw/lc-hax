@@ -1,14 +1,13 @@
 using Hax;
 
-enum CentipedeAiState {
-    SEARCHING = 0,
-    HIDING = 1,
-    CHASING = 2,
-    CLINGING = 3
+enum SnareFleaState {
+    SEARCHING,
+    HIDING,
+    CHASING,
+    CLINGING
 }
 
 internal class SnareFleaController : IEnemyController<CentipedeAI> {
-
     bool IsClingingToSomething(CentipedeAI enemy) {
         Reflector centipedeReflector = enemy.Reflect();
 
@@ -20,14 +19,14 @@ internal class SnareFleaController : IEnemyController<CentipedeAI> {
     }
 
     public void UsePrimarySkill(CentipedeAI enemy) {
-        if (!enemy.IsBehaviourState(CentipedeAiState.HIDING)) return;
-        enemy.SetBehaviourState(CentipedeAiState.CHASING);
+        if (!enemy.IsBehaviourState(SnareFleaState.HIDING)) return;
+        enemy.SetBehaviourState(SnareFleaState.CHASING);
     }
 
     public void UseSecondarySkill(CentipedeAI enemy) {
         if (this.IsClingingToSomething(enemy)) return;
         _ = enemy.Reflect().InvokeInternalMethod("RaycastToCeiling");
-        enemy.SetBehaviourState(CentipedeAiState.HIDING);
+        enemy.SetBehaviourState(SnareFleaState.HIDING);
     }
 
     public bool IsAbleToMove(CentipedeAI enemy) => !this.IsClingingToSomething(enemy);

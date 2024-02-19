@@ -1,7 +1,7 @@
-internal class BlobController : IEnemyController<BlobAI> {
-    public void SetTamedTimer(BlobAI enemy, float time) => _ = enemy.Reflect().SetInternalField("tamedTimer", time);
+internal class HygrodereController : IEnemyController<BlobAI> {
+    void SetTamedTimer(BlobAI enemy, float time) => enemy.Reflect().SetInternalField("tamedTimer", time);
 
-    public void SetAngeredTimer(BlobAI enemy, float time) => _ = enemy.Reflect().SetInternalField("angeredTimer", time);
+    void SetAngeredTimer(BlobAI enemy, float time) => enemy.Reflect().SetInternalField("angeredTimer", time);
 
     public void OnSecondarySkillHold(BlobAI enemy) {
         this.SetAngeredTimer(enemy, 0.0f);

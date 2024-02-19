@@ -1,5 +1,6 @@
 internal interface IController {
     const float DefaultSprintMultiplier = 2.8f;
+
     const float DefaultInteractRange = 2.5f;
 
     void OnPossess(EnemyAI enemy);
@@ -11,6 +12,7 @@ internal interface IController {
     void Update(EnemyAI enemy);
 
     void UsePrimarySkill(EnemyAI enemy);
+
     void OnSecondarySkillHold(EnemyAI enemy);
 
     void UseSecondarySkill(EnemyAI enemy);

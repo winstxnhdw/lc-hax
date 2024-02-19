@@ -35,13 +35,13 @@ internal sealed class PossessionMod : MonoBehaviour {
         { typeof(SandWormAI), new EarthLeviathanController() },
         { typeof(MouthDogAI), new EyelessDogController() },
         { typeof(MaskedPlayerEnemy), new MaskedPlayerController() },
-        { typeof(SpringManAI), new SpringManEnemyController() },
-        { typeof(BlobAI), new BlobController() },
+        { typeof(SpringManAI), new CoilHeadEnemyController() },
+        { typeof(BlobAI), new HygrodereController() },
         { typeof(TestEnemy), new TestEnemyController() },
         { typeof(LassoManAI), new LassoManController() },
         { typeof(CrawlerAI), new CrawlerController() },
         { typeof(SandSpiderAI), new SandSpiderController() },
-        { typeof(RedLocustBees), new RedLocustBeesController() }
+        { typeof(RedLocustBees), new CircuitBeesController() }
     };
 
     float DoorCooldownRemaining { get; set; } = 0.0f;
@@ -136,8 +136,8 @@ internal sealed class PossessionMod : MonoBehaviour {
     void EnemyUpdate(IController controller, EnemyAI enemy) => controller.Update(enemy);
 
     void Update() {
-        if (Helper.LocalPlayer is not PlayerControllerB localPlayer) return;
         if (Helper.CurrentCamera is not Camera { enabled: true } camera) return;
+        if (Helper.LocalPlayer is not PlayerControllerB localPlayer) return;
         if (this.CharacterMovement is not CharacterMovement characterMovement) return;
         if (this.Possession.Enemy is not EnemyAI enemy) return;
         if (enemy.agent is not NavMeshAgent agent) return;
@@ -151,7 +151,7 @@ internal sealed class PossessionMod : MonoBehaviour {
             this.InitCharacterMovement(enemy);
             this.UpdateComponentsOnCurrentState(true);
             this.SetAIControl(false);
-            this.MainEntrance = Helper.FindObjects<EntranceTeleport>().First(entrance => entrance.entranceId is 0);
+            this.MainEntrance = RoundManager.FindMainEntranceScript(true);
         }
 
         if (this.MainEntrance != null) {
@@ -341,16 +341,10 @@ internal sealed class PossessionMod : MonoBehaviour {
         door.OpenDoorAsEnemyServerRpc();
     }
 
-    Transform? GetExitPointFromDoor(EntranceTeleport entrance) {
-        foreach (EntranceTeleport teleport in Helper.FindObjects<EntranceTeleport>()) {
-            if (teleport.entranceId != entrance.entranceId) continue;
-            if (teleport.isEntranceToBuilding == entrance.isEntranceToBuilding) continue;
-
-            return teleport.entrancePoint;
-        }
-
-        return null;
-    }
+    Transform? GetExitPointFromDoor(EntranceTeleport entrance) =>
+        Helper.FindObjects<EntranceTeleport>().First(teleport =>
+            teleport.entranceId == entrance.entranceId && teleport.isEntranceToBuilding != entrance.isEntranceToBuilding
+        )?.entrancePoint;
 
     void InteractWithTeleport(EnemyAI enemy, EntranceTeleport teleport) {
         if (this.CharacterMovement is not CharacterMovement characterMovement) return;

@@ -2,7 +2,7 @@ using GameNetcodeStuff;
 using Hax;
 using Unity.Netcode;
 
-public enum HoarderBugState {
+public enum HoardingBugState {
     IDLE,
     SEARCHING_FOR_ITEMS,
     RETURNING_TO_NEST,
@@ -28,8 +28,8 @@ internal class HoardingBugController : IEnemyController<HoarderBugAI> {
         if (!item.TryGetComponent(out NetworkObject netItem)) return;
 
         _ = enemy.Reflect()
-            .InvokeInternalMethod("GrabItem", netItem)?
-            .SetInternalField("sendingGrabOrDropRPC", true);
+                 .InvokeInternalMethod("GrabItem", netItem)?
+                 .SetInternalField("sendingGrabOrDropRPC", true);
 
         enemy.SwitchToBehaviourServerRpc(1);
         enemy.GrabItemServerRpc(netItem);
@@ -71,7 +71,7 @@ internal class HoardingBugController : IEnemyController<HoarderBugAI> {
             enemy.watchingPlayer = hostPlayer;
             enemy.angryAtPlayer = hostPlayer;
             enemy.angryTimer = 15.0f;
-            enemy.SetBehaviourState(HoarderBugState.CHASING_PLAYER);
+            enemy.SetBehaviourState(HoardingBugState.CHASING_PLAYER);
             return;
         }
 

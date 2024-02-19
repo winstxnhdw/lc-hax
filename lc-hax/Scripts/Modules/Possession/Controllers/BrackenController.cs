@@ -1,6 +1,6 @@
 using Hax;
 
-enum FlowerMan {
+enum BrackenState {
     SCOUTING,
     STAND,
     ANGER
@@ -9,15 +9,15 @@ enum FlowerMan {
 internal class BrackenController : IEnemyController<FlowermanAI> {
     public void UsePrimarySkill(FlowermanAI enemy) {
         if (!enemy.carryingPlayerBody) {
-            enemy.SetBehaviourState(FlowerMan.ANGER);
+            enemy.SetBehaviourState(BrackenState.ANGER);
         }
 
         enemy.DropPlayerBodyServerRpc();
     }
 
-    public void UseSecondarySkill(FlowermanAI enemy) => enemy.SetBehaviourState(FlowerMan.STAND);
+    public void UseSecondarySkill(FlowermanAI enemy) => enemy.SetBehaviourState(BrackenState.STAND);
 
-    public void ReleaseSecondarySkill(FlowermanAI enemy) => enemy.SetBehaviourState(FlowerMan.SCOUTING);
+    public void ReleaseSecondarySkill(FlowermanAI enemy) => enemy.SetBehaviourState(BrackenState.SCOUTING);
 
     public bool IsAbleToMove(FlowermanAI enemy) => !enemy.inSpecialAnimation;
 

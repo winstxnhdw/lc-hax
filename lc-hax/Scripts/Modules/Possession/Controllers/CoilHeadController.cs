@@ -1,4 +1,4 @@
-internal class SpringManEnemyController : IEnemyController<SpringManAI> {
+internal class CoilHeadEnemyController : IEnemyController<SpringManAI> {
     bool HoldingForceMove { get; set; } = false;
 
     bool GetHasStopped(SpringManAI enemy) => enemy.Reflect().GetInternalField<bool>("hasStopped");
