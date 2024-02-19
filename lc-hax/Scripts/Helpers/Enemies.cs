@@ -8,14 +8,13 @@ using UnityEngine;
 namespace Hax;
 
 internal static partial class Helper {
-    internal static HashSet<EnemyAI> Enemies { get; } = Helper.StartOfRound is { inShipPhase: true } ? [] :
+    internal static HashSet<EnemyAI> Enemies { get; } = Helper.StartOfRound is not { inShipPhase: false } ? [] :
         Helper.FindObjects<EnemyAI>()
               .WhereIsNotNull()
               .Where(enemy => enemy.IsSpawned)
               .ToHashSet();
 
-    internal static T? GetEnemy<T>() where T : EnemyAI =>
-        Helper.Enemies.First(enemy => enemy is T) is T enemy ? enemy : null;
+    internal static T? GetEnemy<T>() where T : EnemyAI => Helper.Enemies.First(enemy => enemy is T) as T;
 
     internal static void Kill(this EnemyAI enemy, ulong actualClientId) {
         enemy.ChangeEnemyOwnerServerRpc(actualClientId);
