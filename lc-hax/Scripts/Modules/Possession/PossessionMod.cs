@@ -265,7 +265,7 @@ internal sealed class PossessionMod : MonoBehaviour {
     }
 
     void ToggleAIControl() {
-        if (this.Possession.Enemy?.agent is null) return;
+        if (this.Possession.Enemy is { agent: null }) return;
         if (this.CharacterMovement is null) return;
         if (this.MousePan is null) return;
 

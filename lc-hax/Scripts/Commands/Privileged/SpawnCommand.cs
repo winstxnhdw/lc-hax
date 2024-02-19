@@ -33,7 +33,7 @@ internal class SpawnCommand : ICommand {
     }
 
     public void Execute(StringArray args) {
-        if (Helper.RoundManager?.currentLevel is null) return;
+        if (Helper.RoundManager is { currentLevel: null }) return;
         if (args.Length < 2) {
             Chat.Print("Usage: spawn <enemy> <player> <amount?>");
             return;

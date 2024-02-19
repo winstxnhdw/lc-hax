@@ -23,7 +23,7 @@ internal sealed class PhantomMod : MonoBehaviour {
 
     void Update() {
         if (PossessionMod.Instance is not PossessionMod possessionMod) return;
-        if (Helper.CurrentCamera is not Camera camera || Helper.Try(() => !camera.enabled)) return;
+        if (Helper.CurrentCamera is not Camera { enabled: true } camera) return;
         if (!camera.gameObject.TryGetComponent(out KeyboardMovement keyboard)) return;
         if (!camera.gameObject.TryGetComponent(out MousePan mouse)) return;
         if (!Setting.EnablePhantom) {

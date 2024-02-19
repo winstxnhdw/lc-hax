@@ -8,7 +8,7 @@ using UnityEngine;
 namespace Hax;
 
 internal static partial class Helper {
-    internal static HashSet<EnemyAI> Enemies { get; } = Helper.StartOfRound?.inShipPhase is not false ? [] :
+    internal static HashSet<EnemyAI> Enemies { get; } = Helper.StartOfRound is { inShipPhase: true } ? [] :
         Helper.FindObjects<EnemyAI>()
               .WhereIsNotNull()
               .Where(enemy => enemy.IsSpawned)
