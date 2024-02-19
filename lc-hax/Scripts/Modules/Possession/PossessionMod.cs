@@ -218,7 +218,8 @@ internal sealed class PossessionMod : MonoBehaviour {
         this.FirstUpdate = true;
         this.Possession.SetEnemy(enemy);
         this.IsAIControlled = false;
-        this.ResetInteractionCooldowns();
+        this.TeleportCooldownRemaining = 0.0f;
+        this.DoorCooldownRemaining = 0.0f;
 
         if (this.EnemyControllers.TryGetValue(enemy.GetType(), out IController controller)) {
             this.HandleEnemyOnPossess(controller, enemy);
@@ -255,7 +256,6 @@ internal sealed class PossessionMod : MonoBehaviour {
 
         this.IsAIControlled = false;
         this.MainEntrance = null;
-        this.ResetInteractionCooldowns();
         this.Possession.Clear();
 
         if (this.CharacterMovement is not null) {
@@ -293,11 +293,6 @@ internal sealed class PossessionMod : MonoBehaviour {
         agent.isStopped = !enableAI;
         characterMovement.SetPosition(enemy.transform.position);
         characterMovement.enabled = !enableAI;
-    }
-
-    void ResetInteractionCooldowns() {
-        this.TeleportCooldownRemaining = -DoorInteractionCooldown;
-        this.DoorCooldownRemaining = -TeleportDoorCooldown;
     }
 
     void HandleEntranceDoors(EnemyAI enemy, RaycastHit hit) {
