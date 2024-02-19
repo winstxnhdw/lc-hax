@@ -13,6 +13,7 @@ internal static class Setting {
     internal static bool EnablePhantom { get; set; } = false;
     internal static bool EnableFakeDeath { get; set; } = false;
     internal static bool EnableEavesdrop { get; set; } = false;
-    internal static bool EnableRealisticPossession { get; set; } = false;
+    internal static bool BuildOverlapMode { get; set; } = false;
+
     internal static bool InvertYAxis => IngamePlayerSettings.Instance.settings.invertYAxis;
 }
