@@ -6,10 +6,8 @@ using Hax;
 [Command("sell")]
 internal class SellCommand : ICommand {
     bool CanBeSold(GrabbableObject grabbableObject) =>
-        grabbableObject is not HauntedMaskItem &&
-        grabbableObject.itemProperties.isScrap &&
-        !grabbableObject.itemProperties.isDefensiveWeapon &&
-        !grabbableObject.isHeld;
+        grabbableObject is not HauntedMaskItem and { isHeld: false } &&
+        grabbableObject.itemProperties is { isScrap: true, isDefensiveWeapon: false };
 
     void SellObject(PlayerControllerB player, GrabbableObject item, float currentWeight) {
         player.currentlyHeldObjectServer = item;
