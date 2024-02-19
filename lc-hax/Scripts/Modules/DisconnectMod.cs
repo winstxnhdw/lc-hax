@@ -38,7 +38,6 @@ internal sealed class DisconnectMod : MonoBehaviour {
 
     void TryToConnect() {
         if (!this.IsShiftHeld) return;
-
         if (this.GetSteamIdFromClipboard() is SteamId playerSteamId) {
             Helper.GameNetworkManager?.StartClient(playerSteamId);
         }
@@ -46,7 +45,5 @@ internal sealed class DisconnectMod : MonoBehaviour {
         else if (State.ConnectedLobby is ConnectedLobby connectedLobby) {
             Helper.GameNetworkManager?.JoinLobby(connectedLobby.Lobby, connectedLobby.SteamId);
         }
-
-        GUIUtility.systemCopyBuffer = "";
     }
 }
