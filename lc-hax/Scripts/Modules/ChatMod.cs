@@ -25,7 +25,7 @@ internal sealed class ChatMod : MonoBehaviour {
     }
 
     void CycleBackInHistory() {
-        if (Helper.LocalPlayer is { isTypingChat: false }) return;
+        if (Helper.LocalPlayer is not { isTypingChat: true }) return;
         if (Helper.HUDManager is not HUDManager hudManager) return;
 
         this.HistoryIndex = Math.Clamp(this.HistoryIndex + 1, 0, this.CommandHistory.Count - 1);
@@ -36,7 +36,7 @@ internal sealed class ChatMod : MonoBehaviour {
 
     void CycleForwardInHistory() {
         if (this.HistoryIndex < 0) return;
-        if (Helper.LocalPlayer is { isTypingChat: false }) return;
+        if (Helper.LocalPlayer is not { isTypingChat: true }) return;
         if (Helper.HUDManager is not HUDManager hudManager) return;
 
         this.HistoryIndex = Math.Clamp(this.HistoryIndex - 1, 0, this.CommandHistory.Count - 1);

@@ -37,7 +37,7 @@ internal class HoardingBugController : IEnemyController<HoarderBugAI> {
     }
 
     public void OnMovement(HoarderBugAI enemy, bool isMoving, bool isSprinting) {
-        if (enemy.heldItem is { itemGrabbableObject: null }) return;
+        if (enemy.heldItem?.itemGrabbableObject is null) return;
         enemy.angryTimer = 0.0f;
     }
 
@@ -67,7 +67,7 @@ internal class HoardingBugController : IEnemyController<HoarderBugAI> {
     }
 
     public void UseSecondarySkill(HoarderBugAI enemy) {
-        if (enemy.heldItem is { itemGrabbableObject: null }) {
+        if (enemy.heldItem?.itemGrabbableObject is null) {
             PlayerControllerB hostPlayer = Helper.Players[0];
             enemy.watchingPlayer = hostPlayer;
             enemy.angryAtPlayer = hostPlayer;
