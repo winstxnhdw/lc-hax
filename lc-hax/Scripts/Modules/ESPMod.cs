@@ -122,7 +122,7 @@ internal class ESPMod : MonoBehaviour {
             );
         });
 
-        if (Helper.StartOfRound?.shipBounds is Collider shipBounds) {
+        if (Helper.StartOfRound is { shipBounds: Collider shipBounds }) {
             this.RenderBounds(
                 camera,
                 shipBounds.bounds,
@@ -137,7 +137,7 @@ internal class ESPMod : MonoBehaviour {
         this.InitialiseRenderers();
         this.InitialiseCoordinates();
         this.InGame = true;
-        this.IsMapLoaded = Helper.StartOfRound?.inShipPhase is not false;
+        this.IsMapLoaded = Helper.StartOfRound is { inShipPhase: false };
     }
 
     void OnGameEnd() => this.InGame = false;

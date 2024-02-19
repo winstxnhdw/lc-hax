@@ -2,7 +2,7 @@ using GameNetcodeStuff;
 using Hax;
 using Unity.Netcode;
 
-public enum HoarderBugState {
+public enum HoardingBugState {
     IDLE,
     SEARCHING_FOR_ITEMS,
     RETURNING_TO_NEST,
@@ -12,7 +12,7 @@ public enum HoarderBugState {
 }
 internal class HoardingBugController : IEnemyController<HoarderBugAI> {
     void UseHeldItem(HoarderBugAI enemy) {
-        if (enemy.heldItem?.itemGrabbableObject is not GrabbableObject grabbable) return;
+        if (enemy.heldItem is not { itemGrabbableObject: GrabbableObject grabbable }) return;
 
         switch (grabbable) {
             case ShotgunItem gun:
@@ -20,7 +20,6 @@ internal class HoardingBugController : IEnemyController<HoarderBugAI> {
                 break;
 
             default:
-                grabbable.InteractWithProp();
                 break;
         }
     }
@@ -29,15 +28,15 @@ internal class HoardingBugController : IEnemyController<HoarderBugAI> {
         if (!item.TryGetComponent(out NetworkObject netItem)) return;
 
         _ = enemy.Reflect()
-            .InvokeInternalMethod("GrabItem", netItem)?
-            .SetInternalField("sendingGrabOrDropRPC", true);
+                 .InvokeInternalMethod("GrabItem", netItem)?
+                 .SetInternalField("sendingGrabOrDropRPC", true);
 
         enemy.SwitchToBehaviourServerRpc(1);
         enemy.GrabItemServerRpc(netItem);
     }
 
     public void OnMovement(HoarderBugAI enemy, bool isMoving, bool isSprinting) {
-        if (enemy.heldItem?.itemGrabbableObject is null) return;
+        if (enemy.heldItem is { itemGrabbableObject: null }) return;
         enemy.angryTimer = 0.0f;
     }
 
@@ -67,12 +66,12 @@ internal class HoardingBugController : IEnemyController<HoarderBugAI> {
     }
 
     public void UseSecondarySkill(HoarderBugAI enemy) {
-        if (enemy.heldItem?.itemGrabbableObject is null) {
+        if (enemy.heldItem is { itemGrabbableObject: null }) {
             PlayerControllerB hostPlayer = Helper.Players[0];
             enemy.watchingPlayer = hostPlayer;
             enemy.angryAtPlayer = hostPlayer;
             enemy.angryTimer = 15.0f;
-            enemy.SetBehaviourState(HoarderBugState.CHASING_PLAYER);
+            enemy.SetBehaviourState(HoardingBugState.CHASING_PLAYER);
             return;
         }
 

@@ -4,7 +4,9 @@ using UnityEngine;
 [Command("lobby")]
 internal class LobbyCommand : ICommand {
     public void Execute(StringArray _) {
-        Chat.Print($"The lobby ID {State.ConnectedLobbyId} has been copied!");
-        GUIUtility.systemCopyBuffer = State.ConnectedLobbyId.ToString();
+        if (State.ConnectedLobby is not ConnectedLobby connectedLobby) return;
+
+        GUIUtility.systemCopyBuffer = connectedLobby.SteamId.ToString();
+        Chat.Print($"The host's Steam ID {GUIUtility.systemCopyBuffer} has been copied!");
     }
 }

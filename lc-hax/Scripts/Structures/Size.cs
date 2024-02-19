@@ -1,4 +1,4 @@
-internal readonly ref struct Size {
+readonly ref struct Size {
     internal readonly float Width { get; }
     internal readonly float Height { get; }
 
