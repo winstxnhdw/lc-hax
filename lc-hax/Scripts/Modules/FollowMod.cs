@@ -31,7 +31,11 @@ internal sealed class FollowMod : MonoBehaviour {
         if (localPlayer.isPlayerDead || targetPlayer.isPlayerDead) {
             if (FollowMod.PlayerToFollow is not null) {
                 FollowMod.PlayerToFollow = null;
-                Chat.Print("Stopped following!");
+                Helper.SendNotification(
+                    title: "FollowMod",
+                    body: "Following has been disrupted!",
+                    isWarning: true
+                );
             }
 
             this.PlayerStates.Clear();
