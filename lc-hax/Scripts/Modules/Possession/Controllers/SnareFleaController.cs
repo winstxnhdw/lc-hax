@@ -1,36 +1,45 @@
-enum CentipedeAiState {
-    SEARCHING = 0,
-    HIDING = 1,
-    CHASING = 2,
-    CLINGING = 3
+using Hax;
+
+enum SnareFleaState {
+    SEARCHING,
+    HIDING,
+    CHASING,
+    CLINGING
 }
 
 internal class SnareFleaController : IEnemyController<CentipedeAI> {
-    public bool IsClingingToSomething(CentipedeAI enemyInstance) {
-        Reflector centipedeReflector = enemyInstance.Reflect();
+    bool IsClingingToSomething(CentipedeAI enemy) {
+        Reflector centipedeReflector = enemy.Reflect();
 
-        return enemyInstance.clingingToPlayer != null || enemyInstance.inSpecialAnimation ||
+        return enemy.clingingToPlayer is not null || enemy.inSpecialAnimation ||
                centipedeReflector.GetInternalField<bool>("clingingToDeadBody") ||
                centipedeReflector.GetInternalField<bool>("clingingToCeiling") ||
                centipedeReflector.GetInternalField<bool>("startedCeilingAnimationCoroutine") ||
                centipedeReflector.GetInternalField<bool>("inDroppingOffPlayerAnim");
     }
 
-    public void UsePrimarySkill(CentipedeAI enemyInstance) {
-        if (enemyInstance.currentBehaviourStateIndex is not 1) return;
-        enemyInstance.SwitchToBehaviourServerRpc(2);
+    public void UsePrimarySkill(CentipedeAI enemy) {
+        if (!enemy.IsBehaviourState(SnareFleaState.HIDING)) return;
+        enemy.SetBehaviourState(SnareFleaState.CHASING);
     }
 
-    public void UseSecondarySkill(CentipedeAI enemyInstance) {
-        if (this.IsClingingToSomething(enemyInstance)) return;
-
-        _ = enemyInstance.Reflect().InvokeInternalMethod("RaycastToCeiling");
-        enemyInstance.SwitchToBehaviourServerRpc(2);
+    public void UseSecondarySkill(CentipedeAI enemy) {
+        if (this.IsClingingToSomething(enemy)) return;
+        _ = enemy.Reflect().InvokeInternalMethod("RaycastToCeiling");
+        enemy.SetBehaviourState(SnareFleaState.HIDING);
     }
 
-    public bool IsAbleToMove(CentipedeAI enemyInstance) => !this.IsClingingToSomething(enemyInstance);
+    public bool IsAbleToMove(CentipedeAI enemy) => !this.IsClingingToSomething(enemy);
+
+    public bool IsAbleToRotate(CentipedeAI enemy) => !this.IsClingingToSomething(enemy);
 
     public string GetPrimarySkillName(CentipedeAI _) => "Drop";
 
     public string GetSecondarySkillName(CentipedeAI _) => "Attach to ceiling";
+
+    public float InteractRange(CentipedeAI _) => 1.5f;
+
+    public bool CanUseEntranceDoors(CentipedeAI _) => false;
+
+    public bool SyncAnimationSpeedEnabled(CentipedeAI _) => false;
 }

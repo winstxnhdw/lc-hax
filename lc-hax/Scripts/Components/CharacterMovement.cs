@@ -2,53 +2,76 @@ using UnityEngine;
 using GameNetcodeStuff;
 using UnityEngine.InputSystem;
 using Hax;
+using System.Linq;
 
 internal class CharacterMovement : MonoBehaviour {
     // Movement constants
-    const float BaseSpeed = 5.0f;
-    const float SprintSpeedMultiplier = 2.8f; // Multiplier for sprinting speed
     const float WalkingSpeed = 0.5f; // Walking speed when left control is held
     const float SprintDuration = 0.0f; // Duration sprint key must be held for sprinting (adjust as needed)
     const float JumpForce = 9.2f;
     const float Gravity = 18.0f;
 
+    internal float CharacterSpeed { get; set; } = 5.0f;
+    internal float CharacterSprintSpeed { get; set; } = 2.8f;
+
     // used to sync with the enemy to make sure it plays the correct animation when it is moving
-    public bool IsMoving { get; private set; } = false;
-    public bool IsSprinting { get; private set; } = false;
+    internal bool IsMoving { get; private set; } = false;
+    internal bool IsSprinting { get; private set; } = false;
 
     // Components and state variables
-    CharacterController? CharacterController { get; set; }
     float VelocityY { get; set; } = 0.0f;
     bool IsSprintHeld { get; set; } = false;
     float SprintTimer { get; set; } = 0.0f;
     Keyboard Keyboard { get; set; } = Keyboard.current;
     KeyboardMovement? NoClipKeyboard { get; set; } = null;
+    CharacterController? CharacterController { get; set; }
 
     internal void SetNoClipMode(bool enabled) {
         if (this.NoClipKeyboard is null) return;
         this.NoClipKeyboard.enabled = enabled;
     }
 
-    // Initialize method
     internal void Init() {
         if (Helper.LocalPlayer is not PlayerControllerB localPlayer) return;
         this.gameObject.layer = localPlayer.gameObject.layer;
     }
 
+    internal void SetPosition(Vector3 newPosition) {
+        if (this.CharacterController is null) return;
+
+        this.CharacterController.enabled = false;
+        this.transform.position = newPosition;
+        this.CharacterController.enabled = true;
+    }
+
+
+    internal void CalibrateCollision(EnemyAI enemy) {
+        if (this.CharacterController is null) return;
+
+        this.CharacterController.height = 1.0f;
+        this.CharacterController.radius = 0.5f;
+        this.CharacterController.center = new Vector3(0.0f, 0.5f, 0.0f);
+
+        float maxStepOffset = 0.25f;
+        this.CharacterController.stepOffset = Mathf.Min(this.CharacterController.stepOffset, maxStepOffset);
+
+        enemy.GetComponentsInChildren<Collider>()
+             .Where(collider => collider != this.CharacterController)
+             .ForEach(collider => Physics.IgnoreCollision(this.CharacterController, collider));
+    }
+
+
     void Awake() {
         this.Keyboard = Keyboard.current;
         this.NoClipKeyboard = this.gameObject.AddComponent<KeyboardMovement>();
         this.CharacterController = this.gameObject.AddComponent<CharacterController>();
-        this.CharacterController.height = 0.0f; // Adjust as needed
-        this.CharacterController.center = new Vector3(0.0f, 0.3f, 0.5f); // Adjust as needed
-        this.transform.localScale = new Vector3(0.0f, 0.0f, -0.1f);
     }
 
     // Update is called once per frame
     void Update() {
-        if (this.NoClipKeyboard?.enabled is not true) return;
+        if (this.NoClipKeyboard is { enabled: true }) return;
+        if (this.CharacterController is { enabled: false }) return;
 
-        // Read movement input from keyboard
         Vector2 moveInput = new Vector2(
             this.Keyboard.dKey.ReadValue() - this.Keyboard.aKey.ReadValue(),
             this.Keyboard.wKey.ReadValue() - this.Keyboard.sKey.ReadValue()
@@ -56,12 +79,9 @@ internal class CharacterMovement : MonoBehaviour {
 
         this.IsMoving = moveInput.magnitude > 0.0f;
 
-        // Apply speed modifier based on left control key
-        float speedModifier = 1.0f;
-
-        if (this.Keyboard.leftCtrlKey.isPressed) {
-            speedModifier = WalkingSpeed;
-        }
+        float speedModifier = this.Keyboard.leftCtrlKey.isPressed
+            ? CharacterMovement.WalkingSpeed
+            : 1.0f;
 
         // Calculate movement direction relative to character's forward direction
         Vector3 forward = Vector3.ProjectOnPlane(this.transform.forward, Vector3.up);
@@ -71,8 +91,8 @@ internal class CharacterMovement : MonoBehaviour {
         // Apply speed and sprint modifiers
         moveDirection *= speedModifier * (
             this.IsSprinting
-                ? CharacterMovement.BaseSpeed * CharacterMovement.SprintSpeedMultiplier
-                : CharacterMovement.BaseSpeed
+                ? this.CharacterSpeed * this.CharacterSprintSpeed
+                : this.CharacterSpeed
             );
 
         // Apply gravity
@@ -111,7 +131,7 @@ internal class CharacterMovement : MonoBehaviour {
 
     // Apply gravity to the character controller
     void ApplyGravity() {
-        this.VelocityY = this.CharacterController?.isGrounded is not true
+        this.VelocityY = this.CharacterController is { isGrounded: false }
             ? this.VelocityY - (CharacterMovement.Gravity * Time.deltaTime)
             : 0.0f;
 

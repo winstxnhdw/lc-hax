@@ -38,7 +38,7 @@ internal sealed class TriggerMod : MonoBehaviour, IEnemyPrompter {
                 if (!this.RaycastHits[i].collider.TryGetComponent(out PlayerControllerB player)) continue;
                 if (player.IsSelf()) continue;
 
-                Chat.Print($"Following #{player.playerClientId} {player.playerUsername}!");
+                Chat.Print($"Following {player.playerUsername}!");
                 FollowMod.PlayerToFollow = player;
                 break;
             }
@@ -54,11 +54,6 @@ internal sealed class TriggerMod : MonoBehaviour, IEnemyPrompter {
                 break;
             }
 
-            return;
-        }
-
-        if (HaxObjects.Instance?.DepositItemsDesk?.Object.Unfake() is DepositItemsDesk deposit) {
-            deposit.AttackPlayersServerRpc();
             return;
         }
 
@@ -97,6 +92,11 @@ internal sealed class TriggerMod : MonoBehaviour, IEnemyPrompter {
                 Helper.GetEnemy<CentipedeAI>()?.ClingToPlayerServerRpc(player.playerClientId);
                 this.PromptEnemiesToTarget(targetPlayer: player)
                     .ForEach(enemy => Chat.Print($"{enemy} prompted!"));
+                break;
+            }
+
+            if (collider.TryGetComponent(out DepositItemsDesk depositItemDesk)) {
+                depositItemDesk.AttackPlayersServerRpc();
                 break;
             }
         }

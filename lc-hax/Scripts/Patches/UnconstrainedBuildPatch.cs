@@ -11,7 +11,7 @@ class UnconstrainedBuildPatch {
         ___placingObject.AllowPlacementOnCounters = true;
         ___placingObject.AllowPlacementOnWalls = true;
         ___CanConfirmPosition = true;
-        __result = Helper.LocalPlayer?.inTerminalMenu is not true;
+        __result = Helper.LocalPlayer is { inTerminalMenu: false };
 
         return false;
     }

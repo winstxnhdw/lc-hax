@@ -6,6 +6,8 @@ internal static class Logger {
     static object LockObject { get; } = new();
 
     internal static void Write(string message) {
+        Console.WriteLine(message);
+
         lock (Logger.LockObject) {
             string timeNow = DateTime.Now.ToString("dd-MM-yy HH:mm:ss");
 

@@ -38,14 +38,12 @@ internal sealed class DisconnectMod : MonoBehaviour {
 
     void TryToConnect() {
         if (!this.IsShiftHeld) return;
-
-        SteamId? steamId = this.GetSteamIdFromClipboard() ?? State.ConnectedLobbyId;
-
-        if (steamId is not SteamId lobbyId) {
-            return;
+        if (this.GetSteamIdFromClipboard() is SteamId playerSteamId) {
+            Helper.GameNetworkManager?.StartClient(playerSteamId);
         }
 
-        Helper.GameNetworkManager?.StartClient(lobbyId);
-        GUIUtility.systemCopyBuffer = "";
+        else if (State.ConnectedLobby is ConnectedLobby connectedLobby) {
+            Helper.GameNetworkManager?.JoinLobby(connectedLobby.Lobby, connectedLobby.SteamId);
+        }
     }
 }

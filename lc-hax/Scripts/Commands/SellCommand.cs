@@ -6,31 +6,30 @@ using Hax;
 [Command("sell")]
 internal class SellCommand : ICommand {
     bool CanBeSold(GrabbableObject grabbableObject) =>
-        grabbableObject is not HauntedMaskItem &&
-        grabbableObject.itemProperties.isScrap &&
-        !grabbableObject.itemProperties.isDefensiveWeapon &&
-        !grabbableObject.isHeld;
+        grabbableObject is not HauntedMaskItem and { isHeld: false } &&
+        grabbableObject.itemProperties is { isScrap: true, isDefensiveWeapon: false };
 
-    void SellObject(DepositItemsDesk depositItemsDesk, PlayerControllerB player, GrabbableObject item) {
+    void SellObject(PlayerControllerB player, GrabbableObject item, float currentWeight) {
         player.currentlyHeldObjectServer = item;
-        depositItemsDesk.PlaceItemOnCounter(player);
+        HaxObjects.Instance?.DepositItemsDesk?.Object?.PlaceItemOnCounter(player);
+        player.carryWeight = currentWeight;
     }
 
-    void SellEverything(DepositItemsDesk depositItemsDesk, PlayerControllerB player) =>
+    void SellEverything(PlayerControllerB player, float currentWeight) =>
         Helper.Grabbables.WhereIsNotNull().Where(this.CanBeSold).ForEach(grabbableObject => {
-            this.SellObject(depositItemsDesk, player, grabbableObject);
+            this.SellObject(player, grabbableObject, currentWeight);
         });
 
     /// <summary>
-    /// Uses the 0-1 knapsack algorithm to sell scraps to reach the target value.
-    /// The actual scrap value is usually lower than the displayed value due to the company buying rate.
+    /// Uses a modified 0-1 knapsack algorithm to find the largest combination of scraps whose total value does not exceed the target value.
+    /// The actual scrap value can be lower than the displayed value due to the company buying rate.
     /// </summary>
     /// <returns>the remaining amount left to reach the target value</returns>
-    ulong SellScrapValue(DepositItemsDesk depositItemsDesk, PlayerControllerB player, StartOfRound startOfRound, ulong targetValue) {
+    ulong SellScrapValue(PlayerControllerB player, ulong targetValue, float currentWeight) {
         ReadOnlySpan<GrabbableObject> sellableScraps = Helper.Grabbables.WhereIsNotNull().Where(this.CanBeSold).ToArray();
 
         int sellableScrapsCount = sellableScraps.Length;
-        ulong actualTargetValue = unchecked((ulong)(targetValue * startOfRound.companyBuyingRate));
+        ulong actualTargetValue = unchecked((ulong)(targetValue * player.playersManager.companyBuyingRate));
         ulong[,] table = new ulong[sellableScrapsCount + 1, targetValue + 1];
 
         for (int i = 0; i <= sellableScrapsCount; i++) {
@@ -55,7 +54,7 @@ internal class SellCommand : ICommand {
             if (result == table[i - 1, remainingValue]) continue;
 
             GrabbableObject grabbable = sellableScraps[i - 1];
-            this.SellObject(depositItemsDesk, player, grabbable);
+            this.SellObject(player, grabbable, currentWeight);
             ulong scrapValue = unchecked((ulong)grabbable.scrapValue);
             result -= scrapValue;
             remainingValue -= scrapValue;
@@ -66,7 +65,7 @@ internal class SellCommand : ICommand {
 
     public void Execute(StringArray args) {
         if (Helper.LocalPlayer is not PlayerControllerB player) return;
-        if (HaxObjects.Instance?.DepositItemsDesk?.Object is not DepositItemsDesk depositItemsDesk) {
+        if (Helper.RoundManager?.currentLevel is not { levelID: 3 }) {
             Chat.Print("You must be at the company to use this command!");
             return;
         }
@@ -79,7 +78,7 @@ internal class SellCommand : ICommand {
         float currentWeight = player.carryWeight;
 
         if (args.Length is 0) {
-            this.SellEverything(depositItemsDesk, player);
+            this.SellEverything(player, currentWeight);
             return;
         }
 
@@ -88,9 +87,7 @@ internal class SellCommand : ICommand {
             return;
         }
 
-        ulong result = this.SellScrapValue(depositItemsDesk, player, player.playersManager, targetValue);
+        ulong result = this.SellScrapValue(player, targetValue, currentWeight);
         Chat.Print($"Remaining scrap value to reach target is {result}!");
-
-        player.carryWeight = currentWeight;
     }
 }

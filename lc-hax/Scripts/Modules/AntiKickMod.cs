@@ -1,6 +1,6 @@
 using UnityEngine;
 using Hax;
-using Steamworks;
+using System.Collections;
 
 internal sealed class AntiKickMod : MonoBehaviour {
     bool HasGameStarted { get; set; } = false;
@@ -16,9 +16,25 @@ internal sealed class AntiKickMod : MonoBehaviour {
         GameListener.OnGameEnd -= this.OnGameEnd;
     }
 
+    IEnumerator RejoinLobby() {
+        if (State.ConnectedLobby is not ConnectedLobby connectedLobby) yield break;
+
+        WaitForEndOfFrame waitForEndOfFrame = new();
+
+        while (Helper.FindObject<MenuManager>() is null) {
+            yield return waitForEndOfFrame;
+        }
+
+        while (Helper.GameNetworkManager?.currentLobby.HasValue is not false) {
+            yield return waitForEndOfFrame;
+        }
+
+        Helper.GameNetworkManager?.JoinLobby(connectedLobby.Lobby, connectedLobby.SteamId);
+    }
+
     void OnGameEnd() {
-        if (!State.DisconnectedVoluntarily && Setting.EnableAntiKick && State.ConnectedLobbyId is SteamId lobbyId) {
-            Helper.GameNetworkManager?.StartClient(lobbyId);
+        if (!State.DisconnectedVoluntarily && Setting.EnableAntiKick) {
+            _ = this.StartCoroutine(this.RejoinLobby());
         }
 
         this.HasAnnouncedGameJoin = false;

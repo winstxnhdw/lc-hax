@@ -9,38 +9,44 @@ using Object = UnityEngine.Object;
 namespace Hax;
 
 internal static partial class Helper {
-    internal static HashSet<EnemyAI> Enemies { get; } = Helper.StartOfRound?.inShipPhase is not false ? [] :
+    internal static HashSet<EnemyAI> Enemies { get; } = Helper.StartOfRound is not { inShipPhase: false } ? [] :
         Helper.FindObjects<EnemyAI>()
               .WhereIsNotNull()
               .Where(enemy => enemy.IsSpawned)
               .ToHashSet();
 
-    internal static T? GetEnemy<T>() where T : EnemyAI =>
-        Helper.Enemies.First(enemy => enemy is T) is T enemy ? enemy : null;
+    internal static T? GetEnemy<T>() where T : EnemyAI => Helper.Enemies.First(enemy => enemy is T) as T;
 
-    internal static void Kill(this EnemyAI enemyInstance, ulong actualClientId) {
-        enemyInstance.ChangeEnemyOwnerServerRpc(actualClientId);
+    internal static void Kill(this EnemyAI enemy, ulong actualClientId) {
+        enemy.ChangeEnemyOwnerServerRpc(actualClientId);
 
-        if (enemyInstance is NutcrackerEnemyAI nutcracker) {
+        if (enemy is NutcrackerEnemyAI nutcracker) {
             nutcracker.KillEnemy();
         }
 
         else {
-            enemyInstance.KillEnemyServerRpc(true);
+            enemy.KillEnemyServerRpc(true);
         }
     }
 
-    internal static void Kill(EnemyAI enemyInstance) {
-        if (Helper.LocalPlayer is not PlayerControllerB localPlayer) return;
-        enemyInstance.Kill(localPlayer.actualClientId);
+    internal static void SetOutsideStatus(this EnemyAI enemy, bool isOutside) {
+        if (enemy.isOutside == isOutside) return;
+
+        enemy.isOutside = isOutside;
+        enemy.allAINodes = GameObject.FindGameObjectsWithTag(enemy.isOutside ? "OutsideAINode" : "AINode");
     }
 
-    internal static bool IsBehaviourState(this EnemyAI enemyInstance, Enum state) =>
-        enemyInstance.currentBehaviourStateIndex == Convert.ToInt32(state);
+    internal static void Kill(EnemyAI enemy) {
+        if (Helper.LocalPlayer is not PlayerControllerB localPlayer) return;
+        enemy.Kill(localPlayer.actualClientId);
+    }
 
-    internal static void SetBehaviourState(this EnemyAI enemyInstance, Enum state) {
-        if (enemyInstance.IsBehaviourState(state)) return;
-        enemyInstance.SwitchToBehaviourServerRpc(Convert.ToInt32(state));
+    internal static bool IsBehaviourState(this EnemyAI enemy, Enum state) =>
+        enemy.currentBehaviourStateIndex == Convert.ToInt32(state);
+
+    internal static void SetBehaviourState(this EnemyAI enemy, Enum state) {
+        if (enemy.IsBehaviourState(state)) return;
+        enemy.SwitchToBehaviourServerRpc(Convert.ToInt32(state));
     }
 
     internal static PlayerControllerB? GetPlayerAboutToKilledByEnemy(int playerObjectID) {
