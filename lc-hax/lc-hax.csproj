@@ -539,6 +539,9 @@
       <NoWarn>NU1701</NoWarn>
     </PackageReference>
 
+
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+
     <PackageReference Include="Nullable.Extended.Analyzer" Version="1.15.6169">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
