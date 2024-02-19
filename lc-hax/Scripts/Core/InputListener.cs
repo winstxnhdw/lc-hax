@@ -18,12 +18,14 @@ internal class InputListener : MonoBehaviour {
     internal static event Action? OnRightBracketPress;
     internal static event Action? OnBackslashPress;
     internal static event Action? OnZPress;
+    internal static event Action? OnDelPress;
     internal static event Action? OnXPress;
     internal static event Action? OnNPress;
     internal static event Action? OnUpArrowPress;
     internal static event Action? OnDownArrowPress;
     internal static event Action? OnF4Press;
     internal static event Action? OnF5Press;
+    internal static event Action? OnF9Press;
     internal static event Action<bool>? OnRightButtonHold;
 
     (Func<bool>, Action)[] InputActions { get; } = [
@@ -38,6 +40,7 @@ internal class InputListener : MonoBehaviour {
         (() => Keyboard.current[Key.LeftBracket].wasPressedThisFrame, () => InputListener.OnLeftBracketPress?.Invoke()),
         (() => Keyboard.current[Key.RightBracket].wasPressedThisFrame, () => InputListener.OnRightBracketPress?.Invoke()),
         (() => Keyboard.current[Key.Backslash].wasPressedThisFrame, () => InputListener.OnBackslashPress?.Invoke()),
+        (() => Keyboard.current[Key.Delete].wasPressedThisFrame, () => InputListener.OnDelPress?.Invoke()),
         (() => Keyboard.current[Key.Z].wasPressedThisFrame, () => InputListener.OnZPress?.Invoke()),
         (() => Keyboard.current[Key.X].wasPressedThisFrame, () => InputListener.OnXPress?.Invoke()),
         (() => Keyboard.current[Key.N].wasPressedThisFrame, () => InputListener.OnNPress?.Invoke()),
@@ -45,6 +48,7 @@ internal class InputListener : MonoBehaviour {
         (() => Keyboard.current[Key.DownArrow].wasPressedThisFrame, () => InputListener.OnDownArrowPress?.Invoke()),
         (() => Keyboard.current[Key.F4].wasPressedThisFrame, () => InputListener.OnF4Press?.Invoke()),
         (() => Keyboard.current[Key.F5].wasPressedThisFrame, () => InputListener.OnF5Press?.Invoke()),
+        (() => Keyboard.current[Key.F9].wasPressedThisFrame, () => InputListener.OnF9Press?.Invoke()),
     ];
 
     void Update() {

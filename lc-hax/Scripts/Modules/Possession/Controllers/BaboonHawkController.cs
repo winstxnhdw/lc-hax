@@ -1,5 +1,6 @@
-using Unity.Netcode;
 using Hax;
+using Unity.Netcode;
+using Vector3 = UnityEngine.Vector3;
 
 enum BaboonState {
     SCOUTING = 0,
@@ -8,27 +9,52 @@ enum BaboonState {
 }
 
 internal class BaboonHawkController : IEnemyController<BaboonBirdAI> {
-    void GrabItemAndSync(BaboonBirdAI enemyInstance, GrabbableObject item) {
+    Vector3 CustomCamp { get; } = new Vector3(1000.0f, 0.0f, 0.0f);
+    Vector3 OriginalCamp { get; set; } = Vector3.zero;
+
+    public void OnDeath(BaboonBirdAI enemy) {
+        if (enemy.heldScrap is not null) {
+            _ = enemy.Reflect().InvokeInternalMethod("DropHeldItemAndSync");
+        }
+    }
+
+    public void OnPossess(BaboonBirdAI _) {
+        if (BaboonBirdAI.baboonCampPosition != this.CustomCamp) return;
+
+        this.OriginalCamp = BaboonBirdAI.baboonCampPosition;
+        BaboonBirdAI.baboonCampPosition = this.CustomCamp;
+    }
+
+    public void OnUnpossess(BaboonBirdAI _) {
+        if (BaboonBirdAI.baboonCampPosition == this.OriginalCamp) return;
+        BaboonBirdAI.baboonCampPosition = this.OriginalCamp;
+    }
+
+    void GrabItemAndSync(BaboonBirdAI enemy, GrabbableObject item) {
         if (!item.TryGetComponent(out NetworkObject netItem)) return;
-        _ = enemyInstance.Reflect().InvokeInternalMethod("GrabItemAndSync", netItem);
+        _ = enemy.Reflect().InvokeInternalMethod("GrabItemAndSync", netItem);
     }
 
-    public void UsePrimarySkill(BaboonBirdAI enemyInstance) {
-        if (enemyInstance.heldScrap is null && enemyInstance.FindNearbyItem() is GrabbableObject grabbable) {
-            this.GrabItemAndSync(enemyInstance, grabbable);
+    public void UsePrimarySkill(BaboonBirdAI enemy) {
+        if (enemy.heldScrap is null && enemy.FindNearbyItem() is GrabbableObject grabbable) {
+            this.GrabItemAndSync(enemy, grabbable);
+            return;
         }
 
-        else if (enemyInstance.heldScrap is ShotgunItem shotgun) {
-            shotgun.ShootShotgun(enemyInstance.transform);
+        if (enemy.heldScrap is ShotgunItem shotgun) {
+            shotgun.ShootShotgun(enemy.transform);
+            return;
         }
     }
 
-    public void UseSecondarySkill(BaboonBirdAI enemyInstance) {
-        if (enemyInstance.heldScrap is null) return;
-        _ = enemyInstance.Reflect().InvokeInternalMethod("DropHeldItemAndSync");
+    public void UseSecondarySkill(BaboonBirdAI enemy) {
+        if (enemy.heldScrap is null) return;
+        _ = enemy.Reflect().InvokeInternalMethod("DropHeldItemAndSync");
     }
 
-    public string GetPrimarySkillName(BaboonBirdAI enemyInstance) => enemyInstance.heldScrap is not null ? "" : "Grab Item";
+    public string GetPrimarySkillName(BaboonBirdAI enemy) => enemy.heldScrap is not null ? "" : "Grab Item";
 
-    public string GetSecondarySkillName(BaboonBirdAI enemyInstance) => enemyInstance.heldScrap is null ? "" : "Drop item";
+    public string GetSecondarySkillName(BaboonBirdAI enemy) => enemy.heldScrap is null ? "" : "Drop item";
+
+    public float InteractRange(BaboonBirdAI _) => 1.5f;
 }

@@ -1,39 +1,27 @@
 using Hax;
 
-enum MouthDog {
-    ROAMING = 0,
-    SUSPICIOUS = 1,
-    CHASE = 2,
-    LUNGE = 3
+enum DogState {
+    ROAMING,
+    SUSPICIOUS,
+    CHASE,
+    LUNGE
 }
 
 internal class EyelessDogController : IEnemyController<MouthDogAI> {
-    bool IsSecondarySkillActive { get; set; } = false;
-
-    public void OnMovement(MouthDogAI enemyInstance, bool isMoving, bool isSprinting) {
+    public void OnMovement(MouthDogAI enemy, bool isMoving, bool isSprinting) {
         if (!isSprinting) {
             if (!isMoving) return;
-            enemyInstance.SetBehaviourState(MouthDog.ROAMING);
+            enemy.SetBehaviourState(DogState.ROAMING);
         }
 
         else {
-            enemyInstance.SetBehaviourState(MouthDog.CHASE);
+            enemy.SetBehaviourState(DogState.CHASE);
         }
     }
 
-    public void UseSecondarySkill(MouthDogAI enemyInstance) {
-        if (this.IsSecondarySkillActive) return;
-
-        this.IsSecondarySkillActive = true;
-        enemyInstance.SetBehaviourState(MouthDog.LUNGE);
-    }
-
-    public void ReleaseSecondarySkill(MouthDogAI enemyInstance) {
-        if (!this.IsSecondarySkillActive) return;
-
-        this.IsSecondarySkillActive = false;
-        enemyInstance.SetBehaviourState(MouthDog.CHASE);
-    }
+    public void UseSecondarySkill(MouthDogAI enemy) => enemy.SetBehaviourState(DogState.LUNGE);
 
     public string GetSecondarySkillName(MouthDogAI _) => "Lunge";
+
+    public float InteractRange(MouthDogAI _) => 2.5f;
 }
