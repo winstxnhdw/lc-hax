@@ -131,7 +131,7 @@ internal class CharacterMovement : MonoBehaviour {
 
     // Apply gravity to the character controller
     void ApplyGravity() {
-        this.VelocityY = this.CharacterController?.isGrounded is not true
+        this.VelocityY = this.CharacterController is { isGrounded: false }
             ? this.VelocityY - (CharacterMovement.Gravity * Time.deltaTime)
             : 0.0f;
 

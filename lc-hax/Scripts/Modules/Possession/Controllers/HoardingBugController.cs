@@ -12,7 +12,7 @@ public enum HoardingBugState {
 }
 internal class HoardingBugController : IEnemyController<HoarderBugAI> {
     void UseHeldItem(HoarderBugAI enemy) {
-        if (enemy.heldItem?.itemGrabbableObject is not GrabbableObject grabbable) return;
+        if (enemy.heldItem is not { itemGrabbableObject: GrabbableObject grabbable }) return;
 
         switch (grabbable) {
             case ShotgunItem gun:
@@ -36,7 +36,7 @@ internal class HoardingBugController : IEnemyController<HoarderBugAI> {
     }
 
     public void OnMovement(HoarderBugAI enemy, bool isMoving, bool isSprinting) {
-        if (enemy.heldItem?.itemGrabbableObject is null) return;
+        if (enemy.heldItem is { itemGrabbableObject: null }) return;
         enemy.angryTimer = 0.0f;
     }
 
@@ -66,7 +66,7 @@ internal class HoardingBugController : IEnemyController<HoarderBugAI> {
     }
 
     public void UseSecondarySkill(HoarderBugAI enemy) {
-        if (enemy.heldItem?.itemGrabbableObject is null) {
+        if (enemy.heldItem is { itemGrabbableObject: null }) {
             PlayerControllerB hostPlayer = Helper.Players[0];
             enemy.watchingPlayer = hostPlayer;
             enemy.angryAtPlayer = hostPlayer;
