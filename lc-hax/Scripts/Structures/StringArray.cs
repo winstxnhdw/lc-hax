@@ -1,7 +1,7 @@
 using System;
 using System.Runtime.CompilerServices;
 
-internal readonly ref struct StringArray {
+readonly ref struct StringArray {
     ReadOnlySpan<string> Span { get; }
 
     internal StringArray(ReadOnlySpan<string> span) => this.Span = span;
