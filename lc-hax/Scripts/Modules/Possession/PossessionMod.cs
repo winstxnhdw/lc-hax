@@ -73,6 +73,7 @@ internal sealed class PossessionMod : MonoBehaviour {
         InputListener.OnZPress += this.Unpossess;
         InputListener.OnLeftButtonPress += this.UsePrimarySkill;
         InputListener.OnRightButtonPress += this.UseSecondarySkill;
+        InputListener.OnRightButtonRelease += this.ReleaseSecondarySkill;
         InputListener.OnRightButtonHold += this.OnRightMouseButtonHold;
         InputListener.OnDelPress += this.KillEnemyAndUnposses;
         InputListener.OnF9Press += this.ToggleAIControl;
@@ -84,6 +85,7 @@ internal sealed class PossessionMod : MonoBehaviour {
         InputListener.OnZPress -= this.Unpossess;
         InputListener.OnLeftButtonPress -= this.UsePrimarySkill;
         InputListener.OnRightButtonPress -= this.UseSecondarySkill;
+        InputListener.OnRightButtonRelease -= this.ReleaseSecondarySkill;
         InputListener.OnRightButtonHold -= this.OnRightMouseButtonHold;
         InputListener.OnDelPress -= this.KillEnemyAndUnposses;
         InputListener.OnF9Press -= this.ToggleAIControl;
@@ -93,10 +95,6 @@ internal sealed class PossessionMod : MonoBehaviour {
     void OnRightMouseButtonHold(bool isPressed) {
         if (isPressed) {
             this.OnSecondarySkillHold();
-        }
-
-        else {
-            this.ReleaseSecondarySkill();
         }
     }
 
@@ -232,8 +230,10 @@ internal sealed class PossessionMod : MonoBehaviour {
 
         enemy.Kill(localPlayer.actualClientId);
 
-        if (enemy.TryGetComponent(out NetworkObject networkObject)) {
-            networkObject.Despawn(true);
+        if (localPlayer.IsHost) {
+            if (enemy.TryGetComponent(out NetworkObject networkObject)) {
+                networkObject.Despawn(true);
+            }
         }
 
         this.Unpossess();
