@@ -112,7 +112,7 @@ The complete feature set includes the following.
 | Poison a player               | `/poison <player> <damage> <duration> <delay=1>` |
 | Poison all players            | `/poison --all <damage> <duration> <delay=1>`    |
 | Spoof a server message        | `/say <player> <message>`                        |
-| Translate a message           | `/translate <source> <target> <message>`         |
+| Send a translated message     | `/translate <source> <target> <message>`         |
 | Transmit a signal             | `/signal <message>`                              |
 | Modify shovel damage          | `/shovel <force=1>`                              |
 | Add or remove experience      | `/xp <amount>`                                   |
