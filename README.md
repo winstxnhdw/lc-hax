@@ -24,6 +24,9 @@ A powerful, feature-rich and highly performant portable Windows CLI-only interna
 
 ## Installation
 
+> [!TIP]\
+> If you are uncomfortable with the command line, you can watch the installation [video](https://github.com/winstxnhdw/lc-hax/discussions/389) or follow the opinionated [guide](https://github.com/winstxnhdw/lc-hax/discussions/294).
+
 Clone the repository.
 
 > [!NOTE]\
@@ -297,6 +300,10 @@ static void LoadHaxModules() {
 ### Disabling Patches
 
 There is usually little reason for you to disable patches as they are carefully chosen and come with sane defaults. However, if for whatever reason you wish to disable a patch, you may freely delete any of the corresponding files based on their names [here](lc-hax/Scripts/Patches).
+
+## Uninstalling
+
+Unlike other cheats, `lc-hax` is portable and will never litter your computer with garbage. Deleting the `lc-hax` folder would be the equivalent to uninstalling.
 
 ## Whitelisting SharpMonoInjectorCore
 
