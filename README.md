@@ -29,9 +29,6 @@ A powerful, feature-rich and highly performant portable Windows CLI-only interna
 
 Clone the repository.
 
-> [!NOTE]\
-> Cloning will download this project in your current working directory. You should not be downloading this project as a `zip`.
-
 ```bash
 git clone --recursive https://github.com/winstxnhdw/lc-hax.git
 ```
@@ -237,7 +234,6 @@ The `fatality` command allows you to kill a player with a custom animation. The 
 - Masked
 - Baboon Hawk
 - Circuit Bee
-- Thumper
 - Eyeless Dog
 - Bracken
 - Nutcracker
