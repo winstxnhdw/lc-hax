@@ -6,6 +6,7 @@ internal sealed class StunClickMod : MonoBehaviour {
     RaycastHit[] RaycastHits { get; set; } = new RaycastHit[100];
 
     void OnEnable() => InputListener.OnLeftButtonPress += this.Stun;
+
     void OnDisable() => InputListener.OnLeftButtonPress -= this.Stun;
 
     bool IsHoldingADefensiveWeapon() =>

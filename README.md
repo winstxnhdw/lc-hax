@@ -24,10 +24,10 @@ A powerful, feature-rich and highly performant portable Windows CLI-only interna
 
 ## Installation
 
-Clone the repository.
+> [!TIP]\
+> If you are uncomfortable with the command line, you can watch the installation [video](https://github.com/winstxnhdw/lc-hax/discussions/389) or follow the opinionated [guide](https://github.com/winstxnhdw/lc-hax/discussions/294).
 
-> [!NOTE]\
-> Cloning will download this project in your current working directory. You should not be downloading this project as a `zip`.
+Clone the repository.
 
 ```bash
 git clone --recursive https://github.com/winstxnhdw/lc-hax.git
@@ -113,6 +113,7 @@ The complete feature set includes the following.
 | Poison all players            | `/poison --all <damage> <duration> <delay=1>`    |
 | Spoof a server message        | `/say <player> <message>`                        |
 | Send a translated message     | `/translate <source> <target> <message>`         |
+| Toggle automatic translations | `/translate <source> <target> -d`                |
 | Transmit a signal             | `/signal <message>`                              |
 | Modify shovel damage          | `/shovel <force=1>`                              |
 | Add or remove experience      | `/xp <amount>`                                   |
@@ -233,7 +234,6 @@ The `fatality` command allows you to kill a player with a custom animation. The 
 - Masked
 - Baboon Hawk
 - Circuit Bee
-- Thumper
 - Eyeless Dog
 - Bracken
 - Nutcracker
@@ -297,6 +297,10 @@ static void LoadHaxModules() {
 ### Disabling Patches
 
 There is usually little reason for you to disable patches as they are carefully chosen and come with sane defaults. However, if for whatever reason you wish to disable a patch, you may freely delete any of the corresponding files based on their names [here](lc-hax/Scripts/Patches).
+
+## Uninstalling
+
+Unlike other cheats, `lc-hax` is portable and will never litter your computer with garbage. Deleting the `lc-hax` folder would be the equivalent to uninstalling.
 
 ## Whitelisting SharpMonoInjectorCore
 
