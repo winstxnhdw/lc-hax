@@ -224,12 +224,13 @@ internal static partial class Helper {
         yield return www.SendWebRequest();
 
         if (www.result != UnityWebRequest.Result.Success) {
-            Chat.Print("Translation server is down!");
+            State.TranslateDetachedState = null;
             Helper.HUDManager?.AddTextToChatOnServer(request.Text, player.PlayerIndex());
+            Chat.Print("Translation server is down!");
         }
 
         else {
-            Helper.HUDManager?.AddTextToChatOnServer(www.downloadHandler.text.Trim(), player.PlayerIndex());
+            _ = Helper.HUDManager?.Reflect().InvokeInternalMethod("AddPlayerChatMessageServerRpc", www.downloadHandler.text.Trim(), player.PlayerIndex());
         }
     }
 
