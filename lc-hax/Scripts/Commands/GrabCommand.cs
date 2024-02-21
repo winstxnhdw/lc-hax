@@ -8,9 +8,8 @@ using UnityEngine;
 [Command("grab")]
 internal class GrabCommand : ICommand {
     bool CanGrabItem(GrabbableObject grabbableObject, Vector3 currentPlayerPosition) =>
-        !grabbableObject.isHeld &&
-        !grabbableObject.isHeldByEnemy &&
-        Vector3.Distance(grabbableObject.transform.position, currentPlayerPosition) >= 20.0f;
+        grabbableObject is { isHeld: false } and { isHeldByEnemy: false } &&
+        (grabbableObject.transform.position - currentPlayerPosition).sqrMagnitude >= 20.0f * 20.0f;
 
     IEnumerator GrabAllItemsAsync(PlayerControllerB player, GrabbableObject[] grabbables) {
         float currentWeight = player.carryWeight;

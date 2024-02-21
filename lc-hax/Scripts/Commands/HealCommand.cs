@@ -7,7 +7,6 @@ internal class HealCommand : IStun, ICommand {
     void RespawnLocalPlayer(PlayerControllerB localPlayer, StartOfRound startOfRound, HUDManager hudManager) {
         if (Helper.SoundManager is not SoundManager soundManager) return;
 
-        hudManager.localPlayer.health = 100;
         startOfRound.allPlayersDead = false;
         startOfRound.SetPlayerObjectExtrapolate(false);
         localPlayer.ResetPlayerBloodObjects();
@@ -46,7 +45,6 @@ internal class HealCommand : IStun, ICommand {
         }
 
         localPlayer.DisableJetpackControlsLocally();
-        localPlayer.health = 100;
         localPlayer.mapRadarDotAnimator?.SetBool("dead", false);
 
         if (hudManager.TryGetComponent(out Animator gasHelmetAnimator)) {
@@ -84,7 +82,7 @@ internal class HealCommand : IStun, ICommand {
     }
 
     PlayerControllerB HealLocalPlayer(HUDManager hudManager) {
-        if (hudManager.localPlayer.health <= 0) {
+        if (!hudManager.localPlayer.isPlayerControlled) {
             this.RespawnLocalPlayer(hudManager.localPlayer, hudManager.localPlayer.playersManager, hudManager);
 
             Helper.CreateComponent<WaitForBehaviour>("Respawn")
