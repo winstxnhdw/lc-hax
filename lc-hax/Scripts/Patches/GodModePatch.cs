@@ -44,7 +44,7 @@ class GodModePatch {
     [HarmonyPrefix]
     [HarmonyPatch(typeof(JesterAI), nameof(JesterAI.KillPlayerServerRpc))]
     [HarmonyPatch(typeof(JesterAI), nameof(JesterAI.KillPlayerClientRpc))]
-    static bool PrefixJesterKill(int playerId, ref bool ___inKillAnimation) {
+    static bool PrefixJesterKill(int playerId) {
         if (!Setting.EnableGodMode) return true;
         if (Helper.IsLocalPlayerAboutToGetKilledByEnemy(playerId)) {
             Unfreeze();
@@ -57,7 +57,7 @@ class GodModePatch {
     [HarmonyPrefix]
     [HarmonyPatch(typeof(MaskedPlayerEnemy), nameof(MaskedPlayerEnemy.KillPlayerAnimationServerRpc))]
     [HarmonyPatch(typeof(MaskedPlayerEnemy), nameof(MaskedPlayerEnemy.KillPlayerAnimationServerRpc))]
-    static bool PrefixMaskedPlayerKill(int playerObjectId, ref bool ___startingKillAnimationLocalClient) {
+    static bool PrefixMaskedPlayerKill(int playerObjectId) {
         if (!Setting.EnableGodMode) return true;
         if (Helper.IsLocalPlayerAboutToGetKilledByEnemy(playerObjectId)) {
             Unfreeze();
@@ -70,7 +70,7 @@ class GodModePatch {
     [HarmonyPrefix]
     [HarmonyPatch(typeof(MouthDogAI), nameof(MouthDogAI.KillPlayerServerRpc))]
     [HarmonyPatch(typeof(MouthDogAI), nameof(MouthDogAI.KillPlayerClientRpc))]
-    static bool PrefixDogKill(MouthDogAI __instance, int playerId, ref bool ___inKillAnimation) {
+    static bool PrefixDogKill(int playerId) {
         if (!Setting.EnableGodMode) return true;
         if (Helper.IsLocalPlayerAboutToGetKilledByEnemy(playerId)) {
             Unfreeze();
