@@ -132,6 +132,11 @@
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
 
+    <ProjectReference Include="..\analysers\analysers.csproj">
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+      <OutputItemType>Analyzer</OutputItemType>
+    </ProjectReference>
+
     <PackageReference Include="RequireNamedArgs" Version="0.0.7" />
 
     <PackageReference Include="Quickenshtein" Version="1.5.1" />
