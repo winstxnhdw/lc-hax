@@ -45,7 +45,6 @@ internal class HealCommand : IStun, ICommand {
         }
 
         localPlayer.DisableJetpackControlsLocally();
-        localPlayer.health = 100;
         localPlayer.mapRadarDotAnimator?.SetBool("dead", false);
 
         if (hudManager.TryGetComponent(out Animator gasHelmetAnimator)) {
