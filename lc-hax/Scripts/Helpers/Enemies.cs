@@ -45,6 +45,8 @@ internal static partial class Helper {
         if (enemy.isOutside == isOutside) return;
 
         enemy.isOutside = isOutside;
+        // clear ai nodes cache
+        enemy.allAINodes = null;
         enemy.allAINodes = GameObject.FindGameObjectsWithTag(enemy.isOutside ? "OutsideAINode" : "AINode");
     }
 

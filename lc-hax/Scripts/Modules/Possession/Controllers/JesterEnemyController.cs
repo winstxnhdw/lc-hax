@@ -1,3 +1,5 @@
+using System.Linq;
+using GameNetcodeStuff;
 using Hax;
 
 enum JesterState {
@@ -7,7 +9,13 @@ enum JesterState {
 }
 
 internal class JesterController : IEnemyController<JesterAI> {
-    public void UsePrimarySkill(JesterAI enemy) => enemy.SetBehaviourState(JesterState.CLOSED);
+    
+
+    public void UsePrimarySkill(JesterAI enemy) {
+        enemy.SetBehaviourState(JesterState.CLOSED);
+        this.SetNoPlayerChasetimer(enemy, 0f);
+    }
+
 
     public void OnSecondarySkillHold(JesterAI enemy) {
         if (!enemy.IsBehaviourState(JesterState.CLOSED)) return;
@@ -18,6 +26,16 @@ internal class JesterController : IEnemyController<JesterAI> {
         if (!enemy.IsBehaviourState(JesterState.CRANKING)) return;
         enemy.SetBehaviourState(JesterState.OPEN);
     }
+
+
+    public void Update(JesterAI enemy) => this.SetNoPlayerChasetimer(enemy, 100f);
+
+    public void OnUnpossess(JesterAI enemy) {
+        this.SetNoPlayerChasetimer(enemy, 5f);
+        enemy.SetBehaviourState(JesterState.CLOSED);
+    }
+
+    void SetNoPlayerChasetimer(JesterAI enemy, float value) => enemy.Reflect().SetInternalField("noPlayersToChaseTimer", value);
 
     public bool IsAbleToMove(JesterAI enemy) => !enemy.IsBehaviourState(JesterState.CRANKING);
 
