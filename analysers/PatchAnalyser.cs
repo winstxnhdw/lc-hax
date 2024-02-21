@@ -6,7 +6,7 @@ using Microsoft.CodeAnalysis.Diagnostics;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 [DiagnosticAnalyzer(LanguageNames.CSharp)]
-internal class PatchAnalyzer : DiagnosticAnalyzer {
+internal class PatchAnalyser : DiagnosticAnalyzer {
     internal const string DiagnosticID = "HAX002";
 
     static DiagnosticDescriptor Rule { get; } = new(
@@ -18,7 +18,7 @@ internal class PatchAnalyzer : DiagnosticAnalyzer {
         isEnabledByDefault: true
     );
 
-    public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics => ImmutableArray.Create(PatchAnalyzer.Rule);
+    public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics => ImmutableArray.Create(PatchAnalyser.Rule);
 
     public override void Initialize(AnalysisContext context) {
         context.ConfigureGeneratedCodeAnalysis(GeneratedCodeAnalysisFlags.None);
@@ -33,7 +33,7 @@ internal class PatchAnalyzer : DiagnosticAnalyzer {
         if (!methodSymbol.Parameters.Any(parameter => parameter.Name is "instance")) return;
 
         context.ReportDiagnostic(
-            Diagnostic.Create(PatchAnalyzer.Rule, methodDeclaration.Identifier.GetLocation(), methodSymbol.Name)
+            Diagnostic.Create(PatchAnalyser.Rule, methodDeclaration.Identifier.GetLocation(), methodSymbol.Name)
         );
     }
 }
