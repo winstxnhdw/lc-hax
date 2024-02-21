@@ -42,5 +42,7 @@ internal class ExperienceCommand : ICommand {
             hudManager.localPlayerLevel,
             ES3.Load("playedDuringBeta", "LCGeneralSaveData", true)
         );
+
+        Chat.Print($"You are a {rank} with {hudManager.localPlayerXP} XP!");
     }
 }
