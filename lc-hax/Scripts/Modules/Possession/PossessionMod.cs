@@ -73,6 +73,7 @@ internal sealed class PossessionMod : MonoBehaviour {
         InputListener.OnZPress += this.Unpossess;
         InputListener.OnLeftButtonPress += this.UsePrimarySkill;
         InputListener.OnRightButtonPress += this.UseSecondarySkill;
+        InputListener.OnRightButtonRelease += this.ReleaseSecondarySkill;
         InputListener.OnRightButtonHold += this.OnRightMouseButtonHold;
         InputListener.OnDelPress += this.KillEnemyAndUnposses;
         InputListener.OnF9Press += this.ToggleAIControl;
@@ -84,6 +85,7 @@ internal sealed class PossessionMod : MonoBehaviour {
         InputListener.OnZPress -= this.Unpossess;
         InputListener.OnLeftButtonPress -= this.UsePrimarySkill;
         InputListener.OnRightButtonPress -= this.UseSecondarySkill;
+        InputListener.OnRightButtonRelease -= this.ReleaseSecondarySkill;
         InputListener.OnRightButtonHold -= this.OnRightMouseButtonHold;
         InputListener.OnDelPress -= this.KillEnemyAndUnposses;
         InputListener.OnF9Press -= this.ToggleAIControl;
@@ -93,10 +95,6 @@ internal sealed class PossessionMod : MonoBehaviour {
     void OnRightMouseButtonHold(bool isPressed) {
         if (isPressed) {
             this.OnSecondarySkillHold();
-        }
-
-        else {
-            this.ReleaseSecondarySkill();
         }
     }
 
@@ -121,20 +119,6 @@ internal sealed class PossessionMod : MonoBehaviour {
         this.CharacterMovement?.SetNoClipMode(this.NoClipEnabled);
     }
 
-    void HandleEnemyMovements(IController controller, EnemyAI enemy, bool isMoving, bool isSprinting) =>
-        controller.OnMovement(enemy, isMoving, isSprinting);
-
-    void HandleEnemyOnPossess(IController controller, EnemyAI enemy) =>
-        controller.OnPossess(enemy);
-
-    void HandleEnemyOnUnpossess(IController controller, EnemyAI enemy) =>
-        controller.OnUnpossess(enemy);
-
-    void HandleEnemyOnDeath(IController controller, EnemyAI enemy) =>
-        controller.OnDeath(enemy);
-
-    void EnemyUpdate(IController controller, EnemyAI enemy) => controller.Update(enemy);
-
     void Update() {
         if (Helper.CurrentCamera is not Camera { enabled: true } camera) return;
         if (Helper.LocalPlayer is not PlayerControllerB localPlayer) return;
@@ -142,8 +126,10 @@ internal sealed class PossessionMod : MonoBehaviour {
         if (this.Possession.Enemy is not EnemyAI enemy) return;
         if (enemy.agent is not NavMeshAgent agent) return;
 
-        this.DoorCooldownRemaining = Mathf.Clamp(this.DoorCooldownRemaining - Time.deltaTime, 0.0f, PossessionMod.DoorInteractionCooldown);
-        this.TeleportCooldownRemaining = Mathf.Clamp(this.TeleportCooldownRemaining - Time.deltaTime, 0.0f, PossessionMod.TeleportDoorCooldown);
+        this.DoorCooldownRemaining = Mathf.Clamp(this.DoorCooldownRemaining - Time.deltaTime, 0.0f,
+            PossessionMod.DoorInteractionCooldown);
+        this.TeleportCooldownRemaining = Mathf.Clamp(this.TeleportCooldownRemaining - Time.deltaTime, 0.0f,
+            PossessionMod.TeleportDoorCooldown);
         enemy.ChangeEnemyOwnerServerRpc(localPlayer.actualClientId);
 
         if (this.FirstUpdate) {
@@ -158,25 +144,34 @@ internal sealed class PossessionMod : MonoBehaviour {
             enemy.SetOutsideStatus(enemy.transform.position.y > this.MainEntrance.transform.position.y + 5.0f);
         }
 
-        if (!this.IsAIControlled) {
-            if (!this.EnemyControllers.TryGetValue(enemy.GetType(), out IController controller)) {
+        if (!this.EnemyControllers.TryGetValue(enemy.GetType(), out IController controller)) {
+            if (!this.IsAIControlled) {
                 this.UpdateEnemyPosition(enemy);
                 this.UpdateEnemyRotation();
             }
+        }
 
-            else if (controller.IsAbleToMove(enemy)) {
-                if (controller.SyncAnimationSpeedEnabled(enemy)) {
-                    characterMovement.CharacterSpeed = agent.speed;
+        if (controller != null) {
+            if (enemy.isEnemyDead) {
+                controller.OnDeath(enemy);
+                this.Unpossess();
+            }
+
+            controller.Update(enemy);
+            this.InteractWithAmbient(enemy, controller);
+            if (!this.IsAIControlled) {
+                if (controller.IsAbleToMove(enemy)) {
+                    if (controller.SyncAnimationSpeedEnabled(enemy)) {
+                        characterMovement.CharacterSpeed = agent.speed;
+                    }
+
+                    if (controller.IsAbleToRotate(enemy)) {
+                        this.UpdateEnemyRotation();
+                    }
+
+                    this.UpdateEnemyPosition(enemy);
+                    controller.OnMovement(enemy, characterMovement.IsMoving, CharacterMovement.IsSprinting);
                 }
-
-                if (controller.IsAbleToRotate(enemy)) {
-                    this.UpdateEnemyRotation();
-                }
-
-                this.InteractWithAmbient(enemy, controller);
-                this.UpdateEnemyPosition(enemy);
-                this.HandleEnemyMovements(controller, enemy, characterMovement.IsMoving, characterMovement.IsSprinting);
-                this.EnemyUpdate(controller, enemy);
 
                 localPlayer.cursorTip.text = controller.GetPrimarySkillName(enemy);
             }
@@ -222,7 +217,7 @@ internal sealed class PossessionMod : MonoBehaviour {
         this.DoorCooldownRemaining = 0.0f;
 
         if (this.EnemyControllers.TryGetValue(enemy.GetType(), out IController controller)) {
-            this.HandleEnemyOnPossess(controller, enemy);
+            controller.OnPossess(enemy);
         }
     }
 
@@ -232,8 +227,10 @@ internal sealed class PossessionMod : MonoBehaviour {
 
         enemy.Kill(localPlayer.actualClientId);
 
-        if (enemy.TryGetComponent(out NetworkObject networkObject)) {
-            networkObject.Despawn(true);
+        if (localPlayer.IsHost) {
+            if (enemy.TryGetComponent(out NetworkObject networkObject)) {
+                networkObject.Despawn(true);
+            }
         }
 
         this.Unpossess();
@@ -251,7 +248,7 @@ internal sealed class PossessionMod : MonoBehaviour {
         }
 
         if (this.EnemyControllers.TryGetValue(enemy.GetType(), out IController controller)) {
-            this.HandleEnemyOnUnpossess(controller, enemy);
+            controller.OnUnpossess(enemy);
         }
 
         this.IsAIControlled = false;

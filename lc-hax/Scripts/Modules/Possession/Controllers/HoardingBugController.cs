@@ -24,6 +24,12 @@ internal class HoardingBugController : IEnemyController<HoarderBugAI> {
         }
     }
 
+    public void Update(HoarderBugAI enemy) {
+        if (enemy.heldItem?.itemGrabbableObject is null) return;
+        enemy.angryTimer = 0.0f;
+        enemy.SetBehaviourState(HoardingBugState.IDLE);
+    }
+
     void GrabItem(HoarderBugAI enemy, GrabbableObject item) {
         if (!item.TryGetComponent(out NetworkObject netItem)) return;
 
@@ -36,8 +42,6 @@ internal class HoardingBugController : IEnemyController<HoarderBugAI> {
     }
 
     public void OnMovement(HoarderBugAI enemy, bool isMoving, bool isSprinting) {
-        if (enemy.heldItem?.itemGrabbableObject is null) return;
-        enemy.angryTimer = 0.0f;
     }
 
     public void OnDeath(HoarderBugAI enemy) {
@@ -54,6 +58,7 @@ internal class HoardingBugController : IEnemyController<HoarderBugAI> {
         if (enemy.angryTimer > 0.0f) {
             enemy.angryTimer = 0.0f;
             enemy.angryAtPlayer = null;
+            enemy.SetBehaviourState(HoardingBugState.IDLE);
         }
 
         if (enemy.heldItem is null && enemy.FindNearbyItem() is GrabbableObject grabbable) {
