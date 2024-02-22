@@ -170,7 +170,7 @@ internal sealed class PossessionMod : MonoBehaviour {
                     }
 
                     this.UpdateEnemyPosition(enemy);
-                    controller.OnMovement(enemy, characterMovement.IsMoving, this.CharacterMovement.IsSprinting);
+                    controller.OnMovement(enemy, this.CharacterMovement.IsMoving, this.CharacterMovement.IsSprinting);
                 }
 
                 localPlayer.cursorTip.text = controller.GetPrimarySkillName(enemy);
