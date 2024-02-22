@@ -41,9 +41,6 @@ internal class HoardingBugController : IEnemyController<HoarderBugAI> {
         enemy.GrabItemServerRpc(netItem);
     }
 
-    public void OnMovement(HoarderBugAI enemy, bool isMoving, bool isSprinting) {
-    }
-
     public void OnDeath(HoarderBugAI enemy) {
         if (enemy.heldItem.itemGrabbableObject.TryGetComponent(out NetworkObject networkObject)) return;
 
