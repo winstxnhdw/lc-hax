@@ -20,7 +20,6 @@ internal class HoardingBugController : IEnemyController<HoarderBugAI> {
                 break;
 
             default:
-                grabbable.InteractWithProp();
                 break;
         }
     }
@@ -40,9 +39,6 @@ internal class HoardingBugController : IEnemyController<HoarderBugAI> {
 
         enemy.SwitchToBehaviourServerRpc(1);
         enemy.GrabItemServerRpc(netItem);
-    }
-
-    public void OnMovement(HoarderBugAI enemy, bool isMoving, bool isSprinting) {
     }
 
     public void OnDeath(HoarderBugAI enemy) {

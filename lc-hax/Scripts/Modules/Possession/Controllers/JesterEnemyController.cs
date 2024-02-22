@@ -1,5 +1,3 @@
-using System.Linq;
-using GameNetcodeStuff;
 using Hax;
 
 enum JesterState {
@@ -9,7 +7,7 @@ enum JesterState {
 }
 
 internal class JesterController : IEnemyController<JesterAI> {
-    
+
 
     public void UsePrimarySkill(JesterAI enemy) {
         enemy.SetBehaviourState(JesterState.CLOSED);
@@ -44,3 +42,4 @@ internal class JesterController : IEnemyController<JesterAI> {
 
     public float InteractRange(JesterAI _) => 1.0f;
 }
+

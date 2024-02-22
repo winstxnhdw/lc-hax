@@ -170,7 +170,7 @@ internal sealed class PossessionMod : MonoBehaviour {
                     }
 
                     this.UpdateEnemyPosition(enemy);
-                    controller.OnMovement(enemy, characterMovement.IsMoving, CharacterMovement.IsSprinting);
+                    controller.OnMovement(enemy, this.CharacterMovement.IsMoving, this.CharacterMovement.IsSprinting);
                 }
 
                 localPlayer.cursorTip.text = controller.GetPrimarySkillName(enemy);
@@ -311,8 +311,7 @@ internal sealed class PossessionMod : MonoBehaviour {
             : IController.DefaultSprintMultiplier;
 
     void InteractWithAmbient(EnemyAI enemy, IController controller) {
-        if (!Physics.Raycast(enemy.transform.position, enemy.transform.forward, out RaycastHit hit,
-                this.InteractRange(enemy))) return;
+        if (!Physics.Raycast(enemy.transform.position, enemy.transform.forward, out RaycastHit hit, this.InteractRange(enemy))) return;
         if (hit.collider.gameObject.TryGetComponent(out DoorLock doorLock) && this.DoorCooldownRemaining <= 0.0f) {
             this.OpenDoorAsEnemy(doorLock);
             this.DoorCooldownRemaining = PossessionMod.DoorInteractionCooldown;

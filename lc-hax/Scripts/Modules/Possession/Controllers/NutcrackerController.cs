@@ -33,3 +33,4 @@ internal class NutcrackerController : IEnemyController<NutcrackerEnemyAI> {
 
     public float InteractRange(NutcrackerEnemyAI _) => 1.5f;
 }
+
