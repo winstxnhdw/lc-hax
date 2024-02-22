@@ -1,4 +1,4 @@
-internal class CoilHeadEnemyController : IEnemyController<SpringManAI> {
+internal class CoilHeadController : IEnemyController<SpringManAI> {
     bool GetStoppingMovement(SpringManAI enemy) => enemy.Reflect().GetInternalField<bool>("stoppingMovement");
 
     public void OnSecondarySkillHold(SpringManAI enemy) => enemy.SetAnimationGoServerRpc();
@@ -9,7 +9,6 @@ internal class CoilHeadEnemyController : IEnemyController<SpringManAI> {
 
     public bool IsAbleToRotate(SpringManAI enemy) => !this.GetStoppingMovement(enemy);
 
-    public float? InteractRange(SpringManAI _) => 1.5f;
-
+    public float InteractRange(SpringManAI _) => 1.5f;
 }
 

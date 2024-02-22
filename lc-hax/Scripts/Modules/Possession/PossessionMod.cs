@@ -35,7 +35,7 @@ internal sealed class PossessionMod : MonoBehaviour {
         { typeof(SandWormAI), new EarthLeviathanController() },
         { typeof(MouthDogAI), new EyelessDogController() },
         { typeof(MaskedPlayerEnemy), new MaskedPlayerController() },
-        { typeof(SpringManAI), new CoilHeadEnemyController() },
+        { typeof(SpringManAI), new CoilHeadController() },
         { typeof(BlobAI), new HygrodereController() },
         { typeof(TestEnemy), new TestEnemyController() },
         { typeof(LassoManAI), new LassoManController() },
@@ -126,11 +126,21 @@ internal sealed class PossessionMod : MonoBehaviour {
         if (this.Possession.Enemy is not EnemyAI enemy) return;
         if (enemy.agent is not NavMeshAgent agent) return;
 
-        this.DoorCooldownRemaining = Mathf.Clamp(this.DoorCooldownRemaining - Time.deltaTime, 0.0f,
-            PossessionMod.DoorInteractionCooldown);
-        this.TeleportCooldownRemaining = Mathf.Clamp(this.TeleportCooldownRemaining - Time.deltaTime, 0.0f,
-            PossessionMod.TeleportDoorCooldown);
+        this.DoorCooldownRemaining = Mathf.Clamp(
+            this.DoorCooldownRemaining - Time.deltaTime,
+            0.0f,
+            PossessionMod.DoorInteractionCooldown
+        );
+
+        this.TeleportCooldownRemaining = Mathf.Clamp(
+            this.TeleportCooldownRemaining - Time.deltaTime,
+            0.0f,
+            PossessionMod.TeleportDoorCooldown
+        );
+
         enemy.ChangeEnemyOwnerServerRpc(localPlayer.actualClientId);
+        this.UpdateCameraPosition(camera, enemy);
+        this.UpdateCameraRotation(camera, enemy);
 
         if (this.FirstUpdate) {
             this.FirstUpdate = false;
@@ -149,36 +159,37 @@ internal sealed class PossessionMod : MonoBehaviour {
                 this.UpdateEnemyPosition(enemy);
                 this.UpdateEnemyRotation();
             }
+
+            return;
         }
 
-        if (controller != null) {
-            if (enemy.isEnemyDead) {
-                controller.OnDeath(enemy);
-                this.Unpossess();
-            }
-
-            controller.Update(enemy);
-            this.InteractWithAmbient(enemy, controller);
-            if (!this.IsAIControlled) {
-                if (controller.IsAbleToMove(enemy)) {
-                    if (controller.SyncAnimationSpeedEnabled(enemy)) {
-                        characterMovement.CharacterSpeed = agent.speed;
-                    }
-
-                    if (controller.IsAbleToRotate(enemy)) {
-                        this.UpdateEnemyRotation();
-                    }
-
-                    this.UpdateEnemyPosition(enemy);
-                    controller.OnMovement(enemy, this.CharacterMovement.IsMoving, this.CharacterMovement.IsSprinting);
-                }
-
-                localPlayer.cursorTip.text = controller.GetPrimarySkillName(enemy);
-            }
+        if (enemy.isEnemyDead) {
+            controller.OnDeath(enemy);
+            this.Unpossess();
         }
 
-        this.UpdateCameraPosition(camera, enemy);
-        this.UpdateCameraRotation(camera, enemy);
+        controller.Update(enemy);
+        this.InteractWithAmbient(enemy, controller);
+        localPlayer.cursorTip.text = controller.GetPrimarySkillName(enemy);
+
+        if (this.IsAIControlled) {
+            return;
+        }
+
+        if (!controller.IsAbleToMove(enemy)) {
+            return;
+        }
+
+        if (controller.SyncAnimationSpeedEnabled(enemy)) {
+            characterMovement.CharacterSpeed = agent.speed;
+        }
+
+        if (controller.IsAbleToRotate(enemy)) {
+            this.UpdateEnemyRotation();
+        }
+
+        this.UpdateEnemyPosition(enemy);
+        controller.OnMovement(enemy, this.CharacterMovement.IsMoving, this.CharacterMovement.IsSprinting);
     }
 
     void UpdateCameraPosition(Camera camera, EnemyAI enemy) =>

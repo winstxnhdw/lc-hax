@@ -26,6 +26,7 @@ internal class HoardingBugController : IEnemyController<HoarderBugAI> {
 
     public void Update(HoarderBugAI enemy) {
         if (enemy.heldItem?.itemGrabbableObject is null) return;
+
         enemy.angryTimer = 0.0f;
         enemy.SetBehaviourState(HoardingBugState.IDLE);
     }
