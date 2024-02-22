@@ -35,7 +35,7 @@ internal sealed class PossessionMod : MonoBehaviour {
         { typeof(SandWormAI), new EarthLeviathanController() },
         { typeof(MouthDogAI), new EyelessDogController() },
         { typeof(MaskedPlayerEnemy), new MaskedPlayerController() },
-        { typeof(SpringManAI), new CoilHeadController() },
+        { typeof(SpringManAI), new CoilHeadEnemyController() },
         { typeof(BlobAI), new HygrodereController() },
         { typeof(TestEnemy), new TestEnemyController() },
         { typeof(LassoManAI), new LassoManController() },
