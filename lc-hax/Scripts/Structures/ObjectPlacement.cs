@@ -8,6 +8,6 @@ readonly record struct ObjectPlacement<T, M>() where T : Transform where M : Mon
 }
 
 readonly record struct ObjectPlacements<T, M> where T : Transform where M : MonoBehaviour {
-    internal readonly required ObjectPlacement<T, M> Placement { get; init; }
-    internal readonly required ObjectPlacement<T, M> PreviousPlacement { get; init; }
+    internal required ObjectPlacement<T, M> Placement { get; init; }
+    internal required ObjectPlacement<T, M> PreviousPlacement { get; init; }
 }
