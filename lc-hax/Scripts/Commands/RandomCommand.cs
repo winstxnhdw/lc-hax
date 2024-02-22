@@ -20,45 +20,45 @@ internal class RandomCommand : ICommand {
 
         Vector3 rotationOffset = new(-90.0f, 0.0f, 0.0f);
 
-        ObjectPlacement<Transform, ShipTeleporter> teleporterPlacement = new(
-            target.transform,
-            inverseTeleporter,
-            new Vector3(0.0f, 1.5f, 0.0f),
-            rotationOffset
-        );
+        ObjectPlacement<Transform, ShipTeleporter> teleporterPlacement = new() {
+            TargetObject = target.transform,
+            GameObject = inverseTeleporter,
+            PositionOffset = new(0.0f, 1.5f, 0.0f),
+            RotationOffset = rotationOffset
+        };
 
-        ObjectPlacement<Transform, ShipTeleporter> previousTeleporterPlacement = new(
-            inverseTeleporter.transform.Copy(),
-            inverseTeleporter,
-            new Vector3(0.0f, 1.6f, 0.0f),
-            rotationOffset
-        );
+        ObjectPlacement<Transform, ShipTeleporter> previousTeleporterPlacement = new() {
+            TargetObject = inverseTeleporter.transform.Copy(),
+            GameObject = inverseTeleporter,
+            PositionOffset = new(0.0f, 1.6f, 0.0f),
+            RotationOffset = rotationOffset
+        };
 
-        return new ObjectPlacements<Transform, ShipTeleporter>(
-            teleporterPlacement,
-            previousTeleporterPlacement
-        );
+        return new ObjectPlacements<Transform, ShipTeleporter>() {
+            Placement = teleporterPlacement,
+            PreviousPlacement = previousTeleporterPlacement
+        };
     }
 
     ObjectPlacements<Transform, PlaceableShipObject>? GetCupboardPlacements(Component target) {
         if (Helper.GetUnlockable(Unlockable.CUPBOARD) is not PlaceableShipObject cupboard) return null;
 
-        ObjectPlacement<Transform, PlaceableShipObject> cupboardPlacement = new(
-            target.transform,
-            cupboard,
-            new Vector3(0.0f, 1.75f, 0.0f),
-            new Vector3(-90.0f, 0.0f, 0.0f)
-        );
+        ObjectPlacement<Transform, PlaceableShipObject> cupboardPlacement = new() {
+            TargetObject = target.transform,
+            GameObject = cupboard,
+            PositionOffset = new(0.0f, 1.75f, 0.0f),
+            RotationOffset = new(-90.0f, 0.0f, 0.0f)
+        };
 
-        ObjectPlacement<Transform, PlaceableShipObject> previousCupboardPlacement = new(
-            cupboard.transform.Copy(),
-            cupboard
-        );
+        ObjectPlacement<Transform, PlaceableShipObject> previousCupboardPlacement = new() {
+            TargetObject = cupboard.transform.Copy(),
+            GameObject = cupboard
+        };
 
-        return new ObjectPlacements<Transform, PlaceableShipObject>(
-            cupboardPlacement,
-            previousCupboardPlacement
-        );
+        return new ObjectPlacements<Transform, PlaceableShipObject>() {
+            Placement = cupboardPlacement,
+            PreviousPlacement = previousCupboardPlacement
+        };
     }
 
     Action TeleportPlayerToRandomLater(PlayerControllerB targetPlayer) => () => {

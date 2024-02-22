@@ -21,7 +21,10 @@ internal class TranslateCommand : ICommand {
         }
 
         if (args[2] is "-d") {
-            State.TranslateDetachedState = new TranslatePipe(source, target);
+            State.TranslateDetachedState = new TranslatePipe() {
+                SourceLanguage = source,
+                TargetLanguage = target
+            };
 
             Helper.CreateToggleableComponent<WaitForGameEndBehaviour>("Translate Detached")?
                   .AddActionAfter(() => State.TranslateDetachedState = null);
