@@ -35,7 +35,7 @@ internal sealed class PossessionMod : MonoBehaviour {
         { typeof(SandWormAI), new EarthLeviathanController() },
         { typeof(MouthDogAI), new EyelessDogController() },
         { typeof(MaskedPlayerEnemy), new MaskedPlayerController() },
-        { typeof(SpringManAI), new CoilHeadEnemyController() },
+        { typeof(SpringManAI), new CoilHeadController() },
         { typeof(BlobAI), new HygrodereController() },
         { typeof(TestEnemy), new TestEnemyController() },
         { typeof(LassoManAI), new LassoManController() },
@@ -170,7 +170,7 @@ internal sealed class PossessionMod : MonoBehaviour {
                     }
 
                     this.UpdateEnemyPosition(enemy);
-                    controller.OnMovement(enemy, characterMovement.IsMoving, CharacterMovement.IsSprinting);
+                    controller.OnMovement(enemy, this.CharacterMovement.IsMoving, this.CharacterMovement.IsSprinting);
                 }
 
                 localPlayer.cursorTip.text = controller.GetPrimarySkillName(enemy);
