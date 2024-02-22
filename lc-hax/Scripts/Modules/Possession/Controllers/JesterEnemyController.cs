@@ -30,10 +30,7 @@ internal class JesterController : IEnemyController<JesterAI> {
 
     public void Update(JesterAI enemy) => this.SetNoPlayerChasetimer(enemy, 100f);
 
-    public void OnUnpossess(JesterAI enemy) {
-        this.SetNoPlayerChasetimer(enemy, 5f);
-        enemy.SetBehaviourState(JesterState.CLOSED);
-    }
+    public void OnUnpossess(JesterAI enemy) => this.SetNoPlayerChasetimer(enemy, 5f);
 
     void SetNoPlayerChasetimer(JesterAI enemy, float value) => enemy.Reflect().SetInternalField("noPlayersToChaseTimer", value);
 

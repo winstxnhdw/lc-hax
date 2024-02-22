@@ -59,6 +59,7 @@ internal class HoardingBugController : IEnemyController<HoarderBugAI> {
         if (enemy.angryTimer > 0.0f) {
             enemy.angryTimer = 0.0f;
             enemy.angryAtPlayer = null;
+            enemy.SetBehaviourState(HoardingBugState.IDLE);
         }
 
         if (enemy.heldItem is null && enemy.FindNearbyItem() is GrabbableObject grabbable) {
