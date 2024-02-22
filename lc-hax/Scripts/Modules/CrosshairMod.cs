@@ -50,8 +50,15 @@ internal class CrosshairMod : MonoBehaviour {
     }
 
     void RenderCrosshair() {
-        Size verticalSize = new(CrosshairMod.Thickness, CrosshairMod.Length);
-        Size horizontalSize = new(CrosshairMod.Length, CrosshairMod.Thickness);
+        Size verticalSize = new() {
+            Width = CrosshairMod.Thickness,
+            Height = CrosshairMod.Length
+        };
+
+        Size horizontalSize = new() {
+            Width = CrosshairMod.Length,
+            Height = CrosshairMod.Thickness
+        };
 
         Helper.DrawBox(this.TopCrosshairPosition, verticalSize);
         Helper.DrawBox(this.BottomCrosshairPosition, verticalSize);
