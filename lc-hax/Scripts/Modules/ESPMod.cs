@@ -6,7 +6,7 @@ using Hax;
 
 internal class ESPMod : MonoBehaviour {
     RendererPair<PlayerControllerB, SkinnedMeshRenderer>[] PlayerRenderers { get; set; } = [];
-    Renderer[] LandmineRenderers { get; set; } = [];
+    RendererPair<Landmine, Renderer>[] LandmineRenderers { get; set; } = [];
     Renderer[] TurretRenderers { get; set; } = [];
     Renderer[] EntranceRenderers { get; set; } = [];
     Renderer[] StoryLog { get; set; } = [];
@@ -73,21 +73,26 @@ internal class ESPMod : MonoBehaviour {
     void RenderWhenMapLoads(Camera camera) {
         if (!this.IsMapLoaded) return;
 
-        this.LandmineRenderers.Where(x => x.enabled).ForEach(renderer => this.RenderBounds(
-            camera,
-            renderer.bounds,
-            Helper.ExtraColors.OrangeRed,
-            this.RenderLabel("Landmine")
-        ));
+        this.LandmineRenderers.ForEach(rendererPair => {
+            if (rendererPair.GameObject is not Landmine mine) return;
+            if (mine.hasExploded) return;
 
-        this.TurretRenderers.Where(x => x.enabled).ForEach(renderer => this.RenderBounds(
+            this.RenderBounds(
+                camera,
+                rendererPair.Renderer.bounds,
+                Helper.ExtraColors.OrangeRed,
+                this.RenderLabel("Landmine")
+            );
+        });
+
+        this.TurretRenderers.ForEach(renderer => this.RenderBounds(
             camera,
             renderer.bounds,
             Helper.ExtraColors.OrangeRed,
             this.RenderLabel("Turret")
         ));
 
-        this.EntranceRenderers.Where(x => x.enabled).ForEach(renderer => this.RenderBounds(
+        this.EntranceRenderers.ForEach(renderer => this.RenderBounds(
             camera,
             renderer.bounds,
             Helper.ExtraColors.LightGoldenrodYellow,
@@ -167,7 +172,12 @@ internal class ESPMod : MonoBehaviour {
             }
         ).ToArray();
 
-        this.LandmineRenderers = this.GetRenderers<Landmine>();
+        this.LandmineRenderers = Helper.FindObjects<Landmine>().Select(mine =>
+            new RendererPair<Landmine, Renderer>() {
+                GameObject = mine,
+                Renderer = mine.GetComponent<Renderer>()
+            }
+            ).ToArray();
         this.TurretRenderers = this.GetRenderers<Turret>();
         this.EntranceRenderers = this.GetRenderers<EntranceTeleport>();
     }
