@@ -3,16 +3,15 @@ using Hax;
 using System.Collections;
 
 internal sealed class AntiKickMod : MonoBehaviour {
-    bool HasGameStarted { get; set; } = false;
-    bool HasAnnouncedGameJoin { get; set; } = false;
-
     void OnEnable() {
         InputListener.OnBackslashPress += this.ToggleAntiKick;
+        GameListener.OnGameStart += this.OnGameStart;
         GameListener.OnGameEnd += this.OnGameEnd;
     }
 
     void OnDisable() {
         InputListener.OnBackslashPress -= this.ToggleAntiKick;
+        GameListener.OnGameStart -= this.OnGameStart;
         GameListener.OnGameEnd -= this.OnGameEnd;
     }
 
@@ -32,12 +31,9 @@ internal sealed class AntiKickMod : MonoBehaviour {
         Helper.GameNetworkManager?.JoinLobby(connectedLobby.Lobby, connectedLobby.SteamId);
     }
 
-    void OnGameEnd() {
-        if (!State.DisconnectedVoluntarily && Setting.EnableAntiKick) {
-            _ = this.StartCoroutine(this.RejoinLobby());
-        }
-
-        this.HasAnnouncedGameJoin = false;
+    IEnumerator PrintInvisibleWarning() {
+        yield return new WaitForSeconds(0.5f);
+        Chat.Print("You are invisible! Do /invis to disable!");
     }
 
     bool FindJoinMessageInHistory() =>
@@ -45,17 +41,17 @@ internal sealed class AntiKickMod : MonoBehaviour {
             message.Contains($"{Helper.LocalPlayer?.playerUsername} joined the ship.")
         ) is not null;
 
-    void Update() {
-        if (!Setting.EnableAntiKick) return;
-        if (this.HasAnnouncedGameJoin) return;
-        if (!this.FindJoinMessageInHistory()) return;
+    void OnGameEnd() {
+        if (!State.DisconnectedVoluntarily && Setting.EnableAntiKick) {
+            _ = this.StartCoroutine(this.RejoinLobby());
+        }
+    }
 
-        this.HasAnnouncedGameJoin = true;
+    void OnGameStart() {
+        if (!Setting.EnableAntiKick || !Setting.EnableInvisible) return;
 
-        Helper.ShortDelay(() => {
-            Chat.Clear();
-            Chat.Print("You are invisible! Do /invis to disable!");
-        });
+        Chat.Clear();
+        _ = this.StartCoroutine(this.PrintInvisibleWarning());
     }
 
     void ToggleAntiKick() {
