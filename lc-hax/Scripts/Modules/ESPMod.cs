@@ -73,21 +73,21 @@ internal class ESPMod : MonoBehaviour {
     void RenderWhenMapLoads(Camera camera) {
         if (!this.IsMapLoaded) return;
 
-        this.LandmineRenderers.ForEach(renderer => this.RenderBounds(
+        this.LandmineRenderers.Where(x => x.enabled).ForEach(renderer => this.RenderBounds(
             camera,
             renderer.bounds,
             Helper.ExtraColors.OrangeRed,
             this.RenderLabel("Landmine")
         ));
 
-        this.TurretRenderers.ForEach(renderer => this.RenderBounds(
+        this.TurretRenderers.Where(x => x.enabled).ForEach(renderer => this.RenderBounds(
             camera,
             renderer.bounds,
             Helper.ExtraColors.OrangeRed,
             this.RenderLabel("Turret")
         ));
 
-        this.EntranceRenderers.ForEach(renderer => this.RenderBounds(
+        this.EntranceRenderers.Where(x => x.enabled).ForEach(renderer => this.RenderBounds(
             camera,
             renderer.bounds,
             Helper.ExtraColors.LightGoldenrodYellow,
