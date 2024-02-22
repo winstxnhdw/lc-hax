@@ -1,4 +1,4 @@
-readonly struct TranslatePipe(string sourceLanguage, string targetLanguage) {
-    internal string SourceLanguage { get; } = sourceLanguage;
-    internal string TargetLanguage { get; } = targetLanguage;
+readonly record struct TranslatePipe {
+    internal required string SourceLanguage { get; init; }
+    internal required string TargetLanguage { get; init; }
 }

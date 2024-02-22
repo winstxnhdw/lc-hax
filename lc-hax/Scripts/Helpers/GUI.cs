@@ -29,16 +29,19 @@ internal static partial class Helper {
         float topY = centrePosition.y - halfHeight;
         float bottomY = centrePosition.y + halfHeight;
 
+        Size horizontalSize = size with { Height = lineWidth };
+        Size verticalSize = size with { Width = lineWidth };
+
         Vector2 topLeft = new(leftX, topY);
-        Helper.DrawBox(topLeft, new Size(size.Width, lineWidth), colour);
+        Helper.DrawBox(topLeft, horizontalSize, colour);
 
         Vector2 rightBorderTopLeft = new(rightX - lineWidth, topY);
-        Helper.DrawBox(rightBorderTopLeft, new Size(lineWidth, size.Height), colour);
+        Helper.DrawBox(rightBorderTopLeft, verticalSize, colour);
 
         Vector2 bottomBorderTopLeft = new(leftX, bottomY - lineWidth);
-        Helper.DrawBox(bottomBorderTopLeft, new Size(size.Width, lineWidth), colour);
+        Helper.DrawBox(bottomBorderTopLeft, horizontalSize, colour);
 
-        Helper.DrawBox(topLeft, new Size(lineWidth, size.Height), colour);
+        Helper.DrawBox(topLeft, verticalSize, colour);
     }
 
     internal static void DrawOutlineBox(Vector2 centrePosition, Size size, float lineWidth) =>
