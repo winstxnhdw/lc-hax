@@ -1,0 +1,55 @@
+name: Bug Report
+description: File a bug report
+title: "[Bug]: "
+labels: ["bug", "triage"]
+assignees: winstxnhdw
+body:
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: What happened?
+      description: Also tell us, what did you expect to happen?
+    validations:
+      required: true
+
+  - type: input
+    id: commit-hash
+    attributes:
+      label: Current Commit Hash
+      description: Enter the current commit hash. You can find this by running `git rev-parse HEAD` in your terminal.
+      placeholder: a1b2c3d4
+    validations:
+      required: true
+
+  - type: checkboxes
+    id: injector-check
+    attributes:
+      label: Injector
+      description: Please specify the injector you are using.
+      options:
+        - label: SharpMonoInjectorCore
+        - label: Others
+
+  - type: input
+    id: other-injector
+    attributes:
+      label: If you selected "Others" above, please specify the injector you are using.
+      placeholder: BepinEx, etc
+    validations:
+      required: false
+
+  - type: textarea
+    id: logs
+    attributes:
+      label: Log output
+      description: Log files (if any) can be found in `steamapps\common\Lethal Company`
+
+  - type: checkboxes
+    id: duplicate-check
+    attributes:
+      label: Acknowledgement
+      options:
+        - label: I have confirmed that my anti-virus is not blocking any of the relevant programs
+          required: true
+        - label: I have done my due diligence to check for similar issues
+          required: true

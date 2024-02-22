@@ -1,0 +1,163 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+
+    <OutDir>../bin</OutDir>
+    <Optimize>true</Optimize>
+    <Nullable>enable</Nullable>
+    <LangVersion>preview</LangVersion>
+    <RuntimeIdentifier>win-x64</RuntimeIdentifier>
+    <TargetFramework>netstandard2.1</TargetFramework>
+    <ReferencePath>./References</ReferencePath>
+    <NuGetPath>./References/NuGet</NuGetPath>
+    <RootNamespace>lc-hax</RootNamespace>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <RestorePackagesWithLockFile>true</RestorePackagesWithLockFile>
+
+  </PropertyGroup>
+
+  <ItemGroup>
+
+    <Reference Include="Assembly-CSharp">
+      <HintPath>$(ReferencePath)/Assembly-CSharp.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+
+    <Reference Include="Assembly-CSharp-firstpass">
+      <HintPath>$(ReferencePath)/Assembly-CSharp-firstpass.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+
+    <Reference Include="UnityEngine">
+      <HintPath>$(ReferencePath)/UnityEngine.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+
+    <Reference Include="UnityEngine.CoreModule">
+      <HintPath>$(ReferencePath)/UnityEngine.CoreModule.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+
+    <Reference Include="UnityEngine.PhysicsModule">
+      <HintPath>$(ReferencePath)/UnityEngine.PhysicsModule.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+
+    <Reference Include="UnityEngine.UI">
+      <HintPath>$(ReferencePath)/UnityEngine.UI.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+
+    <Reference Include="UnityEngine.UIModule">
+      <HintPath>$(ReferencePath)/UnityEngine.UIModule.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+
+    <Reference Include="UnityEngine.IMGUIModule">
+      <HintPath>$(ReferencePath)/UnityEngine.IMGUIModule.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+
+    <Reference Include="UnityEngine.ParticleSystemModule">
+      <HintPath>$(ReferencePath)/UnityEngine.ParticleSystemModule.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+
+    <Reference Include="UnityEngine.AIModule">
+      <HintPath>$(ReferencePath)/UnityEngine.AIModule.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+
+    <Reference Include="UnityEngine.TextRenderingModule">
+      <HintPath>$(ReferencePath)/UnityEngine.TextRenderingModule.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+
+    <Reference Include="UnityEngine.AnimationModule">
+      <HintPath>$(ReferencePath)/UnityEngine.AnimationModule.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+
+    <Reference Include="UnityEngine.UnityWebRequestModule">
+      <HintPath>$(ReferencePath)/UnityEngine.UnityWebRequestModule.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+
+    <Reference Include="UnityEngine.AudioModule">
+      <HintPath>$(ReferencePath)/UnityEngine.AudioModule.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+
+    <Reference Include="Unity.InputSystem">
+      <HintPath>$(ReferencePath)/Unity.InputSystem.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+
+    <Reference Include="Unity.TextMeshPro">
+      <HintPath>$(ReferencePath)/Unity.TextMeshPro.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+
+    <Reference Include="Unity.Rendering.Volume">
+      <HintPath>$(ReferencePath)/Unity.RenderPipelines.Core.Runtime.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+
+    <Reference Include="Unity.Rendering.HighDefinition">
+      <HintPath>$(ReferencePath)/Unity.RenderPipelines.HighDefinition.Runtime.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+
+    <Reference Include="Unity.Netcode.Runtime">
+      <HintPath>$(ReferencePath)/Unity.Netcode.Runtime.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+
+    <Reference Include="Facepunch.Steamworks.Win64">
+      <HintPath>$(ReferencePath)/Facepunch.Steamworks.Win64.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+
+    <Reference Include="DissonanceVoip">
+      <HintPath>$(ReferencePath)/DissonanceVoip.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+
+    <PackageReference Include="Lib.Harmony" Version="2.2.2">
+      <NoWarn>NU1701</NoWarn>
+    </PackageReference>
+
+    <PackageReference Include="Nullable.Extended.Analyzer" Version="1.15.6169">
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
+
+    <ProjectReference Include="..\analysers\analysers.csproj" />
+
+    <PackageReference Include="RequireNamedArgs" Version="0.0.7" />
+
+    <PackageReference Include="Quickenshtein" Version="1.5.1" />
+
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+
+    <EmbeddedResource Include="$(NuGetPath)/lib.harmony/2.2.2/lib/net48/0Harmony.dll" />
+
+    <EmbeddedResource Include="$(NuGetPath)/Quickenshtein/1.5.1/lib/netstandard2.0/Quickenshtein.dll" />
+
+    <EmbeddedResource Include="$(NuGetPath)/newtonsoft.json/13.0.3/lib/netstandard2.0/Newtonsoft.Json.dll" />
+
+    <EmbeddedResource Include="$(NuGetPath)/system.memory/4.5.5/lib/netstandard2.0/System.Memory.dll" />
+
+    <EmbeddedResource Include="$(NuGetPath)/system.buffers/4.5.1/lib/netstandard2.0/System.Buffers.dll" />
+
+    <EmbeddedResource Include="$(NuGetPath)/system.runtime.compilerservices.unsafe/6.0.0/lib/netstandard2.0/System.Runtime.CompilerServices.Unsafe.dll" />
+
+  </ItemGroup>
+
+  <Target Name="CleanBeforeRestore" BeforeTargets="Restore">
+    <RemoveDir Directories="$(BaseIntermediateOutputPath)" />
+    <RemoveDir Directories="$(NuGetPath)" />
+    <RemoveDir Directories="$(OutDir)" />
+  </Target>
+
+</Project>
