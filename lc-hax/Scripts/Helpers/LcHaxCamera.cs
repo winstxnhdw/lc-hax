@@ -15,11 +15,18 @@ internal static partial class Helper {
     static Camera? CustomCamera;
 
     internal static void DestroyCustomCam() {
+        if (Helper.LocalPlayer is not PlayerControllerB player) {
+            Object.DestroyImmediate(CustomCameraObj);
+            CustomCameraObj = null;
+            CustomCamera = null;
+            return;
+        }
 
-        if (Helper.LocalPlayer is PlayerControllerB player && !player.IsDead() && player.gameplayCamera is Camera camData) {
+        if(Helper.StartOfRound is not StartOfRound { spectateCamera: Camera spectate }) return;
+        if (!player.IsDead() && player.gameplayCamera is Camera camData) {
             camData.enabled = true;
         }
-        else if (Helper.StartOfRound is StartOfRound { spectateCamera: Camera spectate }) {
+        else {
             spectate.enabled = true;
             if (CustomCameraObj != null) spectate.transform.position = CustomCameraObj.transform.position;
         }
@@ -30,6 +37,7 @@ internal static partial class Helper {
 
         CustomCameraObj = null;
         CustomCamera = null;
+
     }
 
     internal static Camera? GetCustomCamera() {
