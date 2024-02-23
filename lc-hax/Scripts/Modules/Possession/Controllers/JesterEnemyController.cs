@@ -42,7 +42,7 @@ internal class JesterController : IEnemyController<JesterAI> {
     public void OnOutsideStatusChange(JesterAI enemy) => enemy.StopSearch(enemy.roamMap, true);
 
 
-    public void OnPlayerCollision(JesterAI enemy, PlayerControllerB player) =>
+    public void OnCollideWithPlayer(JesterAI enemy, PlayerControllerB player) =>
         enemy.OnCollideWithPlayer(player.playerCollider);
 }
 

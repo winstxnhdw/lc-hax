@@ -42,7 +42,7 @@ internal class ForestGiantController : IEnemyController<ForestGiantAI> {
         enemy.StopSearch(enemy.searchForPlayers, true);
     }
 
-    public void OnPlayerCollision(ForestGiantAI enemy, PlayerControllerB player) =>
+    public void OnCollideWithPlayer(ForestGiantAI enemy, PlayerControllerB player) =>
         enemy.OnCollideWithPlayer(player.playerCollider);
 
 
