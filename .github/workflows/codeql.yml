@@ -43,7 +43,7 @@ jobs:
         cache-dependency-path: lc-hax
 
     - name: Build
-      run: dotnet build lc-hax
+      run: dotnet build lc-hax /warnaserror
 
     - name: Perform CodeQL Analysis
       uses: github/codeql-action/analyze@v3
