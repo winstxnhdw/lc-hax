@@ -8,7 +8,8 @@ enum NutcrackerState {
 internal class NutcrackerController : IEnemyController<NutcrackerEnemyAI> {
     bool InSentryMode { get; set; } = false;
 
-    public void Update(NutcrackerEnemyAI enemy) {
+    public void Update(NutcrackerEnemyAI enemy, bool isAiControlled) {
+        if (isAiControlled) return;
         if (this.InSentryMode) return;
         enemy.SwitchToBehaviourServerRpc(unchecked((int)NutcrackerState.WALKING)); // See #415
     }

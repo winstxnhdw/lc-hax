@@ -168,7 +168,7 @@ internal sealed class PossessionMod : MonoBehaviour {
             this.Unpossess();
         }
 
-        controller.Update(enemy);
+        controller.Update(enemy, this.IsAIControlled);
         this.InteractWithAmbient(enemy, controller);
         localPlayer.cursorTip.text = controller.GetPrimarySkillName(enemy);
 

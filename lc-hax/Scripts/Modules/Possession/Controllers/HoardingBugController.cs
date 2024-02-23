@@ -24,7 +24,8 @@ internal class HoardingBugController : IEnemyController<HoarderBugAI> {
         }
     }
 
-    public void Update(HoarderBugAI enemy) {
+    public void Update(HoarderBugAI enemy, bool isAiControlled) {
+        if (isAiControlled) return;
         if (enemy.heldItem?.itemGrabbableObject is null) return;
 
         enemy.angryTimer = 0.0f;
