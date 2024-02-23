@@ -6,7 +6,7 @@ on:
       - .github/workflows/main.yml
       - .editorconfig
       - lc-hax/**
-  pull_request_target:
+  pull_request:
     paths:
       - .github/workflows/main.yml
       - .editorconfig
