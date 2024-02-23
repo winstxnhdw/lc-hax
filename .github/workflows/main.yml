@@ -1,0 +1,34 @@
+name: Build
+
+on:
+  push:
+    paths:
+      - .github/workflows/main.yml
+      - .editorconfig
+      - lc-hax/**
+  pull_request_target:
+    paths:
+      - .github/workflows/main.yml
+      - .editorconfig
+      - lc-hax/**
+
+env:
+  NUGET_PACKAGES: ${{ github.workspace }}/lc-hax/References/NuGet
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: 8.0.x
+        cache: true
+        cache-dependency-path: lc-hax
+
+    - name: Build
+      run: dotnet build lc-hax /warnaserror

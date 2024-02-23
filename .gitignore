@@ -1,0 +1,8 @@
+bin/
+obj/
+NuGet/
+.vs/
+.vscode/
+.mono/
+.cr/
+*.sln
