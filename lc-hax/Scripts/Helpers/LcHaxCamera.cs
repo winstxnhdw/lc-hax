@@ -22,7 +22,7 @@ internal static partial class Helper {
             return;
         }
 
-        if (Helper.StartOfRound is not StartOfRound { spectateCamera: Camera spectate }) return;
+        if(Helper.StartOfRound is not StartOfRound { spectateCamera: Camera spectate }) return;
         if (!player.IsDead() && player.gameplayCamera is Camera camData) {
             camData.enabled = true;
         }
