@@ -5,7 +5,6 @@ using UnityEngine.Rendering.HighDefinition;
 namespace Hax;
 
 internal static partial class Helper {
-
     internal static Camera? GameCamera =>
         Helper.LocalPlayer?.gameplayCamera is Camera { enabled: true } gameplayCamera
             ? gameplayCamera
@@ -29,12 +28,11 @@ internal static partial class Helper {
         }
     }
 
-    internal static Camera GetCustomCamera() {
+    internal static Camera? GetCustomCamera() {
         if (Helper.LocalPlayer?.gameplayCamera is not Camera camData) return null;
         if (CustomCamera is not null) return CustomCamera;
         CustomCameraObj ??= new GameObject("lc-hax Camera");
-        Camera? newCam = CustomCameraObj.AddComponent<Camera>();
-        if (newCam is null) return null;
+        Camera newCam = CustomCameraObj.AddComponent<Camera>();
         newCam.transform.position = camData.transform.position;
         newCam.transform.rotation = camData.transform.rotation;
 
