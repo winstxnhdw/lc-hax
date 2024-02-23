@@ -5,9 +5,9 @@ internal class SandSpiderController : IEnemyController<SandSpiderAI> {
     public void Update(SandSpiderAI enemy, bool isAIControlled) {
         enemy.meshContainerPosition = enemy.transform.position;
         enemy.meshContainerTarget = enemy.transform.position;
-        enemy.eye.LookAt(enemy.transform.position - enemy.transform.forward * 2 + enemy.transform.right * 0.1f);
+        enemy.eye.LookAt(enemy.transform.position - (enemy.transform.forward * 2) + (enemy.transform.right * 0.1f));
         enemy.SyncMeshContainerPositionToClients();
-        if(!isAIControlled) enemy.homeNode = enemy.ChooseClosestNodeToPosition(enemy.transform.position, false, 2);
+        if (!isAIControlled) enemy.homeNode = enemy.ChooseClosestNodeToPosition(enemy.transform.position, false, 2);
     }
 
     public bool SyncAnimationSpeedEnabled(SandSpiderAI enemy) => false;
@@ -38,9 +38,7 @@ internal class SandSpiderController : IEnemyController<SandSpiderAI> {
         enemy.SpawnWebTrapServerRpc(floorPosition, raycastHit.point);
     }
 
-    public void OnOutsideStatusChange(SandSpiderAI enemy) {
-        enemy.StopSearch(enemy.patrolHomeBase, true);
-    }
+    public void OnOutsideStatusChange(SandSpiderAI enemy) => enemy.StopSearch(enemy.patrolHomeBase, true);
 
 
 }
