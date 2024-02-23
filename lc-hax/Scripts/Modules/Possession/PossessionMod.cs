@@ -5,6 +5,7 @@ using Unity.Netcode;
 using UnityEngine.AI;
 using GameNetcodeStuff;
 using Hax;
+using DunGen;
 
 internal sealed class PossessionMod : MonoBehaviour {
     const float TeleportDoorCooldown = 2.5f;
@@ -316,11 +317,11 @@ internal sealed class PossessionMod : MonoBehaviour {
         characterMovement.enabled = !enableAI;
     }
 
-    void HandleEntranceDoors(EnemyAI enemy, RaycastHit hit) {
+    void HandleEntranceDoors(EnemyAI enemy, RaycastHit hit, IController controller) {
         if (this.TeleportCooldownRemaining > 0.0f) return;
         if (!hit.collider.gameObject.TryGetComponent(out EntranceTeleport entrance)) return;
 
-        this.InteractWithTeleport(enemy, entrance);
+        this.InteractWithTeleport(enemy, entrance, controller);
         this.TeleportCooldownRemaining = PossessionMod.TeleportDoorCooldown;
     }
 
@@ -343,7 +344,7 @@ internal sealed class PossessionMod : MonoBehaviour {
         }
 
         if (controller.CanUseEntranceDoors(enemy)) {
-            this.HandleEntranceDoors(enemy, hit);
+            this.HandleEntranceDoors(enemy, hit, controller);
             return;
         }
     }
@@ -362,10 +363,12 @@ internal sealed class PossessionMod : MonoBehaviour {
             teleport.entranceId == entrance.entranceId && teleport.isEntranceToBuilding != entrance.isEntranceToBuilding
         )?.entrancePoint;
 
-    void InteractWithTeleport(EnemyAI enemy, EntranceTeleport teleport) {
+    void InteractWithTeleport(EnemyAI enemy, EntranceTeleport teleport, IController controller) {
         if (this.CharacterMovement is not CharacterMovement characterMovement) return;
         if (this.GetExitPointFromDoor(teleport) is not Transform exitPoint) return;
         characterMovement.SetPosition(exitPoint.position);
+        _ = enemy.SetOutsideStatus(!teleport.isEntranceToBuilding);
+        controller.OnOutsideStatusChange(enemy);
     }
 
     void UsePrimarySkill() {

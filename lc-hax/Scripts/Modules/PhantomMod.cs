@@ -131,6 +131,9 @@ internal sealed class PhantomMod : MonoBehaviour {
         player.playerBodyAnimator.enabled = !Setting.EnablePhantom;
         player.thisController.enabled = !Setting.EnablePhantom;
         player.isFreeCamera = Setting.EnablePhantom;
+        customCam.transform.position = camera.transform.position;
+        customCam.transform.rotation = camera.transform.rotation;
+
         if (Setting.EnablePhantom) {
             this.PhantomEnabled(customCam);
         }
