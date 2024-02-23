@@ -78,6 +78,7 @@ internal sealed class PhantomMod : MonoBehaviour {
     }
 
     void PhantomEnabled(Camera camera) {
+        if(Helper.GameCamera is not Camera dataCamera) return;
         if (!camera.TryGetComponent(out KeyboardMovement keyboard)) {
             keyboard = camera.gameObject.AddComponent<KeyboardMovement>();
         }
@@ -89,17 +90,24 @@ internal sealed class PhantomMod : MonoBehaviour {
         keyboard.enabled = true;
         mouse.enabled = true;
         camera.transform.SetParent(null, true);
+        camera.transform.position = dataCamera.transform.position;
+        camera.transform.rotation = dataCamera.transform.rotation;
+
     }
 
     void PhantomDisabled(PlayerControllerB player, Camera camera) {
         if (player.cameraContainerTransform is null) return;
         if (player.gameplayCamera is not Camera gameplayCamera) return;
+        if(Helper.StartOfRound is not StartOfRound round) return;
         if (this.IsShiftHeld) {
             player.TeleportPlayer(camera.transform.position);
         }
 
         if (!player.IsDead()) {
             gameplayCamera.enabled = true;
+        }
+        else {
+            round.spectateCamera.enabled = true;
         }
 
         Helper.DestroyCustomCam();
@@ -120,8 +128,6 @@ internal sealed class PhantomMod : MonoBehaviour {
         player.playerBodyAnimator.enabled = !Setting.EnablePhantom;
         player.thisController.enabled = !Setting.EnablePhantom;
         player.isFreeCamera = Setting.EnablePhantom;
-        customCam.transform.position = camera.transform.position;
-        customCam.transform.rotation = camera.transform.rotation;
 
         if (Setting.EnablePhantom) {
             this.PhantomEnabled(customCam);
