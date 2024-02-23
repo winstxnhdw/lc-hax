@@ -2,7 +2,7 @@ using GameNetcodeStuff;
 using Hax;
 using Unity.Netcode;
 
-public enum HoardingBugState {
+enum HoardingBugState {
     IDLE,
     SEARCHING_FOR_ITEMS,
     RETURNING_TO_NEST,
@@ -10,6 +10,7 @@ public enum HoardingBugState {
     WATCHING_PLAYER,
     AT_NEST
 }
+
 internal class HoardingBugController : IEnemyController<HoarderBugAI> {
     void UseHeldItem(HoarderBugAI enemy) {
         if (enemy.heldItem is not { itemGrabbableObject: GrabbableObject grabbable }) return;
@@ -24,6 +25,14 @@ internal class HoardingBugController : IEnemyController<HoarderBugAI> {
         }
     }
 
+    public void Update(HoarderBugAI enemy, bool isAIControlled) {
+        if (isAIControlled) return;
+        if (enemy.heldItem?.itemGrabbableObject is null) return;
+
+        enemy.angryTimer = 0.0f;
+        enemy.SetBehaviourState(HoardingBugState.IDLE);
+    }
+
     void GrabItem(HoarderBugAI enemy, GrabbableObject item) {
         if (!item.TryGetComponent(out NetworkObject netItem)) return;
 
@@ -33,11 +42,6 @@ internal class HoardingBugController : IEnemyController<HoarderBugAI> {
 
         enemy.SwitchToBehaviourServerRpc(1);
         enemy.GrabItemServerRpc(netItem);
-    }
-
-    public void OnMovement(HoarderBugAI enemy, bool isMoving, bool isSprinting) {
-        if (enemy.heldItem?.itemGrabbableObject is null) return;
-        enemy.angryTimer = 0.0f;
     }
 
     public void OnDeath(HoarderBugAI enemy) {
@@ -54,6 +58,7 @@ internal class HoardingBugController : IEnemyController<HoarderBugAI> {
         if (enemy.angryTimer > 0.0f) {
             enemy.angryTimer = 0.0f;
             enemy.angryAtPlayer = null;
+            enemy.SetBehaviourState(HoardingBugState.IDLE);
         }
 
         if (enemy.heldItem is null && enemy.FindNearbyItem() is GrabbableObject grabbable) {
