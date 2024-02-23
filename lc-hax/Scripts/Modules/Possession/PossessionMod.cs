@@ -165,6 +165,7 @@ internal sealed class PossessionMod : MonoBehaviour {
                 this.Unpossess();
             }
 
+            this.InteractWithAmbient(enemy, null);
             return;
         }
 
@@ -325,6 +326,7 @@ internal sealed class PossessionMod : MonoBehaviour {
     }
 
     void HandleEnemyPlayerInteraction(EnemyAI enemy, RaycastHit hit, IController controller) {
+        if (controller == null) return;
         if (!hit.collider.gameObject.TryGetComponent(out PlayerControllerB player)) return;
         controller.OnCollideWithPlayer(enemy, player);
     }
