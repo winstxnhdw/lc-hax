@@ -1,3 +1,5 @@
+using GameNetcodeStuff;
+
 internal interface IController {
     const float DefaultSprintMultiplier = 2.8f;
 
@@ -38,6 +40,8 @@ internal interface IController {
     bool SyncAnimationSpeedEnabled(EnemyAI enemy);
 
     void OnOutsideStatusChange(EnemyAI enemy);
+
+    void OnPlayerCollision(EnemyAI enemy, PlayerControllerB player);
 }
 
 internal interface IEnemyController<T> : IController where T : EnemyAI {
@@ -77,6 +81,8 @@ internal interface IEnemyController<T> : IController where T : EnemyAI {
 
     void OnOutsideStatusChange(T enemy) { }
 
+    void OnPlayerCollision(T enemy, PlayerControllerB player) { }
+
     void IController.OnPossess(EnemyAI enemy) => this.OnPossess((T)enemy);
 
     void IController.OnUnpossess(EnemyAI enemy) => this.OnUnpossess((T)enemy);
@@ -112,4 +118,6 @@ internal interface IEnemyController<T> : IController where T : EnemyAI {
     bool IController.SyncAnimationSpeedEnabled(EnemyAI enemy) => this.SyncAnimationSpeedEnabled((T)enemy);
 
     void IController.OnOutsideStatusChange(EnemyAI enemy) => this.OnOutsideStatusChange((T)enemy);
+
+    void IController.OnPlayerCollision(EnemyAI enemy, PlayerControllerB player) { }
 }
