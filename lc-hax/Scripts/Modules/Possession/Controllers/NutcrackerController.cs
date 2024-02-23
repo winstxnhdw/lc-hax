@@ -1,5 +1,4 @@
 using Hax;
-using System;
 
 enum NutcrackerState {
     WALKING,
@@ -7,12 +6,11 @@ enum NutcrackerState {
 }
 
 internal class NutcrackerController : IEnemyController<NutcrackerEnemyAI> {
-
-    bool InSentryMode = false;
+    bool InSentryMode { get; set; } = false;
 
     public void Update(NutcrackerEnemyAI enemy) {
         if (this.InSentryMode) return;
-        enemy.SwitchToBehaviourServerRpc(Convert.ToInt32(NutcrackerState.WALKING));
+        enemy.SwitchToBehaviourServerRpc(unchecked((int)NutcrackerState.WALKING)); // See #415
     }
 
     public bool IsAbleToRotate(NutcrackerEnemyAI enemy) => !enemy.IsBehaviourState(NutcrackerState.SENTRY);
@@ -30,7 +28,6 @@ internal class NutcrackerController : IEnemyController<NutcrackerEnemyAI> {
         enemy.SetBehaviourState(NutcrackerState.SENTRY);
         this.InSentryMode = true;
     }
-
 
     public void ReleaseSecondarySkill(NutcrackerEnemyAI enemy) {
         enemy.SetBehaviourState(NutcrackerState.WALKING);
