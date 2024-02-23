@@ -98,25 +98,14 @@ internal sealed class PhantomMod : MonoBehaviour {
             player.TeleportPlayer(camera.transform.position);
         }
 
-        Helper.DestroyCustomCam();
         if (!player.IsDead()) {
             gameplayCamera.enabled = true;
         }
 
+        Helper.DestroyCustomCam();
+
         if (PossessionMod.Instance is PossessionMod { IsPossessed: true } possession) {
             possession.Unpossess();
-        }
-
-        gameplayCamera.transform.SetParent(cameraParent, false);
-        gameplayCamera.transform.localPosition = Vector3.zero;
-        gameplayCamera.transform.localRotation = Quaternion.identity;
-
-        if (gameplayCamera.TryGetComponent(out KeyboardMovement gameplayKeyboard)) {
-            gameplayKeyboard.enabled = false;
-        }
-
-        if (gameplayCamera.TryGetComponent(out MousePan gameplayMouse)) {
-            gameplayMouse.enabled = false;
         }
     }
 
