@@ -1,3 +1,4 @@
+using GameNetcodeStuff;
 using Hax;
 
 enum JesterState {
@@ -8,6 +9,8 @@ enum JesterState {
 
 internal class JesterController : IEnemyController<JesterAI> {
     void SetNoPlayerChasetimer(JesterAI enemy, float value) => enemy.Reflect().SetInternalField("noPlayersToChaseTimer", value);
+    bool GetinKillAnimation(JesterAI enemy) => enemy.Reflect().GetInternalField<bool>("inKillAnimation");
+    void SetinKillAnimation(JesterAI enemy, bool value) => enemy.Reflect().SetInternalField("inKillAnimation", value);
 
     public void UsePrimarySkill(JesterAI enemy) {
         enemy.SetBehaviourState(JesterState.CLOSED);
@@ -28,7 +31,7 @@ internal class JesterController : IEnemyController<JesterAI> {
 
     public void OnUnpossess(JesterAI enemy) => this.SetNoPlayerChasetimer(enemy, 5.0f);
 
-    public bool IsAbleToMove(JesterAI enemy) => !enemy.IsBehaviourState(JesterState.CRANKING);
+    public bool IsAbleToMove(JesterAI enemy) => !enemy.IsBehaviourState(JesterState.CRANKING) || !this.GetinKillAnimation(enemy);
 
     public bool IsAbleToRotate(JesterAI enemy) => !enemy.IsBehaviourState(JesterState.CRANKING);
 
@@ -40,5 +43,20 @@ internal class JesterController : IEnemyController<JesterAI> {
 
     public void OnOutsideStatusChange(JesterAI enemy) => enemy.StopSearch(enemy.roamMap, true);
 
+
+    public void OnPlayerCollision(JesterAI enemy, PlayerControllerB player) {
+        if (player.IsDead()) return;
+        if (!enemy.IsBehaviourState(JesterState.OPEN)) return;
+        if (this.GetinKillAnimation(enemy))
+            return;
+        if (enemy.MeetsStandardPlayerCollisionConditions(player.playerCollider)) {
+            
+        }
+
+        
+        // then we can kill it using the jester's fatality
+        enemy.KillPlayerServerRpc((int)player.actualClientId);
+
+    }
 }
 
