@@ -62,7 +62,7 @@ internal static partial class Helper {
 
         return true;
     }
-    internal static bool IsDead(this PlayerControllerB? instance) => instance is not null && (!instance.isPlayerControlled || instance.health <= 0);
+    internal static bool IsDead(this PlayerControllerB player) => !player.isPlayerControlled;
 
     internal static PlayerControllerB? GetPlayerFromBody(this RagdollGrabbableObject body) => Helper.GetPlayer(body.bodyID.Value);
 
