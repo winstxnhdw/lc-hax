@@ -5,7 +5,6 @@ using Unity.Netcode;
 using UnityEngine.AI;
 using GameNetcodeStuff;
 using Hax;
-using DunGen;
 
 internal sealed class PossessionMod : MonoBehaviour {
     const float TeleportDoorCooldown = 2.5f;
