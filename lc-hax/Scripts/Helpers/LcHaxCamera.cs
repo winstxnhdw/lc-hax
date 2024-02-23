@@ -59,20 +59,26 @@ internal static partial class Helper {
 
         // this makes it work as the actual camera
         newCam.tag = camData.tag;
-
-        AudioListener? listener = newCam.GetOrAddComponent<AudioListener>();
+        // add a listener to the camera using the same settings as the original camera 
+        AudioListener? listener = newCam.gameObject.AddComponent<AudioListener>();
         if (listener != null) listener.enabled = true;
-        HDAdditionalCameraData? dataToCopy = camData.GetComponent<HDAdditionalCameraData>();
-        HDAdditionalCameraData? hdData = newCam.GetOrAddComponent<HDAdditionalCameraData>();
-        if (hdData != null && dataToCopy != null) {
-            hdData.customRenderingSettings = true;
-            hdData.renderingPathCustomFrameSettingsOverrideMask.mask = dataToCopy.renderingPathCustomFrameSettingsOverrideMask.mask;
-            hdData.renderingPathCustomFrameSettings.SetEnabled(FrameSettingsField.CustomPass, dataToCopy.renderingPathCustomFrameSettings.IsEnabled(FrameSettingsField.CustomPass));
-            hdData.renderingPathCustomFrameSettings.SetEnabled(FrameSettingsField.Volumetrics, dataToCopy.renderingPathCustomFrameSettings.IsEnabled(FrameSettingsField.Volumetrics));
-            hdData.renderingPathCustomFrameSettings.lodBiasMode = dataToCopy.renderingPathCustomFrameSettings.lodBiasMode;
-            hdData.renderingPathCustomFrameSettings.lodBias = dataToCopy.renderingPathCustomFrameSettings.lodBias;
-            hdData.antialiasing = dataToCopy.antialiasing;
-            hdData.renderingPathCustomFrameSettings.SetEnabled(FrameSettingsField.ShadowMaps, dataToCopy.renderingPathCustomFrameSettings.IsEnabled(FrameSettingsField.ShadowMaps));
+        if (camData.TryGetComponent(out HDAdditionalCameraData dataToCopy)) {
+            HDAdditionalCameraData? hdData = newCam.gameObject.AddComponent<HDAdditionalCameraData>();
+            if (hdData != null && dataToCopy != null) {
+                hdData.customRenderingSettings = true;
+                hdData.renderingPathCustomFrameSettingsOverrideMask.mask =
+                    dataToCopy.renderingPathCustomFrameSettingsOverrideMask.mask;
+                hdData.renderingPathCustomFrameSettings.SetEnabled(FrameSettingsField.CustomPass,
+                    dataToCopy.renderingPathCustomFrameSettings.IsEnabled(FrameSettingsField.CustomPass));
+                hdData.renderingPathCustomFrameSettings.SetEnabled(FrameSettingsField.Volumetrics,
+                    dataToCopy.renderingPathCustomFrameSettings.IsEnabled(FrameSettingsField.Volumetrics));
+                hdData.renderingPathCustomFrameSettings.lodBiasMode =
+                    dataToCopy.renderingPathCustomFrameSettings.lodBiasMode;
+                hdData.renderingPathCustomFrameSettings.lodBias = dataToCopy.renderingPathCustomFrameSettings.lodBias;
+                hdData.antialiasing = dataToCopy.antialiasing;
+                hdData.renderingPathCustomFrameSettings.SetEnabled(FrameSettingsField.ShadowMaps,
+                    dataToCopy.renderingPathCustomFrameSettings.IsEnabled(FrameSettingsField.ShadowMaps));
+            }
         }
 
         newCam.enabled = true;
