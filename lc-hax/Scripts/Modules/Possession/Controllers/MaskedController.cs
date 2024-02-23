@@ -18,7 +18,7 @@ internal class MaskedPlayerController : IEnemyController<MaskedPlayerEnemy> {
 
 
     public void OnPlayerCollision(MaskedPlayerEnemy enemy, PlayerControllerB player) {
-        if(this.GetinKillAnimation(enemy)) return;
+        if (this.GetinKillAnimation(enemy)) return;
         PlayerControllerB playerControllerB = enemy.MeetsStandardPlayerCollisionConditions(player.playerCollider);
         if (playerControllerB != null) {
 
