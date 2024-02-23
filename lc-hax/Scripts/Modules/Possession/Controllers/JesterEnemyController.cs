@@ -50,10 +50,10 @@ internal class JesterController : IEnemyController<JesterAI> {
         if (this.GetinKillAnimation(enemy))
             return;
         if (enemy.MeetsStandardPlayerCollisionConditions(player.playerCollider)) {
-            
+
         }
 
-        
+
         // then we can kill it using the jester's fatality
         enemy.KillPlayerServerRpc((int)player.actualClientId);
 
