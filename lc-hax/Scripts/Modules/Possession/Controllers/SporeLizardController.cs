@@ -44,5 +44,5 @@ internal class SporeLizardController : IEnemyController<PufferAI> {
                 enemy.BitePlayerServerRpc((int)player.actualClientId);
             }
         }
-    } 
+    }
 }
