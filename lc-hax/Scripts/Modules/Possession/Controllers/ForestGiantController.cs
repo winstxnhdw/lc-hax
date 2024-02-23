@@ -1,3 +1,4 @@
+using GameNetcodeStuff;
 using Hax;
 
 enum GiantState {
@@ -30,7 +31,7 @@ internal class ForestGiantController : IEnemyController<ForestGiantAI> {
 
     public bool CanUseEntranceDoors(ForestGiantAI _) => false;
 
-    public float InteractRange(ForestGiantAI _) => 0.0f;
+    public float InteractRange(ForestGiantAI _) => 1.5f;
 
     public void OnUnpossess(ForestGiantAI enemy) => this.IsUsingSecondarySkill = false;
 
@@ -40,5 +41,9 @@ internal class ForestGiantController : IEnemyController<ForestGiantAI> {
         enemy.StopSearch(enemy.roamPlanet, true);
         enemy.StopSearch(enemy.searchForPlayers, true);
     }
+
+    public void OnPlayerCollision(ForestGiantAI enemy, PlayerControllerB player) =>
+        enemy.OnCollideWithPlayer(player.playerCollider);
+
 
 }

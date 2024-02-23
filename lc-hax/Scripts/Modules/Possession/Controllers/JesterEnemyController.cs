@@ -42,14 +42,7 @@ internal class JesterController : IEnemyController<JesterAI> {
     public void OnOutsideStatusChange(JesterAI enemy) => enemy.StopSearch(enemy.roamMap, true);
 
 
-    public void OnPlayerCollision(JesterAI enemy, PlayerControllerB player) {
-        if (player.IsDead()) return;
-        if (!enemy.IsBehaviourState(JesterState.OPEN)) return;
-        if (this.GetinKillAnimation(enemy))
-            return;
-        if (enemy.MeetsStandardPlayerCollisionConditions(player.playerCollider)) {
-            enemy.KillPlayerServerRpc((int)player.actualClientId);
-        }
-    }
+    public void OnPlayerCollision(JesterAI enemy, PlayerControllerB player) =>
+        enemy.OnCollideWithPlayer(player.playerCollider);
 }
 
