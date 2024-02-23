@@ -36,6 +36,8 @@ internal interface IController {
     float SprintMultiplier(EnemyAI enemy);
 
     bool SyncAnimationSpeedEnabled(EnemyAI enemy);
+
+    void OnOutsideStatusChange(EnemyAI enemy);
 }
 
 internal interface IEnemyController<T> : IController where T : EnemyAI {
@@ -73,6 +75,8 @@ internal interface IEnemyController<T> : IController where T : EnemyAI {
 
     bool SyncAnimationSpeedEnabled(T enemy) => true;
 
+    void OnOutsideStatusChange(T enemy) { }
+
     void IController.OnPossess(EnemyAI enemy) => this.OnPossess((T)enemy);
 
     void IController.OnUnpossess(EnemyAI enemy) => this.OnUnpossess((T)enemy);
@@ -106,4 +110,6 @@ internal interface IEnemyController<T> : IController where T : EnemyAI {
     float IController.SprintMultiplier(EnemyAI enemy) => this.SprintMultiplier((T)enemy);
 
     bool IController.SyncAnimationSpeedEnabled(EnemyAI enemy) => this.SyncAnimationSpeedEnabled((T)enemy);
+
+    void IController.OnOutsideStatusChange(EnemyAI enemy) => this.OnOutsideStatusChange((T)enemy);
 }

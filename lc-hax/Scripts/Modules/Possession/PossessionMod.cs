@@ -147,12 +147,9 @@ internal sealed class PossessionMod : MonoBehaviour {
             this.InitCharacterMovement(enemy);
             this.UpdateComponentsOnCurrentState(true);
             this.SetAIControl(false);
-            this.MainEntrance = RoundManager.FindMainEntranceScript(true);
+            this.MainEntrance = RoundManager.FindMainEntranceScript(false);
         }
 
-        if (this.MainEntrance != null) {
-            enemy.SetOutsideStatus(enemy.transform.position.y > this.MainEntrance.transform.position.y + 5.0f);
-        }
 
         if (!this.EnemyControllers.TryGetValue(enemy.GetType(), out IController controller)) {
             if (!this.IsAIControlled) {
@@ -160,7 +157,22 @@ internal sealed class PossessionMod : MonoBehaviour {
                 this.UpdateEnemyRotation();
             }
 
+            if (this.MainEntrance != null) {
+                _ = enemy.SetOutsideStatus(enemy.transform.position.y > this.MainEntrance.transform.position.y + 5.0f);
+            }
+
+            if (enemy.isEnemyDead) {
+                this.Unpossess();
+            }
+
             return;
+        }
+
+        if (this.MainEntrance != null) {
+            if (enemy.SetOutsideStatus(enemy.transform.position.y > this.MainEntrance.transform.position.y + 5.0f)) {
+                controller.OnOutsideStatusChange(enemy);
+                enemy.FinishedCurrentSearchRoutine();
+            }
         }
 
         if (enemy.isEnemyDead) {
@@ -208,7 +220,7 @@ internal sealed class PossessionMod : MonoBehaviour {
     // Updates enemy's position to match the possessed object's position
     void UpdateEnemyPosition(EnemyAI enemy) {
         if (this.CharacterMovement is not CharacterMovement characterMovement) return;
-
+        
         Vector3 enemyEuler = enemy.transform.eulerAngles;
         enemyEuler.y = this.transform.eulerAngles.y;
 
@@ -256,6 +268,7 @@ internal sealed class PossessionMod : MonoBehaviour {
             agent.isStopped = false;
             this.UpdateEnemyPosition(enemy);
             _ = enemy.agent.Warp(enemy.transform.position);
+            enemy.SyncPositionToClients();
         }
 
         if (this.EnemyControllers.TryGetValue(enemy.GetType(), out IController controller)) {
@@ -352,9 +365,7 @@ internal sealed class PossessionMod : MonoBehaviour {
     void InteractWithTeleport(EnemyAI enemy, EntranceTeleport teleport) {
         if (this.CharacterMovement is not CharacterMovement characterMovement) return;
         if (this.GetExitPointFromDoor(teleport) is not Transform exitPoint) return;
-
         characterMovement.SetPosition(exitPoint.position);
-        enemy.EnableEnemyMesh(true, false);
     }
 
     void UsePrimarySkill() {

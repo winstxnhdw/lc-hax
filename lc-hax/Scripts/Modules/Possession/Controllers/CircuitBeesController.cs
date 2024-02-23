@@ -18,5 +18,8 @@ internal class CircuitBeesController : IEnemyController<RedLocustBees> {
     }
 
     public void UseSecondarySkill(RedLocustBees enemy) => enemy.SetBehaviourState(BeesState.IDLE);
+
+    public void OnOutsideStatusChange(RedLocustBees enemy) => enemy.StopSearch(enemy.searchForHive, true);
+
 }
 

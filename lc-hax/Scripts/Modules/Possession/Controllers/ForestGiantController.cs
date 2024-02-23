@@ -35,4 +35,10 @@ internal class ForestGiantController : IEnemyController<ForestGiantAI> {
     public void OnUnpossess(ForestGiantAI enemy) => this.IsUsingSecondarySkill = false;
 
     public bool SyncAnimationSpeedEnabled(ForestGiantAI _) => false;
+
+    public void OnOutsideStatusChange(ForestGiantAI enemy) {
+        enemy.StopSearch(enemy.roamPlanet, true);
+        enemy.StopSearch(enemy.searchForPlayers, true);
+    }
+
 }

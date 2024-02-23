@@ -6,4 +6,7 @@ internal class MaskedPlayerController : IEnemyController<MaskedPlayerEnemy> {
     public float InteractRange(MaskedPlayerEnemy _) => 1.0f;
 
     public bool SyncAnimationSpeedEnabled(MaskedPlayerEnemy _) => false;
+
+    public void OnOutsideStatusChange(MaskedPlayerEnemy enemy) => enemy.StopSearch(enemy.searchForPlayers, true);
+
 }

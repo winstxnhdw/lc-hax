@@ -37,5 +37,8 @@ internal class JesterController : IEnemyController<JesterAI> {
     public string GetSecondarySkillName(JesterAI _) => "(HOLD) Begin cranking";
 
     public float InteractRange(JesterAI _) => 1.0f;
+
+    public void OnOutsideStatusChange(JesterAI enemy) => enemy.StopSearch(enemy.roamMap, true);
+
 }
 

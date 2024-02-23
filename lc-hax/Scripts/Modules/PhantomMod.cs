@@ -93,29 +93,23 @@ internal sealed class PhantomMod : MonoBehaviour {
 
     void PhantomDisabled(PlayerControllerB player, Camera camera) {
         if (player.cameraContainerTransform is not Transform cameraParent) return;
+        if(player.gameplayCamera is not Camera gameplayCamera) return;
         if (this.IsShiftHeld) {
             player.TeleportPlayer(camera.transform.position);
+        }
+
+        Helper.DestroyCustomCam();
+        if (!player.IsDead()) {
+            gameplayCamera.enabled = true;
         }
 
         if (PossessionMod.Instance is PossessionMod { IsPossessed: true } possession) {
             possession.Unpossess();
         }
 
-        camera.transform.SetParent(cameraParent, false);
-        camera.transform.localPosition = Vector3.zero;
-        camera.transform.localRotation = Quaternion.identity;
-
-        if (camera.gameObject.TryGetComponent(out KeyboardMovement keyboard)) {
-            keyboard.enabled = false;
-        }
-
-        if (camera.gameObject.TryGetComponent(out MousePan mouse)) {
-            mouse.enabled = false;
-        }
-
-        if (player.gameplayCamera is not Camera gameplayCamera) {
-            return;
-        }
+        gameplayCamera.transform.SetParent(cameraParent, false);
+        gameplayCamera.transform.localPosition = Vector3.zero;
+        gameplayCamera.transform.localRotation = Quaternion.identity;
 
         if (gameplayCamera.TryGetComponent(out KeyboardMovement gameplayKeyboard)) {
             gameplayKeyboard.enabled = false;
@@ -128,20 +122,22 @@ internal sealed class PhantomMod : MonoBehaviour {
 
     void TogglePhantom() {
         if (Helper.LocalPlayer is not PlayerControllerB player) return;
-        if (Helper.CurrentCamera is not Camera camera || !camera.enabled) return;
+        if (Helper.GameCamera is not Camera camera) return;
 
+        camera.enabled = !Setting.EnablePhantom;
         Setting.EnablePhantom = !Setting.EnablePhantom;
-        player.enabled = !player.isPlayerDead || !Setting.EnablePhantom;
+        player.enabled = !player.IsDead() || !Setting.EnablePhantom;
         player.playerBodyAnimator.enabled = !Setting.EnablePhantom;
         player.thisController.enabled = !Setting.EnablePhantom;
         player.isFreeCamera = Setting.EnablePhantom;
-
         if (Setting.EnablePhantom) {
-            this.PhantomEnabled(camera);
+            Camera? customCamera = Helper.GetCustomCamera();
+            if (customCamera != null) this.PhantomEnabled(customCamera);
         }
 
         else {
-            this.PhantomDisabled(player, camera);
+            Camera? customCamera = Helper.GetCustomCamera();
+            if (customCamera != null) this.PhantomDisabled(player, customCamera);
         }
     }
 }
