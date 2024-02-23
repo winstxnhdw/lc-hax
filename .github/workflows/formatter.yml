@@ -54,5 +54,5 @@ jobs:
       - name: Commit changes
         run: |
           git add .
-          git diff --cached --exit-code --quiet || git commit --amend --no-edit
-          git push --force-with-lease
+          git commit -m "style: format scripts" || true
+          git push
