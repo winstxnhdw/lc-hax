@@ -1,3 +1,4 @@
+using GameNetcodeStuff;
 using Hax;
 
 enum NutcrackerState {
@@ -48,4 +49,5 @@ internal class NutcrackerController : IEnemyController<NutcrackerEnemyAI> {
         enemy.StopSearch(enemy.patrol, true);
     }
 
+    public void OnCollideWithPlayer(NutcrackerEnemyAI enemy, PlayerControllerB player) => enemy.OnCollideWithPlayer(player.playerCollider);
 }
