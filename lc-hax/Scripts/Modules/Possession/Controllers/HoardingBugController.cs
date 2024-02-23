@@ -90,4 +90,10 @@ internal class HoardingBugController : IEnemyController<HoarderBugAI> {
     public string GetSecondarySkillName(HoarderBugAI enemy) => enemy.heldItem is null ? "" : "Drop item";
 
     public float InteractRange(HoarderBugAI _) => 1.0f;
+
+    public void OnOutsideStatusChange(HoarderBugAI enemy) {
+        enemy.StopSearch(enemy.searchForItems, true);
+        enemy.StopSearch(enemy.searchForPlayer, true);
+    }
+
 }

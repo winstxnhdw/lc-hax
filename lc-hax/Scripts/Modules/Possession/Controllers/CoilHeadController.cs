@@ -10,5 +10,10 @@ internal class CoilHeadController : IEnemyController<SpringManAI> {
     public bool IsAbleToRotate(SpringManAI enemy) => !this.GetStoppingMovement(enemy);
 
     public float InteractRange(SpringManAI _) => 1.5f;
+
+    public void OnOutsideStatusChange(SpringManAI enemy) => enemy.StopSearch(enemy.searchForPlayers, true);
+
+
+
 }
 

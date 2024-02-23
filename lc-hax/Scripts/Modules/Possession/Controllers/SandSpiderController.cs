@@ -2,14 +2,15 @@ using Hax;
 using UnityEngine;
 
 internal class SandSpiderController : IEnemyController<SandSpiderAI> {
-    public void OnMovement(SandSpiderAI enemy, bool isMoving, bool isSprinting) {
-        enemy.creatureAnimator.SetBool("moving", true);
-        // spider is too slow, make it like 6f default, 8f sprinting
-        float speed = isSprinting ? 8.0f : 6.0f;
-        enemy.agent.speed = speed;
-        enemy.spiderSpeed = speed;
+    public void Update(SandSpiderAI enemy, bool isAIControlled) {
+        enemy.meshContainerPosition = enemy.transform.position;
+        enemy.meshContainerTarget = enemy.transform.position;
+        enemy.eye.LookAt(enemy.transform.position - enemy.transform.forward * 2 + enemy.transform.right * 0.1f);
         enemy.SyncMeshContainerPositionToClients();
+        if(!isAIControlled) enemy.homeNode = enemy.ChooseClosestNodeToPosition(enemy.transform.position, false, 2);
     }
+
+    public bool SyncAnimationSpeedEnabled(SandSpiderAI enemy) => false;
 
     public void UsePrimarySkill(SandSpiderAI enemy) => this.PlaceWebTrap(enemy);
 
@@ -36,5 +37,11 @@ internal class SandSpiderController : IEnemyController<SandSpiderAI> {
         Vector3 floorPosition = groundHit.point + (Vector3.up * 0.2f);
         enemy.SpawnWebTrapServerRpc(floorPosition, raycastHit.point);
     }
+
+    public void OnOutsideStatusChange(SandSpiderAI enemy) {
+        enemy.StopSearch(enemy.patrolHomeBase, true);
+    }
+
+
 }
 
