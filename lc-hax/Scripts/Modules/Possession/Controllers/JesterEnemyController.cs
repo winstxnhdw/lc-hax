@@ -10,8 +10,6 @@ enum JesterState {
 internal class JesterController : IEnemyController<JesterAI> {
     void SetNoPlayerChasetimer(JesterAI enemy, float value) => enemy.Reflect().SetInternalField("noPlayersToChaseTimer", value);
     bool GetinKillAnimation(JesterAI enemy) => enemy.Reflect().GetInternalField<bool>("inKillAnimation");
-    void SetinKillAnimation(JesterAI enemy, bool value) => enemy.Reflect().SetInternalField("inKillAnimation", value);
-
     public void UsePrimarySkill(JesterAI enemy) {
         enemy.SetBehaviourState(JesterState.CLOSED);
         this.SetNoPlayerChasetimer(enemy, 0.0f);
@@ -50,13 +48,8 @@ internal class JesterController : IEnemyController<JesterAI> {
         if (this.GetinKillAnimation(enemy))
             return;
         if (enemy.MeetsStandardPlayerCollisionConditions(player.playerCollider)) {
-            
+            enemy.KillPlayerServerRpc((int)player.actualClientId);
         }
-
-        
-        // then we can kill it using the jester's fatality
-        enemy.KillPlayerServerRpc((int)player.actualClientId);
-
     }
 }
 
