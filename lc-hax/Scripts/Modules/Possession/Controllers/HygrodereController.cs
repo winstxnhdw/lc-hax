@@ -1,3 +1,5 @@
+using GameNetcodeStuff;
+
 internal class HygrodereController : IEnemyController<BlobAI> {
     void SetTamedTimer(BlobAI enemy, float time) => enemy.Reflect().SetInternalField("tamedTimer", time);
 
@@ -18,6 +20,6 @@ internal class HygrodereController : IEnemyController<BlobAI> {
 
     public void OnOutsideStatusChange(BlobAI enemy) => enemy.StopSearch(enemy.searchForPlayers, true);
 
-
+    public void OnCollideWithPlayer(BlobAI enemy, PlayerControllerB player) => enemy.OnCollideWithPlayer(player.playerCollider);
 }
 

@@ -1,3 +1,4 @@
+using GameNetcodeStuff;
 using Hax;
 
 enum SnareFleaState {
@@ -42,4 +43,6 @@ internal class SnareFleaController : IEnemyController<CentipedeAI> {
     public bool CanUseEntranceDoors(CentipedeAI _) => false;
 
     public bool SyncAnimationSpeedEnabled(CentipedeAI _) => false;
+
+    public void OnCollideWithPlayer(CentipedeAI enemy, PlayerControllerB player) => enemy.OnCollideWithPlayer(player.playerCollider);
 }
