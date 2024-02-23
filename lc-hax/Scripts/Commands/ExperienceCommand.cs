@@ -9,7 +9,7 @@ enum Rank {
 }
 
 [Command("xp")]
-internal class ExperienceCommand {
+internal class ExperienceCommand : ICommand {
     public void Execute(StringArray args) {
         if (Helper.HUDManager is not HUDManager hudManager) return;
         if (args.Length is 0) {
@@ -42,5 +42,7 @@ internal class ExperienceCommand {
             hudManager.localPlayerLevel,
             ES3.Load("playedDuringBeta", "LCGeneralSaveData", true)
         );
+
+        Chat.Print($"You are a {rank} with {hudManager.localPlayerXP} XP!");
     }
 }

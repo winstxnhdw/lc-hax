@@ -1,7 +1,7 @@
 using Steamworks;
 using Steamworks.Data;
 
-readonly struct ConnectedLobby(Lobby lobby, SteamId steamId) {
-    internal Lobby Lobby { get; } = lobby;
-    internal SteamId SteamId { get; } = steamId;
+readonly record struct ConnectedLobby {
+    internal required Lobby Lobby { get; init; }
+    internal required SteamId SteamId { get; init; }
 }

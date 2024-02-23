@@ -44,8 +44,7 @@ internal static class Chat {
 
     internal static void Clear() {
         Helper.HUDManager?.AddTextToChatOnServer(
-            $"</color>\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n<color=#FFFFFF00>",
-            -1
+            $"</color>\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n<color=#FFFFFF00>"
         );
     }
 

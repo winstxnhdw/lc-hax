@@ -161,7 +161,10 @@ internal class ESPMod : MonoBehaviour {
 
     void InitialiseRenderers() {
         this.PlayerRenderers = Helper.Players.Select(player =>
-            new RendererPair<PlayerControllerB, SkinnedMeshRenderer>(player, player.thisPlayerModel)
+            new RendererPair<PlayerControllerB, SkinnedMeshRenderer>() {
+                GameObject = player,
+                Renderer = player.thisPlayerModel
+            }
         ).ToArray();
 
         this.LandmineRenderers = this.GetRenderers<Landmine>();
@@ -192,10 +195,10 @@ internal class ESPMod : MonoBehaviour {
             maxScreenVector = Vector2.Max(maxScreenVector, cornerScreen);
         }
 
-        return new Size(
-            Mathf.Abs(maxScreenVector.x - minScreenVector.x),
-            Mathf.Abs(maxScreenVector.y - minScreenVector.y)
-        );
+        return new Size() {
+            Width = Mathf.Abs(maxScreenVector.x - minScreenVector.x),
+            Height = Mathf.Abs(maxScreenVector.y - minScreenVector.y)
+        };
     }
 
     void RenderBounds(

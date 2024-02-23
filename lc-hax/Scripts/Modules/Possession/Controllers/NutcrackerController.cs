@@ -6,9 +6,12 @@ enum NutcrackerState {
 }
 
 internal class NutcrackerController : IEnemyController<NutcrackerEnemyAI> {
-    public void OnMovement(NutcrackerEnemyAI enemy, bool isMoving, bool isSprinting) {
-        if (!isMoving && !isSprinting) return;
-        enemy.SetBehaviourState(NutcrackerState.WALKING);
+    bool InSentryMode { get; set; } = false;
+
+    public void Update(NutcrackerEnemyAI enemy, bool isAIControlled) {
+        if (isAIControlled) return;
+        if (this.InSentryMode) return;
+        enemy.SwitchToBehaviourServerRpc(unchecked((int)NutcrackerState.WALKING)); // See #415
     }
 
     public bool IsAbleToRotate(NutcrackerEnemyAI enemy) => !enemy.IsBehaviourState(NutcrackerState.SENTRY);
@@ -22,9 +25,17 @@ internal class NutcrackerController : IEnemyController<NutcrackerEnemyAI> {
         enemy.FireGunServerRpc();
     }
 
-    public void OnSecondarySkillHold(NutcrackerEnemyAI enemy) => enemy.SetBehaviourState(NutcrackerState.SENTRY);
+    public void OnSecondarySkillHold(NutcrackerEnemyAI enemy) {
+        enemy.SetBehaviourState(NutcrackerState.SENTRY);
+        this.InSentryMode = true;
+    }
 
-    public void ReleaseSecondarySkill(NutcrackerEnemyAI enemy) => enemy.SetBehaviourState(NutcrackerState.WALKING);
+    public void ReleaseSecondarySkill(NutcrackerEnemyAI enemy) {
+        enemy.SetBehaviourState(NutcrackerState.WALKING);
+        this.InSentryMode = false;
+    }
+
+    public void OnUnpossess(NutcrackerEnemyAI enemy) => this.InSentryMode = false;
 
     public string GetPrimarySkillName(NutcrackerEnemyAI enemy) => enemy.gun is null ? "" : "Fire";
 

@@ -12,7 +12,11 @@ class LobbyDependencyPatch {
             GUIUtility.systemCopyBuffer = "";
         }
 
-        State.ConnectedLobby = new ConnectedLobby(lobby, id);
+        State.ConnectedLobby = new ConnectedLobby() {
+            Lobby = lobby,
+            SteamId = id
+        };
+
         State.DisconnectedVoluntarily = false;
     }
 }

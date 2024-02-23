@@ -7,7 +7,12 @@ enum JesterState {
 }
 
 internal class JesterController : IEnemyController<JesterAI> {
-    public void UsePrimarySkill(JesterAI enemy) => enemy.SetBehaviourState(JesterState.CLOSED);
+    void SetNoPlayerChasetimer(JesterAI enemy, float value) => enemy.Reflect().SetInternalField("noPlayersToChaseTimer", value);
+
+    public void UsePrimarySkill(JesterAI enemy) {
+        enemy.SetBehaviourState(JesterState.CLOSED);
+        this.SetNoPlayerChasetimer(enemy, 0.0f);
+    }
 
     public void OnSecondarySkillHold(JesterAI enemy) {
         if (!enemy.IsBehaviourState(JesterState.CLOSED)) return;
@@ -19,6 +24,10 @@ internal class JesterController : IEnemyController<JesterAI> {
         enemy.SetBehaviourState(JesterState.OPEN);
     }
 
+    public void Update(JesterAI enemy, bool isAIControlled) => this.SetNoPlayerChasetimer(enemy, 100.0f);
+
+    public void OnUnpossess(JesterAI enemy) => this.SetNoPlayerChasetimer(enemy, 5.0f);
+
     public bool IsAbleToMove(JesterAI enemy) => !enemy.IsBehaviourState(JesterState.CRANKING);
 
     public bool IsAbleToRotate(JesterAI enemy) => !enemy.IsBehaviourState(JesterState.CRANKING);
@@ -29,3 +38,4 @@ internal class JesterController : IEnemyController<JesterAI> {
 
     public float InteractRange(JesterAI _) => 1.0f;
 }
+

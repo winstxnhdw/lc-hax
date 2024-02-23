@@ -1,22 +1,29 @@
 readonly ref struct Size {
-    internal readonly float Width { get; }
-    internal readonly float Height { get; }
-
-    internal Size(float width, float height) {
-        this.Width = width;
-        this.Height = height;
-    }
+    internal required float Width { get; init; }
+    internal required float Height { get; init; }
 
     internal Size(float size) {
         this.Width = size;
         this.Height = size;
     }
 
-    public static Size operator +(Size a, Size b) => new(a.Width + b.Width, a.Height + b.Height);
+    public static Size operator +(Size a, Size b) => new() {
+        Width = a.Width + b.Width,
+        Height = a.Height + b.Height
+    };
 
-    public static Size operator -(Size a, Size b) => new(a.Width - b.Width, a.Height - b.Height);
+    public static Size operator -(Size a, Size b) => new() {
+        Width = a.Width - b.Width,
+        Height = a.Height - b.Height
+    };
 
-    public static Size operator *(Size size, float multiplier) => new(size.Width * multiplier, size.Height * multiplier);
+    public static Size operator *(Size size, float multiplier) => new() {
+        Width = size.Width * multiplier,
+        Height = size.Height * multiplier
+    };
 
-    public static Size operator /(Size size, float divider) => new(size.Width / divider, size.Height / divider);
+    public static Size operator /(Size size, float divider) => new() {
+        Width = size.Width / divider,
+        Height = size.Height / divider
+    };
 }

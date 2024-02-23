@@ -34,6 +34,8 @@ internal class MaskCommand : ICommand {
             return;
         }
 
-        this.SpawnMimicOnPlayer(targetPlayer, hauntedMaskItem, amount);
+        Helper.CreateComponent<WaitForBehaviour>()
+              .SetPredicate(() => localPlayer.ItemSlots[localPlayer.currentItemSlot] is HauntedMaskItem)
+              .Init(() => this.SpawnMimicOnPlayer(targetPlayer, hauntedMaskItem, amount));
     }
 }
