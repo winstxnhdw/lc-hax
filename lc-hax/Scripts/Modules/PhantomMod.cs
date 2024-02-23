@@ -92,8 +92,8 @@ internal sealed class PhantomMod : MonoBehaviour {
     }
 
     void PhantomDisabled(PlayerControllerB player, Camera camera) {
-        if (player.cameraContainerTransform is not Transform cameraParent) return;
-        if(player.gameplayCamera is not Camera gameplayCamera) return;
+        if (player.cameraContainerTransform is not Transform) return;
+        if (player.gameplayCamera is not Camera gameplayCamera) return;
         if (this.IsShiftHeld) {
             player.TeleportPlayer(camera.transform.position);
         }
