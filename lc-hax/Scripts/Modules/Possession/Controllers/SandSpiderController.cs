@@ -58,7 +58,7 @@ internal class SandSpiderController : IEnemyController<SandSpiderAI> {
     public void OnCollideWithPlayer(SandSpiderAI enemy, PlayerControllerB player) {
         if (enemy.isOutside) {
             if (this.GetOnWall(enemy)) return;
-            if(this.GetSpoolingPlayerBody(enemy)) return;
+            if (this.GetSpoolingPlayerBody(enemy)) return;
             if (this.GetTimeSinceHittingPlayer(enemy) > 1f) {
                 this.SetTimeSinceHittingPlayer(enemy, 0.0f);
                 player.DamagePlayer(90, true, true, CauseOfDeath.Mauling, 0, false, default);
