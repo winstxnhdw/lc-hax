@@ -342,25 +342,23 @@ internal sealed class PossessionMod : MonoBehaviour {
             ? value.SprintMultiplier(enemy)
             : IController.DefaultSprintMultiplier;
 
-    void InteractWithAmbient(EnemyAI enemy, IController controller) {
-        if (!Physics.Raycast(enemy.transform.position, enemy.transform.forward, out RaycastHit hit, this.InteractRange(enemy))) return;
+    void InteractWithAmbient(EnemyAI enemy, IController? controller) {
+        if (!Physics.Raycast(enemy.transform.position, enemy.transform.forward, out RaycastHit hit,
+                this.InteractRange(enemy))) return;
         if (hit.collider.gameObject.TryGetComponent(out DoorLock doorLock) && this.DoorCooldownRemaining <= 0.0f) {
             this.OpenDoorAsEnemy(doorLock);
             this.DoorCooldownRemaining = PossessionMod.DoorInteractionCooldown;
             return;
         }
 
-        if (controller.CanUseEntranceDoors(enemy)) {
-            this.HandleEntranceDoors(enemy, hit, controller);
-            return;
-        }
+        if (controller != null) {
+            if (controller.CanUseEntranceDoors(enemy)) {
+                this.HandleEntranceDoors(enemy, hit, controller);
+                return;
+            }
 
-        if (controller.CanUseEntranceDoors(enemy)) {
-            this.HandleEntranceDoors(enemy, hit, controller);
-            return;
+            this.HandleEnemyPlayerInteraction(enemy, hit, controller);
         }
-
-        this.HandleEnemyPlayerInteraction(enemy, hit, controller);
     }
 
     void OpenDoorAsEnemy(DoorLock door) {
