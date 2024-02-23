@@ -9,6 +9,12 @@ enum NutcrackerState {
 internal class NutcrackerController : IEnemyController<NutcrackerEnemyAI> {
     bool InSentryMode { get; set; } = false;
 
+    float GetStunNormalizedTimer(NutcrackerEnemyAI enemy) => enemy.Reflect().GetInternalField<float>("stunNormalizedTimer");
+
+    float GetTimeSinceHittingPlayer(NutcrackerEnemyAI enemy) => enemy.Reflect().GetInternalField<float>("timeSinceHittingPlayer");
+
+    void SetTimeSinceHittingPlayer(NutcrackerEnemyAI enemy, float value) => enemy.Reflect().SetInternalField("timeSinceHittingPlayer", value);
+
     public void Update(NutcrackerEnemyAI enemy, bool isAIControlled) {
         if (isAIControlled) return;
         if (this.InSentryMode) return;
@@ -49,5 +55,14 @@ internal class NutcrackerController : IEnemyController<NutcrackerEnemyAI> {
         enemy.StopSearch(enemy.patrol, true);
     }
 
-    public void OnCollideWithPlayer(NutcrackerEnemyAI enemy, PlayerControllerB player) => enemy.OnCollideWithPlayer(player.playerCollider);
+    public void OnCollideWithPlayer(NutcrackerEnemyAI enemy, PlayerControllerB player) {
+        if (enemy.isOutside) {
+            if (enemy.isEnemyDead) return;
+            if (this.GetTimeSinceHittingPlayer(enemy) < 1f) return;
+            if (this.GetStunNormalizedTimer(enemy) >= 0f) return;
+
+            this.SetTimeSinceHittingPlayer(enemy, 0f);
+            enemy.LegKickPlayerServerRpc((int)player.actualClientId);
+        }
+    }
 }
