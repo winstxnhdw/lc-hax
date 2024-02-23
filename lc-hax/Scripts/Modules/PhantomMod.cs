@@ -78,7 +78,7 @@ internal sealed class PhantomMod : MonoBehaviour {
     }
 
     void PhantomEnabled(Camera camera) {
-        if (Helper.GameCamera is not Camera dataCamera) return;
+        if(Helper.GameCamera is not Camera dataCamera) return;
         if (!camera.TryGetComponent(out KeyboardMovement keyboard)) {
             keyboard = camera.gameObject.AddComponent<KeyboardMovement>();
         }
@@ -96,9 +96,9 @@ internal sealed class PhantomMod : MonoBehaviour {
     }
 
     void PhantomDisabled(PlayerControllerB player, Camera camera) {
-        if (player.cameraContainerTransform is null) return;
+        if (player.cameraContainerTransform is not Transform) return;
         if (player.gameplayCamera is not Camera gameplayCamera) return;
-        if (Helper.StartOfRound is not StartOfRound round) return;
+        if(Helper.StartOfRound is not StartOfRound round) return;
         if (this.IsShiftHeld) {
             player.TeleportPlayer(camera.transform.position);
         }
