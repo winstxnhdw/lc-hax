@@ -7,7 +7,6 @@ enum BrackenState {
 }
 
 internal class BrackenController : IEnemyController<FlowermanAI> {
-
     public void UsePrimarySkill(FlowermanAI enemy) {
         if (!enemy.carryingPlayerBody) {
             enemy.SetBehaviourState(BrackenState.ANGER);
