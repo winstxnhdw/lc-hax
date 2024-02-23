@@ -22,9 +22,11 @@ internal static partial class Helper {
         CustomCameraObj = null;
         CustomCamera = null;
 
-        if (Helper.LocalPlayer is PlayerControllerB player && !player.IsDead() &&
-            player.gameplayCamera is Camera camData) {
+        if (Helper.LocalPlayer is PlayerControllerB player && !player.IsDead() && player.gameplayCamera is Camera camData) {
             camData.enabled = true;
+        }
+        else if (Helper.StartOfRound is StartOfRound { spectateCamera: Camera spectate }) {
+            spectate.enabled = true;
         }
     }
 
