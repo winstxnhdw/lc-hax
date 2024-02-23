@@ -35,7 +35,7 @@ internal static partial class Helper {
         if (CustomCamera is not null) return CustomCamera;
         CustomCameraObj ??= new GameObject("lc-hax Camera");
 
-        Camera? newCam = CustomCameraObj.GetOrAddComponent<Camera>();
+        Camera? newCam = CustomCameraObj.AddComponent<Camera>();
         if (newCam is null) return null;
         newCam.transform.position = camData.transform.position;
         newCam.transform.rotation = camData.transform.rotation;
