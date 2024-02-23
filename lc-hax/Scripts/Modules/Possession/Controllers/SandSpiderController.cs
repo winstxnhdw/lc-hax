@@ -18,8 +18,10 @@ internal class SandSpiderController : IEnemyController<SandSpiderAI> {
 
 
     public void Update(SandSpiderAI enemy, bool isAIControlled) {
+        if(Helper.CurrentCamera is not Camera camera) return;
         enemy.meshContainerPosition = enemy.transform.position;
-        enemy.meshContainerTarget = enemy.transform.forward;
+        enemy.meshContainerTarget = camera.transform.position;
+        enemy.eye.LookAt(camera.transform.forward);
         enemy.SyncMeshContainerPositionToClients();
         if(!isAIControlled) enemy.homeNode = enemy.ChooseClosestNodeToPosition(enemy.transform.position, false, 2);
     }

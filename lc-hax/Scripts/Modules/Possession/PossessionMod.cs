@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using Unity.Netcode;
 using UnityEngine.AI;
@@ -147,7 +148,8 @@ internal sealed class PossessionMod : MonoBehaviour {
             this.InitCharacterMovement(enemy);
             this.UpdateComponentsOnCurrentState(true);
             this.SetAIControl(false);
-            this.MainEntrance = RoundManager.FindMainEntranceScript(false);
+            if (this.MainEntrance == null)
+                this.MainEntrance = FindObjectsOfType<EntranceTeleport>().First(entrance => entrance.entranceId == 0);
         }
 
 
@@ -183,8 +185,8 @@ internal sealed class PossessionMod : MonoBehaviour {
 
         controller.Update(enemy, this.IsAIControlled);
         this.InteractWithAmbient(enemy, controller);
+        this.InteractWithPlayers(enemy, controller);
         localPlayer.cursorTip.text = controller.GetPrimarySkillName(enemy);
-
         if (this.IsAIControlled) {
             return;
         }
@@ -325,13 +327,6 @@ internal sealed class PossessionMod : MonoBehaviour {
         this.TeleportCooldownRemaining = PossessionMod.TeleportDoorCooldown;
     }
 
-    void HandleEnemyPlayerInteraction(EnemyAI enemy, RaycastHit hit, IController controller) {
-        if (controller == null) return;
-        if (!hit.collider.gameObject.TryGetComponent(out PlayerControllerB player)) return;
-        if (player.IsDead()) return;
-        controller.OnCollideWithPlayer(enemy, player);
-    }
-
 
     float InteractRange(EnemyAI enemy) =>
         this.EnemyControllers.TryGetValue(enemy.GetType(), out IController value)
@@ -357,8 +352,19 @@ internal sealed class PossessionMod : MonoBehaviour {
                 this.HandleEntranceDoors(enemy, hit, controller);
                 return;
             }
+        }
+    }
 
-            this.HandleEnemyPlayerInteraction(enemy, hit, controller);
+
+    void InteractWithPlayers(EnemyAI enemy, IController controller) {
+        int playerLayer = LayerMask.NameToLayer("Player"); 
+        int layerMask = 1 << playerLayer; 
+        Collider[] hitColliders = Physics.OverlapSphere(enemy.transform.position, 2.8f, layerMask);
+        foreach (var hitCollider in hitColliders) {
+            if (hitCollider.TryGetComponent(out PlayerControllerB player) && !player.IsDead()) {
+                controller.OnCollideWithPlayer(enemy, player);
+                break; 
+            }
         }
     }
 
@@ -380,7 +386,9 @@ internal sealed class PossessionMod : MonoBehaviour {
         if (this.CharacterMovement is not CharacterMovement characterMovement) return;
         if (this.GetExitPointFromDoor(teleport) is not Transform exitPoint) return;
         characterMovement.SetPosition(exitPoint.position);
-        _ = enemy.SetOutsideStatus(!teleport.isEntranceToBuilding);
+        if (enemy.SetOutsideStatus(!teleport.isEntranceToBuilding)) {
+            Logger.Write($"Teleport Enemy isOutside : {enemy.isOutside}");
+        }
         controller.OnOutsideStatusChange(enemy);
     }
 
