@@ -4,8 +4,7 @@ using UnityEngine;
 internal class SandSpiderController : IEnemyController<SandSpiderAI> {
     public void Update(SandSpiderAI enemy, bool isAIControlled) {
         enemy.meshContainerPosition = enemy.transform.position;
-        enemy.meshContainerTarget = enemy.transform.position;
-        enemy.eye.LookAt(enemy.transform.position - enemy.transform.forward * 2 + enemy.transform.right * 0.1f);
+        enemy.meshContainerTarget = enemy.transform.forward;
         enemy.SyncMeshContainerPositionToClients();
         if(!isAIControlled) enemy.homeNode = enemy.ChooseClosestNodeToPosition(enemy.transform.position, false, 2);
     }
