@@ -85,12 +85,13 @@ static class ComponentUtils {
                 foreach (T? comp in parentComp)
                     if (comp != null)
                         comp.enabled = true;
-
-        foreach (var child in parent.transform.Get_All_Childs()) {
-            var comps = child.GetComponents<T>();
+        HashSet<Transform>? childs = parent.transform.Get_All_Childs();
+        if (childs == null) return;
+        foreach (Transform child in childs) {
+            T[] comps = child.GetComponents<T>();
             if (comps == null) continue;
             if (comps.Length != 0) continue;
-            foreach (var comp in comps)
+            foreach (T comp in comps)
                 if (comp != null)
                     comp.enabled = true;
         }
@@ -148,7 +149,7 @@ static class ComponentUtils {
         where T : Component =>
         obj.transform.GetGetInChildrens_OrParent<T>(includeInactive);
 
-    internal static T GetOrAddComponent<T>(this Component obj) where T : Component =>
+    internal static T? GetOrAddComponent<T>(this Component obj) where T : Component =>
         obj.transform.GetOrAddComponent<T>();
 
     internal static void RemoveComponent<T>(this Component obj) where T : Component =>
@@ -167,25 +168,24 @@ static class ComponentUtils {
 
     internal static HashSet<Transform> Get_Childs(this Transform obj) {
         HashSet<Transform> childs = new();
-        for (var i = 0; i < obj.childCount; i++) {
-            var item = obj.GetChild(i);
+        for (int i = 0; i < obj.childCount; i++) {
+            Transform item = obj.GetChild(i);
             if (item != null) {
-                childs.Add(item);
+                _ = childs.Add(item);
             }
         }
 
         return childs;
     }
 
-    internal static HashSet<Transform> Get_All_Childs(this Transform item) {
+    internal static HashSet<Transform>? Get_All_Childs(this Transform item) {
         CheckTransform(item);
-        return _Transforms;
+        return Transforms;
     }
 
-    private static HashSet<Transform> _Transforms;
 
     private static void CheckTransform(Transform transform) {
-        _Transforms = new();
+        Transforms = [];
 
         if (transform == null) {
             Logger.Write("Debug: CheckTransform transform is null");
@@ -196,11 +196,13 @@ static class ComponentUtils {
     }
 
     private static void GetChildren(Transform transform) {
-        _ = _Transforms.Add(transform);
-        for (var i = 0; i < transform.childCount; i++) {
+        if (Transforms != null) _ = Transforms.Add(transform);
+        for (int i = 0; i < transform.childCount; i++) {
             GetChildren(transform.GetChild(i));
         }
     }
+
+    private static HashSet<Transform>? Transforms;
 
 
     #endregion

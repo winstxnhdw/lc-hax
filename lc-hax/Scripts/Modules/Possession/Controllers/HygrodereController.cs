@@ -15,5 +15,9 @@ internal class HygrodereController : IEnemyController<BlobAI> {
     public float InteractRange(BlobAI _) => 3.5f;
 
     public float SprintMultiplier(BlobAI _) => 9.8f;
+
+    public void OnOutsideStatusChange(BlobAI enemy) => enemy.StopSearch(enemy.searchForPlayers, true);
+
+
 }
 
