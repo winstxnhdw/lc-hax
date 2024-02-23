@@ -1,7 +1,6 @@
+using GameNetcodeStuff;
 using UnityEngine;
 using UnityEngine.Rendering.HighDefinition;
-
-#pragma warning disable CS8603 // Possible null reference return.
 
 namespace Hax;
 
@@ -23,10 +22,9 @@ internal static partial class Helper {
 
         CustomCameraObj = null;
         CustomCamera = null;
-        if (!Helper.LocalPlayer.IsDead()) {
-            if (Helper.LocalPlayer?.gameplayCamera is Camera camData) {
-                camData.enabled = true;
-            }
+
+        if (Helper.LocalPlayer is PlayerControllerB player && !player.IsDead() && player.gameplayCamera is Camera camData) {
+            camData.enabled = true;
         }
     }
 
