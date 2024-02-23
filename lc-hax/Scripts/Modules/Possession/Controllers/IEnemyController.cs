@@ -9,7 +9,7 @@ internal interface IController {
 
     void OnDeath(EnemyAI enemy);
 
-    void Update(EnemyAI enemy, bool isAiControlled);
+    void Update(EnemyAI enemy, bool isAIControlled);
 
     void UsePrimarySkill(EnemyAI enemy);
 
@@ -45,7 +45,7 @@ internal interface IEnemyController<T> : IController where T : EnemyAI {
 
     void OnDeath(T enemy) { }
 
-    void Update(T enemy, bool isAiControlled) { }
+    void Update(T enemy, bool isAIControlled) { }
 
     void UsePrimarySkill(T enemy) { }
 
@@ -79,7 +79,7 @@ internal interface IEnemyController<T> : IController where T : EnemyAI {
 
     void IController.OnDeath(EnemyAI enemy) => this.OnDeath((T)enemy);
 
-    void IController.Update(EnemyAI enemy, bool isAiControlled) => this.Update((T)enemy, isAiControlled);
+    void IController.Update(EnemyAI enemy, bool isAIControlled) => this.Update((T)enemy, isAIControlled);
 
     void IController.UsePrimarySkill(EnemyAI enemy) => this.UsePrimarySkill((T)enemy);
 

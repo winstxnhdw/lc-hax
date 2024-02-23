@@ -2,7 +2,7 @@ using GameNetcodeStuff;
 using Hax;
 using Unity.Netcode;
 
-public enum HoardingBugState {
+enum HoardingBugState {
     IDLE,
     SEARCHING_FOR_ITEMS,
     RETURNING_TO_NEST,
@@ -10,6 +10,7 @@ public enum HoardingBugState {
     WATCHING_PLAYER,
     AT_NEST
 }
+
 internal class HoardingBugController : IEnemyController<HoarderBugAI> {
     void UseHeldItem(HoarderBugAI enemy) {
         if (enemy.heldItem is not { itemGrabbableObject: GrabbableObject grabbable }) return;
@@ -24,8 +25,8 @@ internal class HoardingBugController : IEnemyController<HoarderBugAI> {
         }
     }
 
-    public void Update(HoarderBugAI enemy, bool isAiControlled) {
-        if (isAiControlled) return;
+    public void Update(HoarderBugAI enemy, bool isAIControlled) {
+        if (isAIControlled) return;
         if (enemy.heldItem?.itemGrabbableObject is null) return;
 
         enemy.angryTimer = 0.0f;

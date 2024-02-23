@@ -24,7 +24,7 @@ internal class JesterController : IEnemyController<JesterAI> {
         enemy.SetBehaviourState(JesterState.OPEN);
     }
 
-    public void Update(JesterAI enemy, bool isAiControlled) => this.SetNoPlayerChasetimer(enemy, 100.0f);
+    public void Update(JesterAI enemy, bool isAIControlled) => this.SetNoPlayerChasetimer(enemy, 100.0f);
 
     public void OnUnpossess(JesterAI enemy) => this.SetNoPlayerChasetimer(enemy, 5.0f);
 
