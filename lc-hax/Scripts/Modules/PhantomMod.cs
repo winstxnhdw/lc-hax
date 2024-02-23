@@ -123,6 +123,7 @@ internal sealed class PhantomMod : MonoBehaviour {
     void TogglePhantom() {
         if (Helper.LocalPlayer is not PlayerControllerB player) return;
         if (Helper.GameCamera is not Camera camera) return;
+        if (Helper.GetCustomCamera() is not Camera customCam) return;
 
         camera.enabled = !Setting.EnablePhantom;
         Setting.EnablePhantom = !Setting.EnablePhantom;
@@ -131,13 +132,11 @@ internal sealed class PhantomMod : MonoBehaviour {
         player.thisController.enabled = !Setting.EnablePhantom;
         player.isFreeCamera = Setting.EnablePhantom;
         if (Setting.EnablePhantom) {
-            Camera? customCamera = Helper.GetCustomCamera();
-            if (customCamera != null) this.PhantomEnabled(customCamera);
+            this.PhantomEnabled(customCam);
         }
 
         else {
-            Camera? customCamera = Helper.GetCustomCamera();
-            if (customCamera != null) this.PhantomDisabled(player, customCamera);
+            this.PhantomDisabled(player, customCam);
         }
     }
 }
