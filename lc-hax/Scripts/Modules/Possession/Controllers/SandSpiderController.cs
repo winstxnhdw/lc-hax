@@ -1,7 +1,22 @@
+using GameNetcodeStuff;
 using Hax;
 using UnityEngine;
 
 internal class SandSpiderController : IEnemyController<SandSpiderAI> {
+
+    bool GetOnWall(SandSpiderAI enemy) => enemy.Reflect().GetInternalField<bool>("onWall");
+
+    bool GetSpoolingPlayerBody(SandSpiderAI enemy) =>
+        enemy.Reflect().GetInternalField<bool>("spoolingPlayerBody");
+
+    float GetTimeSinceHittingPlayer(SandSpiderAI enemy) =>
+        enemy.Reflect().GetInternalField<float>("timeSinceHittingPlayer");
+
+    void SetTimeSinceHittingPlayer(SandSpiderAI enemy, float value) =>
+        enemy.Reflect().SetInternalField("timeSinceHittingPlayer", value);
+
+
+
     public void Update(SandSpiderAI enemy, bool isAIControlled) {
         enemy.meshContainerPosition = enemy.transform.position;
         enemy.meshContainerTarget = enemy.transform.forward;
@@ -40,5 +55,15 @@ internal class SandSpiderController : IEnemyController<SandSpiderAI> {
 
     public void OnOutsideStatusChange(SandSpiderAI enemy) => enemy.StopSearch(enemy.patrolHomeBase, true);
 
-
+    public void OnCollideWithPlayer(SandSpiderAI enemy, PlayerControllerB player) {
+        if (enemy.isOutside) {
+            if (this.GetOnWall(enemy)) return;
+            if(this.GetSpoolingPlayerBody(enemy)) return;
+            if (this.GetTimeSinceHittingPlayer(enemy) > 1f) {
+                this.SetTimeSinceHittingPlayer(enemy, 0.0f);
+                player.DamagePlayer(90, true, true, CauseOfDeath.Mauling, 0, false, default);
+                enemy.HitPlayerServerRpc((int)player.actualClientId);
+            }
+        }
+    }
 }

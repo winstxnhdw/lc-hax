@@ -328,6 +328,7 @@ internal sealed class PossessionMod : MonoBehaviour {
     void HandleEnemyPlayerInteraction(EnemyAI enemy, RaycastHit hit, IController controller) {
         if (controller == null) return;
         if (!hit.collider.gameObject.TryGetComponent(out PlayerControllerB player)) return;
+        if (player.IsDead()) return;
         controller.OnCollideWithPlayer(enemy, player);
     }
 

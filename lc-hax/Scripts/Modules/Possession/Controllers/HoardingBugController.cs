@@ -1,6 +1,7 @@
 using GameNetcodeStuff;
 using Hax;
 using Unity.Netcode;
+using UnityEngine;
 
 enum HoardingBugState {
     IDLE,
@@ -12,6 +13,16 @@ enum HoardingBugState {
 }
 
 internal class HoardingBugController : IEnemyController<HoarderBugAI> {
+
+    bool GetInChase(HoarderBugAI enemy) => enemy.Reflect().GetInternalField<bool>("inChase");
+
+    float GettimeSinceHittingPlayer(HoarderBugAI enemy) =>
+        enemy.Reflect().GetInternalField<float>("timeSinceHittingPlayer");
+
+    void SettimeSinceHittingPlayer(HoarderBugAI enemy, float value) =>
+        enemy.Reflect().SetInternalField("timeSinceHittingPlayer", value);
+
+
     void UseHeldItem(HoarderBugAI enemy) {
         if (enemy.heldItem is not { itemGrabbableObject: GrabbableObject grabbable }) return;
 
@@ -94,6 +105,16 @@ internal class HoardingBugController : IEnemyController<HoarderBugAI> {
     public void OnOutsideStatusChange(HoarderBugAI enemy) {
         enemy.StopSearch(enemy.searchForItems, true);
         enemy.StopSearch(enemy.searchForPlayer, true);
+    }
+
+    public void OnCollideWithPlayer(HoarderBugAI enemy, PlayerControllerB player) {
+        if (enemy.isOutside) {
+            if (!this.GetInChase(enemy)) return;
+            if (this.GettimeSinceHittingPlayer(enemy) < 0.5f) return;
+            this.SettimeSinceHittingPlayer(enemy, 0f);
+            player.DamagePlayer(30, true, true, CauseOfDeath.Mauling, 0, false, default);
+            enemy.HitPlayerServerRpc();
+        }
     }
 
 }
