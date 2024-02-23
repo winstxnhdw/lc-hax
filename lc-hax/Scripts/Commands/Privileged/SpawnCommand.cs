@@ -1,61 +1,60 @@
-using System;
-using System.Linq;
-using System.Collections.Generic;
-using Unity.Netcode;
-using UnityEngine;
-using UnityObject = UnityEngine.Object;
 using GameNetcodeStuff;
 using Hax;
+using UnityEngine;
 
 [PrivilegedCommand("spawn")]
 internal class SpawnCommand : ICommand {
-    static bool IsHostileEnemy(EnemyType enemy) =>
-        !enemy.enemyName.Contains("Docile Locust Bees", StringComparison.OrdinalIgnoreCase) ||
-        !enemy.enemyName.Contains("Manticoil", StringComparison.OrdinalIgnoreCase);
+    public void Execute(StringArray args) {
+        if (Helper.RoundManager?.currentLevel is null) return;
 
-    static Dictionary<string, GameObject> HostileEnemies { get; } =
-        Resources.FindObjectsOfTypeAll<EnemyType>()
-                 .Where(SpawnCommand.IsHostileEnemy)
-                 .GroupBy(enemy => enemy.enemyName)
-                 .ToDictionary(enemyGroup => enemyGroup.Key, enemy => Enumerable.First(enemy).enemyPrefab);
-
-    void SpawnEnemyOnPlayer(PlayerControllerB player, GameObject prefab, ulong amount = 1) {
-        for (ulong i = 0; i < amount; i++) {
-            GameObject enemy = UnityObject.Instantiate(prefab, player.transform.position, Quaternion.identity);
-
-            if (!enemy.TryGetComponent(out NetworkObject networkObject)) {
-                UnityObject.Destroy(enemy);
-                continue;
+        if (!Setting.EnablePhantom) {
+            if (args.Length < 2) {
+                Chat.Print("Usage: spawn <enemy> <player> <amount?>");
+                return;
             }
 
-            networkObject.Spawn(true);
-        }
-    }
+            if (Helper.GetActivePlayer(args[1]) is not PlayerControllerB targetPlayer) {
+                Chat.Print($"{args[1]} is not alive or found!");
+                return;
+            }
 
-    public void Execute(StringArray args) {
-        if (args.Length < 2) {
-            Chat.Print("Usage: spawn <enemy> <player> <amount?>");
-            return;
-        }
+            string? key = Helper.FuzzyMatch(args[0], Helper.HostileEnemies.Keys);
 
-        if (Helper.GetActivePlayer(args[1]) is not PlayerControllerB targetPlayer) {
-            Chat.Print("Player is not alive or found!");
-            return;
-        }
+            if (key is null) {
+                Chat.Print("Invalid enemy!");
+                return;
+            }
 
-        string? key = Helper.FuzzyMatch(args[0], SpawnCommand.HostileEnemies.Keys);
+            if (!args[2].TryParse(defaultValue: 1, result: out ulong amount)) {
+                Chat.Print("Invalid amount specified. Defaulting to 1.");
+            }
 
-        if (key is null) {
-            Chat.Print("Invalid enemy!");
-            return;
-        }
-
-        if (!args[2].TryParse(defaultValue: 1, result: out ulong amount)) {
-            Chat.Print("Invalid amount specified. Defaulting to 1.");
-            return;
+            Helper.SpawnEnemies(targetPlayer.transform.position, Helper.HostileEnemies[key], amount);
+            Helper.SendNotification(title: "Spawner",
+                body: $"Spawning {(amount > 1 ? amount.ToString() : "a")} {(amount > 1 ? key + "s" : key)} on {targetPlayer.playerUsername}.",
+                isWarning: false);
         }
 
-        this.SpawnEnemyOnPlayer(targetPlayer, SpawnCommand.HostileEnemies[key], amount);
-        Chat.Print($"Spawning {amount}x {key} on {targetPlayer.playerUsername}.");
+        else {
+            if (Helper.CurrentCamera is not Camera camera || !camera.enabled) return;
+
+            if (args.Length < 1) {
+                Chat.Print("Usage: spawn <enemy>");
+                return;
+            }
+
+            string? key = Helper.FuzzyMatch(args[0], Helper.HostileEnemies.Keys);
+            if (key is null) {
+                Chat.Print("Invalid enemy!");
+                return;
+            }
+
+            EnemyAI? enemy = Helper.SpawnEnemy(camera.transform.position, Helper.HostileEnemies[key]);
+
+            if (enemy is not null) {
+                PossessionMod.Instance?.Possess(enemy);
+                Helper.SendNotification(title: "Spawner", body: $"Spawning {key} and possessing it.", isWarning: false);
+            }
+        }
     }
 }

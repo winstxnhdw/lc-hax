@@ -9,7 +9,7 @@ internal class ESPMod : MonoBehaviour {
     Renderer[] LandmineRenderers { get; set; } = [];
     Renderer[] TurretRenderers { get; set; } = [];
     Renderer[] EntranceRenderers { get; set; } = [];
-    Vector3[] StoryLogVectors { get; set; } = [];
+    Renderer[] StoryLog { get; set; } = [];
 
     bool InGame { get; set; } = false;
     bool IsMapLoaded { get; set; } = false;
@@ -50,19 +50,21 @@ internal class ESPMod : MonoBehaviour {
             this.RenderBounds(
                 camera,
                 rendererPair.Renderer.bounds,
+                Helper.ExtraColors.Aquamarine,
                 this.RenderLabel(label)
             );
         });
 
         Helper.Grabbables.WhereIsNotNull().ForEach(grabbableObject => {
+            if (grabbableObject == null) return;
             Vector3 rendererCentrePoint = camera.WorldToEyesPoint(grabbableObject.transform.position);
 
             if (rendererCentrePoint.z <= 2.0f) {
                 return;
             }
 
-            this.RenderLabel($"{grabbableObject.itemProperties.itemName} ${grabbableObject.scrapValue}").Invoke(
-                Color.gray,
+            this.RenderLabel($"{grabbableObject.ToEspLabel()} ${grabbableObject.GetScrapValue()}").Invoke(
+                Helper.GetLootColor(grabbableObject),
                 rendererCentrePoint
             );
         });
@@ -74,39 +76,37 @@ internal class ESPMod : MonoBehaviour {
         this.LandmineRenderers.ForEach(renderer => this.RenderBounds(
             camera,
             renderer.bounds,
-            Color.yellow,
+            Helper.ExtraColors.OrangeRed,
             this.RenderLabel("Landmine")
         ));
 
         this.TurretRenderers.ForEach(renderer => this.RenderBounds(
             camera,
             renderer.bounds,
-            Color.yellow,
+            Helper.ExtraColors.OrangeRed,
             this.RenderLabel("Turret")
         ));
 
         this.EntranceRenderers.ForEach(renderer => this.RenderBounds(
             camera,
             renderer.bounds,
-            Color.yellow,
+            Helper.ExtraColors.LightGoldenrodYellow,
             this.RenderLabel("Entrance")
         ));
 
-        this.StoryLogVectors.ForEach(vector => {
-            Vector3 rendererCentrePoint = camera.WorldToEyesPoint(vector);
+        this.StoryLog.Where(x => x.enabled).ForEach(renderer => this.RenderBounds(
+            camera,
+            renderer.bounds,
+            Helper.ExtraColors.Violet,
+            this.RenderLabel("Story Log")
+        ));
 
-            if (rendererCentrePoint.z <= 2.0f) {
-                return;
-            }
-
-            this.RenderLabel("Log").Invoke(Color.gray, rendererCentrePoint);
-        });
 
         Helper.Enemies.WhereIsNotNull().ForEach(enemy => {
             if (enemy.isEnemyDead) return;
             if (enemy is DocileLocustBeesAI or DoublewingAI) return;
 
-            Renderer? nullableRenderer = enemy is RedLocustBees
+            Renderer? nullableRenderer = enemy is RedLocustBees or TestEnemy
                 ? enemy.meshRenderers.First()
                 : enemy.skinnedMeshRenderers.First();
 
@@ -153,6 +153,12 @@ internal class ESPMod : MonoBehaviour {
               .Select(obj => obj.GetComponent<Renderer>())
               .ToArray();
 
+    Renderer[] GetRenderersInChildren<T>() where T : Component =>
+        Helper.FindObjects<T>()
+            .Select(obj => obj.GetComponentInChildren<Renderer>())
+            .ToArray();
+
+
     void InitialiseRenderers() {
         this.PlayerRenderers = Helper.Players.Select(player =>
             new RendererPair<PlayerControllerB, SkinnedMeshRenderer>() {
@@ -166,7 +172,7 @@ internal class ESPMod : MonoBehaviour {
         this.EntranceRenderers = this.GetRenderers<EntranceTeleport>();
     }
 
-    void InitialiseCoordinates() => this.StoryLogVectors = Helper.FindObjects<StoryLog>().Select(log => log.transform.position).ToArray();
+    void InitialiseCoordinates() => this.StoryLog = this.GetRenderersInChildren<StoryLog>();
 
     Size GetRendererSize(Bounds bounds, Camera camera) {
         ReadOnlySpan<Vector3> corners = [
