@@ -41,7 +41,7 @@ internal interface IController {
 
     void OnOutsideStatusChange(EnemyAI enemy);
 
-    void OnPlayerCollision(EnemyAI enemy, PlayerControllerB player);
+    void OnCollideWithPlayer(EnemyAI enemy, PlayerControllerB player);
 }
 
 internal interface IEnemyController<T> : IController where T : EnemyAI {
@@ -81,7 +81,7 @@ internal interface IEnemyController<T> : IController where T : EnemyAI {
 
     void OnOutsideStatusChange(T enemy) { }
 
-    void OnPlayerCollision(T enemy, PlayerControllerB player) { }
+    void OnCollideWithPlayer(T enemy, PlayerControllerB player) { }
 
     void IController.OnPossess(EnemyAI enemy) => this.OnPossess((T)enemy);
 
@@ -119,5 +119,5 @@ internal interface IEnemyController<T> : IController where T : EnemyAI {
 
     void IController.OnOutsideStatusChange(EnemyAI enemy) => this.OnOutsideStatusChange((T)enemy);
 
-    void IController.OnPlayerCollision(EnemyAI enemy, PlayerControllerB player) { }
+    void IController.OnCollideWithPlayer(EnemyAI enemy, PlayerControllerB player) => this.OnCollideWithPlayer((T)enemy, player);
 }
