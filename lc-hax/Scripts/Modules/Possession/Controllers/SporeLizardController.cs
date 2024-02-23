@@ -1,4 +1,5 @@
 
+using GameNetcodeStuff;
 using Hax;
 
 public enum SporeLizardState {
@@ -26,4 +27,5 @@ internal class SporeLizardController : IEnemyController<PufferAI> {
 
     public void OnOutsideStatusChange(PufferAI enemy) => enemy.StopSearch(enemy.roamMap, true);
 
+    public void OnCollideWithPlayer(PufferAI enemy, PlayerControllerB player) => enemy.OnCollideWithPlayer(player.playerCollider);
 }

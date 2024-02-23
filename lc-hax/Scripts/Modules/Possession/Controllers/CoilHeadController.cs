@@ -1,3 +1,5 @@
+using GameNetcodeStuff;
+
 internal class CoilHeadController : IEnemyController<SpringManAI> {
     bool GetStoppingMovement(SpringManAI enemy) => enemy.Reflect().GetInternalField<bool>("stoppingMovement");
 
@@ -13,7 +15,6 @@ internal class CoilHeadController : IEnemyController<SpringManAI> {
 
     public void OnOutsideStatusChange(SpringManAI enemy) => enemy.StopSearch(enemy.searchForPlayers, true);
 
-
-
+    public void OnCollideWithPlayer(SpringManAI enemy, PlayerControllerB player) => enemy.OnCollideWithPlayer(player.playerCollider);
 }
 

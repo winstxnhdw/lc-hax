@@ -37,9 +37,7 @@ internal class SandSpiderController : IEnemyController<SandSpiderAI> {
         enemy.SpawnWebTrapServerRpc(floorPosition, raycastHit.point);
     }
 
-    public void OnOutsideStatusChange(SandSpiderAI enemy) {
-        enemy.StopSearch(enemy.patrolHomeBase, true);
-    }
+    public void OnOutsideStatusChange(SandSpiderAI enemy) => enemy.StopSearch(enemy.patrolHomeBase, true);
 
 
 }

@@ -1,3 +1,4 @@
+using GameNetcodeStuff;
 using Hax;
 
 enum BrackenState {
@@ -29,4 +30,6 @@ internal class BrackenController : IEnemyController<FlowermanAI> {
     public float InteractRange(FlowermanAI _) => 1.5f;
 
     public bool SyncAnimationSpeedEnabled(FlowermanAI _) => false;
+
+    public void OnCollideWithPlayer(FlowermanAI enemy, PlayerControllerB player) => enemy.OnCollideWithPlayer(player.playerCollider);
 }

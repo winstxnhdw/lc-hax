@@ -1,3 +1,5 @@
+using GameNetcodeStuff;
+
 internal class CrawlerController : IEnemyController<CrawlerAI> {
     public float InteractRange(CrawlerAI _) => 1.5f;
 
@@ -8,5 +10,7 @@ internal class CrawlerController : IEnemyController<CrawlerAI> {
     public void UsePrimarySkill(CrawlerAI enemy) => enemy.CollideWithWallServerRpc();
 
     public void OnOutsideStatusChange(CrawlerAI enemy) => enemy.StopSearch(enemy.searchForPlayers, true);
+
+    public void OnCollideWithPlayer(CrawlerAI enemy, PlayerControllerB player) => enemy.OnCollideWithPlayer(player.playerCollider);
 
 }
