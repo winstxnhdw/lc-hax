@@ -18,7 +18,7 @@ internal static partial class Helper {
             return;
         }
 
-        if(Helper.StartOfRound is not StartOfRound { spectateCamera: Camera spectate }) return;
+        if (Helper.StartOfRound is not StartOfRound { spectateCamera: Camera spectate }) return;
         if (!player.IsDead() && player.gameplayCamera is Camera camData) {
             camData.enabled = true;
         }
@@ -40,8 +40,8 @@ internal static partial class Helper {
         if (CustomCamera is not null) return CustomCamera;
         if (Helper.LocalPlayer is not PlayerControllerB player) return null;
         if (Helper.LocalPlayer?.gameplayCamera is not Camera playercam) return null;
-        if(Helper.StartOfRound is not StartOfRound round) return null;
-        if(round.spectateCamera is not Camera spectate) return null;
+        if (Helper.StartOfRound is not StartOfRound round) return null;
+        if (round.spectateCamera is not Camera spectate) return null;
 
         Camera camData = player.IsDead() ? spectate : playercam;
         CustomCameraObj ??= new GameObject("lc-hax Camera");
