@@ -27,6 +27,7 @@ internal class InputListener : MonoBehaviour {
     internal static event Action? OnF5Press;
     internal static event Action? OnF9Press;
     internal static event Action<bool>? OnRightButtonHold;
+    internal static event Action<bool>? OnLeftAltButtonHold;
 
     (Func<bool>, Action)[] InputActions { get; } = [
         (() => Mouse.current.middleButton.wasPressedThisFrame, () => InputListener.OnMiddleButtonPress?.Invoke()),
@@ -56,6 +57,7 @@ internal class InputListener : MonoBehaviour {
         InputListener.OnFButtonHold?.Invoke(Keyboard.current[Key.F].isPressed);
         InputListener.OnEButtonHold?.Invoke(Keyboard.current[Key.E].isPressed);
         InputListener.OnRightButtonHold?.Invoke(Mouse.current.rightButton.isPressed);
+        InputListener.OnLeftAltButtonHold?.Invoke(Keyboard.current[Key.LeftAlt].isPressed);
 
         foreach ((Func<bool> keyPressed, Action eventAction) in this.InputActions) {
             if (!keyPressed()) continue;
