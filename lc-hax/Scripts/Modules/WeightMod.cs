@@ -4,6 +4,19 @@ using Hax;
 using UnityEngine;
 
 internal sealed class WeightMod : MonoBehaviour {
+
+
+
+    internal static WeightMod? Instance { get; private set; }
+
+    void Awake() {
+        if (WeightMod.Instance != null) {
+            Destroy(this);
+            return;
+        }
+        WeightMod.Instance = this;
+    }
+
     Coroutine? WeightCoroutine { get; set; }
 
 
@@ -22,9 +35,9 @@ internal sealed class WeightMod : MonoBehaviour {
         }
     }
 
-    void StartRoutine() => this.WeightCoroutine ??= this.StartResilientCoroutine(this.SetWeight);
+    internal void StartRoutine() => this.WeightCoroutine ??= this.StartResilientCoroutine(this.SetWeight);
 
-    void OnStopRoutine() {
+    internal void OnStopRoutine() {
         if (this.WeightCoroutine != null) {
             this.StopCoroutine(this.WeightCoroutine);
             this.WeightCoroutine = null;
