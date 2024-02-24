@@ -13,9 +13,9 @@ internal class HaxCamera : MonoBehaviour {
 
     internal void DestroyCustomCam() {
         if (Helper.LocalPlayer is not PlayerControllerB player) {
-            Object.DestroyImmediate(CustomCameraObj);
-            CustomCameraObj = null;
-            CustomCamera = null;
+            Object.DestroyImmediate(this.CustomCameraObj);
+            this.CustomCameraObj = null;
+            this.CustomCamera = null;
             return;
         }
 
@@ -25,15 +25,15 @@ internal class HaxCamera : MonoBehaviour {
         }
         else {
             spectate.enabled = true;
-            if (CustomCameraObj != null) spectate.transform.position = CustomCameraObj.transform.position;
+            if (this.CustomCameraObj != null) spectate.transform.position = this.CustomCameraObj.transform.position;
         }
 
-        if (CustomCameraObj != null) {
-            Object.DestroyImmediate(CustomCameraObj);
+        if (this.CustomCameraObj != null) {
+            Object.DestroyImmediate(this.CustomCameraObj);
         }
 
-        CustomCameraObj = null;
-        CustomCamera = null;
+        this.CustomCameraObj = null;
+        this.CustomCamera = null;
 
     }
 
@@ -50,7 +50,7 @@ internal class HaxCamera : MonoBehaviour {
 
     internal Camera? GetCamera(bool Spawn = true) {
         if (this.CustomCamera is not null) return this.CustomCamera;
-        if(!Spawn) return this.CustomCamera;
+        if (!Spawn) return this.CustomCamera;
         if (Helper.LocalPlayer is not PlayerControllerB player) return null;
         if (Helper.LocalPlayer?.gameplayCamera is not Camera playercam) return null;
         if (Helper.StartOfRound is not StartOfRound round) return null;
