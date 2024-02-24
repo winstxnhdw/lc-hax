@@ -77,10 +77,21 @@ internal sealed class PhantomMod : MonoBehaviour {
         keyboard.LastPosition = targetPlayer.playerEye.position;
     }
 
-    void PhantomEnabled(Camera camera) {
-        if(Helper.GameCamera is not Camera dataCamera) return;
-        camera.transform.position = dataCamera.transform.position;
-        camera.transform.rotation = dataCamera.transform.rotation;
+    void PhantomEnabled(PlayerControllerB player, Camera camera) {
+        if (player.gameplayCamera is not Camera gameplayCamera) return;
+        if (Helper.StartOfRound is not StartOfRound round) return;
+
+        if (!player.IsDead()) {
+            gameplayCamera.enabled = true;
+            camera.transform.position = gameplayCamera.transform.position;
+            camera.transform.rotation = gameplayCamera.transform.rotation;
+        }
+        else {
+            round.spectateCamera.enabled = true;
+            camera.transform.position = round.spectateCamera.transform.position;
+            camera.transform.rotation = round.spectateCamera.transform.rotation;
+        }
+
 
         if (!camera.TryGetComponent(out KeyboardMovement keyboard)) {
             keyboard = camera.gameObject.AddComponent<KeyboardMovement>();
@@ -119,10 +130,7 @@ internal sealed class PhantomMod : MonoBehaviour {
 
     void TogglePhantom() {
         if (Helper.LocalPlayer is not PlayerControllerB player) return;
-        if (Helper.GameCamera is not Camera camera) return;
         if (Helper.GetCustomCamera() is not Camera customCam) return;
-
-        camera.enabled = !Setting.EnablePhantom;
         Setting.EnablePhantom = !Setting.EnablePhantom;
         player.enabled = !player.IsDead() || !Setting.EnablePhantom;
         player.playerBodyAnimator.enabled = !Setting.EnablePhantom;
@@ -130,7 +138,7 @@ internal sealed class PhantomMod : MonoBehaviour {
         player.isFreeCamera = Setting.EnablePhantom;
 
         if (Setting.EnablePhantom) {
-            this.PhantomEnabled(customCam);
+            this.PhantomEnabled(player, customCam);
         }
 
         else {
