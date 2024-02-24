@@ -41,7 +41,7 @@ internal class SporeLizardController : IEnemyController<PufferAI> {
             if (this.GetTimeSinceHittingPlayer(enemy) > 1f) {
                 this.SetTimeSinceHittingPlayer(enemy, 0f);
                 player.DamagePlayer(20, true, true, CauseOfDeath.Mauling, 0, false, default);
-                enemy.BitePlayerServerRpc((int)player.playerClientId);
+                enemy.BitePlayerServerRpc(player.PlayerIndex());
             }
         }
     }
