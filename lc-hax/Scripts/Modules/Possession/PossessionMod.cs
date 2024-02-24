@@ -196,8 +196,9 @@ internal sealed class PossessionMod : MonoBehaviour {
             return;
         }
 
-        if (!controller.IsAbleToMove(enemy)) {
-            return;
+        if (controller.IsAbleToMove(enemy)) {
+            this.UpdateEnemyPosition(enemy);
+            controller.OnMovement(enemy, this.CharacterMovement.IsMoving, this.CharacterMovement.IsSprinting);
         }
 
         if (controller.SyncAnimationSpeedEnabled(enemy)) {
@@ -207,9 +208,6 @@ internal sealed class PossessionMod : MonoBehaviour {
         if (controller.IsAbleToRotate(enemy)) {
             this.UpdateEnemyRotation();
         }
-
-        this.UpdateEnemyPosition(enemy);
-        controller.OnMovement(enemy, this.CharacterMovement.IsMoving, this.CharacterMovement.IsSprinting);
     }
 
     void UpdateCameraPosition(Camera camera, EnemyAI enemy) {
