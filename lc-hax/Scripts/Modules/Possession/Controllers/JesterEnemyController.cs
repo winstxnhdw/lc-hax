@@ -29,9 +29,8 @@ internal class JesterController : IEnemyController<JesterAI> {
 
     public void OnUnpossess(JesterAI enemy) => this.SetNoPlayerChasetimer(enemy, 5.0f);
 
-    public bool IsAbleToMove(JesterAI enemy) => !(enemy.IsBehaviourState(JesterState.CRANKING) || this.GetinKillAnimation(enemy));
-
-    public bool IsAbleToRotate(JesterAI enemy) => !(enemy.IsBehaviourState(JesterState.CRANKING) || this.GetinKillAnimation(enemy));
+    public bool IsAbleToMove(JesterAI enemy) => !enemy.IsBehaviourState(JesterState.CRANKING);
+    public bool IsAbleToRotate(JesterAI enemy) => !enemy.IsBehaviourState(JesterState.CRANKING);
 
     public string GetPrimarySkillName(JesterAI _) => "Close box";
 
