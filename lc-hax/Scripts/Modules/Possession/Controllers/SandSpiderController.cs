@@ -60,7 +60,7 @@ internal class SandSpiderController : IEnemyController<SandSpiderAI> {
             if (this.GetTimeSinceHittingPlayer(enemy) > 1f) {
                 this.SetTimeSinceHittingPlayer(enemy, 0.0f);
                 player.DamagePlayer(90, true, true, CauseOfDeath.Mauling, 0, false, default);
-                enemy.HitPlayerServerRpc((int)player.actualClientId);
+                enemy.HitPlayerServerRpc((int)player.playerClientId);
             }
         }
     }
