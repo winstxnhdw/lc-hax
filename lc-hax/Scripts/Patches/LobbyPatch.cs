@@ -12,10 +12,10 @@ class LobbyPatch {
         __instance.censorOffensiveLobbyNames = false;
     }
 
-    [HarmonyPatch("loadLobbyListAndFilter")]
-    static void Prefix(ref Lobby[] ___currentLobbyList) {
-        ___currentLobbyList.Where(lobby => lobby.GetData("name").Contains('\u200b')).ForEach(lobby =>
-            lobby.SetData("name", $"[CC] {lobby.GetData("name")}")
-        );
-    }
+    //[HarmonyPatch("loadLobbyListAndFilter")]
+    //static void Prefix(ref Lobby[] ___currentLobbyList) {
+    //    ___currentLobbyList.Where(lobby => lobby.GetData("name").Contains('\u200b')).ForEach(lobby =>
+    //        lobby.SetData("name", $"[CC] {lobby.GetData("name")}")
+    //    );
+    //}
 }
