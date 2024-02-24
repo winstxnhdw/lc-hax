@@ -1,4 +1,4 @@
-internal interface IController {
+interface IController {
     const float DefaultSprintMultiplier = 2.8f;
 
     const float DefaultInteractRange = 2.5f;
@@ -38,7 +38,7 @@ internal interface IController {
     bool SyncAnimationSpeedEnabled(EnemyAI enemy);
 }
 
-internal interface IEnemyController<T> : IController where T : EnemyAI {
+interface IEnemyController<T> : IController where T : EnemyAI {
     void OnPossess(T enemy) { }
 
     void OnUnpossess(T enemy) { }
