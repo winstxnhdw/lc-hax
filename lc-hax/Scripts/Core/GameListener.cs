@@ -54,7 +54,6 @@ internal class GameListener : MonoBehaviour {
 
         else {
             GameListener.OnGameEnd?.Invoke();
-            Helper.DestroyCustomCam();
         }
     }
 }

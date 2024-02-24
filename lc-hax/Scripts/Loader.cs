@@ -66,6 +66,7 @@ internal class Loader : MonoBehaviour {
         Loader.AddHaxGameObject<InputListener>();
         Loader.AddHaxGameObject<ScreenListener>();
         Loader.AddHaxGameObject<GameListener>();
+        Loader.AddHaxGameObject<HaxCamera>();
     }
 
     static void LoadHaxModules() {
