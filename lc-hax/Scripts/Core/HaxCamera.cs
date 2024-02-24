@@ -4,13 +4,14 @@ using UnityEngine.Rendering.HighDefinition;
 
 namespace Hax;
 
-internal static partial class Helper {
+internal class HaxCamera : MonoBehaviour {
+    internal static HaxCamera? Instance { get; private set; }
 
-    static GameObject? CustomCameraObj = null;
+    internal GameObject? CustomCameraObj { get; private set; }
 
-    static Camera? CustomCamera;
+    internal Camera? CustomCamera { get; private set; }
 
-    internal static void DestroyCustomCam() {
+    internal void DestroyCustomCam() {
         if (Helper.LocalPlayer is not PlayerControllerB player) {
             Object.DestroyImmediate(CustomCameraObj);
             CustomCameraObj = null;
@@ -36,16 +37,28 @@ internal static partial class Helper {
 
     }
 
-    internal static Camera? GetCustomCamera() {
-        if (CustomCamera is not null) return CustomCamera;
+    void LateUpdate() {
+        if (this.CustomCamera is null) return;
+        if (Helper.StartOfRound is not StartOfRound round) return;
+        if (round.spectateCamera is not Camera spectate) return;
+        if (Helper.LocalPlayer is not PlayerControllerB player) return;
+        if (player?.gameplayCamera is not Camera playercam) return;
+        // keep the cameras off if custom camera is enabled
+        if (playercam.enabled) playercam.enabled = false;
+        if (spectate.enabled) spectate.enabled = false;
+    }
+
+    internal Camera? GetCamera(bool Spawn = true) {
+        if (this.CustomCamera is not null) return this.CustomCamera;
+        if(!Spawn) return this.CustomCamera;
         if (Helper.LocalPlayer is not PlayerControllerB player) return null;
         if (Helper.LocalPlayer?.gameplayCamera is not Camera playercam) return null;
         if (Helper.StartOfRound is not StartOfRound round) return null;
         if (round.spectateCamera is not Camera spectate) return null;
 
         Camera camData = player.IsDead() ? spectate : playercam;
-        CustomCameraObj ??= new GameObject("lc-hax Camera");
-        Camera newCam = CustomCameraObj.AddComponent<Camera>();
+        this.CustomCameraObj ??= new GameObject("lc-hax Camera");
+        Camera newCam = this.CustomCameraObj.AddComponent<Camera>();
         newCam.transform.position = camData.transform.position;
         newCam.transform.rotation = camData.transform.rotation;
 
@@ -89,8 +102,19 @@ internal static partial class Helper {
         }
 
         newCam.enabled = true;
-        CustomCamera = newCam;
-        return CustomCamera;
+        return this.CustomCamera = newCam;
     }
 
+
+    internal void Awake() => Instance = this;
+
+    internal void OnEnable() {
+        GameListener.OnGameStart += this.DestroyCustomCam;
+        GameListener.OnGameEnd += this.DestroyCustomCam;
+    }
+
+    internal void OnDisable() {
+        GameListener.OnGameStart -= this.DestroyCustomCam;
+        GameListener.OnGameEnd -= this.DestroyCustomCam;
+    }
 }
