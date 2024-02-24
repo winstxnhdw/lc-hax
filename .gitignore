@@ -7,6 +7,3 @@ NuGet/
 .cr/
 *.sln
 lc-hax/Scripts/Loader.cs
-lc-hax/Scripts/Loader.cs
-lc-hax/Scripts/Modules/ClearVisionMod.cs
-lc-hax/Scripts/Patches/LobbyPatch.cs
