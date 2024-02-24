@@ -91,24 +91,24 @@ internal sealed class ClearVisionMod : MonoBehaviour {
         }
     }
 
-    IEnumerator DisableSteamValves(object[] args) {
-        WaitForSeconds waitForFiveSeconds = new(5.0f);
+    //IEnumerator DisableSteamValves(object[] args) {
+    //    WaitForSeconds waitForFiveSeconds = new(5.0f);
 
-        while (true) {
-            HaxObjects
-                .Instance?
-                .SteamValves?
-                .ForEach(valve =>
-                    valve?.valveSteamParticle.Stop(true, ParticleSystemStopBehavior.StopEmittingAndClear)
-                );
+    //    while (true) {
+    //        HaxObjects
+    //            .Instance?
+    //            .SteamValves?
+    //            .ForEach(valve =>
+    //                valve?.valveSteamParticle.Stop(true, ParticleSystemStopBehavior.StopEmittingAndClear)
+    //            );
 
-            yield return waitForFiveSeconds;
-        }
-    }
+    //        yield return waitForFiveSeconds;
+    //    }
+    //}
 
     void Start() {
         _ = this.StartResilientCoroutine(this.DisableFog);
-        _ = this.StartResilientCoroutine(this.DisableSteamValves);
+        //_ = this.StartResilientCoroutine(this.DisableSteamValves);
         _ = this.StartResilientCoroutine(this.DisableVisor);
         _ = this.StartResilientCoroutine(this.SetNightVision);
     }
