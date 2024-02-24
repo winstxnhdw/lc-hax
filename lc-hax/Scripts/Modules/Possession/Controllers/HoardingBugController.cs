@@ -38,7 +38,6 @@ internal class HoardingBugController : IEnemyController<HoarderBugAI> {
     public void Update(HoarderBugAI enemy, bool isAIControlled) {
         if (isAIControlled) return;
         if (enemy.heldItem?.itemGrabbableObject is null) return;
-
         enemy.angryTimer = 0.0f;
         enemy.SetBehaviourState(HoardingBugState.IDLE);
     }
@@ -65,12 +64,6 @@ internal class HoardingBugController : IEnemyController<HoarderBugAI> {
     }
 
     public void UsePrimarySkill(HoarderBugAI enemy) {
-        if (enemy.angryTimer > 0.0f) {
-            enemy.angryTimer = 0.0f;
-            enemy.angryAtPlayer = null;
-            enemy.SetBehaviourState(HoardingBugState.IDLE);
-        }
-
         if (enemy.heldItem is null && enemy.FindNearbyItem() is GrabbableObject grabbable) {
             this.GrabItem(enemy, grabbable);
         }
