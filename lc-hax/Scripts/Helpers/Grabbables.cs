@@ -4,7 +4,6 @@ using System.Linq;
 using GameNetcodeStuff;
 using Unity.Netcode;
 using UnityEngine;
-using UnityEngine.UIElements;
 using Object = UnityEngine.Object;
 using Random = System.Random;
 

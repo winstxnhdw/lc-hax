@@ -1,8 +1,6 @@
 using GameNetcodeStuff;
 using HarmonyLib;
 using Hax;
-using UnityEngine;
-using UnityEngine.InputSystem.EnhancedTouch;
 
 [HarmonyPatch]
 class GodModePatch {
