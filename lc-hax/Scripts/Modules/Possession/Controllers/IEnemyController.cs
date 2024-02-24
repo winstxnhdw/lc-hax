@@ -1,6 +1,6 @@
 using GameNetcodeStuff;
 
-internal interface IController {
+interface IController {
     const float DefaultSprintMultiplier = 2.8f;
 
     const float DefaultInteractRange = 2.5f;
@@ -44,7 +44,7 @@ internal interface IController {
     void OnCollideWithPlayer(EnemyAI enemy, PlayerControllerB player);
 }
 
-internal interface IEnemyController<T> : IController where T : EnemyAI {
+interface IEnemyController<T> : IController where T : EnemyAI {
     void OnPossess(T enemy) { }
 
     void OnUnpossess(T enemy) { }
