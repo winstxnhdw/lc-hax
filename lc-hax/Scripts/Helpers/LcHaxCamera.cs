@@ -5,10 +5,6 @@ using UnityEngine.Rendering.HighDefinition;
 namespace Hax;
 
 internal static partial class Helper {
-    internal static Camera? GameCamera =>
-        Helper.LocalPlayer?.gameplayCamera is Camera { enabled: true } gameplayCamera
-            ? gameplayCamera
-            : Helper.StartOfRound?.spectateCamera;
 
     static GameObject? CustomCameraObj = null;
 
@@ -41,8 +37,13 @@ internal static partial class Helper {
     }
 
     internal static Camera? GetCustomCamera() {
-        if (Helper.LocalPlayer?.gameplayCamera is not Camera camData) return null;
         if (CustomCamera is not null) return CustomCamera;
+        if (Helper.LocalPlayer is not PlayerControllerB player) return null;
+        if (Helper.LocalPlayer?.gameplayCamera is not Camera playercam) return null;
+        if(Helper.StartOfRound is not StartOfRound round) return null;
+        if(round.spectateCamera is not Camera spectate) return null;
+
+        Camera camData = player.IsDead() ? spectate : playercam;
         CustomCameraObj ??= new GameObject("lc-hax Camera");
         Camera newCam = CustomCameraObj.AddComponent<Camera>();
         newCam.transform.position = camData.transform.position;
