@@ -19,9 +19,11 @@ internal class CoilHeadController : IEnemyController<SpringManAI> {
 
     public void ReleaseSecondarySkill(SpringManAI enemy) => enemy.SetAnimationStopServerRpc();
 
-    public bool IsAbleToMove(SpringManAI enemy) => !this.GetStoppingMovement(enemy);
+    public bool IsAbleToMove(SpringManAI enemy) =>
+        !this.GetStoppingMovement(enemy) || enemy.IsBehaviourState(CoilHeadState.Idle);
 
-    public bool IsAbleToRotate(SpringManAI enemy) => !this.GetStoppingMovement(enemy);
+    public bool IsAbleToRotate(SpringManAI enemy) =>
+        !this.GetStoppingMovement(enemy) || enemy.IsBehaviourState(CoilHeadState.Idle);
 
     public float InteractRange(SpringManAI _) => 1.5f;
 
@@ -41,4 +43,3 @@ internal class CoilHeadController : IEnemyController<SpringManAI> {
         }
     }
 }
-
