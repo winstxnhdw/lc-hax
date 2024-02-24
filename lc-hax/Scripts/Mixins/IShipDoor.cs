@@ -1,17 +1,20 @@
-using UnityEngine;
 using Hax;
 
-internal interface IShipDoor { }
+interface IShipDoor { }
 
-internal static class IShipDoorMixin {
-    static InteractTrigger? GetAnimationInteractTrigger(this GameObject gameObject, string animation) =>
-        gameObject
-            .GetComponentsInChildren<AnimatedObjectTrigger>()
-            .First(trigger => trigger.animationString == animation)?
-            .GetComponentInParent<InteractTrigger>();
+static class ShipDoorMixin {
+    static HangarShipDoor? HangarShipDoor { get; set; }
 
-    internal static void SetShipDoorState(this IShipDoor _, bool closed) =>
-        Helper.FindObject<HangarShipDoor>()?
-              .gameObject.GetAnimationInteractTrigger(closed ? "CloseDoor" : "OpenDoor")?
-              .onInteract.Invoke(Helper.LocalPlayer);
+    internal static void SetShipDoorState(this IShipDoor _, bool closed) {
+        ShipDoorMixin.HangarShipDoor ??= Helper.FindObject<HangarShipDoor>();
+
+        ShipDoorMixin
+            .HangarShipDoor?
+            .gameObject
+            .GetComponentsInChildren<InteractTrigger>()
+            .First(trigger => trigger.animationString == (closed ? "CloseDoor" : "OpenDoor"))?
+            .GetComponentInParent<InteractTrigger>()
+            .onInteract
+            .Invoke(Helper.LocalPlayer);
+    }
 }

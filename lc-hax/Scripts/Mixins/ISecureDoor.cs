@@ -1,9 +1,14 @@
 using Hax;
 
-internal interface ISecureGate { }
+interface ISecureGate { }
 
-internal static class ISecureDoorMixin {
-    internal static void SetSecureDoorState(this ISecureGate _, bool isUnlocked) =>
-        Helper.FindObjects<TerminalAccessibleObject>()
-              .ForEach(terminalObject => terminalObject.SetDoorOpenServerRpc(isUnlocked));
+static class SecureGateMixin {
+    static TerminalAccessibleObject[]? TerminalAccessibleObjects { get; set; }
+
+    internal static void SetSecureDoorState(this ISecureGate _, bool isUnlocked) {
+        SecureGateMixin.TerminalAccessibleObjects ??= Helper.FindObjects<TerminalAccessibleObject>();
+        SecureGateMixin.TerminalAccessibleObjects.ForEach(
+            terminalObject => terminalObject.SetDoorOpenServerRpc(isUnlocked)
+        );
+    }
 }
