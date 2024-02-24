@@ -5,7 +5,7 @@ namespace Hax;
 internal static partial class Helper {
     internal static Camera? CurrentCamera =>
         Setting.EnablePhantom
-            ? GetCustomCamera()
+            ? HaxCamera.Instance?.GetCamera()
             : Helper.LocalPlayer?.gameplayCamera is Camera { enabled: true } gameplayCamera
                 ? gameplayCamera
                 : Helper.StartOfRound?.spectateCamera;

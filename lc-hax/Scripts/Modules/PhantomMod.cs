@@ -103,7 +103,6 @@ internal sealed class PhantomMod : MonoBehaviour {
 
         keyboard.enabled = true;
         mouse.enabled = true;
-
     }
 
     void PhantomDisabled(PlayerControllerB player, Camera camera) {
@@ -121,7 +120,6 @@ internal sealed class PhantomMod : MonoBehaviour {
             round.spectateCamera.enabled = true;
         }
 
-        Helper.DestroyCustomCam();
 
         if (PossessionMod.Instance is PossessionMod { IsPossessed: true } possession) {
             possession.Unpossess();
@@ -130,19 +128,25 @@ internal sealed class PhantomMod : MonoBehaviour {
 
     void TogglePhantom() {
         if (Helper.LocalPlayer is not PlayerControllerB player) return;
-        if (Helper.GetCustomCamera() is not Camera customCam) return;
+        if (HaxCamera.Instance is not HaxCamera haxCamera) return;
         Setting.EnablePhantom = !Setting.EnablePhantom;
+        Camera? customCam = haxCamera.GetCamera(Setting.EnablePhantom);
+        if (customCam is null) Setting.EnablePhantom = false;
+
+
         player.enabled = !player.IsDead() || !Setting.EnablePhantom;
         player.playerBodyAnimator.enabled = !Setting.EnablePhantom;
         player.thisController.enabled = !Setting.EnablePhantom;
         player.isFreeCamera = Setting.EnablePhantom;
+        if (customCam != null) {
+            if (Setting.EnablePhantom) {
+                this.PhantomEnabled(player, customCam);
+            }
 
-        if (Setting.EnablePhantom) {
-            this.PhantomEnabled(player, customCam);
-        }
-
-        else {
-            this.PhantomDisabled(player, customCam);
+            else {
+                this.PhantomDisabled(player, customCam);
+                haxCamera.DestroyCustomCam();
+            }
         }
     }
 }
