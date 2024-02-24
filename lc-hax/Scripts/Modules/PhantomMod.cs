@@ -79,6 +79,9 @@ internal sealed class PhantomMod : MonoBehaviour {
 
     void PhantomEnabled(Camera camera) {
         if(Helper.GameCamera is not Camera dataCamera) return;
+        camera.transform.position = dataCamera.transform.position;
+        camera.transform.rotation = dataCamera.transform.rotation;
+
         if (!camera.TryGetComponent(out KeyboardMovement keyboard)) {
             keyboard = camera.gameObject.AddComponent<KeyboardMovement>();
         }
@@ -89,9 +92,6 @@ internal sealed class PhantomMod : MonoBehaviour {
 
         keyboard.enabled = true;
         mouse.enabled = true;
-        camera.transform.SetParent(null, true);
-        camera.transform.position = dataCamera.transform.position;
-        camera.transform.rotation = dataCamera.transform.rotation;
 
     }
 
