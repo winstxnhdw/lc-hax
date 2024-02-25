@@ -19,10 +19,15 @@ internal class BaboonHawkController : IEnemyController<BaboonBirdAI> {
     Vector3 OriginalCamp { get; set; } = Vector3.zero;
 
     public void OnDeath(BaboonBirdAI enemy) {
-        if (enemy.heldScrap is not null) {
+        if (enemy.heldScrap is
+ not null) {
             _ = enemy.Reflect().InvokeInternalMethod("DropHeldItemAndSync");
         }
     }
+
+    
+    public void OnOutsideStatusChange(BaboonBirdAI enemy) => enemy.StopSearch(enemy.scoutingSearchRoutine, true);
+
 
     public void OnPossess(BaboonBirdAI _) {
         if (BaboonBirdAI.baboonCampPosition != this.CustomCamp) return;
@@ -51,6 +56,8 @@ internal class BaboonHawkController : IEnemyController<BaboonBirdAI> {
             shotgun.ShootShotgun(enemy.transform);
             return;
         }
+    
+        enemy.heldScrap?.InteractWithProp();
     }
 
     public void UseSecondarySkill(BaboonBirdAI enemy) {
