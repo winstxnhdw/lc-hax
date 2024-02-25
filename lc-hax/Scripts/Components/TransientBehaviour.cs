@@ -2,7 +2,7 @@ using System;
 using System.Collections;
 using UnityEngine;
 
-internal class TransientBehaviour : MonoBehaviour {
+class TransientBehaviour : MonoBehaviour {
     Action<float>? Action { get; set; }
     Action? DisposeAction { get; set; }
     float ExpireTime { get; set; } = 0.0f;

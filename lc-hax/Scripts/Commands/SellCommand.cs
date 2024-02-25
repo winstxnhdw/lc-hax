@@ -4,7 +4,7 @@ using GameNetcodeStuff;
 using Hax;
 
 [Command("sell")]
-internal class SellCommand : ICommand {
+class SellCommand : ICommand {
     bool CanBeSold(GrabbableObject grabbableObject) =>
         grabbableObject is not HauntedMaskItem and { isHeld: false } &&
         grabbableObject.itemProperties is { isScrap: true, isDefensiveWeapon: false };

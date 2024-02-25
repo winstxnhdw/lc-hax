@@ -3,7 +3,7 @@ using Hax;
 using UnityEngine;
 
 [Command("fakedeath")]
-internal class FakeDeathCommand : ICommand {
+class FakeDeathCommand : ICommand {
     public void Execute(StringArray args) {
         if (Helper.LocalPlayer is not PlayerControllerB player) return;
 

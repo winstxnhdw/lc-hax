@@ -2,7 +2,7 @@ using Hax;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-internal class MousePan : MonoBehaviour {
+class MousePan : MonoBehaviour {
     float Sensitivity { get; set; } = 0.2f;
     float Yaw { get; set; } = 0.0f;
     float Pitch { get; set; } = 0.0f;

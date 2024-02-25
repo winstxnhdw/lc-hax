@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using UnityObject = UnityEngine.Object;
 
-internal static partial class Extensions {
+static partial class Extensions {
     internal static void ForEach<T>(this IEnumerable<T> array, Action<T> action) {
         foreach (T item in array) {
             action(item);

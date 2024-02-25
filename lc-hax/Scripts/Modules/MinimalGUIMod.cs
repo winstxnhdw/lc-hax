@@ -1,7 +1,7 @@
 using Hax;
 using UnityEngine;
 
-internal class MinimalGUIMod : MonoBehaviour {
+sealed class MinimalGUIMod : MonoBehaviour {
     bool InGame { get; set; } = false;
 
     void OnEnable() {

@@ -4,7 +4,7 @@ using Hax;
 using UnityEngine;
 
 [Command("buy")]
-internal class BuyCommand : ICommand {
+class BuyCommand : ICommand {
     public void Execute(StringArray args) {
         if (Helper.Terminal is not Terminal terminal) return;
         if (args.Length is 0) {

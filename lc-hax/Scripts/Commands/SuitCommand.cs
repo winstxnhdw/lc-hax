@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using Hax;
 
 [Command("suit")]
-internal class SuitCommand : ICommand {
+class SuitCommand : ICommand {
     internal Dictionary<string, Unlockable> SuitUnlockables =>
         Enum.GetValues(typeof(Unlockable))
             .Cast<Unlockable>()
@@ -19,8 +19,8 @@ internal class SuitCommand : ICommand {
 
         string? key = Helper.FuzzyMatch(args[0], this.SuitUnlockables.Keys);
 
-        if (key == null) {
-            Chat.Print($"Suit is not found!");
+        if (string.IsNullOrWhiteSpace(key)) {
+            Chat.Print("Suit is not found!");
             return;
         }
 

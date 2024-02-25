@@ -2,7 +2,7 @@ using System.Collections;
 using UnityEngine;
 using UnityObject = UnityEngine.Object;
 
-internal class SingleObjectPool<T> where T : UnityObject {
+class SingleObjectPool<T> where T : UnityObject {
     internal T? Object { get; private set; }
 
     internal SingleObjectPool(MonoBehaviour self, float renewInterval = 1.0f) => self.StartCoroutine(this.RenewObject(renewInterval));

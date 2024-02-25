@@ -9,7 +9,7 @@ enum Rank {
 }
 
 [Command("xp")]
-internal class ExperienceCommand : ICommand {
+class ExperienceCommand : ICommand {
     public void Execute(StringArray args) {
         if (Helper.HUDManager is not HUDManager hudManager) return;
         if (args.Length is 0) {

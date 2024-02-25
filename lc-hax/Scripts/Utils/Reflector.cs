@@ -1,7 +1,7 @@
 using System;
 using System.Reflection;
 
-internal class Reflector {
+class Reflector {
     const BindingFlags PrivateOrInternal = BindingFlags.NonPublic | BindingFlags.Instance;
     const BindingFlags InternalStatic = BindingFlags.NonPublic | BindingFlags.Static;
     const BindingFlags InternalField = Reflector.PrivateOrInternal | BindingFlags.GetField;

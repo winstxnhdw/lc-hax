@@ -4,7 +4,7 @@ using Quickenshtein;
 
 namespace Hax;
 
-internal static partial class Helper {
+static partial class Helper {
     /// <summary>
     /// Find the longest common substring between two strings.
     /// </summary>

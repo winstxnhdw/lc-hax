@@ -3,7 +3,7 @@ using GameNetcodeStuff;
 using Hax;
 using UnityEngine;
 
-internal sealed class SaneMod : MonoBehaviour {
+sealed class SaneMod : MonoBehaviour {
     IEnumerator SetSanity(object[] args) {
         WaitForEndOfFrame waitForEndOfFrame = new();
 

@@ -2,7 +2,7 @@ using Hax;
 using UnityEngine;
 
 [PrivilegedCommand("timescale")]
-internal class TimescaleCommand : ICommand {
+class TimescaleCommand : ICommand {
     public void Execute(StringArray args) {
         if (args.Length is 0) {
             Chat.Print("Usage: timescale <scale>");

@@ -18,7 +18,7 @@ readonly struct TranslateRequest(string source, string target, string text) {
     internal string Text { get; } = text;
 }
 
-internal static partial class Helper {
+static partial class Helper {
     static Lazy<Dictionary<string, string>> FLORES200 { get; } = new(() => new Dictionary<string, string>() {
         { "acehnese", "ace_Latn" },
         { "mesopotamian", "acm_Arab" },

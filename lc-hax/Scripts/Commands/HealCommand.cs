@@ -3,7 +3,7 @@ using Hax;
 using UnityEngine;
 
 [Command("heal")]
-internal class HealCommand : IStun, ICommand {
+class HealCommand : ICommand, IStun {
     void RespawnLocalPlayer(PlayerControllerB localPlayer, StartOfRound startOfRound, HUDManager hudManager) {
         if (Helper.SoundManager is not SoundManager soundManager) return;
 

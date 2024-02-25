@@ -3,7 +3,7 @@ using Hax;
 using UnityEngine;
 
 [Command("kill")]
-internal class KillCommand : ICommand {
+class KillCommand : ICommand {
     bool EnableGodMode { get; set; }
 
     Result KillSelf() {

@@ -2,7 +2,7 @@ using Hax;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-internal class KeyboardMovement : MonoBehaviour {
+class KeyboardMovement : MonoBehaviour {
     const float BaseSpeed = 20;
     float SprintMultiplier { get; set; } = 1;
 

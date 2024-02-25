@@ -4,7 +4,7 @@ using System;
 using UnityEngine;
 using UnityEngine.Rendering.HighDefinition;
 
-internal sealed class ClearVisionMod : MonoBehaviour {
+sealed class ClearVisionMod : MonoBehaviour {
     float LightIntensity { get; set; } = 2.0f;
 
     void OnEnable() {

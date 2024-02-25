@@ -3,7 +3,7 @@ using Hax;
 using UnityEngine;
 
 [Command("ct")]
-internal class ChibakuTenseiCommand : ICommand {
+class ChibakuTenseiCommand : ICommand {
     Vector3 spinningY = new(0, 2, 0);
 
     Result AttractAndSpin(StringArray args) {

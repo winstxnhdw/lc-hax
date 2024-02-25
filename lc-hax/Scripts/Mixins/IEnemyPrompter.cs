@@ -10,7 +10,7 @@ enum BehaviourState {
     UNKNOWN = 3
 }
 
-internal class EnemyPromptHandler {
+class EnemyPromptHandler {
     void TeleportEnemyToPlayer(
         EnemyAI enemy,
         PlayerControllerB targetPlayer,
@@ -221,9 +221,9 @@ internal class EnemyPromptHandler {
     }
 }
 
-internal interface IEnemyPrompter { }
+interface IEnemyPrompter { }
 
-internal static class EnemyPromptMixin {
+static class EnemyPromptMixin {
     [RequireNamedArgs]
     internal static List<string> PromptEnemiesToTarget(
         this IEnemyPrompter _,

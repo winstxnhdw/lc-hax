@@ -4,7 +4,7 @@ using Hax;
 using UnityEngine;
 
 [Command("noise")]
-internal class NoiseCommand : ICommand {
+class NoiseCommand : ICommand {
     Action<float> PlayNoise(Vector3 position) => (_) =>
         Helper.RoundManager?.PlayAudibleNoise(position, float.MaxValue, float.MaxValue, 10, false);
 

@@ -2,7 +2,7 @@ using System;
 using System.Collections;
 using UnityEngine;
 
-internal class WaitForBehaviour : MonoBehaviour {
+class WaitForBehaviour : MonoBehaviour {
     Action? Action { get; set; }
     Func<float, bool>? TimerPredicate { get; set; }
     Func<bool>? Predicate { get; set; }

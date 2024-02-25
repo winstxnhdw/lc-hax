@@ -3,7 +3,7 @@ using Hax;
 using UnityEngine;
 
 [Command("noclip")]
-internal class NoClipCommand : ICommand {
+class NoClipCommand : ICommand {
     static bool EnabledGodMode { get; set; }
 
     public void Execute(StringArray args) {

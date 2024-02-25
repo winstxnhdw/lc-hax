@@ -3,7 +3,7 @@ using GameNetcodeStuff;
 using Hax;
 using UnityEngine;
 
-internal sealed class StaminaMod : MonoBehaviour {
+sealed class StaminaMod : MonoBehaviour {
     IEnumerator SetSprint(object[] args) {
         WaitForEndOfFrame waitForEndOfFrame = new();
         WaitForSeconds waitForFiveSeconds = new(5.0f);
