@@ -13,6 +13,6 @@ class EarthLeviathanController : IEnemyController<SandWormAI> {
     public float InteractRange(SandWormAI _) => 0.0f;
 
     public bool SyncAnimationSpeedEnabled(SandWormAI _) => false;
-    public void OnOutsideStatusChange(SandWormAI enemy) => enemy.StopSearch(enemy.roamMap, true);
 
+    public void OnOutsideStatusChange(SandWormAI enemy) => enemy.StopSearch(enemy.roamMap, true);
 }
