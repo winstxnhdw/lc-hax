@@ -11,6 +11,7 @@ internal sealed class PossessionMod : MonoBehaviour {
     const float DoorInteractionCooldown = 0.7f;
     public static float CamOffsetY = 2.5f;
     public static float CamOffsetZ = -3f;
+    public static float EnemyYPositionOffset = 0f;
     bool IsLeftAltHeld { get; set; } = false;
 
     internal static PossessionMod? Instance { get; private set; }
@@ -247,7 +248,8 @@ internal sealed class PossessionMod : MonoBehaviour {
         Vector3 enemyEuler = enemy.transform.eulerAngles;
         enemyEuler.y = this.transform.eulerAngles.y;
 
-        enemy.transform.position = characterMovement.transform.position;
+        Vector3 YPositionOffset = characterMovement.transform.position + new Vector3(0, EnemyYPositionOffset, 0);
+        enemy.transform.position = YPositionOffset;
         if (!this.IsLeftAltHeld) {
             enemy.transform.eulerAngles = enemyEuler;
         }
@@ -265,6 +267,7 @@ internal sealed class PossessionMod : MonoBehaviour {
         this.DoorCooldownRemaining = 0.0f;
         CamOffsetY = 2.5f;
         CamOffsetZ = -3f;
+        EnemyYPositionOffset = 0f;
 
         if (this.EnemyControllers.TryGetValue(enemy.GetType(), out IController controller)) {
             controller.OnPossess(enemy);
