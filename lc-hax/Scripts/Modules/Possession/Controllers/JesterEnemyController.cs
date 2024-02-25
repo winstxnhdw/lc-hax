@@ -67,7 +67,7 @@ internal class JesterController : IEnemyController<JesterAI> {
         if (!enemy.IsBehaviourState(JesterState.OPEN)) return;
         if (this.GetinKillAnimation(enemy))
             return;
-        enemy.KillPlayerServerRpc((int)player.actualClientId);
+        enemy.KillPlayerServerRpc(player.PlayerIndex());
     }
 }
 
