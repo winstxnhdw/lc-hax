@@ -1,5 +1,3 @@
-using GameNetcodeStuff;
-
 internal interface IController {
     const float DefaultSprintMultiplier = 2.8f;
 

@@ -1,5 +1,3 @@
-using GameNetcodeStuff;
-
 internal class HygrodereController : IEnemyController<BlobAI> {
     public void GetCameraPosition(BlobAI enemy) {
         PossessionMod.CamOffsetY = 2f;
