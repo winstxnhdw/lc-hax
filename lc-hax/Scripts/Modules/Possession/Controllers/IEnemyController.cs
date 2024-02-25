@@ -1,6 +1,6 @@
 using GameNetcodeStuff;
 
-interface IController {
+internal interface IController {
     const float DefaultSprintMultiplier = 2.8f;
 
     const float DefaultInteractRange = 2.5f;
@@ -12,6 +12,8 @@ interface IController {
     void OnDeath(EnemyAI enemy);
 
     void Update(EnemyAI enemy, bool isAIControlled);
+
+    void GetCameraPosition(EnemyAI enemy);
 
     void UsePrimarySkill(EnemyAI enemy);
 
@@ -44,7 +46,8 @@ interface IController {
     void OnCollideWithPlayer(EnemyAI enemy, PlayerControllerB player);
 }
 
-interface IEnemyController<T> : IController where T : EnemyAI {
+internal interface IEnemyController<T> : IController where T : EnemyAI {
+
     void OnPossess(T enemy) { }
 
     void OnUnpossess(T enemy) { }
@@ -52,6 +55,8 @@ interface IEnemyController<T> : IController where T : EnemyAI {
     void OnDeath(T enemy) { }
 
     void Update(T enemy, bool isAIControlled) { }
+
+    void GetCameraPosition(T enemy) { }
 
     void UsePrimarySkill(T enemy) { }
 
@@ -90,6 +95,8 @@ interface IEnemyController<T> : IController where T : EnemyAI {
     void IController.OnDeath(EnemyAI enemy) => this.OnDeath((T)enemy);
 
     void IController.Update(EnemyAI enemy, bool isAIControlled) => this.Update((T)enemy, isAIControlled);
+
+    void IController.GetCameraPosition(EnemyAI enemy) => this.GetCameraPosition((T)enemy);
 
     void IController.UsePrimarySkill(EnemyAI enemy) => this.UsePrimarySkill((T)enemy);
 
