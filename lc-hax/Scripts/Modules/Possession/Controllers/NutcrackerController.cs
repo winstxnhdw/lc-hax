@@ -7,6 +7,11 @@ enum NutcrackerState {
 }
 
 internal class NutcrackerController : IEnemyController<NutcrackerEnemyAI> {
+    public void GetCameraPosition(NutcrackerEnemyAI enemy) {
+        PossessionMod.CamOffsetY = 2.8f;
+        PossessionMod.CamOffsetZ = -3f;
+    }
+
     bool InSentryMode { get; set; } = false;
 
     float GetStunNormalizedTimer(NutcrackerEnemyAI enemy) => enemy.Reflect().GetInternalField<float>("stunNormalizedTimer");
@@ -62,7 +67,7 @@ internal class NutcrackerController : IEnemyController<NutcrackerEnemyAI> {
             if (this.GetStunNormalizedTimer(enemy) >= 0f) return;
 
             this.SetTimeSinceHittingPlayer(enemy, 0f);
-            enemy.LegKickPlayerServerRpc(player.PlayerIndex());
+            enemy.LegKickPlayerServerRpc((int)player.actualClientId);
         }
     }
 }

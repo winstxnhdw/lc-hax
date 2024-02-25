@@ -8,6 +8,11 @@ enum BeesState {
 }
 
 internal class CircuitBeesController : IEnemyController<RedLocustBees> {
+    public void GetCameraPosition(RedLocustBees enemy) {
+        PossessionMod.CamOffsetY = 2f;
+        PossessionMod.CamOffsetZ = -3f;
+    }
+
     public bool CanUseEntranceDoors(RedLocustBees _) => true;
 
     public float InteractRange(RedLocustBees _) => 2.5f;

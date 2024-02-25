@@ -1,4 +1,9 @@
 internal class EarthLeviathanController : IEnemyController<SandWormAI> {
+    public void GetCameraPosition(SandWormAI enemy) {
+        PossessionMod.CamOffsetY = 8f;
+        PossessionMod.CamOffsetZ = -13f;
+    }
+
     bool IsEmerged(SandWormAI enemy) => enemy.inEmergingState || enemy.emerged;
 
     public void UseSecondarySkill(SandWormAI enemy) {

@@ -9,6 +9,10 @@ public enum SporeLizardState {
 }
 
 internal class SporeLizardController : IEnemyController<PufferAI> {
+    public void GetCameraPosition(PufferAI enemy) {
+        PossessionMod.CamOffsetY = 2.5f;
+        PossessionMod.CamOffsetZ = -3f;
+    }
 
     float GetTimeSinceHittingPlayer(PufferAI enemy) =>
         enemy.Reflect().GetInternalField<float>("timeSinceHittingPlayer");
@@ -41,7 +45,7 @@ internal class SporeLizardController : IEnemyController<PufferAI> {
             if (this.GetTimeSinceHittingPlayer(enemy) > 1f) {
                 this.SetTimeSinceHittingPlayer(enemy, 0f);
                 player.DamagePlayer(20, true, true, CauseOfDeath.Mauling, 0, false, default);
-                enemy.BitePlayerServerRpc(player.PlayerIndex());
+                enemy.BitePlayerServerRpc((int)player.actualClientId);
             }
         }
     } 

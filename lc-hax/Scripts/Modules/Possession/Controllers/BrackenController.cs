@@ -8,6 +8,10 @@ enum BrackenState {
 }
 
 internal class BrackenController : IEnemyController<FlowermanAI> {
+    public void GetCameraPosition(FlowermanAI enemy) {
+        PossessionMod.CamOffsetY = 2.5f;
+        PossessionMod.CamOffsetZ = -3f;
+    }
 
     bool GetStartingKillAnimationLocalClient(FlowermanAI enemy) => enemy.Reflect().GetInternalField<bool>("startingKillAnimationLocalClient");
 
@@ -40,7 +44,7 @@ internal class BrackenController : IEnemyController<FlowermanAI> {
         if (enemy.isOutside) {
             if (enemy.inKillAnimation || this.GetStartingKillAnimationLocalClient(enemy) ||
                 enemy.carryingPlayerBody) return;
-            enemy.KillPlayerAnimationServerRpc(player.PlayerIndex());
+            enemy.KillPlayerAnimationServerRpc((int)player.actualClientId);
             this.SetStartingKillAnimationLocalClient(enemy, true);
 
 

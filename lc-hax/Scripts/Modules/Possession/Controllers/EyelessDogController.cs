@@ -8,6 +8,11 @@ enum DogState {
 }
 
 internal class EyelessDogController : IEnemyController<MouthDogAI> {
+    public void GetCameraPosition(MouthDogAI enemy) {
+        PossessionMod.CamOffsetY = 3.2f;
+        PossessionMod.CamOffsetZ = -4f;
+    }
+
     public void OnMovement(MouthDogAI enemy, bool isMoving, bool isSprinting) {
         if (!isSprinting) {
             if (!isMoving) return;

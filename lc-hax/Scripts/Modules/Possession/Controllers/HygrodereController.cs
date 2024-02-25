@@ -1,6 +1,11 @@
 using GameNetcodeStuff;
 
 internal class HygrodereController : IEnemyController<BlobAI> {
+    public void GetCameraPosition(BlobAI enemy) {
+        PossessionMod.CamOffsetY = 2f;
+        PossessionMod.CamOffsetZ = -3f;
+    }
+
     void SetTamedTimer(BlobAI enemy, float time) => enemy.Reflect().SetInternalField("tamedTimer", time);
 
     void SetAngeredTimer(BlobAI enemy, float time) => enemy.Reflect().SetInternalField("angeredTimer", time);

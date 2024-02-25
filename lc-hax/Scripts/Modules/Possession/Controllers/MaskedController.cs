@@ -1,6 +1,10 @@
 using GameNetcodeStuff;
 
 internal class MaskedPlayerController : IEnemyController<MaskedPlayerEnemy> {
+    public void GetCameraPosition(MaskedPlayerEnemy enemy) {
+        PossessionMod.CamOffsetY = 2.8f;
+        PossessionMod.CamOffsetZ = -3f;
+    }
 
     void SetstartingKillAnimationLocalClient(MaskedPlayerEnemy enemy, bool value) =>
         enemy.Reflect().SetInternalField("startingKillAnimationLocalClient", value);
