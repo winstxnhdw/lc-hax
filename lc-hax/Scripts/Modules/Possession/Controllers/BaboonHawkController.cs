@@ -25,7 +25,7 @@ internal class BaboonHawkController : IEnemyController<BaboonBirdAI> {
         }
     }
 
-    
+
     public void OnOutsideStatusChange(BaboonBirdAI enemy) => enemy.StopSearch(enemy.scoutingSearchRoutine, true);
 
 
@@ -56,7 +56,7 @@ internal class BaboonHawkController : IEnemyController<BaboonBirdAI> {
             shotgun.ShootShotgun(enemy.transform);
             return;
         }
-    
+
     }
 
     public void UseSecondarySkill(BaboonBirdAI enemy) {

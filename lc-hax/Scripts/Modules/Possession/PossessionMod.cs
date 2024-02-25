@@ -243,7 +243,7 @@ internal sealed class PossessionMod : MonoBehaviour {
     // Updates enemy's position to match the possessed object's position
     void UpdateEnemyPosition(EnemyAI enemy) {
         if (this.CharacterMovement is not CharacterMovement characterMovement) return;
-        
+
         Vector3 enemyEuler = enemy.transform.eulerAngles;
         enemyEuler.y = this.transform.eulerAngles.y;
 
