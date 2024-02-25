@@ -21,7 +21,4 @@ internal class MaskedPlayerController : IEnemyController<MaskedPlayerEnemy> {
     public void OnOutsideStatusChange(MaskedPlayerEnemy enemy) => enemy.StopSearch(enemy.searchForPlayers, true);
 
 
-    public void OnCollideWithPlayer(MaskedPlayerEnemy enemy, PlayerControllerB player) {
-
-    }
 }

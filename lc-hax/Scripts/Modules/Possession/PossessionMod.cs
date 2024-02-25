@@ -352,14 +352,6 @@ internal sealed class PossessionMod : MonoBehaviour {
         this.TeleportCooldownRemaining = PossessionMod.TeleportDoorCooldown;
     }
 
-    void HandleEnemyPlayerInteraction(EnemyAI enemy, RaycastHit hit, IController controller) {
-        if (controller == null) return;
-        if (!hit.collider.gameObject.TryGetComponent(out PlayerControllerB player)) return;
-        if (player.IsDead()) return;
-        controller.OnCollideWithPlayer(enemy, player);
-    }
-
-
     float InteractRange(EnemyAI enemy) =>
         this.EnemyControllers.TryGetValue(enemy.GetType(), out IController value)
             ? value.InteractRange(enemy)
@@ -384,8 +376,6 @@ internal sealed class PossessionMod : MonoBehaviour {
                 this.HandleEntranceDoors(enemy, hit, controller);
                 return;
             }
-
-            this.HandleEnemyPlayerInteraction(enemy, hit, controller);
         }
     }
 
