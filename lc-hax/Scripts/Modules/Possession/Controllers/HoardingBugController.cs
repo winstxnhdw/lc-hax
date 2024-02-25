@@ -35,7 +35,6 @@ internal class HoardingBugController : IEnemyController<HoarderBugAI> {
                 break;
 
             default:
-                grabbable.InteractWithProp();
                 break;
         }
     }
