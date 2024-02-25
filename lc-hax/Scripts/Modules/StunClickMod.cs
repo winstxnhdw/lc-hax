@@ -1,7 +1,7 @@
 using UnityEngine;
 using Hax;
 
-internal sealed class StunClickMod : MonoBehaviour {
+sealed class StunClickMod : MonoBehaviour {
     Collider[] Colliders { get; set; } = new Collider[100];
     RaycastHit[] RaycastHits { get; set; } = new RaycastHit[100];
 

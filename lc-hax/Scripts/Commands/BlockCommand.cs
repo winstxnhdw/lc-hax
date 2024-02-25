@@ -1,7 +1,7 @@
 using Hax;
 
 [Command("block")]
-internal class BlockCommand : ICommand {
+class BlockCommand : ICommand {
     string BlockEnemy() {
         Setting.EnableUntargetable = !Setting.EnableUntargetable;
 

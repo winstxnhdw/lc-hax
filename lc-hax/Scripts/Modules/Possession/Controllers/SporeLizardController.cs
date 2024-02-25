@@ -8,15 +8,12 @@ public enum SporeLizardState {
     HOSTILE
 }
 
-internal class SporeLizardController : IEnemyController<PufferAI> {
-
+class SporeLizardController : IEnemyController<PufferAI> {
     float GetTimeSinceHittingPlayer(PufferAI enemy) =>
         enemy.Reflect().GetInternalField<float>("timeSinceHittingPlayer");
 
     void SetTimeSinceHittingPlayer(PufferAI enemy, float value) =>
         enemy.Reflect().SetInternalField("timeSinceHittingPlayer", value);
-
-
 
     public void UsePrimarySkill(PufferAI enemy) {
         enemy.SetBehaviourState(SporeLizardState.HOSTILE);

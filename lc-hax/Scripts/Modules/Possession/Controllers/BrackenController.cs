@@ -7,12 +7,10 @@ enum BrackenState {
     ANGER
 }
 
-internal class BrackenController : IEnemyController<FlowermanAI> {
-
+class BrackenController : IEnemyController<FlowermanAI> {
     bool GetStartingKillAnimationLocalClient(FlowermanAI enemy) => enemy.Reflect().GetInternalField<bool>("startingKillAnimationLocalClient");
 
     void SetStartingKillAnimationLocalClient(FlowermanAI enemy, bool value) => enemy.Reflect().SetInternalField("startingKillAnimationLocalClient", value);
-
 
     public void UsePrimarySkill(FlowermanAI enemy) {
         if (!enemy.carryingPlayerBody) {
@@ -37,13 +35,10 @@ internal class BrackenController : IEnemyController<FlowermanAI> {
     public bool SyncAnimationSpeedEnabled(FlowermanAI _) => false;
 
     public void OnCollideWithPlayer(FlowermanAI enemy, PlayerControllerB player) {
-        if (enemy.isOutside) {
-            if (enemy.inKillAnimation || this.GetStartingKillAnimationLocalClient(enemy) ||
-                enemy.carryingPlayerBody) return;
-            enemy.KillPlayerAnimationServerRpc(player.PlayerIndex());
-            this.SetStartingKillAnimationLocalClient(enemy, true);
+        if (!enemy.isOutside) return;
+        if (enemy.inKillAnimation || this.GetStartingKillAnimationLocalClient(enemy) || enemy.carryingPlayerBody) return;
 
-
-        }
+        enemy.KillPlayerAnimationServerRpc(player.PlayerIndex());
+        this.SetStartingKillAnimationLocalClient(enemy, true);
     }
 }

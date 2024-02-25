@@ -6,7 +6,7 @@ enum NutcrackerState {
     SENTRY
 }
 
-internal class NutcrackerController : IEnemyController<NutcrackerEnemyAI> {
+class NutcrackerController : IEnemyController<NutcrackerEnemyAI> {
     bool InSentryMode { get; set; } = false;
 
     float GetStunNormalizedTimer(NutcrackerEnemyAI enemy) => enemy.Reflect().GetInternalField<float>("stunNormalizedTimer");

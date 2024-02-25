@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Hax;
 
-internal static partial class Helper {
+static partial class Helper {
     static Dictionary<string, Queue<Component>> ComponentPools { get; } = [];
 
     static T CreateComponent<T>(string name) where T : Component => new GameObject(name).AddComponent<T>();

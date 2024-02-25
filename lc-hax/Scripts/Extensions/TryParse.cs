@@ -1,4 +1,4 @@
-internal static partial class Extensions {
+static partial class Extensions {
     [RequireNamedArgs]
     internal static bool TryParse(this string? value, ushort defaultValue, out ushort result) {
         if (string.IsNullOrWhiteSpace(value)) {

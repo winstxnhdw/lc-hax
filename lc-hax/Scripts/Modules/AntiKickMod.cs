@@ -2,7 +2,7 @@ using UnityEngine;
 using Hax;
 using System.Collections;
 
-internal sealed class AntiKickMod : MonoBehaviour {
+sealed class AntiKickMod : MonoBehaviour {
     void OnEnable() {
         InputListener.OnBackslashPress += this.ToggleAntiKick;
         GameListener.OnGameStart += this.OnGameStart;

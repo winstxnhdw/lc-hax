@@ -8,7 +8,7 @@ using GameNetcodeStuff;
 using Hax;
 
 [PrivilegedCommand("spawn")]
-internal class SpawnCommand : ICommand {
+class SpawnCommand : ICommand {
     static bool IsHostileEnemy(EnemyType enemy) =>
         !enemy.enemyName.Contains("Docile Locust Bees", StringComparison.OrdinalIgnoreCase) ||
         !enemy.enemyName.Contains("Manticoil", StringComparison.OrdinalIgnoreCase);

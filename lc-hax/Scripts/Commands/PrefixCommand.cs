@@ -1,7 +1,7 @@
 using Hax;
 
 [Command("prefix")]
-internal class PrefixCommand : ICommand {
+class PrefixCommand : ICommand {
     public void Execute(StringArray args) {
         if (args.Length is 0) {
             Chat.Print("Usage: prefix <prefix>");

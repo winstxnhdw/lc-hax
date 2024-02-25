@@ -4,7 +4,7 @@ using UnityEngine;
 using Hax;
 
 [Command("build")]
-internal class BuildCommand : ICommand {
+class BuildCommand : ICommand {
     public void Execute(StringArray args) {
         if (Helper.StartOfRound is not StartOfRound startOfRound) return;
         if (Helper.CurrentCamera is not Camera camera) return;

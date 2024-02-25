@@ -3,7 +3,7 @@ using GameNetcodeStuff;
 using UnityEngine;
 using Hax;
 
-internal sealed class WeightMod : MonoBehaviour {
+sealed class WeightMod : MonoBehaviour {
     IEnumerator SetWeight(object[] args) {
         WaitForEndOfFrame waitForEndOfFrame = new();
         WaitForSeconds waitForOneSecond = new(1.0f);

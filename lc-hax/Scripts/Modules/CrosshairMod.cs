@@ -1,7 +1,7 @@
 using UnityEngine;
 using Hax;
 
-internal class CrosshairMod : MonoBehaviour {
+sealed class CrosshairMod : MonoBehaviour {
     const float GapSize = 7.0f;
     const float Thickness = 3.0f;
     const float Length = 10.0f;

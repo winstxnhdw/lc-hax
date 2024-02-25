@@ -1,7 +1,7 @@
 using Hax;
 
 [PrivilegedCommand("quota")]
-internal class QuotaCommand : ICommand {
+class QuotaCommand : ICommand {
     public void Execute(StringArray args) {
         if (Helper.TimeOfDay is not TimeOfDay timeOfDay) return;
         if (args.Length < 1) {
