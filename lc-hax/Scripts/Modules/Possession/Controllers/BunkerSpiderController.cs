@@ -1,4 +1,3 @@
-using GameNetcodeStuff;
 using Hax;
 using UnityEngine;
 
@@ -24,7 +23,7 @@ internal class SandSpiderController : IEnemyController<SandSpiderAI> {
     public void Update(SandSpiderAI enemy, bool isAIControlled) {
         enemy.meshContainerPosition = enemy.transform.position;
         enemy.SyncMeshContainerPositionToClients();
-        if(!isAIControlled) enemy.homeNode = enemy.ChooseClosestNodeToPosition(enemy.transform.position, false, 2);
+        if (!isAIControlled) enemy.homeNode = enemy.ChooseClosestNodeToPosition(enemy.transform.position, false, 2);
     }
 
     public bool SyncAnimationSpeedEnabled(SandSpiderAI enemy) => false;

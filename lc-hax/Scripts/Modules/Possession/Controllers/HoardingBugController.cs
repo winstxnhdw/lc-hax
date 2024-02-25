@@ -69,7 +69,7 @@ internal class HoardingBugController : IEnemyController<HoarderBugAI> {
     }
 
     public void UsePrimarySkill(HoarderBugAI enemy) {
-  
+
 
         if (enemy.heldItem is null && enemy.FindNearbyItem() is GrabbableObject grabbable) {
             this.GrabItem(enemy, grabbable);

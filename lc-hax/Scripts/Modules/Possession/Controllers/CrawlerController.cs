@@ -1,5 +1,3 @@
-using GameNetcodeStuff;
-
 internal class CrawlerController : IEnemyController<CrawlerAI> {
     public void GetCameraPosition(CrawlerAI enemy) {
         PossessionMod.CamOffsetY = 2.5f;
