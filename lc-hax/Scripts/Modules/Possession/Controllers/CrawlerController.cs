@@ -20,15 +20,4 @@ internal class CrawlerController : IEnemyController<CrawlerAI> {
 
     public void OnOutsideStatusChange(CrawlerAI enemy) => enemy.StopSearch(enemy.searchForPlayers, true);
 
-    public void OnCollideWithPlayer(CrawlerAI enemy, PlayerControllerB player) {
-        if (enemy.isOutside) {
-            if (this.GettimeSinceHittingPlayer(enemy) < 0.65f) {
-                return;
-            }
-            this.SettimeSinceHittingPlayer(enemy, 0f);
-            player.DamagePlayer(40, true, true, CauseOfDeath.Mauling, 0, false, default);
-            enemy.HitPlayerServerRpc((int)GameNetworkManager.Instance.localPlayerController.playerClientId);
-        }
-    }
-
 }

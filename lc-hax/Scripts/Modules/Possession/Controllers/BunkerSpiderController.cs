@@ -23,7 +23,6 @@ internal class SandSpiderController : IEnemyController<SandSpiderAI> {
 
     public void Update(SandSpiderAI enemy, bool isAIControlled) {
         enemy.meshContainerPosition = enemy.transform.position;
-        enemy.meshContainerTarget = enemy.transform.forward;
         enemy.SyncMeshContainerPositionToClients();
         if(!isAIControlled) enemy.homeNode = enemy.ChooseClosestNodeToPosition(enemy.transform.position, false, 2);
     }
@@ -57,17 +56,5 @@ internal class SandSpiderController : IEnemyController<SandSpiderAI> {
     }
 
     public void OnOutsideStatusChange(SandSpiderAI enemy) => enemy.StopSearch(enemy.patrolHomeBase, true);
-
-    public void OnCollideWithPlayer(SandSpiderAI enemy, PlayerControllerB player) {
-        if (enemy.isOutside) {
-            if (this.GetOnWall(enemy)) return;
-            if(this.GetSpoolingPlayerBody(enemy)) return;
-            if (this.GetTimeSinceHittingPlayer(enemy) > 1f) {
-                this.SetTimeSinceHittingPlayer(enemy, 0.0f);
-                player.DamagePlayer(90, true, true, CauseOfDeath.Mauling, 0, false, default);
-                enemy.HitPlayerServerRpc(player.PlayerIndex());
-            }
-        }
-    }
 }
 

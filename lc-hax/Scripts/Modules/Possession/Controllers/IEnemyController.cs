@@ -42,8 +42,6 @@ internal interface IController {
     bool SyncAnimationSpeedEnabled(EnemyAI enemy);
 
     void OnOutsideStatusChange(EnemyAI enemy);
-
-    void OnCollideWithPlayer(EnemyAI enemy, PlayerControllerB player);
 }
 
 internal interface IEnemyController<T> : IController where T : EnemyAI {
@@ -86,8 +84,6 @@ internal interface IEnemyController<T> : IController where T : EnemyAI {
 
     void OnOutsideStatusChange(T enemy) { }
 
-    void OnCollideWithPlayer(T enemy, PlayerControllerB player) { }
-
     void IController.OnPossess(EnemyAI enemy) => this.OnPossess((T)enemy);
 
     void IController.OnUnpossess(EnemyAI enemy) => this.OnUnpossess((T)enemy);
@@ -125,6 +121,4 @@ internal interface IEnemyController<T> : IController where T : EnemyAI {
     bool IController.SyncAnimationSpeedEnabled(EnemyAI enemy) => this.SyncAnimationSpeedEnabled((T)enemy);
 
     void IController.OnOutsideStatusChange(EnemyAI enemy) => this.OnOutsideStatusChange((T)enemy);
-
-    void IController.OnCollideWithPlayer(EnemyAI enemy, PlayerControllerB player) => this.OnCollideWithPlayer((T)enemy, player);
 }
