@@ -5,6 +5,7 @@ using Unity.Netcode;
 using UnityEngine.AI;
 using GameNetcodeStuff;
 using Hax;
+using UnityEngine.UI;
 
 internal sealed class PossessionMod : MonoBehaviour {
     const float TeleportDoorCooldown = 2.5f;
@@ -154,7 +155,7 @@ internal sealed class PossessionMod : MonoBehaviour {
             this.InitCharacterMovement(enemy);
             this.UpdateComponentsOnCurrentState(true);
             this.SetAIControl(false);
-            this.MainEntrance = FindObjectsOfType<EntranceTeleport>().First(entrance => entrance.entranceId == 0);
+            this.MainEntrance = RoundManager.FindMainEntranceScript(false);
         }
 
 
