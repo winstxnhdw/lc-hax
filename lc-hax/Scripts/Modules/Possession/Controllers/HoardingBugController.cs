@@ -1,7 +1,6 @@
 using GameNetcodeStuff;
 using Hax;
 using Unity.Netcode;
-using UnityEngine;
 
 enum HoardingBugState {
     IDLE,
@@ -71,7 +70,7 @@ internal class HoardingBugController : IEnemyController<HoarderBugAI> {
     }
 
     public void UsePrimarySkill(HoarderBugAI enemy) {
-  
+
 
         if (enemy.heldItem is null && enemy.FindNearbyItem() is GrabbableObject grabbable) {
             this.GrabItem(enemy, grabbable);
