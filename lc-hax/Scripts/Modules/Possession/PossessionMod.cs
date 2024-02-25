@@ -154,7 +154,7 @@ internal sealed class PossessionMod : MonoBehaviour {
             this.InitCharacterMovement(enemy);
             this.UpdateComponentsOnCurrentState(true);
             this.SetAIControl(false);
-            this.MainEntrance = RoundManager.FindMainEntranceScript(false);
+            this.MainEntrance = FindObjectsOfType<EntranceTeleport>().First(entrance => entrance.entranceId == 0);
         }
 
 
