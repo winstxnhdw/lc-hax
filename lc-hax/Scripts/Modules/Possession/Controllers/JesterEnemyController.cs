@@ -24,8 +24,8 @@ internal class JesterController : IEnemyController<JesterAI> {
         }
 
         // Smoothly interpolate between current and target camera positions
-        PossessionMod.CamOffsetY = Mathf.Lerp(PossessionMod.CamOffsetY, targetCamOffsetY, Time.deltaTime * this.transitionSpeed);
-        PossessionMod.CamOffsetZ = Mathf.Lerp(PossessionMod.CamOffsetZ, targetCamOffsetZ, Time.deltaTime * this.transitionSpeed);
+        PossessionMod.CamOffsetY = Mathf.Lerp(PossessionMod.CamOffsetY, targetCamOffsetY, Time.deltaTime * transitionSpeed);
+        PossessionMod.CamOffsetZ = Mathf.Lerp(PossessionMod.CamOffsetZ, targetCamOffsetZ, Time.deltaTime * transitionSpeed);
     }
 
     void SetNoPlayerChasetimer(JesterAI enemy, float value) => enemy.Reflect().SetInternalField("noPlayersToChaseTimer", value);
@@ -67,7 +67,7 @@ internal class JesterController : IEnemyController<JesterAI> {
         if (!enemy.IsBehaviourState(JesterState.OPEN)) return;
         if (this.GetinKillAnimation(enemy))
             return;
-        enemy.KillPlayerServerRpc((int)player.actualClientId);
+        enemy.KillPlayerServerRpc(player.PlayerIndex());
     }
 }
 

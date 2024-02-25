@@ -67,7 +67,7 @@ internal class NutcrackerController : IEnemyController<NutcrackerEnemyAI> {
             if (this.GetStunNormalizedTimer(enemy) >= 0f) return;
 
             this.SetTimeSinceHittingPlayer(enemy, 0f);
-            enemy.LegKickPlayerServerRpc((int)player.actualClientId);
+            enemy.LegKickPlayerServerRpc(player.PlayerIndex());
         }
     }
 }
