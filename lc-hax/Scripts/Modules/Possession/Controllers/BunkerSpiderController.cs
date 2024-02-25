@@ -7,21 +7,12 @@ internal class BunkerSpiderController : IEnemyController<SandSpiderAI> {
         PossessionMod.CamOffsetZ = -3f;
     }
 
-    bool GetOnWall(SandSpiderAI enemy) => enemy.Reflect().GetInternalField<bool>("onWall");
-
-    bool GetSpoolingPlayerBody(SandSpiderAI enemy) =>
-        enemy.Reflect().GetInternalField<bool>("spoolingPlayerBody");
-
-    float GetTimeSinceHittingPlayer(SandSpiderAI enemy) =>
-        enemy.Reflect().GetInternalField<float>("timeSinceHittingPlayer");
-
-    void SetTimeSinceHittingPlayer(SandSpiderAI enemy, float value) =>
-        enemy.Reflect().SetInternalField("timeSinceHittingPlayer", value);
-
 
 
     public void Update(SandSpiderAI enemy, bool isAIControlled) {
         enemy.meshContainerPosition = enemy.transform.position;
+        _ = enemy.Reflect().SetInternalField("overrideSpiderLookRotation", true);
+        _ = enemy.Reflect().SetInternalField("meshContainerTargetRotation", Quaternion.LookRotation(enemy.transform.forward));
         enemy.SyncMeshContainerPositionToClients();
         if (!isAIControlled) enemy.homeNode = enemy.ChooseClosestNodeToPosition(enemy.transform.position, false, 2);
     }
