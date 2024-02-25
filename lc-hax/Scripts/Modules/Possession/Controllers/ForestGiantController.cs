@@ -6,7 +6,12 @@ enum GiantState {
     CHASE = 1
 }
 
-class ForestGiantController : IEnemyController<ForestGiantAI> {
+internal class ForestGiantController : IEnemyController<ForestGiantAI> {
+    public void GetCameraPosition(ForestGiantAI enemy) {
+        PossessionMod.CamOffsetY = 8f;
+        PossessionMod.CamOffsetZ = -8f;
+    }
+
     bool IsUsingSecondarySkill { get; set; } = false;
 
     public void OnMovement(ForestGiantAI enemy, bool isMoving, bool isSprinting) {

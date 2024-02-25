@@ -1,5 +1,6 @@
 using GameNetcodeStuff;
 using Hax;
+using UnityEngine;
 
 enum JesterState {
     CLOSED,
@@ -7,7 +8,26 @@ enum JesterState {
     OPEN
 }
 
-class JesterController : IEnemyController<JesterAI> {
+internal class JesterController : IEnemyController<JesterAI> {
+    public float transitionSpeed = 5f;
+
+    public void GetCameraPosition(JesterAI enemy) {
+        float targetCamOffsetY, targetCamOffsetZ;
+
+        if (!enemy.IsBehaviourState(JesterState.OPEN)) {
+            targetCamOffsetY = 2f;
+            targetCamOffsetZ = -3f;
+        }
+        else {
+            targetCamOffsetY = 2.3f;
+            targetCamOffsetZ = -3.5f;
+        }
+
+        // Smoothly interpolate between current and target camera positions
+        PossessionMod.CamOffsetY = Mathf.Lerp(PossessionMod.CamOffsetY, targetCamOffsetY, Time.deltaTime * transitionSpeed);
+        PossessionMod.CamOffsetZ = Mathf.Lerp(PossessionMod.CamOffsetZ, targetCamOffsetZ, Time.deltaTime * transitionSpeed);
+    }
+
     void SetNoPlayerChasetimer(JesterAI enemy, float value) => enemy.Reflect().SetInternalField("noPlayersToChaseTimer", value);
     bool GetinKillAnimation(JesterAI enemy) => enemy.Reflect().GetInternalField<bool>("inKillAnimation");
     public void UsePrimarySkill(JesterAI enemy) {
@@ -29,7 +49,8 @@ class JesterController : IEnemyController<JesterAI> {
 
     public void OnUnpossess(JesterAI enemy) => this.SetNoPlayerChasetimer(enemy, 5.0f);
 
-    public bool IsAbleToMove(JesterAI enemy) => !enemy.IsBehaviourState(JesterState.CRANKING);
+    public bool IsAbleToMove(JesterAI enemy) => !enemy.IsBehaviourState(JesterState.CRANKING) || !this.GetinKillAnimation(enemy);
+
     public bool IsAbleToRotate(JesterAI enemy) => !enemy.IsBehaviourState(JesterState.CRANKING);
 
     public string GetPrimarySkillName(JesterAI _) => "Close box";
@@ -42,12 +63,11 @@ class JesterController : IEnemyController<JesterAI> {
 
 
     public void OnCollideWithPlayer(JesterAI enemy, PlayerControllerB player) {
-        if (enemy.isOutside) {
-            if (player.IsDead()) return;
-            if (!enemy.IsBehaviourState(JesterState.OPEN)) return;
-            if (this.GetinKillAnimation(enemy)) return;
-            enemy.KillPlayerServerRpc(player.PlayerIndex());
-        }
+        if (player.IsDead()) return;
+        if (!enemy.IsBehaviourState(JesterState.OPEN)) return;
+        if (this.GetinKillAnimation(enemy))
+            return;
+        enemy.KillPlayerServerRpc((int)player.actualClientId);
     }
 }
 

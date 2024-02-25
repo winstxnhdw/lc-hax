@@ -1,6 +1,7 @@
 using GameNetcodeStuff;
 using Hax;
 using Unity.Netcode;
+using UnityEngine;
 
 enum HoardingBugState {
     IDLE,
@@ -11,7 +12,12 @@ enum HoardingBugState {
     AT_NEST
 }
 
-class HoardingBugController : IEnemyController<HoarderBugAI> {
+internal class HoardingBugController : IEnemyController<HoarderBugAI> {
+    public void GetCameraPosition(HoarderBugAI enemy) {
+        PossessionMod.CamOffsetY = 2.5f;
+        PossessionMod.CamOffsetZ = -3f;
+    }
+
     bool GetInChase(HoarderBugAI enemy) => enemy.Reflect().GetInternalField<bool>("inChase");
 
     float GettimeSinceHittingPlayer(HoarderBugAI enemy) =>
@@ -37,6 +43,7 @@ class HoardingBugController : IEnemyController<HoarderBugAI> {
     public void Update(HoarderBugAI enemy, bool isAIControlled) {
         if (isAIControlled) return;
         if (enemy.heldItem?.itemGrabbableObject is null) return;
+
         enemy.angryTimer = 0.0f;
         enemy.SetBehaviourState(HoardingBugState.IDLE);
     }
@@ -63,6 +70,12 @@ class HoardingBugController : IEnemyController<HoarderBugAI> {
     }
 
     public void UsePrimarySkill(HoarderBugAI enemy) {
+        if (enemy.angryTimer > 0.0f) {
+            enemy.angryTimer = 0.0f;
+            enemy.angryAtPlayer = null;
+            enemy.SetBehaviourState(HoardingBugState.IDLE);
+        }
+
         if (enemy.heldItem is null && enemy.FindNearbyItem() is GrabbableObject grabbable) {
             this.GrabItem(enemy, grabbable);
         }
@@ -107,4 +120,5 @@ class HoardingBugController : IEnemyController<HoarderBugAI> {
             enemy.HitPlayerServerRpc();
         }
     }
+
 }

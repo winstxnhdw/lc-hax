@@ -1,5 +1,6 @@
 using GameNetcodeStuff;
 using Hax;
+using UnityEngine;
 
 enum SnareFleaState {
     SEARCHING,
@@ -8,7 +9,28 @@ enum SnareFleaState {
     CLINGING
 }
 
-class SnareFleaController : IEnemyController<CentipedeAI> {
+internal class SnareFleaController : IEnemyController<CentipedeAI> {
+    public float transitionSpeed = 0f;
+
+    public void GetCameraPosition(CentipedeAI enemy) {
+        float targetCamOffsetY, targetCamOffsetZ;
+
+        if (!enemy.IsBehaviourState(SnareFleaState.HIDING)) {
+            transitionSpeed = 8.0f;
+            targetCamOffsetY = 2f;
+            targetCamOffsetZ = -4f;
+        }
+        else {
+            transitionSpeed = 2.5f;
+            targetCamOffsetY = -0.3f;
+            targetCamOffsetZ = 0f;
+        }
+
+        // Smoothly interpolate between current and target camera positions
+        PossessionMod.CamOffsetY = Mathf.Lerp(PossessionMod.CamOffsetY, targetCamOffsetY, Time.deltaTime * transitionSpeed);
+        PossessionMod.CamOffsetZ = Mathf.Lerp(PossessionMod.CamOffsetZ, targetCamOffsetZ, Time.deltaTime * transitionSpeed);
+    }
+
     bool IsClingingToSomething(CentipedeAI enemy) {
         Reflector centipedeReflector = enemy.Reflect();
 
