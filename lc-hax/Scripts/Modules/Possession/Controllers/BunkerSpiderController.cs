@@ -23,7 +23,6 @@ internal class SandSpiderController : IEnemyController<SandSpiderAI> {
 
     public void Update(SandSpiderAI enemy, bool isAIControlled) {
         enemy.meshContainerPosition = enemy.transform.position;
-        enemy.meshContainerTarget = enemy.transform.forward;
         enemy.SyncMeshContainerPositionToClients();
         if (!isAIControlled) enemy.homeNode = enemy.ChooseClosestNodeToPosition(enemy.transform.position, false, 2);
     }
