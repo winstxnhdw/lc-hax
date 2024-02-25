@@ -2,7 +2,7 @@ using GameNetcodeStuff;
 
 namespace Hax;
 
-internal static partial class Helper {
+static partial class Helper {
     static ManualCameraRenderer? ManualCameraRenderer => Helper.StartOfRound?.mapScreen;
 
     internal static bool IsRadarTarget(ulong playerClientId) => Helper.ManualCameraRenderer?.targetTransformIndex == unchecked((int)playerClientId);

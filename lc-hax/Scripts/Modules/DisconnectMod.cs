@@ -3,7 +3,7 @@ using UnityEngine;
 using Steamworks;
 using Hax;
 
-internal sealed class DisconnectMod : MonoBehaviour {
+sealed class DisconnectMod : MonoBehaviour {
     bool IsShiftHeld { get; set; } = false;
 
     void OnEnable() {

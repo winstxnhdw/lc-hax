@@ -1,7 +1,7 @@
 using Hax;
 
 [Command("translate")]
-internal class TranslateCommand : ICommand {
+class TranslateCommand : ICommand {
     public void Execute(StringArray args) {
         if (args.Length < 3) {
             Chat.Print("Usages:",

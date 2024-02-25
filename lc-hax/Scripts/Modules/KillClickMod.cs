@@ -2,7 +2,7 @@ using UnityEngine;
 using Hax;
 using GameNetcodeStuff;
 
-internal sealed class KillClickMod : MonoBehaviour {
+sealed class KillClickMod : MonoBehaviour {
     RaycastHit[] RaycastHits { get; set; } = new RaycastHit[100];
 
     void OnEnable() => InputListener.OnLeftButtonPress += this.Kill;

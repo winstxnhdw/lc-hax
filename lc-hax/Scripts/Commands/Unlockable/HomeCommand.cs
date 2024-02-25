@@ -3,7 +3,7 @@ using GameNetcodeStuff;
 using Hax;
 
 [Command("home")]
-internal class HomeCommand : ICommand {
+class HomeCommand : ICommand {
     ShipTeleporter? Teleporter => Helper.ShipTeleporters.First(
         teleporter => teleporter is not null && !teleporter.isInverseTeleporter
     );

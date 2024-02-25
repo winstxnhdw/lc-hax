@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using Hax;
 
 [Command("visit")]
-internal class VisitCommand : ICommand {
+class VisitCommand : ICommand {
     public void Execute(StringArray args) {
         if (Helper.Terminal is not Terminal terminal) return;
         if (Helper.StartOfRound is not StartOfRound startOfRound) return;

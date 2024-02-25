@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using UnityObject = UnityEngine.Object;
 
-internal static partial class Extensions {
+static partial class Extensions {
     internal static IEnumerable<T> WhereIsNotNull<T>(this IEnumerable<T?> array) where T : class {
         foreach (T? element in array) {
             if (element == null) continue;

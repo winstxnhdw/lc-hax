@@ -11,7 +11,7 @@ struct CopiedStates {
     internal float animationSpeed;
 }
 
-internal sealed class FollowMod : MonoBehaviour {
+sealed class FollowMod : MonoBehaviour {
     internal static PlayerControllerB? PlayerToFollow { get; set; }
 
     const float SecondsBeforeRealtime = 1.0f;

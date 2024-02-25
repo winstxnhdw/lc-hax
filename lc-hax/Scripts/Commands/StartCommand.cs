@@ -1,7 +1,7 @@
 using Hax;
 
 [Command("start")]
-internal class StartGameCommand : ICommand {
+class StartGameCommand : ICommand {
     public void Execute(StringArray _) {
         if (Helper.StartOfRound is not StartOfRound startOfRound) return;
         if (startOfRound.travellingToNewLevel) {

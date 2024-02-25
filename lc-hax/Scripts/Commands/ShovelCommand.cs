@@ -1,7 +1,7 @@
 using Hax;
 
 [Command("shovel")]
-internal class ShovelCommand : ICommand {
+class ShovelCommand : ICommand {
     public void Execute(StringArray args) {
         if (args.Length is 0) {
             Chat.Print("Usage: shovel <force=1>");

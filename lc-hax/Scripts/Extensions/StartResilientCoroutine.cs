@@ -10,7 +10,7 @@ enum CoroutineState {
 
 class InvalidCoroutineState(CoroutineState state) : Exception($"Invalid CoroutineState: {state}") { }
 
-internal static partial class Extensions {
+static partial class Extensions {
     static CoroutineState ExecuteCoroutineStep(IEnumerator coroutine) {
         try {
             return coroutine.MoveNext() ? CoroutineState.RUNNING : CoroutineState.EXHAUSTED;

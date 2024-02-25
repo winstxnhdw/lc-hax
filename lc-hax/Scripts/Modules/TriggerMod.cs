@@ -2,7 +2,7 @@ using UnityEngine;
 using GameNetcodeStuff;
 using Hax;
 
-internal sealed class TriggerMod : MonoBehaviour, IEnemyPrompter {
+sealed class TriggerMod : MonoBehaviour, IEnemyPrompter {
     RaycastHit[] RaycastHits { get; set; } = new RaycastHit[100];
 
     bool UsingInteractRay { get; set; } = false;

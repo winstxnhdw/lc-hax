@@ -7,7 +7,7 @@ public enum SporeLizardState {
     HOSTILE
 }
 
-internal class SporeLizardController : IEnemyController<PufferAI> {
+class SporeLizardController : IEnemyController<PufferAI> {
     public void UsePrimarySkill(PufferAI enemy) {
         enemy.SetBehaviourState(SporeLizardState.HOSTILE);
         enemy.StompServerRpc();

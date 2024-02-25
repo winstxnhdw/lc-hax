@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Hax;
 
-internal static partial class Helper {
+static partial class Helper {
     internal static HashSet<GrabbableObject> Grabbables { get; } = Helper.LocalPlayer is null ? [] :
         Helper.FindObjects<GrabbableObject>()
               .WhereIsNotNull()

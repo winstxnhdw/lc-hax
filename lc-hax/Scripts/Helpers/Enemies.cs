@@ -7,7 +7,7 @@ using UnityEngine;
 
 namespace Hax;
 
-internal static partial class Helper {
+static partial class Helper {
     internal static HashSet<EnemyAI> Enemies { get; } = Helper.StartOfRound is not { inShipPhase: false } ? [] :
         Helper.FindObjects<EnemyAI>()
               .WhereIsNotNull()
