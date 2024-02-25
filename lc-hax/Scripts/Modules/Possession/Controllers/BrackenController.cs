@@ -44,7 +44,7 @@ internal class BrackenController : IEnemyController<FlowermanAI> {
         if (enemy.isOutside) {
             if (enemy.inKillAnimation || this.GetStartingKillAnimationLocalClient(enemy) ||
                 enemy.carryingPlayerBody) return;
-            enemy.KillPlayerAnimationServerRpc((int)player.actualClientId);
+            enemy.KillPlayerAnimationServerRpc(player.PlayerIndex());
             this.SetStartingKillAnimationLocalClient(enemy, true);
 
 
