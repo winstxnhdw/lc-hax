@@ -40,13 +40,4 @@ internal class SporeLizardController : IEnemyController<PufferAI> {
 
     public void OnOutsideStatusChange(PufferAI enemy) => enemy.StopSearch(enemy.roamMap, true);
 
-    public void OnCollideWithPlayer(PufferAI enemy, PlayerControllerB player) {
-        if (enemy.isOutside) {
-            if (this.GetTimeSinceHittingPlayer(enemy) > 1f) {
-                this.SetTimeSinceHittingPlayer(enemy, 0f);
-                player.DamagePlayer(20, true, true, CauseOfDeath.Mauling, 0, false, default);
-                enemy.BitePlayerServerRpc((int)player.actualClientId);
-            }
-        }
-    }
 }

@@ -39,15 +39,4 @@ internal class BrackenController : IEnemyController<FlowermanAI> {
     public float InteractRange(FlowermanAI _) => 1.5f;
 
     public bool SyncAnimationSpeedEnabled(FlowermanAI _) => false;
-
-    public void OnCollideWithPlayer(FlowermanAI enemy, PlayerControllerB player) {
-        if (enemy.isOutside) {
-            if (enemy.inKillAnimation || this.GetStartingKillAnimationLocalClient(enemy) ||
-                enemy.carryingPlayerBody) return;
-            enemy.KillPlayerAnimationServerRpc(player.PlayerIndex());
-            this.SetStartingKillAnimationLocalClient(enemy, true);
-
-
-        }
-    }
 }
