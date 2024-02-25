@@ -1,7 +1,7 @@
 using Hax;
 using UnityEngine;
 
-internal class SandSpiderController : IEnemyController<SandSpiderAI> {
+internal class BunkerSpiderController : IEnemyController<SandSpiderAI> {
     public void GetCameraPosition(SandSpiderAI enemy) {
         PossessionMod.CamOffsetY = 3f;
         PossessionMod.CamOffsetZ = -3f;
