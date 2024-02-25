@@ -24,7 +24,5 @@ internal class HygrodereController : IEnemyController<BlobAI> {
     public float SprintMultiplier(BlobAI _) => 9.8f;
 
     public void OnOutsideStatusChange(BlobAI enemy) => enemy.StopSearch(enemy.searchForPlayers, true);
-
-    public void OnCollideWithPlayer(BlobAI enemy, PlayerControllerB player) => enemy.OnCollideWithPlayer(player.playerCollider);
 }
 

@@ -109,15 +109,4 @@ internal class HoardingBugController : IEnemyController<HoarderBugAI> {
         enemy.StopSearch(enemy.searchForItems, true);
         enemy.StopSearch(enemy.searchForPlayer, true);
     }
-
-    public void OnCollideWithPlayer(HoarderBugAI enemy, PlayerControllerB player) {
-        if (enemy.isOutside) {
-            if (!this.GetInChase(enemy)) return;
-            if (this.GettimeSinceHittingPlayer(enemy) < 0.5f) return;
-            this.SettimeSinceHittingPlayer(enemy, 0f);
-            player.DamagePlayer(30, true, true, CauseOfDeath.Mauling, 0, false, default);
-            enemy.HitPlayerServerRpc();
-        }
-    }
-
 }
