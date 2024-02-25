@@ -5,7 +5,7 @@ using Hax;
 using UnityEngine;
 
 [Command("bombard")]
-internal class BombardCommand : ICommand, IJetpack {
+class BombardCommand : ICommand, IJetpack {
     /// <summary>
     /// Grab and discard jetpacks to a random location of the same elevation near the target player.
     /// If the target player is far away, it may take a while for the jetpacks to reach the player.

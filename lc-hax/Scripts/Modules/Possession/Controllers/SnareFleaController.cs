@@ -7,7 +7,7 @@ enum SnareFleaState {
     CLINGING
 }
 
-internal class SnareFleaController : IEnemyController<CentipedeAI> {
+class SnareFleaController : IEnemyController<CentipedeAI> {
     bool IsClingingToSomething(CentipedeAI enemy) {
         Reflector centipedeReflector = enemy.Reflect();
 

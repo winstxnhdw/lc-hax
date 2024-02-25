@@ -4,7 +4,7 @@ using GameNetcodeStuff;
 using Hax;
 
 [Command("random")]
-internal class RandomCommand : ICommand {
+class RandomCommand : ICommand {
     internal ShipTeleporter? InverseTeleporter => Helper.ShipTeleporters.First(
         teleporter => teleporter is not null && teleporter.isInverseTeleporter
     );

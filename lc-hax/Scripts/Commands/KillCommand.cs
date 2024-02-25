@@ -2,7 +2,7 @@ using GameNetcodeStuff;
 using Hax;
 
 [Command("kill")]
-internal class KillCommand : ICommand {
+class KillCommand : ICommand {
     bool EnableGodMode { get; set; }
 
     Result KillSelf() {

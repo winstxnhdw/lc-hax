@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 
-internal class WaitForGameEndBehaviour : MonoBehaviour {
+class WaitForGameEndBehaviour : MonoBehaviour {
     Action? ActionBefore { get; set; }
     Action? ActionAfter { get; set; }
     bool HasGameEnded { get; set; } = false;

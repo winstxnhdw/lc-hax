@@ -2,7 +2,7 @@ using System.Collections;
 using UnityEngine;
 using UnityObject = UnityEngine.Object;
 
-internal class MultiObjectPool<T> where T : UnityObject {
+class MultiObjectPool<T> where T : UnityObject {
     internal T?[] Objects { get; private set; } = [];
 
     internal MultiObjectPool(MonoBehaviour self, float renewInterval = 1.0f) => self.StartCoroutine(this.RenewObjects(renewInterval));

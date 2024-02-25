@@ -2,7 +2,7 @@ using UnityEngine;
 using Hax;
 
 [Command("invis")]
-internal class InvisibleCommand : ICommand {
+class InvisibleCommand : ICommand {
     void ImmediatelyUpdatePlayerPosition() =>
         Helper.LocalPlayer?
               .Reflect()

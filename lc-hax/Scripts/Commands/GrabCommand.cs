@@ -6,7 +6,7 @@ using GameNetcodeStuff;
 using Hax;
 
 [Command("grab")]
-internal class GrabCommand : ICommand {
+class GrabCommand : ICommand {
     bool CanGrabItem(GrabbableObject grabbableObject, Vector3 currentPlayerPosition) =>
         grabbableObject is { isHeld: false } and { isHeldByEnemy: false } &&
         (grabbableObject.transform.position - currentPlayerPosition).sqrMagnitude >= 20.0f * 20.0f;

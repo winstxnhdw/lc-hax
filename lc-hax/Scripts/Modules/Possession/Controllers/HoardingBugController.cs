@@ -11,7 +11,7 @@ enum HoardingBugState {
     AT_NEST
 }
 
-internal class HoardingBugController : IEnemyController<HoarderBugAI> {
+class HoardingBugController : IEnemyController<HoarderBugAI> {
     void UseHeldItem(HoarderBugAI enemy) {
         if (enemy.heldItem is not { itemGrabbableObject: GrabbableObject grabbable }) return;
 

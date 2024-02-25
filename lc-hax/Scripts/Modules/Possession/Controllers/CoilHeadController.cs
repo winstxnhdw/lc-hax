@@ -1,4 +1,4 @@
-internal class CoilHeadController : IEnemyController<SpringManAI> {
+class CoilHeadController : IEnemyController<SpringManAI> {
     bool GetStoppingMovement(SpringManAI enemy) => enemy.Reflect().GetInternalField<bool>("stoppingMovement");
 
     public void OnSecondarySkillHold(SpringManAI enemy) => enemy.SetAnimationGoServerRpc();

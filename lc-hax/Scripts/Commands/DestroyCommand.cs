@@ -5,7 +5,7 @@ using Hax;
 using UnityEngine;
 
 [Command("destroy")]
-internal class DestroyCommand : ICommand {
+class DestroyCommand : ICommand {
     IEnumerator DestroyAllItemsAsync(PlayerControllerB player) {
         float currentWeight = player.carryWeight;
 

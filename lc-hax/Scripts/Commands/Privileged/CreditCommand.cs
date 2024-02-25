@@ -2,7 +2,7 @@ using System;
 using Hax;
 
 [PrivilegedCommand("credit")]
-internal class CreditCommand : ICommand {
+class CreditCommand : ICommand {
     public void Execute(StringArray args) {
         if (Helper.Terminal is not Terminal terminal) return;
         if (args.Length is 0) {

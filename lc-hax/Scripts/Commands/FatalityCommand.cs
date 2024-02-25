@@ -4,7 +4,7 @@ using GameNetcodeStuff;
 using Hax;
 
 [Command("fatality")]
-internal class FatalityCommand : ICommand {
+class FatalityCommand : ICommand {
     /// <summary>
     /// Teleports the enemy to the target player and perform the fatality.
     /// Teleporting certain enemies outside of the factory can lag the user, so this burden is passed to the target player.

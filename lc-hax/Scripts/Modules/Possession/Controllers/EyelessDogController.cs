@@ -7,7 +7,7 @@ enum DogState {
     LUNGE
 }
 
-internal class EyelessDogController : IEnemyController<MouthDogAI> {
+class EyelessDogController : IEnemyController<MouthDogAI> {
     public void OnMovement(MouthDogAI enemy, bool isMoving, bool isSprinting) {
         if (!isSprinting) {
             if (!isMoving) return;

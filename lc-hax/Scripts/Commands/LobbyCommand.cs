@@ -2,7 +2,7 @@ using Hax;
 using UnityEngine;
 
 [Command("lobby")]
-internal class LobbyCommand : ICommand {
+class LobbyCommand : ICommand {
     public void Execute(StringArray _) {
         if (State.ConnectedLobby is not ConnectedLobby connectedLobby) return;
 
