@@ -1,5 +1,3 @@
-using GameNetcodeStuff;
-
 internal class MaskedPlayerController : IEnemyController<MaskedPlayerEnemy> {
     public void GetCameraPosition(MaskedPlayerEnemy enemy) {
         PossessionMod.CamOffsetY = 2.8f;
