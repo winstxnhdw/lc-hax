@@ -2,7 +2,12 @@ using GameNetcodeStuff;
 using Hax;
 using UnityEngine;
 
-class BunkerSpiderController : IEnemyController<SandSpiderAI> {
+internal class SandSpiderController : IEnemyController<SandSpiderAI> {
+    public void GetCameraPosition(SandSpiderAI enemy) {
+        PossessionMod.CamOffsetY = 3f;
+        PossessionMod.CamOffsetZ = -3f;
+    }
+
     bool GetOnWall(SandSpiderAI enemy) => enemy.Reflect().GetInternalField<bool>("onWall");
 
     bool GetSpoolingPlayerBody(SandSpiderAI enemy) =>
@@ -14,10 +19,13 @@ class BunkerSpiderController : IEnemyController<SandSpiderAI> {
     void SetTimeSinceHittingPlayer(SandSpiderAI enemy, float value) =>
         enemy.Reflect().SetInternalField("timeSinceHittingPlayer", value);
 
+
+
     public void Update(SandSpiderAI enemy, bool isAIControlled) {
         enemy.meshContainerPosition = enemy.transform.position;
+        enemy.meshContainerTarget = enemy.transform.forward;
         enemy.SyncMeshContainerPositionToClients();
-        if (!isAIControlled) enemy.homeNode = enemy.ChooseClosestNodeToPosition(enemy.transform.position, false, 2);
+        if(!isAIControlled) enemy.homeNode = enemy.ChooseClosestNodeToPosition(enemy.transform.position, false, 2);
     }
 
     public bool SyncAnimationSpeedEnabled(SandSpiderAI enemy) => false;
@@ -53,12 +61,13 @@ class BunkerSpiderController : IEnemyController<SandSpiderAI> {
     public void OnCollideWithPlayer(SandSpiderAI enemy, PlayerControllerB player) {
         if (enemy.isOutside) {
             if (this.GetOnWall(enemy)) return;
-            if (this.GetSpoolingPlayerBody(enemy)) return;
+            if(this.GetSpoolingPlayerBody(enemy)) return;
             if (this.GetTimeSinceHittingPlayer(enemy) > 1f) {
                 this.SetTimeSinceHittingPlayer(enemy, 0.0f);
                 player.DamagePlayer(90, true, true, CauseOfDeath.Mauling, 0, false, default);
-                enemy.HitPlayerServerRpc(player.PlayerIndex());
+                enemy.HitPlayerServerRpc((int)player.actualClientId);
             }
         }
     }
 }
+

@@ -9,6 +9,8 @@ using Hax;
 internal sealed class PossessionMod : MonoBehaviour {
     const float TeleportDoorCooldown = 2.5f;
     const float DoorInteractionCooldown = 0.7f;
+    public static float CamOffsetY = 2.5f;
+    public static float CamOffsetZ = -3f;
     bool IsLeftAltHeld { get; set; } = false;
 
     internal static PossessionMod? Instance { get; private set; }
@@ -194,23 +196,28 @@ internal sealed class PossessionMod : MonoBehaviour {
             return;
         }
 
+        if (controller.SyncAnimationSpeedEnabled(enemy)) {
+            characterMovement.CharacterSpeed = agent.speed;
+        }
+
         if (controller.IsAbleToMove(enemy)) {
             this.UpdateEnemyPosition(enemy);
             controller.OnMovement(enemy, this.CharacterMovement.IsMoving, this.CharacterMovement.IsSprinting);
         }
 
-        if (controller.SyncAnimationSpeedEnabled(enemy)) {
-            characterMovement.CharacterSpeed = agent.speed;
-        }
-
         if (controller.IsAbleToRotate(enemy)) {
             this.UpdateEnemyRotation();
         }
+
+        this.GetCameraPosition();
     }
 
     void UpdateCameraPosition(Camera camera, EnemyAI enemy) {
-        Vector3 newPosition = enemy.transform.position + (0.0f * (Vector3.up - enemy.transform.forward));
-        camera.transform.position = newPosition;
+        Vector3 verticalOffset = CamOffsetY * Vector3.up;
+        Vector3 forwardOffset = CamOffsetZ * camera.transform.forward;
+
+        Vector3 offset = verticalOffset + forwardOffset;
+        camera.transform.position = enemy.transform.position + offset;
     }
 
     void UpdateCameraRotation(Camera camera, EnemyAI enemy) {
@@ -220,20 +227,12 @@ internal sealed class PossessionMod : MonoBehaviour {
 
         // Set the camera rotation without changing its position
         camera.transform.rotation = newRotation;
-
-        // Calculate the new camera position based on the updated rotation
-        Vector3 offset = 2.5f * (Vector3.up - camera.transform.forward);
-        camera.transform.position = enemy.transform.position + offset;
     }
-
 
     void UpdateEnemyRotation() {
         if (this.CharacterMovement is not CharacterMovement characterMovement) return;
-        if (!this.IsLeftAltHeld) {
-            // Only take the horizontal rotation
-            Quaternion horizontalRotation = Quaternion.Euler(0f, this.transform.eulerAngles.y, 0f);
-            characterMovement.transform.rotation = horizontalRotation;
-        }
+        Quaternion horizontalRotation = Quaternion.Euler(0f, this.transform.eulerAngles.y, 0f);
+        characterMovement.transform.rotation = horizontalRotation;
     }
 
     // Updates enemy's position to match the possessed object's position
@@ -259,6 +258,8 @@ internal sealed class PossessionMod : MonoBehaviour {
         this.IsAIControlled = false;
         this.TeleportCooldownRemaining = 0.0f;
         this.DoorCooldownRemaining = 0.0f;
+        CamOffsetY = 2.5f;
+        CamOffsetZ = -3f;
 
         if (this.EnemyControllers.TryGetValue(enemy.GetType(), out IController controller)) {
             controller.OnPossess(enemy);
@@ -402,6 +403,13 @@ internal sealed class PossessionMod : MonoBehaviour {
         characterMovement.SetPosition(exitPoint.position);
         _ = enemy.SetOutsideStatus(!teleport.isEntranceToBuilding);
         controller.OnOutsideStatusChange(enemy);
+    }
+
+    void GetCameraPosition() {
+        if (this.Possession.Enemy is not EnemyAI enemy) return;
+        if (!this.EnemyControllers.TryGetValue(enemy.GetType(), out IController controller)) return;
+
+        controller.GetCameraPosition(enemy);
     }
 
     void UsePrimarySkill() {
