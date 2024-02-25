@@ -231,8 +231,13 @@ internal sealed class PossessionMod : MonoBehaviour {
 
     void UpdateEnemyRotation() {
         if (this.CharacterMovement is not CharacterMovement characterMovement) return;
-        Quaternion horizontalRotation = Quaternion.Euler(0f, this.transform.eulerAngles.y, 0f);
-        characterMovement.transform.rotation = horizontalRotation;
+        if (!this.NoClipEnabled) {
+            Quaternion horizontalRotation = Quaternion.Euler(0f, this.transform.eulerAngles.y, 0f);
+            characterMovement.transform.rotation = horizontalRotation;
+        }
+        else {
+            characterMovement.transform.rotation = this.transform.rotation;
+        }
     }
 
     // Updates enemy's position to match the possessed object's position
