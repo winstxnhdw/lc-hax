@@ -60,4 +60,14 @@ internal class NutcrackerController : IEnemyController<NutcrackerEnemyAI> {
         enemy.StopSearch(enemy.patrol, true);
     }
 
+    public void OnCollideWithPlayer(NutcrackerEnemyAI enemy, PlayerControllerB player) {
+        if (enemy.isOutside) {
+            if (enemy.isEnemyDead) return;
+            if (this.GetTimeSinceHittingPlayer(enemy) < 1f) return;
+            if (this.GetStunNormalizedTimer(enemy) >= 0f) return;
+
+            this.SetTimeSinceHittingPlayer(enemy, 0f);
+            enemy.LegKickPlayerServerRpc(player.PlayerIndex());
+        }
+    }
 }
