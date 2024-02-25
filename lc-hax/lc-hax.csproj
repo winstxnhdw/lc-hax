@@ -8,7 +8,7 @@
     <LangVersion>preview</LangVersion>
     <RuntimeIdentifier>win-x64</RuntimeIdentifier>
     <TargetFramework>netstandard2.1</TargetFramework>
-    <GamePath>C:/Program Files (x86)/Steam/steamapps/common/Lethal Company/Lethal Company_Data/Managed/</GamePath>
+    <GamePath>D:/SteamLibrary/steamapps/common/Lethal Company/Lethal Company_Data/Managed/</GamePath>
     <NuGetPath>./NuGet</NuGetPath>
     <RootNamespace>lc-hax</RootNamespace>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
