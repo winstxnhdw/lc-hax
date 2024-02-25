@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Hax;
 
-internal sealed class ChatMod : MonoBehaviour {
+sealed class ChatMod : MonoBehaviour {
     List<string> CommandHistory { get; } = [];
     int HistoryIndex { get; set; } = -1;
 

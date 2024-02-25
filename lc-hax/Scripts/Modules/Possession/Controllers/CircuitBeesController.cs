@@ -7,7 +7,7 @@ enum BeesState {
     ATTACK
 }
 
-internal class CircuitBeesController : IEnemyController<RedLocustBees> {
+class CircuitBeesController : IEnemyController<RedLocustBees> {
     public bool CanUseEntranceDoors(RedLocustBees _) => true;
 
     public float InteractRange(RedLocustBees _) => 2.5f;

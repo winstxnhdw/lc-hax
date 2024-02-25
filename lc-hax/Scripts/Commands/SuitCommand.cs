@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using Hax;
 
 [Command("suit")]
-internal class SuitCommand : ICommand {
+class SuitCommand : ICommand {
     internal Dictionary<string, Unlockable> SuitUnlockables =>
         Enum.GetValues(typeof(Unlockable))
             .Cast<Unlockable>()

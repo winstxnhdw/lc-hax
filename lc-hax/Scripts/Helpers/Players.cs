@@ -6,7 +6,7 @@ using Unity.Netcode;
 
 namespace Hax;
 
-internal static partial class Helper {
+static partial class Helper {
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     internal static int PlayerIndex(this PlayerControllerB player) => unchecked((int)player.playerClientId);
 

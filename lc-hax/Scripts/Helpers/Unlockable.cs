@@ -1,6 +1,6 @@
 namespace Hax;
 
-internal static partial class Helper {
+static partial class Helper {
     internal static bool Is(this Unlockable unlockable, int unlockableId) => unlockableId == unchecked((int)unlockable);
 
     internal static void BuyUnlockable(Unlockable unlockable) {

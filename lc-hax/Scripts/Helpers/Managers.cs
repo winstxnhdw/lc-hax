@@ -1,6 +1,6 @@
 namespace Hax;
 
-internal static partial class Helper {
+static partial class Helper {
     internal static HUDManager? HUDManager => HUDManager.Instance.Unfake();
 
     internal static RoundManager? RoundManager => RoundManager.Instance.Unfake();

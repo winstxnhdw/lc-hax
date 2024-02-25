@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace Hax;
 
-internal static partial class Helper {
+static partial class Helper {
     internal static void DrawLabel(Vector2 position, string label, Color colour) {
         GUIStyle labelStyle = new(GUI.skin.label) {
             fontStyle = FontStyle.Bold

@@ -6,7 +6,8 @@ using Microsoft.CodeAnalysis.Diagnostics;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 [DiagnosticAnalyzer(LanguageNames.CSharp)]
-internal class PatchAnalyser : DiagnosticAnalyzer {
+class PatchAnalyser : DiagnosticAnalyzer
+{
     internal const string DiagnosticID = "HAX002";
 
     static DiagnosticDescriptor Rule { get; } = new(
@@ -20,13 +21,15 @@ internal class PatchAnalyser : DiagnosticAnalyzer {
 
     public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics => ImmutableArray.Create(PatchAnalyser.Rule);
 
-    public override void Initialize(AnalysisContext context) {
+    public override void Initialize(AnalysisContext context)
+    {
         context.ConfigureGeneratedCodeAnalysis(GeneratedCodeAnalysisFlags.None);
         context.EnableConcurrentExecution();
         context.RegisterSyntaxNodeAction(AnalyseSyntaxNode, SyntaxKind.MethodDeclaration);
     }
 
-    static void AnalyseSyntaxNode(SyntaxNodeAnalysisContext context) {
+    static void AnalyseSyntaxNode(SyntaxNodeAnalysisContext context)
+    {
         if (context.Node is not MethodDeclarationSyntax methodDeclaration) return;
         if (context.SemanticModel.GetDeclaredSymbol(methodDeclaration, context.CancellationToken) is not IMethodSymbol methodSymbol) return;
         if (!methodSymbol.ContainingType.Name.EndsWith("Patch")) return;

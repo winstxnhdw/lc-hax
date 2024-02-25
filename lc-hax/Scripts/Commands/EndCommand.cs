@@ -2,7 +2,7 @@ using GameNetcodeStuff;
 using Hax;
 
 [Command("end")]
-internal class EndCommand : ICommand {
+class EndCommand : ICommand {
     public void Execute(StringArray args) {
         if (args.Length is 0) {
             Helper.StartOfRound?.EndGameServerRpc(-1);

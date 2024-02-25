@@ -7,7 +7,7 @@ using System.Linq;
 
 namespace Hax;
 
-internal class Loader : MonoBehaviour {
+class Loader : MonoBehaviour {
     const string HarmonyID = "winstxnhdw.lc-hax";
 
     static GameObject HaxGameObjects { get; } = new("Hax GameObjects");

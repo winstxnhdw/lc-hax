@@ -1,7 +1,7 @@
 using Hax;
 
 [Command("signal")]
-internal class SignalCommand : ICommand {
+class SignalCommand : ICommand {
     public void Execute(StringArray args) {
         if (args.Length is 0) {
             Chat.Print("Usage: signal <message>");

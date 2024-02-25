@@ -2,7 +2,7 @@ using GameNetcodeStuff;
 using Hax;
 
 [Command("poison")]
-internal class PoisonCommand : ICommand {
+class PoisonCommand : ICommand {
     void PoisonPlayer(PlayerControllerB player, int damage, ulong delay, ulong duration) =>
         Helper.CreateComponent<TransientBehaviour>()
               .Init(_ => player.DamagePlayerRpc(damage), duration, delay);

@@ -6,7 +6,7 @@ enum CoilHeadState {
     Chase = 1
 }
 
-internal class CoilHeadController : IEnemyController<SpringManAI> {
+class CoilHeadController : IEnemyController<SpringManAI> {
     bool GetStoppingMovement(SpringManAI enemy) => enemy.Reflect().GetInternalField<bool>("stoppingMovement");
 
     float GetTimeSinceHittingPlayer(SpringManAI enemy) =>
