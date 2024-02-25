@@ -2,8 +2,7 @@ using GameNetcodeStuff;
 using Hax;
 using UnityEngine;
 
-internal class SandSpiderController : IEnemyController<SandSpiderAI> {
-
+class SandSpiderController : IEnemyController<SandSpiderAI> {
     bool GetOnWall(SandSpiderAI enemy) => enemy.Reflect().GetInternalField<bool>("onWall");
 
     bool GetSpoolingPlayerBody(SandSpiderAI enemy) =>
@@ -15,10 +14,15 @@ internal class SandSpiderController : IEnemyController<SandSpiderAI> {
     void SetTimeSinceHittingPlayer(SandSpiderAI enemy, float value) =>
         enemy.Reflect().SetInternalField("timeSinceHittingPlayer", value);
 
-
-
     public void Update(SandSpiderAI enemy, bool isAIControlled) {
         enemy.meshContainerPosition = enemy.transform.position;
+
+    public void OnMovement(SandSpiderAI enemy, bool isMoving, bool isSprinting) {
+        enemy.creatureAnimator.SetBool("moving", true);
+        // spider is too slow, make it like 6f default, 8f sprinting
+        float speed = isSprinting ? 8.0f : 6.0f;
+        enemy.agent.speed = speed;
+        enemy.spiderSpeed = speed;
         enemy.SyncMeshContainerPositionToClients();
         if (!isAIControlled) enemy.homeNode = enemy.ChooseClosestNodeToPosition(enemy.transform.position, false, 2);
     }

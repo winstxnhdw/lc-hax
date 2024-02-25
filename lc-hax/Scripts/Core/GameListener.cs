@@ -2,7 +2,7 @@ using System;
 using UnityEngine;
 using Hax;
 
-internal class GameListener : MonoBehaviour {
+class GameListener : MonoBehaviour {
     internal static event Action? OnGameStart;
     internal static event Action? OnGameEnd;
     internal static event Action? OnShipDescent;

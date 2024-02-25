@@ -1,4 +1,4 @@
-internal class Possession() {
+class Possession() {
     EnemyAI? enemy = null;
 
     internal EnemyAI? Enemy => this.enemy.Unfake();

@@ -1,6 +1,6 @@
 using GameNetcodeStuff;
 
-internal class HygrodereController : IEnemyController<BlobAI> {
+class HygrodereController : IEnemyController<BlobAI> {
     void SetTamedTimer(BlobAI enemy, float time) => enemy.Reflect().SetInternalField("tamedTimer", time);
 
     void SetAngeredTimer(BlobAI enemy, float time) => enemy.Reflect().SetInternalField("angeredTimer", time);

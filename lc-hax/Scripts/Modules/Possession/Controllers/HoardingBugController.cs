@@ -11,8 +11,7 @@ enum HoardingBugState {
     AT_NEST
 }
 
-internal class HoardingBugController : IEnemyController<HoarderBugAI> {
-
+class HoardingBugController : IEnemyController<HoarderBugAI> {
     bool GetInChase(HoarderBugAI enemy) => enemy.Reflect().GetInternalField<bool>("inChase");
 
     float GettimeSinceHittingPlayer(HoarderBugAI enemy) =>
@@ -20,7 +19,6 @@ internal class HoardingBugController : IEnemyController<HoarderBugAI> {
 
     void SettimeSinceHittingPlayer(HoarderBugAI enemy, float value) =>
         enemy.Reflect().SetInternalField("timeSinceHittingPlayer", value);
-
 
     void UseHeldItem(HoarderBugAI enemy) {
         if (enemy.heldItem is not { itemGrabbableObject: GrabbableObject grabbable }) return;
@@ -108,5 +106,4 @@ internal class HoardingBugController : IEnemyController<HoarderBugAI> {
             enemy.HitPlayerServerRpc();
         }
     }
-
 }

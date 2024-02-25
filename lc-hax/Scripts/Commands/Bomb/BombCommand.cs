@@ -3,7 +3,7 @@ using GameNetcodeStuff;
 using Hax;
 
 [Command("bomb")]
-internal class BombCommand : ICommand, IJetpack {
+class BombCommand : ICommand, IJetpack {
     Action BlowUpLocation(PlayerControllerB localPlayer, PlayerControllerB targetPlayer, JetpackItem jetpack) => () => {
         localPlayer.DiscardHeldObject(placeObject: true, parentObjectTo: targetPlayer.NetworkObject);
         Helper.ShortDelay(jetpack.ExplodeJetpackServerRpc);

@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Hax;
 
-internal static partial class Helper {
+static partial class Helper {
     internal static ShipBuildModeManager? ShipBuildModeManager => ShipBuildModeManager.Instance;
 
     static NetworkObject GetNetworkObject<M>(M gameObject) where M : MonoBehaviour =>
