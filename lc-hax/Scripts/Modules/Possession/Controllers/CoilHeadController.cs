@@ -8,6 +8,11 @@ enum CoilHeadState {
 }
 
 internal class CoilHeadController : IEnemyController<SpringManAI> {
+    public void GetCameraPosition(SpringManAI enemy) {
+        PossessionMod.CamOffsetY = 2.8f;
+        PossessionMod.CamOffsetZ = -3.5f;
+    }
+
     bool GetStoppingMovement(SpringManAI enemy) => enemy.Reflect().GetInternalField<bool>("stoppingMovement");
 
     float GetTimeSinceHittingPlayer(SpringManAI enemy) =>
@@ -20,11 +25,9 @@ internal class CoilHeadController : IEnemyController<SpringManAI> {
 
     public void ReleaseSecondarySkill(SpringManAI enemy) => enemy.SetAnimationStopServerRpc();
 
-    public bool IsAbleToMove(SpringManAI enemy) =>
-        !this.GetStoppingMovement(enemy) || enemy.IsBehaviourState(CoilHeadState.Idle);
+    public bool IsAbleToMove(SpringManAI enemy) => !this.GetStoppingMovement(enemy) || enemy.IsBehaviourState(CoilHeadState.Idle);
 
-    public bool IsAbleToRotate(SpringManAI enemy) =>
-        !this.GetStoppingMovement(enemy) || enemy.IsBehaviourState(CoilHeadState.Idle);
+    public bool IsAbleToRotate(SpringManAI enemy) => !this.GetStoppingMovement(enemy) || enemy.IsBehaviourState(CoilHeadState.Idle);
 
     public float InteractRange(SpringManAI _) => 1.5f;
 
@@ -33,9 +36,9 @@ internal class CoilHeadController : IEnemyController<SpringManAI> {
     public void OnCollideWithPlayer(SpringManAI enemy, PlayerControllerB player) {
         if (enemy.isOutside) {
 
-            if (this.GetStoppingMovement(enemy)) return;
-            if (!enemy.IsBehaviourState(CoilHeadState.Chase)) return;
-            if (this.GetTimeSinceHittingPlayer(enemy) >= 0f) return;
+            if(this.GetStoppingMovement(enemy)) return;
+            if(!enemy.IsBehaviourState(CoilHeadState.Chase)) return;
+            if(this.GetTimeSinceHittingPlayer(enemy) >= 0f) return;
             {
                 this.SetTimeSinceHittingPlayer(enemy, 0.2f);
                 player.DamagePlayer(90, true, true, CauseOfDeath.Mauling, 2, false, default);
@@ -44,3 +47,4 @@ internal class CoilHeadController : IEnemyController<SpringManAI> {
         }
     }
 }
+

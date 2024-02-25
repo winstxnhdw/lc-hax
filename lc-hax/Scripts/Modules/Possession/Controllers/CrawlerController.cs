@@ -2,6 +2,10 @@ using GameNetcodeStuff;
 using UnityEngine;
 
 internal class CrawlerController : IEnemyController<CrawlerAI> {
+    public void GetCameraPosition(CrawlerAI enemy) {
+        PossessionMod.CamOffsetY = 2.5f;
+        PossessionMod.CamOffsetZ = -3f;
+    }
 
     float GettimeSinceHittingPlayer(CrawlerAI enemy) => enemy.Reflect().GetInternalField<float>("timeSinceHittingPlayer");
 

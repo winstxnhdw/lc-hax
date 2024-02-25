@@ -3,6 +3,10 @@ using Hax;
 using UnityEngine;
 
 internal class SandSpiderController : IEnemyController<SandSpiderAI> {
+    public void GetCameraPosition(SandSpiderAI enemy) {
+        PossessionMod.CamOffsetY = 3f;
+        PossessionMod.CamOffsetZ = -3f;
+    }
 
     bool GetOnWall(SandSpiderAI enemy) => enemy.Reflect().GetInternalField<bool>("onWall");
 
@@ -19,6 +23,7 @@ internal class SandSpiderController : IEnemyController<SandSpiderAI> {
 
     public void Update(SandSpiderAI enemy, bool isAIControlled) {
         enemy.meshContainerPosition = enemy.transform.position;
+        enemy.meshContainerTarget = enemy.transform.forward;
         enemy.SyncMeshContainerPositionToClients();
         if(!isAIControlled) enemy.homeNode = enemy.ChooseClosestNodeToPosition(enemy.transform.position, false, 2);
     }
@@ -60,7 +65,7 @@ internal class SandSpiderController : IEnemyController<SandSpiderAI> {
             if (this.GetTimeSinceHittingPlayer(enemy) > 1f) {
                 this.SetTimeSinceHittingPlayer(enemy, 0.0f);
                 player.DamagePlayer(90, true, true, CauseOfDeath.Mauling, 0, false, default);
-                enemy.HitPlayerServerRpc(player.PlayerIndex());
+                enemy.HitPlayerServerRpc((int)player.actualClientId);
             }
         }
     }

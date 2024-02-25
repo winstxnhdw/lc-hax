@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 using Unity.Netcode;
 using UnityEngine.AI;
@@ -10,6 +9,8 @@ using Hax;
 internal sealed class PossessionMod : MonoBehaviour {
     const float TeleportDoorCooldown = 2.5f;
     const float DoorInteractionCooldown = 0.7f;
+    public static float CamOffsetY = 2.5f;
+    public static float CamOffsetZ = -3f;
     bool IsLeftAltHeld { get; set; } = false;
 
     internal static PossessionMod? Instance { get; private set; }
@@ -153,8 +154,7 @@ internal sealed class PossessionMod : MonoBehaviour {
             this.InitCharacterMovement(enemy);
             this.UpdateComponentsOnCurrentState(true);
             this.SetAIControl(false);
-            if (this.MainEntrance == null)
-                this.MainEntrance = FindObjectsOfType<EntranceTeleport>().First(entrance => entrance.entranceId == 0);
+            this.MainEntrance = RoundManager.FindMainEntranceScript(false);
         }
 
 
@@ -190,10 +190,14 @@ internal sealed class PossessionMod : MonoBehaviour {
 
         controller.Update(enemy, this.IsAIControlled);
         this.InteractWithAmbient(enemy, controller);
-        this.InteractWithPlayers(enemy, controller);
         localPlayer.cursorTip.text = controller.GetPrimarySkillName(enemy);
+
         if (this.IsAIControlled) {
             return;
+        }
+
+        if (controller.SyncAnimationSpeedEnabled(enemy)) {
+            characterMovement.CharacterSpeed = agent.speed;
         }
 
         if (controller.IsAbleToMove(enemy)) {
@@ -201,18 +205,19 @@ internal sealed class PossessionMod : MonoBehaviour {
             controller.OnMovement(enemy, this.CharacterMovement.IsMoving, this.CharacterMovement.IsSprinting);
         }
 
-        if (controller.SyncAnimationSpeedEnabled(enemy)) {
-            characterMovement.CharacterSpeed = agent.speed;
-        }
-
         if (controller.IsAbleToRotate(enemy)) {
             this.UpdateEnemyRotation();
         }
+
+        this.GetCameraPosition();
     }
 
     void UpdateCameraPosition(Camera camera, EnemyAI enemy) {
-        Vector3 newPosition = enemy.transform.position + (0.0f * (Vector3.up - enemy.transform.forward));
-        camera.transform.position = newPosition;
+        Vector3 verticalOffset = CamOffsetY * Vector3.up;
+        Vector3 forwardOffset = CamOffsetZ * camera.transform.forward;
+
+        Vector3 offset = verticalOffset + forwardOffset;
+        camera.transform.position = enemy.transform.position + offset;
     }
 
     void UpdateCameraRotation(Camera camera, EnemyAI enemy) {
@@ -222,19 +227,16 @@ internal sealed class PossessionMod : MonoBehaviour {
 
         // Set the camera rotation without changing its position
         camera.transform.rotation = newRotation;
-
-        // Calculate the new camera position based on the updated rotation
-        Vector3 offset = 2.5f * (Vector3.up - camera.transform.forward);
-        camera.transform.position = enemy.transform.position + offset;
     }
-
 
     void UpdateEnemyRotation() {
         if (this.CharacterMovement is not CharacterMovement characterMovement) return;
-        if (!this.IsLeftAltHeld) {
-            // Only take the horizontal rotation
+        if (!this.NoClipEnabled) {
             Quaternion horizontalRotation = Quaternion.Euler(0f, this.transform.eulerAngles.y, 0f);
             characterMovement.transform.rotation = horizontalRotation;
+        }
+        else {
+            characterMovement.transform.rotation = this.transform.rotation;
         }
     }
 
@@ -261,6 +263,8 @@ internal sealed class PossessionMod : MonoBehaviour {
         this.IsAIControlled = false;
         this.TeleportCooldownRemaining = 0.0f;
         this.DoorCooldownRemaining = 0.0f;
+        CamOffsetY = 2.5f;
+        CamOffsetZ = -3f;
 
         if (this.EnemyControllers.TryGetValue(enemy.GetType(), out IController controller)) {
             controller.OnPossess(enemy);
@@ -347,6 +351,13 @@ internal sealed class PossessionMod : MonoBehaviour {
         this.TeleportCooldownRemaining = PossessionMod.TeleportDoorCooldown;
     }
 
+    void HandleEnemyPlayerInteraction(EnemyAI enemy, RaycastHit hit, IController controller) {
+        if (controller == null) return;
+        if (!hit.collider.gameObject.TryGetComponent(out PlayerControllerB player)) return;
+        if (player.IsDead()) return;
+        controller.OnCollideWithPlayer(enemy, player);
+    }
+
 
     float InteractRange(EnemyAI enemy) =>
         this.EnemyControllers.TryGetValue(enemy.GetType(), out IController value)
@@ -372,19 +383,8 @@ internal sealed class PossessionMod : MonoBehaviour {
                 this.HandleEntranceDoors(enemy, hit, controller);
                 return;
             }
-        }
-    }
 
-
-    void InteractWithPlayers(EnemyAI enemy, IController controller) {
-        int playerLayer = LayerMask.NameToLayer("Player"); 
-        int layerMask = 1 << playerLayer; 
-        Collider[] hitColliders = Physics.OverlapSphere(enemy.transform.position, 2.8f, layerMask);
-        foreach (var hitCollider in hitColliders) {
-            if (hitCollider.TryGetComponent(out PlayerControllerB player) && !player.IsDead()) {
-                controller.OnCollideWithPlayer(enemy, player);
-                break; 
-            }
+            this.HandleEnemyPlayerInteraction(enemy, hit, controller);
         }
     }
 
@@ -406,10 +406,15 @@ internal sealed class PossessionMod : MonoBehaviour {
         if (this.CharacterMovement is not CharacterMovement characterMovement) return;
         if (this.GetExitPointFromDoor(teleport) is not Transform exitPoint) return;
         characterMovement.SetPosition(exitPoint.position);
-        if (enemy.SetOutsideStatus(!teleport.isEntranceToBuilding)) {
-            Logger.Write($"Teleport Enemy isOutside : {enemy.isOutside}");
-        }
+        _ = enemy.SetOutsideStatus(!teleport.isEntranceToBuilding);
         controller.OnOutsideStatusChange(enemy);
+    }
+
+    void GetCameraPosition() {
+        if (this.Possession.Enemy is not EnemyAI enemy) return;
+        if (!this.EnemyControllers.TryGetValue(enemy.GetType(), out IController controller)) return;
+
+        controller.GetCameraPosition(enemy);
     }
 
     void UsePrimarySkill() {

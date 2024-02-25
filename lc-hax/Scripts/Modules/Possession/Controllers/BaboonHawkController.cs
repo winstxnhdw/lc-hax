@@ -2,6 +2,7 @@ using Hax;
 using Unity.Netcode;
 using Vector3 = UnityEngine.Vector3;
 
+
 enum BaboonState {
     SCOUTING = 0,
     RETURNING = 1,
@@ -9,20 +10,28 @@ enum BaboonState {
 }
 
 internal class BaboonHawkController : IEnemyController<BaboonBirdAI> {
+    public void GetCameraPosition(BaboonBirdAI enemy) {
+        PossessionMod.CamOffsetY = 3f;
+        PossessionMod.CamOffsetZ = -3.5f;
+    }
+
     Vector3 CustomCamp { get; } = new Vector3(1000.0f, 0.0f, 0.0f);
     Vector3 OriginalCamp { get; set; } = Vector3.zero;
 
-
-    public void OnOutsideStatusChange(BaboonBirdAI enemy) => enemy.StopSearch(enemy.scoutingSearchRoutine, true);
-
     public void OnDeath(BaboonBirdAI enemy) {
-        if (enemy.heldScrap is not null) {
+        if (enemy.heldScrap is
+ not null) {
             _ = enemy.Reflect().InvokeInternalMethod("DropHeldItemAndSync");
         }
     }
 
+    
+    public void OnOutsideStatusChange(BaboonBirdAI enemy) => enemy.StopSearch(enemy.scoutingSearchRoutine, true);
+
+
     public void OnPossess(BaboonBirdAI _) {
         if (BaboonBirdAI.baboonCampPosition != this.CustomCamp) return;
+
         this.OriginalCamp = BaboonBirdAI.baboonCampPosition;
         BaboonBirdAI.baboonCampPosition = this.CustomCamp;
     }
@@ -47,7 +56,7 @@ internal class BaboonHawkController : IEnemyController<BaboonBirdAI> {
             shotgun.ShootShotgun(enemy.transform);
             return;
         }
-
+    
         enemy.heldScrap?.InteractWithProp();
     }
 

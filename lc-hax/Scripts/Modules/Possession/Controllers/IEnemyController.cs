@@ -13,6 +13,8 @@ internal interface IController {
 
     void Update(EnemyAI enemy, bool isAIControlled);
 
+    void GetCameraPosition(EnemyAI enemy);
+
     void UsePrimarySkill(EnemyAI enemy);
 
     void OnSecondarySkillHold(EnemyAI enemy);
@@ -45,6 +47,7 @@ internal interface IController {
 }
 
 internal interface IEnemyController<T> : IController where T : EnemyAI {
+
     void OnPossess(T enemy) { }
 
     void OnUnpossess(T enemy) { }
@@ -52,6 +55,8 @@ internal interface IEnemyController<T> : IController where T : EnemyAI {
     void OnDeath(T enemy) { }
 
     void Update(T enemy, bool isAIControlled) { }
+
+    void GetCameraPosition(T enemy) { }
 
     void UsePrimarySkill(T enemy) { }
 
@@ -90,6 +95,8 @@ internal interface IEnemyController<T> : IController where T : EnemyAI {
     void IController.OnDeath(EnemyAI enemy) => this.OnDeath((T)enemy);
 
     void IController.Update(EnemyAI enemy, bool isAIControlled) => this.Update((T)enemy, isAIControlled);
+
+    void IController.GetCameraPosition(EnemyAI enemy) => this.GetCameraPosition((T)enemy);
 
     void IController.UsePrimarySkill(EnemyAI enemy) => this.UsePrimarySkill((T)enemy);
 
