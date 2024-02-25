@@ -1,4 +1,3 @@
-using GameNetcodeStuff;
 using Hax;
 using UnityEngine;
 
@@ -24,8 +23,8 @@ internal class JesterController : IEnemyController<JesterAI> {
         }
 
         // Smoothly interpolate between current and target camera positions
-        PossessionMod.CamOffsetY = Mathf.Lerp(PossessionMod.CamOffsetY, targetCamOffsetY, Time.deltaTime * transitionSpeed);
-        PossessionMod.CamOffsetZ = Mathf.Lerp(PossessionMod.CamOffsetZ, targetCamOffsetZ, Time.deltaTime * transitionSpeed);
+        PossessionMod.CamOffsetY = Mathf.Lerp(PossessionMod.CamOffsetY, targetCamOffsetY, Time.deltaTime * this.transitionSpeed);
+        PossessionMod.CamOffsetZ = Mathf.Lerp(PossessionMod.CamOffsetZ, targetCamOffsetZ, Time.deltaTime * this.transitionSpeed);
     }
 
     void SetNoPlayerChasetimer(JesterAI enemy, float value) => enemy.Reflect().SetInternalField("noPlayersToChaseTimer", value);
