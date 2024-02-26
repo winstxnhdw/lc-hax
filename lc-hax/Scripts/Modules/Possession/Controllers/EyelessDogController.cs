@@ -14,7 +14,9 @@ internal class EyelessDogController : IEnemyController<MouthDogAI> {
 
     public Vector3 GetCameraOffset(MouthDogAI enemy) => this.CamOffset;
 
-    public void UsePrimarySkill(MouthDogAI enemy) => enemy.SetBehaviourState(DogState.CHASE);
+    public void UsePrimarySkill(MouthDogAI enemy) => enemy.SetBehaviourState(enemy.IsBehaviourState(DogState.CHASE) ? DogState.ROAMING : DogState.CHASE);
+
+
 
     public void UseSecondarySkill(MouthDogAI enemy) => enemy.SetBehaviourState(DogState.LUNGE);
 
