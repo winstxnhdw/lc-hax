@@ -8,7 +8,7 @@ enum GiantState {
 
 internal class ForestGiantController : IEnemyController<ForestGiantAI> {
 
-    Vector3 CamOffset = new Vector3(0, 8f, -8f);
+    Vector3 CamOffset = new(0, 8f, -8f);
 
     public Vector3 GetCameraOffset(ForestGiantAI enemy) => this.CamOffset;
 
