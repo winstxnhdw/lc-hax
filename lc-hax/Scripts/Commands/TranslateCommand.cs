@@ -5,8 +5,8 @@ class TranslateCommand : ICommand {
     public void Execute(StringArray args) {
         if (args.Length < 3) {
             Chat.Print("Usages:",
-                "translate <source> <target> <text>",
-                "translate <source> <target> -d"
+                "translate <language> <language> <text>",
+                "translate <language> <language> -d"
             );
 
             return;
