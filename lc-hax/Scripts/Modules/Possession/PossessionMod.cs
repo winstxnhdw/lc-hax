@@ -76,6 +76,7 @@ internal sealed class PossessionMod : MonoBehaviour {
         InputListener.OnLeftButtonPress += this.UsePrimarySkill;
         InputListener.OnRightButtonPress += this.UseSecondarySkill;
         InputListener.OnRightButtonRelease += this.ReleaseSecondarySkill;
+        InputListener.OnQPress += this.UseSpecialAbility;
         InputListener.OnRightButtonHold += this.OnRightMouseButtonHold;
         InputListener.OnDelPress += this.KillEnemyAndUnposses;
         InputListener.OnF9Press += this.ToggleAIControl;
@@ -89,6 +90,7 @@ internal sealed class PossessionMod : MonoBehaviour {
         InputListener.OnLeftButtonPress -= this.UsePrimarySkill;
         InputListener.OnRightButtonPress -= this.UseSecondarySkill;
         InputListener.OnRightButtonRelease -= this.ReleaseSecondarySkill;
+        InputListener.OnQPress -= this.UseSpecialAbility;
         InputListener.OnRightButtonHold -= this.OnRightMouseButtonHold;
         InputListener.OnDelPress -= this.KillEnemyAndUnposses;
         InputListener.OnF9Press -= this.ToggleAIControl;
@@ -443,5 +445,12 @@ internal sealed class PossessionMod : MonoBehaviour {
         if (!this.EnemyControllers.TryGetValue(enemy.GetType(), out IController controller)) return;
 
         controller.ReleaseSecondarySkill(enemy);
+    }
+
+    void UseSpecialAbility() {
+        if (this.Possession.Enemy is not EnemyAI enemy) return;
+        if (!this.EnemyControllers.TryGetValue(enemy.GetType(), out IController controller)) return;
+
+        controller.UseSpecialAbility(enemy);
     }
 }
