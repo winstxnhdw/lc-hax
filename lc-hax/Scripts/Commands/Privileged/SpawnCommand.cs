@@ -13,21 +13,28 @@ class SpawnCommand : ICommand {
         !enemy.enemyName.Contains("Docile Locust Bees", StringComparison.OrdinalIgnoreCase) ||
         !enemy.enemyName.Contains("Manticoil", StringComparison.OrdinalIgnoreCase);
 
-    static Dictionary<string, GameObject> HostileEnemies { get; } =
+    static Lazy<Dictionary<string, GameObject>> HostileEnemies { get; } = new(() =>
         Resources.FindObjectsOfTypeAll<EnemyType>()
                  .Where(SpawnCommand.IsHostileEnemy)
                  .GroupBy(enemy => enemy.enemyName)
-                 .ToDictionary(enemyGroup => enemyGroup.Key, enemy => Enumerable.First(enemy).enemyPrefab);
+                 .ToDictionary(enemyGroup => enemyGroup.Key, enemy => Enumerable.First(enemy).enemyPrefab)
+    );
 
     void SpawnEnemyOnPlayer(PlayerControllerB player, GameObject prefab, ulong amount = 1) {
         for (ulong i = 0; i < amount; i++) {
-            GameObject enemy = UnityObject.Instantiate(prefab, player.transform.position, Quaternion.identity);
+            GameObject enemyObject = UnityObject.Instantiate(prefab, player.transform.position, Quaternion.identity);
 
-            if (!enemy.TryGetComponent(out NetworkObject networkObject)) {
-                UnityObject.Destroy(enemy);
+            if (!enemyObject.TryGetComponent(out NetworkObject networkObject)) {
+                UnityObject.Destroy(enemyObject);
                 continue;
             }
 
+            if (!networkObject.TryGetComponent(out EnemyAI enemy)) {
+                UnityObject.Destroy(enemyObject);
+                continue;
+            }
+
+            enemy.ChangeEnemyOwnerServerRpc(player.actualClientId);
             networkObject.Spawn(true);
         }
     }
@@ -43,7 +50,7 @@ class SpawnCommand : ICommand {
             return;
         }
 
-        string? key = Helper.FuzzyMatch(args[0], SpawnCommand.HostileEnemies.Keys);
+        string? key = Helper.FuzzyMatch(args[0], SpawnCommand.HostileEnemies.Value.Keys);
 
         if (string.IsNullOrWhiteSpace(key)) {
             Chat.Print("Invalid enemy!");
@@ -55,7 +62,7 @@ class SpawnCommand : ICommand {
             return;
         }
 
-        this.SpawnEnemyOnPlayer(targetPlayer, SpawnCommand.HostileEnemies[key], amount);
+        this.SpawnEnemyOnPlayer(targetPlayer, SpawnCommand.HostileEnemies.Value[key], amount);
         Chat.Print($"Spawning {amount}x {key} on {targetPlayer.playerUsername}.");
     }
 }
