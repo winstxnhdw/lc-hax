@@ -215,8 +215,8 @@ internal sealed class PossessionMod : MonoBehaviour {
         Vector3 offsets = this.GetCameraOffset();
         Vector3 verticalOffset = offsets.y * Vector3.up;
         Vector3 forwardOffset = offsets.z * camera.transform.forward;
-
-        Vector3 offset = verticalOffset + forwardOffset;
+        Vector3 horizontalOffset = offsets.x * camera.transform.right;
+        Vector3 offset = horizontalOffset + verticalOffset + forwardOffset;
         camera.transform.position = enemy.transform.position + offset;
     }
 
