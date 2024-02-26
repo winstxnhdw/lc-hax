@@ -1,5 +1,6 @@
 using System;
 using System.Reflection;
+using System.Collections.Generic;
 
 class Reflector {
     const BindingFlags PrivateOrInternal = BindingFlags.NonPublic | BindingFlags.Instance;
@@ -14,14 +15,21 @@ class Reflector {
     object Obj { get; }
     Type ObjType { get; }
 
-    Reflector(object obj) {
+    Dictionary<string, MemberInfo> Cache { get; } = [];
+
+    internal Reflector(object obj) {
         this.Obj = obj;
         this.ObjType = obj.GetType();
     }
 
     T? GetField<T>(string variableName, BindingFlags flags) {
         try {
-            return (T)this.ObjType.GetField(variableName, flags).GetValue(this.Obj);
+            if (!this.Cache.TryGetValue(variableName, out MemberInfo field)) {
+                this.Cache[variableName] = field = this.ObjType.GetField(variableName, flags);
+            }
+
+            object? result = (field as FieldInfo)?.GetValue(this.Obj);
+            return result is null ? default : (T)result;
         }
 
         catch (InvalidCastException) {
@@ -31,7 +39,12 @@ class Reflector {
 
     T? GetProperty<T>(string propertyName, BindingFlags flags) {
         try {
-            return (T)this.ObjType.GetProperty(propertyName, flags).GetValue(this.Obj);
+            if (!this.Cache.TryGetValue(propertyName, out MemberInfo property)) {
+                this.Cache[propertyName] = property = this.ObjType.GetProperty(propertyName, flags);
+            }
+
+            object? result = (property as PropertyInfo)?.GetValue(this.Obj);
+            return result is null ? default : (T)result;
         }
 
         catch (InvalidCastException) {
@@ -41,7 +54,11 @@ class Reflector {
 
     Reflector? SetField(string variableName, object value, BindingFlags flags) {
         try {
-            this.ObjType.GetField(variableName, flags).SetValue(this.Obj, value);
+            if (!this.Cache.TryGetValue(variableName, out MemberInfo field)) {
+                this.Cache[variableName] = field = this.ObjType.GetField(variableName, flags);
+            }
+
+            (field as FieldInfo)?.SetValue(this.Obj, value);
             return this;
         }
 
@@ -52,7 +69,11 @@ class Reflector {
 
     Reflector? SetProperty(string propertyName, object value, BindingFlags flags) {
         try {
-            this.ObjType.GetProperty(propertyName, flags).SetValue(this.Obj, value);
+            if (!this.Cache.TryGetValue(propertyName, out MemberInfo property)) {
+                this.Cache[propertyName] = property = this.ObjType.GetProperty(propertyName, flags);
+            }
+
+            (property as PropertyInfo)?.SetValue(this.Obj, value);
             return this;
         }
 
@@ -63,7 +84,12 @@ class Reflector {
 
     T? InvokeMethod<T>(string methodName, BindingFlags flags, params object[] args) {
         try {
-            return (T)this.ObjType.GetMethod(methodName, flags).Invoke(this.Obj, args);
+            if (!this.Cache.TryGetValue(methodName, out MemberInfo method)) {
+                this.Cache[methodName] = method = this.ObjType.GetProperty(methodName, flags);
+            }
+
+            object? result = (method as MethodInfo)?.Invoke(this.Obj, args);
+            return result is null ? default : (T)result;
         }
 
         catch (InvalidCastException) {
@@ -96,10 +122,8 @@ class Reflector {
     internal Reflector? InvokeInternalMethod(string methodName, params object[] args) => this.InvokeInternalMethod<object>(methodName, args)?.Reflect();
 
     internal Reflector? InvokeInternalStaticMethod(string methodName, params object[] args) => this.InvokeInternalStaticMethod<object>(methodName, args)?.Reflect();
-
-    internal static Reflector Target(object obj) => new(obj);
 }
 
-internal static class ReflectorExtensions {
-    internal static Reflector Reflect(this object obj) => Reflector.Target(obj);
+static class ReflectorExtensions {
+    internal static Reflector Reflect(this object obj) => new(obj);
 }
