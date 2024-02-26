@@ -5,7 +5,8 @@ using Hax;
 class PoisonCommand : ICommand {
     void PoisonPlayer(PlayerControllerB player, int damage, ulong delay, ulong duration) =>
         Helper.CreateComponent<TransientBehaviour>()
-              .Init(_ => player.DamagePlayerRpc(damage), duration, delay);
+              .Init(_ => player.DamagePlayerRpc(damage), duration, delay)
+              .Unless(() => player.playersManager.inShipPhase);
 
     public void Execute(StringArray args) {
         if (args.Length < 4) {

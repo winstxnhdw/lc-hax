@@ -10,7 +10,8 @@ class NoiseCommand : ICommand {
 
     void PlayNoiseContinuously(Vector3 position, float duration) =>
         Helper.CreateComponent<TransientBehaviour>("Noise")
-              .Init(this.PlayNoise(position), duration);
+              .Init(this.PlayNoise(position), duration)
+              .Unless(() => Helper.LocalPlayer?.playersManager is { inShipPhase: true });
 
     public void Execute(StringArray args) {
         if (args.Length is 0) {

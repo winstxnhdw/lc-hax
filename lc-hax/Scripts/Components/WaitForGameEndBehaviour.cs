@@ -25,7 +25,8 @@ class WaitForGameEndBehaviour : MonoBehaviour {
         this.ActionBefore?.Invoke();
     }
 
-    void Finalise() => Destroy(this.gameObject);
-
-    void OnDestroy() => this.ActionAfter?.Invoke();
+    void Finalise() {
+        this.ActionAfter?.Invoke();
+        Destroy(this.gameObject);
+    }
 }
