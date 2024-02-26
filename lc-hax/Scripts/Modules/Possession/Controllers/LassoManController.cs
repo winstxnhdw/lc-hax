@@ -2,7 +2,7 @@ using UnityEngine;
 
 internal class LassoManController : IEnemyController<LassoManAI> {
 
-    Vector3 CamOffset = new Vector3(0, 2.8f, -3.5f);
+    Vector3 CamOffset = new(0, 2.8f, -3.5f);
 
     public Vector3 GetCameraOffset(LassoManAI enemy) => this.CamOffset;
 

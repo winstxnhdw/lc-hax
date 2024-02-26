@@ -2,7 +2,7 @@ using UnityEngine;
 
 internal class HygrodereController : IEnemyController<BlobAI> {
 
-    Vector3 CamOffset = new Vector3(0, 2f, -3f);
+    Vector3 CamOffset = new(0, 2f, -3f);
 
     public Vector3 GetCameraOffset(BlobAI enemy) => this.CamOffset;
 

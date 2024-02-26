@@ -10,7 +10,7 @@ enum DogState {
 
 internal class EyelessDogController : IEnemyController<MouthDogAI> {
 
-    Vector3 CamOffset = new Vector3(0, 3.2f, -4f);
+    Vector3 CamOffset = new(0, 3.2f, -4f);
 
     public Vector3 GetCameraOffset(MouthDogAI enemy) => this.CamOffset;
 
