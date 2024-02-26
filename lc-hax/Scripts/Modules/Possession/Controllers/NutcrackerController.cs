@@ -14,16 +14,20 @@ internal class NutcrackerController : IEnemyController<NutcrackerEnemyAI> {
 
     bool InSentryMode { get; set; } = false;
 
-    float GetStunNormalizedTimer(NutcrackerEnemyAI enemy) => enemy.Reflect().GetInternalField<float>("stunNormalizedTimer");
-
-    float GetTimeSinceHittingPlayer(NutcrackerEnemyAI enemy) => enemy.Reflect().GetInternalField<float>("timeSinceHittingPlayer");
-
-    void SetTimeSinceHittingPlayer(NutcrackerEnemyAI enemy, float value) => enemy.Reflect().SetInternalField("timeSinceHittingPlayer", value);
-
     public void Update(NutcrackerEnemyAI enemy, bool isAIControlled) {
         if (isAIControlled) return;
+
+        float timeSinceFiringGun = enemy.Reflect().GetInternalField<float>("timeSinceFiringGun");
+        bool reloadingGun = enemy.Reflect().GetInternalField<bool>("reloadingGun");
+        bool aimingGun = enemy.Reflect().GetInternalField<bool>("aimingGun");
+
+        if (timeSinceFiringGun > 0.75f && enemy.gun.shellsLoaded <= 0 && !reloadingGun && !aimingGun) {
+            enemy.ReloadGunServerRpc();
+            enemy.SetBehaviourState(NutcrackerState.WALKING);
+            this.InSentryMode = false;
+        }
         if (this.InSentryMode) return;
-        enemy.SwitchToBehaviourServerRpc(unchecked((int)NutcrackerState.WALKING)); // See #415
+        enemy.SwitchToBehaviourServerRpc(unchecked((int)NutcrackerState.WALKING));
     }
 
     public bool IsAbleToRotate(NutcrackerEnemyAI enemy) => !enemy.IsBehaviourState(NutcrackerState.SENTRY);
@@ -31,13 +35,16 @@ internal class NutcrackerController : IEnemyController<NutcrackerEnemyAI> {
     public bool IsAbleToMove(NutcrackerEnemyAI enemy) => !enemy.IsBehaviourState(NutcrackerState.SENTRY);
 
     public void UsePrimarySkill(NutcrackerEnemyAI enemy) {
-        if (enemy.gun is not ShotgunItem shotgun) return;
+        bool reloadingGun = enemy.Reflect().GetInternalField<bool>("reloadingGun");
+        if (enemy.gun is not ShotgunItem shotgun || enemy.gun.shellsLoaded <= 0 || reloadingGun ) return;
 
         shotgun.gunShootAudio.volume = 0.25f;
         enemy.FireGunServerRpc();
     }
 
     public void OnSecondarySkillHold(NutcrackerEnemyAI enemy) {
+        bool reloadingGun = enemy.Reflect().GetInternalField<bool>("reloadingGun");
+        if (reloadingGun) return;
         enemy.SetBehaviourState(NutcrackerState.SENTRY);
         this.InSentryMode = true;
     }
