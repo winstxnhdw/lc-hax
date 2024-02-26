@@ -20,6 +20,13 @@ class TransientBehaviour : MonoBehaviour {
 
     internal void Dispose(Action disposeAction) => this.DisposeAction = disposeAction;
 
+    internal void Unless(Func<bool> predicate) => this.StartCoroutine(this.UnlessCoroutine(predicate));
+
+    IEnumerator UnlessCoroutine(Func<bool> predicate) {
+        yield return new WaitUntil(predicate);
+        this.Finalise();
+    }
+
     IEnumerator TransientCoroutine(float delay) {
         WaitForSeconds waitForDelay = new(delay);
 
@@ -30,8 +37,7 @@ class TransientBehaviour : MonoBehaviour {
             yield return waitForDelay;
         }
 
-        this.DisposeAction?.Invoke();
-        Destroy(this.gameObject);
+        this.Finalise();
     }
 
     IEnumerator TransientCoroutine() {
@@ -45,6 +51,10 @@ class TransientBehaviour : MonoBehaviour {
             yield return waitForEndOfFrame;
         }
 
+        this.Finalise();
+    }
+
+    void Finalise() {
         this.DisposeAction?.Invoke();
         Destroy(this.gameObject);
     }
