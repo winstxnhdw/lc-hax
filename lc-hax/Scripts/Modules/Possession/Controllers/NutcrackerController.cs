@@ -1,4 +1,5 @@
 using Hax;
+using UnityEngine;
 
 enum NutcrackerState {
     WALKING,
@@ -6,10 +7,10 @@ enum NutcrackerState {
 }
 
 internal class NutcrackerController : IEnemyController<NutcrackerEnemyAI> {
-    public void GetCameraPosition(NutcrackerEnemyAI enemy) {
-        PossessionMod.CamOffsetY = 2.8f;
-        PossessionMod.CamOffsetZ = -3f;
-    }
+
+    Vector3 CamOffset = new(0, 2.8f, -3f);
+
+    public Vector3 GetCameraOffset(NutcrackerEnemyAI enemy) => this.CamOffset;
 
     bool InSentryMode { get; set; } = false;
 

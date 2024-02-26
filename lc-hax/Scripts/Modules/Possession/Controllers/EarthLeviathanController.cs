@@ -1,8 +1,10 @@
+using UnityEngine;
+
 internal class EarthLeviathanController : IEnemyController<SandWormAI> {
-    public void GetCameraPosition(SandWormAI enemy) {
-        PossessionMod.CamOffsetY = 8f;
-        PossessionMod.CamOffsetZ = -13f;
-    }
+
+    Vector3 CamOffset { get; } = new(0, 8f, -13f);
+
+    public Vector3 GetCameraOffset(SandWormAI _) => this.CamOffset;
 
     bool IsEmerged(SandWormAI enemy) => enemy.inEmergingState || enemy.emerged;
 

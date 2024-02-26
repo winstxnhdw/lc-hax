@@ -9,8 +9,9 @@ enum JesterState {
 
 internal class JesterController : IEnemyController<JesterAI> {
     public float transitionSpeed = 5f;
+    public Vector3 CamOffsets = new(0, 2.5f, -3f);
 
-    public void GetCameraPosition(JesterAI enemy) {
+    public Vector3 GetCameraOffset(JesterAI enemy) {
         float targetCamOffsetY, targetCamOffsetZ;
 
         if (!enemy.IsBehaviourState(JesterState.OPEN)) {
@@ -23,12 +24,16 @@ internal class JesterController : IEnemyController<JesterAI> {
         }
 
         // Smoothly interpolate between current and target camera positions
-        PossessionMod.CamOffsetY = Mathf.Lerp(PossessionMod.CamOffsetY, targetCamOffsetY, Time.deltaTime * this.transitionSpeed);
-        PossessionMod.CamOffsetZ = Mathf.Lerp(PossessionMod.CamOffsetZ, targetCamOffsetZ, Time.deltaTime * this.transitionSpeed);
+        this.CamOffsets.y = Mathf.Lerp(this.CamOffsets.y, targetCamOffsetY, Time.deltaTime * this.transitionSpeed);
+        this.CamOffsets.z = Mathf.Lerp(this.CamOffsets.z, targetCamOffsetZ, Time.deltaTime * this.transitionSpeed);
+
+        return this.CamOffsets;
     }
 
     void SetNoPlayerChasetimer(JesterAI enemy, float value) => enemy.Reflect().SetInternalField("noPlayersToChaseTimer", value);
     bool GetinKillAnimation(JesterAI enemy) => enemy.Reflect().GetInternalField<bool>("inKillAnimation");
+
+
     public void UsePrimarySkill(JesterAI enemy) {
         enemy.SetBehaviourState(JesterState.CLOSED);
         this.SetNoPlayerChasetimer(enemy, 0.0f);
@@ -46,7 +51,13 @@ internal class JesterController : IEnemyController<JesterAI> {
 
     public void Update(JesterAI enemy, bool isAIControlled) => this.SetNoPlayerChasetimer(enemy, 100.0f);
 
-    public void OnUnpossess(JesterAI enemy) => this.SetNoPlayerChasetimer(enemy, 5.0f);
+    public void OnUnpossess(JesterAI enemy) {
+        this.SetNoPlayerChasetimer(enemy, 25.0f);
+        this.CamOffsets = new(0, 2.5f, -3f);
+    }
+
+    public void OnPossess(JesterAI enemy) => this.CamOffsets = new(0, 2.5f, -3f);
+
 
     public bool IsAbleToMove(JesterAI enemy) => !enemy.IsBehaviourState(JesterState.CRANKING);
 

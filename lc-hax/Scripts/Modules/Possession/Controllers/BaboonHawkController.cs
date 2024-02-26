@@ -10,17 +10,11 @@ enum BaboonState {
 }
 
 internal class BaboonHawkController : IEnemyController<BaboonBirdAI> {
-    public void GetCameraPosition(BaboonBirdAI enemy) {
-        PossessionMod.CamOffsetY = 3f;
-        PossessionMod.CamOffsetZ = -3.5f;
-    }
-
-    Vector3 CustomCamp { get; } = new Vector3(1000.0f, 0.0f, 0.0f);
     Vector3 OriginalCamp { get; set; } = Vector3.zero;
+    Vector3 CustomCamp { get; } = new Vector3(1000.0f, 1000.0f, 1000.0f);
 
     public void OnDeath(BaboonBirdAI enemy) {
-        if (enemy.heldScrap is
- not null) {
+        if (enemy.heldScrap is not null) {
             _ = enemy.Reflect().InvokeInternalMethod("DropHeldItemAndSync");
         }
     }
@@ -57,6 +51,7 @@ internal class BaboonHawkController : IEnemyController<BaboonBirdAI> {
             return;
         }
 
+        enemy.heldScrap?.InteractWithProp();
     }
 
     public void UseSecondarySkill(BaboonBirdAI enemy) {
