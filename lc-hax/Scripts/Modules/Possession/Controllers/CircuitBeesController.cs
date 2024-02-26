@@ -1,4 +1,5 @@
 using Hax;
+using UnityEngine;
 
 
 enum BeesState {
@@ -8,11 +9,10 @@ enum BeesState {
 }
 
 internal class CircuitBeesController : IEnemyController<RedLocustBees> {
-    public void GetCameraPosition(RedLocustBees enemy) {
-        PossessionMod.CamOffsetY = 2f;
-        PossessionMod.CamOffsetZ = -3f;
-    }
 
+    Vector3 CamOffset { get; } = new(0, 2f, -3f);
+
+    public Vector3 GetCameraOffset(RedLocustBees _) => this.CamOffset; 
     public bool CanUseEntranceDoors(RedLocustBees _) => true;
 
     public float InteractRange(RedLocustBees _) => 2.5f;

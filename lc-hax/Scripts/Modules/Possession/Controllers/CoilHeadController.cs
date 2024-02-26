@@ -1,4 +1,5 @@
 using Hax;
+using UnityEngine;
 
 enum CoilHeadState {
     Idle = 0,
@@ -6,10 +7,10 @@ enum CoilHeadState {
 }
 
 internal class CoilHeadController : IEnemyController<SpringManAI> {
-    public void GetCameraPosition(SpringManAI enemy) {
-        PossessionMod.CamOffsetY = 2.8f;
-        PossessionMod.CamOffsetZ = -3.5f;
-    }
+
+    Vector3 CamOffset { get; } = new(0, 2.8f, -3.5f);
+
+    public Vector3 GetCameraOffset(SpringManAI _) => this.CamOffset;
 
     bool GetStoppingMovement(SpringManAI enemy) => enemy.Reflect().GetInternalField<bool>("stoppingMovement");
 
