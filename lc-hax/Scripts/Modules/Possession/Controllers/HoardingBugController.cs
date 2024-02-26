@@ -12,10 +12,7 @@ enum HoardingBugState {
 }
 
 internal class HoardingBugController : IEnemyController<HoarderBugAI> {
-    public void GetCameraPosition(HoarderBugAI enemy) {
-        PossessionMod.CamOffsetY = 2.5f;
-        PossessionMod.CamOffsetZ = -3f;
-    }
+
 
     bool GetInChase(HoarderBugAI enemy) => enemy.Reflect().GetInternalField<bool>("inChase");
 

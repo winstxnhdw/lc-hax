@@ -12,7 +12,10 @@ enum SnareFleaState {
 internal class SnareFleaController : IEnemyController<CentipedeAI> {
     public float transitionSpeed = 0f;
 
-    public void GetCameraPosition(CentipedeAI enemy) {
+
+    public Vector3 CamOffsets = new(0, 2.5f, -3f);
+
+    public Vector3 GetCameraOffset(CentipedeAI enemy) {
         float targetCamOffsetY, targetCamOffsetZ;
 
         if (!enemy.IsBehaviourState(SnareFleaState.HIDING)) {
@@ -27,8 +30,10 @@ internal class SnareFleaController : IEnemyController<CentipedeAI> {
         }
 
         // Smoothly interpolate between current and target camera positions
-        PossessionMod.CamOffsetY = Mathf.Lerp(PossessionMod.CamOffsetY, targetCamOffsetY, Time.deltaTime * this.transitionSpeed);
-        PossessionMod.CamOffsetZ = Mathf.Lerp(PossessionMod.CamOffsetZ, targetCamOffsetZ, Time.deltaTime * this.transitionSpeed);
+        this.CamOffsets.y = Mathf.Lerp(this.CamOffsets.y, targetCamOffsetY, Time.deltaTime * this.transitionSpeed);
+        this.CamOffsets.z = Mathf.Lerp(this.CamOffsets.z, targetCamOffsetZ, Time.deltaTime * this.transitionSpeed);
+
+        return this.CamOffsets;
     }
 
     bool IsClingingToSomething(CentipedeAI enemy) {

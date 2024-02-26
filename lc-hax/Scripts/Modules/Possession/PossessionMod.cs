@@ -10,9 +10,6 @@ using UnityEngine.UI;
 internal sealed class PossessionMod : MonoBehaviour {
     const float TeleportDoorCooldown = 2.5f;
     const float DoorInteractionCooldown = 0.7f;
-    public static float CamOffsetY = 2.5f;
-    public static float CamOffsetZ = -3f;
-    public static float EnemyYPositionOffset = 0f;
     bool IsLeftAltHeld { get; set; } = false;
 
     internal static PossessionMod? Instance { get; private set; }
@@ -211,12 +208,13 @@ internal sealed class PossessionMod : MonoBehaviour {
             this.UpdateEnemyRotation();
         }
 
-        this.GetCameraPosition();
+        
     }
 
     void UpdateCameraPosition(Camera camera, EnemyAI enemy) {
-        Vector3 verticalOffset = CamOffsetY * Vector3.up;
-        Vector3 forwardOffset = CamOffsetZ * camera.transform.forward;
+        Vector3 offsets = this.GetCameraOffset();
+        Vector3 verticalOffset = offsets.y * Vector3.up;
+        Vector3 forwardOffset = offsets.z * camera.transform.forward;
 
         Vector3 offset = verticalOffset + forwardOffset;
         camera.transform.position = enemy.transform.position + offset;
@@ -245,12 +243,13 @@ internal sealed class PossessionMod : MonoBehaviour {
     // Updates enemy's position to match the possessed object's position
     void UpdateEnemyPosition(EnemyAI enemy) {
         if (this.CharacterMovement is not CharacterMovement characterMovement) return;
-        
+        Vector3 offsets = this.GetEnemyPositionOffset();
+
         Vector3 enemyEuler = enemy.transform.eulerAngles;
         enemyEuler.y = this.transform.eulerAngles.y;
 
-        Vector3 YPositionOffset = characterMovement.transform.position + new Vector3(0, EnemyYPositionOffset, 0);
-        enemy.transform.position = YPositionOffset;
+        Vector3 PositionOffset = characterMovement.transform.position + new Vector3(offsets.x, offsets.y, offsets.z);
+        enemy.transform.position = PositionOffset;
         if (!this.IsLeftAltHeld) {
             enemy.transform.eulerAngles = enemyEuler;
         }
@@ -266,10 +265,7 @@ internal sealed class PossessionMod : MonoBehaviour {
         this.IsAIControlled = false;
         this.TeleportCooldownRemaining = 0.0f;
         this.DoorCooldownRemaining = 0.0f;
-        CamOffsetY = 2.5f;
-        CamOffsetZ = -3f;
-        EnemyYPositionOffset = 0f;
-
+        enemy.EnableEnemyMesh(true);
         if (this.EnemyControllers.TryGetValue(enemy.GetType(), out IController controller)) {
             controller.OnPossess(enemy);
         }
@@ -404,12 +400,22 @@ internal sealed class PossessionMod : MonoBehaviour {
         controller.OnOutsideStatusChange(enemy);
     }
 
-    void GetCameraPosition() {
-        if (this.Possession.Enemy is not EnemyAI enemy) return;
-        if (!this.EnemyControllers.TryGetValue(enemy.GetType(), out IController controller)) return;
+    Vector3 GetCameraOffset() {
+        if (this.Possession.Enemy is not EnemyAI enemy) return IController.DefaultCamOffsets;
+        if (!this.EnemyControllers.TryGetValue(enemy.GetType(), out IController controller)) return IController.DefaultCamOffsets;
 
-        controller.GetCameraPosition(enemy);
+        return controller.GetCameraOffset(enemy);
     }
+
+    Vector3 GetEnemyPositionOffset() {
+        if (this.Possession.Enemy is not EnemyAI enemy) return IController.DefaultEnemyOffset;
+        if (!this.EnemyControllers.TryGetValue(enemy.GetType(), out IController controller))
+            return IController.DefaultEnemyOffset;
+
+        return controller.GetEnemyPositionOffset(enemy);
+    }
+
+
 
     void UsePrimarySkill() {
         if (this.Possession.Enemy is not EnemyAI enemy) return;

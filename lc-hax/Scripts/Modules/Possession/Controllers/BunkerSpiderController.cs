@@ -2,11 +2,10 @@ using Hax;
 using UnityEngine;
 
 internal class BunkerSpiderController : IEnemyController<SandSpiderAI> {
-    public void GetCameraPosition(SandSpiderAI enemy) {
-        PossessionMod.CamOffsetY = 3f;
-        PossessionMod.CamOffsetZ = -3f;
-    }
 
+    Vector3 CamOffset { get; } = new(0, 3f, -3f);
+
+    public Vector3 GetCameraOffset(SandSpiderAI _) => this.CamOffset;
 
 
     public void Update(SandSpiderAI enemy, bool isAIControlled) {

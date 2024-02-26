@@ -1,4 +1,5 @@
 using Hax;
+using UnityEngine;
 
 public enum SporeLizardState {
     IDLE,
@@ -7,10 +8,6 @@ public enum SporeLizardState {
 }
 
 internal class SporeLizardController : IEnemyController<PufferAI> {
-    public void GetCameraPosition(PufferAI enemy) {
-        PossessionMod.CamOffsetY = 2.5f;
-        PossessionMod.CamOffsetZ = -3f;
-    }
 
     float GetTimeSinceHittingPlayer(PufferAI enemy) =>
         enemy.Reflect().GetInternalField<float>("timeSinceHittingPlayer");

@@ -1,7 +1,17 @@
+using UnityEngine;
+
 internal interface IController {
     const float DefaultSprintMultiplier = 2.8f;
 
     const float DefaultInteractRange = 2.5f;
+
+    static Vector3 DefaultCamOffsets => new(0, 2.5f, -3f);
+
+    static Vector3 DefaultEnemyOffset => new();
+
+    Vector3 GetCameraOffset(EnemyAI enemy);
+
+    Vector3 GetEnemyPositionOffset(EnemyAI enemy);
 
     void OnPossess(EnemyAI enemy);
 
@@ -10,8 +20,6 @@ internal interface IController {
     void OnDeath(EnemyAI enemy);
 
     void Update(EnemyAI enemy, bool isAIControlled);
-
-    void GetCameraPosition(EnemyAI enemy);
 
     void UsePrimarySkill(EnemyAI enemy);
 
@@ -52,8 +60,6 @@ internal interface IEnemyController<T> : IController where T : EnemyAI {
 
     void Update(T enemy, bool isAIControlled) { }
 
-    void GetCameraPosition(T enemy) { }
-
     void UsePrimarySkill(T enemy) { }
 
     void OnSecondarySkillHold(T enemy) { }
@@ -78,6 +84,10 @@ internal interface IEnemyController<T> : IController where T : EnemyAI {
 
     float SprintMultiplier(T enemy) => IController.DefaultSprintMultiplier;
 
+    Vector3 GetCameraOffset(T enemy) => IController.DefaultCamOffsets;
+
+    Vector3 GetEnemyPositionOffset(T enemy) => IController.DefaultEnemyOffset;
+
     bool SyncAnimationSpeedEnabled(T enemy) => true;
 
     void OnOutsideStatusChange(T enemy) { }
@@ -89,8 +99,6 @@ internal interface IEnemyController<T> : IController where T : EnemyAI {
     void IController.OnDeath(EnemyAI enemy) => this.OnDeath((T)enemy);
 
     void IController.Update(EnemyAI enemy, bool isAIControlled) => this.Update((T)enemy, isAIControlled);
-
-    void IController.GetCameraPosition(EnemyAI enemy) => this.GetCameraPosition((T)enemy);
 
     void IController.UsePrimarySkill(EnemyAI enemy) => this.UsePrimarySkill((T)enemy);
 
@@ -115,6 +123,10 @@ internal interface IEnemyController<T> : IController where T : EnemyAI {
     float IController.InteractRange(EnemyAI enemy) => this.InteractRange((T)enemy);
 
     float IController.SprintMultiplier(EnemyAI enemy) => this.SprintMultiplier((T)enemy);
+
+    Vector3 IController.GetCameraOffset(EnemyAI enemy) => this.GetCameraOffset((T)enemy);
+
+    Vector3 IController.GetEnemyPositionOffset(EnemyAI enemy) => this.GetEnemyPositionOffset((T)enemy);
 
     bool IController.SyncAnimationSpeedEnabled(EnemyAI enemy) => this.SyncAnimationSpeedEnabled((T)enemy);
 

@@ -1,8 +1,11 @@
+using UnityEngine;
+
 internal class HygrodereController : IEnemyController<BlobAI> {
-    public void GetCameraPosition(BlobAI enemy) {
-        PossessionMod.CamOffsetY = 2f;
-        PossessionMod.CamOffsetZ = -3f;
-    }
+
+    Vector3 CamOffset = new Vector3(0, 2f, -3f);
+
+    public Vector3 GetCameraOffset(BlobAI enemy) => this.CamOffset;
+
 
     void SetTamedTimer(BlobAI enemy, float time) => enemy.Reflect().SetInternalField("tamedTimer", time);
 

@@ -1,8 +1,10 @@
+using UnityEngine;
+
 internal class MaskedPlayerController : IEnemyController<MaskedPlayerEnemy> {
-    public void GetCameraPosition(MaskedPlayerEnemy enemy) {
-        PossessionMod.CamOffsetY = 2.8f;
-        PossessionMod.CamOffsetZ = -3f;
-    }
+
+    Vector3 CamOffset = new Vector3(0, 2.8f, -3f);
+
+    public Vector3 GetCameraOffset(MaskedPlayerEnemy enemy) => this.CamOffset;
 
     void SetstartingKillAnimationLocalClient(MaskedPlayerEnemy enemy, bool value) =>
         enemy.Reflect().SetInternalField("startingKillAnimationLocalClient", value);

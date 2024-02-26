@@ -1,8 +1,10 @@
+using UnityEngine;
+
 internal class LassoManController : IEnemyController<LassoManAI> {
-    public void GetCameraPosition(LassoManAI enemy) {
-        PossessionMod.CamOffsetY = 2.8f;
-        PossessionMod.CamOffsetZ = -3.5f;
-    }
+
+    Vector3 CamOffset = new Vector3(0, 2.8f, -3.5f);
+
+    public Vector3 GetCameraOffset(LassoManAI enemy) => this.CamOffset;
 
     public void UsePrimarySkill(LassoManAI enemy) => enemy.MakeScreechNoiseServerRpc();
 
