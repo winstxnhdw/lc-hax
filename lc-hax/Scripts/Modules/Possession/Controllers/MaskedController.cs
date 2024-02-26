@@ -2,7 +2,7 @@ using UnityEngine;
 
 internal class MaskedPlayerController : IEnemyController<MaskedPlayerEnemy> {
 
-    Vector3 CamOffset = new Vector3(0, 2.8f, -3f);
+    Vector3 CamOffset = new(0, 2.8f, -3f);
 
     public Vector3 GetCameraOffset(MaskedPlayerEnemy enemy) => this.CamOffset;
 
