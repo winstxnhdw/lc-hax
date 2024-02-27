@@ -9,7 +9,9 @@ sealed class PhantomMod : MonoBehaviour {
     bool EnabledPossession { get; set; } = false;
     int CurrentSpectatorIndex { get; set; } = 0;
 
-    void Awake() => PhantomMod.Instance = this;
+    void Awake() {
+        PhantomMod.Instance = this;
+    }
 
     void OnEnable() {
         InputListener.OnShiftButtonHold += this.HoldShift;
@@ -95,13 +97,13 @@ sealed class PhantomMod : MonoBehaviour {
     }
 
     void PhantomDisabled(PlayerControllerB player, Camera camera) {
-        if (player.cameraContainerTransform is null) return;
-        if (player.gameplayCamera is null) return;
-        if (Helper.StartOfRound is null) return;
+        if (player.gameplayCamera is not Camera gameplayCamera) return;
+        if (Helper.StartOfRound is not StartOfRound round) return;
+        if(HaxCamera.Instance is not HaxCamera haxCamera) return;
+        if(haxCamera.HaxCamContainer is not GameObject container) return;
+
         if (this.IsShiftHeld) {
-            player.TeleportPlayer(camera.gameObject.TryGetComponent(out KeyboardMovement keyboard)
-                ? keyboard.LastPosition
-                : camera.transform.position);
+            player.TeleportPlayer(container.transform.position);
         }
         if (PossessionMod.Instance is PossessionMod { IsPossessed: true } possession) {
             possession.Unpossess();
@@ -113,8 +115,6 @@ sealed class PhantomMod : MonoBehaviour {
         if (HaxCamera.Instance is not HaxCamera haxCamera) return;
         if (haxCamera.GetCamera() is not Camera camera) return;
         Setting.EnablePhantom = !Setting.EnablePhantom;
-        haxCamera.SetActive(Setting.EnablePhantom);
-
         player.enabled = !player.IsDead() || !Setting.EnablePhantom;
         player.playerBodyAnimator.enabled = !Setting.EnablePhantom;
         player.thisController.enabled = !Setting.EnablePhantom;
@@ -125,6 +125,8 @@ sealed class PhantomMod : MonoBehaviour {
         else {
             this.PhantomDisabled(player, camera);
         }
+
+        haxCamera.SetActive(Setting.EnablePhantom);
     }
 
     internal void DisablePhantom() {
