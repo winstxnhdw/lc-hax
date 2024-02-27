@@ -43,7 +43,8 @@ internal sealed class PossessionMod : MonoBehaviour {
         { typeof(LassoManAI), new LassoManController() },
         { typeof(CrawlerAI), new CrawlerController() },
         { typeof(SandSpiderAI), new BunkerSpiderController() },
-        { typeof(RedLocustBees), new CircuitBeesController() }
+        { typeof(RedLocustBees), new CircuitBeesController() },
+        { typeof(DressGirlAI), new DressGirlController() }
     };
 
     float DoorCooldownRemaining { get; set; } = 0.0f;

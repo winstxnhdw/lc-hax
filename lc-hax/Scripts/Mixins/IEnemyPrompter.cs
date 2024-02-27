@@ -152,6 +152,11 @@ class EnemyPromptHandler {
         earthLeviathan.SetBehaviourState(BehaviourState.CHASE);
     }
 
+    void HandleDressGirl(DressGirlAI dressGirl, PlayerControllerB targetPlayer, bool willTeleportEnemy) {
+        this.TeleportEnemyToPlayer(dressGirl, targetPlayer, willTeleportEnemy, true);
+        dressGirl.SetBehaviourState(BehaviourState.IDLE);
+    }
+
     internal void HandleEnemy(EnemyAI enemy, PlayerControllerB targetPlayer, bool willTeleportEnemy) {
         switch (enemy) {
             case CrawlerAI thumper:
@@ -212,6 +217,10 @@ class EnemyPromptHandler {
 
             case SandWormAI earthLeviathan:
                 this.HandleEarthLeviathan(earthLeviathan, targetPlayer, willTeleportEnemy);
+                break;
+
+            case DressGirlAI dressGirl:
+                this.HandleDressGirl(dressGirl, targetPlayer, willTeleportEnemy);
                 break;
 
             default:
