@@ -4,7 +4,7 @@ namespace Hax;
 
 static partial class Helper {
     internal static Camera? CurrentCamera =>
-        (HaxCamera.Instance?.CustomCamera?.enabled == true)
+        (HaxCamera.Instance?.HaxCamContainer?.activeSelf == true)
             ? HaxCamera.Instance.CustomCamera
             : (!Helper.LocalPlayer?.IsDead() ?? false) && (Helper.LocalPlayer?.gameplayCamera?.enabled == true)
                 ? Helper.LocalPlayer.gameplayCamera
