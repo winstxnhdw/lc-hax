@@ -11,7 +11,6 @@ internal class HaxCamera : MonoBehaviour {
     internal Camera? GameplayCamera => Helper.LocalPlayer?.gameplayCamera;
 
     internal Camera? SpectateCamera => Helper.StartOfRound?.spectateCamera;
-
     internal AudioListener? GameplayListener => Helper.LocalPlayer?.activeAudioListener;
     internal AudioListener? SpectatorListener => Helper.StartOfRound?.audioListener;
 
@@ -19,21 +18,23 @@ internal class HaxCamera : MonoBehaviour {
 
     internal static HaxCamera? Instance { get; private set; }
 
-    internal GameObject? CustomCameraObj { get; private set; }
+    internal GameObject? HaxCamContainer { get; private set; }
+
+    internal GameObject? HaxCamAudioContainer { get; private set; }
 
     internal Camera? CustomCamera { get; private set; }
 
-    internal AudioListener? CameraListener { get; private set; }
+    internal AudioListener? HaxCamAudioListener { get; private set; }
 
     internal void SetActive(bool active) {
         if (Helper.LocalPlayer is not PlayerControllerB player) return;
+        if(this.HaxCamContainer is null) return;
         if (this.SpectateCamera is not Camera spectate) return;
         if (this.GameplayCamera is not Camera gameplayCamera) return;
-        if (this.CameraListener is not AudioListener CameraListener) return;
 
         if (this.GetCamera() is not Camera cam) return;
-        cam.gameObject.SetActive(active);
-        if (!cam.gameObject.activeSelf) {
+        this.HaxCamContainer.SetActive(active);
+        if (!this.HaxCamContainer.activeSelf) {
             if (!player.IsDead()) {
                 this.CopyFromCamera(player.playerEye, ref cam, ref gameplayCamera);
                 gameplayCamera.gameObject.SetActive(true);
@@ -46,7 +47,7 @@ internal class HaxCamera : MonoBehaviour {
             }
         }
         else {
-            cam.transform.SetParent(null, true);
+            this.HaxCamContainer.transform.SetParent(null, true);
             this.UpdateCameraTrasform(player.IsDead() ? spectate.transform : player.playerEye);
             spectate.gameObject.SetActive(false);
             gameplayCamera.gameObject.SetActive(false);
@@ -73,12 +74,48 @@ internal class HaxCamera : MonoBehaviour {
     internal Camera? GetCamera() {
         if (this.CustomCamera is not null) return this.CustomCamera;
 
-        this.CustomCameraObj ??= new GameObject("lc-hax Camera");
-        Camera newCam = this.CustomCameraObj.AddComponent<Camera>();
+        this.HaxCamContainer ??= new GameObject("lc-hax Camera Parent");
+        Camera newCam = this.HaxCamContainer.AddComponent<Camera>();
 
-        this.CameraListener = newCam.GetComponent<AudioListener>();
-        this.CameraListener ??= newCam.gameObject.AddComponent<AudioListener>();
+        this.HaxCamAudioContainer ??= new GameObject("lc-hax Audio Listener");
+        this.HaxCamAudioListener = this.HaxCamAudioContainer.GetComponent<AudioListener>();
+        this.HaxCamAudioListener ??= this.HaxCamAudioContainer.AddComponent<AudioListener>();
+        this.HaxCamAudioListener.transform.SetParent(this.HaxCamContainer.transform, false);
+        this.HaxCamAudioListener.transform.localScale = new Vector3(0.8196f, 0.8196f, 0.8196f);
+        // zero both local pos and rot
+        this.HaxCamAudioListener.transform.localPosition = Vector3.zero;
+        this.HaxCamAudioListener.transform.localRotation = Quaternion.identity;
 
+        // Set HaxCamAudioContainer as a child of HaxCamContainer
+        this.HaxCamAudioContainer.transform.SetParent(this.HaxCamContainer.transform, false);
+
+        // add AudioReverbFilter
+        AudioReverbFilter? reverb = this.HaxCamAudioContainer.GetComponent<AudioReverbFilter>();
+        reverb ??= this.HaxCamAudioContainer.gameObject.AddComponent<AudioReverbFilter>();
+        reverb.enabled = true;
+
+        AudioLowPassFilter? lowpass = this.HaxCamAudioContainer.GetComponent<AudioLowPassFilter>();
+        lowpass ??= this.HaxCamAudioContainer.gameObject.AddComponent<AudioLowPassFilter>();
+        lowpass.enabled = false;
+
+        AudioChorusFilter? chorus = this.HaxCamAudioContainer.GetComponent<AudioChorusFilter>();
+        chorus ??= this.HaxCamAudioContainer.gameObject.AddComponent<AudioChorusFilter>();
+        chorus.enabled = false;
+
+
+
+        if (this.GameplayListener is AudioListener gameplayListener) {
+            if (gameplayListener.TryGetComponent(out AudioReverbFilter source)) {
+                this.CopyReverbFilterSettings(source, reverb);
+            }
+            if (gameplayListener.TryGetComponent(out AudioLowPassFilter lowPassSource)) {
+                this.CopyLowPassFilterSettings(lowPassSource, lowpass);
+            }
+
+            if (gameplayListener.TryGetComponent(out AudioChorusFilter chorusSource)) {
+                this.CopyChorusFilterSettings(chorusSource, chorus);
+            }
+        }
 
         this.KeyboardMovement = newCam.GetComponent<KeyboardMovement>();
         this.KeyboardMovement ??= newCam.gameObject.AddComponent<KeyboardMovement>();
@@ -90,13 +127,46 @@ internal class HaxCamera : MonoBehaviour {
 
         this.MousePan.enabled = true;
         this.KeyboardMovement.enabled = true;
-        this.CameraListener.enabled = true;
+        this.HaxCamAudioListener.enabled = true;
         newCam.enabled = true;
-        this.CustomCameraObj.SetActive(false);
-        UnityEngine.Object.DontDestroyOnLoad(this.CustomCameraObj);
+        this.HaxCamContainer.SetActive(false);
+        UnityEngine.Object.DontDestroyOnLoad(this.HaxCamContainer);
         return this.CustomCamera = newCam;
     }
 
+
+    internal void CopyLowPassFilterSettings(AudioLowPassFilter source, AudioLowPassFilter target) {
+        target.cutoffFrequency = source.cutoffFrequency;
+        target.lowpassResonanceQ = source.lowpassResonanceQ;
+    }
+
+    internal void CopyChorusFilterSettings(AudioChorusFilter source, AudioChorusFilter target) {
+        target.dryMix = source.dryMix;
+        target.wetMix1 = source.wetMix1;
+        target.wetMix2 = source.wetMix2;
+        target.wetMix3 = source.wetMix3;
+        target.delay = source.delay;
+        target.rate = source.rate;
+        target.depth = source.depth;
+    }
+
+    internal void CopyReverbFilterSettings(AudioReverbFilter source, AudioReverbFilter target) {
+        target.reverbPreset = source.reverbPreset;
+        target.dryLevel = source.dryLevel;
+        target.room = source.room;
+        target.roomHF = source.roomHF;
+        target.roomLF = source.roomLF;
+        target.decayTime = source.decayTime;
+        target.decayHFRatio = source.decayHFRatio;
+        target.reflectionsLevel = source.reflectionsLevel;
+        target.reflectionsDelay = source.reflectionsDelay;
+        target.reverbLevel = source.reverbLevel;
+        target.reverbDelay = source.reverbDelay;
+        target.hfReference = source.hfReference;
+        target.lfReference = source.lfReference;
+        target.diffusion = source.diffusion;
+        target.density = source.density;
+    }
 
     internal void CopyFromCamera(Transform container, ref Camera Cam, ref Camera camData) {
         // zero all the transform properties
