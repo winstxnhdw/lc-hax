@@ -28,8 +28,6 @@ internal class HaxCamera : MonoBehaviour {
         if (Helper.LocalPlayer is not PlayerControllerB player) return;
         if (this.SpectateCamera is not Camera spectate) return;
         if (this.GameplayCamera is not Camera gameplayCamera) return;
-        if (this.GameplayListener is not AudioListener GameAudio) return;
-        if (this.SpectatorListener is not AudioListener spectatorListener) return;
         if (this.CameraListener is not AudioListener CameraListener) return;
 
         if (this.GetCamera() is not Camera cam) return;
@@ -37,28 +35,21 @@ internal class HaxCamera : MonoBehaviour {
         if (!cam.enabled) {
             if (!player.IsDead()) {
                 gameplayCamera.enabled = true;
-                GameAudio.enabled = true;
                 spectate.enabled = false;
-                spectatorListener.enabled = false;
-                CameraListener.enabled = false;
                 this.CopyFromCamera(player.playerEye, ref cam, ref gameplayCamera);
             }
             else {
                 spectate.enabled = true;
-                spectatorListener.enabled = true;
                 gameplayCamera.enabled = false;
-                GameAudio.enabled = false;
-                CameraListener.enabled = false;
                 this.CopyFromCamera(spectate.transform, ref cam, ref spectate);
             }
+            CameraListener.enabled = false;
         }
         else {
             cam.transform.SetParent(null, true);
             this.UpdateCameraTrasform(player.IsDead() ? spectate.transform : player.playerEye);
             gameplayCamera.enabled = false;
             spectate.enabled = false;
-            GameAudio.enabled = false;
-            spectatorListener.enabled = false;
             CameraListener.enabled = true;
         }
     }
@@ -67,14 +58,10 @@ internal class HaxCamera : MonoBehaviour {
         if (this.CustomCamera is null) return;
         if (this.SpectateCamera is not Camera spect) return;
         if (this.GameplayCamera is not Camera game) return;
-        if (this.GameplayListener is not AudioListener GameAudio) return;
-        if (this.SpectatorListener is not AudioListener spectatorListener) return;
         if (this.CustomCamera.enabled) {
             // keep the cameras off if custom camera is enabled
             if (game.enabled) game.enabled = false;
             if (spect.enabled) spect.enabled = false;
-            if (GameAudio.enabled) GameAudio.enabled = false;
-            if (spectatorListener.enabled) spectatorListener.enabled = false;
         }
     }
 
