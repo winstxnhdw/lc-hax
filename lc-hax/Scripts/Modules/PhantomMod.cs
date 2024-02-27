@@ -128,10 +128,10 @@ sealed class PhantomMod : MonoBehaviour {
     }
 
     internal void DisablePhantom() {
+        Setting.EnablePhantom = false;
         if (Helper.LocalPlayer is not PlayerControllerB player) return;
         if (HaxCamera.Instance is not HaxCamera haxCamera) return;
         if (haxCamera.GetCamera() is not Camera camera) return;
-        Setting.EnablePhantom = false;
         player.enabled = !player.IsDead();
         player.playerBodyAnimator.enabled = true;
         player.thisController.enabled = true;

@@ -1,5 +1,6 @@
 using GameNetcodeStuff;
 using Hax;
+using System;
 using UnityEngine;
 using UnityEngine.Rendering.HighDefinition;
 
@@ -55,14 +56,13 @@ internal class HaxCamera : MonoBehaviour {
 
 
     internal void DisableCamera() {
-        _ = this.GetCamera();
-        this.SetActive(false);
         if (PhantomMod.Instance is PhantomMod phantom) phantom.DisablePhantom();
+        if(this.HaxCamContainer != null) this.HaxCamContainer.SetActive(false);
     }
 
 
     internal Camera? GetCamera() {
-        if (this.CustomCamera is not null) return this.CustomCamera;
+        if (this.CustomCamera != null) return this.CustomCamera;
 
         this.HaxCamContainer ??= new GameObject("lc-hax Camera Parent");
         Camera newCam = this.HaxCamContainer.AddComponent<Camera>();
@@ -119,7 +119,9 @@ internal class HaxCamera : MonoBehaviour {
         this.KeyboardMovement.enabled = true;
         this.HaxCamAudioListener.enabled = true;
         this.HaxCamContainer.SetActive(false);
-        return this.CustomCamera = newCam;
+        this.CustomCamera = newCam;
+        DontDestroyOnLoad(this.HaxCamContainer);
+        return newCam;
     }
 
 
@@ -157,8 +159,6 @@ internal class HaxCamera : MonoBehaviour {
     }
 
     internal void CopyFromCamera(Transform container, ref Camera Cam, ref Camera camData) {
-        // zero all the transform properties
-        Cam.transform.SetParent(container, false);
         Cam.transform.position = Vector3.zero;
         Cam.transform.rotation = Quaternion.identity;
         Cam.transform.localPosition = Vector3.zero;
@@ -212,7 +212,7 @@ internal class HaxCamera : MonoBehaviour {
     }
 
     void UpdateCameraTrasform(Transform target) {
-        if (this.CustomCamera is not Camera Cam) return;
+        if (this.HaxCamContainer is not GameObject Cam) return;
         // Transform local position and rotation to world space
         Vector3 worldPosition = target.TransformPoint(target.localPosition);
         Quaternion worldRotation = target.rotation;
@@ -227,6 +227,7 @@ internal class HaxCamera : MonoBehaviour {
     }
 
     internal void Awake() => Instance = this;
+
 
     internal void OnEnable() {
         GameListener.OnGameStart += this.DisableCamera;
