@@ -31,9 +31,8 @@ internal class HaxCamera : MonoBehaviour {
         if (this.CameraListener is not AudioListener CameraListener) return;
 
         if (this.GetCamera() is not Camera cam) return;
-        cam.enabled = active;
-        CameraListener.enabled = active;
-        if (!cam.enabled) {
+        cam.gameObject.SetActive(active);
+        if (!cam.gameObject.activeSelf) {
             if (!player.IsDead()) {
                 this.CopyFromCamera(player.playerEye, ref cam, ref gameplayCamera);
                 gameplayCamera.gameObject.SetActive(true);
@@ -48,8 +47,8 @@ internal class HaxCamera : MonoBehaviour {
         else {
             cam.transform.SetParent(null, true);
             this.UpdateCameraTrasform(player.IsDead() ? spectate.transform : player.playerEye);
-            gameplayCamera.enabled = false;
-            spectate.enabled = false;
+            spectate.gameObject.SetActive(false);
+            gameplayCamera.gameObject.SetActive(false);
         }
     }
 
@@ -57,10 +56,9 @@ internal class HaxCamera : MonoBehaviour {
         if (this.CustomCamera is null) return;
         if (this.SpectateCamera is not Camera spect) return;
         if (this.GameplayCamera is not Camera game) return;
-        if (this.CustomCamera.enabled) {
-            // keep the cameras off if custom camera is enabled
-            if (game.enabled) game.enabled = false;
-            if (spect.enabled) spect.enabled = false;
+        if (this.CustomCamera.gameObject.activeSelf) {
+            if (game.gameObject.activeSelf) game.gameObject.SetActive(false);
+            if (spect.gameObject.activeSelf) spect.gameObject.SetActive(false);
         }
     }
 
@@ -89,10 +87,11 @@ internal class HaxCamera : MonoBehaviour {
         this.MousePan ??= newCam.gameObject.AddComponent<MousePan>();
 
 
-        this.MousePan.enabled = false;
-        this.KeyboardMovement.enabled = false;
-        this.CameraListener.enabled = false;
-        newCam.enabled = false;
+        this.MousePan.enabled = true;
+        this.KeyboardMovement.enabled = true;
+        this.CameraListener.enabled = true;
+        newCam.enabled = true;
+        this.CustomCameraObj.SetActive(false);
         UnityEngine.Object.DontDestroyOnLoad(this.CustomCameraObj);
         return this.CustomCamera = newCam;
     }
