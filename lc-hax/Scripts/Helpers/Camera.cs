@@ -3,15 +3,13 @@ using UnityEngine;
 namespace Hax;
 
 static partial class Helper {
-    internal static Camera? CurrentCamera =>
-        (HaxCamera.Instance?.HaxCamContainer?.activeSelf == true)
-            ? HaxCamera.Instance.CustomCamera
-            : (!Helper.LocalPlayer?.IsDead() ?? false) && (Helper.LocalPlayer?.gameplayCamera?.enabled == true)
-                ? Helper.LocalPlayer.gameplayCamera
-                : (Helper.StartOfRound?.spectateCamera?.enabled == true)
-                    ? Helper.StartOfRound.spectateCamera
-                    : null;
-
+    internal static Camera? CurrentCamera {
+        get {
+            return HaxCamera.Instance?.HaxCamContainer?.activeSelf == true
+                ? HaxCamera.Instance.CustomCamera
+                : Helper.StartOfRound?.activeCamera;
+        }
+    }
 
     internal static Vector3 WorldToEyesPoint(this Camera camera, Vector3 worldPosition) {
         Vector3 screen = camera.WorldToViewportPoint(worldPosition);
