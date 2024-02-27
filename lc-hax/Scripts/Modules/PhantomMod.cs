@@ -9,9 +9,7 @@ sealed class PhantomMod : MonoBehaviour {
     bool EnabledPossession { get; set; } = false;
     int CurrentSpectatorIndex { get; set; } = 0;
 
-    void Awake() {
-        PhantomMod.Instance = this;
-    }
+    void Awake() => PhantomMod.Instance = this;
 
     void OnEnable() {
         InputListener.OnShiftButtonHold += this.HoldShift;
@@ -97,10 +95,10 @@ sealed class PhantomMod : MonoBehaviour {
     }
 
     void PhantomDisabled(PlayerControllerB player, Camera camera) {
-        if (player.gameplayCamera is not Camera gameplayCamera) return;
-        if (Helper.StartOfRound is not StartOfRound round) return;
-        if(HaxCamera.Instance is not HaxCamera haxCamera) return;
-        if(haxCamera.HaxCamContainer is not GameObject container) return;
+        if (player.gameplayCamera is not Camera) return;
+        if (Helper.StartOfRound is not StartOfRound) return;
+        if (HaxCamera.Instance is not HaxCamera haxCamera) return;
+        if (haxCamera.HaxCamContainer is not GameObject container) return;
 
         if (this.IsShiftHeld) {
             player.TeleportPlayer(container.transform.position);
