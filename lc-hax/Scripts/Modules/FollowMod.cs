@@ -83,7 +83,7 @@ sealed class FollowMod : MonoBehaviour {
         localPlayer.transform.rotation = state.rotation * this.DeviateRotation;
 
         //broadcast fake rotation
-        Reflector localPlayerReflector = localPlayer.Reflect();
+        Reflector<PlayerControllerB> localPlayerReflector = localPlayer.Reflect();
 
         _ = localPlayerReflector.InvokeInternalMethod(
             "UpdatePlayerRotationServerRpc",
