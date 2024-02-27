@@ -48,10 +48,22 @@ internal class HaxCamera : MonoBehaviour {
             }
         }
         else {
-            this.HaxCamContainer.transform.SetParent(null, true);
             this.UpdateCameraTrasform(player.IsDead() ? spectate.transform : player.playerEye);
             spectate.gameObject.SetActive(false);
             gameplayCamera.gameObject.SetActive(false);
+        }
+    }
+
+    void LateUpdate() {
+        if (this.HaxCamContainer is not GameObject container) return;
+        if (container.activeSelf) {
+            if (this.GameplayCamera != null && this.GameplayCamera.gameObject.activeSelf) {
+                this.GameplayCamera.gameObject.SetActive(false);
+            }
+
+            if (this.SpectateCamera != null && this.SpectateCamera.gameObject.activeSelf) {
+                this.SpectateCamera.gameObject.SetActive(false);
+            }
         }
     }
 
@@ -227,7 +239,11 @@ internal class HaxCamera : MonoBehaviour {
         }
     }
 
-    internal void Awake() => Instance = this;
+    internal void Awake() {
+        Instance = this;
+        _ = this.GetCamera();
+    }
+
 
 
     internal void OnEnable() {
