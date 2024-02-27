@@ -1,4 +1,3 @@
-using DunGen.Tags;
 using GameNetcodeStuff;
 using Hax;
 using UnityEngine;
@@ -93,15 +92,15 @@ internal class HaxCamera : MonoBehaviour {
         Camera newCam = this.CustomCameraObj.AddComponent<Camera>();
 
         this.CameraListener = newCam.GetComponent<AudioListener>();
-        if (this.CameraListener is null) this.CameraListener = newCam.gameObject.AddComponent<AudioListener>();
+        this.CameraListener ??= newCam.gameObject.AddComponent<AudioListener>();
 
 
         this.KeyboardMovement = newCam.GetComponent<KeyboardMovement>();
-        if (this.KeyboardMovement is null) this.KeyboardMovement = newCam.gameObject.AddComponent<KeyboardMovement>();
+        this.KeyboardMovement ??= newCam.gameObject.AddComponent<KeyboardMovement>();
 
 
         this.MousePan = newCam.GetComponent<MousePan>();
-        if (this.MousePan is null) this.MousePan = newCam.gameObject.AddComponent<MousePan>();
+        this.MousePan ??= newCam.gameObject.AddComponent<MousePan>();
 
 
         this.MousePan.enabled = false;
