@@ -54,6 +54,8 @@ internal class NutcrackerController : IEnemyController<NutcrackerEnemyAI> {
         this.InSentryMode = false;
     }
 
+    public void UseSpecialAbility(NutcrackerEnemyAI enemy) => enemy.ReloadGunServerRpc();
+
     public void OnUnpossess(NutcrackerEnemyAI enemy) => this.InSentryMode = false;
 
     public string GetPrimarySkillName(NutcrackerEnemyAI enemy) => enemy.gun is null ? "" : "Fire";
