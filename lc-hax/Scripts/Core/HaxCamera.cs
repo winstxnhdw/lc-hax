@@ -41,7 +41,7 @@ internal class HaxCamera : MonoBehaviour {
                 spectate.enabled = false;
                 spectatorListener.enabled = false;
                 CameraListener.enabled = false;
-                this.CopyFromCamera(player.cameraContainerTransform, ref cam, ref gameplayCamera);
+                this.CopyFromCamera(player.playerEye, ref cam, ref gameplayCamera);
             }
             else {
                 spectate.enabled = true;
@@ -54,7 +54,7 @@ internal class HaxCamera : MonoBehaviour {
         }
         else {
             cam.transform.SetParent(null, true);
-            this.UpdateCameraTrasform(player.IsDead() ? spectate.transform : player.cameraContainerTransform);
+            this.UpdateCameraTrasform(player.IsDead() ? spectate.transform : player.playerEye);
             gameplayCamera.enabled = false;
             spectate.enabled = false;
             GameAudio.enabled = false;
