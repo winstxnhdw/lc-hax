@@ -58,10 +58,6 @@ internal class DressGirlController : IEnemyController<DressGirlAI> {
         }
     }
 
-    internal static void SendUITip(string header, string message, bool warning) {
-        HUDManager.Instance?.DisplayTip(header, message, warning, false, "LC_Tip1");
-    }
-
     public void OnPossess(DressGirlAI enemy) => ClientSideIsNotVisible(enemy);
 
     public void OnUnpossess(DressGirlAI enemy) {
