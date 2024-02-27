@@ -45,7 +45,7 @@ internal class GiftSetCommand : ICommand {
     void SetGift(GiftBoxItem gift, Item item) {
         if (gift is null || item is null) return;
         if (Helper.RoundManager is null) return;
-        Reflector giftReflector = gift.Reflect();
+        Reflector<GiftBoxItem> giftReflector = gift.Reflect();
         System.Random random = new((int)gift.targetFloorPosition.x + (int)gift.targetFloorPosition.y);
 
         int objectInPresentValue = (int)(random.Next(item.minValue + 25, item.maxValue + 35) *

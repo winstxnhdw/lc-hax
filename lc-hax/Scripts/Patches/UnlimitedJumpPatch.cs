@@ -16,7 +16,7 @@ class UnlimitedJumpPatch {
         if (!__instance.isPlayerControlled) return true;
         if (__instance.inSpecialInteractAnimation) return true;
         if (__instance.isTypingChat) return true;
-        Reflector player = __instance.Reflect();
+        Reflector<PlayerControllerB> player = __instance.Reflect();
 
         _ = player.SetInternalField("playerSlidingTimer", 0f);
         _ = player.SetInternalField("isJumping", true);
