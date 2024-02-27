@@ -161,6 +161,11 @@ class EnemyPromptHandler {
         this.TeleportEnemyToPlayer(doublewingBird, targetPlayer, willTeleportEnemy, true);
     }
 
+        void HandleDocileLocustBees(DocileLocustBeesAI docileLocustBees, PlayerControllerB targetPlayer, bool willTeleportEnemy) {
+        this.TeleportEnemyToPlayer(docileLocustBees, targetPlayer, willTeleportEnemy, true);
+        docileLocustBees.SetBehaviourState(BehaviourState.IDLE);
+    }
+
     internal void HandleEnemy(EnemyAI enemy, PlayerControllerB targetPlayer, bool willTeleportEnemy) {
         switch (enemy) {
             case CrawlerAI thumper:
@@ -229,6 +234,10 @@ class EnemyPromptHandler {
 
             case DoublewingAI doublewingBird:
                 this.HandleDoublewingBird(doublewingBird, targetPlayer, willTeleportEnemy);
+                break;
+
+            case DocileLocustBeesAI docileLocustBees:
+                this.HandleDocileLocustBees(docileLocustBees, targetPlayer, willTeleportEnemy);
                 break;
 
             default:
