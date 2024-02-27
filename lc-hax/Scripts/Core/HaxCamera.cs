@@ -27,7 +27,6 @@ internal class HaxCamera : MonoBehaviour {
 
     internal void SetActive(bool active) {
         if (Helper.LocalPlayer is not PlayerControllerB player) return;
-        if(Helper.LocalPlayer.cameraContainerTransform is not Transform cameraContainerTransform) return;
         if (this.SpectateCamera is not Camera spectate) return;
         if (this.GameplayCamera is not Camera gameplayCamera) return;
         if (this.GameplayListener is not AudioListener GameAudio) return;
@@ -36,7 +35,6 @@ internal class HaxCamera : MonoBehaviour {
 
         if (this.GetCamera() is not Camera cam) return;
         cam.enabled = active;
-        if (cam.TryGetComponent(out AudioListener listener)) listener.enabled = active;
         if (!cam.enabled) {
             if (!player.IsDead()) {
                 gameplayCamera.enabled = true;
@@ -44,7 +42,7 @@ internal class HaxCamera : MonoBehaviour {
                 spectate.enabled = false;
                 spectatorListener.enabled = false;
                 CameraListener.enabled = false;
-                this.CopyFromCamera(player.playerEye, ref cam, ref gameplayCamera);
+                this.CopyFromCamera(player.cameraContainerTransform, ref cam, ref gameplayCamera);
             }
             else {
                 spectate.enabled = true;
