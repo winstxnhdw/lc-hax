@@ -37,7 +37,7 @@ internal class SnareFleaController : IEnemyController<CentipedeAI> {
     }
 
     bool IsClingingToSomething(CentipedeAI enemy) {
-        Reflector centipedeReflector = enemy.Reflect();
+        Reflector<CentipedeAI> centipedeReflector = enemy.Reflect();
 
         return enemy.clingingToPlayer is not null || enemy.inSpecialAnimation ||
                centipedeReflector.GetInternalField<bool>("clingingToDeadBody") ||
