@@ -1,6 +1,5 @@
 using GameNetcodeStuff;
 using Hax;
-using System;
 using UnityEngine;
 using UnityEngine.Rendering.HighDefinition;
 
@@ -57,7 +56,7 @@ internal class HaxCamera : MonoBehaviour {
 
     internal void DisableCamera() {
         if (PhantomMod.Instance is PhantomMod phantom) phantom.DisablePhantom();
-        if(this.HaxCamContainer != null) this.HaxCamContainer.SetActive(false);
+        this.HaxCamContainer?.SetActive(false);
     }
 
 
