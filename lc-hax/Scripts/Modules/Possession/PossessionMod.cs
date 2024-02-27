@@ -205,9 +205,10 @@ internal sealed class PossessionMod : MonoBehaviour {
         }
 
         if (controller.IsAbleToMove(enemy)) {
-            this.UpdateEnemyPosition(enemy);
             controller.OnMovement(enemy, this.CharacterMovement.IsMoving, this.CharacterMovement.IsSprinting);
         }
+
+        this.UpdateEnemyPosition(enemy);
 
         if (controller.IsAbleToRotate(enemy)) {
             this.UpdateEnemyRotation();
