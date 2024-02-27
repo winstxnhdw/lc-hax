@@ -37,17 +37,23 @@ internal class HaxCamera : MonoBehaviour {
         this.HaxCamContainer.SetActive(active);
         if (!this.HaxCamContainer.activeSelf) {
             if (!player.IsDead()) {
-                this.CopyFromCamera(player.playerEye, ref cam, ref gameplayCamera);
                 gameplayCamera.gameObject.SetActive(true);
                 spectate.gameObject.SetActive(false);
             }
             else {
-                this.CopyFromCamera(spectate.transform, ref cam, ref spectate);
                 spectate.gameObject.SetActive(true);
                 gameplayCamera.gameObject.SetActive(false);
             }
         }
         else {
+            if (player.IsDead()) {
+                this.CopyFromCamera(spectate.transform, ref cam, ref spectate);
+            }
+
+            else {
+                this.CopyFromCamera(player.playerEye, ref cam, ref gameplayCamera);
+            }
+
             this.UpdateCameraTrasform(player.IsDead() ? spectate.transform : player.playerEye);
             spectate.gameObject.SetActive(false);
             gameplayCamera.gameObject.SetActive(false);
