@@ -95,8 +95,8 @@ sealed class PhantomMod : MonoBehaviour {
     }
 
     void PhantomDisabled(PlayerControllerB player, Camera camera) {
-        if (player.gameplayCamera is not Camera) return;
-        if (Helper.StartOfRound is not StartOfRound) return;
+        if (player.gameplayCamera is null) return;
+        if (Helper.StartOfRound is null) return;
         if (HaxCamera.Instance is not HaxCamera haxCamera) return;
         if (haxCamera.HaxCamContainer is not GameObject container) return;
 
