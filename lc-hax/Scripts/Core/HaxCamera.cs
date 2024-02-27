@@ -54,15 +54,6 @@ internal class HaxCamera : MonoBehaviour {
         }
     }
 
-    void LateUpdate() {
-        if (this.CustomCamera is null) return;
-        if (this.SpectateCamera is not Camera spect) return;
-        if (this.GameplayCamera is not Camera game) return;
-        if (this.CustomCamera.gameObject.activeSelf) {
-            if (game.gameObject.activeSelf) game.gameObject.SetActive(false);
-            if (spect.gameObject.activeSelf) spect.gameObject.SetActive(false);
-        }
-    }
 
     internal void DisableCamera() {
         _ = this.GetCamera();
@@ -103,11 +94,11 @@ internal class HaxCamera : MonoBehaviour {
         chorus.enabled = false;
 
 
-
         if (this.GameplayListener is AudioListener gameplayListener) {
             if (gameplayListener.TryGetComponent(out AudioReverbFilter source)) {
                 this.CopyReverbFilterSettings(source, reverb);
             }
+
             if (gameplayListener.TryGetComponent(out AudioLowPassFilter lowPassSource)) {
                 this.CopyLowPassFilterSettings(lowPassSource, lowpass);
             }
@@ -128,9 +119,7 @@ internal class HaxCamera : MonoBehaviour {
         this.MousePan.enabled = true;
         this.KeyboardMovement.enabled = true;
         this.HaxCamAudioListener.enabled = true;
-        newCam.enabled = true;
         this.HaxCamContainer.SetActive(false);
-        UnityEngine.Object.DontDestroyOnLoad(this.HaxCamContainer);
         return this.CustomCamera = newCam;
     }
 
