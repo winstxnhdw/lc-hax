@@ -32,25 +32,24 @@ internal class HaxCamera : MonoBehaviour {
 
         if (this.GetCamera() is not Camera cam) return;
         cam.enabled = active;
+        CameraListener.enabled = active;
         if (!cam.enabled) {
             if (!player.IsDead()) {
-                gameplayCamera.enabled = true;
-                spectate.enabled = false;
                 this.CopyFromCamera(player.playerEye, ref cam, ref gameplayCamera);
+                gameplayCamera.gameObject.SetActive(true);
+                spectate.gameObject.SetActive(false);
             }
             else {
-                spectate.enabled = true;
-                gameplayCamera.enabled = false;
                 this.CopyFromCamera(spectate.transform, ref cam, ref spectate);
+                spectate.gameObject.SetActive(true);
+                gameplayCamera.gameObject.SetActive(false);
             }
-            CameraListener.enabled = false;
         }
         else {
             cam.transform.SetParent(null, true);
             this.UpdateCameraTrasform(player.IsDead() ? spectate.transform : player.playerEye);
             gameplayCamera.enabled = false;
             spectate.enabled = false;
-            CameraListener.enabled = true;
         }
     }
 
