@@ -15,7 +15,7 @@ internal class HaxCamera : MonoBehaviour {
         if (Helper.StartOfRound is not StartOfRound { spectateCamera: Camera spectate }) return;
         if (Helper.LocalPlayer is not PlayerControllerB player) return;
         if (player?.gameplayCamera is not Camera gameplayCamera) return;
-        if(this.GetCamera() is not Camera cam) return;
+        if (this.GetCamera() is not Camera cam) return;
         cam.enabled = active;
         if (!cam.enabled) {
             if (!player.IsDead()) {
@@ -41,7 +41,7 @@ internal class HaxCamera : MonoBehaviour {
 
     void LateUpdate() {
         if (this.CustomCamera is null) return;
-        if(this.CustomCameraObj is null) return;
+        if (this.CustomCameraObj is null) return;
         if (Helper.StartOfRound is not StartOfRound round) return;
         if (round.spectateCamera is not Camera spectate) return;
         if (Helper.LocalPlayer is not PlayerControllerB player) return;
