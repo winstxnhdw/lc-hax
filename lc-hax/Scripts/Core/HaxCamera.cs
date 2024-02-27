@@ -27,7 +27,7 @@ internal class HaxCamera : MonoBehaviour {
 
     internal void SetActive(bool active) {
         if (Helper.LocalPlayer is not PlayerControllerB player) return;
-        if(this.HaxCamContainer is null) return;
+        if (this.HaxCamContainer is null) return;
         if (this.SpectateCamera is not Camera spectate) return;
         if (this.GameplayCamera is not Camera gameplayCamera) return;
 
