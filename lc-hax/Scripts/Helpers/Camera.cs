@@ -4,11 +4,13 @@ namespace Hax;
 
 static partial class Helper {
     internal static Camera? CurrentCamera =>
-        Setting.EnablePhantom
-            ? HaxCamera.Instance?.GetCamera(false)
-            : Helper.LocalPlayer?.gameplayCamera is Camera { enabled: true } gameplayCamera
-                ? gameplayCamera
-                : Helper.StartOfRound?.spectateCamera;
+        (HaxCamera.Instance?.CustomCamera?.enabled == true)
+            ? HaxCamera.Instance.CustomCamera
+            : (!Helper.LocalPlayer?.IsDead() ?? false) && (Helper.LocalPlayer?.gameplayCamera?.enabled == true)
+                ? Helper.LocalPlayer.gameplayCamera
+                : (Helper.StartOfRound?.spectateCamera?.enabled == true)
+                    ? Helper.StartOfRound.spectateCamera
+                    : null;
 
 
     internal static Vector3 WorldToEyesPoint(this Camera camera, Vector3 worldPosition) {

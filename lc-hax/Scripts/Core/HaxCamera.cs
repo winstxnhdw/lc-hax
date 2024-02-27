@@ -11,46 +11,67 @@ internal class HaxCamera : MonoBehaviour {
 
     internal Camera? CustomCamera { get; private set; }
 
-    internal void DestroyCustomCam() {
-        if (Helper.LocalPlayer is not PlayerControllerB player) {
-            Object.DestroyImmediate(this.CustomCameraObj);
-            this.CustomCameraObj = null;
-            this.CustomCamera = null;
-            return;
-        }
-
+    internal void SetActive(bool active) {
         if (Helper.StartOfRound is not StartOfRound { spectateCamera: Camera spectate }) return;
-        if (!player.IsDead() && player.gameplayCamera is Camera camData) {
-            camData.enabled = true;
+        if (Helper.LocalPlayer is not PlayerControllerB player) return;
+        if (player?.gameplayCamera is not Camera gameplayCamera) return;
+        if(this.GetCamera() is not Camera cam) return;
+        cam.enabled = active;
+        if (!cam.enabled) {
+            if (!player.IsDead()) {
+                gameplayCamera.enabled = true;
+                spectate.enabled = false;
+            }
+            else {
+                spectate.enabled = true;
+                gameplayCamera.enabled = false;
+            }
         }
         else {
-            spectate.enabled = true;
-            if (this.CustomCameraObj != null) spectate.transform.position = this.CustomCameraObj.transform.position;
+            gameplayCamera.enabled = false;
+            spectate.enabled = false;
         }
+    }
 
-        if (this.CustomCameraObj != null) {
-            Object.DestroyImmediate(this.CustomCameraObj);
-        }
 
-        this.CustomCameraObj = null;
-        this.CustomCamera = null;
-
+    internal void ToggleCamera() {
+        if (this.CustomCamera is not Camera cam) return;
+        this.SetActive(!cam.enabled);
     }
 
     void LateUpdate() {
         if (this.CustomCamera is null) return;
+        if(this.CustomCameraObj is null) return;
         if (Helper.StartOfRound is not StartOfRound round) return;
         if (round.spectateCamera is not Camera spectate) return;
         if (Helper.LocalPlayer is not PlayerControllerB player) return;
         if (player?.gameplayCamera is not Camera playercam) return;
-        // keep the cameras off if custom camera is enabled
-        if (playercam.enabled) playercam.enabled = false;
-        if (spectate.enabled) spectate.enabled = false;
+        if (this.CustomCamera.enabled) {
+            // keep the cameras off if custom camera is enabled
+            if (playercam.enabled) playercam.enabled = false;
+            if (spectate.enabled) spectate.enabled = false;
+        }
+        else {
+            if (player.IsDead()) {
+                this.CustomCameraObj.transform.position = spectate.transform.position;
+                this.CustomCameraObj.transform.rotation = spectate.transform.rotation;
+            }
+            else {
+                this.CustomCameraObj.transform.position = playercam.transform.position;
+                this.CustomCameraObj.transform.rotation = playercam.transform.rotation;
+            }
+        }
     }
 
-    internal Camera? GetCamera(bool Spawn = true) {
+    internal void DisableCamera() {
+        Camera? cam = this.GetCamera();
+        if (cam is not null) cam.enabled = false;
+        this.SetActive(false);
+    }
+
+
+    internal Camera? GetCamera() {
         if (this.CustomCamera is not null) return this.CustomCamera;
-        if (!Spawn) return this.CustomCamera;
         if (Helper.LocalPlayer is not PlayerControllerB player) return null;
         if (Helper.LocalPlayer?.gameplayCamera is not Camera playercam) return null;
         if (Helper.StartOfRound is not StartOfRound round) return null;
@@ -101,7 +122,7 @@ internal class HaxCamera : MonoBehaviour {
             }
         }
 
-        newCam.enabled = true;
+        newCam.enabled = false;
         return this.CustomCamera = newCam;
     }
 
@@ -109,12 +130,12 @@ internal class HaxCamera : MonoBehaviour {
     internal void Awake() => Instance = this;
 
     internal void OnEnable() {
-        GameListener.OnGameStart += this.DestroyCustomCam;
-        GameListener.OnGameEnd += this.DestroyCustomCam;
+        GameListener.OnGameStart += this.DisableCamera;
+        GameListener.OnGameEnd += this.DisableCamera;
     }
 
     internal void OnDisable() {
-        GameListener.OnGameStart -= this.DestroyCustomCam;
-        GameListener.OnGameEnd -= this.DestroyCustomCam;
+        GameListener.OnGameStart -= this.DisableCamera;
+        GameListener.OnGameEnd -= this.DisableCamera;
     }
 }
