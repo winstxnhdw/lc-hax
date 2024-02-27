@@ -101,7 +101,9 @@ sealed class PhantomMod : MonoBehaviour {
         if (player.gameplayCamera is not Camera gameplayCamera) return;
         if (Helper.StartOfRound is not StartOfRound round) return;
         if (this.IsShiftHeld) {
-            player.TeleportPlayer(camera.transform.position);
+            player.TeleportPlayer(camera.gameObject.TryGetComponent(out KeyboardMovement keyboard)
+                ? keyboard.LastPosition
+                : camera.transform.position);
         }
         if (PossessionMod.Instance is PossessionMod { IsPossessed: true } possession) {
             possession.Unpossess();
