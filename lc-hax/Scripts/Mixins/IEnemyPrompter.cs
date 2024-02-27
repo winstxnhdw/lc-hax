@@ -157,6 +157,10 @@ class EnemyPromptHandler {
         dressGirl.SetBehaviourState(BehaviourState.IDLE);
     }
 
+        void HandleDoublewingBird(DoublewingAI doublewingBird, PlayerControllerB targetPlayer, bool willTeleportEnemy) {
+        this.TeleportEnemyToPlayer(doublewingBird, targetPlayer, willTeleportEnemy, true);
+    }
+
     internal void HandleEnemy(EnemyAI enemy, PlayerControllerB targetPlayer, bool willTeleportEnemy) {
         switch (enemy) {
             case CrawlerAI thumper:
@@ -221,6 +225,10 @@ class EnemyPromptHandler {
 
             case DressGirlAI dressGirl:
                 this.HandleDressGirl(dressGirl, targetPlayer, willTeleportEnemy);
+                break;
+
+            case DoublewingAI doublewingBird:
+                this.HandleDoublewingBird(doublewingBird, targetPlayer, willTeleportEnemy);
                 break;
 
             default:
