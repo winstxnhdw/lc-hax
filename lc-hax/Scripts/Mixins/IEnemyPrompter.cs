@@ -152,6 +152,20 @@ class EnemyPromptHandler {
         earthLeviathan.SetBehaviourState(BehaviourState.CHASE);
     }
 
+    void HandleDressGirl(DressGirlAI dressGirl, PlayerControllerB targetPlayer, bool willTeleportEnemy) {
+        this.TeleportEnemyToPlayer(dressGirl, targetPlayer, willTeleportEnemy, true);
+        dressGirl.SetBehaviourState(BehaviourState.IDLE);
+    }
+
+        void HandleDoublewingBird(DoublewingAI doublewingBird, PlayerControllerB targetPlayer, bool willTeleportEnemy) {
+        this.TeleportEnemyToPlayer(doublewingBird, targetPlayer, willTeleportEnemy, true);
+    }
+
+        void HandleDocileLocustBees(DocileLocustBeesAI docileLocustBees, PlayerControllerB targetPlayer, bool willTeleportEnemy) {
+        this.TeleportEnemyToPlayer(docileLocustBees, targetPlayer, willTeleportEnemy, true);
+        docileLocustBees.SetBehaviourState(BehaviourState.IDLE);
+    }
+
     internal void HandleEnemy(EnemyAI enemy, PlayerControllerB targetPlayer, bool willTeleportEnemy) {
         switch (enemy) {
             case CrawlerAI thumper:
@@ -212,6 +226,18 @@ class EnemyPromptHandler {
 
             case SandWormAI earthLeviathan:
                 this.HandleEarthLeviathan(earthLeviathan, targetPlayer, willTeleportEnemy);
+                break;
+
+            case DressGirlAI dressGirl:
+                this.HandleDressGirl(dressGirl, targetPlayer, willTeleportEnemy);
+                break;
+
+            case DoublewingAI doublewingBird:
+                this.HandleDoublewingBird(doublewingBird, targetPlayer, willTeleportEnemy);
+                break;
+
+            case DocileLocustBeesAI docileLocustBees:
+                this.HandleDocileLocustBees(docileLocustBees, targetPlayer, willTeleportEnemy);
                 break;
 
             default:
