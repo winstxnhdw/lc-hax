@@ -6,12 +6,10 @@ using HarmonyLib;
 using Hax;
 using UnityEngine;
 
-[HarmonyPatch(typeof(PlayerControllerB))]
+[HarmonyPatch(typeof(PlayerControllerB, "Jump_performed"))]
 class UnlimitedJumpPatch {
-    [HarmonyPatch("Jump_performed")]
     static bool Prefix(PlayerControllerB __instance) {
-        if (!Setting.EnableUnlimitedJump) return true;
-        if (!__instance.IsSelf()) return true;
+        if (!Setting.EnableUnlimitedJump || !__instance.IsSelf()) return true;
         if (__instance is { inSpecialInteractAnimation: true, isTypingChat: true, isPlayerControlled: false }) return true;
         if (__instance.quickMenuManager.isMenuOpen) return true;
 
@@ -28,8 +26,12 @@ class UnlimitedJumpPatch {
         if (jumpCoroutine is not null) {
             __instance.StopCoroutine(jumpCoroutine);
         }
-        // create a new coroutine to handle the jump
-        _ = playerReflector.SetInternalField("jumpCoroutine", __instance.StartCoroutine(playerReflector.InvokeInternalMethod<IEnumerator>("PlayerJump")));
+
+        _ = playerReflector.SetInternalField(
+            "jumpCoroutine",
+            __instance.StartCoroutine(playerReflector.InvokeInternalMethod<IEnumerator>("PlayerJump"))
+        );
+
         return false;
     }
 }
