@@ -1,6 +1,5 @@
 using GameNetcodeStuff;
 using Hax;
-using Unity.Netcode;
 using UnityEngine;
 
 enum DressGirlState {
@@ -15,24 +14,24 @@ internal class DressGirlController : IEnemyController<DressGirlAI> {
     bool IsStalking { get; set; } = false;
 
     public void UsePrimarySkill(DressGirlAI enemy) {
-        if (IsChasing) return;
-        IsVisible = true;
-        IsChasing = true;
+        if (this.IsChasing) return;
+        this.IsVisible = true;
+        this.IsChasing = true;
     }
 
     public void UseSecondarySkill(DressGirlAI enemy) {
-        IsVisible = true;
-        IsStalking = true;
+        this.IsVisible = true;
+        this.IsStalking = true;
     }
 
     public void ReleaseSecondarySkill(DressGirlAI enemy) {
-        IsVisible = false;
-        IsChasing = false;
-        IsStalking = false;
+        this.IsVisible = false;
+        this.IsChasing = false;
+        this.IsStalking = false;
     }
 
     public void OnMovement(DressGirlAI enemy, bool isMoving, bool isSprinting) {
-        if (!IsVisible) return;
+        if (!this.IsVisible) return;
         if (isMoving) {
         }
         else {
@@ -43,26 +42,26 @@ internal class DressGirlController : IEnemyController<DressGirlAI> {
         PlayerControllerB hostPlayer = Helper.Players[0]; // For Testing
         enemy.hauntingPlayer = hostPlayer;
 
-        if (IsChasing) {
+        if (this.IsChasing) {
             enemy.SetBehaviourState(DressGirlState.HOSTEL);
         }
         else {
             enemy.SetBehaviourState(DressGirlState.PEACAFUL);
         }
 
-        if (IsVisible) {
-            ClientSideIsVisible(enemy);
+        if (this.IsVisible) {
+            this.ClientSideIsVisible(enemy);
         }
         else {
-            ClientSideIsNotVisible(enemy);
+            this.ClientSideIsNotVisible(enemy);
         }
     }
 
-    public void OnPossess(DressGirlAI enemy) => ClientSideIsNotVisible(enemy);
+    public void OnPossess(DressGirlAI enemy) => this.ClientSideIsNotVisible(enemy);
 
     public void OnUnpossess(DressGirlAI enemy) {
-        ReleaseSecondarySkill(enemy);
-        ClientSetInvisible(enemy);
+        this.ReleaseSecondarySkill(enemy);
+        this.ClientSetInvisible(enemy);
     }
 
     void ClientSideIsVisible(DressGirlAI enemy) {
