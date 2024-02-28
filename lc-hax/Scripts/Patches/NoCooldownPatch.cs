@@ -1,9 +1,8 @@
 #pragma warning disable IDE1006
 
 using System.Collections;
-using HarmonyLib;
-using Hax;
 using UnityEngine;
+using HarmonyLib;
 
 [HarmonyPatch]
 class NoCooldownPatch {

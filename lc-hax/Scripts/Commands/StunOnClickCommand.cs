@@ -1,5 +1,3 @@
-using Hax;
-
 [Command("stunclick")]
 class StunOnClickCommand : ICommand {
     public void Execute(StringArray _) {
