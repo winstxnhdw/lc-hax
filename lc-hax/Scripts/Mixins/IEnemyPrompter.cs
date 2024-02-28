@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using GameNetcodeStuff;
 using Hax;
 using UnityEngine;
+using static UnityEngine.Rendering.DebugUI;
 
 
 enum BehaviourState {
@@ -158,6 +159,8 @@ class EnemyPromptHandler {
         jester.targetPlayer = targetPlayer;
         jester.SetMovingTowardsTargetPlayer(targetPlayer);
         jester.SetBehaviourState(JesterState.OPEN);
+        jester.creatureAnimator.SetBool("poppedOut", true);
+        _ = jester.Reflect().SetInternalField("noPlayersToChaseTimer", 20f);
     }
 
     void HandleEarthLeviathan(SandWormAI earthLeviathan, PlayerControllerB targetPlayer, bool willTeleportEnemy) {

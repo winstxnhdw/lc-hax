@@ -37,6 +37,7 @@ internal class JesterController : IEnemyController<JesterAI> {
     public void UsePrimarySkill(JesterAI enemy) {
         enemy.SetBehaviourState(JesterState.CLOSED);
         this.SetNoPlayerChasetimer(enemy, 0.0f);
+        enemy.mainCollider.isTrigger = false;
     }
 
     public void OnSecondarySkillHold(JesterAI enemy) {
@@ -47,6 +48,7 @@ internal class JesterController : IEnemyController<JesterAI> {
     public void ReleaseSecondarySkill(JesterAI enemy) {
         if (!enemy.IsBehaviourState(JesterState.CRANKING)) return;
         enemy.SetBehaviourState(JesterState.OPEN);
+        enemy.mainCollider.isTrigger = true;
     }
 
     public void Update(JesterAI enemy, bool isAIControlled) => this.SetNoPlayerChasetimer(enemy, 100.0f);
