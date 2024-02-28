@@ -5,6 +5,7 @@ using Unity.Netcode;
 using UnityEngine.AI;
 using GameNetcodeStuff;
 using Hax;
+using UnityEngine.UI;
 
 internal sealed class PossessionMod : MonoBehaviour {
     const float TeleportDoorCooldown = 2.5f;
@@ -205,26 +206,19 @@ internal sealed class PossessionMod : MonoBehaviour {
 
         if (controller.IsAbleToMove(enemy)) {
             controller.OnMovement(enemy, this.CharacterMovement.IsMoving, this.CharacterMovement.IsSprinting);
+            this.UpdateEnemyPosition(enemy);
         }
-
-        if (!controller.IsAbleToMove(enemy) && this.PossessedEnemy != null && this.PossessedEnemy.GetType() == typeof(CentipedeAI)) return;
-
-        this.UpdateEnemyPosition(enemy);
 
         if (controller.IsAbleToRotate(enemy)) {
             this.UpdateEnemyRotation();
         }
-
-
     }
 
     void UpdateCameraPosition(Camera camera, EnemyAI enemy) {
         Vector3 offsets = this.GetCameraOffset();
         Vector3 verticalOffset = offsets.y * Vector3.up;
         Vector3 forwardOffset = offsets.z * camera.transform.forward;
-        Vector3 horizontalOffset = offsets.x * camera.transform.right; // Added line for horizontal offset
-
-        // Combine all offsets
+        Vector3 horizontalOffset = offsets.x * camera.transform.right;
         Vector3 offset = horizontalOffset + verticalOffset + forwardOffset;
         camera.transform.position = enemy.transform.position + offset;
     }
@@ -411,19 +405,18 @@ internal sealed class PossessionMod : MonoBehaviour {
     }
 
     Vector3 GetCameraOffset() {
-        return this.Possession.Enemy is not EnemyAI enemy
-            ? IController.DefaultCamOffsets
-            : !this.EnemyControllers.TryGetValue(enemy.GetType(), out IController controller)
-            ? IController.DefaultCamOffsets
-            : controller.GetCameraOffset(enemy);
+        if (this.Possession.Enemy is not EnemyAI enemy) return IController.DefaultCamOffsets;
+        if (!this.EnemyControllers.TryGetValue(enemy.GetType(), out IController controller)) return IController.DefaultCamOffsets;
+
+        return controller.GetCameraOffset(enemy);
     }
 
     Vector3 GetEnemyPositionOffset() {
-        return this.Possession.Enemy is not EnemyAI enemy
-            ? IController.DefaultEnemyOffset
-            : !this.EnemyControllers.TryGetValue(enemy.GetType(), out IController controller)
-            ? IController.DefaultEnemyOffset
-            : controller.GetEnemyPositionOffset(enemy);
+        if (this.Possession.Enemy is not EnemyAI enemy) return IController.DefaultEnemyOffset;
+        if (!this.EnemyControllers.TryGetValue(enemy.GetType(), out IController controller))
+            return IController.DefaultEnemyOffset;
+
+        return controller.GetEnemyPositionOffset(enemy);
     }
 
 
