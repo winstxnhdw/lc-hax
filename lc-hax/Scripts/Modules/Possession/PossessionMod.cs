@@ -5,7 +5,6 @@ using Unity.Netcode;
 using UnityEngine.AI;
 using GameNetcodeStuff;
 using Hax;
-using UnityEngine.UI;
 
 internal sealed class PossessionMod : MonoBehaviour {
     const float TeleportDoorCooldown = 2.5f;
@@ -406,17 +405,16 @@ internal sealed class PossessionMod : MonoBehaviour {
 
     Vector3 GetCameraOffset() {
         if (this.Possession.Enemy is not EnemyAI enemy) return IController.DefaultCamOffsets;
-        if (!this.EnemyControllers.TryGetValue(enemy.GetType(), out IController controller)) return IController.DefaultCamOffsets;
-
-        return controller.GetCameraOffset(enemy);
+        return !this.EnemyControllers.TryGetValue(enemy.GetType(), out IController controller)
+            ? IController.DefaultCamOffsets
+            : controller.GetCameraOffset(enemy);
     }
 
     Vector3 GetEnemyPositionOffset() {
         if (this.Possession.Enemy is not EnemyAI enemy) return IController.DefaultEnemyOffset;
-        if (!this.EnemyControllers.TryGetValue(enemy.GetType(), out IController controller))
-            return IController.DefaultEnemyOffset;
-
-        return controller.GetEnemyPositionOffset(enemy);
+        return !this.EnemyControllers.TryGetValue(enemy.GetType(), out IController controller)
+            ? IController.DefaultEnemyOffset
+            : controller.GetEnemyPositionOffset(enemy);
     }
 
 
