@@ -234,7 +234,8 @@ internal sealed class PossessionMod : MonoBehaviour {
             : Quaternion.LookRotation(enemy.transform.forward);
 
         // Set the camera rotation without changing its position
-        camera.transform.rotation = newRotation;
+        float RotationLerpSpeed = 0.6f;
+        camera.transform.rotation = Quaternion.Lerp(camera.transform.rotation, newRotation, RotationLerpSpeed);
     }
 
     void UpdateEnemyRotation() {
