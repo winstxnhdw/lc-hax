@@ -19,7 +19,7 @@ class UnlimitedJumpPatch {
         __instance.movementAudio.PlayOneShot(StartOfRound.Instance.playerJumpSFX);
 
         Reflector<PlayerControllerB> playerReflector = __instance.Reflect();
-        
+
         Coroutine? jumpCoroutine =
             playerReflector.SetInternalField("playerSlidingTimer", 0.0f)
                            .SetInternalField("isJumping", true)
