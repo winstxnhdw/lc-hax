@@ -1,5 +1,3 @@
-using Hax;
-
 [Command("god")]
 class GodCommand : ICommand {
     public void Execute(StringArray _) {

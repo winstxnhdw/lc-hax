@@ -3,7 +3,6 @@ using UnityEngine;
 using Steamworks;
 using Steamworks.Data;
 using HarmonyLib;
-using Hax;
 
 [HarmonyPatch(typeof(GameNetworkManager), nameof(GameNetworkManager.JoinLobby))]
 class LobbyDependencyPatch {
