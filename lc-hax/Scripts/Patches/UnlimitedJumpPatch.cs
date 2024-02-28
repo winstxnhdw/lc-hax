@@ -10,7 +10,7 @@ using UnityEngine;
 class UnlimitedJumpPatch {
     [HarmonyPatch("Jump_performed")]
     static bool Prefix(PlayerControllerB __instance) {
-        if (!Setting.UnlimitedJump) return true;
+        if (!Setting.EnableUnlimitedJump) return true;
         if (!__instance.IsSelf()) return true;
         if (__instance.quickMenuManager.isMenuOpen) return true;
         if (!__instance.isPlayerControlled) return true;
