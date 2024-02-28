@@ -10,9 +10,14 @@ internal class MaskedPlayerController : IEnemyController<MaskedPlayerEnemy> {
         enemy.Reflect().SetInternalField("startingKillAnimationLocalClient", value);
 
     bool GetinKillAnimation(MaskedPlayerEnemy enemy) => enemy.Reflect().GetInternalField<bool>("inKillAnimation");
+
     public void UsePrimarySkill(MaskedPlayerEnemy enemy) => enemy.SetHandsOutServerRpc(!enemy.creatureAnimator.GetBool("HandsOut"));
 
     public void UseSecondarySkill(MaskedPlayerEnemy enemy) => enemy.SetCrouchingServerRpc(!enemy.creatureAnimator.GetBool("Crouching"));
+
+    public bool IsAbleToMove(EnemyAI enemy) => enemy.Reflect().GetInternalField<bool>("inKillAnimation") ? false : true;
+
+    public bool IsAbleToRotate(EnemyAI enemy) => enemy.Reflect().GetInternalField<bool>("inKillAnimation") ? false : true;
 
     public float InteractRange(MaskedPlayerEnemy _) => 1.0f;
 
