@@ -59,6 +59,8 @@ sealed class ESPMod : MonoBehaviour {
             if (grabbableObject == null) return;
             Vector3 rendererCentrePoint = camera.WorldToEyesPoint(grabbableObject.transform.position);
 
+            if (PossessionMod.Instance is { IsPossessed: true } && !(PossessionMod.Instance is { PossessedEnemy: HoarderBugAI } || PossessionMod.Instance is { PossessedEnemy: BaboonBirdAI })) return;
+            
             if (rendererCentrePoint.z <= 2.0f) {
                 return;
             }
