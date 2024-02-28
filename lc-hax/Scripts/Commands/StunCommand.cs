@@ -1,5 +1,5 @@
-using Hax;
 using UnityEngine;
+using Hax;
 
 [Command("stun")]
 class StunCommand : ICommand, IStun {
