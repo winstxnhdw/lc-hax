@@ -8,6 +8,11 @@ public static class PlayerIsTargetablePatch {
         overrideInsideFactoryCheck = true;
         cannotBeInShip = false;
 
+        if (PossessionMod.Instance is { IsPossessed: true } && PossessionMod.Instance.PossessedEnemy == __instance) {
+            __result = true;
+            return false;
+        }
+
         if (SkipTargetCheck(playerScript, __instance)) {
             __result = true;
             return false;
