@@ -1,5 +1,3 @@
-using Hax;
-
 class DebugCommand(ICommand command) : ICommand {
     ICommand Command { get; } = command;
 

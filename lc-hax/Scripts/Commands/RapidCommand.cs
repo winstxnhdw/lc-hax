@@ -1,5 +1,3 @@
-using Hax;
-
 [Command("rapid")]
 class RapidCommand : ICommand {
     public void Execute(StringArray _) {
