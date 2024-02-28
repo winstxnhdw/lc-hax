@@ -109,6 +109,7 @@ sealed class ESPMod : MonoBehaviour {
 
         Helper.Enemies.WhereIsNotNull().ForEach(enemy => {
             if (enemy.isEnemyDead) return;
+            if (PossessionMod.Instance is { IsPossessed: true }) return;
             if (enemy is DocileLocustBeesAI or DoublewingAI) return;
 
             Renderer? nullableRenderer = enemy is RedLocustBees or TestEnemy
