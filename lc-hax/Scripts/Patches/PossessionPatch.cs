@@ -17,8 +17,10 @@ class PossessionPatch {
         if (PossessionMod.Instance is null or { IsPossessed: true }) {
             ___holdButtonToEndGameEarlyHoldTime = 0.0f;
             __instance.holdButtonToEndGameEarlyMeter?.gameObject.SetActive(false);
-    }
+        }
 
-    [HarmonyPatch(typeof(TimeOfDay), nameof(TimeOfDay.VoteShipToLeaveEarly))]
-    static bool Prefix() => PossessionMod.Instance is null or { IsPossessed: false };
-}
+        [HarmonyPatch(typeof(TimeOfDay), nameof(TimeOfDay.VoteShipToLeaveEarly))]
+        static bool Prefix() {
+            return PossessionMod.Instance is null or { IsPossessed: false };
+        }
+    }
