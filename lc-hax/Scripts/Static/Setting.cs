@@ -11,6 +11,6 @@ static class Setting {
     internal static bool EnablePhantom { get; set; } = false;
     internal static bool EnableFakeDeath { get; set; } = false;
     internal static bool EnableEavesdrop { get; set; } = false;
-    internal static bool EnableUnlimitedJump { get; set; } = false;
+    internal static bool EnableUnlimitedJump { get; set; } = true;
     internal static bool InvertYAxis => IngamePlayerSettings.Instance.settings.invertYAxis;
 }
