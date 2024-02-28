@@ -206,17 +206,12 @@ internal sealed class PossessionMod : MonoBehaviour {
 
         if (controller.IsAbleToMove(enemy)) {
             controller.OnMovement(enemy, this.CharacterMovement.IsMoving, this.CharacterMovement.IsSprinting);
+            this.UpdateEnemyPosition(enemy);
         }
-
-        if (!controller.IsAbleToMove(enemy) && PossessedEnemy != null && PossessedEnemy.GetType() == typeof(CentipedeAI)) return;
-
-        this.UpdateEnemyPosition(enemy);
 
         if (controller.IsAbleToRotate(enemy)) {
             this.UpdateEnemyRotation();
         }
-
-        
     }
 
     void UpdateCameraPosition(Camera camera, EnemyAI enemy) {
