@@ -83,7 +83,7 @@ sealed class TriggerMod : MonoBehaviour, IEnemyPrompter {
                 break;
             }
 
-            if (collider.GetComponentInParent<EnemyAI>().Unfake() is EnemyAI enemy && Setting.EnablePhantom) {
+            if (collider.GetComponentInParent<EnemyAI>().Unfake() is EnemyAI enemy && Setting.EnablePhantom && PossessionMod.Instance?.PossessedEnemy != enemy) {
                 PossessionMod.Instance?.Possess(enemy);
                 break;
             }

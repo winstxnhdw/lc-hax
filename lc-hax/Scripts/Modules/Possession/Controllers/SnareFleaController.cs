@@ -18,12 +18,17 @@ internal class SnareFleaController : IEnemyController<CentipedeAI> {
     public Vector3 GetCameraOffset(CentipedeAI enemy) {
         float targetCamOffsetY, targetCamOffsetZ;
 
-        if (!enemy.IsBehaviourState(SnareFleaState.HIDING)) {
+        if (!enemy.IsBehaviourState(SnareFleaState.HIDING) && enemy.clingingToPlayer is null) { // Is Roaming
             this.transitionSpeed = 8.0f;
             targetCamOffsetY = 2f;
             targetCamOffsetZ = -4f;
         }
-        else {
+        else if (enemy.clingingToPlayer is not null) { // On Player
+            this.transitionSpeed = 4.5f;
+            targetCamOffsetY = 0f;
+            targetCamOffsetZ = -2f;
+        }
+        else { // On Ceiling
             this.transitionSpeed = 2.5f;
             targetCamOffsetY = -0.3f;
             targetCamOffsetZ = 0f;
