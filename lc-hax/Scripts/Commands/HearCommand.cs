@@ -1,5 +1,3 @@
-using Hax;
-
 [Command("hear")]
 class HearCommand : ICommand {
     public void Execute(StringArray args) {

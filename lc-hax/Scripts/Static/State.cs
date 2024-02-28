@@ -1,5 +1,3 @@
-namespace Hax;
-
 internal static class State {
     internal static char CommandPrefix { get; set; } = '/';
     internal static int ShovelHitForce { get; set; } = 1;

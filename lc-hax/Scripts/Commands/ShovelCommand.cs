@@ -1,5 +1,3 @@
-using Hax;
-
 [Command("shovel")]
 class ShovelCommand : ICommand {
     public void Execute(StringArray args) {
