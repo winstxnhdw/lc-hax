@@ -54,7 +54,16 @@ internal class NutcrackerController : IEnemyController<NutcrackerEnemyAI> {
         this.InSentryMode = false;
     }
 
-    public void UseSpecialAbility(NutcrackerEnemyAI enemy) => enemy.ReloadGunServerRpc();
+    public void UseSpecialAbility(NutcrackerEnemyAI enemy) {
+        enemy.Reflect().SetInternalField("timesSeeingSamePlayer", 3);
+        int SaveHP = enemy.enemyHP;
+        enemy.enemyHP = 1;
+        int SaveShellsLoaded = enemy.gun.shellsLoaded;
+        enemy.gun.shellsLoaded = 1;
+        enemy.AimGunServerRpc(enemy.transform.position);
+        enemy.enemyHP = SaveHP;
+        enemy.gun.shellsLoaded = SaveShellsLoaded;
+    }
 
     public void OnUnpossess(NutcrackerEnemyAI enemy) => this.InSentryMode = false;
 
