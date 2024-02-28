@@ -19,18 +19,13 @@ class PossessionPatch {
         if (PossessionMod.Instance is null or { IsPossessed: true }) {
             ___holdButtonToEndGameEarlyHoldTime = 0.0f;
             __instance.holdButtonToEndGameEarlyMeter?.gameObject.SetActive(false);
-            __instance.RemoveSpectateUI();
-            ___hasLoadedSpectateUI = true;
             __instance.HUDAnimator.SetTrigger("hideHud");
             __instance.scanInfoAnimator.SetBool("display", false);
             ReloadUI = true;
-        }
-        else if (ReloadUI) {
-            ___hasLoadedSpectateUI = false;
+        } else if (ReloadUI) {
             __instance.scanInfoAnimator.SetBool("display", true);
             ReloadUI = false;
-        }
-        else {
+        } else {
             __instance.HUDAnimator.SetTrigger("revealHud");
         }
     }
