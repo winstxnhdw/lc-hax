@@ -55,17 +55,21 @@ internal class NutcrackerController : IEnemyController<NutcrackerEnemyAI> {
     }
 
     public void UseSpecialAbility(NutcrackerEnemyAI enemy) {
+        bool reloadingGun = enemy.Reflect().GetInternalField<bool>("reloadingGun");
         int SaveTimesSeeingSamePlayer = enemy.Reflect().GetInternalField<int>("timesSeeingSamePlayer");
         int SaveHP = enemy.enemyHP;
         int SaveShellsLoaded = enemy.gun.shellsLoaded;
-        enemy.Reflect().SetInternalField("timesSeeingSamePlayer", 3);
-        enemy.gun.shellsLoaded = 1;
-        enemy.enemyHP = 1;
+        if (enemy.IsBehaviourState(NutcrackerState.WALKING)) {
+            enemy.Reflect().SetInternalField("timesSeeingSamePlayer", 3);
+            enemy.gun.shellsLoaded = 1;
+            enemy.enemyHP = 1;
+        }
         enemy.AimGunServerRpc(enemy.transform.position);
         enemy.Reflect().SetInternalField("timesSeeingSamePlayer", SaveTimesSeeingSamePlayer);
         enemy.enemyHP = SaveHP;
         enemy.gun.shellsLoaded = SaveShellsLoaded;
     }
+    
     public void OnUnpossess(NutcrackerEnemyAI enemy) => this.InSentryMode = false;
 
     public string GetPrimarySkillName(NutcrackerEnemyAI enemy) => enemy.gun is null ? "" : "Fire";
