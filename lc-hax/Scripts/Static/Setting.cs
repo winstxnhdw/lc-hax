@@ -1,5 +1,3 @@
-namespace Hax;
-
 static class Setting {
     internal static bool EnableGodMode { get; set; } = false;
     internal static bool EnableBlockCredits { get; set; } = false;

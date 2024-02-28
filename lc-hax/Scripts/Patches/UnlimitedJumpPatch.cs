@@ -6,7 +6,7 @@ using HarmonyLib;
 using Hax;
 using UnityEngine;
 
-[HarmonyPatch(typeof(PlayerControllerB, "Jump_performed"))]
+[HarmonyPatch(typeof(PlayerControllerB), "Jump_performed")]
 class UnlimitedJumpPatch {
     static bool Prefix(PlayerControllerB __instance) {
         if (!Setting.EnableUnlimitedJump || !__instance.IsSelf()) return true;
@@ -19,8 +19,8 @@ class UnlimitedJumpPatch {
         Reflector<PlayerControllerB> playerReflector = __instance.Reflect();
 
         Coroutine? jumpCoroutine =
-            playerReflector.SetInternalField("playerSlidingTimer", 0.0f)
-                           .SetInternalField("isJumping", true)
+            playerReflector.SetInternalField("playerSlidingTimer", 0.0f)?
+                           .SetInternalField("isJumping", true)?
                            .GetInternalField<Coroutine>("jumpCoroutine");
 
         if (jumpCoroutine is not null) {
