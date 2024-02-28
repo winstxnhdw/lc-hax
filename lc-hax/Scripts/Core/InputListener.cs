@@ -17,10 +17,11 @@ class InputListener : MonoBehaviour {
     internal static event Action? OnLeftBracketPress;
     internal static event Action? OnRightBracketPress;
     internal static event Action? OnBackslashPress;
-    internal static event Action? OnZPress;
     internal static event Action? OnDelPress;
+    internal static event Action? OnZPress;
     internal static event Action? OnXPress;
     internal static event Action? OnNPress;
+    internal static event Action? OnQPress;
     internal static event Action? OnUpArrowPress;
     internal static event Action? OnDownArrowPress;
     internal static event Action? OnF4Press;
@@ -45,6 +46,7 @@ class InputListener : MonoBehaviour {
         (() => Keyboard.current[Key.Z].wasPressedThisFrame, () => InputListener.OnZPress?.Invoke()),
         (() => Keyboard.current[Key.X].wasPressedThisFrame, () => InputListener.OnXPress?.Invoke()),
         (() => Keyboard.current[Key.N].wasPressedThisFrame, () => InputListener.OnNPress?.Invoke()),
+        (() => Keyboard.current[Key.Q].wasPressedThisFrame, () => InputListener.OnQPress?.Invoke()),
         (() => Keyboard.current[Key.UpArrow].wasPressedThisFrame, () => InputListener.OnUpArrowPress?.Invoke()),
         (() => Keyboard.current[Key.DownArrow].wasPressedThisFrame, () => InputListener.OnDownArrowPress?.Invoke()),
         (() => Keyboard.current[Key.F4].wasPressedThisFrame, () => InputListener.OnF4Press?.Invoke()),

@@ -42,7 +42,10 @@ internal sealed class PossessionMod : MonoBehaviour {
         { typeof(LassoManAI), new LassoManController() },
         { typeof(CrawlerAI), new CrawlerController() },
         { typeof(SandSpiderAI), new BunkerSpiderController() },
-        { typeof(RedLocustBees), new CircuitBeesController() }
+        { typeof(RedLocustBees), new CircuitBeesController() },
+        { typeof(DressGirlAI), new DressGirlController() },
+        { typeof(DoublewingAI), new DoublewingBirdController() },
+        { typeof(DocileLocustBeesAI), new DocileLocustBeesController() }
     };
 
     float DoorCooldownRemaining { get; set; } = 0.0f;
@@ -75,6 +78,7 @@ internal sealed class PossessionMod : MonoBehaviour {
         InputListener.OnLeftButtonPress += this.UsePrimarySkill;
         InputListener.OnRightButtonPress += this.UseSecondarySkill;
         InputListener.OnRightButtonRelease += this.ReleaseSecondarySkill;
+        InputListener.OnQPress += this.UseSpecialAbility;
         InputListener.OnRightButtonHold += this.OnRightMouseButtonHold;
         InputListener.OnDelPress += this.KillEnemyAndUnposses;
         InputListener.OnF9Press += this.ToggleAIControl;
@@ -88,6 +92,7 @@ internal sealed class PossessionMod : MonoBehaviour {
         InputListener.OnLeftButtonPress -= this.UsePrimarySkill;
         InputListener.OnRightButtonPress -= this.UseSecondarySkill;
         InputListener.OnRightButtonRelease -= this.ReleaseSecondarySkill;
+        InputListener.OnQPress -= this.UseSpecialAbility;
         InputListener.OnRightButtonHold -= this.OnRightMouseButtonHold;
         InputListener.OnDelPress -= this.KillEnemyAndUnposses;
         InputListener.OnF9Press -= this.ToggleAIControl;
@@ -199,9 +204,12 @@ internal sealed class PossessionMod : MonoBehaviour {
         }
 
         if (controller.IsAbleToMove(enemy)) {
-            this.UpdateEnemyPosition(enemy);
             controller.OnMovement(enemy, this.CharacterMovement.IsMoving, this.CharacterMovement.IsSprinting);
         }
+
+        if (!controller.IsAbleToMove(enemy) && PossessedEnemy != null && PossessedEnemy.GetType() == typeof(CentipedeAI)) return;
+
+        this.UpdateEnemyPosition(enemy);
 
         if (controller.IsAbleToRotate(enemy)) {
             this.UpdateEnemyRotation();
@@ -227,7 +235,8 @@ internal sealed class PossessionMod : MonoBehaviour {
             : Quaternion.LookRotation(enemy.transform.forward);
 
         // Set the camera rotation without changing its position
-        camera.transform.rotation = newRotation;
+        float RotationLerpSpeed = 0.6f;
+        camera.transform.rotation = Quaternion.Lerp(camera.transform.rotation, newRotation, RotationLerpSpeed);
     }
 
     void UpdateEnemyRotation() {
@@ -445,5 +454,12 @@ internal sealed class PossessionMod : MonoBehaviour {
         if (!this.EnemyControllers.TryGetValue(enemy.GetType(), out IController controller)) return;
 
         controller.ReleaseSecondarySkill(enemy);
+    }
+
+    void UseSpecialAbility() {
+        if (this.Possession.Enemy is not EnemyAI enemy) return;
+        if (!this.EnemyControllers.TryGetValue(enemy.GetType(), out IController controller)) return;
+
+        controller.UseSpecialAbility(enemy);
     }
 }
