@@ -94,7 +94,7 @@ class EnemyPromptHandler {
             playerPosition,
             playerPosition + (targetPlayer.transform.forward * 5.0f)
         );
-        
+
         _ = bunkerSpider.Reflect()
                         .SetInternalField("watchFromDistance", false)?
                         .SetInternalField("chaseTimer", float.MaxValue);
