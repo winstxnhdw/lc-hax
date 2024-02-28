@@ -404,15 +404,17 @@ internal sealed class PossessionMod : MonoBehaviour {
     }
 
     Vector3 GetCameraOffset() {
-        if (this.Possession.Enemy is not EnemyAI enemy) return IController.DefaultCamOffsets;
-        return !this.EnemyControllers.TryGetValue(enemy.GetType(), out IController controller)
+        return this.Possession.Enemy is not EnemyAI enemy
+            ? IController.DefaultCamOffsets
+            : !this.EnemyControllers.TryGetValue(enemy.GetType(), out IController controller)
             ? IController.DefaultCamOffsets
             : controller.GetCameraOffset(enemy);
     }
 
     Vector3 GetEnemyPositionOffset() {
-        if (this.Possession.Enemy is not EnemyAI enemy) return IController.DefaultEnemyOffset;
-        return !this.EnemyControllers.TryGetValue(enemy.GetType(), out IController controller)
+        return this.Possession.Enemy is not EnemyAI enemy
+            ? IController.DefaultEnemyOffset
+            : !this.EnemyControllers.TryGetValue(enemy.GetType(), out IController controller)
             ? IController.DefaultEnemyOffset
             : controller.GetEnemyPositionOffset(enemy);
     }
