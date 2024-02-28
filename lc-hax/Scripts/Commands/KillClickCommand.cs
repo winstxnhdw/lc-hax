@@ -1,5 +1,3 @@
-using Hax;
-
 [Command("killclick")]
 class KillClickCommand : ICommand {
     public void Execute(StringArray _) {

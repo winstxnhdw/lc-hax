@@ -1,5 +1,3 @@
-using Hax;
-
 [Command("beta")]
 class BetaCommand : ICommand {
     public void Execute(StringArray _) {
