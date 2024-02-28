@@ -139,6 +139,7 @@ The complete feature set includes the following.
 | Get coordinates               | `/xyz`                                           |
 | Toggle God mode               | `/god`                                           |
 | Toggle NoClip                 | `/noclip`                                        |
+| Toggle unlimited Jump         | `/jump`                                          |
 | Toggle rapid item usage       | `/rapid`                                         |
 | Eavesdrop on all players      | `/hear`                                          |
 | Fake player death             | `/fakedeath`                                     |
