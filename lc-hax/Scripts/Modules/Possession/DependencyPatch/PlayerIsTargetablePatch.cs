@@ -9,11 +9,6 @@ public static class PlayerIsTargetablePatch {
             if (playerScript.IsDead()) {
                 return true;
             }
-
-            if (playerScript.inAnimationWithEnemy != null) {
-                return true;
-            }
-
             __result = true;
             return false;
         }
