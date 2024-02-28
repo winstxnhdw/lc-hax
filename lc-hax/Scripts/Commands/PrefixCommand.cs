@@ -1,5 +1,3 @@
-using Hax;
-
 [Command("prefix")]
 class PrefixCommand : ICommand {
     public void Execute(StringArray args) {
