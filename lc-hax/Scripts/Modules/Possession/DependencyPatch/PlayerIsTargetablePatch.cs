@@ -4,25 +4,25 @@ using Hax;
 
 [HarmonyPatch(typeof(EnemyAI), nameof(EnemyAI.PlayerIsTargetable))]
 public static class PlayerIsTargetablePatch {
-    public static bool Prefix(ref bool __result, EnemyAI __instance, PlayerControllerB playerScript, ref bool cannotBeInShip, ref bool overrideInsideFactoryCheck) {
-        if (playerScript.IsDead()) {
-            return true;
-        }
-        if (playerScript.inAnimationWithEnemy != null) {
-            return true;
-        }
-
-        overrideInsideFactoryCheck = true;
-        cannotBeInShip = false;
-
+    public static bool Prefix(ref bool __result, EnemyAI __instance, PlayerControllerB playerScript,
+        ref bool cannotBeInShip, ref bool overrideInsideFactoryCheck) {
         if (PossessionMod.Instance is { IsPossessed: true } && PossessionMod.Instance.PossessedEnemy == __instance) {
+            if (playerScript.IsDead()) {
+                return true;
+            }
+
+            if (playerScript.inAnimationWithEnemy != null) {
+                return true;
+            }
+
             __result = true;
             return false;
         }
+
 
         if (__instance.isOutside != __instance.enemyType.isOutsideEnemy) {
-            __result = true;
-            return false;
+            overrideInsideFactoryCheck = true;
+            cannotBeInShip = false;
         }
 
         return true;
