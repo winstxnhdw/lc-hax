@@ -104,14 +104,4 @@ internal static partial class Helper {
 
         return enemyAI;
     }
-
-    internal static bool IsLocalPlayerAboutToGetKilledByEnemy(int PlayerID) {
-        PlayerControllerB? player = Helper.GetPlayerAboutToKilledByEnemy(PlayerID);
-        return player != null && player.IsSelf();
-    }
-
-    internal static PlayerControllerB? GetPlayerAboutToKilledByEnemy(int playerObjectID) {
-        PlayerControllerB[] players = Helper.Players;
-        return players.First(player => (int)player.playerClientId == playerObjectID);
-    }
 }
