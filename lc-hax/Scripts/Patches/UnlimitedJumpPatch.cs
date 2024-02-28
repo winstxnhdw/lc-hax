@@ -15,11 +15,11 @@ class UnlimitedJumpPatch {
         if (__instance is { inSpecialInteractAnimation: true, isTypingChat: true, isPlayerControlled: false }) return true;
         if (__instance.quickMenuManager.isMenuOpen) return true;
 
-        Reflector<PlayerControllerB> playerReflector = __instance.Reflect();
-
         __instance.sprintMeter = Mathf.Clamp(__instance.sprintMeter - 0.08f, 0.0f, 1.0f);
         __instance.movementAudio.PlayOneShot(StartOfRound.Instance.playerJumpSFX);
 
+        Reflector<PlayerControllerB> playerReflector = __instance.Reflect();
+        
         Coroutine? jumpCoroutine =
             playerReflector.SetInternalField("playerSlidingTimer", 0.0f)
                            .SetInternalField("isJumping", true)
@@ -29,7 +29,7 @@ class UnlimitedJumpPatch {
             __instance.StopCoroutine(jumpCoroutine);
         }
         // create a new coroutine to handle the jump
-        _ = player.SetInternalField("jumpCoroutine", __instance.StartCoroutine(playerReflector.InvokeInternalMethod<IEnumerator>("PlayerJump")));
+        _ = playerReflector.SetInternalField("jumpCoroutine", __instance.StartCoroutine(playerReflector.InvokeInternalMethod<IEnumerator>("PlayerJump")));
         return false;
     }
 }
