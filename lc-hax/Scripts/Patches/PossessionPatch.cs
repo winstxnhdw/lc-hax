@@ -22,10 +22,12 @@ class PossessionPatch {
             __instance.HUDAnimator.SetTrigger("hideHud");
             __instance.scanInfoAnimator.SetBool("display", false);
             ReloadUI = true;
-        } else if (ReloadUI) {
+        }
+        else if (ReloadUI) {
             __instance.scanInfoAnimator.SetBool("display", true);
             ReloadUI = false;
-        } else {
+        }
+        else {
             __instance.HUDAnimator.SetTrigger("revealHud");
         }
     }
