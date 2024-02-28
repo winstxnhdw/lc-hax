@@ -13,9 +13,9 @@ internal class EarthLeviathanController : IEnemyController<SandWormAI> {
         enemy.StartEmergeAnimation();
     }
 
-    public bool IsAbleToMove(SandWormAI enemy) => enemy.inSpecialAnimation ? false : true;
+    public bool IsAbleToMove(SandWormAI enemy) => !enemy.inSpecialAnimation;
 
-    public bool IsAbleToRotate(SandWormAI enemy) => enemy.inSpecialAnimation ? false : true;
+    public bool IsAbleToRotate(SandWormAI enemy) => !enemy.inSpecialAnimation;
 
     public string GetSecondarySkillName(SandWormAI _) => "Emerge";
 

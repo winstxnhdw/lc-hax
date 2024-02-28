@@ -157,11 +157,9 @@ class EnemyPromptHandler {
         dressGirl.SetBehaviourState(BehaviourState.IDLE);
     }
 
-        void HandleDoublewingBird(DoublewingAI doublewingBird, PlayerControllerB targetPlayer, bool willTeleportEnemy) {
-        this.TeleportEnemyToPlayer(doublewingBird, targetPlayer, willTeleportEnemy, true);
-    }
+    void HandleDoublewingBird(DoublewingAI doublewingBird, PlayerControllerB targetPlayer, bool willTeleportEnemy) => this.TeleportEnemyToPlayer(doublewingBird, targetPlayer, willTeleportEnemy, true);
 
-        void HandleDocileLocustBees(DocileLocustBeesAI docileLocustBees, PlayerControllerB targetPlayer, bool willTeleportEnemy) {
+    void HandleDocileLocustBees(DocileLocustBeesAI docileLocustBees, PlayerControllerB targetPlayer, bool willTeleportEnemy) {
         this.TeleportEnemyToPlayer(docileLocustBees, targetPlayer, willTeleportEnemy, true);
         docileLocustBees.SetBehaviourState(BehaviourState.IDLE);
     }
