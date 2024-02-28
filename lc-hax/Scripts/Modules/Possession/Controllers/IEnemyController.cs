@@ -70,7 +70,7 @@ internal interface IEnemyController<T> : IController where T : EnemyAI {
 
     void ReleaseSecondarySkill(T enemy) { }
 
-    void UseSpecialAbility(T enemy) {  }
+    void UseSpecialAbility(T enemy) { }
 
     void OnMovement(T enemy, bool isMoving, bool isSprinting) { }
 

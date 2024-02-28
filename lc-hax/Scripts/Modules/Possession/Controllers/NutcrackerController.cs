@@ -36,7 +36,7 @@ internal class NutcrackerController : IEnemyController<NutcrackerEnemyAI> {
 
     public void UsePrimarySkill(NutcrackerEnemyAI enemy) {
         bool reloadingGun = enemy.Reflect().GetInternalField<bool>("reloadingGun");
-        if (enemy.gun is not ShotgunItem shotgun || enemy.gun.shellsLoaded <= 0 || reloadingGun ) return;
+        if (enemy.gun is not ShotgunItem shotgun || enemy.gun.shellsLoaded <= 0 || reloadingGun) return;
 
         shotgun.gunShootAudio.volume = 0.25f;
         enemy.FireGunServerRpc();
