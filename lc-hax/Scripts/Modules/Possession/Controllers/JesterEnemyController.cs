@@ -31,8 +31,6 @@ internal class JesterController : IEnemyController<JesterAI> {
     }
 
     void SetNoPlayerChasetimer(JesterAI enemy, float value) => enemy.Reflect().SetInternalField("noPlayersToChaseTimer", value);
-    bool GetinKillAnimation(JesterAI enemy) => enemy.Reflect().GetInternalField<bool>("inKillAnimation");
-
 
     public void UsePrimarySkill(JesterAI enemy) {
         enemy.SetBehaviourState(JesterState.CLOSED);

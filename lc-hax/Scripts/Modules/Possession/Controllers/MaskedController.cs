@@ -6,11 +6,6 @@ internal class MaskedPlayerController : IEnemyController<MaskedPlayerEnemy> {
 
     public Vector3 GetCameraOffset(MaskedPlayerEnemy enemy) => this.camOffset;
 
-    void SetstartingKillAnimationLocalClient(MaskedPlayerEnemy enemy, bool value) =>
-        enemy.Reflect().SetInternalField("startingKillAnimationLocalClient", value);
-
-    bool GetinKillAnimation(MaskedPlayerEnemy enemy) => enemy.Reflect().GetInternalField<bool>("inKillAnimation");
-
     public void UsePrimarySkill(MaskedPlayerEnemy enemy) => enemy.SetHandsOutServerRpc(!enemy.creatureAnimator.GetBool("HandsOut"));
 
     public void UseSecondarySkill(MaskedPlayerEnemy enemy) => enemy.SetCrouchingServerRpc(!enemy.creatureAnimator.GetBool("Crouching"));
