@@ -3,7 +3,22 @@ using GameNetcodeStuff;
 using Hax;
 using UnityEngine;
 
-sealed class SaneMod : MonoBehaviour {
+internal sealed class SaneMod : MonoBehaviour {
+
+    internal static SaneMod? Instance { get; private set; }
+
+    void Awake() {
+        if (SaneMod.Instance != null) {
+            Destroy(this);
+            return;
+        }
+
+        SaneMod.Instance = this;
+    }
+
+    Coroutine? SaneModCoroutine { get; set; }
+
+
     IEnumerator SetSanity(object[] args) {
         WaitForEndOfFrame waitForEndOfFrame = new();
 
@@ -23,5 +38,19 @@ sealed class SaneMod : MonoBehaviour {
         }
     }
 
-    void Start() => this.StartResilientCoroutine(this.SetSanity);
+    internal void StartRoutine() => this.SaneModCoroutine ??= this.StartResilientCoroutine(this.SetSanity);
+
+    internal void OnStopRoutine() {
+        if (this.SaneModCoroutine != null) {
+            this.StopCoroutine(this.SaneModCoroutine);
+            this.SaneModCoroutine = null;
+        }
+    }
+
+    public void Start() => this.StartRoutine();
+
+    public void OnDisable() => this.OnStopRoutine();
+
+    public void OnEnable() => this.StartRoutine();
+    public void OnDestroy() => this.OnStopRoutine();
 }

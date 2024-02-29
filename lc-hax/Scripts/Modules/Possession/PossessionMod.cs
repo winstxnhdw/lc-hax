@@ -44,7 +44,6 @@ internal sealed class PossessionMod : MonoBehaviour {
         { typeof(CrawlerAI), new CrawlerController() },
         { typeof(SandSpiderAI), new BunkerSpiderController() },
         { typeof(RedLocustBees), new CircuitBeesController() },
-        { typeof(DressGirlAI), new DressGirlController() },
         { typeof(DoublewingAI), new DoublewingBirdController() },
         { typeof(DocileLocustBeesAI), new DocileLocustBeesController() }
     };
@@ -205,15 +204,13 @@ internal sealed class PossessionMod : MonoBehaviour {
         }
 
         if (controller.IsAbleToMove(enemy)) {
-            this.UpdateEnemyPosition(enemy);
             controller.OnMovement(enemy, this.CharacterMovement.IsMoving, this.CharacterMovement.IsSprinting);
+            this.UpdateEnemyPosition(enemy);
         }
 
         if (controller.IsAbleToRotate(enemy)) {
             this.UpdateEnemyRotation();
         }
-
-        
     }
 
     void UpdateCameraPosition(Camera camera, EnemyAI enemy) {
@@ -231,7 +228,8 @@ internal sealed class PossessionMod : MonoBehaviour {
             : Quaternion.LookRotation(enemy.transform.forward);
 
         // Set the camera rotation without changing its position
-        camera.transform.rotation = newRotation;
+        float RotationLerpSpeed = 0.6f;
+        camera.transform.rotation = Quaternion.Lerp(camera.transform.rotation, newRotation, RotationLerpSpeed);
     }
 
     void UpdateEnemyRotation() {
@@ -299,6 +297,7 @@ internal sealed class PossessionMod : MonoBehaviour {
             agent.updateRotation = true;
             agent.isStopped = false;
             this.UpdateEnemyPosition(enemy);
+            this.SetAIControl(true);
             _ = enemy.agent.Warp(enemy.transform.position);
             enemy.SyncPositionToClients();
         }

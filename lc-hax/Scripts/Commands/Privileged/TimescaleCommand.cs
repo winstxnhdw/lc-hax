@@ -1,4 +1,3 @@
-using Hax;
 using UnityEngine;
 
 [PrivilegedCommand("timescale")]

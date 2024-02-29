@@ -1,4 +1,3 @@
-using Hax;
 using UnityEngine;
 using UnityEngine.InputSystem;
 

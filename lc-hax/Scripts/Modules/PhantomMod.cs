@@ -3,9 +3,15 @@ using Hax;
 using UnityEngine;
 
 sealed class PhantomMod : MonoBehaviour {
+
+    internal static PhantomMod? Instance { get; private set; }
     bool IsShiftHeld { get; set; } = false;
     bool EnabledPossession { get; set; } = false;
     int CurrentSpectatorIndex { get; set; } = 0;
+
+    void Awake() {
+        PhantomMod.Instance = this;
+    }
 
     void OnEnable() {
         InputListener.OnShiftButtonHold += this.HoldShift;
@@ -78,21 +84,6 @@ sealed class PhantomMod : MonoBehaviour {
     }
 
     void PhantomEnabled(PlayerControllerB player, Camera camera) {
-        if (player.gameplayCamera is not Camera gameplayCamera) return;
-        if (Helper.StartOfRound is not StartOfRound round) return;
-
-        if (!player.IsDead()) {
-            gameplayCamera.enabled = true;
-            camera.transform.position = gameplayCamera.transform.position;
-            camera.transform.rotation = gameplayCamera.transform.rotation;
-        }
-        else {
-            round.spectateCamera.enabled = true;
-            camera.transform.position = round.spectateCamera.transform.position;
-            camera.transform.rotation = round.spectateCamera.transform.rotation;
-        }
-
-
         if (!camera.TryGetComponent(out KeyboardMovement keyboard)) {
             keyboard = camera.gameObject.AddComponent<KeyboardMovement>();
         }
@@ -106,21 +97,14 @@ sealed class PhantomMod : MonoBehaviour {
     }
 
     void PhantomDisabled(PlayerControllerB player, Camera camera) {
-        if (player.cameraContainerTransform is null) return;
         if (player.gameplayCamera is not Camera gameplayCamera) return;
         if (Helper.StartOfRound is not StartOfRound round) return;
+        if(HaxCamera.Instance is not HaxCamera haxCamera) return;
+        if(haxCamera.HaxCamContainer is not GameObject container) return;
+
         if (this.IsShiftHeld) {
-            player.TeleportPlayer(camera.transform.position);
+            player.TeleportPlayer(container.transform.position);
         }
-
-        if (!player.IsDead()) {
-            gameplayCamera.enabled = true;
-        }
-        else {
-            round.spectateCamera.enabled = true;
-        }
-
-
         if (PossessionMod.Instance is PossessionMod { IsPossessed: true } possession) {
             possession.Unpossess();
         }
@@ -129,24 +113,32 @@ sealed class PhantomMod : MonoBehaviour {
     void TogglePhantom() {
         if (Helper.LocalPlayer is not PlayerControllerB player) return;
         if (HaxCamera.Instance is not HaxCamera haxCamera) return;
+        if (haxCamera.GetCamera() is not Camera camera) return;
         Setting.EnablePhantom = !Setting.EnablePhantom;
-        Camera? customCam = haxCamera.GetCamera(Setting.EnablePhantom);
-        if (customCam is null) Setting.EnablePhantom = false;
-
-
         player.enabled = !player.IsDead() || !Setting.EnablePhantom;
         player.playerBodyAnimator.enabled = !Setting.EnablePhantom;
         player.thisController.enabled = !Setting.EnablePhantom;
         player.isFreeCamera = Setting.EnablePhantom;
-        if (customCam != null) {
-            if (Setting.EnablePhantom) {
-                this.PhantomEnabled(player, customCam);
-            }
-
-            else {
-                this.PhantomDisabled(player, customCam);
-                haxCamera.DestroyCustomCam();
-            }
+        if (Setting.EnablePhantom) {
+            this.PhantomEnabled(player, camera);
         }
+        else {
+            this.PhantomDisabled(player, camera);
+        }
+
+        haxCamera.SetActive(Setting.EnablePhantom);
+    }
+
+    internal void DisablePhantom() {
+        Setting.EnablePhantom = false;
+        if (Helper.LocalPlayer is not PlayerControllerB player) return;
+        if (HaxCamera.Instance is not HaxCamera haxCamera) return;
+        if (haxCamera.GetCamera() is not Camera camera) return;
+        player.enabled = !player.IsDead();
+        player.playerBodyAnimator.enabled = true;
+        player.thisController.enabled = true;
+        player.isFreeCamera = false;
+        this.PhantomDisabled(player, camera);
+
     }
 }

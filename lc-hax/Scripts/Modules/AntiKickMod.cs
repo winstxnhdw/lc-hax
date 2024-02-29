@@ -31,27 +31,20 @@ sealed class AntiKickMod : MonoBehaviour {
         Helper.GameNetworkManager?.JoinLobby(connectedLobby.Lobby, connectedLobby.SteamId);
     }
 
-    IEnumerator PrintInvisibleWarning() {
-        yield return new WaitForSeconds(0.5f);
-        Chat.Print("You are invisible! Do /invis to disable!");
-    }
-
-    bool FindJoinMessageInHistory() =>
-        Helper.HUDManager?.ChatMessageHistory.First(message =>
-            message.Contains($"{Helper.LocalPlayer?.playerUsername} joined the ship.")
-        ) is not null;
-
     void OnGameEnd() {
-        if (!State.DisconnectedVoluntarily && Setting.EnableAntiKick) {
-            _ = this.StartCoroutine(this.RejoinLobby());
-        }
+        if (State.DisconnectedVoluntarily || !Setting.EnableAntiKick) return;
+        _ = this.StartCoroutine(this.RejoinLobby());
     }
 
     void OnGameStart() {
         if (!Setting.EnableAntiKick || !Setting.EnableInvisible) return;
 
         Chat.Clear();
-        _ = this.StartCoroutine(this.PrintInvisibleWarning());
+        Helper.SendNotification(
+            title: "Anti-kick",
+            body: "You are invisible to other players! Do /invis to disable!",
+            isWarning: true
+        );
     }
 
     void ToggleAntiKick() {

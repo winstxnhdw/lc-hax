@@ -113,8 +113,8 @@ The complete feature set includes the following.
 | Poison a player               | `/poison <player> <damage> <duration> <delay=1>` |
 | Poison all players            | `/poison --all <damage> <duration> <delay=1>`    |
 | Spoof a server message        | `/say <player> <message>`                        |
-| Send a translated message     | `/translate <source> <target> <message>`         |
-| Toggle automatic translations | `/translate <source> <target> -d`                |
+| Send a translated message     | `/translate <language> <language> <message>`     |
+| Toggle automatic translations | `/translate <language> <language> -d`            |
 | Transmit a signal             | `/signal <message>`                              |
 | Modify shovel damage          | `/shovel <force=1>`                              |
 | Add or remove experience      | `/xp <amount>`                                   |
@@ -139,6 +139,7 @@ The complete feature set includes the following.
 | Get coordinates               | `/xyz`                                           |
 | Toggle God mode               | `/god`                                           |
 | Toggle NoClip                 | `/noclip`                                        |
+| Toggle unlimited jump         | `/jump`                                          |
 | Toggle rapid item usage       | `/rapid`                                         |
 | Eavesdrop on all players      | `/hear`                                          |
 | Fake player death             | `/fakedeath`                                     |

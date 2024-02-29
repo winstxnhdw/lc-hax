@@ -1,5 +1,3 @@
-using Hax;
-
 [Command("block")]
 class BlockCommand : ICommand {
     string BlockEnemy() {
