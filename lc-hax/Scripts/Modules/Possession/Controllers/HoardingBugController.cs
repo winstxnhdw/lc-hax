@@ -67,8 +67,6 @@ internal class HoardingBugController : IEnemyController<HoarderBugAI> {
     }
 
     public void UsePrimarySkill(HoarderBugAI enemy) {
-
-
         if (enemy.heldItem is null && enemy.FindNearbyItem() is GrabbableObject grabbable) {
             this.GrabItem(enemy, grabbable);
         }
@@ -93,11 +91,7 @@ internal class HoardingBugController : IEnemyController<HoarderBugAI> {
         }
     }
 
-    public void UseSpecialAbility(HoarderBugAI enemy) {
-        for (int i = 0; i <= 99; i++) {
-            enemy.watchingPlayer = Helper.Players[i % Helper.Players.Length];
-        }
-    }
+    public void UseSpecialAbility(HoarderBugAI enemy) => _ = RoundManager.PlayRandomClip(enemy.creatureVoice, enemy.chitterSFX, true, 1f, 0);
 
     public string GetPrimarySkillName(HoarderBugAI enemy) => enemy.heldItem is not null ? "Use item" : "Grab Item";
 
