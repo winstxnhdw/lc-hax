@@ -1,6 +1,8 @@
 using GameNetcodeStuff;
 using HarmonyLib;
+using System;
 using Hax;
+using UnityEngine;
 
 [HarmonyPatch(typeof(EnemyAI), nameof(EnemyAI.PlayerIsTargetable))]
 public static class PlayerIsTargetablePatch {
