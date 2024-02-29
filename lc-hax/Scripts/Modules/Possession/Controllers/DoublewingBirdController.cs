@@ -9,7 +9,7 @@ enum DoublewingBirdState {
 internal class DoublewingBirdController : IEnemyController<DoublewingAI> {
     public float transitionSpeed = 0f;
 
-    public Vector3 CamOffsets = new(0, 2.3f, -3f);
+    public Vector3 camOffsets = new(0, 2.3f, -3f);
     public Vector3 GetCameraOffset(DoublewingAI enemy) {
         float targetCamOffsetY, targetCamOffsetZ;
 
@@ -24,10 +24,10 @@ internal class DoublewingBirdController : IEnemyController<DoublewingAI> {
             targetCamOffsetZ = -3f;
         }
 
-        this.CamOffsets.y = Mathf.Lerp(this.CamOffsets.y, targetCamOffsetY, Time.deltaTime * this.transitionSpeed);
-        this.CamOffsets.z = Mathf.Lerp(this.CamOffsets.z, targetCamOffsetZ, Time.deltaTime * this.transitionSpeed);
+        this.camOffsets.y = Mathf.Lerp(this.camOffsets.y, targetCamOffsetY, Time.deltaTime * this.transitionSpeed);
+        this.camOffsets.z = Mathf.Lerp(this.camOffsets.z, targetCamOffsetZ, Time.deltaTime * this.transitionSpeed);
 
-        return this.CamOffsets;
+        return this.camOffsets;
     }
 
     public void UsePrimarySkill(DoublewingAI enemy) => enemy.SetBehaviourState(DoublewingBirdState.IDLE);
@@ -37,5 +37,6 @@ internal class DoublewingBirdController : IEnemyController<DoublewingAI> {
     public bool IsAbleToRotate(EnemyAI enemy) => !enemy.IsBehaviourState(DoublewingBirdState.IDLE);
 
     public bool SyncAnimationSpeedEnabled(DoublewingAI enemy) => true;
+
 }
 
