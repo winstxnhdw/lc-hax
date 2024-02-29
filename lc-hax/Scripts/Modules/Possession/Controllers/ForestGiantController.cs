@@ -8,9 +8,9 @@ enum GiantState {
 
 internal class ForestGiantController : IEnemyController<ForestGiantAI> {
 
-    Vector3 CamOffset = new(0, 8f, -8f);
+    Vector3 camOffset = new(0, 8f, -8f);
 
-    public Vector3 GetCameraOffset(ForestGiantAI enemy) => this.CamOffset;
+    public Vector3 GetCameraOffset(ForestGiantAI enemy) => this.camOffset;
 
     bool IsUsingSecondarySkill { get; set; } = false;
 
@@ -40,7 +40,7 @@ internal class ForestGiantController : IEnemyController<ForestGiantAI> {
 
     public bool CanUseEntranceDoors(ForestGiantAI _) => false;
 
-    public float InteractRange(ForestGiantAI _) => 1.5f;
+    public float InteractRange(ForestGiantAI _) => 0f;
 
     public void OnUnpossess(ForestGiantAI enemy) => this.IsUsingSecondarySkill = false;
 

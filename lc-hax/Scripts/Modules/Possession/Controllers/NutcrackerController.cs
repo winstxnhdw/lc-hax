@@ -36,7 +36,7 @@ internal class NutcrackerController : IEnemyController<NutcrackerEnemyAI> {
 
     public void UsePrimarySkill(NutcrackerEnemyAI enemy) {
         bool reloadingGun = enemy.Reflect().GetInternalField<bool>("reloadingGun");
-        if (enemy.gun is not ShotgunItem shotgun || enemy.gun.shellsLoaded <= 0 || reloadingGun) return;
+        if (enemy.gun is not ShotgunItem shotgun || enemy.gun.shellsLoaded <= 0 || reloadingGun ) return;
 
         shotgun.gunShootAudio.volume = 0.25f;
         enemy.FireGunServerRpc();
@@ -55,28 +55,26 @@ internal class NutcrackerController : IEnemyController<NutcrackerEnemyAI> {
     }
 
     public void UseSpecialAbility(NutcrackerEnemyAI enemy) {
-        _ = enemy.Reflect().GetInternalField<bool>("reloadingGun");
+        bool reloadingGun = enemy.Reflect().GetInternalField<bool>("reloadingGun");
         int SaveTimesSeeingSamePlayer = enemy.Reflect().GetInternalField<int>("timesSeeingSamePlayer");
         int SaveHP = enemy.enemyHP;
         int SaveShellsLoaded = enemy.gun.shellsLoaded;
         if (enemy.IsBehaviourState(NutcrackerState.WALKING)) {
-            _ = enemy.Reflect().SetInternalField("timesSeeingSamePlayer", 3);
+            enemy.Reflect().SetInternalField("timesSeeingSamePlayer", 3);
             enemy.gun.shellsLoaded = 1;
             enemy.enemyHP = 1;
         }
         enemy.AimGunServerRpc(enemy.transform.position);
-        _ = enemy.Reflect().SetInternalField("timesSeeingSamePlayer", SaveTimesSeeingSamePlayer);
+        enemy.Reflect().SetInternalField("timesSeeingSamePlayer", SaveTimesSeeingSamePlayer);
         enemy.enemyHP = SaveHP;
         enemy.gun.shellsLoaded = SaveShellsLoaded;
     }
-
+    
     public void OnUnpossess(NutcrackerEnemyAI enemy) => this.InSentryMode = false;
 
     public string GetPrimarySkillName(NutcrackerEnemyAI enemy) => enemy.gun is null ? "" : "Fire";
 
     public string GetSecondarySkillName(NutcrackerEnemyAI _) => "(HOLD) Sentry mode";
-
-    public float InteractRange(NutcrackerEnemyAI _) => 1.5f;
 
     public void OnOutsideStatusChange(NutcrackerEnemyAI enemy) {
         enemy.StopSearch(enemy.attackSearch, true);

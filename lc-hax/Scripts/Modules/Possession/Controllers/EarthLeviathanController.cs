@@ -1,7 +1,6 @@
 using UnityEngine;
 
 internal class EarthLeviathanController : IEnemyController<SandWormAI> {
-
     Vector3 CamOffset { get; } = new(0, 8f, -13f);
 
     public Vector3 GetCameraOffset(SandWormAI _) => this.CamOffset;

@@ -30,7 +30,7 @@ internal class BrackenController : IEnemyController<FlowermanAI> {
 
         return this.CamOffsets;
     }
-
+    
     bool GetStartingKillAnimationLocalClient(FlowermanAI enemy) => enemy.Reflect().GetInternalField<bool>("startingKillAnimationLocalClient");
 
     void SetStartingKillAnimationLocalClient(FlowermanAI enemy, bool value) => enemy.Reflect().SetInternalField("startingKillAnimationLocalClient", value);
@@ -54,7 +54,7 @@ internal class BrackenController : IEnemyController<FlowermanAI> {
 
     public string GetSecondarySkillName(FlowermanAI _) => "Stand";
 
-    public float InteractRange(FlowermanAI _) => 1.5f;
+    public float InteractRange(FlowermanAI _) => 2.5f;
 
     public bool SyncAnimationSpeedEnabled(FlowermanAI _) => false;
 }

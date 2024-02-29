@@ -2,18 +2,15 @@ using UnityEngine;
 
 internal class TestEnemyController : IEnemyController<TestEnemy> {
 
-    Vector3 CamOffset = new(0, 2f, -4.5f);
+    Vector3 camOffset = new(0, 2f, -4.5f);
 
-    Vector3 EnemyPositionOffset = new(0, 1.5f, 0);
+    Vector3 enemyPositionOffset = new(0, 1.5f, 0);
 
-    public Vector3 GetCameraOffset(TestEnemy enemy) => this.CamOffset;
+    public Vector3 GetCameraOffset(TestEnemy enemy) => this.camOffset;
 
-    public Vector3 GetEnemyPositionOffset(TestEnemy enemy) => this.EnemyPositionOffset;
-
-
+    public Vector3 GetEnemyPositionOffset(TestEnemy enemy) => this.enemyPositionOffset;
 
     public bool CanUseEntranceDoors(TestEnemy _) => true;
 
-    public float InteractRange(TestEnemy _) => 4.5f;
 }
 
