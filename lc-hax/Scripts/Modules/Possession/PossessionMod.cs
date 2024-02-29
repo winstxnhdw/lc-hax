@@ -168,7 +168,6 @@ internal sealed class PossessionMod : MonoBehaviour {
 
         if (this.Controller == null) {
             this.UnregisteredEnemy(enemy);
-            return;
         }
         else {
             this.CompatibilityMode(localPlayer, enemy, this.Controller, characterMovement, agent);
@@ -436,19 +435,16 @@ internal sealed class PossessionMod : MonoBehaviour {
 
     void UseSecondarySkill() {
         if (this.Possession.Enemy is not EnemyAI enemy || this.Controller is null) return;
-
         this.Controller.UseSecondarySkill(enemy);
     }
 
     void OnSecondarySkillHold() {
         if (this.Possession.Enemy is not EnemyAI enemy || this.Controller is null) return;
-
         this.Controller.OnSecondarySkillHold(enemy);
     }
 
     void ReleaseSecondarySkill() {
         if (this.Possession.Enemy is not EnemyAI enemy || this.Controller is null) return;
-
         this.Controller.ReleaseSecondarySkill(enemy);
     }
 
