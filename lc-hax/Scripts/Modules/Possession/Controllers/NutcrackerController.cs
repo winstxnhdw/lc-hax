@@ -16,16 +16,18 @@ internal class NutcrackerController : IEnemyController<NutcrackerEnemyAI> {
 
     public void Update(NutcrackerEnemyAI enemy, bool isAIControlled) {
         if (isAIControlled) return;
+        Reflector<NutcrackerEnemyAI> Nutcracker = enemy.Reflect();
 
-        float timeSinceFiringGun = enemy.Reflect().GetInternalField<float>("timeSinceFiringGun");
-        bool reloadingGun = enemy.Reflect().GetInternalField<bool>("reloadingGun");
-        bool aimingGun = enemy.Reflect().GetInternalField<bool>("aimingGun");
+        float timeSinceFiringGun = Nutcracker.GetInternalField<float>("timeSinceFiringGun");
+        bool reloadingGun = Nutcracker.GetInternalField<bool>("reloadingGun");
+        bool aimingGun = Nutcracker.GetInternalField<bool>("aimingGun");
 
         if (timeSinceFiringGun > 0.75f && enemy.gun.shellsLoaded <= 0 && !reloadingGun && !aimingGun) {
             enemy.ReloadGunServerRpc();
             enemy.SetBehaviourState(NutcrackerState.WALKING);
             this.InSentryMode = false;
         }
+
         if (this.InSentryMode) return;
         enemy.SwitchToBehaviourServerRpc(unchecked((int)NutcrackerState.WALKING));
     }
@@ -37,7 +39,7 @@ internal class NutcrackerController : IEnemyController<NutcrackerEnemyAI> {
     public void UsePrimarySkill(NutcrackerEnemyAI enemy) {
         bool reloadingGun = enemy.Reflect().GetInternalField<bool>("reloadingGun");
         if (enemy.gun is not ShotgunItem shotgun || enemy.gun.shellsLoaded <= 0 || reloadingGun ) return;
-
+        enemy.AimGunServerRpc(enemy.transform.forward);
         shotgun.gunShootAudio.volume = 0.25f;
         enemy.FireGunServerRpc();
     }
@@ -56,16 +58,17 @@ internal class NutcrackerController : IEnemyController<NutcrackerEnemyAI> {
 
     public void UseSpecialAbility(NutcrackerEnemyAI enemy) {
         bool reloadingGun = enemy.Reflect().GetInternalField<bool>("reloadingGun");
-        int SaveTimesSeeingSamePlayer = enemy.Reflect().GetInternalField<int>("timesSeeingSamePlayer");
+        Reflector<NutcrackerEnemyAI> Nutcracker = enemy.Reflect();
+        int SaveTimesSeeingSamePlayer = Nutcracker.GetInternalField<int>("timesSeeingSamePlayer");
         int SaveHP = enemy.enemyHP;
         int SaveShellsLoaded = enemy.gun.shellsLoaded;
         if (enemy.IsBehaviourState(NutcrackerState.WALKING)) {
-            enemy.Reflect().SetInternalField("timesSeeingSamePlayer", 3);
+            _ = Nutcracker.SetInternalField("timesSeeingSamePlayer", 3);
             enemy.gun.shellsLoaded = 1;
             enemy.enemyHP = 1;
         }
         enemy.AimGunServerRpc(enemy.transform.position);
-        enemy.Reflect().SetInternalField("timesSeeingSamePlayer", SaveTimesSeeingSamePlayer);
+        _ = Nutcracker.SetInternalField("timesSeeingSamePlayer", SaveTimesSeeingSamePlayer);
         enemy.enemyHP = SaveHP;
         enemy.gun.shellsLoaded = SaveShellsLoaded;
     }

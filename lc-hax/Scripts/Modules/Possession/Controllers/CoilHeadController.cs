@@ -14,12 +14,6 @@ internal class CoilHeadController : IEnemyController<SpringManAI> {
 
     bool GetStoppingMovement(SpringManAI enemy) => enemy.Reflect().GetInternalField<bool>("stoppingMovement");
 
-    float GetTimeSinceHittingPlayer(SpringManAI enemy) =>
-        enemy.Reflect().GetInternalField<float>("timeSinceHittingPlayer");
-
-    void SetTimeSinceHittingPlayer(SpringManAI enemy, float value) =>
-        enemy.Reflect().SetInternalField("timeSinceHittingPlayer", value);
-
     public void UsePrimarySkill(SpringManAI enemy) => enemy.SetBehaviourState(enemy.IsBehaviourState(CoilHeadState.Chase) ? CoilHeadState.Idle : CoilHeadState.Chase);
 
     public void OnSecondarySkillHold(SpringManAI enemy) => enemy.SetAnimationGoServerRpc();
