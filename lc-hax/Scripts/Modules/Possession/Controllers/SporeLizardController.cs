@@ -1,5 +1,4 @@
 using Hax;
-using UnityEngine;
 
 public enum SporeLizardState {
     IDLE,
