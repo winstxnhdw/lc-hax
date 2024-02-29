@@ -67,7 +67,7 @@ The complete feature set includes the following.
 - Grab through walls
 - Pocket any item
 - Instant interact
-- No reload
+- No/fake reload
 - No item usage cooldown
 - No lobby refresh delay
 - No build constraints
