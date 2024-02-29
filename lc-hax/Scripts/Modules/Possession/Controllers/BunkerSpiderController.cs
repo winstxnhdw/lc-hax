@@ -3,10 +3,11 @@ using UnityEngine;
 
 internal class BunkerSpiderController : IEnemyController<SandSpiderAI> {
 
-    Vector3 CamOffset { get; } = new(0, 3f, -3f);
+    Vector3 CamOffset { get; } = new(0, 2f, -3f);
 
     public Vector3 GetCameraOffset(SandSpiderAI _) => this.CamOffset;
 
+    public void OnPossess(SandSpiderAI enemy) => enemy.transform.position = enemy.meshContainerPosition;
 
     public void Update(SandSpiderAI enemy, bool isAIControlled) {
         enemy.meshContainerPosition = enemy.transform.position;
@@ -14,6 +15,8 @@ internal class BunkerSpiderController : IEnemyController<SandSpiderAI> {
         _ = enemy.Reflect().SetInternalField("meshContainerTargetRotation", Quaternion.LookRotation(enemy.transform.forward));
         enemy.SyncMeshContainerPositionToClients();
         if (!isAIControlled) enemy.homeNode = enemy.ChooseClosestNodeToPosition(enemy.transform.position, false, 2);
+        enemy.Reflect().SetInternalField("gotWallPositionInLOS", false);
+        enemy.Reflect().SetInternalField("reachedWallPosition", false);
     }
 
     public bool SyncAnimationSpeedEnabled(SandSpiderAI enemy) => false;
@@ -46,4 +49,3 @@ internal class BunkerSpiderController : IEnemyController<SandSpiderAI> {
 
     public void OnOutsideStatusChange(SandSpiderAI enemy) => enemy.StopSearch(enemy.patrolHomeBase, true);
 }
-
