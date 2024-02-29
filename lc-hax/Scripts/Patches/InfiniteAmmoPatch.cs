@@ -4,8 +4,8 @@ using HarmonyLib;
 
 [HarmonyPatch(typeof(ShotgunItem), nameof(ShotgunItem.ItemActivate))]
 class InfiniteShotgunAmmoPatch {
-    static void Prefix(EnemyAI? ___heldByEnemy, ref int ___shellsLoaded) {
+    static void Prefix(ShotgunItem __instance, EnemyAI? ___heldByEnemy) {
         if (___heldByEnemy is not null) return;
-        ___shellsLoaded = 3;
+        __instance.shellsLoaded = 3;
     }
 }
