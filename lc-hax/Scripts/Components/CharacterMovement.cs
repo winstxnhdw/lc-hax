@@ -103,7 +103,7 @@ class CharacterMovement : MonoBehaviour {
         this.ApplyGravity();
 
         if (Helper.LocalPlayer is { isTypingChat: true }) return;
-        if(!this.CanMove) return;
+        if (!this.CanMove) return;
 
         // Attempt to move
         _ = this.CharacterController?.Move(moveDirection * Time.deltaTime);

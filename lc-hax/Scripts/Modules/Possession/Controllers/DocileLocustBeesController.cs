@@ -8,9 +8,9 @@ enum DocileLocustBeesState {
 
 internal class DocileLocustBeesController : IEnemyController<DocileLocustBeesAI> {
 
-    Vector3 camOffset = new Vector3(0, 2f, -4.5f);
+    Vector3 camOffset = new(0, 2f, -4.5f);
 
-    Vector3 enemyPositionOffset = new Vector3(0, 1.5f, 0);
+    Vector3 enemyPositionOffset = new(0, 1.5f, 0);
 
     public Vector3 GetCameraOffset(DocileLocustBeesAI enemy) => this.camOffset;
 
