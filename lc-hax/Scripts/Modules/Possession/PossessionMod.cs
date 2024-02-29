@@ -301,6 +301,7 @@ internal sealed class PossessionMod : MonoBehaviour {
         if (this.Possession.Enemy is not EnemyAI enemy) return;
 
         enemy.Kill(localPlayer.actualClientId);
+        this.Controller?.OnDeath(enemy);
 
         if (localPlayer.IsHost) {
             if (enemy.TryGetComponent(out NetworkObject networkObject)) {
