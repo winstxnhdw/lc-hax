@@ -5,10 +5,6 @@ using Unity.Netcode;
 using UnityEngine.AI;
 using GameNetcodeStuff;
 using Hax;
-using UnityEngine.UI;
-using static UnityEngine.EventSystems.EventTrigger;
-using Mono.Security.Interface;
-using Steamworks;
 
 internal sealed class PossessionMod : MonoBehaviour {
     const float TeleportDoorCooldown = 2.5f;
@@ -325,7 +321,7 @@ internal sealed class PossessionMod : MonoBehaviour {
             enemy.SyncPositionToClients();
         }
 
-        if (this.Controller != null) this.Controller.OnUnpossess(enemy);
+        this.Controller?.OnUnpossess(enemy);
 
         this.IsAIControlled = false;
         this.Possession.Clear();
@@ -420,13 +416,15 @@ internal sealed class PossessionMod : MonoBehaviour {
     }
 
     Vector3 GetCameraOffset() {
-        if (this.Possession.Enemy is not EnemyAI enemy || this.Controller is null) return IController.DefaultCamOffsets;
-        return this.Controller.GetCameraOffset(enemy);
+        return this.Possession.Enemy is not EnemyAI enemy || this.Controller is null
+            ? IController.DefaultCamOffsets
+            : this.Controller.GetCameraOffset(enemy);
     }
 
     Vector3 GetEnemyPositionOffset() {
-        if (this.Possession.Enemy is not EnemyAI enemy || this.Controller is null) return IController.DefaultEnemyOffset;
-        return this.Controller.GetEnemyPositionOffset(enemy);
+        return this.Possession.Enemy is not EnemyAI enemy || this.Controller is null
+            ? IController.DefaultEnemyOffset
+            : this.Controller.GetEnemyPositionOffset(enemy);
     }
 
 
