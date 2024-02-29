@@ -358,7 +358,7 @@ internal sealed class PossessionMod : MonoBehaviour {
 
 
     void InteractWithDungeonDoors(EnemyAI enemy) {
-        if (!Physics.Raycast(enemy.transform.position + Vector3.up * 0.2f, enemy.transform.forward, out RaycastHit hit, this.InteractRange(enemy))) return;
+        if (!Physics.Raycast(enemy.transform.position + (Vector3.up * 0.2f), enemy.transform.forward, out RaycastHit hit, this.InteractRange(enemy))) return;
         if (hit.collider.gameObject.TryGetComponent(out DoorLock doorLock)) {
             this.OpenDoorAsEnemy(doorLock);
         }
@@ -367,7 +367,7 @@ internal sealed class PossessionMod : MonoBehaviour {
     void InteractWithExitDoors(EnemyAI enemy, IController? controller) {
         if (controller == null) return;
         if (!controller.CanUseEntranceDoors(enemy)) return;
-        if (!Physics.Raycast(enemy.transform.position + Vector3.up * 0.2f, enemy.transform.forward, out RaycastHit hit, this.InteractRange(enemy))) return;
+        if (!Physics.Raycast(enemy.transform.position + (Vector3.up * 0.2f), enemy.transform.forward, out RaycastHit hit, this.InteractRange(enemy))) return;
         if (!hit.collider.gameObject.TryGetComponent(out EntranceTeleport entrance)) return;
         this.InteractWithTeleport(enemy, entrance, controller);
     }
