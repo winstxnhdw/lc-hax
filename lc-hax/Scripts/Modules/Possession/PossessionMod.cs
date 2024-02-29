@@ -172,7 +172,6 @@ internal sealed class PossessionMod : MonoBehaviour {
 
         if (this.Controller == null) {
             this.UnregisteredEnemy(enemy);
-            return;
         }
         else {
             this.CompatibilityMode(localPlayer, enemy, this.Controller, characterMovement, agent);
@@ -419,17 +418,15 @@ internal sealed class PossessionMod : MonoBehaviour {
         controller.OnOutsideStatusChange(enemy);
     }
 
-    Vector3 GetCameraOffset() {
-        if (this.Possession.Enemy is not EnemyAI enemy || this.Controller is null) return IController.DefaultCamOffsets;
-        return this.Controller.GetCameraOffset(enemy);
-    }
+    Vector3 GetCameraOffset() =>
+        this.Possession.Enemy is not EnemyAI enemy || this.Controller is null
+            ? IController.DefaultCamOffsets
+            : this.Controller.GetCameraOffset(enemy);
 
-    Vector3 GetEnemyPositionOffset() {
-        if (this.Possession.Enemy is not EnemyAI enemy || this.Controller is null) return IController.DefaultEnemyOffset;
-        return this.Controller.GetEnemyPositionOffset(enemy);
-    }
-
-
+    Vector3 GetEnemyPositionOffset() =>
+        this.Possession.Enemy is not EnemyAI enemy || this.Controller is null
+            ? IController.DefaultEnemyOffset
+            : this.Controller.GetEnemyPositionOffset(enemy);
 
     void UsePrimarySkill() {
         if (this.Possession.Enemy is not EnemyAI enemy || this.Controller is null) return;
@@ -438,19 +435,16 @@ internal sealed class PossessionMod : MonoBehaviour {
 
     void UseSecondarySkill() {
         if (this.Possession.Enemy is not EnemyAI enemy || this.Controller is null) return;
-
         this.Controller.UseSecondarySkill(enemy);
     }
 
     void OnSecondarySkillHold() {
         if (this.Possession.Enemy is not EnemyAI enemy || this.Controller is null) return;
-
         this.Controller.OnSecondarySkillHold(enemy);
     }
 
     void ReleaseSecondarySkill() {
         if (this.Possession.Enemy is not EnemyAI enemy || this.Controller is null) return;
-
         this.Controller.ReleaseSecondarySkill(enemy);
     }
 
