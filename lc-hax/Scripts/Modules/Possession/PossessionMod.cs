@@ -9,8 +9,6 @@ using UnityEngine.Windows.WebCam;
 using static UnityEngine.EventSystems.EventTrigger;
 
 internal sealed class PossessionMod : MonoBehaviour {
-    const float TeleportDoorCooldown = 2.5f;
-    const float DoorInteractionCooldown = 0.7f;
     bool IsLeftAltHeld { get; set; } = false;
 
     internal static PossessionMod? Instance { get; private set; }
@@ -224,10 +222,10 @@ internal sealed class PossessionMod : MonoBehaviour {
 
     void OnInteract() {
         if (this.PossessedEnemy is not EnemyAI enemy) return;
-        Console.WriteLine("OnInteract Called!");
+        float maxRange = this.InteractRange(enemy);
+        if (maxRange == 0) return;
         Vector3 rayOrigin = enemy.transform.position + new Vector3(0, 0.8f, 0);
         Vector3 rayDirection = enemy.transform.forward;
-        float maxRange = this.InteractRange(enemy);
         int layerMask = 1 << LayerMask.NameToLayer("InteractableObject");
 
         if (!Physics.Raycast(rayOrigin, rayDirection, out RaycastHit hit, maxRange, layerMask)) return;
