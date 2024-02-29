@@ -8,25 +8,25 @@ enum DocileLocustBeesState {
 
 internal class DocileLocustBeesController : IEnemyController<DocileLocustBeesAI> {
 
-    Vector3 CamOffset = new Vector3(0, 2f, -4.5f);
+    Vector3 camOffset = new Vector3(0, 2f, -4.5f);
 
-    Vector3 EnemyPositionOffset = new Vector3(0, 1.5f, 0);
+    Vector3 enemyPositionOffset = new Vector3(0, 1.5f, 0);
 
-    public Vector3 GetCameraOffset(DocileLocustBeesAI enemy) => this.CamOffset;
+    public Vector3 GetCameraOffset(DocileLocustBeesAI enemy) => this.camOffset;
 
-    public Vector3 GetEnemyPositionOffset(DocileLocustBeesAI enemy) => this.EnemyPositionOffset;
+    public Vector3 GetEnemyPositionOffset(DocileLocustBeesAI enemy) => this.enemyPositionOffset;
 
-    bool IsRoaming = true;
+    bool isRoaming = true;
 
-    public void OnPossess(DocileLocustBeesAI enemy) => IsRoaming = true;
+    public void OnPossess(DocileLocustBeesAI enemy) => this.isRoaming = true;
 
-    public void UseSecondarySkill(DocileLocustBeesAI enemy) => IsRoaming = false;
+    public void UseSecondarySkill(DocileLocustBeesAI enemy) => this.isRoaming = false;
 
-    public void ReleaseSecondarySkill(DocileLocustBeesAI enemy) => IsRoaming = true;
+    public void ReleaseSecondarySkill(DocileLocustBeesAI enemy) => this.isRoaming = true;
 
     public void Update(DocileLocustBeesAI enemy, bool isAIControlled) {
         if (isAIControlled) return;
-        if (IsRoaming) {
+        if (this.isRoaming) {
             enemy.SetBehaviourState(DocileLocustBeesState.ROAMING);
         }
         else {

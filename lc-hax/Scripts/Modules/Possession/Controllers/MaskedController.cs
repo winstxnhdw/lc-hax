@@ -2,9 +2,9 @@ using UnityEngine;
 
 internal class MaskedPlayerController : IEnemyController<MaskedPlayerEnemy> {
 
-    Vector3 CamOffset = new Vector3(0, 2.8f, -3f);
+    Vector3 camOffset = new(0, 2.8f, -3f);
 
-    public Vector3 GetCameraOffset(MaskedPlayerEnemy enemy) => this.CamOffset;
+    public Vector3 GetCameraOffset(MaskedPlayerEnemy enemy) => this.camOffset;
 
     void SetstartingKillAnimationLocalClient(MaskedPlayerEnemy enemy, bool value) =>
         enemy.Reflect().SetInternalField("startingKillAnimationLocalClient", value);
@@ -18,8 +18,6 @@ internal class MaskedPlayerController : IEnemyController<MaskedPlayerEnemy> {
     public bool IsAbleToMove(EnemyAI enemy) => enemy.Reflect().GetInternalField<bool>("inKillAnimation") ? false : true;
 
     public bool IsAbleToRotate(EnemyAI enemy) => enemy.Reflect().GetInternalField<bool>("inKillAnimation") ? false : true;
-
-    public float InteractRange(MaskedPlayerEnemy _) => 1.0f;
 
     public bool SyncAnimationSpeedEnabled(MaskedPlayerEnemy _) => false;
 

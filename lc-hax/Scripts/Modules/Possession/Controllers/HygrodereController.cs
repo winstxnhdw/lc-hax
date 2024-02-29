@@ -2,9 +2,9 @@ using UnityEngine;
 
 internal class HygrodereController : IEnemyController<BlobAI> {
 
-    Vector3 CamOffset = new Vector3(0, 2f, -3f);
+    Vector3 camOffset = new(0, 2f, -3f);
 
-    public Vector3 GetCameraOffset(BlobAI enemy) => this.CamOffset;
+    public Vector3 GetCameraOffset(BlobAI enemy) => this.camOffset;
 
 
     void SetTamedTimer(BlobAI enemy, float time) => enemy.Reflect().SetInternalField("tamedTimer", time);
@@ -19,8 +19,6 @@ internal class HygrodereController : IEnemyController<BlobAI> {
     public void ReleaseSecondarySkill(BlobAI enemy) => this.SetTamedTimer(enemy, 0.0f);
 
     public void UsePrimarySkill(BlobAI enemy) => this.SetAngeredTimer(enemy, 18.0f);
-
-    public float InteractRange(BlobAI _) => 3.5f;
 
     public float SprintMultiplier(BlobAI _) => 9.8f;
 

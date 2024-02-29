@@ -3,7 +3,7 @@ using UnityEngine;
 internal interface IController {
     const float DefaultSprintMultiplier = 2.8f;
 
-    const float DefaultInteractRange = 2.5f;
+    const float DefaultInteractRange = 4.5f;
 
     static Vector3 DefaultCamOffsets => new(0, 2.5f, -3f);
 

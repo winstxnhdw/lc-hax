@@ -14,6 +14,8 @@ class CharacterMovement : MonoBehaviour {
     internal float CharacterSpeed { get; set; } = 5.0f;
     internal float CharacterSprintSpeed { get; set; } = 2.8f;
 
+    internal bool CanMove { get; set; } = true;
+
     // used to sync with the enemy to make sure it plays the correct animation when it is moving
     internal bool IsMoving { get; private set; } = false;
     internal bool IsSprinting { get; private set; } = false;
@@ -26,9 +28,6 @@ class CharacterMovement : MonoBehaviour {
     KeyboardMovement? NoClipKeyboard { get; set; } = null;
     CharacterController? CharacterController { get; set; }
 
-    IController? EnemyController => PossessionMod.Instance?.Controller;
-
-    EnemyAI? ControlledEnemy => PossessionMod.Instance?.PossessedEnemy;
 
 
     internal void SetNoClipMode(bool enabled) {
@@ -104,11 +103,7 @@ class CharacterMovement : MonoBehaviour {
         this.ApplyGravity();
 
         if (Helper.LocalPlayer is { isTypingChat: true }) return;
-
-        // Check if Enemy can move.
-        if (this.ControlledEnemy != null && this.EnemyController != null) {
-            if (!this.EnemyController.IsAbleToMove(this.ControlledEnemy)) return;
-        }
+        if(!this.CanMove) return;
 
         // Attempt to move
         _ = this.CharacterController?.Move(moveDirection * Time.deltaTime);

@@ -15,8 +15,6 @@ internal class SporeLizardController : IEnemyController<PufferAI> {
     void SetTimeSinceHittingPlayer(PufferAI enemy, float value) =>
         enemy.Reflect().SetInternalField("timeSinceHittingPlayer", value);
 
-
-
     public void UsePrimarySkill(PufferAI enemy) {
         enemy.SetBehaviourState(SporeLizardState.HOSTILE);
         enemy.StompServerRpc();
@@ -30,8 +28,6 @@ internal class SporeLizardController : IEnemyController<PufferAI> {
     public string GetPrimarySkillName(PufferAI _) => "Stomp";
 
     public string GetSecondarySkillName(PufferAI _) => "Smoke";
-
-    public float InteractRange(PufferAI _) => 2.5f;
 
     public void OnOutsideStatusChange(PufferAI enemy) => enemy.StopSearch(enemy.roamMap, true);
 

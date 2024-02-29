@@ -5,6 +5,8 @@ using Unity.Netcode;
 using UnityEngine.AI;
 using GameNetcodeStuff;
 using Hax;
+using UnityEngine.Windows.WebCam;
+using static UnityEngine.EventSystems.EventTrigger;
 
 internal sealed class PossessionMod : MonoBehaviour {
     const float TeleportDoorCooldown = 2.5f;
@@ -153,7 +155,6 @@ internal sealed class PossessionMod : MonoBehaviour {
             this.SetAIControl(false);
         }
 
-
         if (this.Controller == null) {
             this.UnregisteredEnemy(enemy);
         }
@@ -172,7 +173,7 @@ internal sealed class PossessionMod : MonoBehaviour {
         }
 
         if (this.MainEntrance != null) {
-            _ = enemy.SetOutsideStatus(enemy.transform.position.y > this.MainEntrance.transform.position.y + 5.0f);
+            enemy.SetOutsideStatus(enemy.transform.position.y > this.MainEntrance.transform.position.y + 5.0f);
         }
 
         if (enemy.isEnemyDead) {
@@ -185,10 +186,7 @@ internal sealed class PossessionMod : MonoBehaviour {
     /// </summary>
     void CompatibilityMode(PlayerControllerB player, EnemyAI enemy, IController controller, CharacterMovement movement, NavMeshAgent agent) {
         if (this.MainEntrance != null) {
-            if (enemy.SetOutsideStatus(enemy.transform.position.y > this.MainEntrance.transform.position.y + 5.0f)) {
-                controller.OnOutsideStatusChange(enemy);
-                enemy.FinishedCurrentSearchRoutine();
-            }
+            enemy.SetOutsideStatus(enemy.transform.position.y > this.MainEntrance.transform.position.y + 5.0f, controller);
         }
 
         if (enemy.isEnemyDead) {
@@ -208,8 +206,12 @@ internal sealed class PossessionMod : MonoBehaviour {
         }
 
         if (controller.IsAbleToMove(enemy)) {
+            movement.CanMove = true;
             controller.OnMovement(enemy, movement.IsMoving, movement.IsSprinting);
             this.UpdateEnemyPosition(enemy);
+        }
+        else {
+            movement.CanMove = false;
         }
 
         if (controller.IsAbleToRotate(enemy)) {
@@ -217,9 +219,19 @@ internal sealed class PossessionMod : MonoBehaviour {
         }
     }
 
+
+
+
     void OnInteract() {
         if (this.PossessedEnemy is not EnemyAI enemy) return;
-        if (!Physics.Raycast(enemy.transform.position + Vector3.up * 0.2f, enemy.transform.forward, out RaycastHit hit, this.InteractRange(enemy))) return;
+        Console.WriteLine("OnInteract Called!");
+        Vector3 rayOrigin = enemy.transform.position + new Vector3(0, 0.8f, 0);
+        Vector3 rayDirection = enemy.transform.forward;
+        float maxRange = this.InteractRange(enemy);
+        int layerMask = 1 << LayerMask.NameToLayer("InteractableObject");
+
+        if (!Physics.Raycast(rayOrigin, rayDirection, out RaycastHit hit, maxRange, layerMask)) return;
+
         if (hit.collider.gameObject.TryGetComponent(out DoorLock doorLock)) {
             this.OpenOrcloseDoorAsEnemy(doorLock);
             return;
@@ -295,7 +307,6 @@ internal sealed class PossessionMod : MonoBehaviour {
         if (this.Possession.Enemy is not EnemyAI enemy) return;
 
         enemy.Kill(localPlayer.actualClientId);
-        this.Controller?.OnDeath(enemy);
 
         if (localPlayer.IsHost) {
             if (enemy.TryGetComponent(out NetworkObject networkObject)) {
@@ -303,6 +314,7 @@ internal sealed class PossessionMod : MonoBehaviour {
             }
         }
 
+        this.Controller?.OnDeath(enemy);
         this.Unpossess();
     }
 
@@ -368,20 +380,19 @@ internal sealed class PossessionMod : MonoBehaviour {
 
     void OpenOrcloseDoorAsEnemy(DoorLock door) {
         if (door == null) return;
-        if (door.gameObject.TryGetComponent(out AnimatedObjectTrigger trigger)) {
-            trigger.TriggerAnimationNonPlayer(false, true, false);
-        }
+        bool isDoorOpened = door.Reflect().GetInternalField<bool>("isDoorOpened");
 
         if (door.isLocked) {
             door.UnlockDoorSyncWithServer();
         }
-
-        if (door.Reflect().GetInternalField<bool>("isDoorOpened")) {
+        
+        if (isDoorOpened) {
             door.OpenOrCloseDoor(Helper.Players[0]);
         }
         else {
             door.OpenDoorAsEnemyServerRpc();
         }
+
     }
 
     Transform? GetExitPointFromDoor(EntranceTeleport entrance) =>
@@ -393,7 +404,7 @@ internal sealed class PossessionMod : MonoBehaviour {
         if (this.CharacterMovement is not CharacterMovement characterMovement) return;
         if (this.GetExitPointFromDoor(teleport) is not Transform exitPoint) return;
         characterMovement.SetPosition(exitPoint.position);
-        _ = enemy.SetOutsideStatus(!teleport.isEntranceToBuilding);
+        enemy.SetOutsideStatus(!teleport.isEntranceToBuilding);
         controller.OnOutsideStatusChange(enemy);
     }
 

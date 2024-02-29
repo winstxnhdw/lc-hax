@@ -76,8 +76,6 @@ internal class NutcrackerController : IEnemyController<NutcrackerEnemyAI> {
 
     public string GetSecondarySkillName(NutcrackerEnemyAI _) => "(HOLD) Sentry mode";
 
-    public float InteractRange(NutcrackerEnemyAI _) => 1.5f;
-
     public void OnOutsideStatusChange(NutcrackerEnemyAI enemy) {
         enemy.StopSearch(enemy.attackSearch, true);
         enemy.StopSearch(enemy.patrol, true);

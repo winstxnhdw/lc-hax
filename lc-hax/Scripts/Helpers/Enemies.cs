@@ -41,8 +41,8 @@ internal static partial class Helper {
         }
     }
 
-    internal static bool SetOutsideStatus(this EnemyAI enemy, bool isOutside) {
-        if (enemy.isOutside == isOutside) return false;
+    internal static void SetOutsideStatus(this EnemyAI enemy, bool isOutside, IController? controller = null) {
+        if (enemy.isOutside == isOutside) return;
 
         enemy.isOutside = isOutside;
         enemy.allAINodes = GameObject.FindGameObjectsWithTag(enemy.isOutside ? "OutsideAINode" : "AINode");
@@ -52,8 +52,9 @@ internal static partial class Helper {
         enemy.SyncPositionToClients();
         enemy.agent.ResetPath();
         enemy.EnableEnemyMesh(true, false);
+        enemy.FinishedCurrentSearchRoutine();
         enemy.StopSearch(enemy.currentSearch, true);
-        return true;
+        controller?.OnOutsideStatusChange(enemy);
     }
 
     internal static void Kill(EnemyAI enemy) {

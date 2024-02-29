@@ -15,8 +15,6 @@ internal class CircuitBeesController : IEnemyController<RedLocustBees> {
     public Vector3 GetCameraOffset(RedLocustBees _) => this.CamOffset; 
     public bool CanUseEntranceDoors(RedLocustBees _) => true;
 
-    public float InteractRange(RedLocustBees _) => 2.5f;
-
     public void UsePrimarySkill(RedLocustBees enemy) {
         enemy.SetBehaviourState(BeesState.ATTACK);
         enemy.EnterAttackZapModeServerRpc(-1);

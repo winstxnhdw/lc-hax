@@ -11,12 +11,13 @@ internal class BunkerSpiderController : IEnemyController<SandSpiderAI> {
 
     public void Update(SandSpiderAI enemy, bool isAIControlled) {
         enemy.meshContainerPosition = enemy.transform.position;
-        _ = enemy.Reflect().SetInternalField("overrideSpiderLookRotation", true);
-        _ = enemy.Reflect().SetInternalField("meshContainerTargetRotation", Quaternion.LookRotation(enemy.transform.forward));
+        Reflector<SandSpiderAI> reflect = enemy.Reflect();
+        _ = reflect.SetInternalField("overrideSpiderLookRotation", true);
+        _ = reflect.SetInternalField("meshContainerTargetRotation", Quaternion.LookRotation(enemy.transform.forward));
         enemy.SyncMeshContainerPositionToClients();
+        _ = reflect.SetInternalField("gotWallPositionInLOS", false);
+        _ = reflect.SetInternalField("reachedWallPosition", false);
         if (!isAIControlled) enemy.homeNode = enemy.ChooseClosestNodeToPosition(enemy.transform.position, false, 2);
-        enemy.Reflect().SetInternalField("gotWallPositionInLOS", false);
-        enemy.Reflect().SetInternalField("reachedWallPosition", false);
     }
 
     public bool SyncAnimationSpeedEnabled(SandSpiderAI enemy) => false;

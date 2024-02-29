@@ -13,7 +13,6 @@ enum HoardingBugState {
 
 internal class HoardingBugController : IEnemyController<HoarderBugAI> {
 
-
     bool GetInChase(HoarderBugAI enemy) => enemy.Reflect().GetInternalField<bool>("inChase");
 
     float GettimeSinceHittingPlayer(HoarderBugAI enemy) =>
@@ -96,8 +95,6 @@ internal class HoardingBugController : IEnemyController<HoarderBugAI> {
     public string GetPrimarySkillName(HoarderBugAI enemy) => enemy.heldItem is not null ? "Use item" : "Grab Item";
 
     public string GetSecondarySkillName(HoarderBugAI enemy) => enemy.heldItem is null ? "" : "Drop item";
-
-    public float InteractRange(HoarderBugAI _) => 1.0f;
 
     public void OnOutsideStatusChange(HoarderBugAI enemy) {
         enemy.StopSearch(enemy.searchForItems, true);
