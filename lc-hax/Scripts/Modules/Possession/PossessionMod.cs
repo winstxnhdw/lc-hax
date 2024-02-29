@@ -6,6 +6,9 @@ using UnityEngine.AI;
 using GameNetcodeStuff;
 using Hax;
 using UnityEngine.UI;
+using static UnityEngine.EventSystems.EventTrigger;
+using Mono.Security.Interface;
+using Steamworks;
 
 internal sealed class PossessionMod : MonoBehaviour {
     const float TeleportDoorCooldown = 2.5f;
@@ -15,15 +18,20 @@ internal sealed class PossessionMod : MonoBehaviour {
     internal static PossessionMod? Instance { get; private set; }
     internal bool IsPossessed => this.Possession.IsPossessed;
     internal EnemyAI? PossessedEnemy => this.Possession.Enemy;
+    internal IController? Controller { get; private set; } = null;
 
     Possession Possession { get; } = new();
     GameObject? CharacterMovementInstance { get; set; } = null;
     CharacterMovement? CharacterMovement { get; set; } = null;
+    EntranceTeleport? MainEntrance => RoundManager.FindMainEntranceScript(false);
+
     MousePan? MousePan { get; set; } = null;
 
     bool FirstUpdate { get; set; } = true;
     bool NoClipEnabled { get; set; } = false;
     bool IsAIControlled { get; set; } = false;
+    float DoorCooldownRemaining { get; set; } = 0.0f;
+    float TeleportCooldownRemaining { get; set; } = 0.0f;
 
     Dictionary<Type, IController> EnemyControllers { get; } = new() {
         { typeof(CentipedeAI), new SnareFleaController() },
@@ -48,9 +56,8 @@ internal sealed class PossessionMod : MonoBehaviour {
         { typeof(DocileLocustBeesAI), new DocileLocustBeesController() }
     };
 
-    float DoorCooldownRemaining { get; set; } = 0.0f;
-    float TeleportCooldownRemaining { get; set; } = 0.0f;
-    EntranceTeleport? MainEntrance { get; set; }
+    internal IController? GetEnemyController(EnemyAI enemy) =>
+        enemy == null ? null : this.EnemyControllers.GetValueOrDefault(enemy.GetType());
 
     void Awake() {
         this.InitCharacterMovement();
@@ -72,6 +79,8 @@ internal sealed class PossessionMod : MonoBehaviour {
         }
     }
 
+
+
     void OnEnable() {
         InputListener.OnNPress += this.ToggleNoClip;
         InputListener.OnZPress += this.Unpossess;
@@ -85,6 +94,7 @@ internal sealed class PossessionMod : MonoBehaviour {
         InputListener.OnLeftAltButtonHold += this.HoldAlt;
         this.UpdateComponentsOnCurrentState(true);
     }
+
 
     void OnDisable() {
         InputListener.OnNPress -= this.ToggleNoClip;
@@ -157,28 +167,42 @@ internal sealed class PossessionMod : MonoBehaviour {
             this.InitCharacterMovement(enemy);
             this.UpdateComponentsOnCurrentState(true);
             this.SetAIControl(false);
-            this.MainEntrance = RoundManager.FindMainEntranceScript(false);
         }
 
 
-        if (!this.EnemyControllers.TryGetValue(enemy.GetType(), out IController controller)) {
-            if (!this.IsAIControlled) {
-                this.UpdateEnemyPosition(enemy);
-                this.UpdateEnemyRotation();
-            }
-
-            if (this.MainEntrance != null) {
-                _ = enemy.SetOutsideStatus(enemy.transform.position.y > this.MainEntrance.transform.position.y + 5.0f);
-            }
-
-            if (enemy.isEnemyDead) {
-                this.Unpossess();
-            }
-
-            this.InteractWithAmbient(enemy, null);
+        if (this.Controller == null) {
+            this.UnregisteredEnemy(enemy);
             return;
         }
+        else {
+            this.CompatibilityMode(localPlayer, enemy, this.Controller, characterMovement, agent);
+        }
+    }
 
+    /// <summary>
+    /// This Allows to possess an enemy without a controller Registered to it..
+    /// </summary>
+    void UnregisteredEnemy(EnemyAI enemy) {
+        if (!this.IsAIControlled) {
+            this.UpdateEnemyPosition(enemy);
+            this.UpdateEnemyRotation();
+        }
+
+        if (this.MainEntrance != null) {
+            _ = enemy.SetOutsideStatus(enemy.transform.position.y > this.MainEntrance.transform.position.y + 5.0f);
+        }
+
+        if (enemy.isEnemyDead) {
+            this.Unpossess();
+        }
+
+        this.InteractWithAmbient(enemy, null);
+    }
+
+    /// <summary>
+    /// This Allows To possess an Enemy with full compatibility thanks to IController.
+    /// </summary>
+    void CompatibilityMode(PlayerControllerB player, EnemyAI enemy, IController controller, CharacterMovement movement, NavMeshAgent agent) {
         if (this.MainEntrance != null) {
             if (enemy.SetOutsideStatus(enemy.transform.position.y > this.MainEntrance.transform.position.y + 5.0f)) {
                 controller.OnOutsideStatusChange(enemy);
@@ -192,23 +216,21 @@ internal sealed class PossessionMod : MonoBehaviour {
         }
 
         controller.Update(enemy, this.IsAIControlled);
-        this.InteractWithAmbient(enemy, controller);
-        localPlayer.cursorTip.text = controller.GetPrimarySkillName(enemy);
+        this.InteractWithAmbient(enemy, this.Controller);
+        player.cursorTip.text = controller.GetPrimarySkillName(enemy);
 
         if (this.IsAIControlled) {
             return;
         }
 
         if (controller.SyncAnimationSpeedEnabled(enemy)) {
-            characterMovement.CharacterSpeed = agent.speed;
+            movement.CharacterSpeed = agent.speed;
         }
 
         if (controller.IsAbleToMove(enemy)) {
-            controller.OnMovement(enemy, this.CharacterMovement.IsMoving, this.CharacterMovement.IsSprinting);
+            controller.OnMovement(enemy, movement.IsMoving, movement.IsSprinting);
             this.UpdateEnemyPosition(enemy);
-            CharacterMovement.AbleToMove = true;
         }
-        else { CharacterMovement.AbleToMove = false;}
 
         if (controller.IsAbleToRotate(enemy)) {
             this.UpdateEnemyRotation();
@@ -271,9 +293,8 @@ internal sealed class PossessionMod : MonoBehaviour {
         this.TeleportCooldownRemaining = 0.0f;
         this.DoorCooldownRemaining = 0.0f;
         enemy.EnableEnemyMesh(true);
-        if (this.EnemyControllers.TryGetValue(enemy.GetType(), out IController controller)) {
-            controller.OnPossess(enemy);
-        }
+        this.Controller = this.GetEnemyController(enemy);
+        this.Controller?.OnPossess(enemy);
     }
 
     void KillEnemyAndUnposses() {
@@ -304,14 +325,11 @@ internal sealed class PossessionMod : MonoBehaviour {
             enemy.SyncPositionToClients();
         }
 
-        if (this.EnemyControllers.TryGetValue(enemy.GetType(), out IController controller)) {
-            controller.OnUnpossess(enemy);
-        }
+        if (this.Controller != null) this.Controller.OnUnpossess(enemy);
 
         this.IsAIControlled = false;
-        this.MainEntrance = null;
         this.Possession.Clear();
-
+        this.Controller = null;
         if (this.CharacterMovement is not null) {
             Destroy(this.CharacterMovementInstance);
             this.CharacterMovementInstance = null;
@@ -357,15 +375,10 @@ internal sealed class PossessionMod : MonoBehaviour {
         this.TeleportCooldownRemaining = PossessionMod.TeleportDoorCooldown;
     }
 
-    float InteractRange(EnemyAI enemy) =>
-        this.EnemyControllers.TryGetValue(enemy.GetType(), out IController value)
-            ? value.InteractRange(enemy)
-            : IController.DefaultInteractRange;
+    float InteractRange(EnemyAI enemy) => this.Controller?.InteractRange(enemy) ?? IController.DefaultInteractRange;
 
-    float SprintMultiplier(EnemyAI enemy) =>
-        this.EnemyControllers.TryGetValue(enemy.GetType(), out IController value)
-            ? value.SprintMultiplier(enemy)
-            : IController.DefaultSprintMultiplier;
+    float SprintMultiplier(EnemyAI enemy) => this.Controller?.SprintMultiplier(enemy) ?? IController.DefaultSprintMultiplier;
+
 
     void InteractWithAmbient(EnemyAI enemy, IController? controller) {
         if (!Physics.Raycast(enemy.transform.position, enemy.transform.forward, out RaycastHit hit,
@@ -407,54 +420,42 @@ internal sealed class PossessionMod : MonoBehaviour {
     }
 
     Vector3 GetCameraOffset() {
-        if (this.Possession.Enemy is not EnemyAI enemy) return IController.DefaultCamOffsets;
-        if (!this.EnemyControllers.TryGetValue(enemy.GetType(), out IController controller)) return IController.DefaultCamOffsets;
-
-        return controller.GetCameraOffset(enemy);
+        if (this.Possession.Enemy is not EnemyAI enemy || this.Controller is null) return IController.DefaultCamOffsets;
+        return this.Controller.GetCameraOffset(enemy);
     }
 
     Vector3 GetEnemyPositionOffset() {
-        if (this.Possession.Enemy is not EnemyAI enemy) return IController.DefaultEnemyOffset;
-        if (!this.EnemyControllers.TryGetValue(enemy.GetType(), out IController controller))
-            return IController.DefaultEnemyOffset;
-
-        return controller.GetEnemyPositionOffset(enemy);
+        if (this.Possession.Enemy is not EnemyAI enemy || this.Controller is null) return IController.DefaultEnemyOffset;
+        return this.Controller.GetEnemyPositionOffset(enemy);
     }
 
 
 
     void UsePrimarySkill() {
-        if (this.Possession.Enemy is not EnemyAI enemy) return;
-        if (!this.EnemyControllers.TryGetValue(enemy.GetType(), out IController controller)) return;
-
-        controller.UsePrimarySkill(enemy);
+        if (this.Possession.Enemy is not EnemyAI enemy || this.Controller is null) return;
+        this.Controller.UsePrimarySkill(enemy);
     }
 
     void UseSecondarySkill() {
-        if (this.Possession.Enemy is not EnemyAI enemy) return;
-        if (!this.EnemyControllers.TryGetValue(enemy.GetType(), out IController controller)) return;
+        if (this.Possession.Enemy is not EnemyAI enemy || this.Controller is null) return;
 
-        controller.UseSecondarySkill(enemy);
+        this.Controller.UseSecondarySkill(enemy);
     }
 
     void OnSecondarySkillHold() {
-        if (this.Possession.Enemy is not EnemyAI enemy) return;
-        if (!this.EnemyControllers.TryGetValue(enemy.GetType(), out IController controller)) return;
+        if (this.Possession.Enemy is not EnemyAI enemy || this.Controller is null) return;
 
-        controller.OnSecondarySkillHold(enemy);
+        this.Controller.OnSecondarySkillHold(enemy);
     }
 
     void ReleaseSecondarySkill() {
-        if (this.Possession.Enemy is not EnemyAI enemy) return;
-        if (!this.EnemyControllers.TryGetValue(enemy.GetType(), out IController controller)) return;
+        if (this.Possession.Enemy is not EnemyAI enemy || this.Controller is null) return;
 
-        controller.ReleaseSecondarySkill(enemy);
+        this.Controller.ReleaseSecondarySkill(enemy);
     }
 
     void UseSpecialAbility() {
-        if (this.Possession.Enemy is not EnemyAI enemy) return;
-        if (!this.EnemyControllers.TryGetValue(enemy.GetType(), out IController controller)) return;
-
-        controller.UseSpecialAbility(enemy);
+        if (this.Possession.Enemy is not EnemyAI enemy || this.Controller is null) return;
+        this.Controller.UseSpecialAbility(enemy);
     }
 }
