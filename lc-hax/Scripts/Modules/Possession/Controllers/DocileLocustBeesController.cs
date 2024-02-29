@@ -34,6 +34,6 @@ internal class DocileLocustBeesController : IEnemyController<DocileLocustBeesAI>
         }
     }
 
-    public bool SyncAnimationSpeedEnabled(EnemyAI enemy) => false;
+    public bool SyncAnimationSpeedEnabled(DocileLocustBeesAI enemy) => false;
 }
 

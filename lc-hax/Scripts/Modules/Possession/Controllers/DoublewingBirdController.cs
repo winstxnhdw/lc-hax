@@ -34,7 +34,7 @@ internal class DoublewingBirdController : IEnemyController<DoublewingAI> {
 
     public void UseSecondarySkill(DoublewingAI enemy) => enemy.SetBehaviourState(DoublewingBirdState.GLIDING);
 
-    public bool IsAbleToRotate(EnemyAI enemy) => !enemy.IsBehaviourState(DoublewingBirdState.IDLE);
+    public bool IsAbleToRotate(DoublewingAI enemy) => !enemy.IsBehaviourState(DoublewingBirdState.IDLE);
 
     public bool SyncAnimationSpeedEnabled(DoublewingAI enemy) => true;
 
