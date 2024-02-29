@@ -8,7 +8,7 @@ updates:
       timezone: Asia/Singapore
 
   - package-ecosystem: nuget
-    directory: /
+    directory: lc-hax
     schedule:
       interval: daily
       time: '18:00'
