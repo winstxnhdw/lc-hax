@@ -358,22 +358,18 @@ internal sealed class PossessionMod : MonoBehaviour {
 
 
     void InteractWithDungeonDoors(EnemyAI enemy) {
-        foreach (RaycastHit hit in Physics.SphereCastAll(enemy.transform.position + (enemy.transform.forward * (this.InteractRange(enemy) + 1.75f)), this.InteractRange(enemy), enemy.transform.forward, this.InteractRange(enemy)))
-            if (hit.collider.gameObject.TryGetComponent(out DoorLock doorLock)) {
-                this.OpenDoorAsEnemy(doorLock);
-                return;
-            }
+        if (!Physics.Raycast(enemy.transform.position + Vector3.up * 0.2f, enemy.transform.forward, out RaycastHit hit, this.InteractRange(enemy))) return;
+        if (hit.collider.gameObject.TryGetComponent(out DoorLock doorLock)) {
+            this.OpenDoorAsEnemy(doorLock);
+        }
     }
 
     void InteractWithExitDoors(EnemyAI enemy, IController? controller) {
-        if (!Physics.Raycast(enemy.transform.position, enemy.transform.forward, out RaycastHit hit, this.InteractRange(enemy))) return;
-        if (controller != null) {
-            if (controller.CanUseEntranceDoors(enemy)) {
-                if (!hit.collider.gameObject.TryGetComponent(out EntranceTeleport entrance)) return;
-                this.InteractWithTeleport(enemy, entrance, controller);
-                return;
-            }
-        }
+        if (controller == null) return;
+        if (!controller.CanUseEntranceDoors(enemy)) return;
+        if (!Physics.Raycast(enemy.transform.position + Vector3.up * 0.2f, enemy.transform.forward, out RaycastHit hit, this.InteractRange(enemy))) return;
+        if (!hit.collider.gameObject.TryGetComponent(out EntranceTeleport entrance)) return;
+        this.InteractWithTeleport(enemy, entrance, controller);
     }
 
     void OpenDoorAsEnemy(DoorLock door) {
