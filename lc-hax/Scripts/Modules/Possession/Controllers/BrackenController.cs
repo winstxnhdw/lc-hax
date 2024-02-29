@@ -31,11 +31,6 @@ internal class BrackenController : IEnemyController<FlowermanAI> {
         return this.CamOffsets;
     }
 
-    bool GetStartingKillAnimationLocalClient(FlowermanAI enemy) => enemy.Reflect().GetInternalField<bool>("startingKillAnimationLocalClient");
-
-    void SetStartingKillAnimationLocalClient(FlowermanAI enemy, bool value) => enemy.Reflect().SetInternalField("startingKillAnimationLocalClient", value);
-
-
     public void UsePrimarySkill(FlowermanAI enemy) {
         if (!enemy.carryingPlayerBody) {
             enemy.SetBehaviourState(BrackenState.ANGER);
