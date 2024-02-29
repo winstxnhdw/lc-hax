@@ -297,6 +297,7 @@ internal sealed class PossessionMod : MonoBehaviour {
             agent.isStopped = false;
             this.SetAIControl(true);
             this.UpdateEnemyPosition(enemy);
+            this.SetAIControl(true);
             _ = enemy.agent.Warp(enemy.transform.position);
             enemy.SyncPositionToClients();
         }
