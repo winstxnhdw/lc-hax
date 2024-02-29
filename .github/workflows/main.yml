@@ -7,10 +7,7 @@ on:
       - .editorconfig
       - lc-hax/**
   pull_request:
-    paths:
-      - .github/workflows/main.yml
-      - .editorconfig
-      - lc-hax/**
+    types: opened
 
 env:
   NUGET_PACKAGES: ${{ github.workspace }}/lc-hax/References/NuGet
@@ -20,15 +17,15 @@ jobs:
     runs-on: windows-latest
 
     steps:
-    - name: Checkout repository
-      uses: actions/checkout@v4.1.1
+      - name: Checkout repository
+        uses: actions/checkout@v4.1.1
 
-    - name: Setup .NET
-      uses: actions/setup-dotnet@v4.0.0
-      with:
-        dotnet-version: 8.0.x
-        cache: true
-        cache-dependency-path: lc-hax
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4.0.0
+        with:
+          dotnet-version: 8.0.x
+          cache: true
+          cache-dependency-path: lc-hax
 
-    - name: Build
-      run: dotnet build lc-hax /warnaserror
+      - name: Build
+        run: dotnet build lc-hax /warnaserror
