@@ -30,8 +30,6 @@ internal sealed class PossessionMod : MonoBehaviour {
     bool FirstUpdate { get; set; } = true;
     bool NoClipEnabled { get; set; } = false;
     bool IsAIControlled { get; set; } = false;
-    float DoorCooldownRemaining { get; set; } = 0.0f;
-    float TeleportCooldownRemaining { get; set; } = 0.0f;
 
     Dictionary<Type, IController> EnemyControllers { get; } = new() {
         { typeof(CentipedeAI), new SnareFleaController() },
@@ -92,6 +90,7 @@ internal sealed class PossessionMod : MonoBehaviour {
         InputListener.OnDelPress += this.KillEnemyAndUnposses;
         InputListener.OnF9Press += this.ToggleAIControl;
         InputListener.OnLeftAltButtonHold += this.HoldAlt;
+        InputListener.OnEPress += this.OnInteract;
         this.UpdateComponentsOnCurrentState(true);
     }
 
@@ -107,6 +106,7 @@ internal sealed class PossessionMod : MonoBehaviour {
         InputListener.OnDelPress -= this.KillEnemyAndUnposses;
         InputListener.OnF9Press -= this.ToggleAIControl;
         InputListener.OnLeftAltButtonHold -= this.HoldAlt;
+        InputListener.OnEPress -= this.OnInteract;
         this.UpdateComponentsOnCurrentState(false);
     }
 
@@ -146,18 +146,6 @@ internal sealed class PossessionMod : MonoBehaviour {
         if (this.Possession.Enemy is not EnemyAI enemy) return;
         if (enemy.agent is not NavMeshAgent agent) return;
 
-        this.DoorCooldownRemaining = Mathf.Clamp(
-            this.DoorCooldownRemaining - Time.deltaTime,
-            0.0f,
-            PossessionMod.DoorInteractionCooldown
-        );
-
-        this.TeleportCooldownRemaining = Mathf.Clamp(
-            this.TeleportCooldownRemaining - Time.deltaTime,
-            0.0f,
-            PossessionMod.TeleportDoorCooldown
-        );
-
         enemy.ChangeEnemyOwnerServerRpc(localPlayer.actualClientId);
         this.UpdateCameraPosition(camera, enemy);
         this.UpdateCameraRotation(camera, enemy);
@@ -194,8 +182,6 @@ internal sealed class PossessionMod : MonoBehaviour {
         if (enemy.isEnemyDead) {
             this.Unpossess();
         }
-
-        this.InteractWithAmbient(enemy, null);
     }
 
     /// <summary>
@@ -215,7 +201,6 @@ internal sealed class PossessionMod : MonoBehaviour {
         }
 
         controller.Update(enemy, this.IsAIControlled);
-        this.InteractWithAmbient(enemy, this.Controller);
         player.cursorTip.text = controller.GetPrimarySkillName(enemy);
 
         if (this.IsAIControlled) {
@@ -234,6 +219,12 @@ internal sealed class PossessionMod : MonoBehaviour {
         if (controller.IsAbleToRotate(enemy)) {
             this.UpdateEnemyRotation();
         }
+    }
+
+    void OnInteract() {
+        if (this.PossessedEnemy == null) return;
+        this.InteractWithDungeonDoors(this.PossessedEnemy);
+        if (this.Controller != null) this.InteractWithExitDoors(this.PossessedEnemy, this.Controller);
     }
 
     void UpdateCameraPosition(Camera camera, EnemyAI enemy) {
@@ -289,8 +280,6 @@ internal sealed class PossessionMod : MonoBehaviour {
         this.FirstUpdate = true;
         this.Possession.SetEnemy(enemy);
         this.IsAIControlled = false;
-        this.TeleportCooldownRemaining = 0.0f;
-        this.DoorCooldownRemaining = 0.0f;
         enemy.EnableEnemyMesh(true);
         this.Controller = this.GetEnemyController(enemy);
         this.Controller?.OnPossess(enemy);
@@ -367,31 +356,25 @@ internal sealed class PossessionMod : MonoBehaviour {
         characterMovement.enabled = !enableAI;
     }
 
-    void HandleEntranceDoors(EnemyAI enemy, RaycastHit hit, IController controller) {
-        if (this.TeleportCooldownRemaining > 0.0f) return;
-        if (!hit.collider.gameObject.TryGetComponent(out EntranceTeleport entrance)) return;
-
-        this.InteractWithTeleport(enemy, entrance, controller);
-        this.TeleportCooldownRemaining = PossessionMod.TeleportDoorCooldown;
-    }
-
     float InteractRange(EnemyAI enemy) => this.Controller?.InteractRange(enemy) ?? IController.DefaultInteractRange;
 
     float SprintMultiplier(EnemyAI enemy) => this.Controller?.SprintMultiplier(enemy) ?? IController.DefaultSprintMultiplier;
 
 
-    void InteractWithAmbient(EnemyAI enemy, IController? controller) {
-        if (!Physics.Raycast(enemy.transform.position, enemy.transform.forward, out RaycastHit hit,
-                this.InteractRange(enemy))) return;
-        if (hit.collider.gameObject.TryGetComponent(out DoorLock doorLock) && this.DoorCooldownRemaining <= 0.0f) {
-            this.OpenDoorAsEnemy(doorLock);
-            this.DoorCooldownRemaining = PossessionMod.DoorInteractionCooldown;
-            return;
-        }
+    void InteractWithDungeonDoors(EnemyAI enemy) {
+        foreach (RaycastHit hit in Physics.SphereCastAll(enemy.transform.position + (enemy.transform.forward * (this.InteractRange(enemy) + 1.75f)), this.InteractRange(enemy), enemy.transform.forward, this.InteractRange(enemy)))
+            if (hit.collider.gameObject.TryGetComponent(out DoorLock doorLock)) {
+                this.OpenDoorAsEnemy(doorLock);
+                return;
+            }
+    }
 
+    void InteractWithExitDoors(EnemyAI enemy, IController? controller) {
+        if (!Physics.Raycast(enemy.transform.position, enemy.transform.forward, out RaycastHit hit, this.InteractRange(enemy))) return;
         if (controller != null) {
             if (controller.CanUseEntranceDoors(enemy)) {
-                this.HandleEntranceDoors(enemy, hit, controller);
+                if (!hit.collider.gameObject.TryGetComponent(out EntranceTeleport entrance)) return;
+                this.InteractWithTeleport(enemy, entrance, controller);
                 return;
             }
         }

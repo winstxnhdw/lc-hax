@@ -19,10 +19,6 @@ class InputListener : MonoBehaviour {
     internal static event Action? OnRightBracketPress;
     internal static event Action? OnBackslashPress;
     internal static event Action? OnDelPress;
-    internal static event Action? OnZPress;
-    internal static event Action? OnXPress;
-    internal static event Action? OnNPress;
-    internal static event Action? OnQPress;
     internal static event Action? OnUpArrowPress;
     internal static event Action? OnDownArrowPress;
     internal static event Action? OnF4Press;
@@ -30,8 +26,13 @@ class InputListener : MonoBehaviour {
     internal static event Action? OnF9Press;
     internal static event Action<bool>? OnRightButtonHold;
     internal static event Action<bool>? OnLeftAltButtonHold;
+    internal static event Action? OnZPress;
+    internal static event Action? OnXPress;
+    internal static event Action? OnNPress;
+    internal static event Action? OnQPress;
+    internal static event Action? OnEPress;
 
-    static bool isNotTyping() => Helper.LocalPlayer == null || !Helper.LocalPlayer.isTypingChat;
+    static bool IsNotTyping() => Helper.LocalPlayer == null || !Helper.LocalPlayer.isTypingChat;
 
     (Func<bool>, Action)[] InputActions { get; } = [
         (() => Mouse.current.middleButton.wasPressedThisFrame, () => InputListener.OnMiddleButtonPress?.Invoke()),
@@ -51,16 +52,20 @@ class InputListener : MonoBehaviour {
         (() => Keyboard.current[Key.F4].wasPressedThisFrame, () => InputListener.OnF4Press?.Invoke()),
         (() => Keyboard.current[Key.F5].wasPressedThisFrame, () => InputListener.OnF5Press?.Invoke()),
         (() => Keyboard.current[Key.F9].wasPressedThisFrame, () => InputListener.OnF9Press?.Invoke()),
-        (() => isNotTyping() && Keyboard.current[Key.Z].wasPressedThisFrame, () => InputListener.OnZPress?.Invoke()),
-        (() => isNotTyping() && Keyboard.current[Key.X].wasPressedThisFrame, () => InputListener.OnXPress?.Invoke()),
-        (() => isNotTyping() && Keyboard.current[Key.N].wasPressedThisFrame, () => InputListener.OnNPress?.Invoke()),
-        (() => isNotTyping() && Keyboard.current[Key.Q].wasPressedThisFrame, () => InputListener.OnQPress?.Invoke()),
+        (() => IsNotTyping() && Keyboard.current[Key.Z].wasPressedThisFrame, () => InputListener.OnZPress?.Invoke()),
+        (() => IsNotTyping() && Keyboard.current[Key.X].wasPressedThisFrame, () => InputListener.OnXPress?.Invoke()),
+        (() => IsNotTyping() && Keyboard.current[Key.N].wasPressedThisFrame, () => InputListener.OnNPress?.Invoke()),
+        (() => IsNotTyping() && Keyboard.current[Key.Q].wasPressedThisFrame, () => InputListener.OnQPress?.Invoke()),
+        (() => IsNotTyping() && Keyboard.current[Key.E].wasPressedThisFrame, () => InputListener.OnEPress?.Invoke()),
     ];
 
     void Update() {
+        if (IsNotTyping()) {
+            InputListener.OnFButtonHold?.Invoke(Keyboard.current[Key.F].isPressed);
+            InputListener.OnEButtonHold?.Invoke(Keyboard.current[Key.E].isPressed);
+        }
+
         InputListener.OnShiftButtonHold?.Invoke(Keyboard.current[Key.LeftShift].isPressed);
-        InputListener.OnFButtonHold?.Invoke(Keyboard.current[Key.F].isPressed);
-        InputListener.OnEButtonHold?.Invoke(Keyboard.current[Key.E].isPressed);
         InputListener.OnRightButtonHold?.Invoke(Mouse.current.rightButton.isPressed);
         InputListener.OnLeftAltButtonHold?.Invoke(Keyboard.current[Key.LeftAlt].isPressed);
 
