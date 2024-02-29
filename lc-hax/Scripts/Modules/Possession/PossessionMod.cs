@@ -5,8 +5,6 @@ using Unity.Netcode;
 using UnityEngine.AI;
 using GameNetcodeStuff;
 using Hax;
-using UnityEngine.Windows.WebCam;
-using static UnityEngine.EventSystems.EventTrigger;
 
 internal sealed class PossessionMod : MonoBehaviour {
     const float TeleportDoorCooldown = 2.5f;
@@ -385,7 +383,7 @@ internal sealed class PossessionMod : MonoBehaviour {
         if (door.isLocked) {
             door.UnlockDoorSyncWithServer();
         }
-        
+
         if (isDoorOpened) {
             door.OpenOrCloseDoor(Helper.Players[0]);
         }
