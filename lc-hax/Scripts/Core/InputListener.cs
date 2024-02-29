@@ -1,4 +1,5 @@
 using System;
+using Hax;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -30,6 +31,8 @@ class InputListener : MonoBehaviour {
     internal static event Action<bool>? OnRightButtonHold;
     internal static event Action<bool>? OnLeftAltButtonHold;
 
+    static bool isNotTyping() => Helper.LocalPlayer == null || !Helper.LocalPlayer.isTypingChat;
+
     (Func<bool>, Action)[] InputActions { get; } = [
         (() => Mouse.current.middleButton.wasPressedThisFrame, () => InputListener.OnMiddleButtonPress?.Invoke()),
         (() => Mouse.current.leftButton.wasPressedThisFrame, () => InputListener.OnLeftButtonPress?.Invoke()),
@@ -43,15 +46,15 @@ class InputListener : MonoBehaviour {
         (() => Keyboard.current[Key.RightBracket].wasPressedThisFrame, () => InputListener.OnRightBracketPress?.Invoke()),
         (() => Keyboard.current[Key.Backslash].wasPressedThisFrame, () => InputListener.OnBackslashPress?.Invoke()),
         (() => Keyboard.current[Key.Delete].wasPressedThisFrame, () => InputListener.OnDelPress?.Invoke()),
-        (() => Keyboard.current[Key.Z].wasPressedThisFrame, () => InputListener.OnZPress?.Invoke()),
-        (() => Keyboard.current[Key.X].wasPressedThisFrame, () => InputListener.OnXPress?.Invoke()),
-        (() => Keyboard.current[Key.N].wasPressedThisFrame, () => InputListener.OnNPress?.Invoke()),
-        (() => Keyboard.current[Key.Q].wasPressedThisFrame, () => InputListener.OnQPress?.Invoke()),
         (() => Keyboard.current[Key.UpArrow].wasPressedThisFrame, () => InputListener.OnUpArrowPress?.Invoke()),
         (() => Keyboard.current[Key.DownArrow].wasPressedThisFrame, () => InputListener.OnDownArrowPress?.Invoke()),
         (() => Keyboard.current[Key.F4].wasPressedThisFrame, () => InputListener.OnF4Press?.Invoke()),
         (() => Keyboard.current[Key.F5].wasPressedThisFrame, () => InputListener.OnF5Press?.Invoke()),
         (() => Keyboard.current[Key.F9].wasPressedThisFrame, () => InputListener.OnF9Press?.Invoke()),
+        (() => isNotTyping() && Keyboard.current[Key.Z].wasPressedThisFrame, () => InputListener.OnZPress?.Invoke()),
+        (() => isNotTyping() && Keyboard.current[Key.X].wasPressedThisFrame, () => InputListener.OnXPress?.Invoke()),
+        (() => isNotTyping() && Keyboard.current[Key.N].wasPressedThisFrame, () => InputListener.OnNPress?.Invoke()),
+        (() => isNotTyping() && Keyboard.current[Key.Q].wasPressedThisFrame, () => InputListener.OnQPress?.Invoke()),
     ];
 
     void Update() {
