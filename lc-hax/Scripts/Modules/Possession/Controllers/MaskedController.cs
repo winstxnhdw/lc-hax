@@ -10,9 +10,9 @@ internal class MaskedPlayerController : IEnemyController<MaskedPlayerEnemy> {
 
     public void UseSecondarySkill(MaskedPlayerEnemy enemy) => enemy.SetCrouchingServerRpc(!enemy.creatureAnimator.GetBool("Crouching"));
 
-    public bool IsAbleToMove(EnemyAI enemy) => !enemy.Reflect().GetInternalField<bool>("inKillAnimation");
+    public bool IsAbleToMove(MaskedPlayerEnemy enemy) => !enemy.Reflect().GetInternalField<bool>("inKillAnimation");
 
-    public bool IsAbleToRotate(EnemyAI enemy) => !enemy.Reflect().GetInternalField<bool>("inKillAnimation");
+    public bool IsAbleToRotate(MaskedPlayerEnemy enemy) => !enemy.Reflect().GetInternalField<bool>("inKillAnimation");
 
     public bool SyncAnimationSpeedEnabled(MaskedPlayerEnemy _) => false;
 
