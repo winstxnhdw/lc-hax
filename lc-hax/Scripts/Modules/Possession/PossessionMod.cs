@@ -219,7 +219,7 @@ internal sealed class PossessionMod : MonoBehaviour {
 
     void OnInteract() {
         if (this.PossessedEnemy is not EnemyAI enemy) return;
-        if (!Physics.Raycast(enemy.transform.position + Vector3.up * 0.2f, enemy.transform.forward, out RaycastHit hit, this.InteractRange(enemy))) return;
+        if (!Physics.Raycast(enemy.transform.position + (Vector3.up * 0.2f), enemy.transform.forward, out RaycastHit hit, this.InteractRange(enemy))) return;
         if (hit.collider.gameObject.TryGetComponent(out DoorLock doorLock)) {
             this.OpenOrcloseDoorAsEnemy(doorLock);
             return;
