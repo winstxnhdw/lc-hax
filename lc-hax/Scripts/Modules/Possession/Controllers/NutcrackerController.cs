@@ -55,7 +55,7 @@ internal class NutcrackerController : IEnemyController<NutcrackerEnemyAI> {
     }
 
     public void UseSpecialAbility(NutcrackerEnemyAI enemy) {
-        bool reloadingGun = enemy.Reflect().GetInternalField<bool>("reloadingGun");
+        _ = enemy.Reflect().GetInternalField<bool>("reloadingGun");
         int SaveTimesSeeingSamePlayer = enemy.Reflect().GetInternalField<int>("timesSeeingSamePlayer");
         int SaveHP = enemy.enemyHP;
         int SaveShellsLoaded = enemy.gun.shellsLoaded;
