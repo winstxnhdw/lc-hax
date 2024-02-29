@@ -103,6 +103,8 @@ class CharacterMovement : MonoBehaviour {
         // Apply gravity
         this.ApplyGravity();
 
+        if (Helper.LocalPlayer is { isTypingChat: true }) return;
+
         // Check if Enemy can move.
         if (this.ControlledEnemy != null && this.EnemyController != null) {
             if (!this.EnemyController.IsAbleToMove(this.ControlledEnemy)) return;

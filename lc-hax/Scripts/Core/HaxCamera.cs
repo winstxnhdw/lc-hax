@@ -1,6 +1,7 @@
 using GameNetcodeStuff;
 using Hax;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using UnityEngine.Rendering.HighDefinition;
 
 internal class HaxCamera : MonoBehaviour {
@@ -28,7 +29,6 @@ internal class HaxCamera : MonoBehaviour {
         if (this.GetCamera() is not Camera cam) return;
         this.HaxCamContainer.SetActive(active);
         if (!this.HaxCamContainer.activeSelf) {
-            player.playerActions.Movement.PingScan.Enable();
             playerlistener.enabled = true;
             startOfRound.audioListener = playerlistener;
             startOfRound.activeCamera.enabled = true;
@@ -38,7 +38,14 @@ internal class HaxCamera : MonoBehaviour {
             startOfRound.activeCamera.enabled = false;
             playerlistener.enabled = false;
             startOfRound.audioListener = haxListener;
-            player.playerActions.Movement.PingScan.Disable();
+        }
+    }
+
+    void LateUpdate() {
+        if (this.HaxCamContainer is null) return;
+        if(this.KeyboardMovement is null) return;
+        if (this.HaxCamContainer.activeSelf) {
+            this.KeyboardMovement.IsPaused = Helper.LocalPlayer is { isTypingChat: true };
         }
     }
 

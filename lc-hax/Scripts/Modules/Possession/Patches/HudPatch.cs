@@ -3,7 +3,7 @@
 using HarmonyLib;
 
 [HarmonyPatch]
-class PossessionPatch {
+class HudPatch {
     [HarmonyPatch(typeof(HUDManager), "CanPlayerScan")]
     static bool Prefix(ref bool __result) {
         if (HaxCamera.Instance?.HaxCamContainer?.activeSelf == false) return false;
