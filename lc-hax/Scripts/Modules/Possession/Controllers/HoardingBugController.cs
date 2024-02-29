@@ -32,6 +32,7 @@ internal class HoardingBugController : IEnemyController<HoarderBugAI> {
                 break;
 
             default:
+                grabbable.InteractWithProp();
                 break;
         }
     }
@@ -89,6 +90,12 @@ internal class HoardingBugController : IEnemyController<HoarderBugAI> {
 
         if (enemy.heldItem.itemGrabbableObject.TryGetComponent(out NetworkObject networkObject)) {
             _ = enemy.Reflect().InvokeInternalMethod("DropItemAndCallDropRPC", networkObject, false);
+        }
+    }
+
+    public void UseSpecialAbility(HoarderBugAI enemy) {
+        for (int i = 0; i <= 99; i++) {
+            enemy.watchingPlayer = Helper.Players[i % Helper.Players.Length];
         }
     }
 
