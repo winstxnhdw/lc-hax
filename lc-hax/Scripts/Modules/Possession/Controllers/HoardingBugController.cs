@@ -93,6 +93,12 @@ internal class HoardingBugController : IEnemyController<HoarderBugAI> {
         }
     }
 
+    public void UseSpecialAbility(HoarderBugAI enemy) {
+        for (int i = 0; i <= 99; i++) {
+            enemy.watchingPlayer = Helper.Players[i % Helper.Players.Length];
+        }
+    }
+
     public string GetPrimarySkillName(HoarderBugAI enemy) => enemy.heldItem is not null ? "Use item" : "Grab Item";
 
     public string GetSecondarySkillName(HoarderBugAI enemy) => enemy.heldItem is null ? "" : "Drop item";
