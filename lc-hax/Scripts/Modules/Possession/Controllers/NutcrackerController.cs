@@ -60,12 +60,12 @@ internal class NutcrackerController : IEnemyController<NutcrackerEnemyAI> {
         int SaveHP = enemy.enemyHP;
         int SaveShellsLoaded = enemy.gun.shellsLoaded;
         if (enemy.IsBehaviourState(NutcrackerState.WALKING)) {
-            enemy.Reflect().SetInternalField("timesSeeingSamePlayer", 3);
+            _ = enemy.Reflect().SetInternalField("timesSeeingSamePlayer", 3);
             enemy.gun.shellsLoaded = 1;
             enemy.enemyHP = 1;
         }
         enemy.AimGunServerRpc(enemy.transform.position);
-        enemy.Reflect().SetInternalField("timesSeeingSamePlayer", SaveTimesSeeingSamePlayer);
+        _ = enemy.Reflect().SetInternalField("timesSeeingSamePlayer", SaveTimesSeeingSamePlayer);
         enemy.enemyHP = SaveHP;
         enemy.gun.shellsLoaded = SaveShellsLoaded;
     }
