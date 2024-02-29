@@ -218,9 +218,18 @@ internal sealed class PossessionMod : MonoBehaviour {
     }
 
     void OnInteract() {
-        if (this.PossessedEnemy == null) return;
-        this.InteractWithDungeonDoors(this.PossessedEnemy);
-        if (this.Controller != null) this.InteractWithExitDoors(this.PossessedEnemy, this.Controller);
+        if (this.PossessedEnemy is not EnemyAI enemy) return;
+        if (!Physics.Raycast(enemy.transform.position + Vector3.up * 0.2f, enemy.transform.forward, out RaycastHit hit, this.InteractRange(enemy))) return;
+        if (hit.collider.gameObject.TryGetComponent(out DoorLock doorLock)) {
+            this.OpenOrcloseDoorAsEnemy(doorLock);
+            return;
+        }
+
+        if (this.Controller is not IController controller) return;
+        if (!controller.CanUseEntranceDoors(enemy)) return;
+        if (hit.collider.gameObject.TryGetComponent(out EntranceTeleport entrance)) {
+            this.InteractWithTeleport(enemy, entrance, controller);
+        }
     }
 
     void UpdateCameraPosition(Camera camera, EnemyAI enemy) {
@@ -357,28 +366,22 @@ internal sealed class PossessionMod : MonoBehaviour {
     float SprintMultiplier(EnemyAI enemy) => this.Controller?.SprintMultiplier(enemy) ?? IController.DefaultSprintMultiplier;
 
 
-    void InteractWithDungeonDoors(EnemyAI enemy) {
-        if (!Physics.Raycast(enemy.transform.position + Vector3.up * 0.2f, enemy.transform.forward, out RaycastHit hit, this.InteractRange(enemy))) return;
-        if (hit.collider.gameObject.TryGetComponent(out DoorLock doorLock)) {
-            this.OpenDoorAsEnemy(doorLock);
-        }
-    }
-
-    void InteractWithExitDoors(EnemyAI enemy, IController? controller) {
-        if (controller == null) return;
-        if (!controller.CanUseEntranceDoors(enemy)) return;
-        if (!Physics.Raycast(enemy.transform.position + Vector3.up * 0.2f, enemy.transform.forward, out RaycastHit hit, this.InteractRange(enemy))) return;
-        if (!hit.collider.gameObject.TryGetComponent(out EntranceTeleport entrance)) return;
-        this.InteractWithTeleport(enemy, entrance, controller);
-    }
-
-    void OpenDoorAsEnemy(DoorLock door) {
-        if (door.Reflect().GetInternalField<bool>("isDoorOpened")) return;
+    void OpenOrcloseDoorAsEnemy(DoorLock door) {
+        if (door == null) return;
         if (door.gameObject.TryGetComponent(out AnimatedObjectTrigger trigger)) {
             trigger.TriggerAnimationNonPlayer(false, true, false);
         }
 
-        door.OpenDoorAsEnemyServerRpc();
+        if (door.isLocked) {
+            door.UnlockDoorSyncWithServer();
+        }
+
+        if (door.Reflect().GetInternalField<bool>("isDoorOpened")) {
+            door.OpenOrCloseDoor(Helper.Players[0]);
+        }
+        else {
+            door.OpenDoorAsEnemyServerRpc();
+        }
     }
 
     Transform? GetExitPointFromDoor(EntranceTeleport entrance) =>
