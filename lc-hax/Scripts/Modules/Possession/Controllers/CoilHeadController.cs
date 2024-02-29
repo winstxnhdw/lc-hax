@@ -26,12 +26,9 @@ internal class CoilHeadController : IEnemyController<SpringManAI> {
 
     public void ReleaseSecondarySkill(SpringManAI enemy) => enemy.SetAnimationStopServerRpc();
 
-    public bool IsAbleToMove(SpringManAI enemy) => !this.GetStoppingMovement(enemy) || (enemy.IsBehaviourState(CoilHeadState.Idle) && enemy.agent.speed >= 0);
+    public bool IsAbleToMove(SpringManAI enemy) => !this.GetStoppingMovement(enemy) || enemy.IsBehaviourState(CoilHeadState.Idle) && enemy.agent.speed >= 0;
 
-    public bool IsAbleToRotate(SpringManAI enemy) => !this.GetStoppingMovement(enemy) || (enemy.IsBehaviourState(CoilHeadState.Idle) && enemy.agent.speed >= 0);
-
-    public float InteractRange(SpringManAI _) => 1.5f;
-
+    public bool IsAbleToRotate(SpringManAI enemy) => !this.GetStoppingMovement(enemy) || enemy.IsBehaviourState(CoilHeadState.Idle) && enemy.agent.speed >= 0;
     public void OnOutsideStatusChange(SpringManAI enemy) => enemy.StopSearch(enemy.searchForPlayers, true);
 
 }
