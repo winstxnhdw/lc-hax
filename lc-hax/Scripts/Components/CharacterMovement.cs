@@ -13,7 +13,6 @@ class CharacterMovement : MonoBehaviour {
 
     internal float CharacterSpeed { get; set; } = 5.0f;
     internal float CharacterSprintSpeed { get; set; } = 2.8f;
-    public bool AbleToMove { get;  set; } = true;
 
     // used to sync with the enemy to make sure it plays the correct animation when it is moving
     internal bool IsMoving { get; private set; } = false;
@@ -26,6 +25,11 @@ class CharacterMovement : MonoBehaviour {
     Keyboard Keyboard { get; set; } = Keyboard.current;
     KeyboardMovement? NoClipKeyboard { get; set; } = null;
     CharacterController? CharacterController { get; set; }
+
+    IController? EnemyController => PossessionMod.Instance?.Controller;
+
+    EnemyAI? ControlledEnemy => PossessionMod.Instance?.PossessedEnemy;
+
 
     internal void SetNoClipMode(bool enabled) {
         if (this.NoClipKeyboard is null) return;
@@ -57,8 +61,8 @@ class CharacterMovement : MonoBehaviour {
         this.CharacterController.stepOffset = Mathf.Min(this.CharacterController.stepOffset, maxStepOffset);
 
         enemy.GetComponentsInChildren<Collider>()
-             .Where(collider => collider != this.CharacterController)
-             .ForEach(collider => Physics.IgnoreCollision(this.CharacterController, collider));
+            .Where(collider => collider != this.CharacterController)
+            .ForEach(collider => Physics.IgnoreCollision(this.CharacterController, collider));
     }
 
 
@@ -94,12 +98,15 @@ class CharacterMovement : MonoBehaviour {
             this.IsSprinting
                 ? this.CharacterSpeed * this.CharacterSprintSpeed
                 : this.CharacterSpeed
-            );
+        );
 
         // Apply gravity
         this.ApplyGravity();
 
-        if (!AbleToMove) return;
+        // Check if Enemy can move.
+        if (this.ControlledEnemy != null && this.EnemyController != null) {
+            if (!this.EnemyController.IsAbleToMove(this.ControlledEnemy)) return;
+        }
 
         // Attempt to move
         _ = this.CharacterController?.Move(moveDirection * Time.deltaTime);
