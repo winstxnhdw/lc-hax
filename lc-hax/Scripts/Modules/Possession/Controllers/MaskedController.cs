@@ -6,9 +6,9 @@ internal class MaskedPlayerController : IEnemyController<MaskedPlayerEnemy> {
 
     public Vector3 GetCameraOffset(MaskedPlayerEnemy enemy) => this.camOffset;
 
-    public void UsePrimarySkill(MaskedPlayerEnemy enemy) => enemy.SetHandsOutServerRpc(!enemy.creatureAnimator.GetBool("HandsOut"));
+    public void UsePrimarySkill(MaskedPlayerEnemy enemy) => enemy.SetHandsOutServerRpc(!enemy.Reflect().GetInternalField<bool>("HandsOut"));
 
-    public void UseSecondarySkill(MaskedPlayerEnemy enemy) => enemy.SetCrouchingServerRpc(!enemy.creatureAnimator.GetBool("Crouching"));
+    public void UseSecondarySkill(MaskedPlayerEnemy enemy) => enemy.SetCrouchingServerRpc(!enemy.Reflect().GetInternalField<bool>("crouching"));
 
     public bool IsAbleToMove(MaskedPlayerEnemy enemy) => !enemy.Reflect().GetInternalField<bool>("inKillAnimation");
 
@@ -17,6 +17,5 @@ internal class MaskedPlayerController : IEnemyController<MaskedPlayerEnemy> {
     public bool SyncAnimationSpeedEnabled(MaskedPlayerEnemy _) => false;
 
     public void OnOutsideStatusChange(MaskedPlayerEnemy enemy) => enemy.StopSearch(enemy.searchForPlayers, true);
-
 
 }
