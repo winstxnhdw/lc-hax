@@ -123,7 +123,7 @@
       <Private>False</Private>
     </Reference>
 
-    <PackageReference Include="Lib.Harmony" Version="2.2.2">
+    <PackageReference Include="Lib.Harmony" Version="2.3.0">
       <NoWarn>NU1701</NoWarn>
     </PackageReference>
 
