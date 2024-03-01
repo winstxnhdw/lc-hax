@@ -1,81 +1,41 @@
-#pragma warning disable IDE1006
-
-using System.Collections;
-using UnityEngine;
+using GameNetcodeStuff;
 using HarmonyLib;
+using Hax;
 
-[HarmonyPatch(typeof(ShotgunItem))]
 class FakeReloadPatch {
-    static IEnumerator CustomReloadCoroutine(ShotgunItem shotgun) {
-        yield return new WaitForSeconds(0.3f);
 
-        shotgun.gunAudio.PlayOneShot(shotgun.gunReloadSFX);
-        shotgun.gunAnimator.SetBool("Reloading", true);
-        shotgun.ReloadGunEffectsServerRpc(true);
+    static bool InterruptDestroyItem { get; set; }
 
-        yield return new WaitForSeconds(0.95f);
-
-        shotgun.shotgunShellInHand.enabled = true;
-        shotgun.shotgunShellInHandTransform.SetParent(shotgun.playerHeldBy.leftHandItemTarget);
-        shotgun.shotgunShellInHandTransform.localPosition = new Vector3(-0.0555f, 0.1469f, -0.0655f);
-        shotgun.shotgunShellInHandTransform.localEulerAngles = new Vector3(-1.956f, 143.856f, -16.427f);
-
-        yield return new WaitForSeconds(0.95f);
-
-        shotgun.shellsLoaded = Mathf.Clamp(shotgun.shellsLoaded + 1, 0, 2);
-        shotgun.shotgunShellLeft.enabled = true;
-
-        if (shotgun.shellsLoaded == 2) {
-            shotgun.shotgunShellRight.enabled = true;
+    [HarmonyPatch(typeof(ShotgunItem))]
+    class ShotGun {
+        [HarmonyPatch("FindAmmoInInventory"), HarmonyPrefix] // This makes the shotgun look for a item slot that has a Shotgun Shell. Patch makes FindAmmoInInventory always result to 0 so it's not null.
+        static bool PrefixFindAmmoInInventory(ShotgunItem __instance, ref int __result) {
+            __result = 0;
+            return false;
         }
 
-        shotgun.shotgunShellInHand.enabled = false;
-        shotgun.shotgunShellInHandTransform.SetParent(shotgun.transform);
+        [HarmonyPatch("ItemInteractLeftRight"), HarmonyPrefix]
+        static bool PrefixItemInteractLeftRight(ShotgunItem __instance, ref int ___shellsLoaded) { // This checks if the shotgun is already loaded. Patch makes it where if it's full it unloads it so you can reload again.
+            if (___shellsLoaded >= 2) {
+                ___shellsLoaded = 0;
+                return false;
+            }
+            return true;
+        }
 
-        yield return new WaitForSeconds(0.45f);
-
-        shotgun.gunAudio.PlayOneShot(shotgun.gunReloadFinishSFX);
-        shotgun.gunAnimator.SetBool("Reloading", false);
-        shotgun.playerHeldBy.playerBodyAnimator.SetBool("ReloadShotgun", false);
-        shotgun.playerHeldBy.playerBodyAnimator.SetBool("ReloadShotgun2", false);
-        shotgun.isReloading = false;
-        shotgun.ReloadGunEffectsServerRpc(false);
+        [HarmonyPatch("reloadGunAnimation"), HarmonyPrefix] // Sets InterruptDestroyItem to true if Reload Starts.
+        static void PrefixReloadGunAnimation() {
+            FakeReloadPatch.InterruptDestroyItem = true;
+        }
+        [HarmonyPatch("StopUsingGun"), HarmonyPrefix] // Sets InterruptDestroyItem to false if Shotgun is Dropped or Pocketed.
+        static void PrefixStopUsingGun() {
+            FakeReloadPatch.InterruptDestroyItem = false;
+        }
     }
 
-    /// <summary>
-    /// Allow reloads even if the shotgun is full
-    /// </summary>
-    [HarmonyPatch(nameof(ShotgunItem.ItemInteractLeftRight))]
-    static void Prefix(ShotgunItem __instance) => __instance.shellsLoaded = 1;
-
-    /// <summary>
-    /// Allow reloads without any shells in the inventory
-    /// </summary>
-    [HarmonyPatch("ReloadedGun")]
-    static bool Prefix(ref bool __result) {
-        __result = true;
-        return false;
-    }
-
-    /// <summary>
-    /// Do not attempt to destroy any shells
-    /// </summary>
-    [HarmonyPrefix]
-    [HarmonyPatch("reloadGunAnimation")]
-    static bool ReloadGunAnimationPrefix(ShotgunItem __instance) {
-        if (__instance.shellsLoaded <= 0) {
-            __instance.playerHeldBy.playerBodyAnimator.SetBool("ReloadShotgun", true);
-            __instance.shotgunShellLeft.enabled = false;
-        }
-
-        else {
-            __instance.playerHeldBy.playerBodyAnimator.SetBool("ReloadShotgun2", true);
-        }
-
-        __instance.isReloading = true;
-        __instance.shotgunShellRight.enabled = false;
-        _ = __instance.StartCoroutine(FakeReloadPatch.CustomReloadCoroutine(__instance));
-
-        return false;
+    [HarmonyPatch(typeof(PlayerControllerB))]
+    class DestroyItem {
+        [HarmonyPatch("DestroyItemInSlotAndSync"), HarmonyPrefix] // if InterruptDestroyItem it's true it immediately returns DestroyItemInSlotAndSync to prevent ShotgunItem.reloadGunAnimation to call it.
+        static bool Prefix() => !FakeReloadPatch.InterruptDestroyItem;
     }
 }

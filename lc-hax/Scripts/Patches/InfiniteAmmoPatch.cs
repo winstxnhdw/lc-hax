@@ -2,10 +2,12 @@
 
 using HarmonyLib;
 
-[HarmonyPatch(typeof(ShotgunItem), nameof(ShotgunItem.ItemActivate))]
+[HarmonyPatch(typeof(ShotgunItem), nameof(ShotgunItem.ItemActivate))] // Load shell if empty on fire
 class InfiniteShotgunAmmoPatch {
-    static void Prefix(ShotgunItem __instance, EnemyAI? ___heldByEnemy) {
-        if (___heldByEnemy is not null) return;
-        __instance.shellsLoaded = 3;
+    static void Prefix(EnemyAI? ___heldByEnemy, ref int ___shellsLoaded, ref bool ___isReloading) {
+        if (___heldByEnemy is not null || ___isReloading) return;
+        if (___shellsLoaded <= 0) {
+            ___shellsLoaded = 1;
+        }
     }
 }
