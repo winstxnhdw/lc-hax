@@ -6,10 +6,17 @@ updates:
       interval: weekly
       time: '18:00'
       timezone: Asia/Singapore
+    groups:
+       dependencies:
+          patterns: ['*']
+
 
   - package-ecosystem: nuget
-    directory: /
+    directory: lc-hax
     schedule:
       interval: daily
       time: '18:00'
       timezone: Asia/Singapore
+    groups:
+       dependencies:
+          patterns: ['*']
