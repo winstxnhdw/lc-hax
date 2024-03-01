@@ -1,6 +1,5 @@
 using GameNetcodeStuff;
 using HarmonyLib;
-using Hax;
 
 class FakeReloadPatch {
 
@@ -24,13 +23,9 @@ class FakeReloadPatch {
         }
 
         [HarmonyPatch("reloadGunAnimation"), HarmonyPrefix] // Sets InterruptDestroyItem to true if Reload Starts.
-        static void PrefixReloadGunAnimation() {
-            FakeReloadPatch.InterruptDestroyItem = true;
-        }
+        static void PrefixReloadGunAnimation() => FakeReloadPatch.InterruptDestroyItem = true;
         [HarmonyPatch("StopUsingGun"), HarmonyPrefix] // Sets InterruptDestroyItem to false if Shotgun is Dropped or Pocketed.
-        static void PrefixStopUsingGun() {
-            FakeReloadPatch.InterruptDestroyItem = false;
-        }
+        static void PrefixStopUsingGun() => FakeReloadPatch.InterruptDestroyItem = false;
     }
 
     [HarmonyPatch(typeof(PlayerControllerB))]

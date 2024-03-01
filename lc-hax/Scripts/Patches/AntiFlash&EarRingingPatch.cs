@@ -13,8 +13,6 @@ class AntiFlashAndEarRingingPatch {
     [HarmonyPatch(typeof(SoundManager), "SetEarsRinging")]
     class AntiEarRingingPatch {
         [HarmonyPrefix]
-        static bool Prefix() {
-            return false;
-        }
+        static bool Prefix() => false;
     }
 }
