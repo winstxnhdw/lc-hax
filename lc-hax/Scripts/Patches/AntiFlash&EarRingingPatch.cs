@@ -4,9 +4,8 @@ class AntiFlashAndEarRingingPatch {
     [HarmonyPatch(typeof(HUDManager), "Update")]
     class AntiFlashPatch {
         [HarmonyPrefix]
-        static bool Prefix(HUDManager __instance) {
+        static void Prefix(HUDManager __instance) {
             __instance.flashFilter = 0f;
-            return true;
         }
     }
 
