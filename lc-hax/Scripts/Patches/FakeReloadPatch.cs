@@ -3,7 +3,7 @@ using HarmonyLib;
 
 class FakeReloadPatch {
 
-    static bool InterruptDestroyItem { get; set; }
+    static bool InterruptDestroyItem { get; set; } = false;
 
     [HarmonyPatch(typeof(ShotgunItem))]
     class ShotGun {
