@@ -9,7 +9,7 @@ class FakeReloadPatch {
     class ShotGun {
         [HarmonyPatch("FindAmmoInInventory"), HarmonyPrefix] // This makes the shotgun look for a item slot that has a Shotgun Shell. Patch makes FindAmmoInInventory always result to 0 so it's not null.
         static bool PrefixFindAmmoInInventory(ShotgunItem __instance, ref int __result) {
-            __result = 0;
+            __result = -2;
             return false;
         }
 
