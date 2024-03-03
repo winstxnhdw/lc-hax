@@ -1,37 +1,40 @@
+#pragma warning disable IDE1006
+
 using GameNetcodeStuff;
 using HarmonyLib;
 
+[HarmonyPatch]
 class FakeReloadPatch {
-
     static bool InterruptDestroyItem { get; set; } = false;
 
-    [HarmonyPatch(typeof(ShotgunItem))]
-    class ShotGun {
-        [HarmonyPatch("FindAmmoInInventory"), HarmonyPrefix] // This makes the shotgun look for a item slot that has a Shotgun Shell. Patch makes FindAmmoInInventory always result to 0 so it's not null.
-        static bool PrefixFindAmmoInInventory(ref int __result, ref int ___ammoSlotToUse) {
-            ___ammoSlotToUse = -2;
-            __result = -2;
-            return false;
-        }
-
-        [HarmonyPatch("ItemInteractLeftRight"), HarmonyPrefix]
-        static bool PrefixItemInteractLeftRight(ShotgunItem __instance, ref int ___shellsLoaded) { // This checks if the shotgun is already loaded. Patch makes it where if it's full it unloads it so you can reload again.
-            if (___shellsLoaded >= 2) {
-                ___shellsLoaded = 0;
-                return false;
-            }
-            return true;
-        }
-
-        [HarmonyPatch("reloadGunAnimation"), HarmonyPrefix] // Sets InterruptDestroyItem to true if Reload Starts.
-        static void PrefixReloadGunAnimation() => FakeReloadPatch.InterruptDestroyItem = true;
-        [HarmonyPatch("StopUsingGun"), HarmonyPrefix] // Sets InterruptDestroyItem to false if Shotgun is Dropped or Pocketed.
-        static void PrefixStopUsingGun() => FakeReloadPatch.InterruptDestroyItem = false;
+    /// <summary>
+    /// Prevents the shotgun from consuming ammo when firing
+    /// </summary>
+    [HarmonyPatch(typeof(ShotgunItem), "FindAmmoInInventory")]
+    static bool Prefix(ref int __result, ref int ___ammoSlotToUse) {
+        ___ammoSlotToUse = -2;
+        __result = -2;
+        return false;
     }
 
-    [HarmonyPatch(typeof(PlayerControllerB))]
-    class DestroyItem {
-        [HarmonyPatch("DestroyItemInSlotAndSync"), HarmonyPrefix] // if InterruptDestroyItem it's true it immediately returns DestroyItemInSlotAndSync to prevent ShotgunItem.reloadGunAnimation to call it.
-        static bool Prefix() => !FakeReloadPatch.InterruptDestroyItem;
+    /// <summary>
+    /// Always allow the Shotgun to reload
+    /// </summary>
+    [HarmonyPatch(typeof(ShotgunItem), nameof(ShotgunItem.ItemInteractLeftRight))]
+    static void Prefix(ShotgunItem __instance) {
+        __instance.shellsLoaded = 1;
+        FakeReloadPatch.InterruptDestroyItem = true;
     }
+
+    /// <summary>
+    /// Resets the interrupt flag
+    /// </summary>
+    [HarmonyPatch(typeof(ShotgunItem), "StopUsingGun")]
+    static void Postfix() => FakeReloadPatch.InterruptDestroyItem = false;
+
+    /// <summary>
+    /// Prevents the shotgun shell from being destroyed
+    /// </summary>
+    [HarmonyPatch(typeof(PlayerControllerB), nameof(PlayerControllerB.DestroyItemInSlotAndSync))]
+    static bool Prefix() => !FakeReloadPatch.InterruptDestroyItem;
 }

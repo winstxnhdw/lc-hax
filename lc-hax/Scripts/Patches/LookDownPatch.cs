@@ -1,31 +1,31 @@
-using System.Collections.Generic;
-using System.Linq;
 using System.Reflection.Emit;
+using System.Collections.Generic;
 using GameNetcodeStuff;
 using HarmonyLib;
 
-[HarmonyPatch]
-internal class LookDownSmoothPatch {
-    [HarmonyPatch(typeof(PlayerControllerB), "CalculateSmoothLookingInput")]
-    private static IEnumerable<CodeInstruction> Transpiler(IEnumerable<CodeInstruction> instructions) => instructions.Select(AdjustInstruction);
+[HarmonyPatch(typeof(PlayerControllerB))]
+class LookDownPatch {
+    [HarmonyTranspiler]
+    [HarmonyPatch("CalculateSmoothLookingInput")]
+    static IEnumerable<CodeInstruction> SmoothLookingTranspiler(IEnumerable<CodeInstruction> instructions) {
+        foreach (CodeInstruction instruction in instructions) {
+            if (instruction.opcode == OpCodes.Ldc_R4 && instruction.operand.Equals(60.0f)) {
+                instruction.operand = 90.0f;
+            }
 
-    private static CodeInstruction AdjustInstruction(CodeInstruction instruction) {
-        if (instruction.opcode == OpCodes.Ldc_R4 && (float)instruction.operand == 60f) {
-            instruction.operand = 90f;
+            yield return instruction;
         }
-        return instruction;
     }
-}
 
-[HarmonyPatch]
-internal class LookDownNormalPatch {
-    [HarmonyPatch(typeof(PlayerControllerB), "CalculateNormalLookingInput")]
-    private static IEnumerable<CodeInstruction> Transpiler(IEnumerable<CodeInstruction> instructions) => instructions.Select(AdjustInstruction);
+    [HarmonyTranspiler]
+    [HarmonyPatch("CalculateNormalLookingInput")]
+    static IEnumerable<CodeInstruction> NormalLookingTranspiler(IEnumerable<CodeInstruction> instructions) {
+        foreach (CodeInstruction instruction in instructions) {
+            if (instruction.opcode == OpCodes.Ldc_R4 && instruction.operand.Equals(60.0f)) {
+                instruction.operand = 90.0f;
+            }
 
-    private static CodeInstruction AdjustInstruction(CodeInstruction instruction) {
-        if (instruction.opcode == OpCodes.Ldc_R4 && (float)instruction.operand == 60f) {
-            instruction.operand = 90f;
+            yield return instruction;
         }
-        return instruction;
     }
 }
