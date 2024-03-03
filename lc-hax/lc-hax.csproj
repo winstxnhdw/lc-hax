@@ -123,10 +123,6 @@
       <Private>False</Private>
     </Reference>
 
-    <PackageReference Include="Lib.Harmony" Version="2.3.0">
-      <NoWarn>NU1701</NoWarn>
-    </PackageReference>
-
     <PackageReference Include="Nullable.Extended.Analyzer" Version="1.15.6169">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
@@ -139,6 +135,8 @@
     <PackageReference Include="Quickenshtein" Version="1.5.1" />
 
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+
+    <PackageReference Include="Lib.Harmony" Version="2.3.0" />
 
     <EmbeddedResource Include="$(NuGetPath)/lib.harmony/2.3.0/lib/net48/0Harmony.dll" />
 
