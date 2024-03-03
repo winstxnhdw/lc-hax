@@ -7,7 +7,10 @@ on:
       - .editorconfig
       - lc-hax/**
   pull_request:
-    types: opened
+    paths:
+      - .github/workflows/main.yml
+      - .editorconfig
+      - lc-hax/**
 
 env:
   NUGET_PACKAGES: ${{ github.workspace }}/lc-hax/References/NuGet
