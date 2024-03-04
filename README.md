@@ -31,7 +31,7 @@ A powerful, feature-rich and highly performant portable Windows CLI-only interna
 Clone the repository.
 
 ```bash
-git clone --recursive https://github.com/winstxnhdw/lc-hax.git
+git clone --recursive --depth 50 https://github.com/winstxnhdw/lc-hax.git
 ```
 
 You can now build and install the dependencies by executing `requirements.bat`.
