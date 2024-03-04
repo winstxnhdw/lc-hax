@@ -29,10 +29,11 @@ class TransientBehaviour : MonoBehaviour {
 
     IEnumerator TransientCoroutine(float delay) {
         WaitForSeconds waitForDelay = new(delay);
+        float timeElapsed = 0.0f;
 
         while (this.ExpireTime > 0.0f) {
             this.ExpireTime -= delay;
-            this.Action?.Invoke(delay);
+            this.Action?.Invoke(timeElapsed += delay);
 
             yield return waitForDelay;
         }
@@ -42,11 +43,12 @@ class TransientBehaviour : MonoBehaviour {
 
     IEnumerator TransientCoroutine() {
         WaitForEndOfFrame waitForEndOfFrame = new();
+        float timeElapsed = 0.0f;
 
         while (this.ExpireTime > 0.0f) {
             float deltaTime = Time.deltaTime;
             this.ExpireTime -= deltaTime;
-            this.Action?.Invoke(deltaTime);
+            this.Action?.Invoke(timeElapsed += deltaTime);
 
             yield return waitForEndOfFrame;
         }
