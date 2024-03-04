@@ -55,6 +55,7 @@ Execute `launch.bat` when you have launched the game to inject the assembly into
 The complete feature set includes the following.
 
 - Anti-kick
+- Anti-flash
 - Auto-reconnect
 - Connection spoofing
 - Infinite stamina
@@ -72,6 +73,7 @@ The complete feature set includes the following.
 - No lobby refresh delay
 - No build constraints
 - No character limit
+- No pan limits
 - Always sane
 - Always lightweight
 - Always show HUD
