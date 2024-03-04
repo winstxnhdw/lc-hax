@@ -94,5 +94,6 @@ class Loader : MonoBehaviour {
     internal static void Unload() {
         Destroy(Loader.HaxModules);
         Destroy(Loader.HaxGameObjects);
+        new Harmony(Loader.HarmonyID).UnpatchAll();
     }
 }
