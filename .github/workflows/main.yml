@@ -1,12 +1,14 @@
 name: Build
 
 on:
-  push:
+  pull_request_target:
+    types: opened
+  pull_request:
     paths:
       - .github/workflows/main.yml
       - .editorconfig
       - lc-hax/**
-  pull_request:
+  push:
     paths:
       - .github/workflows/main.yml
       - .editorconfig
