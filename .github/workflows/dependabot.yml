@@ -4,9 +4,11 @@ on: pull_request
 
 permissions:
   contents: write
+  pull-requests: write
 
 jobs:
   auto-merge:
-    uses: winstxnhdw/actions/.github/workflows/dependabot-public.yml@main
+    uses: winstxnhdw/actions/.github/workflows/dependabot-private.yml@main
     secrets:
       token: ${{ secrets.GITHUB_TOKEN }}
+
