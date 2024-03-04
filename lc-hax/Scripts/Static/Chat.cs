@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using UnityEngine.EventSystems;
 using Hax;
 
-internal static class Chat {
+static class Chat {
     internal static event Action<string>? OnExecuteCommandAttempt;
 
     static Dictionary<string, ICommand> Commands { get; } =

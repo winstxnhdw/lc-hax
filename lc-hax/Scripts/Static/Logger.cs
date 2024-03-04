@@ -1,7 +1,7 @@
 using System;
 using System.IO;
 
-internal static class Logger {
+static class Logger {
     const string LogFileName = "lc-hax.log";
     static object LockObject { get; } = new();
 
