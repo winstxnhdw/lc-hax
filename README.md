@@ -101,7 +101,6 @@ The complete feature set includes the following.
 | Teleport back to ship         | `/home <player?>`                                |
 | Teleport enemies to player    | `/mob <player>`                                  |
 | Inverse teleport a player     | `/random <player>`                               |
-| Chibaku Tensei                | `/ct <player>`                                   |
 | Play noise on player          | `/noise <player> <duration=30>`                  |
 | Bomb player                   | `/bomb <player>`                                 |
 | Bombard player                | `/bombard <player>`                              |
@@ -130,6 +129,7 @@ The complete feature set includes the following.
 | Place an unlockable           | `/build <unlockable>`                            |
 | Wear a suit                   | `/suit <suit>`                                   |
 | Change moons                  | `/visit <moon>`                                  |
+| Spin all placeable objects    | `/spin <duration>`                               |
 | Stun enemies                  | `/stun <duration>`                               |
 | Pull the ship's horn          | `/horn <duration>`                               |
 | Toggle stun on click          | `/stunclick`                                     |
