@@ -22,9 +22,7 @@ class ExperienceCommand : ICommand {
             return;
         }
 
-        hudManager.localPlayerXP += amount;
-
-        Rank rank = hudManager.localPlayerXP switch {
+        Rank rank = (hudManager.localPlayerXP += amount) switch {
             < 50 => Rank.INTERN,
             < 100 => Rank.PART_TIME,
             < 200 => Rank.EMPLOYEE,
