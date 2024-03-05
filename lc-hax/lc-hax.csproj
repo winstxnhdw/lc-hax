@@ -136,7 +136,7 @@
 
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
 
-    <PackageReference Include="Lib.Harmony" Version="2.3.0" />
+    <PackageReference Include="Lib.Harmony" Version="2.3.1.1" />
 
     <EmbeddedResource Include="$(NuGetPath)/lib.harmony/2.3.0/lib/net48/0Harmony.dll" />
 
