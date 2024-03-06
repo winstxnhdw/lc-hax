@@ -17,7 +17,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Reference Include="Unity.AI.Navigation">
+
+       <Reference Include="Unity.AI.Navigation">
       <HintPath>$(GamePath)/Unity.AI.Navigation.dll</HintPath>
       <Private>False</Private>
     </Reference>
@@ -534,12 +535,11 @@
       <Private>False</Private>
     </Reference>
 
-
     <PackageReference Include="Nullable.Extended.Analyzer" Version="1.15.6169">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
-	
+
     <ProjectReference Include="..\analysers\analysers.csproj" />
 
     <PackageReference Include="RequireNamedArgs" Version="0.0.7" />
@@ -547,6 +547,15 @@
     <PackageReference Include="Quickenshtein" Version="1.5.1" />
 
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+
+    <PackageReference Include="Lib.Harmony" Version="2.3.1.1" />
+
+    <EmbeddedResource Include="$(NuGetPath)/lib.harmony/2.3.1.1/lib/net48/0Harmony.dll" />
+
+    <EmbeddedResource
+      Include="$(NuGetPath)/Quickenshtein/1.5.1/lib/netstandard2.0/Quickenshtein.dll" />
+
+    <EmbeddedResource
       Include="$(NuGetPath)/newtonsoft.json/13.0.3/lib/netstandard2.0/Newtonsoft.Json.dll" />
 
     <EmbeddedResource
@@ -557,6 +566,7 @@
 
     <EmbeddedResource
       Include="$(NuGetPath)/system.runtime.compilerservices.unsafe/6.0.0/lib/netstandard2.0/System.Runtime.CompilerServices.Unsafe.dll" />
+
   </ItemGroup>
 
   <Target Name="CleanBeforeRestore" BeforeTargets="Restore">
