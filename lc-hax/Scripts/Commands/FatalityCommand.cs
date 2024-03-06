@@ -9,10 +9,10 @@ class FatalityCommand : ICommand {
     /// Teleports the enemy to the target player and perform the fatality.
     /// Teleporting certain enemies outside of the factory can lag the user, so this burden is passed to the target player.
     /// </summary>
-    /// <returns>an error string if any</returns>
-    string? HandleEnemy<T>(PlayerControllerB targetPlayer, Action<PlayerControllerB, T> enemyHandler) where T : EnemyAI {
+    /// <returns>true if the enemy was successfully teleported and the fatality was performed</returns>
+    bool HandleEnemy<T>(PlayerControllerB targetPlayer, Action<PlayerControllerB, T> enemyHandler) where T : EnemyAI {
         if (Helper.LocalPlayer is not PlayerControllerB localPlayer || Helper.GetEnemy<T>() is not T enemy) {
-            return "Enemy has not yet spawned!";
+            return false;
         }
 
         enemy.ChangeEnemyOwnerServerRpc(localPlayer.actualClientId);
@@ -20,7 +20,8 @@ class FatalityCommand : ICommand {
         enemy.SyncPositionToClients();
         enemyHandler(targetPlayer, enemy);
         enemy.ChangeEnemyOwnerServerRpc(targetPlayer.actualClientId);
-        return null;
+
+        return true;
     }
 
     void GiantFatality(PlayerControllerB targetPlayer, ForestGiantAI forestGiant) => forestGiant.GrabPlayerServerRpc(targetPlayer.PlayerIndex());
@@ -54,7 +55,7 @@ class FatalityCommand : ICommand {
             return;
         }
 
-        Dictionary<string, Func<string?>> enemyHandlers = new() {
+        Dictionary<string, Func<bool>> enemyHandlers = new() {
             { "Forest Giant", () => this.HandleEnemy<ForestGiantAI>(targetPlayer, this.GiantFatality) },
             { "Jester",       () => this.HandleEnemy<JesterAI>(targetPlayer, this.JesterFatality) },
             { "Masked",       () => this.HandleEnemy<MaskedPlayerEnemy>(targetPlayer, this.MaskedFatality) },
@@ -65,20 +66,15 @@ class FatalityCommand : ICommand {
             { "Nutcracker",   () => this.HandleEnemy<NutcrackerEnemyAI>(targetPlayer, this.NutcrackerFatality) }
         };
 
-        string? key = Helper.FuzzyMatch(
-            string.Join(" ", args[1..]).ToTitleCase(),
-            enemyHandlers.Keys
-        );
-
-        if (string.IsNullOrWhiteSpace(key)) {
+        if (!string.Join(" ", args[1..]).ToTitleCase().FuzzyMatch(enemyHandlers.Keys, out string key)) {
             Chat.Print("Failed to find enemy!");
             return;
         }
 
         Chat.Print($"Performing {key} fatality on {targetPlayer.playerUsername}..");
 
-        if (enemyHandlers[key]() is string message) {
-            Chat.Print(message);
+        if (!enemyHandlers[key]()) {
+            Chat.Print("Enemy has not yet spawned!");
         }
     }
 }

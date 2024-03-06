@@ -234,11 +234,18 @@ static partial class Helper {
         }
     }
 
-    internal static void Translate(string? sourceLanguage, string? targetLanguage, string? text) {
+    internal static void Translate(string sourceLanguage, string targetLanguage, string? text) {
         if (string.IsNullOrWhiteSpace(text)) return;
 
-        string? source = Helper.FuzzyMatch(sourceLanguage?.ToLower(), Helper.FLORES200.Value.Keys);
-        string? target = Helper.FuzzyMatch(targetLanguage?.ToLower(), Helper.FLORES200.Value.Keys);
+        if (!sourceLanguage.FuzzyMatch(Helper.FLORES200.Value.Keys, out string? source)) {
+            Chat.Print("Failed to find the source language!");
+            return;
+        }
+
+        if (!targetLanguage.FuzzyMatch(Helper.FLORES200.Value.Keys, out string? target)) {
+            Chat.Print("Failed to find the target language!");
+            return;
+        }
 
         if (string.IsNullOrWhiteSpace(source) || string.IsNullOrWhiteSpace(target)) {
             Chat.Print("Failed to find the language!");

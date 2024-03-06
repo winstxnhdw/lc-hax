@@ -4,10 +4,12 @@ using Hax;
 
 [Command("visit")]
 class VisitCommand : ICommand {
+    static Dictionary<string, int>? Levels { get; set; }
+
     public void Execute(StringArray args) {
         if (Helper.Terminal is not Terminal terminal) return;
         if (Helper.StartOfRound is not StartOfRound startOfRound) return;
-        if (args.Length is 0) {
+        if (args[0] is not string moon) {
             Chat.Print("Usage: visit <moon>");
             return;
         }
@@ -22,20 +24,17 @@ class VisitCommand : ICommand {
             return;
         }
 
-        Dictionary<string, int> levels = startOfRound.levels.ToDictionary(
+        VisitCommand.Levels ??= startOfRound.levels.ToDictionary(
             level => level.name[..(level.name.Length - "Level".Length)].ToLower(),
             level => level.levelID
         );
 
-        string? key = Helper.FuzzyMatch(args[0]?.ToLower(), levels.Keys);
-
-        if (string.IsNullOrWhiteSpace(key)) {
+        if (!moon.FuzzyMatch(VisitCommand.Levels.Keys, out string key)) {
             Chat.Print("Failed to find moon!");
             return;
         }
 
-        startOfRound.ChangeLevelServerRpc(levels[key], terminal.groupCredits);
-
+        startOfRound.ChangeLevelServerRpc(VisitCommand.Levels[key], terminal.groupCredits);
         Chat.Print($"Visiting {key.ToTitleCase()}!");
     }
 }
