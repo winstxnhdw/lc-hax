@@ -91,16 +91,12 @@ internal sealed class ScrapPossessionMod : MonoBehaviour {
     }
 
     void Update() {
-        if (HaxCamera.Instance is not HaxCamera haxCamera) return;
-        if (haxCamera.HaxCamContainer?.activeSelf == false) return;
-        if (haxCamera.CustomCamera is not Camera { enabled: true } camera) return;
+        if (Helper.CurrentCamera is not Camera { enabled: true } camera) return;
         if (Helper.LocalPlayer is not PlayerControllerB localPlayer) return;
         if (this.CharacterMovement is not CharacterMovement characterMovement) return;
         if (this.Possession.Item is not GrabbableObject item) return;
-
         item.ChangeOwnershipOfProp(localPlayer.actualClientId);
-        this.UpdateCameraPosition(camera, item);
-        this.UpdateCameraRotation(camera);
+
 
         if (this.FirstUpdate) {
             this.FirstUpdate = false;
@@ -108,6 +104,9 @@ internal sealed class ScrapPossessionMod : MonoBehaviour {
             this.UpdateComponentsOnCurrentState(true);
             characterMovement.SetPosition(item.transform.position);
         }
+
+        this.UpdateCameraPosition(camera, item);
+        this.UpdateCameraRotation(camera, characterMovement);
 
         this.UpdateScrapPosition(item);
         this.UpdateScrapRotation();
@@ -141,16 +140,15 @@ internal sealed class ScrapPossessionMod : MonoBehaviour {
         Vector3 horizontalOffset = offsets.x * camera.transform.right;
         Vector3 offset = horizontalOffset + verticalOffset + forwardOffset;
         camera.transform.position = item.transform.position + offset;
+
     }
 
-    void UpdateCameraRotation(Camera camera) {
-        Quaternion newRotation = this.transform.rotation;
-
+    void UpdateCameraRotation(Camera camera, CharacterMovement item) {
+        Quaternion newRotation = Quaternion.LookRotation(item.transform.forward);
         // Set the camera rotation without changing its position
         float RotationLerpSpeed = 0.6f;
         camera.transform.rotation = Quaternion.Lerp(camera.transform.rotation, newRotation, RotationLerpSpeed);
     }
-
     void UpdateScrapRotation() {
         if (this.CharacterMovement is not CharacterMovement characterMovement) return;
         if (!this.NoClipEnabled) {
@@ -183,7 +181,6 @@ internal sealed class ScrapPossessionMod : MonoBehaviour {
         if (PossessionMod.Instance?.IsPossessed == true) return;
         this.Unpossess();
         this.InitCharacterMovement(item);
-        this.enabled = true;
         this.FirstUpdate = true;
         this.Possession.SetItem(item);
     }
@@ -195,7 +192,6 @@ internal sealed class ScrapPossessionMod : MonoBehaviour {
         if (this.CharacterMovementInstance is not null) {
             Destroy(this.CharacterMovementInstance);
         }
-        this.enabled = false;
     }
 
     float InteractRange() => 4.5f;

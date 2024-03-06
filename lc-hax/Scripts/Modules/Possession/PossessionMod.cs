@@ -141,9 +141,7 @@ internal sealed class PossessionMod : MonoBehaviour {
     }
 
     void Update() {
-        if (HaxCamera.Instance is not HaxCamera haxCamera) return;
-        if (haxCamera.HaxCamContainer?.activeSelf == false) return;
-        if (haxCamera.CustomCamera is not Camera { enabled: true } camera) return;
+        if (Helper.CurrentCamera is not Camera { enabled: true } camera) return;
         if (Helper.LocalPlayer is not PlayerControllerB localPlayer) return;
         if (this.CharacterMovement is not CharacterMovement characterMovement) return;
         if (this.Possession.Enemy is not EnemyAI enemy) return;

@@ -29,37 +29,45 @@ sealed class PhantomMod : MonoBehaviour {
 
     void Update() {
         if (PossessionMod.Instance is not PossessionMod possessionMod) return;
+        if (ScrapPossessionMod.Instance is not ScrapPossessionMod itemPossessionMod) return; // Assuming ScrapPossessionMod is your ItemPossessionMod
+
         if (Helper.CurrentCamera is not Camera { enabled: true } camera) return;
         if (!camera.gameObject.TryGetComponent(out KeyboardMovement keyboard)) return;
         if (!camera.gameObject.TryGetComponent(out MousePan mouse)) return;
+
+        bool isPossessed = possessionMod.IsPossessed || itemPossessionMod.IsPossessed; // Combined possession check
+
         if (!Setting.EnablePhantom) {
             if (!this.EnabledPossession) return;
 
-            possessionMod.Unpossess();
+            if (possessionMod.IsPossessed) {
+                possessionMod.Unpossess();
+                possessionMod.enabled = false;
+            }
+            if (itemPossessionMod.IsPossessed) {
+                itemPossessionMod.Unpossess();
+                itemPossessionMod.enabled = false;
+            }
             this.EnabledPossession = false;
-            possessionMod.enabled = false;
         }
-
-        else if (!possessionMod.IsPossessed) {
+        else if (!isPossessed) { // If neither is currently possessed
             this.EnabledPossession = false;
-            possessionMod.enabled = false;
-
             keyboard.enabled = true;
             mouse.enabled = true;
         }
-
-        // possessing monster for the first frame
-        else if (!this.EnabledPossession) {
+        else if (!this.EnabledPossession) { // Possessing for the first frame
             this.EnabledPossession = true;
-            possessionMod.enabled = true;
+            if (possessionMod.IsPossessed) possessionMod.enabled = true;
+            else if (itemPossessionMod.IsPossessed) itemPossessionMod.enabled = true;
             keyboard.enabled = false;
             mouse.enabled = false;
         }
 
-        if (!possessionMod.IsPossessed && Setting.EnablePhantom) {
+        if (!isPossessed && Setting.EnablePhantom) {
             keyboard.IsPaused = Helper.LocalPlayer is { isTypingChat: true };
         }
     }
+
 
     void HoldShift(bool isHeld) => this.IsShiftHeld = isHeld;
 
