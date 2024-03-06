@@ -17,35 +17,33 @@ internal static partial class Helper {
             .Where(scrap => scrap.IsSpawned)
             .ToHashSet();
 
-
     internal static void InteractWithProp(this GrabbableObject grabbable) {
         if (Helper.LocalPlayer is PlayerControllerB localPlayer && !grabbable.IsOwner) {
             grabbable.ChangeOwnershipOfProp(localPlayer.actualClientId);
         }
 
-        if (grabbable.TryGetComponent(out AnimatedItem animatedItem)) {
-            animatedItem.EquipItem();
-            return;
+        switch (grabbable) {
+            case AnimatedItem animatedItem:
+                animatedItem.EquipItem();
+                break;
+            case NoisemakerProp noisemakerProp:
+                noisemakerProp.ItemActivate(true, true);
+                break;
+            case BoomboxItem boomboxItem:
+                boomboxItem.ItemActivate(true, true);
+                break;
+            case WhoopieCushionItem whoopieCushionItem:
+                whoopieCushionItem.Fart();
+                break;
+            case GiftBoxItem giftBoxItem:
+                giftBoxItem.OpenGiftBoxServerRpc();
+                break;
+            default:
+                grabbable.UseItemOnClient(true);
+                break;
         }
-
-        if (grabbable.TryGetComponent(out NoisemakerProp noisemakerProp)) {
-            noisemakerProp.ItemActivate(true, true);
-            return;
-        }
-
-        if (grabbable.TryGetComponent(out BoomboxItem boomboxItem)) {
-            boomboxItem.ItemActivate(true, true);
-            return;
-        }
-
-        if (grabbable.TryGetComponent(out WhoopieCushionItem whoopieCushionItem)) {
-            whoopieCushionItem.Fart();
-            return;
-        }
-
-
-        grabbable.UseItemOnClient(true);
     }
+
 
     internal static void ShootShotgun(this ShotgunItem item, Transform origin) {
         item.gunShootAudio.volume = 0.15f;
@@ -118,6 +116,12 @@ internal static partial class Helper {
         Random random = new((int)position.x + (int)position.y);
         Grab.SetScrapValue((int)(random.Next(prefab.minValue + 25, prefab.maxValue + 35) * Helper.RoundManager.scrapValueMultiplier));
         return Grab;
+    }
+
+    internal static void SpawnItems(Vector3 position, Item prefab, int amount) {
+        for (int i = 0; i < amount; i++) {
+            _ = SpawnItem(position, prefab);
+        }
     }
 
 }

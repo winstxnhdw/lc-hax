@@ -10,7 +10,7 @@ internal class LootSpawnCommand : ICommand {
         if (Helper.LocalPlayer is not PlayerControllerB localPlayer) return;
         string? itemName = args[0];
         if (itemName is null) {
-            Chat.Print("Usage: give <item>");
+            Chat.Print("Usage: give <item> <amount>");
             return;
         }
         itemName = itemName.Replace("_", " ");
@@ -21,18 +21,28 @@ internal class LootSpawnCommand : ICommand {
             return;
         }
 
-        Transform? target;
-        if (Setting.EnablePhantom && Helper.CurrentCamera is Camera camera && camera.enabled) {
-            target = camera.transform;
-        }
-        else {
-            target = (PossessionMod.Instance != null && PossessionMod.Instance.IsPossessed)
-                ? PossessionMod.Instance.PossessedEnemy?.transform
-                : localPlayer.transform;
+        if (!args[1].TryParse(defaultValue: 1, result: out ulong amount)) {
+            Chat.Print("Invalid amount!");
+            return;
         }
 
-        if(target is null) return;
-        _ = Helper.SpawnItem(target.position, scrap);
+
+        Transform? target = PossessionMod.Instance?.PossessedEnemy is not null
+            ? PossessionMod.Instance.PossessedEnemy.transform
+            : Setting.EnablePhantom ? Helper.CurrentCamera?.transform
+                : localPlayer.transform;
+
+
+        if (target is null) return;
+
+        Vector3 spawnPosition = target.position + Vector3.up * 0.5f;
+
+        if (amount != 1) {
+            Helper.SpawnItems(spawnPosition, scrap, (int)amount);
+        }
+        else {
+            _ = Helper.SpawnItem(spawnPosition, scrap);
+        }
     }
 }
 
