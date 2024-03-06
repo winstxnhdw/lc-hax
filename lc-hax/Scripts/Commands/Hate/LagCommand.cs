@@ -48,7 +48,7 @@ class LagCommand : ICommand {
     public void Execute(StringArray args) {
         if (Helper.LocalPlayer is not PlayerControllerB localPlayer) return;
         if (args.Length is 0) {
-            Chat.Print("Usage: /lag <player>");
+            Chat.Print("Usage: lag <player>");
             return;
         }
 
