@@ -62,11 +62,13 @@ internal sealed class PossessionMod : MonoBehaviour {
     }
 
     void InitCharacterMovement(EnemyAI? enemy = null) {
-        this.CharacterMovementInstance = new GameObject("Hax CharacterMovement");
-        this.CharacterMovementInstance.transform.position = enemy is null ? default : enemy.transform.position;
-        this.CharacterMovement = this.CharacterMovementInstance.AddComponent<CharacterMovement>();
+        this.CharacterMovement = CharacterMovement.Instance;
+        if (this.CharacterMovement == null) {
+            GameObject characterMovementObject = new("Hax CharacterMovement");
+            this.CharacterMovement = characterMovementObject.AddComponent<CharacterMovement>();
+        }
+        this.CharacterMovement.transform.position = enemy is null ? default : enemy.transform.position;
         this.CharacterMovement.Init();
-
         if (enemy is not null) {
             this.CharacterMovement.CalibrateCollision(enemy);
             this.CharacterMovement.CharacterSprintSpeed = this.SprintMultiplier(enemy);

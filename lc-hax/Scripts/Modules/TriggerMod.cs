@@ -83,11 +83,14 @@ sealed class TriggerMod : MonoBehaviour, IEnemyPrompter {
                 break;
             }
 
-            if (collider.GetComponentInParent<EnemyAI>().Unfake() is EnemyAI enemy && Setting.EnablePhantom && PossessionMod.Instance?.PossessedEnemy != enemy) {
+            if (collider.GetComponentInParent<EnemyAI>().Unfake() is EnemyAI enemy && Setting.EnablePhantom && PossessionMod.Instance?.PossessedEnemy != enemy && ScrapPossessionMod.Instance?.IsPossessed == false) {
                 PossessionMod.Instance?.Possess(enemy);
                 break;
             }
-
+            if (collider.GetComponentInParent<GrabbableObject>().Unfake() is GrabbableObject item && Setting.EnablePhantom && ScrapPossessionMod.Instance?.PossessedScrap != item && PossessionMod.Instance?.IsPossessed == false) {
+                ScrapPossessionMod.Instance?.Possess(item);
+                break;
+            }
             if (collider.TryGetComponent(out PlayerControllerB player)) {
                 Helper.GetEnemy<CentipedeAI>()?.ClingToPlayerServerRpc(player.playerClientId);
                 this.PromptEnemiesToTarget(targetPlayer: player)

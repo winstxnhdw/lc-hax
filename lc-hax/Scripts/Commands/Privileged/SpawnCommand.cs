@@ -17,8 +17,15 @@ internal class SpawnCommand : ICommand {
                 Chat.Print($"{args[1]} is not alive or found!");
                 return;
             }
+            if (args[0] is not string enemyname) {
+                Chat.Print("Invalid enemy!");
+                return;
+            }
 
-            string? key = Helper.FuzzyMatch(args[0], Helper.HostileEnemies.Keys);
+            if (!enemyname.FuzzyMatch(Helper.HostileEnemies.Keys, out string key)) {
+                Chat.Print("Invalid enemy!");
+                return;
+            }
 
             if (key is null) {
                 Chat.Print("Invalid enemy!");
@@ -42,9 +49,12 @@ internal class SpawnCommand : ICommand {
                 Chat.Print("Usage: spawn <enemy>");
                 return;
             }
+            if (args[0] is not string enemyname) {
+                Chat.Print("Invalid enemy!");
+                return;
+            }
 
-            string? key = Helper.FuzzyMatch(args[0], Helper.HostileEnemies.Keys);
-            if (key is null) {
+            if (!enemyname.FuzzyMatch(Helper.HostileEnemies.Keys, out string key)) {
                 Chat.Print("Invalid enemy!");
                 return;
             }

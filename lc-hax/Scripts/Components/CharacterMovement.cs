@@ -5,6 +5,8 @@ using Hax;
 using System.Linq;
 
 class CharacterMovement : MonoBehaviour {
+
+    internal static CharacterMovement? Instance { get; private set; }
     // Movement constants
     const float WalkingSpeed = 0.5f; // Walking speed when left control is held
     const float SprintDuration = 0.0f; // Duration sprint key must be held for sprinting (adjust as needed)
@@ -64,8 +66,27 @@ class CharacterMovement : MonoBehaviour {
             .ForEach(collider => Physics.IgnoreCollision(this.CharacterController, collider));
     }
 
+    internal void CalibrateCollision(GrabbableObject scrap) {
+        if (this.CharacterController is null) return;
+
+        this.CharacterController.height = 1.0f;
+        this.CharacterController.radius = 0.5f;
+        this.CharacterController.center = new Vector3(0.0f, 0.5f, 0.0f);
+
+        float maxStepOffset = 0.25f;
+        this.CharacterController.stepOffset = Mathf.Min(this.CharacterController.stepOffset, maxStepOffset);
+
+        scrap.GetComponentsInChildren<Collider>()
+            .Where(collider => collider != this.CharacterController)
+            .ForEach(collider => Physics.IgnoreCollision(this.CharacterController, collider));
+    }
 
     void Awake() {
+        if (Instance is not null) {
+            Destroy(this);
+            return;
+        }
+        Instance = this;
         this.Keyboard = Keyboard.current;
         this.NoClipKeyboard = this.gameObject.AddComponent<KeyboardMovement>();
         this.CharacterController = this.gameObject.AddComponent<CharacterController>();

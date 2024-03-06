@@ -52,7 +52,7 @@ static partial class Extensions {
     /// If the string is empty or the list is empty, we return null.
     /// </summary>
     /// <returns>true if a match was found, false otherwise</returns>
-    internal static bool FuzzyMatch(this string query, ReadOnlySpan<string> strings, out string closestMatch) {
+    internal static bool FuzzyMatchInternal(this string query, ReadOnlySpan<string> strings, out string closestMatch) {
         if (strings.Length is 0 || string.IsNullOrWhiteSpace(query)) {
             closestMatch = "";
             return false;
@@ -78,6 +78,5 @@ static partial class Extensions {
     /// If the string is empty or the list is empty, we return null.
     /// </summary>
     /// <returns>true if a match was found, false otherwise</returns>
-    internal static bool FuzzyMatch(this string query, IEnumerable<string> strings, out string closestMatch) =>
-        Extensions.FuzzyMatch(query, [.. strings], out closestMatch);
+    internal static bool FuzzyMatch(this string query, IEnumerable<string> strings, out string closestMatch) => Extensions.FuzzyMatchInternal(query, [.. strings], out closestMatch);
 }
