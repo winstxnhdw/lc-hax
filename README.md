@@ -31,7 +31,7 @@ A powerful, feature-rich and highly performant portable Windows CLI-only interna
 Clone the repository.
 
 ```bash
-git clone --recursive https://github.com/winstxnhdw/lc-hax.git
+git clone --recursive --depth 50 https://github.com/winstxnhdw/lc-hax.git
 ```
 
 You can now build and install the dependencies by executing `requirements.bat`.
@@ -55,6 +55,7 @@ Execute `launch.bat` when you have launched the game to inject the assembly into
 The complete feature set includes the following.
 
 - Anti-kick
+- Anti-flash
 - Auto-reconnect
 - Connection spoofing
 - Infinite stamina
@@ -72,6 +73,7 @@ The complete feature set includes the following.
 - No lobby refresh delay
 - No build constraints
 - No character limit
+- No pan limits
 - Always sane
 - Always lightweight
 - Always show HUD
@@ -99,7 +101,6 @@ The complete feature set includes the following.
 | Teleport back to ship         | `/home <player?>`                                |
 | Teleport enemies to player    | `/mob <player>`                                  |
 | Inverse teleport a player     | `/random <player>`                               |
-| Chibaku Tensei                | `/ct <player>`                                   |
 | Play noise on player          | `/noise <player> <duration=30>`                  |
 | Bomb player                   | `/bomb <player>`                                 |
 | Bombard player                | `/bombard <player>`                              |
@@ -128,6 +129,7 @@ The complete feature set includes the following.
 | Place an unlockable           | `/build <unlockable>`                            |
 | Wear a suit                   | `/suit <suit>`                                   |
 | Change moons                  | `/visit <moon>`                                  |
+| Spin all placeable objects    | `/spin <duration>`                               |
 | Stun enemies                  | `/stun <duration>`                               |
 | Pull the ship's horn          | `/horn <duration>`                               |
 | Toggle stun on click          | `/stunclick`                                     |

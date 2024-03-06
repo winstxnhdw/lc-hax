@@ -4,7 +4,7 @@ using Quickenshtein;
 
 namespace Hax;
 
-static partial class Helper {
+static partial class Extensions {
     /// <summary>
     /// Find the longest common substring between two strings.
     /// </summary>
@@ -42,7 +42,7 @@ static partial class Helper {
     /// <returns>the total similarity weight</returns>
     static int GetSimilarityWeight(string query, string original) {
         int distancePenalty = Levenshtein.GetDistance(query, original);
-        int commonalityReward = Helper.LongestCommonSubstring(query, original) * -2;
+        int commonalityReward = Extensions.LongestCommonSubstring(query, original) * -2;
 
         return distancePenalty + commonalityReward;
     }
@@ -51,15 +51,18 @@ static partial class Helper {
     /// Find the closest match to the query from a list of strings.
     /// If the string is empty or the list is empty, we return null.
     /// </summary>
-    /// <returns>the string with closest match to the query or null</returns>
-    internal static string? FuzzyMatchInternal(string? query, ReadOnlySpan<string> strings) {
-        if (strings.Length is 0 || string.IsNullOrWhiteSpace(query)) return null;
+    /// <returns>true if a match was found, false otherwise</returns>
+    internal static bool FuzzyMatch(this string query, ReadOnlySpan<string> strings, out string closestMatch) {
+        if (strings.Length is 0 || string.IsNullOrWhiteSpace(query)) {
+            closestMatch = "";
+            return false;
+        }
 
-        string closestMatch = strings[0];
-        int lowestWeight = Helper.GetSimilarityWeight(query, strings[0]);
+        closestMatch = strings[0];
+        int lowestWeight = Extensions.GetSimilarityWeight(query, strings[0]);
 
         for (int i = 1; i < strings.Length; i++) {
-            int totalWeight = Helper.GetSimilarityWeight(query, strings[i]);
+            int totalWeight = Extensions.GetSimilarityWeight(query, strings[i]);
 
             if (totalWeight < lowestWeight) {
                 lowestWeight = totalWeight;
@@ -67,8 +70,14 @@ static partial class Helper {
             }
         }
 
-        return closestMatch;
+        return true;
     }
 
-    internal static string? FuzzyMatch(string? query, IEnumerable<string> strings) => Helper.FuzzyMatchInternal(query, [.. strings]);
+    /// <summary>
+    /// Find the closest match to the query from a list of strings.
+    /// If the string is empty or the list is empty, we return null.
+    /// </summary>
+    /// <returns>true if a match was found, false otherwise</returns>
+    internal static bool FuzzyMatch(this string query, IEnumerable<string> strings, out string closestMatch) =>
+        Extensions.FuzzyMatch(query, [.. strings], out closestMatch);
 }

@@ -5,28 +5,28 @@ using UnityEngine;
 
 [Command("build")]
 class BuildCommand : ICommand {
+    static Dictionary<string, int>? Unlockables { get; set; }
+
     public void Execute(StringArray args) {
         if (Helper.StartOfRound is not StartOfRound startOfRound) return;
         if (Helper.CurrentCamera is not Camera camera) return;
-        if (args.Length is 0) {
+        if (args[0] is not string unlockableName) {
             Chat.Print("Usage: build <unlockable>");
             return;
         }
 
-        Dictionary<string, int> unlockables =
+        BuildCommand.Unlockables ??=
             startOfRound.unlockablesList.unlockables.Select((unlockable, i) => (unlockable, i)).ToDictionary(
                 pair => pair.unlockable.unlockableName.ToLower(),
                 pair => pair.i
             );
 
-        string? key = Helper.FuzzyMatch(args[0]?.ToLower(), unlockables.Keys);
-
-        if (string.IsNullOrWhiteSpace(key)) {
+        if (!unlockableName.FuzzyMatch(BuildCommand.Unlockables.Keys, out string key)) {
             Chat.Print("Failed to find unlockable!");
             return;
         }
 
-        Unlockable unlockable = (Unlockable)unlockables[key];
+        Unlockable unlockable = (Unlockable)BuildCommand.Unlockables[key];
         Helper.BuyUnlockable(unlockable);
         Helper.ReturnUnlockable(unlockable);
 
