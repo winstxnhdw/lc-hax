@@ -86,6 +86,7 @@ class Loader : MonoBehaviour {
         Loader.AddHaxModules<CrosshairMod>();
         Loader.AddHaxModules<MinimalGUIMod>();
         Loader.AddHaxModules<PossessionMod>();
+        Loader.AddHaxModules<ScrapPossessionMod>();
         Loader.AddHaxModules<DisconnectMod>();
         Loader.AddHaxModules<ClearVisionMod>();
         Loader.AddHaxModules<InstantInteractMod>();

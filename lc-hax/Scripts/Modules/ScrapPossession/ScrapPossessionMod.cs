@@ -1,13 +1,6 @@
-using System;
-using System.Collections.Generic;
 using UnityEngine;
-using Unity.Netcode;
-using UnityEngine.AI;
 using GameNetcodeStuff;
 using Hax;
-using UnityEngine.Windows.WebCam;
-using static UnityEngine.EventSystems.EventTrigger;
-using Steamworks;
 
 internal sealed class ScrapPossessionMod : MonoBehaviour {
     bool IsLeftAltHeld { get; set; } = false;
@@ -24,27 +17,31 @@ internal sealed class ScrapPossessionMod : MonoBehaviour {
     bool NoClipEnabled { get; set; } = false;
 
     void Awake() {
-        this.InitCharacterMovement();
-        this.MousePan = this.gameObject.AddComponent<MousePan>();
+        this.MousePan = this.gameObject.GetOrAddComponent<MousePan>();
         this.enabled = false;
 
         ScrapPossessionMod.Instance = this;
     }
+    void Start() => this.InitCharacterMovement();
 
     void InitCharacterMovement(GrabbableObject? item = null) {
-        this.CharacterMovement = CharacterMovement.Instance;
-        if (this.CharacterMovement == null) {
-            GameObject characterMovementObject = new ("Hax CharacterMovement");
-            this.CharacterMovement = characterMovementObject.AddComponent<CharacterMovement>();
+        this.CharacterMovementInstance = Finder.Find("Hax CharacterMovement");
+        if (this.CharacterMovementInstance == null) {
+            this.CharacterMovementInstance = new("Hax CharacterMovement");
+            this.CharacterMovementInstance.transform.position = default;
         }
-        this.CharacterMovement.transform.position = item is null ? default : item.transform.position;
-        this.CharacterMovement.Init();
-        if (item is not null) {
-            this.CharacterMovement.CalibrateCollision(item);
-            this.CharacterMovement.CharacterSprintSpeed = this.SprintMultiplier();
-            this.CharacterMovement.CanMove = true;
+        if (item != null) {
+            this.CharacterMovementInstance.transform.position = item.transform.position;
+            this.CharacterMovement = this.CharacterMovementInstance.GetOrAddComponent<CharacterMovement>();
+            if (this.CharacterMovement is not null) {
+                this.CharacterMovement.SetPosition(item.transform.position);
+                this.CharacterMovement.CalibrateCollision(item);
+                this.CharacterMovement.CharacterSprintSpeed = this.SprintMultiplier();
+                this.CharacterMovement.CanMove = true;
+            }
         }
     }
+
 
 
 
@@ -94,7 +91,9 @@ internal sealed class ScrapPossessionMod : MonoBehaviour {
     }
 
     void Update() {
-        if (Helper.CurrentCamera is not Camera { enabled: true } camera) return;
+        if (HaxCamera.Instance is not HaxCamera haxCamera) return;
+        if (haxCamera.HaxCamContainer?.activeSelf == false) return;
+        if (haxCamera.CustomCamera is not Camera { enabled: true } camera) return;
         if (Helper.LocalPlayer is not PlayerControllerB localPlayer) return;
         if (this.CharacterMovement is not CharacterMovement characterMovement) return;
         if (this.Possession.Item is not GrabbableObject item) return;
@@ -126,7 +125,7 @@ internal sealed class ScrapPossessionMod : MonoBehaviour {
         if (!Physics.Raycast(rayOrigin, rayDirection, out RaycastHit hit, maxRange, layerMask)) return;
 
         if (hit.collider.gameObject.TryGetComponent(out DoorLock doorLock)) {
-            this.OpenOrcloseDoorAsEnemy(doorLock);
+            this.OpenOrcloseDoorAsItem(doorLock);
             return;
         }
 
@@ -163,37 +162,40 @@ internal sealed class ScrapPossessionMod : MonoBehaviour {
         }
     }
 
-    // Updates enemy's position to match the possessed object's position
-    void UpdateScrapPosition(GrabbableObject enemy) {
+    // Updates item's position to match the possessed object's position
+    void UpdateScrapPosition(GrabbableObject item) {
         if (this.CharacterMovement is not CharacterMovement characterMovement) return;
         Vector3 offsets = this.GetScrapPositionOffset();
 
-        Vector3 enemyEuler = enemy.transform.eulerAngles;
-        enemyEuler.y = this.transform.eulerAngles.y;
+        Vector3 ItemEuler = item.transform.eulerAngles;
+        ItemEuler.y = this.transform.eulerAngles.y;
 
         Vector3 PositionOffset = characterMovement.transform.position + new Vector3(offsets.x, offsets.y, offsets.z);
-        enemy.transform.position = PositionOffset;
+        item.transform.position = PositionOffset;
+        item.targetFloorPosition = PositionOffset;
         if (!this.IsLeftAltHeld) {
-            enemy.transform.eulerAngles = enemyEuler;
+            item.transform.eulerAngles = ItemEuler;
         }
     }
 
-    // Possesses the specified enemy
-    internal void Possess(GrabbableObject enemy) {
-        if (PossessionMod.Instance?.IsPossessed == true) PossessionMod.Instance?.Unpossess();
+    // Possesses the specified item
+    internal void Possess(GrabbableObject item) {
+        if (PossessionMod.Instance?.IsPossessed == true) return;
         this.Unpossess();
+        this.InitCharacterMovement(item);
+        this.enabled = true;
         this.FirstUpdate = true;
-        this.Possession.SetItem(enemy);
+        this.Possession.SetItem(item);
     }
 
 
     internal void Unpossess() {
         if (this.Possession.Item is not GrabbableObject item) return;
         this.Possession.Clear();
-        if (this.CharacterMovement is not null) {
+        if (this.CharacterMovementInstance is not null) {
             Destroy(this.CharacterMovementInstance);
-            this.CharacterMovementInstance = null;
         }
+        this.enabled = false;
     }
 
     float InteractRange() => 4.5f;
@@ -201,21 +203,13 @@ internal sealed class ScrapPossessionMod : MonoBehaviour {
     float SprintMultiplier() => 2.8f;
 
 
-    void OpenOrcloseDoorAsEnemy(DoorLock door) {
+    void OpenOrcloseDoorAsItem(DoorLock door) {
         if (door == null) return;
-        bool isDoorOpened = door.Reflect().GetInternalField<bool>("isDoorOpened");
-
         if (door.isLocked) {
             door.UnlockDoorSyncWithServer();
         }
-        
-        if (isDoorOpened) {
-            door.OpenOrCloseDoor(Helper.Players[0]);
-        }
-        else {
-            door.OpenDoorAsEnemyServerRpc();
-        }
 
+        door.OpenOrCloseDoor(Helper.Players[0]);
     }
 
     Transform? GetExitPointFromDoor(EntranceTeleport entrance) =>

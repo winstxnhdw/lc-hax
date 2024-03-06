@@ -6,7 +6,6 @@ using System.Linq;
 
 class CharacterMovement : MonoBehaviour {
 
-    internal static CharacterMovement? Instance { get; private set; }
     // Movement constants
     const float WalkingSpeed = 0.5f; // Walking speed when left control is held
     const float SprintDuration = 0.0f; // Duration sprint key must be held for sprinting (adjust as needed)
@@ -30,7 +29,19 @@ class CharacterMovement : MonoBehaviour {
     KeyboardMovement? NoClipKeyboard { get; set; } = null;
     CharacterController? CharacterController { get; set; }
 
+    void OnEnable() {
+        if (this.CharacterController is not null)
+            this.CharacterController.enabled = true;
+    }
+    void OnDisable(){
+        if (this.CharacterController is not null)
+            this.CharacterController.enabled = false;
+    }
 
+    void OnDestroy() {
+        Destroy(this.CharacterController);
+        Destroy(this.NoClipKeyboard);
+    }
 
     internal void SetNoClipMode(bool enabled) {
         if (this.NoClipKeyboard is null) return;
@@ -82,14 +93,9 @@ class CharacterMovement : MonoBehaviour {
     }
 
     void Awake() {
-        if (Instance is not null) {
-            Destroy(this);
-            return;
-        }
-        Instance = this;
         this.Keyboard = Keyboard.current;
-        this.NoClipKeyboard = this.gameObject.AddComponent<KeyboardMovement>();
-        this.CharacterController = this.gameObject.AddComponent<CharacterController>();
+        this.NoClipKeyboard = this.gameObject.GetOrAddComponent<KeyboardMovement>();
+        this.CharacterController = this.gameObject.GetOrAddComponent<CharacterController>();
     }
 
     // Update is called once per frame

@@ -54,24 +54,27 @@ internal sealed class PossessionMod : MonoBehaviour {
         enemy == null ? null : this.EnemyControllers.GetValueOrDefault(enemy.GetType());
 
     void Awake() {
-        this.InitCharacterMovement();
-        this.MousePan = this.gameObject.AddComponent<MousePan>();
+        this.MousePan = this.gameObject.GetOrAddComponent<MousePan>();
         this.enabled = false;
 
         PossessionMod.Instance = this;
     }
 
     void InitCharacterMovement(EnemyAI? enemy = null) {
-        this.CharacterMovement = CharacterMovement.Instance;
-        if (this.CharacterMovement == null) {
-            GameObject characterMovementObject = new("Hax CharacterMovement");
-            this.CharacterMovement = characterMovementObject.AddComponent<CharacterMovement>();
+        this.CharacterMovementInstance = Finder.Find("Hax CharacterMovement");
+        if (this.CharacterMovementInstance == null) {
+            this.CharacterMovementInstance = new("Hax CharacterMovement");
+            this.CharacterMovementInstance.transform.position = default;
         }
-        this.CharacterMovement.transform.position = enemy is null ? default : enemy.transform.position;
-        this.CharacterMovement.Init();
-        if (enemy is not null) {
-            this.CharacterMovement.CalibrateCollision(enemy);
-            this.CharacterMovement.CharacterSprintSpeed = this.SprintMultiplier(enemy);
+        if (enemy != null) {
+            this.CharacterMovementInstance.transform.position = enemy.transform.position;
+            this.CharacterMovement = this.CharacterMovementInstance.GetOrAddComponent<CharacterMovement>();
+            if (this.CharacterMovement is not null) {
+                this.CharacterMovement.SetPosition(enemy.transform.position);
+                this.CharacterMovement.CalibrateCollision(enemy);
+                this.CharacterMovement.CharacterSprintSpeed = this.SprintMultiplier(enemy);
+                this.CharacterMovement.CanMove = true;
+            }
         }
     }
 
@@ -138,7 +141,9 @@ internal sealed class PossessionMod : MonoBehaviour {
     }
 
     void Update() {
-        if (Helper.CurrentCamera is not Camera { enabled: true } camera) return;
+        if (HaxCamera.Instance is not HaxCamera haxCamera) return;
+        if (haxCamera.HaxCamContainer?.activeSelf == false) return;
+        if (haxCamera.CustomCamera is not Camera { enabled: true } camera) return;
         if (Helper.LocalPlayer is not PlayerControllerB localPlayer) return;
         if (this.CharacterMovement is not CharacterMovement characterMovement) return;
         if (this.Possession.Enemy is not EnemyAI enemy) return;
@@ -292,11 +297,13 @@ internal sealed class PossessionMod : MonoBehaviour {
     // Possesses the specified enemy
     internal void Possess(EnemyAI enemy) {
         if (enemy.isEnemyDead) return;
-
+        // unposssess if possessing a Scrap
+        if(ScrapPossessionMod.Instance?.IsPossessed == true) ScrapPossessionMod.Instance?.Unpossess();
         this.Unpossess();
-        this.FirstUpdate = true;
         this.Possession.SetEnemy(enemy);
         this.IsAIControlled = false;
+        this.InitCharacterMovement(enemy);
+        this.FirstUpdate = true;
         enemy.EnableEnemyMesh(true);
         this.Controller = this.GetEnemyController(enemy);
         this.Controller?.OnPossess(enemy);
@@ -336,9 +343,8 @@ internal sealed class PossessionMod : MonoBehaviour {
         this.IsAIControlled = false;
         this.Possession.Clear();
         this.Controller = null;
-        if (this.CharacterMovement is not null) {
+        if (this.CharacterMovementInstance is not null) {
             Destroy(this.CharacterMovementInstance);
-            this.CharacterMovementInstance = null;
         }
     }
 

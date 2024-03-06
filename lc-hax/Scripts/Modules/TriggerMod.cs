@@ -83,11 +83,11 @@ sealed class TriggerMod : MonoBehaviour, IEnemyPrompter {
                 break;
             }
 
-            if (collider.GetComponentInParent<EnemyAI>().Unfake() is EnemyAI enemy && Setting.EnablePhantom && PossessionMod.Instance?.PossessedEnemy != enemy && ScrapPossessionMod.Instance?.IsPossessed == false) {
+            if (collider.GetComponentInParent<EnemyAI>().Unfake() is EnemyAI enemy && Setting.EnablePhantom && PossessionMod.Instance?.PossessedEnemy != enemy) {
                 PossessionMod.Instance?.Possess(enemy);
                 break;
             }
-            if (collider.GetComponentInParent<GrabbableObject>().Unfake() is GrabbableObject item && Setting.EnablePhantom && ScrapPossessionMod.Instance?.PossessedScrap != item && PossessionMod.Instance?.IsPossessed == false) {
+            if (collider.GetComponent<GrabbableObject>().Unfake() is GrabbableObject item && Setting.EnablePhantom && ScrapPossessionMod.Instance?.PossessedScrap != item) {
                 ScrapPossessionMod.Instance?.Possess(item);
                 break;
             }
