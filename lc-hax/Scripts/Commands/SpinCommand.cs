@@ -1,8 +1,20 @@
+using System;
 using UnityEngine;
 using Hax;
 
 [Command("spin")]
 class SpinCommand : ICommand {
+    Action<float> PlaceObjectAtRotation(PlaceableShipObject shipObject) => (timeElapsed) =>
+        Helper.PlaceObjectAtPosition(
+            shipObject,
+            shipObject.transform.position,
+            new Vector3(0.0f, timeElapsed * 810.0f, 0.0f)
+        );
+
+    Action<PlaceableShipObject> SpinObject(ulong duration) => (shipObject) =>
+        Helper.CreateComponent<TransientBehaviour>()
+              .Init(this.PlaceObjectAtRotation(shipObject), duration);
+
     public void Execute(StringArray args) {
         if (args.Length is 0) {
             Chat.Print("Usage: spin <duration>");
@@ -12,10 +24,7 @@ class SpinCommand : ICommand {
             Chat.Print("Invalid duration!");
         }
 
-        Helper.FindObjects<PlaceableShipObject>().ForEach(shipObject =>
-            Helper
-                .CreateComponent<TransientBehaviour>($"Spin {shipObject.name}")
-                .Init(timeElapsed => shipObject.transform.Rotate(Vector3.up, timeElapsed * 810), duration)
-        );
+        Helper.FindObjects<PlaceableShipObject>()
+              .ForEach(this.SpinObject(duration));
     }
 }
