@@ -12,23 +12,22 @@ class SuitCommand : ICommand {
             .ToDictionary(suit => suit.ToString().Replace("_SUIT", "").ToLower(), suit => suit);
 
     public void Execute(StringArray args) {
-        if (args.Length is 0) {
+        if (args[0] is not string suit) {
             Chat.Print("Usage: suit <suit>");
             return;
         }
 
-        string? key = Helper.FuzzyMatch(args[0], this.SuitUnlockables.Keys);
-
-        if (string.IsNullOrWhiteSpace(key)) {
+        if (!suit.FuzzyMatch(this.SuitUnlockables.Keys, out string key)) {
             Chat.Print("Suit is not found!");
             return;
         }
 
         Unlockable selectedSuit = this.SuitUnlockables[key];
+        Helper.BuyUnlockable(selectedSuit);
 
         Helper
             .FindObjects<UnlockableSuit>()
-            .First(suit => this.SuitUnlockables[key].Is(suit.suitID))?
+            .First(suit => selectedSuit.Is(suit.suitID))?
             .SwitchSuitToThis(Helper.LocalPlayer);
 
         Chat.Print($"Wearing {string.Join(" ", selectedSuit.ToString().Split('_').Select(s => s.ToLower())).ToTitleCase()}!");

@@ -34,7 +34,7 @@ class FallCommand : ICommand {
     public void Execute(StringArray args) {
         if (Helper.LocalPlayer is not PlayerControllerB localPlayer) return;
         if (args.Length is 0) {
-            Chat.Print("Usage: /fall <player>");
+            Chat.Print("Usage: fall <player>");
             return;
         }
 
