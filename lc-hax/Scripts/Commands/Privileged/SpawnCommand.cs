@@ -45,14 +45,17 @@ class SpawnCommand : ICommand {
             return;
         }
 
+        if (args[0] is not string enemy) {
+            Chat.Print("Invalid enemy!");
+            return;
+        }
+
         if (Helper.GetActivePlayer(args[1]) is not PlayerControllerB targetPlayer) {
             Chat.Print("Player is not alive or found!");
             return;
         }
 
-        string? key = Helper.FuzzyMatch(args[0], SpawnCommand.HostileEnemies.Value.Keys);
-
-        if (string.IsNullOrWhiteSpace(key)) {
+        if (!enemy.FuzzyMatch(SpawnCommand.HostileEnemies.Value.Keys, out string key)) {
             Chat.Print("Invalid enemy!");
             return;
         }

@@ -5,9 +5,11 @@ using Hax;
 
 [Command("buy")]
 class BuyCommand : ICommand {
+    static Dictionary<string, int>? BuyableItems { get; set; }
+
     public void Execute(StringArray args) {
         if (Helper.Terminal is not Terminal terminal) return;
-        if (args.Length is 0) {
+        if (args[0] is not string item) {
             Chat.Print("Usage: buy <item> <quantity?>");
             return;
         }
@@ -19,21 +21,19 @@ class BuyCommand : ICommand {
 
         int clampedQuantity = Mathf.Clamp(quantity, 1, 12);
 
-        Dictionary<string, int> items = terminal.buyableItemsList.Select((item, i) => (item, i)).ToDictionary(
+        BuyCommand.BuyableItems ??= terminal.buyableItemsList.Select((item, i) => (item, i)).ToDictionary(
             pair => pair.item.itemName.ToLower(),
             pair => pair.i
         );
 
-        string? key = Helper.FuzzyMatch(args[0]?.ToLower(), items.Keys);
-
-        if (string.IsNullOrWhiteSpace(key)) {
+        if (!item.FuzzyMatch(BuyCommand.BuyableItems.Keys, out string key)) {
             Chat.Print("Failed to find purchase!");
             return;
         }
 
         terminal.orderedItemsFromTerminal.Clear();
         terminal.BuyItemsServerRpc(
-            [.. Enumerable.Repeat(items[key], clampedQuantity)],
+            [.. Enumerable.Repeat(BuyCommand.BuyableItems[key], clampedQuantity)],
             terminal.groupCredits - 1,
             terminal.numberOfItemsInDropship
         );
