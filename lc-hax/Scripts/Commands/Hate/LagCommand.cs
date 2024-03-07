@@ -23,28 +23,32 @@ class LagCommand : ICommand {
     IEnumerator PassBrackenComputeToTargetPlayer(
         PlayerControllerB localPlayer,
         PlayerControllerB targetPlayer,
-        FlowermanAI enemy
+        FlowermanAI bracken
     ) {
-        Reflector<FlowermanAI> enemyReflector = enemy.Reflect();
+        Reflector<FlowermanAI> enemyReflector = bracken.Reflect();
 
-        yield return this.WaitForEnemyOwnershipChange(localPlayer, enemy, enemyReflector);
+        yield return this.WaitForEnemyOwnershipChange(localPlayer, bracken, enemyReflector);
 
-        Vector3 outsideFactory = new(0.0f, -50.0f, 0.0f);
+        Vector3 outsideFactory = new(0.0f, -10.0f, 0.0f);
+
+        bracken.SetMovingTowardsTargetPlayer(targetPlayer);
+        bracken.SetBehaviourState(BehaviourState.AGGRAVATED);
+        bracken.EnterAngerModeServerRpc(float.MaxValue);
 
         _ = enemyReflector.InvokeInternalMethod(
             "UpdateEnemyPositionServerRpc",
-            enemy.serverPosition == outsideFactory
+            bracken.serverPosition == outsideFactory
                 ? targetPlayer.transform.position
                 : outsideFactory
         );
 
-        yield return this.WaitForEnemyOwnershipChange(targetPlayer, enemy, enemyReflector);
+        yield return this.WaitForEnemyOwnershipChange(targetPlayer, bracken, enemyReflector);
     }
 
     public void Execute(StringArray args) {
         if (Helper.LocalPlayer is not PlayerControllerB localPlayer) return;
         if (args.Length is 0) {
-            Chat.Print("Usage: /lag <player>");
+            Chat.Print("Usage: lag <player>");
             return;
         }
 

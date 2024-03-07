@@ -12,11 +12,8 @@ class TranslateCommand : ICommand {
             return;
         }
 
-        string? source = args[0];
-        string? target = args[1];
-
-        if (string.IsNullOrWhiteSpace(source) || string.IsNullOrWhiteSpace(target)) {
-            Chat.Print("Invalid arguments!");
+        if (args[0] is not string source || args[1] is not string target) {
+            Chat.Print("Invalid source or target language!");
             return;
         }
 
@@ -31,7 +28,7 @@ class TranslateCommand : ICommand {
         }
 
         else {
-            Helper.Translate(args[0], args[1], string.Join(' ', args[2..]));
+            Helper.Translate(source, target, string.Join(' ', args[2..]));
         }
     }
 }
