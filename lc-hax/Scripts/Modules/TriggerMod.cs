@@ -93,9 +93,6 @@ sealed class TriggerMod : MonoBehaviour, IEnemyPrompter {
                 break;
             }
             if (collider.TryGetComponent(out PlayerControllerB player)) {
-                if (player.isInsideFactory) {
-                    Helper.GetEnemy<CentipedeAI>()?.ClingToPlayerServerRpc(player.playerClientId);
-                }
                 this.PromptEnemiesToTarget(targetPlayer: player).ForEach(enemy => Chat.Print($"{enemy} prompted!"));
                 break;
             }
