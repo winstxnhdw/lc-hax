@@ -147,7 +147,7 @@ internal sealed class PossessionMod : MonoBehaviour {
         if (this.Possession.Enemy is not EnemyAI enemy) return;
         if (enemy.agent is not NavMeshAgent agent) return;
 
-        enemy.ChangeEnemyOwnerServerRpc(localPlayer.actualClientId);
+        enemy.TakeOwnership()
         this.UpdateCameraPosition(camera, enemy);
         this.UpdateCameraRotation(camera, enemy);
 

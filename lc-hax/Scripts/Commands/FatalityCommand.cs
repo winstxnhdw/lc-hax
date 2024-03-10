@@ -15,11 +15,11 @@ class FatalityCommand : ICommand {
             return false;
         }
 
-        enemy.ChangeEnemyOwnerServerRpc(localPlayer.actualClientId);
+        enemy.TakeOwnership();
         enemy.transform.position = targetPlayer.transform.position;
         enemy.SyncPositionToClients();
         enemyHandler(targetPlayer, enemy);
-        enemy.ChangeEnemyOwnerServerRpc(targetPlayer.actualClientId);
+        enemy.SetOwner(targetPlayer);
 
         return true;
     }

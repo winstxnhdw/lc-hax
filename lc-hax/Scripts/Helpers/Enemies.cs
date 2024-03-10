@@ -16,6 +16,40 @@ internal static partial class Helper {
             .Where(enemy => enemy.IsSpawned)
             .ToHashSet();
 
+    /// <summary>
+    /// Gives the local player ownership of the enemy.
+    /// </summary>
+    internal static void TakeOwnership(this EnemyAI enemy) {
+        if(Helper.LocalPlayer is not PlayerControllerB localPlayer) return;
+        enemy.SetOwner(localPlayer);
+    }
+    /// <summary>
+    /// Restores the enemy Ownership to the Host.
+    /// </summary>
+    internal static void RemoveOwnership(this EnemyAI enemy) => enemy.SetOwner(Helper.Players[0]);
+
+    /// <summary>
+    /// Sets the owner of the enemy to the specified player.
+    /// </summary>
+    /// <param name="enemy"></param>
+    /// <param name="player"></param>
+    internal static void SetOwner(this EnemyAI enemy, PlayerControllerB? player) {
+        if (player is null) return;
+        if (player.IsSelf()) {
+            enemy.SetOwner(player.actualClientId);
+        }
+        else {
+            enemy.SetOwner((ulong)player.PlayerIndex());
+        }
+    }
+
+    /// <summary>
+    /// Sets the owner of the enemy to the specified client with RPC.
+    /// </summary>
+    /// <param name="enemy"></param>
+    /// <param name="clientID"></param>
+    internal static void SetOwner(this EnemyAI enemy, ulong clientID) => enemy.ChangeEnemyOwnerServerRpc(clientID);
+
     internal static bool IsHostileEnemy(EnemyType enemy) =>
         !enemy.enemyName.Contains("Docile Locust Bees", StringComparison.InvariantCultureIgnoreCase) &&
         !enemy.enemyName.Contains("Manticoil", StringComparison.InvariantCultureIgnoreCase);
@@ -30,7 +64,7 @@ internal static partial class Helper {
         Helper.Enemies.First(enemy => enemy is T) is T enemy ? enemy : null;
 
     internal static void Kill(this EnemyAI enemy, ulong actualClientId) {
-        enemy.ChangeEnemyOwnerServerRpc(actualClientId);
+        enemy.TakeOwnership();
 
         if (enemy is NutcrackerEnemyAI nutcracker) {
             nutcracker.KillEnemy();

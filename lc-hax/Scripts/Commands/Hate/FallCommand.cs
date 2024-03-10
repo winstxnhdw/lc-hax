@@ -11,7 +11,7 @@ class FallCommand : ICommand {
         while (enemyReflector.GetInternalField<int>("currentOwnershipOnThisClient") != player.PlayerIndex()) {
             if (Helper.StartOfRound is { inShipPhase: true }) yield break;
 
-            enemy.ChangeEnemyOwnerServerRpc(player.actualClientId);
+            enemy.SetOwner(player);
             yield return waitForEndOfFrame;
         }
     }
