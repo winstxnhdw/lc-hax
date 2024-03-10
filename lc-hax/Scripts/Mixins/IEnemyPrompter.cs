@@ -29,11 +29,20 @@ class EnemyPromptHandler {
         enemy.SyncPositionToClients();
     }
 
-    bool IsEnemyAllowedInside(EnemyAI enemy, PlayerControllerB targetPlayer, bool willTeleportEnemy, bool overrideInsideFactory) =>
-        willTeleportEnemy || enemy is MaskedPlayerEnemy or DressGirlAI || overrideInsideFactory || (!enemy.enemyType.isOutsideEnemy || !targetPlayer.isInsideFactory);
+    bool IsEnemyAllowedInside(EnemyAI enemy, PlayerControllerB targetPlayer, bool willTeleportEnemy, bool overrideInsideFactory) {
+        if (overrideInsideFactory) return true;
+        if (willTeleportEnemy) return true;
+        if (enemy is MaskedPlayerEnemy or DressGirlAI) return true;
+        return !targetPlayer.isInsideFactory;
 
-    bool IsEnemyAllowedOutside(EnemyAI enemy, PlayerControllerB targetPlayer, bool willTeleportEnemy, bool overrideInsideFactory) =>
-        willTeleportEnemy || enemy is MaskedPlayerEnemy or DressGirlAI || overrideInsideFactory || (enemy.enemyType.isOutsideEnemy && !targetPlayer.isInsideFactory);
+    }
+
+    bool IsEnemyAllowedOutside(EnemyAI enemy, PlayerControllerB targetPlayer, bool willTeleportEnemy, bool overrideInsideFactory) {
+        if (overrideInsideFactory) return true;
+        if (willTeleportEnemy) return true;
+        if (enemy is MaskedPlayerEnemy or DressGirlAI) return true;
+        return targetPlayer.isInsideFactory;
+    }
 
     bool HandleThumper(CrawlerAI thumper, PlayerControllerB targetPlayer, bool willTeleportEnemy, bool overrideInsideFactory) {
         if(!this.IsEnemyAllowedOutside(thumper, targetPlayer, willTeleportEnemy, overrideInsideFactory)) return false;
