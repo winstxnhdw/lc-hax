@@ -16,6 +16,30 @@ internal static partial class Helper {
             .Where(enemy => enemy.IsSpawned)
             .ToHashSet();
 
+    internal static void TakeOwnerShipIfNotOwned(this EnemyAI enemy) {
+        if (enemy.IsOwner()) return;
+        enemy.TakeOwnership();
+    }
+
+    /// <summary>
+    /// Checks if the specified player is the owner of the enemy.
+    /// </summary>
+    internal static bool IsOwner(this EnemyAI enemy, PlayerControllerB player) {
+        if (player is null) return false;
+        int currentOwnershipOnThisClient = enemy.Reflect().GetInternalField<int>("currentOwnershipOnThisClient");
+        ulong networkOwner = enemy.NetworkObject.OwnerClientId;
+        ulong playerID = player.IsSelf() ? player.actualClientId : (ulong)player.PlayerIndex();
+        return currentOwnershipOnThisClient == (int)playerID && networkOwner == playerID;
+    }
+
+    /// <summary>
+    /// Checks if the local player is the owner of the enemy.
+    /// </summary>
+    internal static bool IsOwner(this EnemyAI enemy) {
+        if(Helper.LocalPlayer is not PlayerControllerB localPlayer) return false;
+        return enemy.IsOwner(localPlayer);
+    }
+
     /// <summary>
     /// Gives the local player ownership of the enemy.
     /// </summary>
