@@ -100,7 +100,12 @@ internal static partial class Helper {
             enemy.KillEnemyServerRpc(true);
         }
     }
-
+    /// <summary>
+    /// Updates enemy navmesh and resets the searchs routines
+    /// </summary>
+    /// <param name="enemy"></param>
+    /// <param name="isOutside"></param>
+    /// <param name="controller">If None given, it will use PossessionMod's and get a suitable controller to reset it's searches</param>
     internal static void SetOutsideStatus(this EnemyAI enemy, bool isOutside, IController? controller = null) {
         if (enemy.isOutside == isOutside) return;
 
