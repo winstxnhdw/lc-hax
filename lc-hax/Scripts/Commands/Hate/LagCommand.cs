@@ -29,17 +29,13 @@ class LagCommand : ICommand {
 
         yield return this.WaitForEnemyOwnershipChange(localPlayer, bracken, enemyReflector);
 
-        Vector3 outsideFactory = new(0.0f, -10.0f, 0.0f);
-
         bracken.SetMovingTowardsTargetPlayer(targetPlayer);
         bracken.SetBehaviourState(BehaviourState.AGGRAVATED);
         bracken.EnterAngerModeServerRpc(float.MaxValue);
 
         _ = enemyReflector.InvokeInternalMethod(
             "UpdateEnemyPositionServerRpc",
-            bracken.serverPosition == outsideFactory
-                ? targetPlayer.transform.position
-                : outsideFactory
+            targetPlayer.transform.position
         );
 
         yield return this.WaitForEnemyOwnershipChange(targetPlayer, bracken, enemyReflector);
@@ -59,6 +55,11 @@ class LagCommand : ICommand {
 
         if (Helper.GetPlayer(args[0]) is not PlayerControllerB targetPlayer) {
             Chat.Print("Target player is not found!");
+            return;
+        }
+
+        if (targetPlayer.isInsideFactory) {
+            Chat.Print("Target player must be outside of the factory!");
             return;
         }
 

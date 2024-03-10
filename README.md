@@ -160,10 +160,7 @@ The complete feature set includes the following.
 
 ## Privileged Commands
 
-> [!IMPORTANT]\
-> All commands under here require host privileges.
-
-These commands are only available when the user is in superuser mode.
+These commands are only available when the user is host.
 
 | Action                        | Command                                          |
 | ----------------------------- | ------------------------------------------------ |
