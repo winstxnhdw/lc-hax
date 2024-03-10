@@ -88,7 +88,7 @@ sealed class TriggerMod : MonoBehaviour, IEnemyPrompter {
                 PossessionMod.Instance?.Possess(enemy);
                 break;
             }
-            if (collider.GetComponent<GrabbableObject>().Unfake() is GrabbableObject item && Setting.EnablePhantom && ScrapPossessionMod.Instance?.PossessedScrap != item) {
+            if (collider.GetComponent<GrabbableObject>().Unfake() is GrabbableObject item && Setting.EnablePhantom && ScrapPossessionMod.Instance?.PossessedScrap != item && localplayer.IsHost) {
                 ScrapPossessionMod.Instance?.Possess(item);
                 break;
             }
