@@ -48,8 +48,10 @@ internal static partial class Helper {
     /// </summary>
     /// <param name="enemy"></param>
     /// <param name="clientID"></param>
-    internal static void SetOwner(this EnemyAI enemy, ulong clientID) => enemy.ChangeEnemyOwnerServerRpc(clientID);
-
+    internal static void SetOwner(this EnemyAI enemy, ulong clientID) {
+        enemy.ChangeOwnershipOfEnemy(clientID);
+        enemy.ChangeEnemyOwnerServerRpc(clientID);
+    }
     internal static bool IsHostileEnemy(EnemyType enemy) =>
         !enemy.enemyName.Contains("Docile Locust Bees", StringComparison.InvariantCultureIgnoreCase) &&
         !enemy.enemyName.Contains("Manticoil", StringComparison.InvariantCultureIgnoreCase);
@@ -63,7 +65,7 @@ internal static partial class Helper {
     internal static T? GetEnemy<T>() where T : EnemyAI =>
         Helper.Enemies.First(enemy => enemy is T) is T enemy ? enemy : null;
 
-    internal static void Kill(this EnemyAI enemy, ulong actualClientId) {
+    internal static void Kill(this EnemyAI enemy) {
         enemy.TakeOwnership();
 
         if (enemy is NutcrackerEnemyAI nutcracker) {
@@ -94,12 +96,6 @@ internal static partial class Helper {
         }
         controller?.OnOutsideStatusChange(enemy);
     }
-
-    internal static void Kill(EnemyAI enemy) {
-        if (Helper.LocalPlayer is not PlayerControllerB localPlayer) return;
-        enemy.Kill(localPlayer.actualClientId);
-    }
-
     internal static bool IsBehaviourState(this EnemyAI enemy, Enum state) =>
         enemy.currentBehaviourStateIndex == Convert.ToInt32(state);
 

@@ -18,7 +18,7 @@ sealed class KillClickMod : MonoBehaviour {
             if (!this.RaycastHits[i].collider.TryGetComponent(out EnemyAICollisionDetect enemy)) continue;
 
             enemy.mainScript.ChangeOwnershipOfEnemy(localPlayer.actualClientId);
-            enemy.mainScript.Kill(localPlayer.actualClientId);
+            enemy.mainScript.Kill();
             break;
         }
     }

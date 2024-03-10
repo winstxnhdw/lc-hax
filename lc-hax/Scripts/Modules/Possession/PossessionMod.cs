@@ -147,7 +147,7 @@ internal sealed class PossessionMod : MonoBehaviour {
         if (this.Possession.Enemy is not EnemyAI enemy) return;
         if (enemy.agent is not NavMeshAgent agent) return;
 
-        enemy.TakeOwnership()
+        enemy.TakeOwnership();
         this.UpdateCameraPosition(camera, enemy);
         this.UpdateCameraRotation(camera, enemy);
 
@@ -311,7 +311,7 @@ internal sealed class PossessionMod : MonoBehaviour {
         if (Helper.LocalPlayer is not PlayerControllerB localPlayer) return;
         if (this.Possession.Enemy is not EnemyAI enemy) return;
 
-        enemy.Kill(localPlayer.actualClientId);
+        enemy.Kill();
 
         if (localPlayer.IsHost) {
             if (enemy.TryGetComponent(out NetworkObject networkObject)) {
