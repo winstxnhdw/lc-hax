@@ -23,7 +23,7 @@ class EnemyPromptHandler {
         if (!willTeleportEnemy) return;
         if (!allowedOutside && !targetPlayer.isInsideFactory) return;
         if (!allowedInside && targetPlayer.isInsideFactory) return;
-        enemy.TakeOwnership();
+        enemy.TakeOwnerShipIfNotOwned();
         enemy.transform.position = targetPlayer.transform.position;
         enemy.SetOutsideStatus(!targetPlayer.isInsideFactory);
         enemy.SyncPositionToClients();
@@ -319,8 +319,21 @@ class EnemyPromptHandler {
                 return this.HandleDocileLocustBees(docileLocustBees, targetPlayer, willTeleportEnemy);
 
             default:
-                enemy.SetBehaviourState(BehaviourState.CHASE);
-                return true;
+                if (enemy.enemyType.isOutsideEnemy && !targetPlayer.isInsideFactory) {
+                    this.TeleportEnemyToPlayer(enemy, targetPlayer, willTeleportEnemy, true);
+                    enemy.TakeOwnership();
+                    enemy.SetMovingTowardsTargetPlayer(targetPlayer);
+                    enemy.SetBehaviourState(BehaviourState.CHASE);
+                    return true;
+                }
+                if (!enemy.enemyType.isOutsideEnemy && targetPlayer.isInsideFactory) {
+                    this.TeleportEnemyToPlayer(enemy, targetPlayer, willTeleportEnemy, true);
+                    enemy.TakeOwnership();
+                    enemy.SetMovingTowardsTargetPlayer(targetPlayer);
+                    enemy.SetBehaviourState(BehaviourState.CHASE);
+                    return true;
+                }
+                return false;
         }
     }
 }
