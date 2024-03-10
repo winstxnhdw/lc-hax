@@ -46,14 +46,18 @@ internal static partial class Helper {
 
         enemy.isOutside = isOutside;
         enemy.allAINodes = GameObject.FindGameObjectsWithTag(enemy.isOutside ? "OutsideAINode" : "AINode");
-        Transform closestNodePos = enemy.ChooseClosestNodeToPosition(enemy.transform.position, false, 0);
-        _ = enemy.SetDestinationToPosition(closestNodePos.position, true);
         _ = enemy.agent.Warp(enemy.transform.position);
-        enemy.SyncPositionToClients();
-        enemy.agent.ResetPath();
-        enemy.EnableEnemyMesh(true, false);
         enemy.FinishedCurrentSearchRoutine();
         enemy.StopSearch(enemy.currentSearch, true);
+        enemy.SyncPositionToClients();
+        enemy.agent.ResetPath();
+        Transform closestNodePos = enemy.ChooseClosestNodeToPosition(enemy.transform.position, false, 0);
+        _ = enemy.SetDestinationToPosition(closestNodePos.position, true);
+        enemy.EnableEnemyMesh(true, false);
+        if (controller is null) {
+            if (PossessionMod.Instance is not PossessionMod possession) return;
+            controller = possession.GetEnemyController(enemy);
+        }
         controller?.OnOutsideStatusChange(enemy);
     }
 

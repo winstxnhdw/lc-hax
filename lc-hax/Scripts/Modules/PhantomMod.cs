@@ -9,9 +9,7 @@ sealed class PhantomMod : MonoBehaviour {
     bool EnabledPossession { get; set; } = false;
     int CurrentSpectatorIndex { get; set; } = 0;
 
-    void Awake() {
-        PhantomMod.Instance = this;
-    }
+    void Awake() => PhantomMod.Instance = this;
 
     void OnEnable() {
         InputListener.OnShiftButtonHold += this.HoldShift;
@@ -29,7 +27,7 @@ sealed class PhantomMod : MonoBehaviour {
 
     void Update() {
         if (PossessionMod.Instance is not PossessionMod possessionMod) return;
-        if (ScrapPossessionMod.Instance is not ScrapPossessionMod itemPossessionMod) return; 
+        if (ScrapPossessionMod.Instance is not ScrapPossessionMod itemPossessionMod) return;
 
         if (Helper.CurrentCamera is not Camera { enabled: true } camera) return;
         if (!camera.gameObject.TryGetComponent(out KeyboardMovement keyboard)) return;

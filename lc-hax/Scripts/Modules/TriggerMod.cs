@@ -26,6 +26,7 @@ sealed class TriggerMod : MonoBehaviour, IEnemyPrompter {
 
     void Fire() {
         if (Helper.CurrentCamera is not Camera camera) return;
+        if (Helper.LocalPlayer is not PlayerControllerB localplayer) return;
 
         if (this.UsingFollowRay) {
             if (FollowMod.PlayerToFollow is not null) {
@@ -92,9 +93,10 @@ sealed class TriggerMod : MonoBehaviour, IEnemyPrompter {
                 break;
             }
             if (collider.TryGetComponent(out PlayerControllerB player)) {
-                Helper.GetEnemy<CentipedeAI>()?.ClingToPlayerServerRpc(player.playerClientId);
-                this.PromptEnemiesToTarget(targetPlayer: player)
-                    .ForEach(enemy => Chat.Print($"{enemy} prompted!"));
+                if (player.isInsideFactory) {
+                    Helper.GetEnemy<CentipedeAI>()?.ClingToPlayerServerRpc(player.playerClientId);
+                }
+                this.PromptEnemiesToTarget(targetPlayer: player).ForEach(enemy => Chat.Print($"{enemy} prompted!"));
                 break;
             }
 
