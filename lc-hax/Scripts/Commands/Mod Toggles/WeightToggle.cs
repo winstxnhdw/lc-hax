@@ -11,14 +11,13 @@ internal class WeightToggle : ICommand {
         if (Helper.LocalPlayer is not PlayerControllerB player) return;
         player.carryWeight = 1.0f;
         if (!weight.enabled) {
-            // calculate weight by held items
-            foreach(GrabbableObject item in player.ItemSlots) {
-
-                player.carryWeight += Mathf.Clamp(player.carryWeight - (item.itemProperties.weight - 1f), 0f, 10f);
+            float totalWeight = 0f;
+            foreach (GrabbableObject? item in player.ItemSlots) {
+                if (item != null) {
+                    totalWeight += Mathf.Clamp(item.itemProperties.weight - 1f, 0f, 10f); ;
+                }
             }
-        }
-        else {
-            player.carryWeight = 1.0f;
+            player.carryWeight += totalWeight;
         }
     }
 }

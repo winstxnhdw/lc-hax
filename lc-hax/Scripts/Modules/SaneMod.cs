@@ -14,6 +14,7 @@ internal sealed class SaneMod : MonoBehaviour {
         }
 
         SaneMod.Instance = this;
+        this.enabled = false;
     }
 
     Coroutine? SaneModCoroutine { get; set; }
