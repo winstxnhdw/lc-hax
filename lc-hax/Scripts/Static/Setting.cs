@@ -13,4 +13,6 @@ static class Setting {
     internal static bool EnableEavesdrop { get; set; } = false;
     internal static bool EnableUnlimitedJump { get; set; } = true;
     internal static bool InvertYAxis => IngamePlayerSettings.Instance.settings.invertYAxis;
+    public static bool EnableNoSinking { get; set; } = true;
+    public static bool DisableSpiderWebSlowness { get; set; } = true;
 }
