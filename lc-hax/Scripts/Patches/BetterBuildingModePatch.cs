@@ -38,6 +38,7 @@ class BetterBuildingModePatch {
         PlacingObject = ___placingObject;
         ___placingObject.AllowPlacementOnCounters = true;
         ___placingObject.AllowPlacementOnWalls = true;
+        __instance.ghostObjectRenderer.sharedMaterial = __instance.ghostObjectGreen;
         if (Keyboard.leftShiftKey.isPressed) {
             ShiftKeyisPressed = true;
         }
