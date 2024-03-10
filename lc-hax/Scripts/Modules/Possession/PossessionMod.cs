@@ -296,7 +296,7 @@ internal sealed class PossessionMod : MonoBehaviour {
     internal void Possess(EnemyAI enemy) {
         if (enemy.isEnemyDead) return;
         // unposssess if possessing a Scrap
-        if(ScrapPossessionMod.Instance?.IsPossessed == true) ScrapPossessionMod.Instance?.Unpossess();
+        if (ScrapPossessionMod.Instance?.IsPossessed == true) ScrapPossessionMod.Instance?.Unpossess();
         this.Unpossess();
         this.Possession.SetEnemy(enemy);
         this.IsAIControlled = false;
@@ -325,18 +325,19 @@ internal sealed class PossessionMod : MonoBehaviour {
 
     // Releases possession of the current enemy
     internal void Unpossess() {
-        if (this.Possession.Enemy is not EnemyAI enemy) return;
-        if (enemy.agent is NavMeshAgent agent) {
-            agent.updatePosition = true;
-            agent.updateRotation = true;
-            agent.isStopped = false;
+        if (this.Possession.Enemy is EnemyAI enemy) {
+            if (enemy.agent is NavMeshAgent agent) {
+                agent.updatePosition = true;
+                agent.updateRotation = true;
+                agent.isStopped = false;
+                _ = enemy.agent.Warp(enemy.transform.position);
+            }
+            enemy.SyncPositionToClients();
             this.UpdateEnemyPosition(enemy);
             this.SetAIControl(true);
-            _ = enemy.agent.Warp(enemy.transform.position);
-            enemy.SyncPositionToClients();
+            this.Controller?.OnUnpossess(enemy);
         }
 
-        this.Controller?.OnUnpossess(enemy);
 
         this.IsAIControlled = false;
         this.Possession.Clear();

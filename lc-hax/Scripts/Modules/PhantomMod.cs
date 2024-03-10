@@ -29,25 +29,20 @@ sealed class PhantomMod : MonoBehaviour {
 
     void Update() {
         if (PossessionMod.Instance is not PossessionMod possessionMod) return;
-        if (ScrapPossessionMod.Instance is not ScrapPossessionMod itemPossessionMod) return; // Assuming ScrapPossessionMod is your ItemPossessionMod
+        if (ScrapPossessionMod.Instance is not ScrapPossessionMod itemPossessionMod) return; 
 
         if (Helper.CurrentCamera is not Camera { enabled: true } camera) return;
         if (!camera.gameObject.TryGetComponent(out KeyboardMovement keyboard)) return;
         if (!camera.gameObject.TryGetComponent(out MousePan mouse)) return;
 
-        bool isPossessed = possessionMod.IsPossessed || itemPossessionMod.IsPossessed; // Combined possession check
-
+        bool isPossessed = possessionMod.IsPossessed || itemPossessionMod.IsPossessed;
         if (!Setting.EnablePhantom) {
             if (!this.EnabledPossession) return;
+            possessionMod.Unpossess();
+            possessionMod.enabled = false;
+            itemPossessionMod.Unpossess();
+            itemPossessionMod.enabled = false;
 
-            if (possessionMod.IsPossessed) {
-                possessionMod.Unpossess();
-                possessionMod.enabled = false;
-            }
-            if (itemPossessionMod.IsPossessed) {
-                itemPossessionMod.Unpossess();
-                itemPossessionMod.enabled = false;
-            }
             this.EnabledPossession = false;
         }
         else if (!isPossessed) { // If neither is currently possessed
@@ -57,8 +52,12 @@ sealed class PhantomMod : MonoBehaviour {
         }
         else if (!this.EnabledPossession) { // Possessing for the first frame
             this.EnabledPossession = true;
-            if (possessionMod.IsPossessed) possessionMod.enabled = true;
-            else if (itemPossessionMod.IsPossessed) itemPossessionMod.enabled = true;
+            if (possessionMod.IsPossessed)
+                possessionMod.enabled = true;
+
+            if (itemPossessionMod.IsPossessed)
+                itemPossessionMod.enabled = true;
+
             keyboard.enabled = false;
             mouse.enabled = false;
         }
@@ -116,13 +115,19 @@ sealed class PhantomMod : MonoBehaviour {
         if (PossessionMod.Instance is PossessionMod { IsPossessed: true } possession) {
             possession.Unpossess();
         }
+        if (ScrapPossessionMod.Instance is ScrapPossessionMod { IsPossessed: true } scrappossession) {
+            scrappossession.Unpossess();
+        }
+
     }
 
-    void TogglePhantom() {
+    void TogglePhantom() => this.SetPhantom(!Setting.EnablePhantom);
+
+    internal void SetPhantom(bool EnablePhantom) {
         if (Helper.LocalPlayer is not PlayerControllerB player) return;
         if (HaxCamera.Instance is not HaxCamera haxCamera) return;
         if (haxCamera.GetCamera() is not Camera camera) return;
-        Setting.EnablePhantom = !Setting.EnablePhantom;
+        Setting.EnablePhantom = EnablePhantom;
         player.enabled = !player.IsDead() || !Setting.EnablePhantom;
         player.playerBodyAnimator.enabled = !Setting.EnablePhantom;
         player.thisController.enabled = !Setting.EnablePhantom;
@@ -135,18 +140,5 @@ sealed class PhantomMod : MonoBehaviour {
         }
 
         haxCamera.SetActive(Setting.EnablePhantom);
-    }
-
-    internal void DisablePhantom() {
-        Setting.EnablePhantom = false;
-        if (Helper.LocalPlayer is not PlayerControllerB player) return;
-        if (HaxCamera.Instance is not HaxCamera haxCamera) return;
-        if (haxCamera.GetCamera() is not Camera camera) return;
-        player.enabled = !player.IsDead();
-        player.playerBodyAnimator.enabled = true;
-        player.thisController.enabled = true;
-        player.isFreeCamera = false;
-        this.PhantomDisabled(player, camera);
-
     }
 }

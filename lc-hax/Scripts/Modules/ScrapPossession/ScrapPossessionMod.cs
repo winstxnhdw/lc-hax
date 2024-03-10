@@ -108,8 +108,11 @@ internal sealed class ScrapPossessionMod : MonoBehaviour {
         this.UpdateCameraPosition(camera, item);
         this.UpdateCameraRotation(camera, characterMovement);
 
+        Vector3 cameraForward = camera.transform.forward;
+        cameraForward.y = 0;
+        item.transform.forward = cameraForward;
         this.UpdateScrapPosition(item);
-        this.UpdateScrapRotation();
+        this.UpdateScrapRotation(item);
 
     }
 
@@ -144,21 +147,14 @@ internal sealed class ScrapPossessionMod : MonoBehaviour {
     }
 
     void UpdateCameraRotation(Camera camera, CharacterMovement item) {
-        Quaternion newRotation = Quaternion.LookRotation(item.transform.forward);
-        // Set the camera rotation without changing its position
+        Vector3 currentRotation = this.transform.eulerAngles;
+        float yaw = item.transform.eulerAngles.y + currentRotation.y;
+        float pitch = currentRotation.x;
+        Quaternion newRotation = Quaternion.Euler(pitch, yaw, 0f);
         float RotationLerpSpeed = 0.6f;
         camera.transform.rotation = Quaternion.Lerp(camera.transform.rotation, newRotation, RotationLerpSpeed);
     }
-    void UpdateScrapRotation() {
-        if (this.CharacterMovement is not CharacterMovement characterMovement) return;
-        if (!this.NoClipEnabled) {
-            Quaternion horizontalRotation = Quaternion.Euler(0f, this.transform.eulerAngles.y, 0f);
-            characterMovement.transform.rotation = horizontalRotation;
-        }
-        else {
-            characterMovement.transform.rotation = this.transform.rotation;
-        }
-    }
+    void UpdateScrapRotation(GrabbableObject item) => item.transform.rotation = Quaternion.Euler(0, this.transform.eulerAngles.y, 0);
 
     // Updates item's position to match the possessed object's position
     void UpdateScrapPosition(GrabbableObject item) {
@@ -178,7 +174,7 @@ internal sealed class ScrapPossessionMod : MonoBehaviour {
 
     // Possesses the specified item
     internal void Possess(GrabbableObject item) {
-        if (PossessionMod.Instance?.IsPossessed == true) return;
+        if (PossessionMod.Instance?.IsPossessed == true) PossessionMod.Instance.Unpossess();
         this.Unpossess();
         this.InitCharacterMovement(item);
         this.FirstUpdate = true;
@@ -225,7 +221,12 @@ internal sealed class ScrapPossessionMod : MonoBehaviour {
     }
     void UseSecondarySkill() {
         if (this.PossessedScrap is not GrabbableObject scrap) return;
-        scrap.InteractWithProp();
+        if(Helper.StartOfRound is not StartOfRound round) return;
+        if (scrap.itemProperties.dropSFX != null) {
+            scrap.gameObject.GetComponent<AudioSource>()?.PlayOneShot(scrap.itemProperties.dropSFX);
+            RoundManager.Instance.PlayAudibleNoise(scrap.transform.position, 8f, 0.5f, 0, scrap.isInElevator && round.hangarDoorsClosed, 941);
+        }
+
 
     }
 

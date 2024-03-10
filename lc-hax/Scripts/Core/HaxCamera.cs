@@ -53,7 +53,7 @@ internal class HaxCamera : MonoBehaviour {
 
 
     internal void DisableCamera() {
-        if (PhantomMod.Instance is PhantomMod phantom) phantom.DisablePhantom();
+        if (PhantomMod.Instance is PhantomMod phantom) phantom.SetPhantom(false);
         this.HaxCamContainer?.SetActive(false);
     }
 
