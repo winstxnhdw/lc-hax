@@ -52,9 +52,14 @@ static partial class Helper {
 
     internal static PlayerControllerB? GetActivePlayer(int playerClientId) => Helper.GetActivePlayer(playerClientId.ToString());
 
-    internal static bool GrabObject(this PlayerControllerB player, GrabbableObject grabbable) {
-        if (player.ItemSlots.WhereIsNotNull().Count() >= 4) return false;
+    internal static bool HasFreeSlots(this PlayerControllerB player) => player.ItemSlots.Any(slot => slot == null);
 
+    internal static bool IsHoldingGrabbable(this PlayerControllerB player, GrabbableObject grabbable) => player.ItemSlots[player.currentItemSlot] == grabbable;
+
+    public static bool IsHoldingItemOfType<T>(this PlayerControllerB player) where T : GrabbableObject => player.ItemSlots[player.currentItemSlot] is T;
+
+    internal static bool GrabObject(this PlayerControllerB player, GrabbableObject grabbable) {
+        if(!player.HasFreeSlots()) return false;
         NetworkObjectReference networkObject = grabbable.NetworkObject;
         _ = player.Reflect().InvokeInternalMethod("GrabObjectServerRpc", networkObject);
 

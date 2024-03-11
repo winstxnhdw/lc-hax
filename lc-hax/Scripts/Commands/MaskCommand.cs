@@ -43,7 +43,7 @@ class MaskCommand : ICommand {
         }
 
         Helper.CreateComponent<WaitForBehaviour>()
-              .SetPredicate(() => localPlayer.ItemSlots[localPlayer.currentItemSlot] is HauntedMaskItem)
+              .SetPredicate(() => localPlayer.IsHoldingItemOfType<HauntedMaskItem>())
               .Init(() => this.SpawnMimicOnPlayer(targetPlayer, hauntedMaskItem, amount));
     }
 }

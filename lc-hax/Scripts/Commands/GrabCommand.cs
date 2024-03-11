@@ -16,7 +16,7 @@ class GrabCommand : ICommand {
 
         foreach (GrabbableObject grabbable in grabbables) {
             if (!player.GrabObject(grabbable)) continue;
-            yield return new WaitUntil(() => player.ItemSlots[player.currentItemSlot] == grabbable);
+            yield return new WaitUntil(() => player.IsHoldingGrabbable(grabbable));
             player.DiscardHeldObject();
         }
 
@@ -58,7 +58,7 @@ class GrabCommand : ICommand {
         }
 
         Helper.CreateComponent<WaitForBehaviour>()
-              .SetPredicate(() => player.ItemSlots[player.currentItemSlot] == grabbable)
+              .SetPredicate(() => player.IsHoldingGrabbable(grabbable))
               .Init(() => player.DiscardHeldObject());
 
         return $"Grabbed a {key.ToTitleCase()}!";
@@ -66,7 +66,7 @@ class GrabCommand : ICommand {
 
     public void Execute(StringArray args) {
         if (Helper.LocalPlayer is not PlayerControllerB localPlayer) return;
-        if (localPlayer.ItemSlots.WhereIsNotNull().Count() >= 4) {
+        if (!localPlayer.HasFreeSlots()) {
             Chat.Print("You must have an empty inventory slot!");
             return;
         }

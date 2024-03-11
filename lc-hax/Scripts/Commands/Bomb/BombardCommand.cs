@@ -16,7 +16,7 @@ class BombardCommand : ICommand, IJetpack {
 
         foreach (JetpackItem jetpack in jetpacks) {
             if (!player.GrabObject(jetpack)) continue;
-            yield return new WaitUntil(() => player.ItemSlots[player.currentItemSlot] == jetpack);
+            yield return new WaitUntil(() => player.IsHoldingGrabbable(jetpack));
 
             const float bombardRadius = 10.0f;
             Vector2 randomDirection = Random.insideUnitCircle * bombardRadius;
@@ -38,7 +38,7 @@ class BombardCommand : ICommand, IJetpack {
             return;
         }
 
-        if (localPlayer.ItemSlots.WhereIsNotNull().Count() >= 4) {
+        if (!localPlayer.HasFreeSlots()) {
             Chat.Print("You must have an empty inventory slot!");
             return;
         }

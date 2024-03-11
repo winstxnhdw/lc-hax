@@ -32,7 +32,7 @@ class BombCommand : ICommand, IJetpack {
         }
 
         Helper.CreateComponent<WaitForBehaviour>("Throw Bomb")
-              .SetPredicate(() => localPlayer.ItemSlots[localPlayer.currentItemSlot] == jetpack)
+              .SetPredicate(() => localPlayer.IsHoldingGrabbable(jetpack))
               .Init(this.BlowUpLocation(localPlayer, targetPlayer, jetpack));
     }
 }

@@ -97,6 +97,7 @@ internal static partial class Helper {
             item.name.Contains(itemName, StringComparison.InvariantCultureIgnoreCase));
 
 
+
     internal static GrabbableObject? SpawnItem(Vector3 position, Item prefab) {
         if (prefab == null) return null;
         if(Helper.RoundManager == null) return null;
@@ -118,10 +119,15 @@ internal static partial class Helper {
         return Grab;
     }
 
-    internal static void SpawnItems(Vector3 position, Item prefab, int amount) {
+    internal static HashSet<GrabbableObject> SpawnItems(Vector3 position, Item prefab, int amount) {
+        HashSet<GrabbableObject> spawnedItems = new HashSet<GrabbableObject>();
         for (int i = 0; i < amount; i++) {
-            _ = SpawnItem(position, prefab);
+            GrabbableObject? newItem = SpawnItem(position, prefab);
+            if (newItem != null) {
+                spawnedItems.Add(newItem);
+            }
         }
+        return spawnedItems;
     }
 
 }

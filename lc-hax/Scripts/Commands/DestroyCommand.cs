@@ -11,7 +11,7 @@ class DestroyCommand : ICommand {
 
         foreach (GrabbableObject grabbable in Helper.Grabbables.ToArray()) {
             if (!player.GrabObject(grabbable)) continue;
-            yield return new WaitUntil(() => player.ItemSlots[player.currentItemSlot] == grabbable);
+            yield return new WaitUntil(() => player.IsHoldingGrabbable(grabbable));
             player.DespawnHeldObject();
         }
 
@@ -37,7 +37,7 @@ class DestroyCommand : ICommand {
     public void Execute(StringArray args) {
         if (Helper.LocalPlayer is not PlayerControllerB player) return;
 
-        if (player.ItemSlots.WhereIsNotNull().Count() >= 4) {
+        if (!player.HasFreeSlots()) {
             Chat.Print("You must have an empty inventory slot!");
             return;
         }
