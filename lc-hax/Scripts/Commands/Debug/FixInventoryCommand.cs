@@ -8,6 +8,7 @@ class FixInventoryCommand : ICommand {
         if(Helper.LocalPlayer is not PlayerControllerB player) return;
         Helper.Grabbables.ForEach(grabbable => {
             if(grabbable is not null) {
+                if(player.HasItemInSlot(grabbable)) return; // only target the unheld items that are bugged in player's hand.
                 if(grabbable.playerHeldBy == player) {
                     grabbable.Detach();
                 }

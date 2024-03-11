@@ -124,7 +124,7 @@ internal static partial class Helper {
         for (int i = 0; i < amount; i++) {
             GrabbableObject? newItem = SpawnItem(position, prefab);
             if (newItem != null) {
-                _ = spawnedItems.Add(newItem);
+                spawnedItems.Add(newItem);
             }
         }
         return spawnedItems;

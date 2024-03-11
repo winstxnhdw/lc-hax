@@ -52,6 +52,8 @@ static partial class Helper {
 
     internal static PlayerControllerB? GetActivePlayer(int playerClientId) => Helper.GetActivePlayer(playerClientId.ToString());
 
+    internal static bool HasItemInSlot(this PlayerControllerB player, GrabbableObject grabbable) => player.ItemSlots.Any(slot => slot == grabbable);
+
     internal static bool HasFreeSlots(this PlayerControllerB player) => player.ItemSlots.Any(slot => slot == null);
 
     internal static bool IsHoldingGrabbable(this PlayerControllerB player, GrabbableObject grabbable) => player.ItemSlots[player.currentItemSlot] == grabbable;
