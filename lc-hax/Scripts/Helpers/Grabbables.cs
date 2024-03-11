@@ -130,4 +130,31 @@ internal static partial class Helper {
         return spawnedItems;
     }
 
+    internal static void RemoveBoundItems(this GrabbableObject grabbableObject) {
+        if (Helper.LocalPlayer is not PlayerControllerB player) return;
+        if (Helper.StartOfRound is not StartOfRound round) return;
+        grabbableObject.parentObject = null;
+        grabbableObject.heldByPlayerOnServer = false;
+        if (player.isInElevator) {
+            grabbableObject.transform.SetParent(round.elevatorTransform, worldPositionStays: true);
+        }
+        else {
+            grabbableObject.transform.SetParent(round.propsContainer, worldPositionStays: true);
+        }
+
+        player.SetItemInElevator(player.isInHangarShipRoom, player.isInElevator, grabbableObject);
+        grabbableObject.EnablePhysics(enable: true);
+        grabbableObject.EnableItemMeshes(enable: true);
+        grabbableObject.transform.localScale = grabbableObject.originalScale;
+        grabbableObject.isHeld = false;
+        grabbableObject.isPocketed = false;
+        grabbableObject.startFallingPosition = grabbableObject.transform.parent.InverseTransformPoint(grabbableObject.transform.position);
+        grabbableObject.FallToGround(randomizePosition: true);
+        grabbableObject.fallTime = UnityEngine.Random.Range(-0.3f, 0.05f);
+        grabbableObject.DiscardItemOnClient();
+        if (!grabbableObject.itemProperties.syncDiscardFunction) {
+            grabbableObject.playerHeldBy = null;
+        }
+    }
+
 }
