@@ -82,7 +82,7 @@ internal class GiveCommand : ICommand {
         Vector3 spawnPosition = target.position + Vector3.up * 0.5f;
         List<Item> allItems = Helper.Items
             .Where(item => item.isScrap && item.minValue > 0 && item.maxValue > 0
-                && !new[] { "ammo", "shotgun", "gold bar" }.Contains(item.itemName, StringComparer.InvariantCultureIgnoreCase))
+                && !new[] { "ammo", "shotgun", "gold bar", "gift" }.Contains(item.itemName, StringComparer.InvariantCultureIgnoreCase))
             .ToList();
         if (allItems.Count == 0) yield break;
 
