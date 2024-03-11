@@ -21,7 +21,7 @@ class BombardCommand : ICommand, IJetpack {
             const float bombardRadius = 10.0f;
             Vector2 randomDirection = Random.insideUnitCircle * bombardRadius;
             Vector3 randomDirectionXZ = new(randomDirection.x, 0.0f, randomDirection.y);
-            player.DiscardHeldObject(placeObject: true, placePosition: targetTransform.position + randomDirectionXZ);
+            player.DiscardObject(jetpack, placeObject: true, placePosition: targetTransform.position + randomDirectionXZ);
 
             Helper.CreateComponent<WaitForBehaviour>()
                   .SetPredicate(() => Vector3.Distance(jetpack.transform.position, targetTransform.position) < 5.0f)

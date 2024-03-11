@@ -5,7 +5,7 @@ using Hax;
 [Command("bomb")]
 class BombCommand : ICommand, IJetpack {
     Action BlowUpLocation(PlayerControllerB localPlayer, PlayerControllerB targetPlayer, JetpackItem jetpack) => () => {
-        localPlayer.DiscardHeldObject(placeObject: true, parentObjectTo: targetPlayer.NetworkObject);
+        localPlayer.DiscardObject(jetpack,placeObject: true, parentObjectTo: targetPlayer.NetworkObject);
         Helper.ShortDelay(jetpack.ExplodeJetpackServerRpc);
     };
 

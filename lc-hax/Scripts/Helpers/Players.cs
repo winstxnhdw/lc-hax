@@ -70,6 +70,22 @@ static partial class Helper {
 
         return true;
     }
+    /// <summary>
+    /// Finds the Held object slot, and discards it properly and updates the HUD slots, along with detaching if it bugs onto the player hand.
+    /// </summary>
+    internal static void DiscardObject(this PlayerControllerB localPlayer, GrabbableObject item, bool placeObject = false, NetworkObject? parentObjectTo = null, Vector3 placePosition = default, bool matchRotationOfParent = true) {
+        if(Helper.HUDManager is not HUDManager hudManager) return;
+        int slot = Array.IndexOf(localPlayer.ItemSlots, item);
+        if (slot == -1) return;
+        _ = localPlayer.Reflect().InvokeInternalMethod("SwitchToItemSlot", slot);
+        localPlayer.DiscardHeldObject(placeObject, parentObjectTo, placePosition, matchRotationOfParent);
+        item.Detach();
+        hudManager.holdingTwoHandedItem.enabled = false;
+        hudManager.itemSlotIcons[slot].enabled = false;
+        hudManager.ClearControlTips();
+    }
+
+
 
     internal static bool IsDead(this PlayerControllerB instance) => !instance.isPlayerControlled;
 

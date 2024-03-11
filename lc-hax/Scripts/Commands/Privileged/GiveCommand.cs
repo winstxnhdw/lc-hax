@@ -106,8 +106,9 @@ internal class GiveCommand : ICommand {
                     if (!player.GrabObject(spawnedItem)) continue;
                     yield return new WaitUntil(() => player.IsHoldingGrabbable(spawnedItem));
                     yield return delayframe;
-                    player.DiscardHeldObject();
-                    spawnedItem.Detach();
+                    yield return delayframe;
+                    player.DiscardObject(spawnedItem);
+                    yield return delayframe;
                     yield return delayframe;
                 }
 
@@ -172,10 +173,7 @@ internal class GiveCommand : ICommand {
                 yield return new WaitUntil(() => player.IsHoldingGrabbable(spawnedItem));
                 yield return delayframe;
                 yield return delayframe;
-                yield return delayframe;
-                player.DiscardHeldObject();
-                spawnedItem.Detach();
-                yield return delayframe;
+                player.DiscardObject(spawnedItem);
                 yield return delayframe;
                 yield return delayframe;
 

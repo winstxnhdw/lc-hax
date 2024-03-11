@@ -17,7 +17,7 @@ class GrabCommand : ICommand {
         foreach (GrabbableObject grabbable in grabbables) {
             if (!player.GrabObject(grabbable)) continue;
             yield return new WaitUntil(() => player.IsHoldingGrabbable(grabbable));
-            player.DiscardHeldObject();
+            player.DiscardObject(grabbable);
         }
 
         player.carryWeight = currentWeight;
@@ -60,8 +60,7 @@ class GrabCommand : ICommand {
         Helper.CreateComponent<WaitForBehaviour>()
               .SetPredicate(() => player.IsHoldingGrabbable(grabbable))
               .Init(() => {
-                  player.DiscardHeldObject();
-                  grabbable.Detach();
+                  player.DiscardObject(grabbable);
               });
 
         return $"Grabbed a {key.ToTitleCase()}!";
