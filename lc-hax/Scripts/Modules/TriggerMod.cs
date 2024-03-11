@@ -62,15 +62,25 @@ sealed class TriggerMod : MonoBehaviour, IEnemyPrompter {
             Collider collider = raycastHit.collider;
 
             if (collider.TryGetComponent(out TerminalAccessibleObject terminalObject)) {
-                terminalObject.SetDoorOpenServerRpc(!terminalObject.Reflect().GetInternalField<bool>("isDoorOpen"));
+                terminalObject.ToggleDoor();
             }
 
             if (collider.TryGetComponent(out Turret turret)) {
-                turret.EnterBerserkModeServerRpc(-1);
+                if(!Setting.EnableStunOnLeftClick) {
+                    turret.BerserkMode();
+                }
+                else {
+                    turret.ToggleTurret();
+                }
             }
 
             if (collider.TryGetComponent(out Landmine landmine)) {
-                landmine.TriggerMine();
+                if (!Setting.EnableStunOnLeftClick) {
+                    landmine.TriggerMine();
+                }
+                else {
+                    landmine.ToggleLandmine();
+                }
                 break;
             }
 
