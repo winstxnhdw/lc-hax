@@ -48,6 +48,7 @@ class EnemyPromptHandler {
         if(!this.IsEnemyAllowedOutside(thumper, targetPlayer, willTeleportEnemy, overrideInsideFactory)) return false;
         this.TeleportEnemyToPlayer(thumper, targetPlayer, willTeleportEnemy, allowedInside: true);
         thumper.TakeOwnership();
+        thumper.targetPlayer = targetPlayer;
         thumper.SetMovingTowardsTargetPlayer(targetPlayer);
         thumper.BeginChasingPlayerServerRpc(targetPlayer.PlayerIndex());
         return true;
@@ -57,6 +58,7 @@ class EnemyPromptHandler {
         if (!this.IsEnemyAllowedInside(eyelessDog, targetPlayer, willTeleportEnemy, overrideInsideFactory)) return false;
         this.TeleportEnemyToPlayer(eyelessDog, targetPlayer, willTeleportEnemy, true);
         eyelessDog.TakeOwnership();
+        eyelessDog.targetPlayer = targetPlayer;
         eyelessDog.SetMovingTowardsTargetPlayer(targetPlayer);
         eyelessDog.ReactToOtherDogHowl(targetPlayer.transform.position);
         return true;
@@ -78,6 +80,7 @@ class EnemyPromptHandler {
             hasAttacked = true
         };
         baboonHawk.TakeOwnership();
+        baboonHawk.targetPlayer = targetPlayer;
         baboonHawk.SetMovingTowardsTargetPlayer(targetPlayer);
 
         baboonHawk.SetAggressiveModeServerRpc(1);
@@ -89,6 +92,7 @@ class EnemyPromptHandler {
         if (!this.IsEnemyAllowedInside(forestGiant, targetPlayer, willTeleportEnemy, overrideInsideFactory)) return false;
         this.TeleportEnemyToPlayer(forestGiant, targetPlayer, willTeleportEnemy, true);
         forestGiant.TakeOwnership();
+        forestGiant.targetPlayer = targetPlayer;
         forestGiant.SetBehaviourState(GiantState.CHASE);
         forestGiant.StopSearch(forestGiant.roamPlanet, false);
         forestGiant.chasingPlayer = targetPlayer;
@@ -103,6 +107,7 @@ class EnemyPromptHandler {
     bool HandleSnareFlea(CentipedeAI snareFlea, PlayerControllerB targetPlayer) {
         if (!targetPlayer.isInsideFactory) return false;
         snareFlea.TakeOwnership();
+        snareFlea.targetPlayer = targetPlayer;
         snareFlea.SetMovingTowardsTargetPlayer(targetPlayer);
         snareFlea.targetPlayer = targetPlayer;
         snareFlea.SetBehaviourState(SnareFleaState.CHASING);
@@ -113,6 +118,7 @@ class EnemyPromptHandler {
         if (!this.IsEnemyAllowedOutside(bracken, targetPlayer, willTeleportEnemy, overrideInsideFactory)) return false;
         this.TeleportEnemyToPlayer(bracken, targetPlayer, willTeleportEnemy, allowedInside: true);
         bracken.TakeOwnership();
+        bracken.targetPlayer = targetPlayer;
         bracken.SetMovingTowardsTargetPlayer(targetPlayer);
         bracken.SetBehaviourState(BrackenState.ANGER);
         bracken.EnterAngerModeServerRpc(float.MaxValue);
@@ -123,6 +129,7 @@ class EnemyPromptHandler {
         if (!this.IsEnemyAllowedOutside(bunkerSpider, targetPlayer, willTeleportEnemy, overrideInsideFactory)) return false;
         this.TeleportEnemyToPlayer(bunkerSpider, targetPlayer, willTeleportEnemy, allowedInside: true);
         bunkerSpider.TakeOwnership();
+        bunkerSpider.targetPlayer = targetPlayer;
         bunkerSpider.SetMovingTowardsTargetPlayer(targetPlayer);
         if (willTeleportEnemy) {
             bunkerSpider.meshContainerPosition = targetPlayer.transform.position;
@@ -147,6 +154,7 @@ class EnemyPromptHandler {
         if (!this.IsEnemyAllowedInside(bee, targetPlayer, willTeleportEnemy, overrideInsideFactory)) return false;
         this.TeleportEnemyToPlayer(bee, targetPlayer, willTeleportEnemy, true);
         bee.TakeOwnership();
+        bee.targetPlayer = targetPlayer;
         bee.SetMovingTowardsTargetPlayer(targetPlayer);
         bee.SetBehaviourState(BeesState.ATTACK);
         bee.EnterAttackZapModeServerRpc(targetPlayer.PlayerIndex());
@@ -157,6 +165,7 @@ class EnemyPromptHandler {
         if (!this.IsEnemyAllowedOutside(hoardingBug, targetPlayer, willTeleportEnemy, overrideInsideFactory)) return false;
         this.TeleportEnemyToPlayer(hoardingBug, targetPlayer, willTeleportEnemy, allowedInside: true);
         hoardingBug.TakeOwnership();
+        hoardingBug.targetPlayer = targetPlayer;
         hoardingBug.SetMovingTowardsTargetPlayer(targetPlayer);
         hoardingBug.SetBehaviourState(HoardingBugState.CHASING_PLAYER);
         hoardingBug.angryAtPlayer = targetPlayer;
@@ -173,6 +182,7 @@ class EnemyPromptHandler {
 
         this.TeleportEnemyToPlayer(nutcracker, targetPlayer, willTeleportEnemy, true, true);
         nutcracker.TakeOwnership();
+        nutcracker.targetPlayer = targetPlayer;
         nutcracker.SetMovingTowardsTargetPlayer(targetPlayer);
 
         nutcracker.StopInspection();
@@ -189,13 +199,13 @@ class EnemyPromptHandler {
 
         this.TeleportEnemyToPlayer(maskedPlayer, targetPlayer, willTeleportEnemy, true, true);
         maskedPlayer.TakeOwnership();
-        maskedPlayer.SetMovingTowardsTargetPlayer(targetPlayer);
-
-        maskedPlayer.SwitchToBehaviourServerRpc(1);
         maskedPlayer.targetPlayer = targetPlayer;
         maskedPlayer.SetMovingTowardsTargetPlayer(targetPlayer);
+        maskedPlayer.SwitchToBehaviourServerRpc(1);
         maskedPlayer.SetRunningServerRpc(true);
         maskedPlayer.SetEnemyOutside(!targetPlayer.isInsideFactory);
+        maskedPlayer.targetPlayer = targetPlayer;
+        maskedPlayer.SetMovingTowardsTargetPlayer(targetPlayer);
         return true;
     }
 
@@ -203,6 +213,7 @@ class EnemyPromptHandler {
         if (!this.IsEnemyAllowedOutside(coilHead, targetPlayer, willTeleportEnemy, overrideInsideFactory)) return false;
         this.TeleportEnemyToPlayer(coilHead, targetPlayer, willTeleportEnemy, allowedInside: true);
         coilHead.TakeOwnership();
+        coilHead.targetPlayer = targetPlayer;
         coilHead.SetMovingTowardsTargetPlayer(targetPlayer);
         coilHead.SetBehaviourState(CoilHeadState.Chase);
         coilHead.SetAnimationGoServerRpc();
@@ -216,8 +227,8 @@ class EnemyPromptHandler {
         if (!this.IsEnemyAllowedOutside(sporeLizard, targetPlayer, willTeleportEnemy, overrideInsideFactory)) return false;
         this.TeleportEnemyToPlayer(sporeLizard, targetPlayer, willTeleportEnemy, allowedInside: true);
         sporeLizard.TakeOwnership();
-        sporeLizard.SetMovingTowardsTargetPlayer(targetPlayer);
         sporeLizard.targetPlayer = targetPlayer;
+        sporeLizard.SetMovingTowardsTargetPlayer(targetPlayer);
         sporeLizard.SetMovingTowardsTargetPlayer(targetPlayer);
         sporeLizard.SetBehaviourState(SporeLizardState.HOSTILE);
         return true;
@@ -227,8 +238,8 @@ class EnemyPromptHandler {
         if (!this.IsEnemyAllowedOutside(jester, targetPlayer, willTeleportEnemy, overrideInsideFactory)) return false;
         this.TeleportEnemyToPlayer(jester, targetPlayer, willTeleportEnemy, allowedInside: true);
         jester.TakeOwnership();
-        jester.SetMovingTowardsTargetPlayer(targetPlayer);
         jester.targetPlayer = targetPlayer;
+        jester.SetMovingTowardsTargetPlayer(targetPlayer);
         _ = jester.Reflect().SetInternalField("previousState", (int)JesterState.CRANKING);
         jester.SetBehaviourState(JesterState.OPEN);
         jester.popUpTimer = 0.0f;
@@ -241,6 +252,7 @@ class EnemyPromptHandler {
         if (!this.IsEnemyAllowedInside(earthLeviathan, targetPlayer, willTeleportEnemy, false)) return false;
         this.TeleportEnemyToPlayer(earthLeviathan, targetPlayer, willTeleportEnemy, true);
         earthLeviathan.TakeOwnership();
+        earthLeviathan.targetPlayer = targetPlayer;
         earthLeviathan.SetMovingTowardsTargetPlayer(targetPlayer);
         earthLeviathan.SetBehaviourState(BehaviourState.CHASE);
         return true;
@@ -249,8 +261,9 @@ class EnemyPromptHandler {
     bool HandleDressGirl(DressGirlAI dressGirl, PlayerControllerB targetPlayer, bool willTeleportEnemy) {
         this.TeleportEnemyToPlayer(dressGirl, targetPlayer, willTeleportEnemy, true);
         dressGirl.TakeOwnership();
-        dressGirl.SetMovingTowardsTargetPlayer(targetPlayer);
+        dressGirl.targetPlayer = targetPlayer;
         dressGirl.hauntingPlayer = targetPlayer;
+        dressGirl.SetMovingTowardsTargetPlayer(targetPlayer);
         dressGirl.SetOwner(targetPlayer);
         dressGirl.SetBehaviourState(BehaviourState.IDLE);
         return true;
@@ -331,6 +344,7 @@ class EnemyPromptHandler {
                 if (enemy.enemyType.isOutsideEnemy && !targetPlayer.isInsideFactory) {
                     this.TeleportEnemyToPlayer(enemy, targetPlayer, willTeleportEnemy, true);
                     enemy.TakeOwnership();
+                    enemy.targetPlayer = targetPlayer;
                     enemy.SetMovingTowardsTargetPlayer(targetPlayer);
                     enemy.SetBehaviourState(BehaviourState.CHASE);
                     return true;
@@ -338,6 +352,7 @@ class EnemyPromptHandler {
                 if (!enemy.enemyType.isOutsideEnemy && targetPlayer.isInsideFactory) {
                     this.TeleportEnemyToPlayer(enemy, targetPlayer, willTeleportEnemy, true);
                     enemy.TakeOwnership();
+                    enemy.targetPlayer = targetPlayer;
                     enemy.SetMovingTowardsTargetPlayer(targetPlayer);
                     enemy.SetBehaviourState(BehaviourState.CHASE);
                     return true;
@@ -365,7 +380,6 @@ static class EnemyPromptMixin {
         Helper.Enemies.WhereIsNotNull().ForEach((enemy) => {
             if (enemy is DocileLocustBeesAI or DoublewingAI or BlobAI or TestEnemy or LassoManAI) return;
 
-            enemy.targetPlayer = targetPlayer;
             if (enemyPromptHandler.HandleEnemy(enemy, targetPlayer, willTeleportEnemies, overrideInsideFactory)) {
                 enemyNames.Add(enemy.enemyType.enemyName);
             }
