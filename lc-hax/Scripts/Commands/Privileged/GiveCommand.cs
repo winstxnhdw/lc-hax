@@ -8,13 +8,15 @@ using System.Collections.Generic;
 using Steamworks.Ugc;
 using Unity.Netcode;
 using System.Collections;
+using System;
+using Object = UnityEngine.Object;
 
 [PrivilegedCommand("give")]
 internal class GiveCommand : ICommand {
 
-    Dictionary<string, string[]> kits = new() {
-    { "starter", new string[] { "shovel", "proflash", "walkie" } },
-    { "shotgun", new string[] {"shotgun", "ammo", "ammo" } }
+    Dictionary<string, Dictionary<string, int>> kits = new() {
+    { "starter", new Dictionary<string, int> { { "shovel", 1 }, { "proflash", 1 }, { "walkie", 1 } } },
+    { "shotgun", new Dictionary<string, int> { { "shotgun", 1 }, { "ammo", 2 } } }
 };
 
 
@@ -77,12 +79,15 @@ internal class GiveCommand : ICommand {
         if (target == null) yield break;
 
         Vector3 spawnPosition = target.position + Vector3.up * 0.5f;
-        List<Item> allItems = Helper.Items.Where(item => item.isScrap && item.minValue > 0 && item.maxValue > 0).ToList();
+        List<Item> allItems = Helper.Items
+            .Where(item => item.isScrap && item.minValue > 0 && item.maxValue > 0
+                && !new[] { "ammo", "shotgun", "gold bar" }.Contains(item.itemName, StringComparer.InvariantCultureIgnoreCase))
+            .ToList();
         if (allItems.Count == 0) yield break;
 
         int totalScrapValueGiven = 0;
 
-        while (totalScrapValueGiven <= scrapValue) { // Change the condition to <=
+        while (totalScrapValueGiven <= scrapValue) {
             Item randomItem = allItems[UnityEngine.Random.Range(0, allItems.Count)];
             GrabbableObject? spawnedItem = Helper.SpawnItem(spawnPosition, randomItem);
             yield return delayframe;
@@ -101,6 +106,7 @@ internal class GiveCommand : ICommand {
                     yield return new WaitUntil(() => player.IsHoldingGrabbable(spawnedItem));
                     yield return delayframe;
                     player.DiscardHeldObject();
+                    spawnedItem.Detach();
                     yield return delayframe;
                 }
 
@@ -111,10 +117,12 @@ internal class GiveCommand : ICommand {
 
 
 
-    void GiveKit(PlayerControllerB player, string kitName, int amount) {
-        if (this.kits.TryGetValue(kitName, out string[] itemsToGive)) {
-            foreach (string itemName in itemsToGive) {
-                this.GiveItem(player, itemName, amount);
+    void GiveKit(PlayerControllerB player, string kitName, int baseAmount) {
+        if (this.kits.TryGetValue(kitName, out var itemsToGive)) {
+            foreach (KeyValuePair<string, int> itemEntry in itemsToGive) {
+                string itemName = itemEntry.Key;
+                int itemAmount = itemEntry.Value * baseAmount; // Multiply the specified amount by the base amount.
+                this.GiveItem(player, itemName, itemAmount);
             }
         }
         else {
@@ -155,6 +163,7 @@ internal class GiveCommand : ICommand {
                 if (!player.GrabObject(spawnedItem)) continue;
                 yield return new WaitUntil(() => player.IsHoldingGrabbable(spawnedItem));
                 player.DiscardHeldObject(); // Discard immediately after grabbing
+                spawnedItem.Detach();
                 yield return delayframe;
             }
         }

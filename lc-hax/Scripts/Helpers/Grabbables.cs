@@ -129,8 +129,10 @@ internal static partial class Helper {
         }
         return spawnedItems;
     }
-
-    internal static void RemoveBoundItems(this GrabbableObject grabbableObject) {
+    /// <summary>
+    /// This is only to "unglue" a softlocked item from the Local Player's hand.
+    /// </summary>
+    internal static void Detach(this GrabbableObject grabbableObject) {
         if (Helper.LocalPlayer is not PlayerControllerB player) return;
         if (Helper.StartOfRound is not StartOfRound round) return;
         grabbableObject.parentObject = null;

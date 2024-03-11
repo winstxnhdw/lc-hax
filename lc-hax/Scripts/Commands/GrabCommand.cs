@@ -59,7 +59,10 @@ class GrabCommand : ICommand {
 
         Helper.CreateComponent<WaitForBehaviour>()
               .SetPredicate(() => player.IsHoldingGrabbable(grabbable))
-              .Init(() => player.DiscardHeldObject());
+              .Init(() => {
+                  player.DiscardHeldObject();
+                  grabbable.Detach();
+              });
 
         return $"Grabbed a {key.ToTitleCase()}!";
     }

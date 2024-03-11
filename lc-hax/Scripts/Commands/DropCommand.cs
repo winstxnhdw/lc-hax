@@ -11,13 +11,13 @@ class DropCommand : ICommand {
         Helper.Grabbables.ForEach(grabbable => {
             if(grabbable is not null) {
                 if(grabbable.playerHeldBy == player) {
-                    grabbable.RemoveBoundItems();
+                    grabbable.Detach();
                 }
                 else if(grabbable.parentObject == player.localItemHolder) {
-                    grabbable.RemoveBoundItems();
+                    grabbable.Detach();
                 }
                 else if (grabbable.parentObject == player.serverItemHolder) {
-                    grabbable.RemoveBoundItems();
+                    grabbable.Detach();
                 }
             }
         });
