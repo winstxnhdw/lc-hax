@@ -1,3 +1,5 @@
+#pragma warning disable CS8625 
+
 using System;
 using System.Linq;
 using System.Runtime.CompilerServices;
@@ -58,7 +60,9 @@ static partial class Helper {
 
     internal static bool IsHoldingGrabbable(this PlayerControllerB player, GrabbableObject grabbable) => player.ItemSlots[player.currentItemSlot] == grabbable;
 
-    public static bool IsHoldingItemOfType<T>(this PlayerControllerB player) where T : GrabbableObject => player.ItemSlots[player.currentItemSlot] is T;
+    internal static bool IsHoldingItemOfType<T>(this PlayerControllerB player) where T : GrabbableObject => player.ItemSlots[player.currentItemSlot] is T;
+
+    internal static int GetSlotOfItem(this PlayerControllerB player, GrabbableObject grabbable) => Array.IndexOf(player.ItemSlots, grabbable);
 
     internal static bool GrabObject(this PlayerControllerB player, GrabbableObject grabbable) {
         if(!player.HasFreeSlots()) return false;
@@ -74,18 +78,14 @@ static partial class Helper {
     /// Finds the Held object slot, and discards it properly and updates the HUD slots, along with detaching if it bugs onto the player hand.
     /// </summary>
     internal static void DiscardObject(this PlayerControllerB localPlayer, GrabbableObject item, bool placeObject = false, NetworkObject? parentObjectTo = null, Vector3 placePosition = default, bool matchRotationOfParent = true) {
-        if(Helper.HUDManager is not HUDManager hudManager) return;
-        int slot = Array.IndexOf(localPlayer.ItemSlots, item);
+        if (!localPlayer.IsHoldingGrabbable(item)) return;
+        int slot = localPlayer.GetSlotOfItem(item);
         if (slot == -1) return;
-        _ = localPlayer.Reflect().InvokeInternalMethod("SwitchToItemSlot", slot);
+        _ = localPlayer.Reflect().InvokeInternalMethod("SwitchToItemSlot", slot, null);
         localPlayer.DiscardHeldObject(placeObject, parentObjectTo, placePosition, matchRotationOfParent);
         item.Detach();
-        hudManager.holdingTwoHandedItem.enabled = false;
-        hudManager.itemSlotIcons[slot].enabled = false;
-        hudManager.ClearControlTips();
+        Helper.RemoveItemFromHud(slot);
     }
-
-
 
     internal static bool IsDead(this PlayerControllerB instance) => !instance.isPlayerControlled;
 

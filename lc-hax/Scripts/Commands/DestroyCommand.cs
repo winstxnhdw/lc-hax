@@ -12,6 +12,7 @@ class DestroyCommand : ICommand {
         foreach (GrabbableObject grabbable in Helper.Grabbables.ToArray()) {
             if (!player.GrabObject(grabbable)) continue;
             yield return new WaitUntil(() => player.IsHoldingGrabbable(grabbable));
+            Helper.RemoveItemFromHud(player.GetSlotOfItem(grabbable));
             player.DespawnHeldObject();
         }
 
@@ -23,6 +24,7 @@ class DestroyCommand : ICommand {
             return new Result(message: "You are not holding anything!");
         }
 
+        Helper.RemoveItemFromHud(player.GetSlotOfItem(player.currentlyHeldObjectServer));
         player.DespawnHeldObject();
         return new Result(true);
     }
