@@ -10,6 +10,7 @@ using Unity.Netcode;
 using System.Collections;
 using System;
 using Object = UnityEngine.Object;
+using static Steamworks.InventoryItem;
 
 [PrivilegedCommand("give")]
 internal class GiveCommand : ICommand {
@@ -122,7 +123,10 @@ internal class GiveCommand : ICommand {
             foreach (KeyValuePair<string, int> itemEntry in itemsToGive) {
                 string itemName = itemEntry.Key;
                 int itemAmount = itemEntry.Value * baseAmount; // Multiply the specified amount by the base amount.
-                this.GiveItem(player, itemName, itemAmount);
+                Item? item = this.FindItem(itemName);
+                if (item is null) continue;
+                _ = this.Spawn(player, item, itemAmount).Start();
+
             }
         }
         else {
@@ -156,17 +160,28 @@ internal class GiveCommand : ICommand {
 
         Vector3 spawnPosition = target.position + Vector3.up * 0.5f;
 
-        for (int i = 0; i < amount; i++) {
-            GrabbableObject? spawnedItem = Helper.SpawnItem(spawnPosition, item);
+        List<GrabbableObject> spawnedItems = Helper.SpawnItems(spawnPosition, item, amount);
+        foreach (GrabbableObject spawnedItem in spawnedItems) {
+            Console.WriteLine($"Spawned {spawnedItem.name} at {spawnPosition}");
+        }
+
+        if (target == player.transform) {
             yield return delayframe;
-            if (spawnedItem != null && target == player.transform) {
+            foreach (GrabbableObject spawnedItem in spawnedItems) {
                 if (!player.GrabObject(spawnedItem)) continue;
                 yield return new WaitUntil(() => player.IsHoldingGrabbable(spawnedItem));
-                player.DiscardHeldObject(); // Discard immediately after grabbing
+                yield return delayframe;
+                yield return delayframe;
+                yield return delayframe;
+                player.DiscardHeldObject();
                 spawnedItem.Detach();
                 yield return delayframe;
+                yield return delayframe;
+                yield return delayframe;
+
             }
         }
+
     }
 
 }

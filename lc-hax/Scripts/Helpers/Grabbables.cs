@@ -119,12 +119,12 @@ internal static partial class Helper {
         return Grab;
     }
 
-    internal static HashSet<GrabbableObject> SpawnItems(Vector3 position, Item prefab, int amount) {
-        HashSet<GrabbableObject> spawnedItems = new HashSet<GrabbableObject>();
+    internal static List<GrabbableObject> SpawnItems(Vector3 position, Item prefab, int amount) {
+        List<GrabbableObject> spawnedItems = new();
         for (int i = 0; i < amount; i++) {
             GrabbableObject? newItem = SpawnItem(position, prefab);
             if (newItem != null) {
-                spawnedItems.Add(newItem);
+                _ = spawnedItems.Add(newItem);
             }
         }
         return spawnedItems;
