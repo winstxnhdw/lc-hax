@@ -30,6 +30,7 @@ class InputListener : MonoBehaviour {
     internal static event Action? OnNPress;
     internal static event Action? OnQPress;
     internal static event Action? OnEPress;
+    internal static event Action? OnSpacePress;
 
     (Func<bool>, Action)[] InputActions { get; } = [
         (() => Mouse.current.middleButton.wasPressedThisFrame, () => InputListener.OnMiddleButtonPress?.Invoke()),
@@ -54,6 +55,7 @@ class InputListener : MonoBehaviour {
         (() => Keyboard.current[Key.N].wasPressedThisFrame, () => InputListener.OnNPress?.Invoke()),
         (() => Keyboard.current[Key.Q].wasPressedThisFrame, () => InputListener.OnQPress?.Invoke()),
         (() => Keyboard.current[Key.E].wasPressedThisFrame, () => InputListener.OnEPress?.Invoke()),
+        (() => Keyboard.current[Key.Space].wasPressedThisFrame, () => InputListener.OnSpacePress?.Invoke()),
     ];
 
     void Update() {
