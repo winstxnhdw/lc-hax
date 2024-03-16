@@ -1,7 +1,6 @@
 using Hax;
+using UnityEngine;
 using Unity.Netcode;
-using Vector3 = UnityEngine.Vector3;
-
 
 enum BaboonState {
     SCOUTING = 0,
@@ -19,9 +18,7 @@ internal class BaboonHawkController : IEnemyController<BaboonBirdAI> {
         }
     }
 
-
     public void OnOutsideStatusChange(BaboonBirdAI enemy) => enemy.StopSearch(enemy.scoutingSearchRoutine, true);
-
 
     public void OnPossess(BaboonBirdAI _) {
         if (BaboonBirdAI.baboonCampPosition != this.CustomCamp) return;
