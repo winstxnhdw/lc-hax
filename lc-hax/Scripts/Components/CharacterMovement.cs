@@ -28,8 +28,6 @@ class CharacterMovement : MonoBehaviour {
     KeyboardMovement? NoClipKeyboard { get; set; } = null;
     CharacterController? CharacterController { get; set; }
 
-
-
     internal void SetNoClipMode(bool enabled) {
         if (this.NoClipKeyboard is null) return;
         this.NoClipKeyboard.enabled = enabled;
@@ -60,10 +58,9 @@ class CharacterMovement : MonoBehaviour {
         this.CharacterController.stepOffset = Mathf.Min(this.CharacterController.stepOffset, maxStepOffset);
 
         enemy.GetComponentsInChildren<Collider>()
-            .Where(collider => collider != this.CharacterController)
-            .ForEach(collider => Physics.IgnoreCollision(this.CharacterController, collider));
+             .Where(collider => collider != this.CharacterController)
+             .ForEach(collider => Physics.IgnoreCollision(this.CharacterController, collider));
     }
-
 
     void Awake() {
         this.Keyboard = Keyboard.current;
@@ -102,8 +99,9 @@ class CharacterMovement : MonoBehaviour {
         // Apply gravity
         this.ApplyGravity();
 
-        if (Helper.LocalPlayer is { isTypingChat: true }) return;
-        if (!this.CanMove) return;
+        if (Helper.LocalPlayer is { isTypingChat: true } || !this.CanMove) {
+            return;
+        }
 
         // Attempt to move
         _ = this.CharacterController?.Move(moveDirection * Time.deltaTime);
