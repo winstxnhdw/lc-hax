@@ -12,7 +12,7 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 [ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(CommandCodeFix)), Shared]
 public class CommandCodeFix : CodeFixProvider {
-    public override ImmutableArray<string> FixableDiagnosticIds => ImmutableArray.Create(CommandAnalyzer.DiagnosticID);
+    public override ImmutableArray<string> FixableDiagnosticIds => [CommandAnalyzer.DiagnosticID];
 
     public override FixAllProvider GetFixAllProvider() => WellKnownFixAllProviders.BatchFixer;
 
