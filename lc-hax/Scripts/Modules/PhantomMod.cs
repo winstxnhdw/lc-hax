@@ -3,7 +3,6 @@ using Hax;
 using UnityEngine;
 
 sealed class PhantomMod : MonoBehaviour {
-
     internal static PhantomMod? Instance { get; private set; }
     bool IsShiftHeld { get; set; } = false;
     bool EnabledPossession { get; set; } = false;
@@ -98,7 +97,7 @@ sealed class PhantomMod : MonoBehaviour {
         if (player.gameplayCamera is null) return;
         if (Helper.StartOfRound is null) return;
         if (HaxCamera.Instance is not HaxCamera haxCamera) return;
-        if (haxCamera.HaxCamContainer is not GameObject container) return;
+        if (haxCamera.HaxCameraContainer is not GameObject container) return;
 
         if (this.IsShiftHeld) {
             player.TeleportPlayer(container.transform.position);
@@ -132,11 +131,11 @@ sealed class PhantomMod : MonoBehaviour {
         if (Helper.LocalPlayer is not PlayerControllerB player) return;
         if (HaxCamera.Instance is not HaxCamera haxCamera) return;
         if (haxCamera.GetCamera() is not Camera camera) return;
+
         player.enabled = !player.IsDead();
         player.playerBodyAnimator.enabled = true;
         player.thisController.enabled = true;
         player.isFreeCamera = false;
         this.PhantomDisabled(player, camera);
-
     }
 }
