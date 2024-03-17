@@ -10,7 +10,7 @@ internal class HaxCamera : MonoBehaviour {
     internal GameObject? HaxCameraContainer { get; private set; }
     internal GameObject? HaxCameraAudioContainer { get; private set; }
     internal Camera? CustomCamera { get; private set; }
-    internal AudioListener? HaxCamAudioListener { get; private set; }
+    internal AudioListener? HaxCameraAudioListener { get; private set; }
 
     void OnEnable() {
         GameListener.OnGameStart += this.DisableCamera;
@@ -38,7 +38,7 @@ internal class HaxCamera : MonoBehaviour {
         if (Helper.LocalPlayer is not PlayerControllerB player) return;
         if (player.activeAudioListener is not AudioListener playerlistener) return;
         if (this.HaxCameraContainer is null) return;
-        if (this.HaxCamAudioListener is not AudioListener haxListener) return;
+        if (this.HaxCameraAudioListener is not AudioListener haxListener) return;
         if (this.GetCamera() is not Camera camera) return;
 
         this.HaxCameraContainer.SetActive(active);
@@ -74,15 +74,15 @@ internal class HaxCamera : MonoBehaviour {
 
         this.CustomCamera = this.HaxCameraContainer.AddComponent<Camera>();
 
-        this.HaxCamAudioListener =
+        this.HaxCameraAudioListener =
             this.HaxCameraAudioContainer.GetComponent<AudioListener>() ??
             this.HaxCameraAudioContainer.AddComponent<AudioListener>();
 
         this.HaxCameraAudioContainer.transform.SetParent(this.HaxCameraContainer.transform, false);
-        this.HaxCamAudioListener.transform.SetParent(this.HaxCameraContainer.transform, false);
-        this.HaxCamAudioListener.transform.localScale = new Vector3(0.8196f, 0.8196f, 0.8196f);
-        this.HaxCamAudioListener.transform.localPosition = Vector3.zero;
-        this.HaxCamAudioListener.transform.localRotation = Quaternion.identity;
+        this.HaxCameraAudioListener.transform.SetParent(this.HaxCameraContainer.transform, false);
+        this.HaxCameraAudioListener.transform.localScale = new Vector3(0.8196f, 0.8196f, 0.8196f);
+        this.HaxCameraAudioListener.transform.localPosition = Vector3.zero;
+        this.HaxCameraAudioListener.transform.localRotation = Quaternion.identity;
 
         this.KeyboardMovement =
             this.CustomCamera.GetComponent<KeyboardMovement>() ??
@@ -94,7 +94,7 @@ internal class HaxCamera : MonoBehaviour {
 
         this.MousePan.enabled = true;
         this.KeyboardMovement.enabled = true;
-        this.HaxCamAudioListener.enabled = true;
+        this.HaxCameraAudioListener.enabled = true;
         this.HaxCameraContainer.SetActive(false);
 
         return this.CustomCamera;
@@ -103,7 +103,7 @@ internal class HaxCamera : MonoBehaviour {
     void AddHDCameraCompatibility(Camera camera) {
         if (!camera.TryGetComponent(out HDAdditionalCameraData dataToCopy)) return;
 
-        HDAdditionalCameraData? hdData =
+        HDAdditionalCameraData hdData =
             camera.GetComponent<HDAdditionalCameraData>() ??
             camera.gameObject.AddComponent<HDAdditionalCameraData>();
 
@@ -129,21 +129,19 @@ internal class HaxCamera : MonoBehaviour {
         );
     }
 
-    void UpdateCameraTrasform(Transform target) {
-        if (this.HaxCameraContainer is not GameObject camera) return;
-
-        camera.transform.forward = target.forward;
-        camera.transform.position = target.position;
-        camera.transform.rotation = target.rotation;
-        camera.gameObject.layer = target.gameObject.layer;
-
+    void UpdateCameraTransform(Transform target) {
+        if (this.HaxCameraContainer is not GameObject cameraContainer) return;
         if (this.KeyboardMovement != null) {
             this.KeyboardMovement.LastPosition = target.position;
         }
+
+        cameraContainer.transform.position = target.position;
+        cameraContainer.transform.rotation = target.rotation;
     }
 
     void CopyFromCamera(Camera camera, Camera originalCamera) {
         camera.CopyFrom(originalCamera);
+        camera.transform.localRotation = originalCamera.transform.localRotation;
         camera.backgroundColor = originalCamera.backgroundColor;
         camera.renderingPath = originalCamera.renderingPath;
         camera.nearClipPlane = originalCamera.nearClipPlane;
@@ -152,6 +150,6 @@ internal class HaxCamera : MonoBehaviour {
         camera.tag = originalCamera.tag;
 
         this.AddHDCameraCompatibility(camera);
-        this.UpdateCameraTrasform(originalCamera.transform);
+        this.UpdateCameraTransform(originalCamera.transform);
     }
 }
