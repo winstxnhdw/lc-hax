@@ -5,12 +5,12 @@ using UnityEngine.Rendering.HighDefinition;
 
 internal class HaxCamera : MonoBehaviour {
     internal static HaxCamera? Instance { get; private set; }
-    internal KeyboardMovement? KeyboardMovement { get; private set; }
-    internal MousePan? MousePan { get; private set; }
+    KeyboardMovement? KeyboardMovement { get; set; }
+    MousePan? MousePan { get; set; }
+    GameObject? HaxCameraAudioContainer { get; set; }
+    AudioListener? HaxCameraAudioListener { get; set; }
     internal GameObject? HaxCameraContainer { get; private set; }
-    internal GameObject? HaxCameraAudioContainer { get; private set; }
     internal Camera? CustomCamera { get; private set; }
-    internal AudioListener? HaxCameraAudioListener { get; private set; }
 
     void OnEnable() {
         GameListener.OnGameStart += this.DisableCamera;
