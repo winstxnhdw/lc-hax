@@ -1,7 +1,6 @@
 using HarmonyLib;
 
-[HarmonyPatch]
+[HarmonyPatch(typeof(HUDManager), nameof(HUDManager.HideHUD))]
 class HUDPatch {
-    [HarmonyPatch(typeof(HUDManager), nameof(HUDManager.HideHUD))]
     static void Prefix(ref bool hide) => hide = false;
 }
