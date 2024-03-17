@@ -12,25 +12,25 @@ class SnareFleaController : IEnemyController<CentipedeAI> {
     public Vector3 GetCameraOffset(CentipedeAI enemy) {
         Vector3 cameraOffset = new(0.0f, 2.5f, -3.0f);
         float transitionSpeed = 2.5f;
-        float targetCamOffsetY = 2.5f;
-        float targetCamOffsetZ = 0.0f;
+        float targetCameraOffsetY = 2.5f;
+        float targetCameraOffsetZ = 0.0f;
 
         // Snare Flea is roaming
         if (!enemy.IsBehaviourState(SnareFleaState.HIDING) && enemy.clingingToPlayer is null) {
             transitionSpeed = 8.0f;
-            targetCamOffsetY = 2.0f;
-            targetCamOffsetZ = -4.0f;
+            targetCameraOffsetY = 2.0f;
+            targetCameraOffsetZ = -4.0f;
         }
 
         else if (enemy.clingingToPlayer is not null) {
             transitionSpeed = 4.5f;
-            targetCamOffsetY = 0.0f;
-            targetCamOffsetZ = -2.0f;
+            targetCameraOffsetY = 0.0f;
+            targetCameraOffsetZ = -2.0f;
         }
 
         float transitionSpeedDelta = transitionSpeed * Time.deltaTime;
-        cameraOffset.y = Mathf.Lerp(cameraOffset.y, targetCamOffsetY, transitionSpeedDelta);
-        cameraOffset.z = Mathf.Lerp(cameraOffset.z, targetCamOffsetZ, transitionSpeedDelta);
+        cameraOffset.y = Mathf.Lerp(cameraOffset.y, targetCameraOffsetY, transitionSpeedDelta);
+        cameraOffset.z = Mathf.Lerp(cameraOffset.z, targetCameraOffsetZ, transitionSpeedDelta);
 
         return cameraOffset;
     }
