@@ -13,19 +13,19 @@ class JesterController : IEnemyController<JesterAI> {
 
     public Vector3 GetCameraOffset(JesterAI enemy) {
         float transitionSpeed = 5.0f;
-        float targetCamOffsetY = 2.3f;
-        float targetCamOffsetZ = -3.5f;
+        float targetCameraOffsetY = 2.3f;
+        float targetCameraOffsetZ = -3.5f;
 
         if (!enemy.IsBehaviourState(JesterState.OPEN)) {
-            targetCamOffsetY = 2.0f;
-            targetCamOffsetZ = -3.0f;
+            targetCameraOffsetY = 2.0f;
+            targetCameraOffsetZ = -3.0f;
         }
 
         float transitionSpeedDelta = transitionSpeed * Time.deltaTime;
         this.CameraOffset = new Vector3(
             this.CameraOffset.x,
-            Mathf.Lerp(this.CameraOffset.y, targetCamOffsetY, transitionSpeedDelta),
-            Mathf.Lerp(this.CameraOffset.z, targetCamOffsetZ, transitionSpeedDelta)
+            Mathf.Lerp(this.CameraOffset.y, targetCameraOffsetY, transitionSpeedDelta),
+            Mathf.Lerp(this.CameraOffset.z, targetCameraOffsetZ, transitionSpeedDelta)
         );
 
         return this.CameraOffset;
