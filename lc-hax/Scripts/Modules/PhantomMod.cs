@@ -79,19 +79,6 @@ sealed class PhantomMod : MonoBehaviour {
         keyboard.LastPosition = targetPlayer.playerEye.position;
     }
 
-    void PhantomEnabled(Camera camera) {
-        if (!camera.TryGetComponent(out KeyboardMovement keyboard)) {
-            keyboard = camera.gameObject.AddComponent<KeyboardMovement>();
-        }
-
-        if (!camera.TryGetComponent(out MousePan mouse)) {
-            mouse = camera.gameObject.AddComponent<MousePan>();
-        }
-
-        keyboard.enabled = true;
-        mouse.enabled = true;
-    }
-
     void PhantomDisabled(PlayerControllerB player) {
         if (player.gameplayCamera is null) return;
         if (Helper.StartOfRound is null) return;
@@ -110,7 +97,6 @@ sealed class PhantomMod : MonoBehaviour {
     void TogglePhantom() {
         if (Helper.LocalPlayer is not PlayerControllerB player) return;
         if (HaxCamera.Instance is not HaxCamera haxCamera) return;
-        if (haxCamera.GetCamera() is not Camera camera) return;
 
         Setting.EnablePhantom = !Setting.EnablePhantom;
         player.enabled = !player.IsDead() || !Setting.EnablePhantom;
@@ -118,11 +104,7 @@ sealed class PhantomMod : MonoBehaviour {
         player.thisController.enabled = !Setting.EnablePhantom;
         player.isFreeCamera = Setting.EnablePhantom;
 
-        if (Setting.EnablePhantom) {
-            this.PhantomEnabled(camera);
-        }
-
-        else {
+        if (!Setting.EnablePhantom) {
             this.PhantomDisabled(player);
         }
 

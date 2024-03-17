@@ -33,6 +33,14 @@ internal class HaxCamera : MonoBehaviour {
         this.KeyboardMovement.IsPaused = Helper.LocalPlayer is { isTypingChat: true };
     }
 
+    void DisableCamera() {
+        if (PhantomMod.Instance is PhantomMod phantom) {
+            phantom.DisablePhantom();
+        }
+
+        this.HaxCameraContainer?.SetActive(false);
+    }
+
     internal void SetActive(bool active) {
         if (Helper.StartOfRound is not StartOfRound startOfRound) return;
         if (Helper.LocalPlayer is not PlayerControllerB player) return;
@@ -57,15 +65,7 @@ internal class HaxCamera : MonoBehaviour {
         }
     }
 
-    internal void DisableCamera() {
-        if (PhantomMod.Instance is PhantomMod phantom) {
-            phantom.DisablePhantom();
-        }
-
-        this.HaxCameraContainer?.SetActive(false);
-    }
-
-    internal Camera? GetCamera() {
+    Camera? GetCamera() {
         if (this.CustomCamera is not null) return this.CustomCamera;
 
         this.HaxCameraAudioContainer ??= new GameObject("HaxCamera Audio Container");
