@@ -8,9 +8,14 @@ enum BaboonState {
     AGGRESSIVE = 2,
 }
 
-internal class BaboonHawkController : IEnemyController<BaboonBirdAI> {
+class BaboonHawkController : IEnemyController<BaboonBirdAI> {
     Vector3 OriginalCamp { get; set; } = Vector3.zero;
     Vector3 CustomCamp { get; } = new Vector3(1000.0f, 1000.0f, 1000.0f);
+
+    void GrabItemAndSync(BaboonBirdAI enemy, GrabbableObject item) {
+        if (!item.TryGetComponent(out NetworkObject netItem)) return;
+        _ = enemy.Reflect().InvokeInternalMethod("GrabItemAndSync", netItem);
+    }
 
     public void OnDeath(BaboonBirdAI enemy) {
         if (enemy.heldScrap is not null) {
@@ -30,11 +35,6 @@ internal class BaboonHawkController : IEnemyController<BaboonBirdAI> {
     public void OnUnpossess(BaboonBirdAI _) {
         if (BaboonBirdAI.baboonCampPosition == this.OriginalCamp) return;
         BaboonBirdAI.baboonCampPosition = this.OriginalCamp;
-    }
-
-    void GrabItemAndSync(BaboonBirdAI enemy, GrabbableObject item) {
-        if (!item.TryGetComponent(out NetworkObject netItem)) return;
-        _ = enemy.Reflect().InvokeInternalMethod("GrabItemAndSync", netItem);
     }
 
     public void UsePrimarySkill(BaboonBirdAI enemy) {

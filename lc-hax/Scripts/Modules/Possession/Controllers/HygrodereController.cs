@@ -1,15 +1,11 @@
 using UnityEngine;
 
-internal class HygrodereController : IEnemyController<BlobAI> {
-
-    Vector3 camOffset = new(0, 2f, -3f);
-
-    public Vector3 GetCameraOffset(BlobAI enemy) => this.camOffset;
-
-
+class HygrodereController : IEnemyController<BlobAI> {
     void SetTamedTimer(BlobAI enemy, float time) => enemy.Reflect().SetInternalField("tamedTimer", time);
 
     void SetAngeredTimer(BlobAI enemy, float time) => enemy.Reflect().SetInternalField("angeredTimer", time);
+
+    public Vector3 GetCameraOffset(BlobAI enemy) => new(0.0f, 2.0f, -3.0f);
 
     public void OnSecondarySkillHold(BlobAI enemy) {
         this.SetAngeredTimer(enemy, 0.0f);

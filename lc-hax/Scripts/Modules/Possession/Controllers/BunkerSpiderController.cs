@@ -1,29 +1,7 @@
 using Hax;
 using UnityEngine;
 
-internal class BunkerSpiderController : IEnemyController<SandSpiderAI> {
-
-    Vector3 CamOffset { get; } = new(0, 2f, -3f);
-
-    public Vector3 GetCameraOffset(SandSpiderAI _) => this.CamOffset;
-
-    public void OnPossess(SandSpiderAI enemy) => enemy.transform.position = enemy.meshContainerPosition;
-
-    public void Update(SandSpiderAI enemy, bool isAIControlled) {
-        enemy.meshContainerPosition = enemy.transform.position;
-        Reflector<SandSpiderAI> reflect = enemy.Reflect();
-        _ = reflect.SetInternalField("overrideSpiderLookRotation", true);
-        _ = reflect.SetInternalField("meshContainerTargetRotation", Quaternion.LookRotation(enemy.transform.forward));
-        enemy.SyncMeshContainerPositionToClients();
-        _ = reflect.SetInternalField("gotWallPositionInLOS", false);
-        _ = reflect.SetInternalField("reachedWallPosition", false);
-        if (!isAIControlled) enemy.homeNode = enemy.ChooseClosestNodeToPosition(enemy.transform.position, false, 2);
-    }
-
-    public bool SyncAnimationSpeedEnabled(SandSpiderAI enemy) => false;
-
-    public void UsePrimarySkill(SandSpiderAI enemy) => this.PlaceWebTrap(enemy);
-
+class BunkerSpiderController : IEnemyController<SandSpiderAI> {
     void PlaceWebTrap(SandSpiderAI enemy) {
         if (Helper.StartOfRound is not StartOfRound startOfRound) return;
 
@@ -47,6 +25,29 @@ internal class BunkerSpiderController : IEnemyController<SandSpiderAI> {
         Vector3 floorPosition = groundHit.point + (Vector3.up * 0.2f);
         enemy.SpawnWebTrapServerRpc(floorPosition, raycastHit.point);
     }
+
+    public Vector3 GetCameraOffset(SandSpiderAI _) => new(0.0f, 2.0f, -3.0f);
+
+    public void OnPossess(SandSpiderAI enemy) => enemy.transform.position = enemy.meshContainerPosition;
+
+    public void Update(SandSpiderAI enemy, bool isAIControlled) {
+        if (!isAIControlled) {
+            enemy.homeNode = enemy.ChooseClosestNodeToPosition(enemy.transform.position, false, 2);
+        }
+
+        _ = enemy.Reflect()
+                 .SetInternalField("overrideSpiderLookRotation", true)?
+                 .SetInternalField("meshContainerTargetRotation", Quaternion.LookRotation(enemy.transform.forward))?
+                 .SetInternalField("gotWallPositionInLOS", false)?
+                 .SetInternalField("reachedWallPosition", false);
+
+        enemy.meshContainerPosition = enemy.transform.position;
+        enemy.SyncMeshContainerPositionToClients();
+    }
+
+    public bool SyncAnimationSpeedEnabled(SandSpiderAI enemy) => false;
+
+    public void UsePrimarySkill(SandSpiderAI enemy) => this.PlaceWebTrap(enemy);
 
     public void OnOutsideStatusChange(SandSpiderAI enemy) => enemy.StopSearch(enemy.patrolHomeBase, true);
 }
