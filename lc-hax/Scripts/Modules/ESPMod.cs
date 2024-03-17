@@ -55,9 +55,9 @@ sealed class ESPMod : MonoBehaviour {
         });
 
         Helper.Grabbables.WhereIsNotNull().ForEach(grabbableObject => {
-            Vector3 rendererCentrePoint = camera.WorldToEyesPoint(grabbableObject.transform.position);
+            if (PossessionMod.Instance is { IsPossessed: true } and not { PossessedEnemy: HoarderBugAI or BaboonBirdAI }) return;
 
-            if (PossessionMod.Instance is { IsPossessed: true } and not ({ PossessedEnemy: HoarderBugAI } or { PossessedEnemy: BaboonBirdAI })) return;
+            Vector3 rendererCentrePoint = camera.WorldToEyesPoint(grabbableObject.transform.position);
 
             if (rendererCentrePoint.z <= 2.0f) {
                 return;
