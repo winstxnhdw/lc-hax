@@ -11,7 +11,7 @@ internal class HaxCamera : MonoBehaviour {
 
     internal static HaxCamera? Instance { get; private set; }
 
-    internal GameObject? HaxCamContainer { get; private set; }
+    internal GameObject? HaxCameraContainer { get; private set; }
 
     internal GameObject? HaxCamAudioContainer { get; private set; }
 
@@ -23,11 +23,11 @@ internal class HaxCamera : MonoBehaviour {
         if (Helper.StartOfRound is not StartOfRound startOfRound) return;
         if (Helper.LocalPlayer is not PlayerControllerB player) return;
         if (player.activeAudioListener is not AudioListener playerlistener) return;
-        if (this.HaxCamContainer is null) return;
+        if (this.HaxCameraContainer is null) return;
         if (this.HaxCamAudioListener is not AudioListener haxListener) return;
         if (this.GetCamera() is not Camera cam) return;
-        this.HaxCamContainer.SetActive(active);
-        if (!this.HaxCamContainer.activeSelf) {
+        this.HaxCameraContainer.SetActive(active);
+        if (!this.HaxCameraContainer.activeSelf) {
             playerlistener.enabled = true;
             startOfRound.audioListener = playerlistener;
             startOfRound.activeCamera.enabled = true;
@@ -41,9 +41,9 @@ internal class HaxCamera : MonoBehaviour {
     }
 
     void LateUpdate() {
-        if (this.HaxCamContainer is null) return;
+        if (this.HaxCameraContainer is null) return;
         if (this.KeyboardMovement is null) return;
-        if (this.HaxCamContainer.activeSelf) {
+        if (this.HaxCameraContainer.activeSelf) {
             this.KeyboardMovement.IsPaused = Helper.LocalPlayer is { isTypingChat: true };
         }
     }
@@ -51,27 +51,27 @@ internal class HaxCamera : MonoBehaviour {
 
     internal void DisableCamera() {
         if (PhantomMod.Instance is PhantomMod phantom) phantom.DisablePhantom();
-        this.HaxCamContainer?.SetActive(false);
+        this.HaxCameraContainer?.SetActive(false);
     }
 
 
     internal Camera? GetCamera() {
         if (this.CustomCamera != null) return this.CustomCamera;
 
-        this.HaxCamContainer ??= new GameObject("lc-hax Camera Parent");
-        Camera newCam = this.HaxCamContainer.AddComponent<Camera>();
+        this.HaxCameraContainer ??= new GameObject("lc-hax Camera Parent");
+        Camera newCam = this.HaxCameraContainer.AddComponent<Camera>();
 
         this.HaxCamAudioContainer ??= new GameObject("lc-hax Audio Listener");
         this.HaxCamAudioListener = this.HaxCamAudioContainer.GetComponent<AudioListener>();
         this.HaxCamAudioListener ??= this.HaxCamAudioContainer.AddComponent<AudioListener>();
-        this.HaxCamAudioListener.transform.SetParent(this.HaxCamContainer.transform, false);
+        this.HaxCamAudioListener.transform.SetParent(this.HaxCameraContainer.transform, false);
         this.HaxCamAudioListener.transform.localScale = new Vector3(0.8196f, 0.8196f, 0.8196f);
         // zero both local pos and rot
         this.HaxCamAudioListener.transform.localPosition = Vector3.zero;
         this.HaxCamAudioListener.transform.localRotation = Quaternion.identity;
 
         // Set HaxCamAudioContainer as a child of HaxCamContainer
-        this.HaxCamAudioContainer.transform.SetParent(this.HaxCamContainer.transform, false);
+        this.HaxCamAudioContainer.transform.SetParent(this.HaxCameraContainer.transform, false);
 
         this.KeyboardMovement = newCam.GetComponent<KeyboardMovement>();
         this.KeyboardMovement ??= newCam.gameObject.AddComponent<KeyboardMovement>();
@@ -84,9 +84,9 @@ internal class HaxCamera : MonoBehaviour {
         this.MousePan.enabled = true;
         this.KeyboardMovement.enabled = true;
         this.HaxCamAudioListener.enabled = true;
-        this.HaxCamContainer.SetActive(false);
+        this.HaxCameraContainer.SetActive(false);
         this.CustomCamera = newCam;
-        DontDestroyOnLoad(this.HaxCamContainer);
+        DontDestroyOnLoad(this.HaxCameraContainer);
         return newCam;
     }
 
@@ -145,14 +145,14 @@ internal class HaxCamera : MonoBehaviour {
     }
 
     void UpdateCameraTrasform(Transform target) {
-        if (this.HaxCamContainer is not GameObject Cam) return;
+        if (this.HaxCameraContainer is not GameObject camera) return;
         // Transform local position and rotation to world space
         Vector3 worldPosition = target.TransformPoint(target.localPosition);
         Quaternion worldRotation = target.rotation;
         // Copy transform properties
-        Cam.transform.position = worldPosition;
-        Cam.transform.rotation = worldRotation;
-        Cam.gameObject.layer = target.gameObject.layer;
+        camera.transform.position = worldPosition;
+        camera.transform.rotation = worldRotation;
+        camera.gameObject.layer = target.gameObject.layer;
 
         if (this.KeyboardMovement != null) {
             this.KeyboardMovement.LastPosition = worldPosition;
@@ -164,14 +164,12 @@ internal class HaxCamera : MonoBehaviour {
         _ = this.GetCamera();
     }
 
-
-
-    internal void OnEnable() {
+    void OnEnable() {
         GameListener.OnGameStart += this.DisableCamera;
         GameListener.OnGameEnd += this.DisableCamera;
     }
 
-    internal void OnDisable() {
+    void OnDisable() {
         GameListener.OnGameStart -= this.DisableCamera;
         GameListener.OnGameEnd -= this.DisableCamera;
     }
