@@ -17,14 +17,14 @@ class CharacterMovement : MonoBehaviour {
     internal bool IsSprinting { get; private set; } = false;
 
     float VelocityY { get; set; } = 0.0f;
-    bool IsSprintHeld { get; set; } = false;
     float SprintTimer { get; set; } = 0.0f;
-    Keyboard Keyboard { get; set; } = Keyboard.current;
+    bool IsSprintHeld { get; set; } = false;
+
+    Keyboard Keyboard { get; } = Keyboard.current;
     KeyboardMovement? NoClipKeyboard { get; set; }
     CharacterController? CharacterController { get; set; }
 
     void Awake() {
-        this.Keyboard = Keyboard.current;
         this.NoClipKeyboard = this.gameObject.AddComponent<KeyboardMovement>();
         this.CharacterController = this.gameObject.AddComponent<CharacterController>();
     }
@@ -83,7 +83,7 @@ class CharacterMovement : MonoBehaviour {
 
         else {
             this.IsSprintHeld = false;
-            this.IsSprinting = !this.IsSprinting && this.IsSprinting;
+            this.IsSprinting = !this.IsSprinting;
         }
 
         _ = this.CharacterController?.Move(moveDirection * Time.deltaTime);
