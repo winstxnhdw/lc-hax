@@ -8,11 +8,8 @@ enum DogState {
     LUNGE
 }
 
-internal class EyelessDogController : IEnemyController<MouthDogAI> {
-
-    readonly Vector3 camOffset = new(0, 3.2f, -4f);
-
-    public Vector3 GetCameraOffset(MouthDogAI enemy) => this.camOffset;
+class EyelessDogController : IEnemyController<MouthDogAI> {
+    public Vector3 GetCameraOffset(MouthDogAI enemy) => new(0.0f, 3.2f, -4.0f);
 
     public void UsePrimarySkill(MouthDogAI enemy) => enemy.SetBehaviourState(enemy.IsBehaviourState(DogState.CHASE) ? DogState.ROAMING : DogState.CHASE);
 
@@ -21,7 +18,4 @@ internal class EyelessDogController : IEnemyController<MouthDogAI> {
     public string GetSecondarySkillName(MouthDogAI _) => "Lunge";
 
     public void OnOutsideStatusChange(MouthDogAI enemy) => enemy.StopSearch(enemy.roamPlanet, true);
-
-
-
 }

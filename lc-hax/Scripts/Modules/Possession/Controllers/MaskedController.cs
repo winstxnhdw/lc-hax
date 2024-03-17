@@ -1,10 +1,7 @@
 using UnityEngine;
 
-internal class MaskedPlayerController : IEnemyController<MaskedPlayerEnemy> {
-
-    Vector3 camOffset = new(0, 2.8f, -3f);
-
-    public Vector3 GetCameraOffset(MaskedPlayerEnemy enemy) => this.camOffset;
+class MaskedPlayerController : IEnemyController<MaskedPlayerEnemy> {
+    public Vector3 GetCameraOffset(MaskedPlayerEnemy enemy) => new(0.0f, 2.8f, -3.0f);
 
     public void UsePrimarySkill(MaskedPlayerEnemy enemy) => enemy.SetHandsOutServerRpc(!enemy.creatureAnimator.GetBool("HandsOut"));
 
@@ -17,6 +14,4 @@ internal class MaskedPlayerController : IEnemyController<MaskedPlayerEnemy> {
     public bool SyncAnimationSpeedEnabled(MaskedPlayerEnemy _) => false;
 
     public void OnOutsideStatusChange(MaskedPlayerEnemy enemy) => enemy.StopSearch(enemy.searchForPlayers, true);
-
-
 }

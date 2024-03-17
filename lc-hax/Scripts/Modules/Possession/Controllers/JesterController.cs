@@ -7,30 +7,32 @@ enum JesterState {
     OPEN
 }
 
-internal class JesterController : IEnemyController<JesterAI> {
-    public float transitionSpeed = 5f;
-    public Vector3 camOffsets = new(0, 2.5f, -3f);
+class JesterController : IEnemyController<JesterAI> {
+    Vector3 OriginalCameraOffset { get; } = new(0.0f, 2.5f, -3.0f);
+    Vector3 CameraOffset { get; set; }
 
     public Vector3 GetCameraOffset(JesterAI enemy) {
-        float targetCamOffsetY, targetCamOffsetZ;
+        float transitionSpeed = 5.0f;
+        float targetCamOffsetY = 2.3f;
+        float targetCamOffsetZ = -3.5f;
 
         if (!enemy.IsBehaviourState(JesterState.OPEN)) {
-            targetCamOffsetY = 2f;
-            targetCamOffsetZ = -3f;
-        }
-        else {
-            targetCamOffsetY = 2.3f;
-            targetCamOffsetZ = -3.5f;
+            targetCamOffsetY = 2.0f;
+            targetCamOffsetZ = -3.0f;
         }
 
-        // Smoothly interpolate between current and target camera positions
-        this.camOffsets.y = Mathf.Lerp(this.camOffsets.y, targetCamOffsetY, Time.deltaTime * this.transitionSpeed);
-        this.camOffsets.z = Mathf.Lerp(this.camOffsets.z, targetCamOffsetZ, Time.deltaTime * this.transitionSpeed);
+        float transitionSpeedDelta = transitionSpeed * Time.deltaTime;
+        this.CameraOffset = new Vector3(
+            this.CameraOffset.x,
+            Mathf.Lerp(this.CameraOffset.y, targetCamOffsetY, transitionSpeedDelta),
+            Mathf.Lerp(this.CameraOffset.z, targetCamOffsetZ, transitionSpeedDelta)
+        );
 
-        return this.camOffsets;
+        return this.CameraOffset;
     }
 
-    void SetNoPlayerChasetimer(JesterAI enemy, float value) => enemy.Reflect().SetInternalField("noPlayersToChaseTimer", value);
+    void SetNoPlayerChasetimer(JesterAI enemy, float value) =>
+        enemy.Reflect().SetInternalField("noPlayersToChaseTimer", value);
 
     public void UsePrimarySkill(JesterAI enemy) {
         enemy.SetBehaviourState(JesterState.CLOSED);
@@ -53,11 +55,10 @@ internal class JesterController : IEnemyController<JesterAI> {
 
     public void OnUnpossess(JesterAI enemy) {
         this.SetNoPlayerChasetimer(enemy, 25.0f);
-        this.camOffsets = new(0, 2.5f, -3f);
+        this.CameraOffset = this.OriginalCameraOffset;
     }
 
-    public void OnPossess(JesterAI enemy) => this.camOffsets = new(0, 2.5f, -3f);
-
+    public void OnPossess(JesterAI enemy) => this.CameraOffset = this.OriginalCameraOffset;
 
     public bool IsAbleToMove(JesterAI enemy) => !enemy.IsBehaviourState(JesterState.CRANKING);
 

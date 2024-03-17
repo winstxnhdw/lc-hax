@@ -8,11 +8,11 @@ enum BeesState {
     ATTACK
 }
 
-internal class CircuitBeesController : IEnemyController<RedLocustBees> {
+class CircuitBeesController : IEnemyController<RedLocustBees> {
+    Vector3 CameraOffset { get; } = new(0.0f, 2.0f, -3.0f);
 
-    Vector3 CamOffset { get; } = new(0, 2f, -3f);
+    public Vector3 GetCameraOffset(RedLocustBees _) => this.CameraOffset;
 
-    public Vector3 GetCameraOffset(RedLocustBees _) => this.CamOffset;
     public bool CanUseEntranceDoors(RedLocustBees _) => true;
 
     public void UsePrimarySkill(RedLocustBees enemy) {
@@ -23,6 +23,5 @@ internal class CircuitBeesController : IEnemyController<RedLocustBees> {
     public void UseSecondarySkill(RedLocustBees enemy) => enemy.SetBehaviourState(BeesState.IDLE);
 
     public void OnOutsideStatusChange(RedLocustBees enemy) => enemy.StopSearch(enemy.searchForHive, true);
-
 }
 

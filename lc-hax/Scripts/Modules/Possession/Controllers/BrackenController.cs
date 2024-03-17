@@ -7,28 +7,23 @@ enum BrackenState {
     ANGER
 }
 
-internal class BrackenController : IEnemyController<FlowermanAI> {
-    float TransitionSpeed { get; set; } = 0.0f;
-    Vector3 CameraOffset { get; set; } = new Vector3(0.0f, 2.0f, -3.0f);
-
+class BrackenController : IEnemyController<FlowermanAI> {
     public Vector3 GetCameraOffset(FlowermanAI enemy) {
-        this.TransitionSpeed = 4.0f;
+        Vector3 cameraOffset = new(0.0f, 2.0f, -3.0f);
+        float transitionSpeed = 4.0f;
         float targetCamOffsetY = 2.6f;
         float targetCamOffsetZ = -3.2f;
 
         if (enemy.IsBehaviourState(BrackenState.SCOUTING)) {
-            this.TransitionSpeed = 4.0f;
             targetCamOffsetY = 2.0f;
             targetCamOffsetZ = -3.0f;
         }
 
-        this.CameraOffset = new Vector3(
-            this.CameraOffset.x,
-            Mathf.Lerp(this.CameraOffset.y, targetCamOffsetY, Time.deltaTime * this.TransitionSpeed),
-            Mathf.Lerp(this.CameraOffset.z, targetCamOffsetZ, Time.deltaTime * this.TransitionSpeed)
-        );
+        float transitionSpeedDelta = transitionSpeed * Time.deltaTime;
+        cameraOffset.y = Mathf.Lerp(cameraOffset.y, targetCamOffsetY, transitionSpeedDelta);
+        cameraOffset.z = Mathf.Lerp(cameraOffset.z, targetCamOffsetZ, transitionSpeedDelta);
 
-        return this.CameraOffset;
+        return cameraOffset;
     }
 
     public void UsePrimarySkill(FlowermanAI enemy) {

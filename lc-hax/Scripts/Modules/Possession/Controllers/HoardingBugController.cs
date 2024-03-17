@@ -1,27 +1,17 @@
+using Unity.Netcode;
 using GameNetcodeStuff;
 using Hax;
-using Unity.Netcode;
 
 enum HoardingBugState {
     IDLE,
-    SEARCHING_FOR_ITEMS,
-    RETURNING_TO_NEST,
-    CHASING_PLAYER,
-    WATCHING_PLAYER,
-    AT_NEST
+    SEARCHING,
+    RETURNING,
+    CHASING,
+    WATCHING,
+    NESTED
 }
 
-internal class HoardingBugController : IEnemyController<HoarderBugAI> {
-
-    bool GetInChase(HoarderBugAI enemy) => enemy.Reflect().GetInternalField<bool>("inChase");
-
-    float GettimeSinceHittingPlayer(HoarderBugAI enemy) =>
-        enemy.Reflect().GetInternalField<float>("timeSinceHittingPlayer");
-
-    void SettimeSinceHittingPlayer(HoarderBugAI enemy, float value) =>
-        enemy.Reflect().SetInternalField("timeSinceHittingPlayer", value);
-
-
+class HoardingBugController : IEnemyController<HoarderBugAI> {
     void UseHeldItem(HoarderBugAI enemy) {
         if (enemy.heldItem is not { itemGrabbableObject: GrabbableObject grabbable }) return;
 
@@ -35,14 +25,6 @@ internal class HoardingBugController : IEnemyController<HoarderBugAI> {
         }
     }
 
-    public void Update(HoarderBugAI enemy, bool isAIControlled) {
-        if (isAIControlled) return;
-        if (enemy.heldItem?.itemGrabbableObject is null) return;
-
-        enemy.angryTimer = 0.0f;
-        enemy.SetBehaviourState(HoardingBugState.IDLE);
-    }
-
     void GrabItem(HoarderBugAI enemy, GrabbableObject item) {
         if (!item.TryGetComponent(out NetworkObject netItem)) return;
 
@@ -52,6 +34,14 @@ internal class HoardingBugController : IEnemyController<HoarderBugAI> {
 
         enemy.SwitchToBehaviourServerRpc(1);
         enemy.GrabItemServerRpc(netItem);
+    }
+
+    public void Update(HoarderBugAI enemy, bool isAIControlled) {
+        if (isAIControlled) return;
+        if (enemy.heldItem?.itemGrabbableObject is null) return;
+
+        enemy.angryTimer = 0.0f;
+        enemy.SetBehaviourState(HoardingBugState.IDLE);
     }
 
     public void OnDeath(HoarderBugAI enemy) {
@@ -80,7 +70,7 @@ internal class HoardingBugController : IEnemyController<HoarderBugAI> {
             enemy.watchingPlayer = hostPlayer;
             enemy.angryAtPlayer = hostPlayer;
             enemy.angryTimer = 15.0f;
-            enemy.SetBehaviourState(HoardingBugState.CHASING_PLAYER);
+            enemy.SetBehaviourState(HoardingBugState.CHASING);
             return;
         }
 
@@ -89,7 +79,7 @@ internal class HoardingBugController : IEnemyController<HoarderBugAI> {
         }
     }
 
-    public void UseSpecialAbility(HoarderBugAI enemy) => _ = RoundManager.PlayRandomClip(enemy.creatureVoice, enemy.chitterSFX, true, 1f, 0);
+    public void UseSpecialAbility(HoarderBugAI enemy) => RoundManager.PlayRandomClip(enemy.creatureVoice, enemy.chitterSFX, true, 1.0f, 0);
 
     public string GetPrimarySkillName(HoarderBugAI enemy) => enemy.heldItem is not null ? "Use item" : "Grab Item";
 

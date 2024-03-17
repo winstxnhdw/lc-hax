@@ -6,13 +6,10 @@ enum GiantState {
     CHASE = 1
 }
 
-internal class ForestGiantController : IEnemyController<ForestGiantAI> {
-
-    Vector3 camOffset = new(0, 8f, -8f);
-
-    public Vector3 GetCameraOffset(ForestGiantAI enemy) => this.camOffset;
-
+class ForestGiantController : IEnemyController<ForestGiantAI> {
     bool IsUsingSecondarySkill { get; set; } = false;
+
+    public Vector3 GetCameraOffset(ForestGiantAI enemy) => new(0.0f, 8.0f, -8.0f);
 
     public void Update(ForestGiantAI enemy, bool isAIControlled) {
         if (!this.IsUsingSecondarySkill) {
@@ -22,7 +19,6 @@ internal class ForestGiantController : IEnemyController<ForestGiantAI> {
             enemy.SetBehaviourState(GiantState.CHASE);
         }
     }
-
 
     public void OnSecondarySkillHold(ForestGiantAI enemy) {
         this.IsUsingSecondarySkill = true;
@@ -40,7 +36,7 @@ internal class ForestGiantController : IEnemyController<ForestGiantAI> {
 
     public bool CanUseEntranceDoors(ForestGiantAI _) => false;
 
-    public float InteractRange(ForestGiantAI _) => 0f;
+    public float InteractRange(ForestGiantAI _) => 0.0f;
 
     public void OnUnpossess(ForestGiantAI enemy) => this.IsUsingSecondarySkill = false;
 
@@ -50,5 +46,4 @@ internal class ForestGiantController : IEnemyController<ForestGiantAI> {
         enemy.StopSearch(enemy.roamPlanet, true);
         enemy.StopSearch(enemy.searchForPlayers, true);
     }
-
 }
