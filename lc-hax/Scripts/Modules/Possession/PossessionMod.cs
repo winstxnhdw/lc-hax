@@ -7,8 +7,6 @@ using GameNetcodeStuff;
 using Hax;
 
 internal sealed class PossessionMod : MonoBehaviour {
-    bool IsLeftAltHeld { get; set; } = false;
-
     internal static PossessionMod? Instance { get; private set; }
     internal bool IsPossessed => this.Possession.IsPossessed;
     internal EnemyAI? PossessedEnemy => this.Possession.Enemy;
@@ -18,9 +16,9 @@ internal sealed class PossessionMod : MonoBehaviour {
     GameObject? CharacterMovementInstance { get; set; } = null;
     CharacterMovement? CharacterMovement { get; set; } = null;
     EntranceTeleport? MainEntrance => RoundManager.FindMainEntranceScript(false);
-
     MousePan? MousePan { get; set; } = null;
 
+    bool IsLeftAltHeld { get; set; } = false;
     bool FirstUpdate { get; set; } = true;
     bool NoClipEnabled { get; set; } = false;
     bool IsAIControlled { get; set; } = false;
@@ -45,7 +43,7 @@ internal sealed class PossessionMod : MonoBehaviour {
         { typeof(SandSpiderAI), new BunkerSpiderController() },
         { typeof(RedLocustBees), new CircuitBeesController() },
         { typeof(DoublewingAI), new DoublewingBirdController() },
-        { typeof(DocileLocustBeesAI), new DocileLocustBeesController() }
+        { typeof(DocileLocustBeesAI), new LocustController() }
     };
 
     internal IController? GetEnemyController(EnemyAI enemy) =>
@@ -71,8 +69,6 @@ internal sealed class PossessionMod : MonoBehaviour {
         }
     }
 
-
-
     void OnEnable() {
         InputListener.OnNPress += this.ToggleNoClip;
         InputListener.OnZPress += this.Unpossess;
@@ -87,7 +83,6 @@ internal sealed class PossessionMod : MonoBehaviour {
         InputListener.OnEPress += this.OnInteract;
         this.UpdateComponentsOnCurrentState(true);
     }
-
 
     void OnDisable() {
         InputListener.OnNPress -= this.ToggleNoClip;
@@ -214,9 +209,6 @@ internal sealed class PossessionMod : MonoBehaviour {
             this.UpdateEnemyRotation();
         }
     }
-
-
-
 
     void OnInteract() {
         if (this.PossessedEnemy is not EnemyAI enemy) return;
@@ -415,8 +407,6 @@ internal sealed class PossessionMod : MonoBehaviour {
             ? IController.DefaultEnemyOffset
             : this.Controller.GetEnemyPositionOffset(enemy);
     }
-
-
 
     void UsePrimarySkill() {
         if (this.Possession.Enemy is not EnemyAI enemy || this.Controller is null) return;
