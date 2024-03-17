@@ -1,13 +1,12 @@
 using Hax;
 
-public enum SporeLizardState {
+enum SporeLizardState {
     IDLE,
     ALERTED,
     HOSTILE
 }
 
-internal class SporeLizardController : IEnemyController<PufferAI> {
-
+class SporeLizardController : IEnemyController<PufferAI> {
     float GetTimeSinceHittingPlayer(PufferAI enemy) =>
         enemy.Reflect().GetInternalField<float>("timeSinceHittingPlayer");
 
@@ -29,5 +28,4 @@ internal class SporeLizardController : IEnemyController<PufferAI> {
     public string GetSecondarySkillName(PufferAI _) => "Smoke";
 
     public void OnOutsideStatusChange(PufferAI enemy) => enemy.StopSearch(enemy.roamMap, true);
-
 }

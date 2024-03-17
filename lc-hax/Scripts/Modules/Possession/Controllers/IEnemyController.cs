@@ -1,6 +1,6 @@
 using UnityEngine;
 
-internal interface IController {
+interface IController {
     const float DefaultSprintMultiplier = 2.8f;
 
     const float DefaultInteractRange = 4.5f;
@@ -19,19 +19,21 @@ internal interface IController {
 
     void OnDeath(EnemyAI enemy);
 
+    void OnMovement(EnemyAI enemy, bool isMoving, bool isSprinting);
+
     void Update(EnemyAI enemy, bool isAIControlled);
 
     void UsePrimarySkill(EnemyAI enemy);
 
     void OnSecondarySkillHold(EnemyAI enemy);
 
+    void OnOutsideStatusChange(EnemyAI enemy);
+
     void UseSecondarySkill(EnemyAI enemy);
 
     void ReleaseSecondarySkill(EnemyAI enemy);
 
     void UseSpecialAbility(EnemyAI enemy);
-
-    void OnMovement(EnemyAI enemy, bool isMoving, bool isSprinting);
 
     bool IsAbleToMove(EnemyAI enemy);
 
@@ -48,12 +50,9 @@ internal interface IController {
     float SprintMultiplier(EnemyAI enemy);
 
     bool SyncAnimationSpeedEnabled(EnemyAI enemy);
-
-    void OnOutsideStatusChange(EnemyAI enemy);
 }
 
-internal interface IEnemyController<T> : IController where T : EnemyAI {
-
+interface IEnemyController<T> : IController where T : EnemyAI {
     void OnPossess(T enemy) { }
 
     void OnUnpossess(T enemy) { }
@@ -72,6 +71,8 @@ internal interface IEnemyController<T> : IController where T : EnemyAI {
 
     void UseSpecialAbility(T enemy) { }
 
+    void OnOutsideStatusChange(T enemy) { }
+
     void OnMovement(T enemy, bool isMoving, bool isSprinting) { }
 
     bool IsAbleToMove(T enemy) => true;
@@ -79,6 +80,8 @@ internal interface IEnemyController<T> : IController where T : EnemyAI {
     bool IsAbleToRotate(T enemy) => true;
 
     bool CanUseEntranceDoors(T enemy) => true;
+
+    bool SyncAnimationSpeedEnabled(T enemy) => true;
 
     string? GetPrimarySkillName(T enemy) => null;
 
@@ -91,10 +94,6 @@ internal interface IEnemyController<T> : IController where T : EnemyAI {
     Vector3 GetCameraOffset(T enemy) => IController.DefaultCamOffsets;
 
     Vector3 GetEnemyPositionOffset(T enemy) => IController.DefaultEnemyOffset;
-
-    bool SyncAnimationSpeedEnabled(T enemy) => true;
-
-    void OnOutsideStatusChange(T enemy) { }
 
     void IController.OnPossess(EnemyAI enemy) => this.OnPossess((T)enemy);
 

@@ -108,7 +108,7 @@ class EnemyPromptHandler {
 
     void HandleHoardingBug(HoarderBugAI hoardingBug, PlayerControllerB targetPlayer, bool willTeleportEnemy) {
         this.TeleportEnemyToPlayer(hoardingBug, targetPlayer, willTeleportEnemy, allowedInside: true);
-        hoardingBug.SetBehaviourState(HoardingBugState.CHASING_PLAYER);
+        hoardingBug.SetBehaviourState(HoardingBugState.CHASING);
         hoardingBug.angryAtPlayer = targetPlayer;
         hoardingBug.angryTimer = float.MaxValue;
 
