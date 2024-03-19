@@ -143,6 +143,7 @@ The complete feature set includes the following.
 | Toggle NoClip                 | `/noclip`                                        |
 | Toggle unlimited jump         | `/jump`                                          |
 | Toggle rapid item usage       | `/rapid`                                         |
+| Set all objects upright       | `/upright`                                       |
 | Eavesdrop on all players      | `/hear`                                          |
 | Fake player death             | `/fakedeath`                                     |
 | Unlock all doors              | `/unlock`                                        |
