@@ -3,12 +3,12 @@ using Hax;
 
 [Command("upright")]
 class UprightCommand : ICommand {
-    void SetObjectUpright(PlaceableShipObject shipObject) =>
-        Helper.PlaceObjectAtPosition(
-            shipObject,
-            shipObject.transform.position,
-            new Vector3(-90.0f, 0.0f, 0.0f)
-        );
+    void SetObjectUpright(PlaceableShipObject shipObject) {
+        Vector3 uprightRotation = shipObject.transform.eulerAngles;
+        uprightRotation.x = -90.0f;
+
+        Helper.PlaceObjectAtPosition(shipObject, shipObject.transform.position, uprightRotation);
+    }
 
     public void Execute(StringArray _) {
         Helper.FindObjects<PlaceableShipObject>()
