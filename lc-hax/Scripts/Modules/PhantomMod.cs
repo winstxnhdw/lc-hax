@@ -137,6 +137,6 @@ sealed class PhantomMod : MonoBehaviour {
             this.PhantomDisabled(player, camera);
         }
 
-        haxCamera.SetActive(Setting.EnablePhantom);
+        haxCamera.enabled = Setting.EnablePhantom;
     }
 }

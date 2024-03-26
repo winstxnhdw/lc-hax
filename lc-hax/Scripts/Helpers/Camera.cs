@@ -5,7 +5,7 @@ namespace Hax;
 static partial class Helper {
     internal static Camera? CurrentCamera {
         get {
-            return HaxCamera.Instance?.HaxCamContainer?.activeSelf == true
+            return HaxCamera.Instance?.enabled == true
                 ? HaxCamera.Instance.CustomCamera
                 : Helper.StartOfRound?.activeCamera;
         }

@@ -7,7 +7,7 @@ using Hax;
 class HudPatch {
     [HarmonyPatch(typeof(HUDManager), "PingScan_performed")]
     [HarmonyPrefix]
-    static bool PingScanPrefix() => HaxCamera.Instance?.HaxCamContainer?.activeSelf != true &&
+    static bool PingScanPrefix() => HaxCamera.Instance?.enabled != true &&
                             PossessionMod.Instance?.IsPossessed != true;
 
     [HarmonyPatch(typeof(HUDManager), "Update")]

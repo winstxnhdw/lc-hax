@@ -22,26 +22,39 @@ internal class HaxCamera : MonoBehaviour {
 
     internal AudioListener? HaxCamAudioListener { get; private set; }
 
-    internal void SetActive(bool active) {
+
+    internal void OnEnable() {
+        GameListener.OnGameStart += this.DisableCamera;
+        GameListener.OnGameEnd += this.DisableCamera;
         if (Helper.StartOfRound is not StartOfRound startOfRound) return;
         if (Helper.LocalPlayer is not PlayerControllerB player) return;
         if (player.activeAudioListener is not AudioListener playerlistener) return;
         if (this.HaxCamContainer is null) return;
         if (this.HaxCamAudioListener is not AudioListener haxListener) return;
         if (this.GetCamera() is not Camera cam) return;
-        this.HaxCamContainer.SetActive(active);
-        if (!this.HaxCamContainer.activeSelf) {
-            playerlistener.enabled = true;
-            startOfRound.audioListener = playerlistener;
-            startOfRound.activeCamera.enabled = true;
-        }
-        else {
-            this.CopyFromCamera(startOfRound.activeCamera.transform, ref cam, ref startOfRound.activeCamera);
-            startOfRound.activeCamera.enabled = false;
-            playerlistener.enabled = false;
-            startOfRound.audioListener = haxListener;
-        }
+        this.HaxCamContainer.SetActive(true);
+        this.CopyFromCamera(startOfRound.activeCamera.transform, ref cam, ref startOfRound.activeCamera);
+        startOfRound.activeCamera.enabled = false;
+        playerlistener.enabled = false;
+        startOfRound.audioListener = haxListener;
+
     }
+
+    internal void OnDisable() {
+        GameListener.OnGameStart -= this.DisableCamera;
+        GameListener.OnGameEnd -= this.DisableCamera;
+        if (Helper.StartOfRound is not StartOfRound startOfRound) return;
+        if (Helper.LocalPlayer is not PlayerControllerB player) return;
+        if (player.activeAudioListener is not AudioListener playerlistener) return;
+        if (this.HaxCamContainer is null) return;
+        if (this.HaxCamAudioListener is not AudioListener haxListener) return;
+        if (this.GetCamera() is not Camera cam) return;
+        this.HaxCamContainer.SetActive(false);
+        playerlistener.enabled = true;
+        startOfRound.audioListener = playerlistener;
+        startOfRound.activeCamera.enabled = true;
+    }
+
 
     void LateUpdate() {
         if (this.HaxCamContainer is null) return;
@@ -165,17 +178,9 @@ internal class HaxCamera : MonoBehaviour {
     internal void Awake() {
         Instance = this;
         _ = this.GetCamera();
+        this.enabled = false;
     }
 
 
 
-    internal void OnEnable() {
-        GameListener.OnGameStart += this.DisableCamera;
-        GameListener.OnGameEnd += this.DisableCamera;
-    }
-
-    internal void OnDisable() {
-        GameListener.OnGameStart -= this.DisableCamera;
-        GameListener.OnGameEnd -= this.DisableCamera;
-    }
 }
