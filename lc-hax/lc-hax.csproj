@@ -124,12 +124,9 @@
       <Private>False</Private>
     </Reference>
 
-    <PackageReference Include="Nullable.Extended.Analyzer" Version="1.15.6169">
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-      <PrivateAssets>all</PrivateAssets>
-    </PackageReference>
-
     <ProjectReference Include="..\analysers\analysers.csproj" />
+
+    <PackageReference Include="Nullable.Extended.Analyzer" Version="1.15.6169" />
 
     <PackageReference Include="RequireNamedArgs" Version="0.0.7" />
 
