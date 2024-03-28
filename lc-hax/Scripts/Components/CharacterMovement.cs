@@ -75,6 +75,8 @@ class CharacterMovement : MonoBehaviour {
         enemy.GetComponentsInChildren<Collider>()
             .Where(collider => collider != this.CharacterController)
             .ForEach(collider => Physics.IgnoreCollision(this.CharacterController, collider));
+
+        this.gameObject.layer = enemy.gameObject.layer;
     }
 
     internal void CalibrateCollision(GrabbableObject scrap) {
