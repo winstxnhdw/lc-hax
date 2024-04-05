@@ -27,6 +27,8 @@ internal sealed class PossessionMod : MonoBehaviour {
     bool NoClipEnabled { get; set; } = false;
     bool IsAIControlled { get; set; } = false;
 
+
+    // determines the controller to use for each enemy types 
     Dictionary<Type, IController> EnemyControllers { get; } = new() {
         { typeof(CentipedeAI), new SnareFleaController() },
         { typeof(FlowermanAI), new BrackenController() },
@@ -47,7 +49,10 @@ internal sealed class PossessionMod : MonoBehaviour {
         { typeof(SandSpiderAI), new BunkerSpiderController() },
         { typeof(RedLocustBees), new CircuitBeesController() },
         { typeof(DoublewingAI), new DoublewingBirdController() },
-        { typeof(DocileLocustBeesAI), new DocileLocustBeesController() }
+        { typeof(DocileLocustBeesAI), new DocileLocustBeesController() },
+        { typeof(ButlerEnemyAI), new ButlerEnemyController() },
+        { typeof(ButlerBeesEnemyAI), new ButlerBeesController() },
+        { typeof(RadMechAI), new RadMechController() },
     };
 
     internal IController? GetEnemyController(EnemyAI enemy) =>

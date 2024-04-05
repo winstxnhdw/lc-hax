@@ -26,8 +26,8 @@ internal static partial class Helper {
     /// </summary>
     internal static bool IsOwner(this EnemyAI enemy, PlayerControllerB player) {
         if (player is null) return false;
-        int currentOwnershipOnThisClient = enemy.Reflect().GetInternalField<int>("currentOwnershipOnThisClient");
-        ulong networkOwner = enemy.NetworkObject.OwnerClientId;
+        int currentOwnershipOnThisClient = enemy.currentOwnershipOnThisClient;
+        ulong networkOwner = enemy.thisNetworkObject.OwnerClientId;
         ulong playerID = player.IsSelf() ? player.actualClientId : (ulong)player.PlayerIndex();
         return currentOwnershipOnThisClient == (int)playerID && networkOwner == playerID;
     }
@@ -92,12 +92,17 @@ internal static partial class Helper {
     internal static void Kill(this EnemyAI enemy) {
         enemy.TakeOwnership();
 
-        if (enemy is NutcrackerEnemyAI nutcracker) {
-            nutcracker.KillEnemy();
-        }
+        switch(enemy) {
+            case NutcrackerEnemyAI nutcracker:
+                nutcracker.KillEnemy();
+                break;
+            case ButlerEnemyAI butler:
+                butler.KillEnemy();
+                break;
 
-        else {
-            enemy.KillEnemyServerRpc(true);
+            default:
+                enemy.KillEnemyServerRpc(true);
+                break;
         }
     }
     /// <summary>
@@ -168,4 +173,59 @@ internal static partial class Helper {
 
         return enemyAI;
     }
+
+    /// <summary>
+    /// Finds the closest player to the enemy within a specified radius, prioritizing players on the ground.
+    /// If no players are found, it defaults to the Host.
+    /// </summary>
+    /// <param name="enemy">The enemy AI from which to search for nearby players.</param>
+    /// <param name="radius">The search radius. Default is 1.5f, but will be scaled by a factor of 3.</param>
+    /// <returns>The closest PlayerControllerB instance or Helper.Players[0] if no player is found.</returns>
+    internal static PlayerControllerB FindClosestPlayer(this EnemyAI enemy, float radius = 1.5f) {
+        radius *= 3;
+
+        float groundLevel = enemy.transform.position.y;
+
+        Collider[] playersInRange = Physics.OverlapSphere(enemy.transform.position, radius, LayerMask.GetMask("Player"));
+
+        PlayerControllerB? closestPlayer = null;
+        float closestDistanceSqr = Mathf.Infinity;
+        float groundPriorityWeight = 0.1f; // Adjust this weight to prioritize ground distance more or less
+        foreach (Collider playerCollider in playersInRange) {
+            PlayerControllerB player = playerCollider.GetComponent<PlayerControllerB>();
+            if (player) {
+                Vector3 playerPosition = player.transform.position;
+                float verticalOffset = Mathf.Abs(playerPosition.y - groundLevel); // Distance from the ground
+                float distanceSqr = (playerPosition - enemy.transform.position).sqrMagnitude + (verticalOffset * groundPriorityWeight);
+
+                if (distanceSqr < closestDistanceSqr) {
+                    closestDistanceSqr = distanceSqr;
+                    closestPlayer = player;
+                }
+            }
+        }
+        Console.WriteLine($"Enemy: {enemy.enemyType.enemyName} | Closest Player: {closestPlayer?.playerUsername}");
+        return closestPlayer ?? Helper.Players[0];
+    }
+    /// <summary>
+    /// Converts the Player to a Threat object with max priority for any enemy.
+    /// </summary>
+    /// <param name="Player"></param>
+    /// <returns></returns>
+    internal static Threat ToThreat(this PlayerControllerB Player) {
+        return new() {
+            threatScript = Player,
+            lastSeenPosition = Player.transform.position,
+            threatLevel = int.MaxValue,
+            type = ThreatType.Player,
+            focusLevel = int.MaxValue,
+            timeLastSeen = Time.time,
+            distanceToThreat = 0.0f,
+            distanceMovedTowardsBaboon = float.MaxValue,
+            interestLevel = int.MaxValue,
+            hasAttacked = true
+
+        };
+    }
+
 }

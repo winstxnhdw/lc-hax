@@ -10,7 +10,5 @@ internal class TestEnemyController : IEnemyController<TestEnemy> {
 
     public Vector3 GetEnemyPositionOffset(TestEnemy enemy) => this.enemyPositionOffset;
 
-    public bool CanUseEntranceDoors(TestEnemy _) => true;
-
 }
 

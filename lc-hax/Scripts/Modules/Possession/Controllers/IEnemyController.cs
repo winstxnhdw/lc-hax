@@ -52,6 +52,10 @@ internal interface IController {
     void OnOutsideStatusChange(EnemyAI enemy);
 }
 
+/// <summary>
+/// Do Not forget to register the controller in the <see cref="PossessionMod.EnemyControllers"/>
+/// </summary>
+/// <typeparam name="T"></typeparam>
 internal interface IEnemyController<T> : IController where T : EnemyAI {
 
     void OnPossess(T enemy) { }

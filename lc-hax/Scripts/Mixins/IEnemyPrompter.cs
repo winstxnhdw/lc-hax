@@ -67,24 +67,12 @@ class EnemyPromptHandler {
     bool HandleBaboonHawk(BaboonBirdAI baboonHawk, PlayerControllerB targetPlayer, bool willTeleportEnemy, bool overrideInsideFactory) {
         if (!this.IsEnemyAllowedInside(baboonHawk, targetPlayer, willTeleportEnemy, overrideInsideFactory)) return false;
         this.TeleportEnemyToPlayer(baboonHawk, targetPlayer, willTeleportEnemy, true);
-        Threat threat = new() {
-            threatScript = targetPlayer,
-            lastSeenPosition = targetPlayer.transform.position,
-            threatLevel = int.MaxValue,
-            type = ThreatType.Player,
-            focusLevel = int.MaxValue,
-            timeLastSeen = Time.time,
-            distanceToThreat = 0.0f,
-            distanceMovedTowardsBaboon = float.MaxValue,
-            interestLevel = int.MaxValue,
-            hasAttacked = true
-        };
         baboonHawk.TakeOwnership();
         baboonHawk.targetPlayer = targetPlayer;
         baboonHawk.SetMovingTowardsTargetPlayer(targetPlayer);
 
         baboonHawk.SetAggressiveModeServerRpc(1);
-        _ = baboonHawk.Reflect().InvokeInternalMethod("ReactToThreat", threat);
+        _ = baboonHawk.Reflect().InvokeInternalMethod("ReactToThreat", targetPlayer.ToThreat());
         return true;
     }
 
@@ -268,6 +256,38 @@ class EnemyPromptHandler {
         dressGirl.SetBehaviourState(BehaviourState.IDLE);
         return true;
     }
+    bool HandleRadMech(RadMechAI radMech, PlayerControllerB targetPlayer, bool willTeleportEnemy, bool overrideInsideFactory) {
+        if (!this.IsEnemyAllowedInside(radMech, targetPlayer, willTeleportEnemy, overrideInsideFactory)) return false;
+        this.TeleportEnemyToPlayer(radMech, targetPlayer, willTeleportEnemy, true);
+        radMech.TakeOwnership();
+        radMech.targetPlayer = targetPlayer;
+        radMech.SetBehaviourState(GiantState.CHASE);
+        radMech.SetMovingTowardsTargetPlayer(targetPlayer);
+        _ = radMech.SetDestinationToPosition(targetPlayer.transform.position);
+        _ = radMech.Reflect().SetInternalField("lostPlayerInChase", false);
+        return true;
+    }
+
+    bool HandleButler(ButlerEnemyAI butler, PlayerControllerB targetPlayer, bool willTeleportEnemy, bool overrideInsideFactory) {
+        if (!this.IsEnemyAllowedOutside(butler, targetPlayer, willTeleportEnemy, overrideInsideFactory)) return false;
+        this.TeleportEnemyToPlayer(butler, targetPlayer, willTeleportEnemy, true);
+        butler.TakeOwnership();
+        butler.targetPlayer = targetPlayer;
+        butler.SetMovingTowardsTargetPlayer(targetPlayer);
+        butler.SetBehaviourState(ButlerBehaviorState.Alert);
+        butler.SetOwner(targetPlayer);
+        return true;
+    }
+    bool HandleButlerBees(ButlerBeesEnemyAI butlerBees, PlayerControllerB targetPlayer, bool willTeleportEnemy, bool overrideInsideFactory) {
+        if (!this.IsEnemyAllowedOutside(butlerBees, targetPlayer, willTeleportEnemy, overrideInsideFactory)) return false;
+        this.TeleportEnemyToPlayer(butlerBees, targetPlayer, willTeleportEnemy, true);
+        butlerBees.TakeOwnership();
+        butlerBees.targetPlayer = targetPlayer;
+        butlerBees.SetMovingTowardsTargetPlayer(targetPlayer);
+        butlerBees.SetOwner(targetPlayer);
+        return true;
+    }
+
 
     bool HandleDoublewingBird(DoublewingAI doublewingBird, PlayerControllerB targetPlayer, bool willTeleportEnemy) {
         if(this.IsEnemyAllowedInside(doublewingBird, targetPlayer, willTeleportEnemy, false)) return false;
@@ -287,8 +307,19 @@ class EnemyPromptHandler {
 
     internal bool HandleEnemy(EnemyAI enemy, PlayerControllerB targetPlayer, bool willTeleportEnemy, bool overrideInsideFactory) {
         switch (enemy) {
-            case CrawlerAI thumper:
-                return this.HandleThumper(thumper, targetPlayer, willTeleportEnemy, overrideInsideFactory);
+
+            #region Special Enemies
+            case MaskedPlayerEnemy maskedPlayer:
+                return this.HandleMaskedPlayer(maskedPlayer, targetPlayer, willTeleportEnemy);
+
+            case DressGirlAI dressGirl:
+                return this.HandleDressGirl(dressGirl, targetPlayer, willTeleportEnemy);
+
+
+            #endregion
+
+            #region Outside Enemies
+
             case MouthDogAI eyelessDog:
                 return this.HandleEyelessDog(eyelessDog, targetPlayer, willTeleportEnemy, overrideInsideFactory);
 
@@ -298,47 +329,47 @@ class EnemyPromptHandler {
             case ForestGiantAI forestGiant:
                 return this.HandleForestGiant(forestGiant, targetPlayer, willTeleportEnemy, overrideInsideFactory);
 
-            case CentipedeAI snareFlea:
-                return this.HandleSnareFlea(snareFlea, targetPlayer);
-
-            case FlowermanAI bracken:
-                return this.HandleBracken(bracken, targetPlayer, willTeleportEnemy, overrideInsideFactory);
-
-            case SandSpiderAI bunkerSpider:
-                return this.HandleBunkerSpider(bunkerSpider, targetPlayer, willTeleportEnemy, overrideInsideFactory);
+            case RadMechAI RadMech:
+                return this.HandleRadMech(RadMech, targetPlayer, willTeleportEnemy, overrideInsideFactory);
 
             case RedLocustBees bee:
                 return this.HandleBee(bee, targetPlayer, willTeleportEnemy, overrideInsideFactory);
 
-            case HoarderBugAI hoardingBug:
-                return this.HandleHoardingBug(hoardingBug, targetPlayer, willTeleportEnemy, overrideInsideFactory);
-
-            case NutcrackerEnemyAI nutcracker:
-                return this.HandleNutcracker(nutcracker, targetPlayer, willTeleportEnemy, overrideInsideFactory);
-
-            case MaskedPlayerEnemy maskedPlayer:
-                return this.HandleMaskedPlayer(maskedPlayer, targetPlayer, willTeleportEnemy);
-
-            case SpringManAI coilHead:
-                return this.HandleCoilHead(coilHead, targetPlayer, willTeleportEnemy, overrideInsideFactory);
-
-            case PufferAI sporeLizard:
-                return this.HandleSporeLizard(sporeLizard, targetPlayer, willTeleportEnemy, overrideInsideFactory);
-
-            case JesterAI jester:
-                return this.HandleJester(jester, targetPlayer, willTeleportEnemy, overrideInsideFactory);
-
             case SandWormAI earthLeviathan:
                 return this.HandleEarthLeviathan(earthLeviathan, targetPlayer, willTeleportEnemy);
-
-            case DressGirlAI dressGirl:
-                return this.HandleDressGirl(dressGirl, targetPlayer, willTeleportEnemy);
 
             case DoublewingAI doublewingBird:
                 return this.HandleDoublewingBird(doublewingBird, targetPlayer, willTeleportEnemy);
 
             case DocileLocustBeesAI docileLocustBees:
                 return this.HandleDocileLocustBees(docileLocustBees, targetPlayer, willTeleportEnemy);
+
+            #endregion
+
+            #region Inside Enemies
+            case CrawlerAI thumper:
+                return this.HandleThumper(thumper, targetPlayer, willTeleportEnemy, overrideInsideFactory);
+            case CentipedeAI snareFlea:
+                return this.HandleSnareFlea(snareFlea, targetPlayer);
+            case FlowermanAI bracken:
+                return this.HandleBracken(bracken, targetPlayer, willTeleportEnemy, overrideInsideFactory);
+            case ButlerEnemyAI butler:
+                return this.HandleButler(butler, targetPlayer, willTeleportEnemy, overrideInsideFactory);
+            case SandSpiderAI bunkerSpider:
+                return this.HandleBunkerSpider(bunkerSpider, targetPlayer, willTeleportEnemy, overrideInsideFactory);
+            case HoarderBugAI hoardingBug:
+                return this.HandleHoardingBug(hoardingBug, targetPlayer, willTeleportEnemy, overrideInsideFactory);
+            case ButlerBeesEnemyAI butlerbees:
+                return this.HandleButlerBees(butlerbees, targetPlayer, willTeleportEnemy, overrideInsideFactory);
+            case NutcrackerEnemyAI nutcracker:
+                return this.HandleNutcracker(nutcracker, targetPlayer, willTeleportEnemy, overrideInsideFactory);
+            case SpringManAI coilHead:
+                return this.HandleCoilHead(coilHead, targetPlayer, willTeleportEnemy, overrideInsideFactory);
+            case PufferAI sporeLizard:
+                return this.HandleSporeLizard(sporeLizard, targetPlayer, willTeleportEnemy, overrideInsideFactory);
+            case JesterAI jester:
+                return this.HandleJester(jester, targetPlayer, willTeleportEnemy, overrideInsideFactory);
+            #endregion
 
             default:
                 if (enemy.enemyType.isOutsideEnemy && !targetPlayer.isInsideFactory) {

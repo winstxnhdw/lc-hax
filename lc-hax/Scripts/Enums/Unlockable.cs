@@ -23,5 +23,9 @@ enum Unlockable {
     WELCOME_MAT = 21,
     GOLDFISH = 22,
     PLUSHIE_PAJAMA_MAN = 23,
-    PURPLE_SUIT = 24
+    PURPLE_SUIT = 24,
+    BEE_SUIT = 25,
+    BUNNY_SUIT = 26,
+    DISCO_BALL = 27,
+
 }

@@ -76,7 +76,11 @@ class CharacterMovement : MonoBehaviour {
             .Where(collider => collider != this.CharacterController)
             .ForEach(collider => Physics.IgnoreCollision(this.CharacterController, collider));
 
-        this.gameObject.layer = enemy.gameObject.layer;
+        if(Helper.LocalPlayer is PlayerControllerB player) {
+            this.CharacterController.gameObject.layer = player.gameObject.layer;
+            this.gameObject.layer = player.gameObject.layer;
+        }
+
     }
 
     internal void CalibrateCollision(GrabbableObject scrap) {

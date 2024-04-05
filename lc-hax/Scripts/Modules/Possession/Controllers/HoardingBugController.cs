@@ -13,6 +13,13 @@ enum HoardingBugState {
 
 internal class HoardingBugController : IEnemyController<HoarderBugAI> {
 
+    internal bool angry = false;
+
+    void OnUnpossess(HoarderBugAI _) => this.angry = false;
+
+    void OnPossess(HoarderBugAI _) => this.angry = false;
+
+
     bool GetInChase(HoarderBugAI enemy) => enemy.Reflect().GetInternalField<bool>("inChase");
 
     float GettimeSinceHittingPlayer(HoarderBugAI enemy) =>
@@ -38,8 +45,12 @@ internal class HoardingBugController : IEnemyController<HoarderBugAI> {
 
     public void Update(HoarderBugAI enemy, bool isAIControlled) {
         if (isAIControlled) return;
-        if (enemy.heldItem?.itemGrabbableObject is null) return;
-
+        if (enemy.heldItem?.itemGrabbableObject is null) {
+            if (this.angry) {
+                enemy.angryTimer = 15.0f;
+            }
+            return;
+        }
         enemy.angryTimer = 0.0f;
         enemy.SetBehaviourState(HoardingBugState.IDLE);
     }
@@ -77,11 +88,18 @@ internal class HoardingBugController : IEnemyController<HoarderBugAI> {
 
     public void UseSecondarySkill(HoarderBugAI enemy) {
         if (enemy.heldItem?.itemGrabbableObject is null) {
-            PlayerControllerB hostPlayer = Helper.Players[0];
-            enemy.watchingPlayer = hostPlayer;
-            enemy.angryAtPlayer = hostPlayer;
-            enemy.angryTimer = 15.0f;
-            enemy.SetBehaviourState(HoardingBugState.CHASING_PLAYER);
+            if (!this.angry) {
+                PlayerControllerB closePlayer = enemy.FindClosestPlayer();
+                enemy.watchingPlayer = closePlayer;
+                enemy.angryAtPlayer = closePlayer;
+                enemy.angryTimer = 15.0f;
+                this.angry = true;
+                enemy.SetBehaviourState(HoardingBugState.CHASING_PLAYER);
+            }
+            else {
+                enemy.angryAtPlayer = null;
+                enemy.angryTimer = 0.0f;
+            }
             return;
         }
 
