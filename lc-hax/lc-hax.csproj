@@ -18,6 +18,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Scripts\Modules\Possession\Controllers\ButlerBeesController.cs" />
+    <Compile Remove="Scripts\Modules\Possession\Controllers\ButlerEnemyController.cs" />
+    <Compile Remove="Scripts\Modules\Possession\Controllers\RadMechController.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
 
        <Reference Include="Unity.AI.Navigation">
       <HintPath>$(GamePath)/Unity.AI.Navigation.dll</HintPath>
