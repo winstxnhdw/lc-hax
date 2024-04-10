@@ -169,6 +169,7 @@ These commands are only available when the user is host.
 | Set the quota                 | `/quota <amount> <fulfilled=0>`                  |
 | Spawn enem(ies) on player     | `/spawn <enemy> <player> <amount=1>`             |
 | Give or take credit(s)        | `/credit <amount>`                               |
+| Eject all players             | `/eject`                                         |
 
 ## Special Commands
 

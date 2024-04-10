@@ -18,25 +18,19 @@ permissions:
 
 jobs:
   analyze:
-    name: Analyze
     runs-on: windows-latest
-    timeout-minutes: 360
-    strategy:
-      fail-fast: false
-      matrix:
-        language: [csharp]
 
     steps:
     - name: Checkout repository
       uses: actions/checkout@v4.1.2
 
     - name: Initialise CodeQL
-      uses: github/codeql-action/init@v3
+      uses: github/codeql-action/init@v3.24.10
       with:
-        languages: ${{ matrix.language }}
+        languages: csharp
 
     - name: Setup .NET
-      uses: actions/setup-dotnet@v4
+      uses: actions/setup-dotnet@v4.0.0
       with:
         dotnet-version: 8.0.x
         cache: true
@@ -46,6 +40,6 @@ jobs:
       run: dotnet build lc-hax
 
     - name: Perform CodeQL Analysis
-      uses: github/codeql-action/analyze@v3
+      uses: github/codeql-action/analyze@v3.24.10
       with:
-        category: /language:${{matrix.language}}
+        category: /language:csharp
