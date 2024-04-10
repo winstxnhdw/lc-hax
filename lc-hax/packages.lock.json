@@ -4,11 +4,11 @@
     ".NETStandard,Version=v2.1": {
       "Lib.Harmony": {
         "type": "Direct",
-        "requested": "[2.3.1.1, )",
-        "resolved": "2.3.1.1",
-        "contentHash": "tydjMTa88RB7MjdP6TzYgclwVRv6KqvvsprinCf0xPuHgemj2k0ZMJnC2b8YwwyGr7+sAG3e4P0ii09uwwRBMA==",
+        "requested": "[2.3.3, )",
+        "resolved": "2.3.3",
+        "contentHash": "qxO8d2q7luoY8mTfCStQFOgRSd3dWZSS0Ffi5nrjX4qFkZxEBAEvNh5b/ZejTl2kY0fJs62LmfRJkBBTeiuuyQ==",
         "dependencies": {
-          "Lib.Harmony.Ref": "2.3.1.1"
+          "Lib.Harmony.Ref": "2.3.3"
         }
       },
       "Newtonsoft.Json": {
@@ -53,8 +53,8 @@
       },
       "Lib.Harmony.Ref": {
         "type": "Transitive",
-        "resolved": "2.3.1.1",
-        "contentHash": "V5EMzCqC5wSEdaHAWRcBfgj9V1ztPpjPATTNRktdF82pVS6KlMdMInfgdKSY3L7B/fqyy84XJCUxU76Zx9lieg==",
+        "resolved": "2.3.3",
+        "contentHash": "OJ3cLy2eAKLKYbPqsI1leZt+p+ZSqCEGVZzSlyFVTxwR9eG5HwSxJBb3G+qT4cW0VdL58E+qv35wkeBj0ErqZQ==",
         "dependencies": {
           "System.Reflection.Emit": "4.7.0"
         }
