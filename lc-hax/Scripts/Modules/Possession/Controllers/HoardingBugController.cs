@@ -17,8 +17,12 @@ internal class HoardingBugController : IEnemyController<HoarderBugAI> {
 
     void OnUnpossess(HoarderBugAI _) => this.angry = false;
 
-    void OnPossess(HoarderBugAI _) => this.angry = false;
-
+    void OnPossess(HoarderBugAI enemy) {
+        this.angry = false;
+        // calm the bug down when possessed
+        enemy.angryTimer = 0.0f;
+        enemy.SetBehaviourState(HoardingBugState.IDLE);
+    }
 
     bool GetInChase(HoarderBugAI enemy) => enemy.Reflect().GetInternalField<bool>("inChase");
 
