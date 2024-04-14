@@ -26,7 +26,7 @@ internal class ButlerEnemyController : IEnemyController<ButlerEnemyAI> {
 
     public bool IsAbleToRotate(ButlerEnemyAI enemy) => !enemy.Reflect().GetInternalField<bool>("currentSpecialAnimation");
 
-    public bool SyncAnimationSpeedEnabled(ButlerEnemyAI _) => true;
+    public bool SyncAnimationSpeedEnabled(ButlerEnemyAI _) => false;
 
     public void OnOutsideStatusChange(ButlerEnemyAI enemy) {
         enemy.StopSearch(enemy.roamAndSweepFloor, true);
