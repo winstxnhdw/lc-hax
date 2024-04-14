@@ -300,8 +300,6 @@ internal sealed class PossessionMod : MonoBehaviour {
     // Possesses the specified enemy
     internal void Possess(EnemyAI enemy) {
         if (enemy.isEnemyDead) return;
-        // unposssess if possessing a Scrap
-        if (ScrapPossessionMod.Instance?.IsPossessed == true) ScrapPossessionMod.Instance?.Unpossess();
         this.Unpossess();
         this.Possession.SetEnemy(enemy);
         this.IsAIControlled = false;

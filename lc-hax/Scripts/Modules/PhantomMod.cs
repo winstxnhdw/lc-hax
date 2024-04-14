@@ -27,20 +27,15 @@ sealed class PhantomMod : MonoBehaviour {
 
     void Update() {
         if (PossessionMod.Instance is not PossessionMod possessionMod) return;
-        if (ScrapPossessionMod.Instance is not ScrapPossessionMod itemPossessionMod) return;
-
         if (Helper.CurrentCamera is not Camera { enabled: true } camera) return;
         if (!camera.gameObject.TryGetComponent(out KeyboardMovement keyboard)) return;
         if (!camera.gameObject.TryGetComponent(out MousePan mouse)) return;
 
-        bool isPossessed = possessionMod.IsPossessed || itemPossessionMod.IsPossessed;
+        bool isPossessed = possessionMod.IsPossessed;
         if (!Setting.EnablePhantom) {
             if (!this.EnabledPossession) return;
             possessionMod.Unpossess();
             possessionMod.enabled = false;
-            itemPossessionMod.Unpossess();
-            itemPossessionMod.enabled = false;
-
             this.EnabledPossession = false;
         }
         else if (!isPossessed) { // If neither is currently possessed
@@ -52,9 +47,6 @@ sealed class PhantomMod : MonoBehaviour {
             this.EnabledPossession = true;
             if (possessionMod.IsPossessed)
                 possessionMod.enabled = true;
-
-            if (itemPossessionMod.IsPossessed)
-                itemPossessionMod.enabled = true;
 
             keyboard.enabled = false;
             mouse.enabled = false;
@@ -113,10 +105,6 @@ sealed class PhantomMod : MonoBehaviour {
         if (PossessionMod.Instance is PossessionMod { IsPossessed: true } possession) {
             possession.Unpossess();
         }
-        if (ScrapPossessionMod.Instance is ScrapPossessionMod { IsPossessed: true } scrappossession) {
-            scrappossession.Unpossess();
-        }
-
     }
 
     void TogglePhantom() => this.SetPhantom(!Setting.EnablePhantom);
