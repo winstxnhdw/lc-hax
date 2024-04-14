@@ -26,8 +26,7 @@ internal static partial class Helper {
     /// </summary>
     internal static bool IsOwner(this EnemyAI enemy, PlayerControllerB player) {
         if (player is null) return false;
-        int currentOwnershipOnThisClient = enemy.Reflect().GetInternalField<int>("currentOwnershipOnThisClient");
-        //int currentOwnershipOnThisClient = enemy.currentOwnershipOnThisClient; // When the v50 is released
+        int currentOwnershipOnThisClient = enemy.currentOwnershipOnThisClient;
         ulong networkOwner = enemy.thisNetworkObject.OwnerClientId;
         ulong playerID = player.IsSelf() ? player.actualClientId : (ulong)player.PlayerIndex();
         return currentOwnershipOnThisClient == (int)playerID && networkOwner == playerID;
@@ -97,9 +96,9 @@ internal static partial class Helper {
             case NutcrackerEnemyAI nutcracker:
                 nutcracker.KillEnemy();
                 break;
-            //case ButlerEnemyAI butler:
-            //    butler.KillEnemy();
-            //    break;
+            case ButlerEnemyAI butler:
+                butler.KillEnemy();
+                break;
 
             default:
                 enemy.KillEnemyServerRpc(true);

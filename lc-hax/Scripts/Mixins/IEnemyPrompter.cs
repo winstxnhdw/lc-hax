@@ -256,37 +256,37 @@ class EnemyPromptHandler {
         dressGirl.SetBehaviourState(BehaviourState.IDLE);
         return true;
     }
-    //bool HandleRadMech(RadMechAI radMech, PlayerControllerB targetPlayer, bool willTeleportEnemy, bool overrideInsideFactory) {
-    //    if (!this.IsEnemyAllowedInside(radMech, targetPlayer, willTeleportEnemy, overrideInsideFactory)) return false;
-    //    this.TeleportEnemyToPlayer(radMech, targetPlayer, willTeleportEnemy, true);
-    //    radMech.TakeOwnership();
-    //    radMech.targetPlayer = targetPlayer;
-    //    radMech.SetBehaviourState(GiantState.CHASE);
-    //    radMech.SetMovingTowardsTargetPlayer(targetPlayer);
-    //    _ = radMech.SetDestinationToPosition(targetPlayer.transform.position);
-    //    _ = radMech.Reflect().SetInternalField("lostPlayerInChase", false);
-    //    return true;
-    //}
+    bool HandleRadMech(RadMechAI radMech, PlayerControllerB targetPlayer, bool willTeleportEnemy, bool overrideInsideFactory) {
+        if (!this.IsEnemyAllowedInside(radMech, targetPlayer, willTeleportEnemy, overrideInsideFactory)) return false;
+        this.TeleportEnemyToPlayer(radMech, targetPlayer, willTeleportEnemy, true);
+        radMech.TakeOwnership();
+        radMech.targetPlayer = targetPlayer;
+        radMech.SetBehaviourState(GiantState.CHASE);
+        radMech.SetMovingTowardsTargetPlayer(targetPlayer);
+        _ = radMech.SetDestinationToPosition(targetPlayer.transform.position);
+        _ = radMech.Reflect().SetInternalField("lostPlayerInChase", false);
+        return true;
+    }
 
-    //bool HandleButler(ButlerEnemyAI butler, PlayerControllerB targetPlayer, bool willTeleportEnemy, bool overrideInsideFactory) {
-    //    if (!this.IsEnemyAllowedOutside(butler, targetPlayer, willTeleportEnemy, overrideInsideFactory)) return false;
-    //    this.TeleportEnemyToPlayer(butler, targetPlayer, willTeleportEnemy, true);
-    //    butler.TakeOwnership();
-    //    butler.targetPlayer = targetPlayer;
-    //    butler.SetMovingTowardsTargetPlayer(targetPlayer);
-    //    butler.SetBehaviourState(ButlerBehaviorState.Alert);
-    //    butler.SetOwner(targetPlayer);
-    //    return true;
-    //}
-    //bool HandleButlerBees(ButlerBeesEnemyAI butlerBees, PlayerControllerB targetPlayer, bool willTeleportEnemy, bool overrideInsideFactory) {
-    //    if (!this.IsEnemyAllowedOutside(butlerBees, targetPlayer, willTeleportEnemy, overrideInsideFactory)) return false;
-    //    this.TeleportEnemyToPlayer(butlerBees, targetPlayer, willTeleportEnemy, true);
-    //    butlerBees.TakeOwnership();
-    //    butlerBees.targetPlayer = targetPlayer;
-    //    butlerBees.SetMovingTowardsTargetPlayer(targetPlayer);
-    //    butlerBees.SetOwner(targetPlayer);
-    //    return true;
-    //}
+    bool HandleButler(ButlerEnemyAI butler, PlayerControllerB targetPlayer, bool willTeleportEnemy, bool overrideInsideFactory) {
+        if (!this.IsEnemyAllowedOutside(butler, targetPlayer, willTeleportEnemy, overrideInsideFactory)) return false;
+        this.TeleportEnemyToPlayer(butler, targetPlayer, willTeleportEnemy, true);
+        butler.TakeOwnership();
+        butler.targetPlayer = targetPlayer;
+        butler.SetMovingTowardsTargetPlayer(targetPlayer);
+        butler.SetBehaviourState(ButlerBehaviorState.Alert);
+        butler.SetOwner(targetPlayer);
+        return true;
+    }
+    bool HandleButlerBees(ButlerBeesEnemyAI butlerBees, PlayerControllerB targetPlayer, bool willTeleportEnemy, bool overrideInsideFactory) {
+        if (!this.IsEnemyAllowedOutside(butlerBees, targetPlayer, willTeleportEnemy, overrideInsideFactory)) return false;
+        this.TeleportEnemyToPlayer(butlerBees, targetPlayer, willTeleportEnemy, true);
+        butlerBees.TakeOwnership();
+        butlerBees.targetPlayer = targetPlayer;
+        butlerBees.SetMovingTowardsTargetPlayer(targetPlayer);
+        butlerBees.SetOwner(targetPlayer);
+        return true;
+    }
 
 
     bool HandleDoublewingBird(DoublewingAI doublewingBird, PlayerControllerB targetPlayer, bool willTeleportEnemy) {
@@ -329,6 +329,8 @@ class EnemyPromptHandler {
             case ForestGiantAI forestGiant:
                 return this.HandleForestGiant(forestGiant, targetPlayer, willTeleportEnemy, overrideInsideFactory);
 
+            case RadMechAI RadMech:
+                return this.HandleRadMech(RadMech, targetPlayer, willTeleportEnemy, overrideInsideFactory);
 
             case RedLocustBees bee:
                 return this.HandleBee(bee, targetPlayer, willTeleportEnemy, overrideInsideFactory);
@@ -341,8 +343,6 @@ class EnemyPromptHandler {
 
             case DocileLocustBeesAI docileLocustBees:
                 return this.HandleDocileLocustBees(docileLocustBees, targetPlayer, willTeleportEnemy);
-            //case RadMechAI RadMech:
-            //    return this.HandleRadMech(RadMech, targetPlayer, willTeleportEnemy, overrideInsideFactory);
 
             #endregion
 
@@ -353,10 +353,14 @@ class EnemyPromptHandler {
                 return this.HandleSnareFlea(snareFlea, targetPlayer);
             case FlowermanAI bracken:
                 return this.HandleBracken(bracken, targetPlayer, willTeleportEnemy, overrideInsideFactory);
+            case ButlerEnemyAI butler:
+                return this.HandleButler(butler, targetPlayer, willTeleportEnemy, overrideInsideFactory);
             case SandSpiderAI bunkerSpider:
                 return this.HandleBunkerSpider(bunkerSpider, targetPlayer, willTeleportEnemy, overrideInsideFactory);
             case HoarderBugAI hoardingBug:
                 return this.HandleHoardingBug(hoardingBug, targetPlayer, willTeleportEnemy, overrideInsideFactory);
+            case ButlerBeesEnemyAI butlerbees:
+                return this.HandleButlerBees(butlerbees, targetPlayer, willTeleportEnemy, overrideInsideFactory);
             case NutcrackerEnemyAI nutcracker:
                 return this.HandleNutcracker(nutcracker, targetPlayer, willTeleportEnemy, overrideInsideFactory);
             case SpringManAI coilHead:
@@ -365,12 +369,6 @@ class EnemyPromptHandler {
                 return this.HandleSporeLizard(sporeLizard, targetPlayer, willTeleportEnemy, overrideInsideFactory);
             case JesterAI jester:
                 return this.HandleJester(jester, targetPlayer, willTeleportEnemy, overrideInsideFactory);
-
-            //case ButlerBeesEnemyAI butlerbees:
-            //    return this.HandleButlerBees(butlerbees, targetPlayer, willTeleportEnemy, overrideInsideFactory);
-            //case ButlerEnemyAI butler:
-            //    return this.HandleButler(butler, targetPlayer, willTeleportEnemy, overrideInsideFactory);
-
             #endregion
 
             default:
