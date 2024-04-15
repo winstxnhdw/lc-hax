@@ -9,8 +9,14 @@ class VisitCommand : ICommand {
     public void Execute(StringArray args) {
         if (Helper.Terminal is not Terminal terminal) return;
         if (Helper.StartOfRound is not StartOfRound startOfRound) return;
+        VisitCommand.Levels ??= startOfRound.levels.ToDictionary(
+            level => level.name[..(level.name.Length - "Level".Length)].ToLower(),
+            level => level.levelID
+        );
+
         if (args[0] is not string moon) {
             Chat.Print("Usage: visit <moon>");
+            Chat.Print("Moons: " + string.Join(", ", VisitCommand.Levels.Keys));
             return;
         }
 
@@ -24,10 +30,6 @@ class VisitCommand : ICommand {
             return;
         }
 
-        VisitCommand.Levels ??= startOfRound.levels.ToDictionary(
-            level => level.name[..(level.name.Length - "Level".Length)].ToLower(),
-            level => level.levelID
-        );
 
         if (!moon.FuzzyMatch(VisitCommand.Levels.Keys, out string key)) {
             Chat.Print("Failed to find moon!");

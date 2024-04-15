@@ -170,7 +170,7 @@ internal static partial class Helper {
             Object.Destroy(enemy);
             return null;
         }
-
+        _ = Enemies.Add(enemyAI);
         return enemyAI;
     }
 
