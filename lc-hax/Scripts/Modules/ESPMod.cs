@@ -114,7 +114,7 @@ sealed class ESPMod : MonoBehaviour {
             if (PossessionMod.Instance?.PossessedEnemy == enemy) return;
             if (enemy is DocileLocustBeesAI or DoublewingAI) return;
 
-            Renderer? nullableRenderer = enemy is RedLocustBees or TestEnemy
+            Renderer? nullableRenderer = enemy is RedLocustBees or TestEnemy or ButlerBeesEnemyAI
                 ? enemy.meshRenderers.First()
                 : enemy.skinnedMeshRenderers.First();
 

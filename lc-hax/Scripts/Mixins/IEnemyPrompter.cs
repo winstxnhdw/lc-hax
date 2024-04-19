@@ -261,10 +261,15 @@ class EnemyPromptHandler {
         this.TeleportEnemyToPlayer(radMech, targetPlayer, willTeleportEnemy, true);
         radMech.TakeOwnership();
         radMech.targetPlayer = targetPlayer;
-        radMech.SetBehaviourState(GiantState.CHASE);
-        radMech.SetMovingTowardsTargetPlayer(targetPlayer);
+        radMech.targetedThreat = targetPlayer.ToThreat();
+        //radMech.SetBehaviourState(RadMechBehaviorState.Alert);
+        //radMech.SetMovingTowardsTargetPlayer(targetPlayer);
         _ = radMech.SetDestinationToPosition(targetPlayer.transform.position);
-        _ = radMech.Reflect().SetInternalField("lostPlayerInChase", false);
+        radMech.SetLostCreatureInChaseClientRpc(false);
+       _ = radMech.Reflect().SetInternalField("losTimer", 100f);
+        _ = radMech.Reflect().SetInternalField("lostCreatureInChase", false);
+        _ = radMech.Reflect().SetInternalField("lostCreatureInChaseDebounce", false);
+
         return true;
     }
 

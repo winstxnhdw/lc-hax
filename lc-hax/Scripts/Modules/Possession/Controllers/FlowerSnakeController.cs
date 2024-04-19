@@ -34,5 +34,5 @@ internal class FlowerSnakeController : IEnemyController<FlowerSnakeEnemy> {
 
     public string GetSecondarySkillName(FlowerSnakeEnemy _) => "";
 
-    public bool SyncAnimationSpeedEnabled(FlowerSnakeEnemy _) => false;
+    public bool SyncAnimationSpeedEnabled(FlowerSnakeEnemy _) => true;
 }

@@ -27,13 +27,26 @@ static partial class Helper {
         player.TeleportPlayer(RoundManager.FindMainEntranceScript(outside).entrancePoint.position);
         player.isInsideFactory = !outside;
     }
-
+    /// <summary>
+    /// Local Player
+    /// </summary>
     internal static PlayerControllerB? LocalPlayer => Helper.GameNetworkManager?.localPlayerController.Unfake();
 
+    /// <summary>
+    /// All Players (including non initialized players & Dead)
+    /// </summary>
     internal static PlayerControllerB[] Players => Helper.StartOfRound?.allPlayerScripts ?? [];
 
+    /// <summary>
+    /// Active Players (Players that are not dead)
+    /// </summary>
     internal static PlayerControllerB[] ActivePlayers => Helper.Players.Where(player => player.isPlayerControlled && !player.isPlayerDead).ToArray();
 
+    /// <summary>
+    /// Get a player by their name or ID
+    /// </summary>
+    /// <param name="playerNameOrId"></param>
+    /// <returns></returns>
     internal static PlayerControllerB? GetPlayer(string? playerNameOrId) {
         if (string.IsNullOrEmpty(playerNameOrId)) return null;
 
@@ -43,15 +56,35 @@ static partial class Helper {
                players.First(player => player.playerClientId.ToString() == playerNameOrId);
     }
 
+    /// <summary>
+    /// Get a player by their Client ID
+    /// </summary>
+    /// <param name="playerClientId"></param>
+    /// <returns></returns>
     internal static PlayerControllerB? GetPlayer(ulong playerClientId) => Helper.Players.First(player => player.playerClientId == playerClientId);
 
+    /// <summary>
+    /// Get a player by their Client ID
+    /// </summary>
+    /// <param name="playerClientId"></param>
+    /// <returns></returns>
     internal static PlayerControllerB? GetPlayer(int playerClientId) => Helper.GetPlayer(unchecked((ulong)playerClientId));
 
+    /// <summary>
+    /// Get a player by their Client ID and is not dead
+    /// </summary>
+    /// <param name="playerNameOrId"></param>
+    /// <returns></returns>
     internal static PlayerControllerB? GetActivePlayer(string? playerNameOrId) {
         PlayerControllerB? player = Helper.GetPlayer(playerNameOrId);
         return player == null || player.IsDead() ? null : player;
     }
 
+    /// <summary>
+    /// Get a player by their Client ID and is not dead
+    /// </summary>
+    /// <param name="playerClientId"></param>
+    /// <returns></returns>
     internal static PlayerControllerB? GetActivePlayer(int playerClientId) => Helper.GetActivePlayer(playerClientId.ToString());
 
     internal static bool HasItemInSlot(this PlayerControllerB player, GrabbableObject grabbable) => player.ItemSlots.Any(slot => slot == grabbable);

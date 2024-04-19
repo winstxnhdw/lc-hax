@@ -1,3 +1,4 @@
+using GameNetcodeStuff;
 using Hax;
 using UnityEngine;
 
@@ -15,13 +16,25 @@ internal class ButlerEnemyController : IEnemyController<ButlerEnemyAI> {
 
     public void OnMovement(ButlerEnemyAI enemy, bool isMoving, bool isSprinting) => enemy.SetButlerRunningServerRpc(isSprinting);
 
-    public void UsePrimarySkill(ButlerEnemyAI enemy) {
+
+
+    public void OnPrimarySkillHold(ButlerEnemyAI enemy) {
+        enemy.SetBehaviourState(ButlerBehaviorState.Murder);
+        enemy.StabPlayerServerRpc(enemy.FindClosestPlayer(4f).PlayerIndex(), Random.value < 0.8f);
+    }
+
+
+    public void ReleasePrimarySkill(ButlerEnemyAI enemy) {
         _ = enemy.Reflect().InvokeInternalMethod("ForgetSeenPlayers");
-        enemy.StabPlayerServerRpc(enemy.GetClosestPlayer().PlayerIndex(), true);
+        enemy.SetBehaviourState(ButlerBehaviorState.Idle);
+    }
+    public void UseSecondarySkill(ButlerEnemyAI enemy) {
+        enemy.SetBehaviourState(ButlerBehaviorState.Idle);
+        _ = enemy.Reflect().SetInternalField("sweepFloorTimer", 10f);
+        enemy.SyncSearchingMadlyServerRpc(false);
+        enemy.SetSweepingAnimServerRpc(true);
 
     }
-    public void UseSecondarySkill(ButlerEnemyAI enemy) => enemy.SetSweepingAnimServerRpc(enemy.Reflect().GetInternalField<bool>("isSweeping"));
-
     public bool IsAbleToMove(ButlerEnemyAI enemy) => !enemy.Reflect().GetInternalField<bool>("currentSpecialAnimation");
 
     public bool IsAbleToRotate(ButlerEnemyAI enemy) => !enemy.Reflect().GetInternalField<bool>("currentSpecialAnimation");

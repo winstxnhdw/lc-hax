@@ -188,7 +188,7 @@ internal static partial class Helper {
 
         Collider[] playersInRange = Physics.OverlapSphere(enemy.transform.position, radius, LayerMask.GetMask("Player"));
 
-        PlayerControllerB? closestPlayer = null;
+        PlayerControllerB closestPlayer = null;
         float closestDistanceSqr = Mathf.Infinity;
         float groundPriorityWeight = 0.1f; // Adjust this weight to prioritize ground distance more or less
         foreach (Collider playerCollider in playersInRange) {
@@ -204,7 +204,7 @@ internal static partial class Helper {
                 }
             }
         }
-        Console.WriteLine($"Enemy: {enemy.enemyType.enemyName} | Closest Player: {closestPlayer?.playerUsername}");
+        Console.WriteLine($"Enemy: {enemy.enemyType.enemyName} | Closest Player: {(closestPlayer ?? Helper.Players[0])?.playerUsername}");
         return closestPlayer ?? Helper.Players[0];
     }
     /// <summary>

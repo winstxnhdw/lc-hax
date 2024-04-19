@@ -9,6 +9,7 @@ class InputListener : MonoBehaviour {
     internal static event Action<bool>? OnEButtonHold;
     internal static event Action? OnMiddleButtonPress;
     internal static event Action? OnLeftButtonPress;
+    internal static event Action? OnLeftButtonRelease;
     internal static event Action? OnRightButtonPress;
     internal static event Action? OnRightButtonRelease;
     internal static event Action? OnLeftArrowKeyPress;
@@ -25,6 +26,7 @@ class InputListener : MonoBehaviour {
     internal static event Action? OnF5Press;
     internal static event Action? OnF9Press;
     internal static event Action<bool>? OnRightButtonHold;
+    internal static event Action<bool>? OnLeftButtonHold;
     internal static event Action<bool>? OnLeftAltButtonHold;
     internal static event Action? OnZPress;
     internal static event Action? OnXPress;
@@ -37,6 +39,7 @@ class InputListener : MonoBehaviour {
     (Func<bool>, Action)[] InputActions { get; } = [
         (() => Mouse.current.middleButton.wasPressedThisFrame, () => InputListener.OnMiddleButtonPress?.Invoke()),
         (() => Mouse.current.leftButton.wasPressedThisFrame, () => InputListener.OnLeftButtonPress?.Invoke()),
+        (() => Mouse.current.leftButton.wasReleasedThisFrame, () => InputListener.OnLeftButtonRelease?.Invoke()),
         (() => Mouse.current.rightButton.wasPressedThisFrame, () => InputListener.OnRightButtonPress?.Invoke()),
         (() => Mouse.current.rightButton.wasReleasedThisFrame, () => InputListener.OnRightButtonRelease?.Invoke()),
         (() => Keyboard.current[Key.Pause].wasPressedThisFrame, () => InputListener.OnPausePress?.Invoke()),
@@ -66,6 +69,7 @@ class InputListener : MonoBehaviour {
         }
 
         InputListener.OnShiftButtonHold?.Invoke(Keyboard.current[Key.LeftShift].isPressed);
+        InputListener.OnLeftButtonHold?.Invoke(Mouse.current.leftButton.isPressed);
         InputListener.OnRightButtonHold?.Invoke(Mouse.current.rightButton.isPressed);
         InputListener.OnLeftAltButtonHold?.Invoke(Keyboard.current[Key.LeftAlt].isPressed);
 

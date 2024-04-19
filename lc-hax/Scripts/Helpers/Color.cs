@@ -20,6 +20,7 @@ static partial class Helper {
             RagdollGrabbableObject => Helper.ExtraColors.HotPink,
             LungProp => Helper.ExtraColors.LightBlue,
             ShotgunItem => Helper.ExtraColors.Khaki,
+            KnifeItem => Helper.ExtraColors.DarkKhaki,
             HauntedMaskItem => Helper.ExtraColors.MediumVioletRed,
             _ when scrap.itemProperties.isDefensiveWeapon => Helper.ExtraColors.LawnGreen,
             _ when scrap.GetScrapValue() > 50 => Helper.ExtraColors.Gold, 
