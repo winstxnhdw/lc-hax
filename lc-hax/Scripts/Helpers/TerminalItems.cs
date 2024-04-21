@@ -40,5 +40,17 @@ static partial class Helper {
     /// </summary>
     internal static void BerserkMode(this Turret turret) => turret?.EnterBerserkModeServerRpc(-1);
 
+    /// <summary>
+    /// This method is used to toggle the spikes using RPC and using it's trapActive property.
+    /// </summary>
+    /// <param name="spike"></param>
+    internal static void ToggleSpikes(this SpikeRoofTrap spike) => spike?.ToggleSpikesServerRpc(!spike.trapActive);
+
+
+    /// <summary>
+    /// This method is used to slam the spikes using RPC
+    /// </summary>
+    /// <param name="spike"></param>
+    internal static void Slam(this SpikeRoofTrap spike) => spike?.SpikeTrapSlamServerRpc(-1);
 
 }

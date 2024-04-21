@@ -1,21 +1,23 @@
+using GameNetcodeStuff;
+using Hax;
 using System;
 using System.Linq;
-using GameNetcodeStuff;
 using UnityEngine;
-using Hax;
 
-sealed class ESPMod : MonoBehaviour {
-    RendererPair<PlayerControllerB, SkinnedMeshRenderer>[] PlayerRenderers { get; set; } = [];
-    RendererPair<Landmine, Renderer>[] LandmineRenderers { get; set; } = [];
-    Renderer[] TurretRenderers { get; set; } = [];
-    Renderer[] EntranceRenderers { get; set; } = [];
-    Renderer[] StoryLog { get; set; } = [];
+internal sealed class ESPMod : MonoBehaviour {
+    private RendererPair<PlayerControllerB, SkinnedMeshRenderer>[] PlayerRenderers { get; set; } = [];
+    private RendererPair<Landmine, Renderer>[] LandmineRenderers { get; set; } = [];
+    private RendererPair<SpikeRoofTrap, Renderer>[] SpikeRoofTrapRenderers { get; set; } = [];
 
-    bool InGame { get; set; } = false;
-    bool IsMapLoaded { get; set; } = false;
-    bool Enabled { get; set; } = true;
+    private Renderer[] TurretRenderers { get; set; } = [];
+    private Renderer[] EntranceRenderers { get; set; } = [];
+    private Renderer[] StoryLog { get; set; } = [];
 
-    void OnEnable() {
+    private bool InGame { get; set; } = false;
+    private bool IsMapLoaded { get; set; } = false;
+    private bool Enabled { get; set; } = true;
+
+    private void OnEnable() {
         GameListener.OnLevelGenerated += this.Initialise;
         GameListener.OnGameStart += this.Initialise;
         GameListener.OnGameEnd += this.OnGameEnd;
@@ -24,7 +26,7 @@ sealed class ESPMod : MonoBehaviour {
         InputListener.OnPausePress += this.ToggleESP;
     }
 
-    void OnDisable() {
+    private void OnDisable() {
         GameListener.OnLevelGenerated -= this.Initialise;
         GameListener.OnGameStart -= this.Initialise;
         GameListener.OnGameEnd -= this.OnGameEnd;
@@ -33,14 +35,14 @@ sealed class ESPMod : MonoBehaviour {
         InputListener.OnPausePress -= this.ToggleESP;
     }
 
-    void OnGUI() {
+    private void OnGUI() {
         if (!this.Enabled || !this.InGame || Helper.CurrentCamera is not Camera camera) return;
 
         this.RenderAlways(camera);
         this.RenderWhenMapLoads(camera);
     }
 
-    void RenderAlways(Camera camera) {
+    private void RenderAlways(Camera camera) {
         this.PlayerRenderers.ForEach(rendererPair => {
             if (rendererPair.GameObject is not PlayerControllerB player) return;
             if (player.isPlayerDead || !player.isPlayerControlled) return;
@@ -60,7 +62,7 @@ sealed class ESPMod : MonoBehaviour {
             Vector3 rendererCentrePoint = camera.WorldToEyesPoint(grabbableObject.transform.position);
 
             if (PossessionMod.Instance is { IsPossessed: true } && !(PossessionMod.Instance is { PossessedEnemy: HoarderBugAI } || PossessionMod.Instance is { PossessedEnemy: BaboonBirdAI })) return;
-            
+
             if (rendererCentrePoint.z <= 2.0f) {
                 return;
             }
@@ -72,8 +74,19 @@ sealed class ESPMod : MonoBehaviour {
         });
     }
 
-    void RenderWhenMapLoads(Camera camera) {
+    private void RenderWhenMapLoads(Camera camera) {
         if (!this.IsMapLoaded) return;
+
+        this.SpikeRoofTrapRenderers.ForEach(rendererPair => {
+            if (rendererPair.GameObject is not SpikeRoofTrap spike) return;
+
+            if (spike.trapActive) {
+                this.RenderBounds(camera, rendererPair.Renderer.bounds, Helper.ExtraColors.OrangeRed, this.RenderLabel("Spike Roof Trap"));
+            }
+            else {
+                this.RenderBounds(camera, rendererPair.Renderer.bounds, Helper.ExtraColors.YellowGreen, this.RenderLabel("Spike Roof Trap (OFF)"));
+            }
+        });
 
         this.LandmineRenderers.ForEach(rendererPair => {
             if (rendererPair.GameObject is not Landmine mine) return;
@@ -108,7 +121,6 @@ sealed class ESPMod : MonoBehaviour {
             this.RenderLabel("Story Log")
         ));
 
-
         Helper.Enemies.WhereIsNotNull().ForEach(enemy => {
             if (enemy.isEnemyDead) return;
             if (PossessionMod.Instance?.PossessedEnemy == enemy) return;
@@ -141,33 +153,32 @@ sealed class ESPMod : MonoBehaviour {
         }
     }
 
-    void Initialise() {
+    private void Initialise() {
         this.InitialiseRenderers();
         this.InitialiseCoordinates();
         this.InGame = true;
         this.IsMapLoaded = Helper.StartOfRound is { inShipPhase: false };
     }
 
-    void OnGameEnd() => this.InGame = false;
+    private void OnGameEnd() => this.InGame = false;
 
-    void OnShipLeave() => this.IsMapLoaded = false;
+    private void OnShipLeave() => this.IsMapLoaded = false;
 
-    void OnMapLoaded() => this.IsMapLoaded = true;
+    private void OnMapLoaded() => this.IsMapLoaded = true;
 
-    void ToggleESP() => this.Enabled = !this.Enabled;
+    private void ToggleESP() => this.Enabled = !this.Enabled;
 
-    Renderer[] GetRenderers<T>() where T : Component =>
+    private Renderer[] GetRenderers<T>() where T : Component =>
         Helper.FindObjects<T>()
               .Select(obj => obj.GetComponent<Renderer>())
               .ToArray();
 
-    Renderer[] GetRenderersInChildren<T>() where T : Component =>
+    private Renderer[] GetRenderersInChildren<T>() where T : Component =>
         Helper.FindObjects<T>()
             .Select(obj => obj.GetComponentInChildren<Renderer>())
             .ToArray();
 
-
-    void InitialiseRenderers() {
+    private void InitialiseRenderers() {
         this.PlayerRenderers = Helper.Players.Select(player =>
             new RendererPair<PlayerControllerB, SkinnedMeshRenderer>() {
                 GameObject = player,
@@ -181,13 +192,20 @@ sealed class ESPMod : MonoBehaviour {
                 Renderer = mine.GetComponent<Renderer>()
             }
             ).ToArray();
+
+        this.SpikeRoofTrapRenderers = Helper.FindObjects<SpikeRoofTrap>().Select(mine =>
+            new RendererPair<SpikeRoofTrap, Renderer>() {
+                GameObject = mine,
+                Renderer = mine.GetComponent<Renderer>()
+            }
+            ).ToArray();
         this.TurretRenderers = this.GetRenderers<Turret>();
         this.EntranceRenderers = this.GetRenderers<EntranceTeleport>();
     }
 
-    void InitialiseCoordinates() => this.StoryLog = this.GetRenderersInChildren<StoryLog>();
+    private void InitialiseCoordinates() => this.StoryLog = this.GetRenderersInChildren<StoryLog>();
 
-    Size GetRendererSize(Bounds bounds, Camera camera) {
+    private Size GetRendererSize(Bounds bounds, Camera camera) {
         ReadOnlySpan<Vector3> corners = [
             new(bounds.min.x, bounds.min.y, bounds.min.z),
             new(bounds.max.x, bounds.min.y, bounds.min.z),
@@ -214,7 +232,7 @@ sealed class ESPMod : MonoBehaviour {
         };
     }
 
-    void RenderBounds(
+    private void RenderBounds(
         Camera camera,
         Bounds bounds,
         Color colour,
@@ -237,9 +255,9 @@ sealed class ESPMod : MonoBehaviour {
         action?.Invoke(colour, rendererCentrePoint);
     }
 
-    void RenderBounds(Camera camera, Bounds bounds, Action<Color, Vector3>? action) =>
+    private void RenderBounds(Camera camera, Bounds bounds, Action<Color, Vector3>? action) =>
         this.RenderBounds(camera, bounds, Color.white, action);
 
-    Action<Color, Vector3> RenderLabel(string name) => (colour, rendererCentrePoint) =>
+    private Action<Color, Vector3> RenderLabel(string name) => (colour, rendererCentrePoint) =>
         Helper.DrawLabel(rendererCentrePoint, name, colour);
 }

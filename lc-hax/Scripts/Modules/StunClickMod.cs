@@ -17,7 +17,7 @@ sealed class StunClickMod : MonoBehaviour {
             enemy.mainScript.SetEnemyStunned(true, 5.0f);
         }
 
-        if (!collider.TryGetComponent(out Turret _) && !collider.TryGetComponent(out Landmine _)) {
+        if (!collider.TryGetComponent(out Turret _) && !collider.TryGetComponent(out Landmine _) && !collider.TryGetComponent(out SpikeRoofTrap _)) {
             return;
         }
 

@@ -74,6 +74,15 @@ sealed class TriggerMod : MonoBehaviour, IEnemyPrompter {
                 }
             }
 
+            if (collider.TryGetComponent(out SpikeRoofTrap spike)) {
+                if (!Setting.EnableStunOnLeftClick) {
+                    spike.Slam();
+                }
+                else {
+                    spike.ToggleSpikes();
+                }
+            }
+
             if (collider.TryGetComponent(out Landmine landmine)) {
                 if (!Setting.EnableStunOnLeftClick) {
                     landmine.TriggerMine();
