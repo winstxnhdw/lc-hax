@@ -14,6 +14,7 @@
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
     <RestorePackagesWithLockFile>true</RestorePackagesWithLockFile>
+    <NoWarn>CS9057</NoWarn>
 
   </PropertyGroup>
 
@@ -535,8 +536,6 @@
       <HintPath>$(GamePath)/Mono.Security.dll</HintPath>
       <Private>False</Private>
     </Reference>
-
-    <ProjectReference Include="..\analysers\analysers.csproj" />
 
     <PackageReference Include="Nullable.Extended.Analyzer" Version="1.15.6169" />
 

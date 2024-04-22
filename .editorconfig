@@ -6,6 +6,7 @@ indent_style = space
 indent_size = 4
 trim_trailing_whitespace = true
 insert_final_newline = true
+dotnet_diagnostic.CS9057.severity = none # Suppress CS9057 warning for analyzer assemblies
 
 [{*.yml,*.csproj,*.json}]
 indent_size = 2
@@ -90,4 +91,8 @@ dotnet_diagnostic.IDE0002.severity = none   # Simplify member access
 dotnet_diagnostic.IDE0051.severity = none   # Remove unused private member
 dotnet_diagnostic.IDE0072.severity = none   # Add missing cases to switch expression
 dotnet_diagnostic.IDE0130.severity = none   # Namespace does not match folder structure
-dotnet_diagnostic.CS8524.severity = none
+dotnet_diagnostic.IDE0048.severity = none   # Use explicit type instead of var
+dotnet_diagnostic.IDE1006.severity = none   # Naming rule violation
+dotnet_diagnostic.CS8524.severity = none # The switch expression does not handle all possible values of its input type
+dotnet_diagnostic.cs8601.severity = none # Possible null reference assignment
+dotnet_diagnostic.CS8600.severity = none  # Converting null literal or possible null value to non-nullable type
