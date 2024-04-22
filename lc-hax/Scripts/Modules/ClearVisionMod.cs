@@ -9,16 +9,17 @@ sealed class ClearVisionMod : MonoBehaviour {
     float InternalLight { get; set; } = 2.0f;
     float OutsideLight { get; set; } = 1.0f;
     float LightIntensity {
-        get => this.isInsideFactory ? this.InternalLight : this.OutsideLight;
+        get => this.IsInsideFactory ? this.InternalLight : this.OutsideLight;
         set {
-            if (this.isInsideFactory) {
+            if (this.IsInsideFactory) {
                 this.InternalLight = value;
-            } else {
+            }
+            else {
                 this.OutsideLight = value;
             }
         }
     }
-    bool isInsideFactory => Helper.LocalPlayer is PlayerControllerB player && player.isInsideFactory;
+    bool IsInsideFactory => Helper.LocalPlayer is PlayerControllerB player && player.isInsideFactory;
     void OnEnable() {
         InputListener.OnF4Press += this.DecreaseLightIntensity;
         InputListener.OnF5Press += this.IncreaseLightIntensity;
@@ -39,23 +40,6 @@ sealed class ClearVisionMod : MonoBehaviour {
         Console.WriteLine($"LightIntensity: {this.LightIntensity}");
     }
 
-    float GetOptimalOutsideLightIntensity() {
-        if (this.isInsideFactory) {
-            return this.GetOptimalInsideLightIntensity();
-        }
-
-        return this.LightIntensity;
-    }
-
-    float GetOptimalInsideLightIntensity() {
-        if (!this.isInsideFactory) {
-            return this.GetOptimalOutsideLightIntensity();
-        }
-
-        // from the 
-
-        return this.LightIntensity;
-    }
     IEnumerator SetNightVision(object[] args) {
         WaitForEndOfFrame waitForEndOfFrame = new();
 

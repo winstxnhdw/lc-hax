@@ -35,16 +35,13 @@ internal static partial class Helper {
     /// <summary>
     /// Checks if the local player is the owner of the enemy.
     /// </summary>
-    internal static bool IsOwner(this EnemyAI enemy) {
-        if(Helper.LocalPlayer is not PlayerControllerB localPlayer) return false;
-        return enemy.IsOwner(localPlayer);
-    }
+    internal static bool IsOwner(this EnemyAI enemy) => Helper.LocalPlayer is PlayerControllerB localPlayer && enemy.IsOwner(localPlayer);
 
     /// <summary>
     /// Gives the local player ownership of the enemy.
     /// </summary>
     internal static void TakeOwnership(this EnemyAI enemy) {
-        if(Helper.LocalPlayer is not PlayerControllerB localPlayer) return;
+        if (Helper.LocalPlayer is not PlayerControllerB localPlayer) return;
         enemy.SetOwner(localPlayer);
     }
     /// <summary>
@@ -92,7 +89,7 @@ internal static partial class Helper {
     internal static void Kill(this EnemyAI enemy) {
         enemy.TakeOwnership();
 
-        switch(enemy) {
+        switch (enemy) {
             case NutcrackerEnemyAI nutcracker:
                 nutcracker.KillEnemy();
                 break;
@@ -210,12 +207,12 @@ internal static partial class Helper {
     /// <summary>
     /// Converts the Player to a Threat object with max priority for any enemy.
     /// </summary>
-    /// <param name="Player"></param>
+    /// <param name="player"></param>
     /// <returns></returns>
-    internal static Threat ToThreat(this PlayerControllerB Player) {
+    internal static Threat ToThreat(this PlayerControllerB player) {
         return new() {
-            threatScript = Player,
-            lastSeenPosition = Player.transform.position,
+            threatScript = player,
+            lastSeenPosition = player.transform.position,
             threatLevel = int.MaxValue,
             type = ThreatType.Player,
             focusLevel = int.MaxValue,

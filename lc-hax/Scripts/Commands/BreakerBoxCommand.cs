@@ -1,7 +1,7 @@
 using Hax;
 using System.Linq;
 
-[Command("breakerbox")]
+[Command("breaker")]
 class BreakerBoxCommand : ICommand {
 
 

@@ -5,17 +5,15 @@ using GameNetcodeStuff;
 using Hax;
 using UnityEngine;
 using System.Collections.Generic;
-using Steamworks.Ugc;
 using Unity.Netcode;
 using System.Collections;
 using System;
 using Object = UnityEngine.Object;
-using static Steamworks.InventoryItem;
 
 [PrivilegedCommand("give")]
 internal class GiveCommand : ICommand {
 
-    Dictionary<string, Dictionary<string, int>> kits = new() {
+    readonly Dictionary<string, Dictionary<string, int>> kits = new() {
     { "starter", new Dictionary<string, int> { { "shovel", 1 }, { "proflash", 1 }, { "walkie", 1 } } },
     { "shotgun", new Dictionary<string, int> { { "shotgun", 1 }, { "ammo", 2 } } }
 };
@@ -120,7 +118,7 @@ internal class GiveCommand : ICommand {
 
 
     void GiveKit(PlayerControllerB player, string kitName, int baseAmount) {
-        if (this.kits.TryGetValue(kitName, out var itemsToGive)) {
+        if (this.kits.TryGetValue(kitName, out Dictionary<string, int>? itemsToGive)) {
             foreach (KeyValuePair<string, int> itemEntry in itemsToGive) {
                 string itemName = itemEntry.Key;
                 int itemAmount = itemEntry.Value * baseAmount; // Multiply the specified amount by the base amount.
@@ -154,7 +152,7 @@ internal class GiveCommand : ICommand {
 
 
     IEnumerator Spawn(PlayerControllerB player, Item item, int amount) {
-        WaitForEndOfFrame delayframe = new ();
+        WaitForEndOfFrame delayframe = new();
         if (item == null) yield break;
         Transform? target = PossessionMod.Instance?.PossessedEnemy is not null ? PossessionMod.Instance.PossessedEnemy.transform : Setting.EnablePhantom ? Helper.CurrentCamera?.transform : player.transform;
         if (target == null) yield break;

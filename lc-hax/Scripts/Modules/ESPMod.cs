@@ -63,7 +63,7 @@ internal sealed class ESPMod : MonoBehaviour {
             if (grabbableObject == null) return;
             Vector3 rendererCentrePoint = camera.WorldToEyesPoint(grabbableObject.transform.position);
 
-            if (PossessionMod.Instance is { IsPossessed: true } && !(PossessionMod.Instance is { PossessedEnemy: HoarderBugAI } || PossessionMod.Instance is { PossessedEnemy: BaboonBirdAI })) return;
+            if (PossessionMod.Instance is { IsPossessed: true } and not ({ PossessedEnemy: HoarderBugAI } or { PossessedEnemy: BaboonBirdAI })) return;
 
             if (rendererCentrePoint.z <= 2.0f) {
                 return;
@@ -83,10 +83,10 @@ internal sealed class ESPMod : MonoBehaviour {
             if (rendererPair.GameObject is not BreakerBox breaker) return;
 
             if (breaker.leversSwitchedOff <= 0 && !breaker.isPowerOn) {
-                this.RenderBounds(camera, rendererPair.Renderer.bounds, Helper.ExtraColors.SpringGreen, this.RenderLabel("Breaker Box (ON)"));
+                this.RenderBounds(camera, rendererPair.Renderer.bounds, Helper.ExtraColors.Yellow, this.RenderLabel("Breaker Box (OFF)"));
             }
             else if (breaker.leversSwitchedOff > 0 && breaker.isPowerOn) {
-                this.RenderBounds(camera, rendererPair.Renderer.bounds, Helper.ExtraColors.Yellow, this.RenderLabel("Breaker Box (OFF)"));
+                this.RenderBounds(camera, rendererPair.Renderer.bounds, Helper.ExtraColors.SpringGreen, this.RenderLabel("Breaker Box (ON)"));
             }
         });
 
@@ -219,7 +219,7 @@ internal sealed class ESPMod : MonoBehaviour {
         this.BreakerBoxRenderers = Helper.FindObjects<BreakerBox>().Select(breakerbox =>
             new RendererPair<BreakerBox, Renderer>() {
                 GameObject = breakerbox,
-                Renderer = breakerbox.GetComponent<Renderer>()
+                Renderer = breakerbox.gameObject.FindObject("Mesh")?.GetComponent<Renderer>()
             }
             ).ToArray();
 
