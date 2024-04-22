@@ -90,8 +90,6 @@ internal sealed class ESPMod : MonoBehaviour {
             }
         });
 
-
-
         this.SpikeRoofTrapRenderers.ForEach(rendererPair => {
             if (rendererPair.GameObject is not SpikeRoofTrap spike) return;
 
@@ -102,7 +100,6 @@ internal sealed class ESPMod : MonoBehaviour {
                 this.RenderBounds(camera, rendererPair.Renderer.bounds, Helper.ExtraColors.YellowGreen, this.RenderLabel("Spike Roof Trap (OFF)"));
             }
         });
-
 
         this.LandmineRenderers.ForEach(rendererPair => {
             if (rendererPair.GameObject is not Landmine mine) return;
@@ -216,7 +213,7 @@ internal sealed class ESPMod : MonoBehaviour {
             }
             ).ToArray();
 
-        this.BreakerBoxRenderers = Helper.FindObjects<BreakerBox>().Where(x=> x.name.Contains("(Clone)")).Select(breakerbox =>
+        this.BreakerBoxRenderers = Helper.FindObjects<BreakerBox>().Where(x => x.name.Contains("(Clone)")).Select(breakerbox =>
             new RendererPair<BreakerBox, Renderer>() {
                 GameObject = breakerbox,
                 Renderer = breakerbox.gameObject.FindObject("Mesh")?.GetComponent<Renderer>()

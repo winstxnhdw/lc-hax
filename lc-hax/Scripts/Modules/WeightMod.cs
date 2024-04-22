@@ -1,15 +1,12 @@
-using System.Collections;
 using GameNetcodeStuff;
 using Hax;
+using System.Collections;
 using UnityEngine;
 
 internal sealed class WeightMod : MonoBehaviour {
-
-
-
     internal static WeightMod? Instance { get; private set; }
 
-    void Awake() {
+    private void Awake() {
         if (WeightMod.Instance != null) {
             Destroy(this);
             return;
@@ -17,10 +14,9 @@ internal sealed class WeightMod : MonoBehaviour {
         WeightMod.Instance = this;
     }
 
-    Coroutine? WeightCoroutine { get; set; }
+    private Coroutine? WeightCoroutine { get; set; }
 
-
-    IEnumerator SetWeight(object[] args) {
+    private IEnumerator SetWeight(object[] args) {
         WaitForEndOfFrame waitForEndOfFrame = new();
         WaitForSeconds waitForOneSecond = new(1.0f);
 
@@ -49,8 +45,9 @@ internal sealed class WeightMod : MonoBehaviour {
 
     public void Start() => this.StartRoutine();
 
-    public void OnDisable()=> this.OnStopRoutine();
+    public void OnDisable() => this.OnStopRoutine();
 
     public void OnEnable() => this.StartRoutine();
+
     public void OnDestroy() => this.OnStopRoutine();
 }
