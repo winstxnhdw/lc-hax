@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
 
@@ -538,8 +538,6 @@
     </Reference>
 
     <PackageReference Include="Nullable.Extended.Analyzer" Version="1.15.6169" />
-
-    <PackageReference Include="RequireNamedArgs" Version="0.0.7" />
 
     <PackageReference Include="Quickenshtein" Version="1.5.1" />
 
