@@ -9,6 +9,8 @@ internal sealed class ESPMod : MonoBehaviour {
     private RendererPair<Landmine, Renderer>[] LandmineRenderers { get; set; } = [];
     private RendererPair<SpikeRoofTrap, Renderer>[] SpikeRoofTrapRenderers { get; set; } = [];
 
+    private RendererPair<BreakerBox, Renderer>[] BreakerBoxRenderers { get; set; } = [];
+
     private Renderer[] TurretRenderers { get; set; } = [];
     private Renderer[] EntranceRenderers { get; set; } = [];
     private Renderer[] StoryLog { get; set; } = [];
@@ -77,6 +79,19 @@ internal sealed class ESPMod : MonoBehaviour {
     private void RenderWhenMapLoads(Camera camera) {
         if (!this.IsMapLoaded) return;
 
+        this.BreakerBoxRenderers.ForEach(rendererPair => {
+            if (rendererPair.GameObject is not BreakerBox breaker) return;
+
+            if (breaker.leversSwitchedOff <= 0 && !breaker.isPowerOn) {
+                this.RenderBounds(camera, rendererPair.Renderer.bounds, Helper.ExtraColors.SpringGreen, this.RenderLabel("Breaker Box (ON)"));
+            }
+            else if (breaker.leversSwitchedOff > 0 && breaker.isPowerOn) {
+                this.RenderBounds(camera, rendererPair.Renderer.bounds, Helper.ExtraColors.Yellow, this.RenderLabel("Breaker Box (OFF)"));
+            }
+        });
+
+
+
         this.SpikeRoofTrapRenderers.ForEach(rendererPair => {
             if (rendererPair.GameObject is not SpikeRoofTrap spike) return;
 
@@ -87,6 +102,7 @@ internal sealed class ESPMod : MonoBehaviour {
                 this.RenderBounds(camera, rendererPair.Renderer.bounds, Helper.ExtraColors.YellowGreen, this.RenderLabel("Spike Roof Trap (OFF)"));
             }
         });
+
 
         this.LandmineRenderers.ForEach(rendererPair => {
             if (rendererPair.GameObject is not Landmine mine) return;
@@ -193,12 +209,20 @@ internal sealed class ESPMod : MonoBehaviour {
             }
             ).ToArray();
 
-        this.SpikeRoofTrapRenderers = Helper.FindObjects<SpikeRoofTrap>().Select(mine =>
+        this.SpikeRoofTrapRenderers = Helper.FindObjects<SpikeRoofTrap>().Select(spiketrap =>
             new RendererPair<SpikeRoofTrap, Renderer>() {
-                GameObject = mine,
-                Renderer = mine.GetComponent<Renderer>()
+                GameObject = spiketrap,
+                Renderer = spiketrap.GetComponent<Renderer>()
             }
             ).ToArray();
+
+        this.BreakerBoxRenderers = Helper.FindObjects<BreakerBox>().Select(breakerbox =>
+            new RendererPair<BreakerBox, Renderer>() {
+                GameObject = breakerbox,
+                Renderer = breakerbox.GetComponent<Renderer>()
+            }
+            ).ToArray();
+
         this.TurretRenderers = this.GetRenderers<Turret>();
         this.EntranceRenderers = this.GetRenderers<EntranceTeleport>();
     }

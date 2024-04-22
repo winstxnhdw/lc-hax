@@ -1,6 +1,7 @@
 using System.Linq;
 using System.Collections.Generic;
 using Hax;
+using System;
 
 [Command("visit")]
 class VisitCommand : ICommand {
@@ -17,6 +18,8 @@ class VisitCommand : ICommand {
         if (args[0] is not string moon) {
             Chat.Print("Usage: visit <moon>");
             Chat.Print("Moons: " + string.Join(", ", VisitCommand.Levels.Keys));
+            // dump to console as well
+            Console.WriteLine("Moons: " + string.Join(", ", VisitCommand.Levels.Keys));
             return;
         }
 

@@ -3,10 +3,22 @@ using Hax;
 using System;
 using UnityEngine;
 using UnityEngine.Rendering.HighDefinition;
+using GameNetcodeStuff;
 
 sealed class ClearVisionMod : MonoBehaviour {
-    float LightIntensity { get; set; } = 2.0f;
-
+    float InternalLight { get; set; } = 2.0f;
+    float OutsideLight { get; set; } = 1.0f;
+    float LightIntensity {
+        get => this.isInsideFactory ? this.InternalLight : this.OutsideLight;
+        set {
+            if (this.isInsideFactory) {
+                this.InternalLight = value;
+            } else {
+                this.OutsideLight = value;
+            }
+        }
+    }
+    bool isInsideFactory => Helper.LocalPlayer is PlayerControllerB player && player.isInsideFactory;
     void OnEnable() {
         InputListener.OnF4Press += this.DecreaseLightIntensity;
         InputListener.OnF5Press += this.IncreaseLightIntensity;
@@ -17,10 +29,33 @@ sealed class ClearVisionMod : MonoBehaviour {
         InputListener.OnF5Press -= this.IncreaseLightIntensity;
     }
 
-    void IncreaseLightIntensity() => this.LightIntensity = Math.Clamp(this.LightIntensity + 1.0f, 0.0f, 10.0f);
+    void IncreaseLightIntensity() {
+        this.LightIntensity = Math.Clamp(this.LightIntensity + 1.0f, 0.0f, 10.0f);
+        Console.WriteLine($"LightIntensity: {this.LightIntensity}");
+    }
 
-    void DecreaseLightIntensity() => this.LightIntensity = Math.Clamp(this.LightIntensity - 1.0f, 0.0f, 10.0f);
+    void DecreaseLightIntensity() {
+        this.LightIntensity = Math.Clamp(this.LightIntensity - 1.0f, 0.0f, 10.0f);
+        Console.WriteLine($"LightIntensity: {this.LightIntensity}");
+    }
 
+    float GetOptimalOutsideLightIntensity() {
+        if (this.isInsideFactory) {
+            return this.GetOptimalInsideLightIntensity();
+        }
+
+        return this.LightIntensity;
+    }
+
+    float GetOptimalInsideLightIntensity() {
+        if (!this.isInsideFactory) {
+            return this.GetOptimalOutsideLightIntensity();
+        }
+
+        // from the 
+
+        return this.LightIntensity;
+    }
     IEnumerator SetNightVision(object[] args) {
         WaitForEndOfFrame waitForEndOfFrame = new();
 
@@ -105,7 +140,6 @@ sealed class ClearVisionMod : MonoBehaviour {
     //        yield return waitForFiveSeconds;
     //    }
     //}
-
     void Start() {
         _ = this.StartResilientCoroutine(this.DisableFog);
         //_ = this.StartResilientCoroutine(this.DisableSteamValves);

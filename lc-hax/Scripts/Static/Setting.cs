@@ -12,6 +12,8 @@ static class Setting {
     internal static bool EnableFakeDeath { get; set; } = false;
     internal static bool EnableEavesdrop { get; set; } = false;
     internal static bool EnableUnlimitedJump { get; set; } = true;
+    internal static bool EnableUnlimitedGiftBox { get; set; } = false;
+
     internal static bool InvertYAxis => IngamePlayerSettings.Instance.settings.invertYAxis;
     internal static bool EnableNoSinking { get; set; } = true;
     internal static bool DisableSpiderWebSlowness { get; set; } = true;

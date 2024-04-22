@@ -10,13 +10,16 @@ class GiftBoxPatch {
 
     [HarmonyPatch(nameof(GiftBoxItem.ItemActivate))]
     static bool Prefix(GiftBoxItem __instance) {
+        if (!Setting.EnableUnlimitedGiftBox) return true;
         GiftBoxPatch.LocalPlayerActivated = true;
         __instance.OpenGiftBoxServerRpc();
         return false;
     }
 
     [HarmonyPatch(nameof(GiftBoxItem.OpenGiftBoxClientRpc))]
-    static bool Prefix(NetworkObjectReference netObjectRef, int presentValue, Vector3 startFallingPos) {
+    static bool Prefix(GiftBoxItem __instance, NetworkObjectReference netObjectRef, int presentValue, Vector3 startFallingPos) {
+        if (!Setting.EnableUnlimitedGiftBox) return true;
+
         bool skipFlag = !GiftBoxPatch.LocalPlayerActivated;
         GiftBoxPatch.LocalPlayerActivated = false;
         return skipFlag;
@@ -24,5 +27,5 @@ class GiftBoxPatch {
 
     [HarmonyPrefix]
     [HarmonyPatch(nameof(GiftBoxItem.OpenGiftBoxNoPresentClientRpc))]
-    static bool Prefix() => false;
+    static bool Prefix() => !Setting.EnableUnlimitedGiftBox;
 }
