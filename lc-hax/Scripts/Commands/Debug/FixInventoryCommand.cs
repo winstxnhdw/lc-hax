@@ -1,6 +1,5 @@
 using GameNetcodeStuff;
 using Hax;
-using UnityEngine;
 
 [DebugCommand("fixinventory")]
 class FixInventoryCommand : ICommand {

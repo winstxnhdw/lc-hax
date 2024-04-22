@@ -10,7 +10,7 @@ class BreakerBoxCommand : ICommand {
             Chat.Print("Usage: breaker <on/off>");
             return;
         }
-        BreakerBox[] Breakers = Helper.FindObjects<BreakerBox>();
+        BreakerBox[] Breakers = Helper.FindObjects<BreakerBox>().Where(breaker => breaker.name.Contains("(Clone)")).ToArray();
 
         if (Breakers.Count() is 0) {
             Chat.Print("Breaker box is not found!");
@@ -18,10 +18,10 @@ class BreakerBoxCommand : ICommand {
         }
 
         if (args[0] is "on") {
-            Breakers.ForEach(breaker => breaker.SwitchBreaker(true));
+            Breakers.ForEach(breaker => breaker.SetBreakerBox(true));
         }
         else if (args[0] is "off") {
-            Breakers.ForEach(breaker => breaker.SwitchBreaker(false));
+            Breakers.ForEach(breaker => breaker.SetBreakerBox(false));
         }
         else {
             Chat.Print("Invalid property!");

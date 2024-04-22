@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
 
@@ -9,7 +9,7 @@
     <RuntimeIdentifier>win-x64</RuntimeIdentifier>
     <TargetFramework>netstandard2.1</TargetFramework>
     <GamePath>D:/SteamLibrary/steamapps/common/Lethal Company/Lethal Company_Data/Managed/</GamePath>
-    <NuGetPath>./NuGet</NuGetPath>
+    <NuGetPath>./References/NuGet</NuGetPath>
     <RootNamespace>lc-hax</RootNamespace>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
@@ -544,7 +544,7 @@
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
 
     <PackageReference Include="Lib.Harmony" Version="2.3.3" />
-
+    
     <EmbeddedResource Include="$(NuGetPath)/lib.harmony/2.3.3/lib/net48/0Harmony.dll" />
 
     <EmbeddedResource Include="$(NuGetPath)/Quickenshtein/1.5.1/lib/netstandard2.0/Quickenshtein.dll" />

@@ -96,3 +96,4 @@ dotnet_diagnostic.IDE1006.severity = none   # Naming rule violation
 dotnet_diagnostic.CS8524.severity = none # The switch expression does not handle all possible values of its input type
 dotnet_diagnostic.cs8601.severity = none # Possible null reference assignment
 dotnet_diagnostic.CS8600.severity = none  # Converting null literal or possible null value to non-nullable type
+dotnet_diagnostic.IDE0056.severity = none   

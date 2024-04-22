@@ -82,11 +82,11 @@ internal sealed class ESPMod : MonoBehaviour {
         this.BreakerBoxRenderers.ForEach(rendererPair => {
             if (rendererPair.GameObject is not BreakerBox breaker) return;
 
-            if (breaker.leversSwitchedOff <= 0 && !breaker.isPowerOn) {
-                this.RenderBounds(camera, rendererPair.Renderer.bounds, Helper.ExtraColors.Yellow, this.RenderLabel("Breaker Box (OFF)"));
-            }
-            else if (breaker.leversSwitchedOff > 0 && breaker.isPowerOn) {
+            if (breaker.leversSwitchedOff == 0 && breaker.isPowerOn) {
                 this.RenderBounds(camera, rendererPair.Renderer.bounds, Helper.ExtraColors.SpringGreen, this.RenderLabel("Breaker Box (ON)"));
+            }
+            else {
+                this.RenderBounds(camera, rendererPair.Renderer.bounds, Helper.ExtraColors.Yellow, this.RenderLabel("Breaker Box (OFF)"));
             }
         });
 
@@ -216,7 +216,7 @@ internal sealed class ESPMod : MonoBehaviour {
             }
             ).ToArray();
 
-        this.BreakerBoxRenderers = Helper.FindObjects<BreakerBox>().Select(breakerbox =>
+        this.BreakerBoxRenderers = Helper.FindObjects<BreakerBox>().Where(x=> x.name.Contains("(Clone)")).Select(breakerbox =>
             new RendererPair<BreakerBox, Renderer>() {
                 GameObject = breakerbox,
                 Renderer = breakerbox.gameObject.FindObject("Mesh")?.GetComponent<Renderer>()
