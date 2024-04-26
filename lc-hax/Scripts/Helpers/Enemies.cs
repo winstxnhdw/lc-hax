@@ -16,6 +16,10 @@ internal static partial class Helper {
             .Where(enemy => enemy.IsSpawned)
             .ToHashSet();
 
+    /// <summary>
+    /// Only takes ownership of the enemy if it is not already owned.
+    /// </summary>
+    /// <param name="enemy"></param>
     internal static void TakeOwnerShipIfNotOwned(this EnemyAI enemy) {
         if (enemy.IsOwner()) return;
         enemy.TakeOwnership();
