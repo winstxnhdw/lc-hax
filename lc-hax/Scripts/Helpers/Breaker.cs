@@ -29,22 +29,21 @@ internal static partial class Helper {
 
     internal static bool Get_BreakerBoxSwitch_State(this InteractTrigger breakerswitch) {
         if (breakerswitch == null) return false;
-        // extract the animator from the interact trigger
         Animator animator = breakerswitch.GetComponent<Animator>();
         return animator != null && animator.GetBool("turnedLeft");
     }
-    internal static void Set_BreakerBox_Switch_state(this InteractTrigger breakerswitch, bool On) {
+    internal static void Set_BreakerBox_Switch_state(this InteractTrigger breakerswitch, bool Active) {
         if (breakerswitch == null) return;
-        if (breakerswitch.Get_BreakerBoxSwitch_State() == On) return;
+        if (breakerswitch.Get_BreakerBoxSwitch_State() == Active) return;
         breakerswitch.Interact(Helper.LocalPlayer?.transform);
     }
 
     // Set a specified BreakerBox switch to a specified state
-    internal static void Set_BreakerBox_Switch(this BreakerBox breaker, int index, bool On) {
+    internal static void Set_BreakerBox_Switch(this BreakerBox breaker, int index, bool Active) {
         if (breaker == null) return;
         InteractTrigger[] interactTriggers = breaker.Get_BreakerBox_Switches();
         if (interactTriggers.Length == 0) return;
         if (index < 0 || index >= interactTriggers.Length) return;
-        interactTriggers[index].Set_BreakerBox_Switch_state(On);
+        interactTriggers[index].Set_BreakerBox_Switch_state(Active);
     }
 }
