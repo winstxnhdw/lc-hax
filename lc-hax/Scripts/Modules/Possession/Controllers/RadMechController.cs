@@ -18,7 +18,7 @@ internal class RadMechController : IEnemyController<RadMechAI> {
         bool inFlyingMode = enemy.Reflect().GetInternalField<bool>("inFlyingMode");
         if (inFlyingMode) return;
         if (isSprinting) {
-            enemy.timeBetweenSteps = 0.05f;
+            enemy.timeBetweenSteps = 0.2f;
         }
         else {
             enemy.timeBetweenSteps = 0.7f;
@@ -33,7 +33,7 @@ internal class RadMechController : IEnemyController<RadMechAI> {
 
     public float InteractRange(RadMechAI _) => 0f;
 
-    public bool SyncAnimationSpeedEnabled(RadMechAI _) => true;
+    public bool SyncAnimationSpeedEnabled(RadMechAI _) => false;
 
     public void OnOutsideStatusChange(RadMechAI enemy) => enemy.StopSearch(enemy.searchForPlayers, true);
 

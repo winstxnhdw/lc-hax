@@ -6,8 +6,10 @@ using UnityEngine.Rendering.HighDefinition;
 using GameNetcodeStuff;
 
 sealed class ClearVisionMod : MonoBehaviour {
+
+    internal static ClearVisionMod? Instance { get; private set; }
     float InternalLight { get; set; } = 2.0f;
-    float OutsideLight { get; set; } = 1.0f;
+    float OutsideLight { get; set; } = 0.5f;
     float LightIntensity {
         get => this.IsInsideFactory ? this.InternalLight : this.OutsideLight;
         set {
@@ -20,15 +22,6 @@ sealed class ClearVisionMod : MonoBehaviour {
         }
     }
     bool IsInsideFactory => Helper.LocalPlayer is PlayerControllerB player && player.isInsideFactory;
-    void OnEnable() {
-        InputListener.OnF4Press += this.DecreaseLightIntensity;
-        InputListener.OnF5Press += this.IncreaseLightIntensity;
-    }
-
-    void OnDisable() {
-        InputListener.OnF4Press -= this.DecreaseLightIntensity;
-        InputListener.OnF5Press -= this.IncreaseLightIntensity;
-    }
 
     void IncreaseLightIntensity() {
         this.LightIntensity = Math.Clamp(this.LightIntensity + 1.0f, 0.0f, 10.0f);
@@ -110,24 +103,70 @@ sealed class ClearVisionMod : MonoBehaviour {
         }
     }
 
-    //IEnumerator DisableSteamValves(object[] args) {
-    //    WaitForSeconds waitForFiveSeconds = new(5.0f);
-
-    //    while (true) {
-    //        HaxObjects
-    //            .Instance?
-    //            .SteamValves?
-    //            .ForEach(valve =>
-    //                valve?.valveSteamParticle.Stop(true, ParticleSystemStopBehavior.StopEmittingAndClear)
-    //            );
-
-    //        yield return waitForFiveSeconds;
-    //    }
-    //}
-    void Start() {
-        _ = this.StartResilientCoroutine(this.DisableFog);
-        //_ = this.StartResilientCoroutine(this.DisableSteamValves);
-        _ = this.StartResilientCoroutine(this.DisableVisor);
-        _ = this.StartResilientCoroutine(this.SetNightVision);
+    void Initalize()
+    {
+        if(Fog is null)
+        {
+            Fog = this.StartResilientCoroutine(this.DisableFog);
+        }
+        if(Visor is null)
+        {
+            Visor = this.StartResilientCoroutine(this.DisableVisor);
+        }
+        if(NightVision is null)
+        {
+            NightVision = this.StartResilientCoroutine(this.SetNightVision);
+        }
     }
+    void Start() {
+        if (ClearVisionMod.Instance != null)
+        {
+            Destroy(this);
+            return;
+        }
+        ClearVisionMod.Instance = this;
+        this.Initalize();
+    }
+
+    void HaltRoutines()
+    {
+        if (Fog is Coroutine fog)
+        {
+            this.StopCoroutine(fog);
+            Fog = null;
+        }
+        if (NightVision is Coroutine nightVision)
+        {
+            this.StopCoroutine(nightVision);
+            NightVision = null;
+        }
+    }
+
+    void RestoreVision()
+    {
+        if(Helper.TimeOfDay is not TimeOfDay timeOfDay) return;
+        if(timeOfDay.sunAnimator is not Animator sunAnimator) return;
+        sunAnimator.enabled = true;
+        timeOfDay.insideLighting = IsInsideFactory;
+    }
+
+    void OnEnable()
+    {
+        InputListener.OnF4Press += this.DecreaseLightIntensity;
+        InputListener.OnF5Press += this.IncreaseLightIntensity;
+        this.Initalize();
+    }
+
+    void OnDisable()
+    {
+        InputListener.OnF4Press -= this.DecreaseLightIntensity;
+        InputListener.OnF5Press -= this.IncreaseLightIntensity;
+        HaltRoutines();
+        RestoreVision();
+    }
+
+    Coroutine Fog { get; set; }
+    Coroutine Visor { get; set; }
+    Coroutine NightVision { get; set; }
+
 }
