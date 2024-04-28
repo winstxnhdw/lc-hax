@@ -35,7 +35,7 @@ internal static partial class Helper {
     internal static void Set_BreakerBox_Switch_state(this InteractTrigger breakerswitch, bool Active) {
         if (breakerswitch == null) return;
         if (breakerswitch.Get_BreakerBoxSwitch_State() == Active) return;
-        breakerswitch.Interact(Helper.LocalPlayer?.transform);
+        breakerswitch.Interact(Helper.HostPlayer?.transform);
     }
 
     // Set a specified BreakerBox switch to a specified state

@@ -41,7 +41,7 @@ internal class BaboonHawkController : IEnemyController<BaboonBirdAI> {
     }
 
     public void UsePrimarySkill(BaboonBirdAI enemy) {
-        if (enemy.heldScrap is null && enemy.FindNearbyItem() is GrabbableObject grabbable) {
+        if (enemy.heldScrap is null && enemy.FindNearbyItem(2) is GrabbableObject grabbable) {
             this.GrabItemAndSync(enemy, grabbable);
             return;
         }

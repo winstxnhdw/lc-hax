@@ -32,6 +32,13 @@ static partial class Helper {
     /// </summary>
     internal static PlayerControllerB? LocalPlayer => Helper.GameNetworkManager?.localPlayerController.Unfake();
 
+
+    /// <summary>
+    /// Host Player
+    /// </summary>
+    internal static PlayerControllerB? HostPlayer => Helper.Players[0];
+
+
     /// <summary>
     /// All Players (including non initialized players & Dead)
     /// </summary>

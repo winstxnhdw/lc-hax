@@ -265,9 +265,9 @@ class EnemyPromptHandler {
         //radMech.SetBehaviourState(RadMechBehaviorState.Alert);
         //radMech.SetMovingTowardsTargetPlayer(targetPlayer);
         //_ = radMech.SetDestinationToPosition(targetPlayer.transform.position);
-       _ = radMech.Reflect().SetInternalField("losTimer", 100f);
-        _ = radMech.Reflect().SetInternalField("lostCreatureInChase", false);
-        _ = radMech.Reflect().SetInternalField("lostCreatureInChaseDebounce", false);
+       //_ = radMech.Reflect().SetInternalField("losTimer", 100f);
+       // _ = radMech.Reflect().SetInternalField("lostCreatureInChase", false);
+       // _ = radMech.Reflect().SetInternalField("lostCreatureInChaseDebounce", false);
         radMech.SetOwner(targetPlayer);
         return true;
     }
