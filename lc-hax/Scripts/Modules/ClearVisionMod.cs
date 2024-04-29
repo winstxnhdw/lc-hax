@@ -4,36 +4,104 @@ using System;
 using UnityEngine;
 using UnityEngine.Rendering.HighDefinition;
 using GameNetcodeStuff;
+using UnityEngine.UI;
 
 sealed class ClearVisionMod : MonoBehaviour {
 
     internal static ClearVisionMod? Instance { get; private set; }
-    float InternalLight { get; set; } = 2.0f;
+    float LightIntensity_Min => 0f;
+    float LightIntensity_Max => 35f;
+
+    float InternalLight { get; set; } = 25.0f;
     float OutsideLight { get; set; } = 0.5f;
-    float LightIntensity {
+    float LightIntensity
+    {
         get => this.IsInsideFactory ? this.InternalLight : this.OutsideLight;
-        set {
-            if (this.IsInsideFactory) {
+        set
+        {
+            if (this.IsInsideFactory)
+            {
                 this.InternalLight = value;
             }
-            else {
+            else
+            {
                 this.OutsideLight = value;
             }
         }
     }
+
+    internal GameObject SunObject { get; set; }
+    internal Light SunLight { get; set; }
+
+
+    private void Awake()
+    {
+        if (ClearVisionMod.Instance != null)
+        {
+            Destroy(this);
+            return;
+        }
+        ClearVisionMod.Instance = this;
+        Initalize();
+        SpawnSun();
+    }
+
+    internal void SpawnSun()
+    {
+        if (SunObject is null)
+        {
+            SunObject = new GameObject("Lc-Hax Sun");
+        }
+        SunObject.transform.parent = null;
+        DontDestroyOnLoad(SunObject);
+        SunLight = SunObject.GetOrAddComponent<Light>();
+        SunLight.type = LightType.Directional;
+        SunLight.shape = LightShape.Cone;
+        SunLight.color = Color.white;
+        SunLight.transform.position = new Vector3(0F, 1000F, 0F);
+        SunLight.transform.rotation = Quaternion.Euler(90F, 0F, 0F);
+        var Data = SunLight.GetOrAddComponent<HDAdditionalLightData>();
+        if(Data != null)
+        {
+            Data.lightDimmer = 1;
+            Data.volumetricDimmer = 0;
+            Data.SetLightDimmer(1, 0);
+            Data.EnableShadows(false);
+            Data.distance = float.MaxValue;
+        }
+    }
+
+
+    private void Update()
+    {
+        if(SunObject == null) return;
+        if(SunLight == null) return;
+        if(Helper.StartOfRound.inShipPhase)
+        {
+            SunLight.enabled = false;
+            return;
+        }
+        if(Helper.TimeOfDay != null && Helper.TimeOfDay.sunIndirect != null)
+        {
+            SunLight.cullingMask = Helper.TimeOfDay.sunIndirect.cullingMask;
+        }
+        SunLight.enabled = enabled;
+        SunLight.intensity = LightIntensity;
+    }
+
     bool IsInsideFactory => Helper.LocalPlayer is PlayerControllerB player && player.isInsideFactory;
 
     void IncreaseLightIntensity() {
-        this.LightIntensity = Math.Clamp(this.LightIntensity + 1.0f, 0.0f, 10.0f);
+        this.LightIntensity = Math.Clamp(this.LightIntensity + 1.0f, LightIntensity_Min, LightIntensity_Max);
         Console.WriteLine($"LightIntensity: {this.LightIntensity}");
     }
 
     void DecreaseLightIntensity() {
-        this.LightIntensity = Math.Clamp(this.LightIntensity - 1.0f, 0.0f, 10.0f);
+        this.LightIntensity = Math.Clamp(this.LightIntensity - 1.0f, LightIntensity_Min, LightIntensity_Max);
         Console.WriteLine($"LightIntensity: {this.LightIntensity}");
     }
 
-    IEnumerator SetNightVision(object[] args) {
+    IEnumerator RemoveBlackSkybox(object[] args) {
         WaitForEndOfFrame waitForEndOfFrame = new();
 
         while (true) {
@@ -47,33 +115,13 @@ sealed class ClearVisionMod : MonoBehaviour {
                 continue;
             }
 
-            if (Helper.TimeOfDay is not TimeOfDay timeOfDay) {
-                yield return waitForEndOfFrame;
-                continue;
+            if(startOfRound.blackSkyVolume is not null)
+            {
+                startOfRound.blackSkyVolume.weight = 0f;
+                UnityEngine.Object.Destroy(startOfRound.blackSkyVolume);
+                // end the routine if the black sky volume is destroyed
+                yield break;
             }
-
-            if (timeOfDay.sunAnimator is not Animator sunAnimator) {
-                yield return waitForEndOfFrame;
-                continue;
-            }
-
-            if (!timeOfDay.sunIndirect.TryGetComponent(out HDAdditionalLightData lightData)) {
-                yield return waitForEndOfFrame;
-                continue;
-            }
-
-            sunAnimator.enabled = false;
-            timeOfDay.sunIndirect.transform.eulerAngles = new Vector3(90, 0, 0);
-            timeOfDay.sunIndirect.transform.position = camera.transform.position;
-            timeOfDay.sunIndirect.color = Color.white;
-            timeOfDay.sunIndirect.intensity = this.LightIntensity;
-            timeOfDay.sunIndirect.enabled = true;
-            timeOfDay.sunDirect.transform.eulerAngles = new Vector3(90, 0, 0);
-            timeOfDay.sunDirect.enabled = true;
-            lightData.lightDimmer = float.MaxValue;
-            lightData.distance = float.MaxValue;
-            timeOfDay.insideLighting = false;
-            startOfRound.blackSkyVolume.weight = 0;
 
             yield return waitForEndOfFrame;
         }
@@ -113,21 +161,15 @@ sealed class ClearVisionMod : MonoBehaviour {
         {
             Visor = this.StartResilientCoroutine(this.DisableVisor);
         }
-        if(NightVision is null)
+        if(NoblackSlybox is null)
         {
-            NightVision = this.StartResilientCoroutine(this.SetNightVision);
+            NoblackSlybox = this.StartResilientCoroutine(this.RemoveBlackSkybox);
+        }
+        if (SunLight is not null)
+        {
+            SunLight.enabled = true;
         }
     }
-    void Start() {
-        if (ClearVisionMod.Instance != null)
-        {
-            Destroy(this);
-            return;
-        }
-        ClearVisionMod.Instance = this;
-        this.Initalize();
-    }
-
     void HaltRoutines()
     {
         if (Fog is Coroutine fog)
@@ -135,19 +177,30 @@ sealed class ClearVisionMod : MonoBehaviour {
             this.StopCoroutine(fog);
             Fog = null;
         }
-        if (NightVision is Coroutine nightVision)
+        if (NoblackSlybox is Coroutine nightVision)
         {
             this.StopCoroutine(nightVision);
-            NightVision = null;
+            NoblackSlybox = null;
         }
     }
 
     void RestoreVision()
     {
-        if(Helper.TimeOfDay is not TimeOfDay timeOfDay) return;
-        if(timeOfDay.sunAnimator is not Animator sunAnimator) return;
-        sunAnimator.enabled = true;
-        timeOfDay.insideLighting = IsInsideFactory;
+        //if(Helper.TimeOfDay is not TimeOfDay timeOfDay) return;
+        //if(timeOfDay.sunAnimator is not Animator sunAnimator) return;
+        //sunAnimator.enabled = true;
+        //timeOfDay.insideLighting = IsInsideFactory;
+        if(SunLight is not null)
+        {
+            SunLight.enabled = false;
+        }
+        HaxObjects
+    .Instance?
+    .LocalVolumetricFogs?
+    .ForEach(localVolumetricFog =>
+        localVolumetricFog?.gameObject.SetActive(true)
+    );
+
     }
 
     void OnEnable()
@@ -167,6 +220,6 @@ sealed class ClearVisionMod : MonoBehaviour {
 
     Coroutine Fog { get; set; }
     Coroutine Visor { get; set; }
-    Coroutine NightVision { get; set; }
+    Coroutine NoblackSlybox { get; set; }
 
 }
