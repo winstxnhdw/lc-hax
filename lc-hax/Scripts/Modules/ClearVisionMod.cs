@@ -9,6 +9,8 @@ using UnityEngine.UI;
 sealed class ClearVisionMod : MonoBehaviour {
 
     internal static ClearVisionMod? Instance { get; private set; }
+    bool IsInsideFactory => Helper.LocalPlayer is PlayerControllerB player && player.isInsideFactory;
+
     float LightIntensity_Min => 0f;
     float LightIntensity_Max => 35f;
 
@@ -42,7 +44,6 @@ sealed class ClearVisionMod : MonoBehaviour {
             return;
         }
         ClearVisionMod.Instance = this;
-        Initalize();
         SpawnSun();
     }
 
@@ -72,24 +73,53 @@ sealed class ClearVisionMod : MonoBehaviour {
     }
 
 
-    private void Update()
+    private void UpdateNewSun()
     {
-        if(SunObject == null) return;
-        if(SunLight == null) return;
-        if(Helper.StartOfRound.inShipPhase)
+        if (SunObject == null) return;
+        if (SunLight == null) return;
+        if (Helper.StartOfRound.inShipPhase)
         {
             SunLight.enabled = false;
             return;
         }
-        if(Helper.TimeOfDay != null && Helper.TimeOfDay.sunIndirect != null)
+        if (Helper.TimeOfDay != null && Helper.TimeOfDay.sunIndirect != null)
         {
             SunLight.cullingMask = Helper.TimeOfDay.sunIndirect.cullingMask;
         }
         SunLight.enabled = enabled;
         SunLight.intensity = LightIntensity;
+
+    }
+    private void RemoveBlackSkybox()
+    {
+        if (Helper.StartOfRound.blackSkyVolume != null)
+        {
+            Helper.StartOfRound.blackSkyVolume.weight = 0f;
+            UnityEngine.Object.Destroy(Helper.StartOfRound.blackSkyVolume);
+        }
+    }
+    void ToggleFog(bool active)
+    {
+        HaxObjects.Instance?.LocalVolumetricFogs?.ForEach(localVolumetricFog => localVolumetricFog?.gameObject.SetActive(active));
     }
 
-    bool IsInsideFactory => Helper.LocalPlayer is PlayerControllerB player && player.isInsideFactory;
+    void RemoveVisor()
+    {
+        if (Helper.LocalPlayer?.localVisor is not null && Helper.LocalPlayer.localVisor.gameObject.activeSelf)
+        {
+            Helper.LocalPlayer.localVisor.gameObject.SetActive(false);
+        }
+    }
+
+
+    private void Update()
+    {
+        UpdateNewSun();
+        RemoveBlackSkybox();
+        RemoveVisor();
+        ToggleFog(false);
+    }
+
 
     void IncreaseLightIntensity() {
         this.LightIntensity = Math.Clamp(this.LightIntensity + 1.0f, LightIntensity_Min, LightIntensity_Max);
@@ -101,125 +131,28 @@ sealed class ClearVisionMod : MonoBehaviour {
         Console.WriteLine($"LightIntensity: {this.LightIntensity}");
     }
 
-    IEnumerator RemoveBlackSkybox(object[] args) {
-        WaitForEndOfFrame waitForEndOfFrame = new();
 
-        while (true) {
-            if (Helper.StartOfRound is not StartOfRound startOfRound) {
-                yield return waitForEndOfFrame;
-                continue;
-            }
 
-            if (Helper.CurrentCamera is not Camera camera) {
-                yield return waitForEndOfFrame;
-                continue;
-            }
-
-            if(startOfRound.blackSkyVolume is not null)
-            {
-                startOfRound.blackSkyVolume.weight = 0f;
-                UnityEngine.Object.Destroy(startOfRound.blackSkyVolume);
-                // end the routine if the black sky volume is destroyed
-                yield break;
-            }
-
-            yield return waitForEndOfFrame;
-        }
-    }
-
-    IEnumerator DisableVisor(object[] args) {
-        WaitForSeconds waitForTenSeconds = new(10.0f);
-
-        while (true) {
-            Helper.LocalPlayer?.localVisor.gameObject.SetActive(false);
-            yield return waitForTenSeconds;
-        }
-    }
-
-    IEnumerator DisableFog(object[] args) {
-        WaitForSeconds waitForFiveSeconds = new(5.0f);
-
-        while (true) {
-            HaxObjects
-                .Instance?
-                .LocalVolumetricFogs?
-                .ForEach(localVolumetricFog =>
-                    localVolumetricFog?.gameObject.SetActive(false)
-                );
-
-            yield return waitForFiveSeconds;
-        }
-    }
-
-    void Initalize()
+    void DisableMod()
     {
-        if(Fog is null)
-        {
-            Fog = this.StartResilientCoroutine(this.DisableFog);
-        }
-        if(Visor is null)
-        {
-            Visor = this.StartResilientCoroutine(this.DisableVisor);
-        }
-        if(NoblackSlybox is null)
-        {
-            NoblackSlybox = this.StartResilientCoroutine(this.RemoveBlackSkybox);
-        }
-        if (SunLight is not null)
-        {
-            SunLight.enabled = true;
-        }
-    }
-    void HaltRoutines()
-    {
-        if (Fog is Coroutine fog)
-        {
-            this.StopCoroutine(fog);
-            Fog = null;
-        }
-        if (NoblackSlybox is Coroutine nightVision)
-        {
-            this.StopCoroutine(nightVision);
-            NoblackSlybox = null;
-        }
-    }
-
-    void RestoreVision()
-    {
-        //if(Helper.TimeOfDay is not TimeOfDay timeOfDay) return;
-        //if(timeOfDay.sunAnimator is not Animator sunAnimator) return;
-        //sunAnimator.enabled = true;
-        //timeOfDay.insideLighting = IsInsideFactory;
         if(SunLight is not null)
         {
             SunLight.enabled = false;
         }
-        HaxObjects
-    .Instance?
-    .LocalVolumetricFogs?
-    .ForEach(localVolumetricFog =>
-        localVolumetricFog?.gameObject.SetActive(true)
-    );
-
+        ToggleFog(true);
     }
 
     void OnEnable()
     {
         InputListener.OnF4Press += this.DecreaseLightIntensity;
         InputListener.OnF5Press += this.IncreaseLightIntensity;
-        this.Initalize();
     }
 
     void OnDisable()
     {
         InputListener.OnF4Press -= this.DecreaseLightIntensity;
         InputListener.OnF5Press -= this.IncreaseLightIntensity;
-        HaltRoutines();
-        RestoreVision();
+        DisableMod();
     }
-
-    Coroutine Fog { get; set; }
-    Coroutine Visor { get; set; }
-    Coroutine NoblackSlybox { get; set; }
 
 }
