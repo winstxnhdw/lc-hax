@@ -29,19 +29,19 @@ internal sealed class TrapControllerMod : MonoBehaviour
         {
             SpikeRoofTrap = this.gameObject.GetComponent<SpikeRoofTrap>();
             TrapType = "SpikeRoofTrap";
-            Radius = 40f;
+            Radius = 13;
         }
         else if (this.gameObject.GetComponent<Landmine>())
         {
             Landmine = this.gameObject.GetComponent<Landmine>();
             TrapType = "Landmine";
-            Radius = 15f;
+            Radius = 8;
         }
         else if (this.gameObject.GetComponent<Turret>())
         {
             Turret = this.gameObject.GetComponent<Turret>();
             TrapType = "Turret";
-            Radius = 35f;
+            Radius = 10;
         }
     }
 
@@ -68,7 +68,7 @@ internal sealed class TrapControllerMod : MonoBehaviour
     {
         if (DisableTrapWhenPlayerNearby)
         {
-            Collider[] hitColliders = Physics.OverlapSphere(this.transform.position, 5f, Mask.Player);
+            Collider[] hitColliders = Physics.OverlapSphere(this.transform.position, Radius, Mask.Player);
             foreach (Collider hitCollider in hitColliders)
             {
                 PlayerControllerB player = hitCollider.GetComponent<PlayerControllerB>();
