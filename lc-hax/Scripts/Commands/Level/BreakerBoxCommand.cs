@@ -12,9 +12,9 @@ class BreakerBoxCommand : ICommand {
             return;
         }
 
-        BreakerBox[] Breakers = Helper.FindObjects<BreakerBox>().Where(breaker => breaker.name.Contains("(Clone)")).ToArray();
+        BreakerBox Breaker = Helper.FindObjects<BreakerBox>().FirstOrDefault(breaker => breaker.name.Contains("(Clone)"));
 
-        if (Breakers.Count() is 0) {
+        if (Breaker == null) {
             Chat.Print("Breaker box is not found!");
             return;
         }
@@ -23,22 +23,16 @@ class BreakerBoxCommand : ICommand {
         {
             if (args.Length == 1 || args[1].ToLower() == "all")
             {
-                Breakers.ForEach(breaker =>
-                {
-                    breaker.RemoveComponent<BreakerTrollMod>();
-                    breaker.Set_All_BreakerBox_Switches(true);
-                });
+                Breaker.RemoveComponent<BreakerTrollMod>();
+                Breaker.Set_All_BreakerBox_Switches(true);
                 Chat.Print("All BreakerBox switches turned on.");
                 return;
             }
 
             if (int.TryParse(args[1], out int index) && index >= 1 && index <= 5)
             {
-                Breakers.ForEach(breaker =>
-                {
-                    breaker.RemoveComponent<BreakerTrollMod>();
-                    breaker.Set_BreakerBox_Switch(index - 1, true);
-                });
+                Breaker.RemoveComponent<BreakerTrollMod>();
+                Breaker.Set_BreakerBox_Switch(index - 1, true);
                 Chat.Print($"BreakerBox switch {index} turned on.");
                 return;
             }
@@ -53,22 +47,16 @@ class BreakerBoxCommand : ICommand {
         {
             if (args.Length == 1 || args[1].ToLower() == "all")
             {
-                Breakers.ForEach(breaker =>
-                {
-                    breaker.RemoveComponent<BreakerTrollMod>();
-                    breaker.Set_All_BreakerBox_Switches(false);
-                });
+                Breaker.RemoveComponent<BreakerTrollMod>();
+                Breaker.Set_All_BreakerBox_Switches(false);
                 Chat.Print("All BreakerBox switches turned off.");
                 return;
             }
 
             if (int.TryParse(args[1], out int index) && index >= 1 && index <= 5)
             {
-                Breakers.ForEach(breaker =>
-                {
-                    breaker.RemoveComponent<BreakerTrollMod>();
-                    breaker.Set_BreakerBox_Switch(index - 1, false);
-                });
+                Breaker.RemoveComponent<BreakerTrollMod>();
+                Breaker.Set_BreakerBox_Switch(index - 1, false);
                 Chat.Print($"BreakerBox switch {index} turned off.");
                 return;
             }

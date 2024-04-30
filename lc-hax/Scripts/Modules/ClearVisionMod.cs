@@ -61,7 +61,7 @@ sealed class ClearVisionMod : MonoBehaviour {
         SunLight.color = Color.white;
         SunLight.transform.position = new Vector3(0F, 1000F, 0F);
         SunLight.transform.rotation = Quaternion.Euler(90F, 0F, 0F);
-        var Data = SunLight.GetOrAddComponent<HDAdditionalLightData>();
+        HDAdditionalLightData Data = SunLight.GetOrAddComponent<HDAdditionalLightData>();
         if(Data != null)
         {
             Data.lightDimmer = 1;
@@ -81,10 +81,6 @@ sealed class ClearVisionMod : MonoBehaviour {
         {
             SunLight.enabled = false;
             return;
-        }
-        if (Helper.TimeOfDay != null && Helper.TimeOfDay.sunIndirect != null)
-        {
-            SunLight.cullingMask = Helper.TimeOfDay.sunIndirect.cullingMask;
         }
         SunLight.enabled = enabled;
         SunLight.intensity = LightIntensity;

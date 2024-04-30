@@ -51,13 +51,7 @@ sealed class BreakerTrollMod : MonoBehaviour
             var PickedSwitch = Switches[randomIndex];
             bool isOn = PickedSwitch.Get_BreakerBoxSwitch_State();
             PickedSwitch.Set_BreakerBox_Switch_state(!isOn);
-            if(!isOn)
-            {
-                Helper.RoundManager.PowerSwitchOffClientRpc();
-            } else
-            {
-                Helper.RoundManager.PowerSwitchOnClientRpc();
-            }
+            Helper.SetPowerSwitch(!isOn);
 
 
             lastToggledIndex = randomIndex;
