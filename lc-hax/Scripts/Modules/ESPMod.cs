@@ -8,10 +8,10 @@ internal sealed class ESPMod : MonoBehaviour {
     private RendererPair<PlayerControllerB, SkinnedMeshRenderer>[] PlayerRenderers { get; set; } = [];
     private RendererPair<Landmine, Renderer>[] LandmineRenderers { get; set; } = [];
     private RendererPair<SpikeRoofTrap, Renderer>[] SpikeRoofTrapRenderers { get; set; } = [];
+    private RendererPair<Turret, Renderer>[] TurretRenderers { get; set; } = [];
 
     private RendererPair<BreakerBox, Renderer>[] BreakerBoxRenderers { get; set; } = [];
 
-    private Renderer[] TurretRenderers { get; set; } = [];
     private Renderer[] EntranceRenderers { get; set; } = [];
     private Renderer[] StoryLog { get; set; } = [];
 
@@ -49,7 +49,7 @@ internal sealed class ESPMod : MonoBehaviour {
             if (rendererPair.GameObject is not PlayerControllerB player) return;
             if (player.isPlayerDead || !player.isPlayerControlled) return;
 
-            string label = $"#{player.playerClientId} {player.playerUsername}";
+            string label = $"#{player.playerClientId} {player.playerUsername}, (Health : {player.health})";
 
             this.RenderBounds(
                 camera,
@@ -61,6 +61,7 @@ internal sealed class ESPMod : MonoBehaviour {
 
         Helper.Grabbables.WhereIsNotNull().ForEach(grabbableObject => {
             if (grabbableObject == null) return;
+            if(!grabbableObject.enabled) return;
             Vector3 rendererCentrePoint = camera.WorldToEyesPoint(grabbableObject.transform.position);
 
             if (PossessionMod.Instance is { IsPossessed: true } and not ({ PossessedEnemy: HoarderBugAI } or { PossessedEnemy: BaboonBirdAI })) return;
@@ -82,7 +83,7 @@ internal sealed class ESPMod : MonoBehaviour {
         this.BreakerBoxRenderers.ForEach(rendererPair => {
             if (rendererPair.GameObject is not BreakerBox breaker) return;
 
-            if (breaker.leversSwitchedOff == 0 && breaker.isPowerOn) {
+            if (breaker.isPowerOn) {
                 this.RenderBounds(camera, rendererPair.Renderer.bounds, Helper.ExtraColors.SpringGreen, this.RenderLabel("Breaker Box (ON)"));
             }
             else {
@@ -93,7 +94,7 @@ internal sealed class ESPMod : MonoBehaviour {
         this.SpikeRoofTrapRenderers.ForEach(rendererPair => {
             if (rendererPair.GameObject is not SpikeRoofTrap spike) return;
 
-            if (spike.trapActive) {
+            if (spike.isTrapActive()) {
                 this.RenderBounds(camera, rendererPair.Renderer.bounds, Helper.ExtraColors.OrangeRed, this.RenderLabel("Spike Roof Trap"));
             }
             else {
@@ -105,20 +106,40 @@ internal sealed class ESPMod : MonoBehaviour {
             if (rendererPair.GameObject is not Landmine mine) return;
             if (mine.hasExploded) return;
 
-            this.RenderBounds(
-                camera,
-                rendererPair.Renderer.bounds,
-                Helper.ExtraColors.OrangeRed,
-                this.RenderLabel("Landmine")
-            );
+            if (mine.isLandmineActive())
+            {
+                this.RenderBounds(camera, rendererPair.Renderer.bounds, Helper.ExtraColors.OrangeRed, this.RenderLabel("Landmine"));
+            }
+            else
+            {
+                this.RenderBounds(camera, rendererPair.Renderer.bounds, Helper.ExtraColors.YellowGreen, this.RenderLabel("Landmine (OFF)"));
+            }
         });
+        this.LandmineRenderers.ForEach(rendererPair => {
+            if (rendererPair.GameObject is not Landmine mine) return;
+            if (mine.hasExploded) return;
 
-        this.TurretRenderers.ForEach(renderer => this.RenderBounds(
-            camera,
-            renderer.bounds,
-            Helper.ExtraColors.OrangeRed,
-            this.RenderLabel("Turret")
-        ));
+            if (mine.isLandmineActive())
+            {
+                this.RenderBounds(camera, rendererPair.Renderer.bounds, Helper.ExtraColors.OrangeRed, this.RenderLabel("Landmine"));
+            }
+            else
+            {
+                this.RenderBounds(camera, rendererPair.Renderer.bounds, Helper.ExtraColors.YellowGreen, this.RenderLabel("Landmine (OFF)"));
+            }
+        });
+        this.TurretRenderers.ForEach(rendererPair => {
+            if (rendererPair.GameObject is not Turret turret) return;
+
+            if (turret.isTurretActive())
+            {
+                this.RenderBounds(camera, rendererPair.Renderer.bounds, Helper.ExtraColors.OrangeRed, this.RenderLabel("Turret"));
+            }
+            else
+            {
+                this.RenderBounds(camera, rendererPair.Renderer.bounds, Helper.ExtraColors.YellowGreen, this.RenderLabel("Turret (OFF)"));
+            }
+        });
 
         this.EntranceRenderers.ForEach(renderer => this.RenderBounds(
             camera,
@@ -146,12 +167,19 @@ internal sealed class ESPMod : MonoBehaviour {
             if (nullableRenderer.Unfake() is not Renderer renderer) {
                 return;
             }
+            string EnemyESPLabel = enemy.enemyType.enemyName;
+
+            if(enemy.CanEnemyDie())
+            {
+                // append health to EnemyESPLabel
+                EnemyESPLabel += $" (Health : {enemy.enemyHP})";
+            }
 
             this.RenderBounds(
                 camera,
                 renderer.bounds,
                 Color.red,
-                this.RenderLabel(enemy.enemyType.enemyName)
+                this.RenderLabel(EnemyESPLabel)   
             );
         });
 
@@ -220,7 +248,15 @@ internal sealed class ESPMod : MonoBehaviour {
             }
             ).ToArray();
 
-        this.TurretRenderers = this.GetRenderers<Turret>();
+        this.TurretRenderers = Helper.FindObjects<Turret>().Select(turret =>
+            new RendererPair<Turret, Renderer>()
+            {
+                GameObject = turret,
+                Renderer = turret.GetComponent<Renderer>()
+            }
+            ).ToArray();
+
+
         this.EntranceRenderers = this.GetRenderers<EntranceTeleport>();
     }
 

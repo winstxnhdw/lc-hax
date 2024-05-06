@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using GameNetcodeStuff;
 using Unity.Netcode;
 using UnityEngine;
@@ -227,6 +228,11 @@ internal static partial class Helper {
             hasAttacked = true
 
         };
+    }
+
+    internal static bool CanEnemyDie(this EnemyAI enemy)
+    {
+        return enemy.enemyType.canDie;
     }
 
 }
