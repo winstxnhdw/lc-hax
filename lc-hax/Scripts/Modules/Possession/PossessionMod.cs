@@ -180,6 +180,17 @@ internal sealed class PossessionMod : MonoBehaviour {
         }
     }
 
+    void LateUpdate()
+    {
+        if (Helper.CurrentCamera is not Camera { enabled: true } camera) return;
+        if (Helper.LocalPlayer is not PlayerControllerB localPlayer) return;
+        if (this.CharacterMovement is not CharacterMovement characterMovement) return;
+        if (this.Possession.Enemy is not EnemyAI enemy) return;
+        if (enemy.agent is not NavMeshAgent agent) return;
+        if(this.Controller is not IController controller) return;
+        controller.LateUpdate(enemy);
+    }
+
     /// <summary>
     /// This Allows to possess an enemy without a controller Registered to it..
     /// </summary>
@@ -371,6 +382,8 @@ internal sealed class PossessionMod : MonoBehaviour {
         this.IsAIControlled = !this.IsAIControlled;
         this.SetAIControl(this.IsAIControlled);
         this.SendPossessionNotifcation($"AI Control: {(this.IsAIControlled ? "Enabled" : "Disabled")}");
+
+        
     }
 
     void SetAIControl(bool enableAI) {
@@ -392,6 +405,10 @@ internal sealed class PossessionMod : MonoBehaviour {
         agent.isStopped = !enableAI;
         characterMovement.SetPosition(enemy.transform.position);
         characterMovement.enabled = !enableAI;
+        if(this.Controller != null)
+        {
+            this.Controller.OnEnableAIControl(enemy, enableAI);
+        }
     }
 
     float InteractRange(EnemyAI enemy) => this.Controller?.InteractRange(enemy) ?? IController.DefaultInteractRange;

@@ -13,6 +13,8 @@ internal interface IController {
 
     Vector3 GetEnemyPositionOffset(EnemyAI enemy);
 
+    void OnEnableAIControl(EnemyAI enemy, bool enabled);
+
     void OnPossess(EnemyAI enemy);
 
     void OnUnpossess(EnemyAI enemy);
@@ -20,6 +22,8 @@ internal interface IController {
     void OnDeath(EnemyAI enemy);
 
     void Update(EnemyAI enemy, bool isAIControlled);
+
+    void LateUpdate(EnemyAI enemy);
 
     void UsePrimarySkill(EnemyAI enemy);
     void OnPrimarySkillHold(EnemyAI enemy);
@@ -61,6 +65,8 @@ internal interface IController {
 /// <typeparam name="T"></typeparam>
 internal interface IEnemyController<T> : IController where T : EnemyAI {
 
+    void OnEnableAIControl(T enemy, bool enabled) { }
+
     void OnPossess(T enemy) { }
 
     void OnUnpossess(T enemy) { }
@@ -68,6 +74,8 @@ internal interface IEnemyController<T> : IController where T : EnemyAI {
     void OnDeath(T enemy) { }
 
     void Update(T enemy, bool isAIControlled) { }
+
+    void LateUpdate(T enemy) { }
 
     void UsePrimarySkill(T enemy) { }
 
@@ -106,6 +114,7 @@ internal interface IEnemyController<T> : IController where T : EnemyAI {
     bool SyncAnimationSpeedEnabled(T enemy) => true;
 
     void OnOutsideStatusChange(T enemy) { }
+    void IController.OnEnableAIControl(EnemyAI enemy, bool enabled) => this.OnEnableAIControl((T)enemy, enabled);
 
     void IController.OnPossess(EnemyAI enemy) => this.OnPossess((T)enemy);
 
@@ -114,6 +123,8 @@ internal interface IEnemyController<T> : IController where T : EnemyAI {
     void IController.OnDeath(EnemyAI enemy) => this.OnDeath((T)enemy);
 
     void IController.Update(EnemyAI enemy, bool isAIControlled) => this.Update((T)enemy, isAIControlled);
+
+    void IController.LateUpdate(EnemyAI enemy) => this.LateUpdate((T)enemy);
 
     void IController.UsePrimarySkill(EnemyAI enemy) => this.UsePrimarySkill((T)enemy);
     void IController.OnPrimarySkillHold(EnemyAI enemy) => this.OnPrimarySkillHold((T)enemy);

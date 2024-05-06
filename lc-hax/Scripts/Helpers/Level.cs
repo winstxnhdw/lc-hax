@@ -19,4 +19,10 @@ static partial class Helper {
         }
 
     }
+
+    internal static void FlickerLights(bool flickerFlashlights = false, bool disableFlashlights = false)
+    {
+        if (Helper.RoundManager is not RoundManager roundmanager) return;
+        roundmanager.FlickerLights(flickerFlashlights, disableFlashlights);
+    }
 }

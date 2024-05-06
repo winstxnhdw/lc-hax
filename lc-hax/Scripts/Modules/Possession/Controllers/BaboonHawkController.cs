@@ -35,13 +35,26 @@ internal class BaboonHawkController : IEnemyController<BaboonBirdAI> {
         BaboonBirdAI.baboonCampPosition = this.OriginalCamp;
     }
 
+    void EnableAIControl(BaboonBirdAI enemy, bool enabled)
+    {
+        if (enabled)
+        {
+            BaboonBirdAI.baboonCampPosition = this.OriginalCamp;
+        }
+        else
+        {
+            BaboonBirdAI.baboonCampPosition = this.CustomCamp;
+        }
+    }
+
     void GrabItemAndSync(BaboonBirdAI enemy, GrabbableObject item) {
         if (!item.TryGetComponent(out NetworkObject netItem)) return;
+            enemy.SetBehaviourState(BaboonState.RETURNING);
         _ = enemy.Reflect().InvokeInternalMethod("GrabItemAndSync", netItem);
     }
 
     public void UsePrimarySkill(BaboonBirdAI enemy) {
-        if (enemy.heldScrap is null && enemy.FindNearbyItem(2) is GrabbableObject grabbable) {
+        if (enemy.heldScrap is null && enemy.FindNearbyItem(1.5f) is GrabbableObject grabbable) {
             this.GrabItemAndSync(enemy, grabbable);
             return;
         }

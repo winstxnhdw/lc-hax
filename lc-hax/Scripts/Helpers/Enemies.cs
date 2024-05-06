@@ -181,7 +181,7 @@ internal static partial class Helper {
     /// </summary>
     /// <param name="enemy">The enemy AI from which to search for nearby players.</param>
     /// <param name="radius">The search radius. Default is 1.5f, but will be scaled by a factor of 3.</param>
-    /// <returns>The closest PlayerControllerB instance or Helper.Players[0] if no player is found.</returns>
+    /// <returns>The closest PlayerControllerB instance or Host if no player is found.</returns>
     internal static PlayerControllerB FindClosestPlayer(this EnemyAI enemy, float radius = 1.5f) {
         radius *= 3;
 

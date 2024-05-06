@@ -52,7 +52,7 @@ static partial class Helper {
     /// <summary>
     /// This method is used to set the turret using RPC
     /// </summary>
-    internal static void SetTurret(this Turret? turret, bool turretActive) => turret?.ToggleTurretClientRpc(turretActive);
+    internal static void SetTurret(this Turret? turret, bool turretActive) => turret?.ToggleTurretServerRpc(turretActive);
 
     /// <summary>
     /// This makes the Turret go into berserk mode

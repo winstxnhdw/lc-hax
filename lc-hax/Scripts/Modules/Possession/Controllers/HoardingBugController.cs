@@ -1,6 +1,8 @@
 using GameNetcodeStuff;
 using Hax;
+using System.Collections.Generic;
 using Unity.Netcode;
+using UnityEngine;
 
 enum HoardingBugState {
     IDLE,
@@ -14,6 +16,23 @@ enum HoardingBugState {
 internal class HoardingBugController : IEnemyController<HoarderBugAI> {
 
     internal bool angry = false;
+    private static readonly HashSet<HoarderBugItem> _FakeStolenItems = [];
+
+
+    void EnableAIControl(HoarderBugAI enemy, bool enabled)
+    {
+        if (enabled)
+        {
+            enemy.Reflect().InvokeInternalMethod("ChooseNestPosition");
+            enemy.SetBehaviourState(HoardingBugState.IDLE);
+        }
+        else
+        {
+            enemy.nestPosition = new Vector3(2000f, 2000f, 2000f);
+        }
+    }
+
+
 
     void OnUnpossess(HoarderBugAI _) => this.angry = false;
 
@@ -68,6 +87,7 @@ internal class HoardingBugController : IEnemyController<HoarderBugAI> {
 
         enemy.SwitchToBehaviourServerRpc(1);
         enemy.GrabItemServerRpc(netItem);
+        item.EquipItem();
     }
 
     public void OnDeath(HoarderBugAI enemy) {
@@ -98,17 +118,47 @@ internal class HoardingBugController : IEnemyController<HoarderBugAI> {
                 enemy.angryAtPlayer = closePlayer;
                 enemy.angryTimer = 15.0f;
                 this.angry = true;
+                AttackPlayer(enemy, true);
                 enemy.SetBehaviourState(HoardingBugState.CHASING_PLAYER);
             }
             else {
                 enemy.angryAtPlayer = null;
                 enemy.angryTimer = 0.0f;
+                AttackPlayer(enemy, false);
             }
             return;
         }
 
         if (enemy.heldItem.itemGrabbableObject.TryGetComponent(out NetworkObject networkObject)) {
             _ = enemy.Reflect().InvokeInternalMethod("DropItemAndCallDropRPC", networkObject, false);
+        }
+    }
+
+    public  void AttackPlayer(HoarderBugAI enemy, bool isAttacking)
+    {
+        if (!isAttacking)
+        {
+            foreach (var fakeStolenItem in (HoarderBugItem[])[.._FakeStolenItems,])
+            {
+                _FakeStolenItems.Remove(fakeStolenItem);
+                HoarderBugAI.HoarderBugItems.Remove(fakeStolenItem);
+            }
+            return;
+        }
+
+        foreach (var playerControllerB in RoundManager.Instance.playersManager.allPlayerScripts)
+        {
+            foreach (var itemSlot in playerControllerB.ItemSlots)
+            {
+                if (itemSlot is null)
+                    continue;
+
+                var fakeStolenItem = new HoarderBugItem(itemSlot, HoarderBugItemStatus.Stolen, enemy.nestPosition);
+
+                _FakeStolenItems.Add(fakeStolenItem);
+
+                HoarderBugAI.HoarderBugItems.Add(fakeStolenItem);
+            }
         }
     }
 

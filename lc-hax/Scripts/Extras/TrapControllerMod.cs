@@ -110,24 +110,15 @@ internal sealed class TrapControllerMod : MonoBehaviour
     {
         if (SpikeRoofTrap != null)
         {
-            if (SpikeRoofTrap.isTrapActive() != Active)
-            {
-                SpikeRoofTrap.SetSpikes(Active);
-            }
+            SpikeRoofTrap.SetSpikes(Active);
         }
-        else if (Landmine != null)
+        if (Landmine != null)
         {
-            if (Landmine.isLandmineActive() != Active)
-            {
-                Landmine.SetLandmine(Active);
-            }
+            Landmine.SetLandmine(Active);
         }
-        else if (Turret != null)
+        if (Turret != null)
         {
-            if (Turret.isTurretActive() != Active)
-            {
-                Turret.SetTurret(Active);
-            }
+            Turret.SetTurret(Active);
         }
     }
 }
