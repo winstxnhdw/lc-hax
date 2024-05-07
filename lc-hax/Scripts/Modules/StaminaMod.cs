@@ -18,46 +18,17 @@ internal sealed class StaminaMod : MonoBehaviour
         StaminaMod.Instance = this;
     }
 
-    private Coroutine? StaminaCoroutine { get; set; }
-
-    IEnumerator SetSprint(object[] args)
+    void Update()
     {
-        WaitForEndOfFrame waitForEndOfFrame = new();
-        WaitForSeconds waitForFiveSeconds = new(5.0f);
-
-        while (true)
-        {
-            if (Helper.LocalPlayer is not PlayerControllerB player)
-            {
-                yield return waitForEndOfFrame;
-                continue;
-            }
-
-            player.isSpeedCheating = false;
-            player.isSprinting = false;
-            player.isExhausted = false;
-            player.sprintMeter = 1.0f;
-
-            yield return waitForFiveSeconds;
-        }
+        if (Helper.LocalPlayer is not PlayerControllerB player) return;
+        player.isSpeedCheating = false;
+        player.isSprinting = false;
+        player.isExhausted = false;
+        player.sprintMeter = 1.0f;
+        player.isMovementHindered = 0;
+        player.hinderedMultiplier = 1f;
+        player.sourcesCausingSinking = 0;
     }
-
-    internal void StartRoutine() => this.StaminaCoroutine ??= this.StartResilientCoroutine(this.SetSprint);
-
-    internal void OnStopRoutine()
-    {
-        if (this.StaminaCoroutine != null)
-        {
-            this.StopCoroutine(this.StaminaCoroutine);
-            this.StaminaCoroutine = null;
-        }
-    }
-
-    public void Start() => this.StartRoutine();
-
-    public void OnDisable() => this.OnStopRoutine();
-
-    public void OnEnable() => this.StartRoutine();
-
-    public void OnDestroy() => this.OnStopRoutine();
 }
+
+    
