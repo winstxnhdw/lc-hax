@@ -36,7 +36,7 @@ class NoCooldownPatch {
 
         if (__instance.GetComponent<DoorLock>() != null) return;
         
-        if (__instance.transform.root.name.ToLower().Contains("leverswitchhandle")) return;
+        if (__instance.transform.name.ToLower().Contains("leverswitchhandle")) return;
 
         __instance.interactCooldown = false;
     }
