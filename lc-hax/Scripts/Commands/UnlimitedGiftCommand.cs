@@ -4,6 +4,6 @@ using Hax;
 class UnlimitedGiftCommand : ICommand {
     public void Execute(StringArray _) {
         Setting.EnableUnlimitedGiftBox = !Setting.EnableUnlimitedGiftBox;
-        Helper.SendNotification(title: "Unlimited Gift Box", body: Setting.EnableUnlimitedGiftBox ? " enabled" : "disabled");
+        Helper.DisplayFlatHudMessage(Setting.EnableUnlimitedGiftBox ? "Unlimited Gift Box enabled" : "Unlimited Gift Box disabled");
     }
 }

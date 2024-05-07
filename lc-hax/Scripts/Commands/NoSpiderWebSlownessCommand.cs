@@ -4,6 +4,6 @@ using Hax;
 class NoSpiderWebSlownessCommand : ICommand {
     public void Execute(StringArray _) {
         Setting.DisableSpiderWebSlowness = !Setting.DisableSpiderWebSlowness;
-        Helper.SendNotification("Spider Web Slowness", $"{(Setting.DisableSpiderWebSlowness ? "Disabled" : "Enabled")}");
+        Helper.DisplayFlatHudMessage(Setting.DisableSpiderWebSlowness ? "Spider Web Slowness Disabled" : "Spider Web Slowness Enabled");
     }
 }

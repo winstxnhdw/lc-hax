@@ -3,10 +3,21 @@ using Hax;
 using UnityEngine;
 
 sealed class TriggerMod : MonoBehaviour, IEnemyPrompter {
+
+    internal static TriggerMod? Instance { get; private set; }
     RaycastHit[] RaycastHits { get; set; } = new RaycastHit[100];
 
     bool UsingInteractRay { get; set; } = false;
     bool UsingFollowRay { get; set; } = false;
+    void Awake()
+    {
+        if (TriggerMod.Instance != null)
+        {
+            Destroy(this);
+            return;
+        }
+        TriggerMod.Instance = this;
+    }   
 
     void OnEnable() {
         InputListener.OnMiddleButtonPress += this.Fire;

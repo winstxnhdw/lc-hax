@@ -37,9 +37,7 @@ internal class SpawnCommand : ICommand {
             }
 
             Helper.SpawnEnemies(targetPlayer.transform.position, Helper.HostileEnemies[key], amount);
-            Helper.SendNotification("Spawner",
-                $"Spawning {(amount > 1 ? amount.ToString() : "a")} {(amount > 1 ? key + "s" : key)} on {targetPlayer.playerUsername}.",
-                false);
+            Helper.DisplayFlatHudMessage($"Spawning {(amount > 1 ? amount.ToString() : "a")} {(amount > 1 ? key + "s" : key)} on {targetPlayer.playerUsername}.");
         }
 
         else {
@@ -63,7 +61,7 @@ internal class SpawnCommand : ICommand {
 
             if (enemy is not null) {
                 PossessionMod.Instance?.Possess(enemy);
-                Helper.SendNotification("Spawner", $"Spawning {key} and possessing it.", false);
+                Helper.DisplayFlatHudMessage($"Spawning {key} and possessing it.");
             }
         }
     }

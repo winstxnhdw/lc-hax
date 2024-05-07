@@ -5,6 +5,8 @@ using System.Linq;
 using UnityEngine;
 
 internal sealed class ESPMod : MonoBehaviour {
+
+    internal static ESPMod? Instance { get; private set; }
     private RendererPair<PlayerControllerB, SkinnedMeshRenderer>[] PlayerRenderers { get; set; } = [];
     private RendererPair<Landmine, Renderer>[] LandmineRenderers { get; set; } = [];
     private RendererPair<SpikeRoofTrap, Renderer>[] SpikeRoofTrapRenderers { get; set; } = [];
@@ -18,6 +20,15 @@ internal sealed class ESPMod : MonoBehaviour {
     private bool InGame { get; set; } = false;
     private bool IsMapLoaded { get; set; } = false;
     private bool Enabled { get; set; } = true;
+    void Awake()
+    {
+        if (ESPMod.Instance != null)
+        {
+            Destroy(this);
+            return;
+        }
+        ESPMod.Instance = this;
+    }
 
     private void OnEnable() {
         GameListener.OnLevelGenerated += this.Initialise;

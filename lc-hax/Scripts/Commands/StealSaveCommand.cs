@@ -16,7 +16,7 @@ class StealSaveCommand : ICommand {
         // Check if the ship has landed
         if (round.shipHasLanded) {
             Console.WriteLine("Ship has landed. Aborting.");
-            Helper.SendNotification(title: "Savegame Stealer", "Ship must be in orbit.", false);
+            Helper.DisplayFlatHudMessage("Savegame Stealer : Ship must be in orbit.");
             return;
         }
 
@@ -48,7 +48,7 @@ class StealSaveCommand : ICommand {
             }
         }
         if (saveFileName == "") {
-            Helper.SendNotification(title: "Savegame Stealer", "No Open Save Slot found.");
+            Helper.DisplayFlatHudMessage("Savegame Stealer : No Open Save Slot found.");
             return;
         }
 
@@ -62,13 +62,13 @@ class StealSaveCommand : ICommand {
         }
         catch (Exception e) {
             Logger.Write(e);
-            Helper.SendNotification(title: "Savegame Stealer", "Saving Failed.", true);
+            Helper.DisplayFlatHudMessage("Savegame Stealer : Saving Failed.");
             return; 
         }
 
         manager.isHostingGame = oldIsHostingGame;
         manager.currentSaveFileName = oldSaveFileName;
         round.maxShipItemCapacity = oldMaxItemCap;
-        Helper.SendNotification(title: "Savegame Stealer", $"Save Successful with alias: {alias}.");
+        Helper.DisplayFlatHudMessage($"Savegame Stealer : Save Successful with alias: {alias}.");
     }
 }

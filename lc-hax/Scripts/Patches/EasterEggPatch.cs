@@ -8,7 +8,7 @@ class EasterEggPatch {
         Reflector<StunGrenadeItem> item = __instance.Reflect();
         bool explodeOnThrow = item.GetInternalField<bool>("explodeOnThrow");
         if (explodeOnThrow) {
-            Helper.SendNotification("Explosive egg", "This Easter Egg will Explode on drop!", true);
+            Helper.DisplayFlatHudMessage("This Easter Egg will Explode on drop!");
         }
     }
 }

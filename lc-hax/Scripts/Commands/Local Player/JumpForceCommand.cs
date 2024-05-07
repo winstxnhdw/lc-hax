@@ -28,7 +28,7 @@ internal class JumpForceCommand : ICommand {
         }
         Setting.New_JumpForce = Force;
         player.jumpForce = Force;
-        Helper.SendNotification("Jump Force", $"Jump Force set to {Force}!");
+        Helper.DisplayFlatHudMessage($"Jump Force set to {Force}!");
     }
 
     void Reset(PlayerControllerB player) {
@@ -36,7 +36,7 @@ internal class JumpForceCommand : ICommand {
             Setting.New_JumpForce = Setting.Default_JumpForce;
             player.jumpForce = Setting.Default_JumpForce;
             Setting.OverrideJumpForce = false;
-            Helper.SendNotification("Jump Force", $"Jump Force reset to default {player.jumpForce}!");
+            Helper.DisplayFlatHudMessage("Jump Force reset to default!");
         }
 
     }

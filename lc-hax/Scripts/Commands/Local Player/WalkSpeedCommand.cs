@@ -28,7 +28,7 @@ internal class WalkSpeedCommand : ICommand {
         }
         Setting.New_MovementSpeed = Force;
         player.movementSpeed = Force;
-        Helper.SendNotification("Walk Speed", $"Walk Speed set to {Force}!");
+        Helper.DisplayFlatHudMessage($"Walk Speed set to {Force}!");
     }
 
     void Reset(PlayerControllerB player) {
@@ -36,7 +36,7 @@ internal class WalkSpeedCommand : ICommand {
             Setting.New_MovementSpeed = Setting.Default_MovementSpeed;
             player.movementSpeed = Setting.Default_MovementSpeed;
             Setting.OverrideMovementSpeed = false;
-            Helper.SendNotification("Walk Speed", $"Walk Speed reset to default {player.movementSpeed}!");
+            Helper.DisplayFlatHudMessage($"Walk Speed reset to default {player.movementSpeed}!");
         }
 
     }

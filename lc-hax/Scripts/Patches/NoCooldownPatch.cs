@@ -35,6 +35,9 @@ class NoCooldownPatch {
     static void TriggerPostFix(InteractTrigger __instance) {
 
         if (__instance.GetComponent<DoorLock>() != null) return;
+        
+        if (__instance.transform.root.name.ToLower().Contains("leverswitchhandle")) return;
+
         __instance.interactCooldown = false;
     }
 }

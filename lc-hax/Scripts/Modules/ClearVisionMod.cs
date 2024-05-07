@@ -8,6 +8,7 @@ internal sealed class ClearVisionMod : MonoBehaviour
 {
     internal static ClearVisionMod? Instance { get; private set; }
     private bool IsInsideFactory => Helper.LocalPlayer is PlayerControllerB player && player.isInsideFactory;
+    private bool IsDead => Helper.LocalPlayer is PlayerControllerB player && player.IsDead();
 
     private float LightIntensity_Min => 0f;
     private float LightIntensity_Max => 35f;
@@ -17,7 +18,15 @@ internal sealed class ClearVisionMod : MonoBehaviour
 
     private float LightIntensity
     {
-        get => this.IsInsideFactory ? this.InternalLight : this.OutsideLight;
+        get
+        {
+            float Light = this.IsInsideFactory ? this.InternalLight : this.OutsideLight;
+            if (this.IsDead)
+            {
+                Light *= 2f;
+            }
+            return Light;
+        }
         set
         {
             if (this.IsInsideFactory)
@@ -88,31 +97,10 @@ internal sealed class ClearVisionMod : MonoBehaviour
             SunLight.enabled = false;
             return;
         }
-        UpdateCullingMask(camera);
         SunLight.enabled = this.enabled;
-        if(player.IsDead())
-        {
-            SunLight.intensity = LightIntensity * 0.8f;
-        }
-        else
-        {
-            SunLight.intensity = LightIntensity;
-
-        }
+        SunLight.intensity = LightIntensity;
     }
 
-    // Update the Culling Mask of the Sun Light to match the current camera
-    void UpdateCullingMask(Camera currentCamera)
-    {
-        if (SunLight == null || Data == null || currentCamera == null)
-            return;
-
-        if (SunLight.cullingMask != currentCamera.cullingMask)
-        {
-            SunLight.cullingMask = currentCamera.cullingMask;
-            Data.SetCullingMask(currentCamera.cullingMask);
-        }
-    }
     private void RemoveBlackSkybox()
     {
         if (Helper.StartOfRound is not StartOfRound round) return;
@@ -129,11 +117,12 @@ internal sealed class ClearVisionMod : MonoBehaviour
         HaxObjects.Instance?.LocalVolumetricFogs?.ForEach(localVolumetricFog => localVolumetricFog?.gameObject.SetActive(active));
     }
 
-    private void RemoveVisor()
+    private void ToggleVisor(bool active)
     {
-        if (Helper.LocalPlayer?.localVisor is not null && Helper.LocalPlayer.localVisor.gameObject.activeSelf)
+        if (Helper.LocalPlayer?.localVisor.gameObject is not GameObject visor) return;
+        if(visor.activeSelf != active)
         {
-            Helper.LocalPlayer.localVisor.gameObject.SetActive(false);
+            visor.SetActive(active);
         }
     }
 
@@ -141,7 +130,7 @@ internal sealed class ClearVisionMod : MonoBehaviour
     {
         UpdateNewSun();
         RemoveBlackSkybox();
-        RemoveVisor();
+        ToggleVisor(false);
         ToggleFog(false);
     }
 
@@ -164,6 +153,7 @@ internal sealed class ClearVisionMod : MonoBehaviour
             SunLight.enabled = false;
         }
         ToggleFog(true);
+        ToggleVisor(true);
     }
 
     private void OnEnable()

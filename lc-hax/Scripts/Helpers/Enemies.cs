@@ -92,20 +92,24 @@ internal static partial class Helper {
         Helper.Enemies.First(enemy => enemy is T) is T enemy ? enemy : null;
 
     internal static void Kill(this EnemyAI enemy) {
-        enemy.TakeOwnership();
-
+        enemy.TakeOwnerShipIfNotOwned();
+        bool Destroy = true;
         switch (enemy) {
             case NutcrackerEnemyAI nutcracker:
                 nutcracker.KillEnemy();
+                Destroy = false;
                 break;
             case ButlerEnemyAI butler:
                 butler.KillEnemy();
+                Destroy = false;
                 break;
-
+            case FlowermanAI flowerman:
+                flowerman.KillEnemy();
+                break;
             default:
-                enemy.KillEnemyServerRpc(true);
                 break;
         }
+        enemy.KillEnemyServerRpc(Destroy);
     }
     /// <summary>
     /// Updates enemy navmesh and resets the searchs routines
@@ -232,7 +236,28 @@ internal static partial class Helper {
 
     internal static bool CanEnemyDie(this EnemyAI enemy)
     {
-        return enemy.enemyType.canDie;
+        // determine for each available inherited enemy
+        if (enemy == null) return false;
+        switch(enemy)
+        {
+            case RadMechAI _: 
+            case BlobAI _ : 
+            case PufferAI _ : 
+            case DoublewingAI _ : 
+            case RedLocustBees _ : 
+            case ButlerBeesEnemyAI _ : 
+            case JesterAI _ : 
+            case SandWormAI _:
+            case SpringManAI _:
+            case TestEnemy _:
+            case LassoManAI _:
+            case DocileLocustBeesAI _:
+            case DressGirlAI _:
+                return false;
+
+            default:
+                return enemy.enemyType.canDie;  
+        }
     }
 
 }

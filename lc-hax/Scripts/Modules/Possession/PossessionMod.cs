@@ -232,7 +232,6 @@ internal sealed class PossessionMod : MonoBehaviour {
         if (this.IsAIControlled) {
             return;
         }
-
         if (controller.SyncAnimationSpeedEnabled(enemy)) {
             movement.CharacterSpeed = agent.speed;
         }
@@ -319,6 +318,7 @@ internal sealed class PossessionMod : MonoBehaviour {
         if (!this.IsLeftAltHeld) {
             enemy.transform.eulerAngles = enemyEuler;
         }
+        enemy.SyncPositionToClients();
     }
 
     // Possesses the specified enemy
