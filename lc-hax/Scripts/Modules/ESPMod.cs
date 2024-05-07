@@ -84,7 +84,7 @@ internal sealed class ESPMod : MonoBehaviour {
             if (rendererPair.GameObject is not BreakerBox breaker) return;
 
             if (breaker.isPowerOn) {
-                this.RenderBounds(camera, rendererPair.Renderer.bounds, Helper.ExtraColors.SpringGreen, this.RenderLabel("Breaker Box (ON)"));
+                this.RenderBounds(camera, rendererPair.Renderer.bounds, Helper.ExtraColors.SpringGreen, this.RenderLabel("Breaker Box"));
             }
             else {
                 this.RenderBounds(camera, rendererPair.Renderer.bounds, Helper.ExtraColors.Yellow, this.RenderLabel("Breaker Box (OFF)"));
