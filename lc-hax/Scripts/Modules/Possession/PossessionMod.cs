@@ -9,7 +9,8 @@ using UnityEngine.Windows.WebCam;
 using static UnityEngine.EventSystems.EventTrigger;
 using Steamworks;
 
-internal sealed class PossessionMod : MonoBehaviour {
+internal sealed class PossessionMod : MonoBehaviour
+{
     bool IsLeftAltHeld { get; set; } = false;
 
     internal static PossessionMod? Instance { get; private set; }
@@ -60,23 +61,28 @@ internal sealed class PossessionMod : MonoBehaviour {
     internal IController? GetEnemyController(EnemyAI enemy) =>
         enemy == null ? null : this.EnemyControllers.GetValueOrDefault(enemy.GetType());
 
-    void Awake() {
+    void Awake()
+    {
         this.MousePan = this.gameObject.GetOrAddComponent<MousePan>();
         this.enabled = false;
 
         PossessionMod.Instance = this;
     }
 
-    void InitCharacterMovement(EnemyAI? enemy = null) {
+    void InitCharacterMovement(EnemyAI? enemy = null)
+    {
         this.CharacterMovementInstance = Finder.Find("Hax CharacterMovement");
-        if (this.CharacterMovementInstance == null) {
+        if (this.CharacterMovementInstance == null)
+        {
             this.CharacterMovementInstance = new("Hax CharacterMovement");
             this.CharacterMovementInstance.transform.position = default;
         }
-        if (enemy != null) {
+        if (enemy != null)
+        {
             this.CharacterMovementInstance.transform.position = enemy.transform.position;
             this.CharacterMovement = this.CharacterMovementInstance.GetOrAddComponent<CharacterMovement>();
-            if (this.CharacterMovement is not null) {
+            if (this.CharacterMovement is not null)
+            {
                 this.CharacterMovement.SetPosition(enemy.transform.position);
                 this.CharacterMovement.CharacterSprintSpeed = this.SprintMultiplier(enemy);
                 this.CharacterMovement.CanMove = true;
@@ -86,7 +92,8 @@ internal sealed class PossessionMod : MonoBehaviour {
 
 
 
-    void OnEnable() {
+    void OnEnable()
+    {
         InputListener.OnNPress += this.ToggleNoClip;
         InputListener.OnZPress += this.Unpossess;
         InputListener.OnLeftButtonPress += this.UsePrimarySkill;
@@ -104,7 +111,8 @@ internal sealed class PossessionMod : MonoBehaviour {
     }
 
 
-    void OnDisable() {
+    void OnDisable()
+    {
         InputListener.OnNPress -= this.ToggleNoClip;
         InputListener.OnZPress -= this.Unpossess;
         InputListener.OnLeftButtonPress -= this.UsePrimarySkill;
@@ -123,30 +131,37 @@ internal sealed class PossessionMod : MonoBehaviour {
 
     void HoldAlt(bool isHeld) => this.IsLeftAltHeld = isHeld;
 
-    void OnLeftMouseButtonHold(bool isPressed) {
-        if (isPressed) {
+    void OnLeftMouseButtonHold(bool isPressed)
+    {
+        if (isPressed)
+        {
             this.OnPrimarySkillHold();
         }
     }
-    void OnRightMouseButtonHold(bool isPressed) {
-        if (isPressed) {
+    void OnRightMouseButtonHold(bool isPressed)
+    {
+        if (isPressed)
+        {
             this.OnSecondarySkillHold();
         }
     }
-    void SendPossessionNotifcation(string message) {
+    void SendPossessionNotifcation(string message)
+    {
         Helper.SendNotification(
             title: "Possession",
             body: message
         );
     }
 
-    void ToggleNoClip() {
+    void ToggleNoClip()
+    {
         this.NoClipEnabled = !this.NoClipEnabled;
         this.UpdateComponentsOnCurrentState(this.enabled);
         this.SendPossessionNotifcation($"NoClip: {(this.NoClipEnabled ? "Enabled" : "Disabled")}");
     }
 
-    void UpdateComponentsOnCurrentState(bool thisGameObjectIsEnabled) {
+    void UpdateComponentsOnCurrentState(bool thisGameObjectIsEnabled)
+    {
         if (this.MousePan is null) return;
 
         this.MousePan.enabled = thisGameObjectIsEnabled;
@@ -154,7 +169,8 @@ internal sealed class PossessionMod : MonoBehaviour {
         this.CharacterMovement?.SetNoClipMode(this.NoClipEnabled);
     }
 
-    void Update() {
+    void Update()
+    {
         if (Helper.CurrentCamera is not Camera { enabled: true } camera) return;
         if (Helper.LocalPlayer is not PlayerControllerB localPlayer) return;
         if (this.CharacterMovement is not CharacterMovement characterMovement) return;
@@ -165,17 +181,20 @@ internal sealed class PossessionMod : MonoBehaviour {
         this.UpdateCameraPosition(camera, enemy);
         this.UpdateCameraRotation(camera, enemy);
 
-        if (this.FirstUpdate) {
+        if (this.FirstUpdate)
+        {
             this.FirstUpdate = false;
             this.InitCharacterMovement(enemy);
             this.UpdateComponentsOnCurrentState(true);
             this.SetAIControl(false);
         }
 
-        if (this.Controller == null) {
+        if (this.Controller == null)
+        {
             this.UnregisteredEnemy(enemy);
         }
-        else {
+        else
+        {
             this.CompatibilityMode(localPlayer, enemy, this.Controller, characterMovement, agent);
         }
     }
@@ -187,26 +206,31 @@ internal sealed class PossessionMod : MonoBehaviour {
         if (this.CharacterMovement is not CharacterMovement characterMovement) return;
         if (this.Possession.Enemy is not EnemyAI enemy) return;
         if (enemy.agent is not NavMeshAgent agent) return;
-        if(this.Controller is not IController controller) return;
+        if (this.Controller is not IController controller) return;
         controller.LateUpdate(enemy);
     }
 
     /// <summary>
     /// This Allows to possess an enemy without a controller Registered to it..
     /// </summary>
-    void UnregisteredEnemy(EnemyAI enemy) {
-        if (!this.IsAIControlled) {
+    void UnregisteredEnemy(EnemyAI enemy)
+    {
+        if (!this.IsAIControlled)
+        {
             this.UpdateEnemyPosition(enemy);
             this.UpdateEnemyRotation();
         }
 
-        if (this.NoClipEnabled) {
-            if (this.MainEntrance != null) {
+        if (this.NoClipEnabled)
+        {
+            if (this.MainEntrance != null)
+            {
                 enemy.SetOutsideStatus(enemy.transform.position.y > this.MainEntrance.transform.position.y + 5.0f);
             }
         }
 
-        if (enemy.isEnemyDead) {
+        if (enemy.isEnemyDead)
+        {
             this.Unpossess();
         }
     }
@@ -214,14 +238,18 @@ internal sealed class PossessionMod : MonoBehaviour {
     /// <summary>
     /// This Allows To possess an Enemy with full compatibility thanks to IController.
     /// </summary>
-    void CompatibilityMode(PlayerControllerB player, EnemyAI enemy, IController controller, CharacterMovement movement, NavMeshAgent agent) {
-        if (this.NoClipEnabled) {
-            if (this.MainEntrance != null) {
+    void CompatibilityMode(PlayerControllerB player, EnemyAI enemy, IController controller, CharacterMovement movement, NavMeshAgent agent)
+    {
+        if (this.NoClipEnabled)
+        {
+            if (this.MainEntrance != null)
+            {
                 enemy.SetOutsideStatus(enemy.transform.position.y > this.MainEntrance.transform.position.y + 5.0f, controller);
             }
         }
 
-        if (enemy.isEnemyDead) {
+        if (enemy.isEnemyDead)
+        {
             controller.OnDeath(enemy);
             this.Unpossess();
         }
@@ -229,23 +257,28 @@ internal sealed class PossessionMod : MonoBehaviour {
         controller.Update(enemy, this.IsAIControlled);
         player.cursorTip.text = controller.GetPrimarySkillName(enemy);
 
-        if (this.IsAIControlled) {
+        if (this.IsAIControlled)
+        {
             return;
         }
-        if (controller.SyncAnimationSpeedEnabled(enemy)) {
+        if (controller.SyncAnimationSpeedEnabled(enemy))
+        {
             movement.CharacterSpeed = agent.speed;
         }
 
-        if (controller.IsAbleToMove(enemy)) {
+        if (controller.IsAbleToMove(enemy))
+        {
             movement.CanMove = true;
             controller.OnMovement(enemy, Helper.PlayerInput_isMoving(), Helper.PlayerInput_Sprint());
             this.UpdateEnemyPosition(enemy);
         }
-        else {
+        else
+        {
             movement.CanMove = false;
         }
 
-        if (controller.IsAbleToRotate(enemy)) {
+        if (controller.IsAbleToRotate(enemy))
+        {
             this.UpdateEnemyRotation();
         }
     }
@@ -253,7 +286,8 @@ internal sealed class PossessionMod : MonoBehaviour {
 
 
 
-    void OnInteract() {
+    void OnInteract()
+    {
         if (this.PossessedEnemy is not EnemyAI enemy) return;
         float maxRange = this.InteractRange(enemy);
         if (maxRange == 0) return;
@@ -263,19 +297,22 @@ internal sealed class PossessionMod : MonoBehaviour {
 
         if (!Physics.Raycast(rayOrigin, rayDirection, out RaycastHit hit, maxRange, layerMask)) return;
 
-        if (hit.collider.gameObject.TryGetComponent(out DoorLock doorLock)) {
+        if (hit.collider.gameObject.TryGetComponent(out DoorLock doorLock))
+        {
             this.OpenOrcloseDoorAsEnemy(doorLock);
             return;
         }
 
         if (this.Controller is not IController controller) return;
         if (!controller.CanUseEntranceDoors(enemy)) return;
-        if (hit.collider.gameObject.TryGetComponent(out EntranceTeleport entrance)) {
+        if (hit.collider.gameObject.TryGetComponent(out EntranceTeleport entrance))
+        {
             this.InteractWithTeleport(enemy, entrance, controller);
         }
     }
 
-    void UpdateCameraPosition(Camera camera, EnemyAI enemy) {
+    void UpdateCameraPosition(Camera camera, EnemyAI enemy)
+    {
         Vector3 offsets = this.GetCameraOffset();
         Vector3 verticalOffset = offsets.y * Vector3.up;
         Vector3 forwardOffset = offsets.z * camera.transform.forward;
@@ -284,7 +321,8 @@ internal sealed class PossessionMod : MonoBehaviour {
         camera.transform.position = enemy.transform.position + offset;
     }
 
-    void UpdateCameraRotation(Camera camera, EnemyAI enemy) {
+    void UpdateCameraRotation(Camera camera, EnemyAI enemy)
+    {
         Quaternion newRotation = !this.IsAIControlled
             ? this.transform.rotation
             : Quaternion.LookRotation(enemy.transform.forward);
@@ -294,19 +332,23 @@ internal sealed class PossessionMod : MonoBehaviour {
         camera.transform.rotation = Quaternion.Lerp(camera.transform.rotation, newRotation, RotationLerpSpeed);
     }
 
-    void UpdateEnemyRotation() {
+    void UpdateEnemyRotation()
+    {
         if (this.CharacterMovement is not CharacterMovement characterMovement) return;
-        if (!this.NoClipEnabled) {
+        if (!this.NoClipEnabled)
+        {
             Quaternion horizontalRotation = Quaternion.Euler(0f, this.transform.eulerAngles.y, 0f);
             characterMovement.transform.rotation = horizontalRotation;
         }
-        else {
+        else
+        {
             characterMovement.transform.rotation = this.transform.rotation;
         }
     }
 
     // Updates enemy's position to match the possessed object's position
-    void UpdateEnemyPosition(EnemyAI enemy) {
+    void UpdateEnemyPosition(EnemyAI enemy)
+    {
         if (this.CharacterMovement is not CharacterMovement characterMovement) return;
         Vector3 offsets = this.GetEnemyPositionOffset();
 
@@ -315,33 +357,42 @@ internal sealed class PossessionMod : MonoBehaviour {
 
         Vector3 PositionOffset = characterMovement.transform.position + new Vector3(offsets.x, offsets.y, offsets.z);
         enemy.transform.position = PositionOffset;
-        if (!this.IsLeftAltHeld) {
+        if (!this.IsLeftAltHeld)
+        {
             enemy.transform.eulerAngles = enemyEuler;
         }
         enemy.SyncPositionToClients();
     }
 
     // Possesses the specified enemy
-    internal void Possess(EnemyAI enemy) {
+    internal void Possess(EnemyAI enemy)
+    {
         if (enemy.isEnemyDead) return;
         this.Unpossess();
-        this.Possession.SetEnemy(enemy);
+        if(this.isHostEnemyOnly(enemy))
+        {
+            Helper.SendNotification("Possession", $"This {enemy.enemyType.enemyName} Control is Host Only");
+            return;
+        }
+        this.Controller = this.GetEnemyController(enemy);
         this.IsAIControlled = false;
         this.InitCharacterMovement(enemy);
         this.FirstUpdate = true;
         enemy.EnableEnemyMesh(true);
-        this.Controller = this.GetEnemyController(enemy);
         this.Controller?.OnPossess(enemy);
     }
 
-    void KillEnemyAndUnposses() {
+    void KillEnemyAndUnposses()
+    {
         if (Helper.LocalPlayer is not PlayerControllerB localPlayer) return;
         if (this.Possession.Enemy is not EnemyAI enemy) return;
 
         enemy.Kill();
 
-        if (localPlayer.IsHost) {
-            if (enemy.TryGetComponent(out NetworkObject networkObject)) {
+        if (localPlayer.IsHost)
+        {
+            if (enemy.TryGetComponent(out NetworkObject networkObject))
+            {
                 networkObject.Despawn(true);
             }
         }
@@ -351,9 +402,12 @@ internal sealed class PossessionMod : MonoBehaviour {
     }
 
     // Releases possession of the current enemy
-    internal void Unpossess() {
-        if (this.Possession.Enemy is EnemyAI enemy) {
-            if (enemy.agent is NavMeshAgent agent) {
+    internal void Unpossess()
+    {
+        if (this.Possession.Enemy is EnemyAI enemy)
+        {
+            if (enemy.agent is NavMeshAgent agent)
+            {
                 agent.updatePosition = true;
                 agent.updateRotation = true;
                 agent.isStopped = false;
@@ -369,12 +423,14 @@ internal sealed class PossessionMod : MonoBehaviour {
         this.IsAIControlled = false;
         this.Possession.Clear();
         this.Controller = null;
-        if (this.CharacterMovementInstance is not null) {
+        if (this.CharacterMovementInstance is not null)
+        {
             Destroy(this.CharacterMovementInstance);
         }
     }
 
-    void ToggleAIControl() {
+    void ToggleAIControl()
+    {
         if (this.Possession.Enemy?.agent is null) return;
         if (this.CharacterMovement is null) return;
         if (this.MousePan is null) return;
@@ -383,19 +439,22 @@ internal sealed class PossessionMod : MonoBehaviour {
         this.SetAIControl(this.IsAIControlled);
         this.SendPossessionNotifcation($"AI Control: {(this.IsAIControlled ? "Enabled" : "Disabled")}");
 
-        
+
     }
 
-    void SetAIControl(bool enableAI) {
+    void SetAIControl(bool enableAI)
+    {
         if (this.CharacterMovement is not CharacterMovement characterMovement) return;
         if (this.Possession.Enemy is not EnemyAI enemy) return;
         if (enemy.agent is not NavMeshAgent agent) return;
-        if (enableAI) {
+        if (enableAI)
+        {
             _ = enemy.agent.Warp(enemy.transform.position);
             enemy.SyncPositionToClients();
         }
 
-        if (this.NoClipEnabled) {
+        if (this.NoClipEnabled)
+        {
             this.NoClipEnabled = false;
             characterMovement.SetNoClipMode(false);
         }
@@ -405,7 +464,7 @@ internal sealed class PossessionMod : MonoBehaviour {
         agent.isStopped = !enableAI;
         characterMovement.SetPosition(enemy.transform.position);
         characterMovement.enabled = !enableAI;
-        if(this.Controller != null)
+        if (this.Controller != null)
         {
             this.Controller.OnEnableAIControl(enemy, enableAI);
         }
@@ -416,18 +475,22 @@ internal sealed class PossessionMod : MonoBehaviour {
     float SprintMultiplier(EnemyAI enemy) => this.Controller?.SprintMultiplier(enemy) ?? IController.DefaultSprintMultiplier;
 
 
-    void OpenOrcloseDoorAsEnemy(DoorLock door) {
+    void OpenOrcloseDoorAsEnemy(DoorLock door)
+    {
         if (door == null) return;
         bool isDoorOpened = door.Reflect().GetInternalField<bool>("isDoorOpened");
 
-        if (door.isLocked) {
+        if (door.isLocked)
+        {
             door.UnlockDoorSyncWithServer();
         }
-        
-        if (isDoorOpened) {
+
+        if (isDoorOpened)
+        {
             door.OpenOrCloseDoor(Helper.Players[0]);
         }
-        else {
+        else
+        {
             door.OpenDoorAsEnemyServerRpc();
         }
 
@@ -438,20 +501,23 @@ internal sealed class PossessionMod : MonoBehaviour {
             teleport.entranceId == entrance.entranceId && teleport.isEntranceToBuilding != entrance.isEntranceToBuilding
         )?.entrancePoint;
 
-    void InteractWithTeleport(EnemyAI enemy, EntranceTeleport teleport, IController controller) {
+    void InteractWithTeleport(EnemyAI enemy, EntranceTeleport teleport, IController controller)
+    {
         if (this.CharacterMovement is not CharacterMovement characterMovement) return;
         if (this.GetExitPointFromDoor(teleport) is not Transform exitPoint) return;
         characterMovement.SetPosition(exitPoint.position);
         enemy.SetOutsideStatus(!teleport.isEntranceToBuilding, controller);
     }
 
-    Vector3 GetCameraOffset() {
+    Vector3 GetCameraOffset()
+    {
         return this.Possession.Enemy is not EnemyAI enemy || this.Controller is null
             ? IController.DefaultCamOffsets
             : this.Controller.GetCameraOffset(enemy);
     }
 
-    Vector3 GetEnemyPositionOffset() {
+    Vector3 GetEnemyPositionOffset()
+    {
         return this.Possession.Enemy is not EnemyAI enemy || this.Controller is null
             ? IController.DefaultEnemyOffset
             : this.Controller.GetEnemyPositionOffset(enemy);
@@ -459,37 +525,54 @@ internal sealed class PossessionMod : MonoBehaviour {
 
 
 
-    void UsePrimarySkill() {
+    void UsePrimarySkill()
+    {
         if (this.Possession.Enemy is not EnemyAI enemy || this.Controller is null) return;
         this.Controller.UsePrimarySkill(enemy);
     }
 
-    void UseSecondarySkill() {
+    void UseSecondarySkill()
+    {
         if (this.Possession.Enemy is not EnemyAI enemy || this.Controller is null) return;
         this.Controller.UseSecondarySkill(enemy);
     }
-    void OnPrimarySkillHold() {
+    void OnPrimarySkillHold()
+    {
         if (this.Possession.Enemy is not EnemyAI enemy || this.Controller is null) return;
         this.Controller.OnPrimarySkillHold(enemy);
     }
-    void ReleasePrimarySkill() {
+    void ReleasePrimarySkill()
+    {
         if (this.Possession.Enemy is not EnemyAI enemy || this.Controller is null) return;
         this.Controller.ReleasePrimarySkill(enemy);
     }
 
-    void OnSecondarySkillHold() {
+    void OnSecondarySkillHold()
+    {
         if (this.Possession.Enemy is not EnemyAI enemy || this.Controller is null) return;
         this.Controller.OnSecondarySkillHold(enemy);
     }
 
 
-    void ReleaseSecondarySkill() {
+    void ReleaseSecondarySkill()
+    {
         if (this.Possession.Enemy is not EnemyAI enemy || this.Controller is null) return;
         this.Controller.ReleaseSecondarySkill(enemy);
     }
 
-    void UseSpecialAbility() {
+    void UseSpecialAbility()
+    {
         if (this.Possession.Enemy is not EnemyAI enemy || this.Controller is null) return;
         this.Controller.UseSpecialAbility(enemy);
+    }
+
+    bool isHostEnemyOnly(EnemyAI enemy)
+    {
+        if(enemy is null) return false;
+        if(GetEnemyController(enemy) is IController controller)
+        {
+            return controller.isHostOnly(enemy);
+        }
+        return false;
     }
 }

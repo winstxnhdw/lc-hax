@@ -258,16 +258,17 @@ class EnemyPromptHandler {
     }
     bool HandleRadMech(RadMechAI radMech, PlayerControllerB targetPlayer, bool willTeleportEnemy, bool overrideInsideFactory) {
         if (!this.IsEnemyAllowedInside(radMech, targetPlayer, willTeleportEnemy, overrideInsideFactory)) return false;
+        if (!Helper.LocalPlayer.IsHost) return false;
         this.TeleportEnemyToPlayer(radMech, targetPlayer, willTeleportEnemy, true);
         radMech.TakeOwnership();
         radMech.targetPlayer = targetPlayer;
         radMech.targetedThreat = targetPlayer.ToThreat();
         //radMech.SetBehaviourState(RadMechBehaviorState.Alert);
-        //radMech.SetMovingTowardsTargetPlayer(targetPlayer);
-        //_ = radMech.SetDestinationToPosition(targetPlayer.transform.position);
-       //_ = radMech.Reflect().SetInternalField("losTimer", 100f);
-       // _ = radMech.Reflect().SetInternalField("lostCreatureInChase", false);
-       // _ = radMech.Reflect().SetInternalField("lostCreatureInChaseDebounce", false);
+        radMech.SetMovingTowardsTargetPlayer(targetPlayer);
+        _ = radMech.SetDestinationToPosition(targetPlayer.transform.position);
+       _ = radMech.Reflect().SetInternalField("losTimer", 100f);
+       _ = radMech.Reflect().SetInternalField("lostCreatureInChase", false);
+       _ = radMech.Reflect().SetInternalField("lostCreatureInChaseDebounce", false);
         radMech.SetOwner(targetPlayer);
         return true;
     }

@@ -1,6 +1,7 @@
 using UnityEngine;
 
 internal interface IController {
+
     const float DefaultSprintMultiplier = 2.8f;
 
     const float DefaultInteractRange = 4.5f;
@@ -51,6 +52,8 @@ internal interface IController {
     string? GetSecondarySkillName(EnemyAI enemy);
 
     float InteractRange(EnemyAI enemy);
+
+    bool isHostOnly(EnemyAI enemy);
 
     float SprintMultiplier(EnemyAI enemy);
 
@@ -103,6 +106,8 @@ internal interface IEnemyController<T> : IController where T : EnemyAI {
 
     string? GetSecondarySkillName(T enemy) => null;
 
+    bool isHostOnly(T enemy) => false;
+
     float InteractRange(T enemy) => IController.DefaultInteractRange;
 
     float SprintMultiplier(T enemy) => IController.DefaultSprintMultiplier;
@@ -149,6 +154,8 @@ internal interface IEnemyController<T> : IController where T : EnemyAI {
     string? IController.GetPrimarySkillName(EnemyAI enemy) => this.GetPrimarySkillName((T)enemy);
 
     string? IController.GetSecondarySkillName(EnemyAI enemy) => this.GetSecondarySkillName((T)enemy);
+
+    bool IController.isHostOnly(EnemyAI enemy) => this.isHostOnly((T)enemy);
 
     float IController.InteractRange(EnemyAI enemy) => this.InteractRange((T)enemy);
 

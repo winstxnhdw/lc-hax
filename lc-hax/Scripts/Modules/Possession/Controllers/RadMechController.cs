@@ -90,8 +90,9 @@ internal class RadMechController : IEnemyController<RadMechAI> {
             this.isFiring = false;
         }
     }
+    public bool isHostOnly(RadMechAI _) => true;
 
-    void OnUnpossess(RadMechAI _) => this.isFiring = false;
+    public void OnUnpossess(RadMechAI _) => this.isFiring = false;
 
     public void Update(RadMechAI enemy, bool isAIControlled) {
         if(isAIControlled) return;
