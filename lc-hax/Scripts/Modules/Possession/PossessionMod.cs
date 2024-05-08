@@ -368,17 +368,18 @@ internal sealed class PossessionMod : MonoBehaviour
     internal void Possess(EnemyAI enemy)
     {
         if (enemy.isEnemyDead) return;
-        this.Unpossess();
-        if(this.isHostEnemyOnly(enemy))
+        if (this.isHostEnemyOnly(enemy))
         {
             Helper.SendNotification("Possession", $"This {enemy.enemyType.enemyName} Control is Host Only", true);
             return;
         }
-        this.Controller = this.GetEnemyController(enemy);
+        this.Unpossess();
+        this.Possession.SetEnemy(enemy);
         this.IsAIControlled = false;
         this.InitCharacterMovement(enemy);
         this.FirstUpdate = true;
         enemy.EnableEnemyMesh(true);
+        this.Controller = this.GetEnemyController(enemy);
         this.Controller?.OnPossess(enemy);
     }
 
