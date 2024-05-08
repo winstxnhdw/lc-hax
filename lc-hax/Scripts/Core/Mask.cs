@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 public static class Mask
@@ -49,5 +50,25 @@ public static class Mask
             combinedLayerMask |= mask;
         }
         return combinedLayerMask;
+    }
+
+    public static LayerMask ToLayerMask(this HashSet<LayerMask> layerMasks)
+    {
+        LayerMask combinedMask = 0;
+        foreach (LayerMask mask in layerMasks)
+        {
+            combinedMask |= mask;
+        }
+        return combinedMask;
+    }
+
+    public static LayerMask ToLayerMask(this List<LayerMask> layerMasks)
+    {
+        LayerMask combinedMask = 0;
+        foreach (LayerMask mask in layerMasks)
+        {
+            combinedMask |= mask;
+        }
+        return combinedMask;
     }
 }

@@ -3,9 +3,17 @@ using System.Collections.Generic;
 using UnityObject = UnityEngine.Object;
 
 static partial class Extensions {
-    internal static void ForEach<T>(this IEnumerable<T> array, Action<T> action) {
+    internal static void ForEach<T>(this IEnumerable<T> array, Action<T> action, bool ThrowException = true) {
         foreach (T item in array) {
-            action(item);
+            try
+            {
+                action(item);
+            }
+            catch (Exception e)
+            {
+                if (ThrowException)
+                    throw e;
+            }   
         }
     }
 
