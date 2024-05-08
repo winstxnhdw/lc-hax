@@ -371,7 +371,7 @@ internal sealed class PossessionMod : MonoBehaviour
         this.Unpossess();
         if(this.isHostEnemyOnly(enemy))
         {
-            Helper.SendNotification("Possession", $"This {enemy.enemyType.enemyName} Control is Host Only");
+            Helper.SendNotification("Possession", $"This {enemy.enemyType.enemyName} Control is Host Only", true);
             return;
         }
         this.Controller = this.GetEnemyController(enemy);
