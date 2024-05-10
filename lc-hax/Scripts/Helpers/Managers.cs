@@ -16,4 +16,6 @@ static partial class Helper {
     internal static Terminal? Terminal => Helper.HUDManager?.Reflect().GetInternalField<Terminal>("terminalScript").Unfake();
 
     internal static IngamePlayerSettings? IngamePlayerSettings => IngamePlayerSettings.Instance.Unfake();
+
+
 }

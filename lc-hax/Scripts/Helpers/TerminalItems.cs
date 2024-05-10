@@ -11,12 +11,12 @@ static partial class Helper {
     /// <summary>
     /// This method is used to toggle the door using it's isDoorOpen property.
     /// </summary>
-    internal static void ToggleDoor(this TerminalAccessibleObject door) => door?.SetDoorOpen(!door.isDoorOpen());
+    internal static void ToggleDoor(this TerminalAccessibleObject door) => door.SetDoor(!door.isDoorOpen());
 
     /// <summary>
     /// Opens or closes the Terminal door using RPC
     /// </summary>
-    internal static void SetDoorOpen(this TerminalAccessibleObject door, bool isDoorOpen) => door.SetDoorOpenServerRpc(isDoorOpen);
+    internal static void SetDoor(this TerminalAccessibleObject door, bool isDoorOpen) => door?.SetDoorOpenServerRpc(isDoorOpen);
 
     /// <summary>
     /// Detonates the Landmine

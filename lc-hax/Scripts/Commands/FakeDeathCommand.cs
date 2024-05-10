@@ -12,7 +12,7 @@ class FakeDeathCommand : ICommand {
         _ = player.Reflect().InvokeInternalMethod(
             "KillPlayerServerRpc",
             player.PlayerIndex(),
-            false,
+            true,
             Vector3.zero,
             CauseOfDeath.Unknown,
             0

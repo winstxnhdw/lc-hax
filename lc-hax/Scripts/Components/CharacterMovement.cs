@@ -26,7 +26,15 @@ class CharacterMovement : MonoBehaviour {
     KeyboardMovement? NoClipKeyboard { get; set; } = null;
     CharacterController? CharacterController { get; set; }
 
-
+    readonly HashSet<LayerMask> ignoredLayers = new()
+    {
+        Mask.PlayerRagdoll,
+        Mask.Enemies,
+        Mask.LineOfSight,
+        //Mask.InteractableObject,
+        Mask.Props
+    };
+    
     void OnEnable() {
         if (this.CharacterController is not null)
             this.CharacterController.enabled = true;
@@ -63,8 +71,8 @@ class CharacterMovement : MonoBehaviour {
     void InitializeCharacterController() {
         if(this.gameObject.GetOrAddComponent<CharacterController>() is not CharacterController controller) return;
         this.CharacterController = controller;
-        // ignore these layers, LineOfSight, InteractableObject, Enemies, Props, PlayerRagdoll
-        this.CharacterController.excludeLayers = LayerMask.GetMask(new string[] { "LineOfSight", "InteractableObject", "Enemies", "Props", "PlayerRagdoll" });
+
+        this.CharacterController.excludeLayers = ignoredLayers.ToLayerMask();
         this.CharacterController.center = new Vector3(0f, 0.55f, 0f);
         this.CharacterController.height = 0.4f;
 

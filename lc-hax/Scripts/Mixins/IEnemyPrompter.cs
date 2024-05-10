@@ -46,6 +46,7 @@ class EnemyPromptHandler {
 
     bool HandleThumper(CrawlerAI thumper, PlayerControllerB targetPlayer, bool willTeleportEnemy, bool overrideInsideFactory) {
         if(!this.IsEnemyAllowedOutside(thumper, targetPlayer, willTeleportEnemy, overrideInsideFactory)) return false;
+        if (thumper.isEnemyDead) return false;
         this.TeleportEnemyToPlayer(thumper, targetPlayer, willTeleportEnemy, allowedInside: true);
         thumper.TakeOwnership();
         thumper.targetPlayer = targetPlayer;
@@ -56,6 +57,7 @@ class EnemyPromptHandler {
 
     bool HandleEyelessDog(MouthDogAI eyelessDog, PlayerControllerB targetPlayer, bool willTeleportEnemy, bool overrideInsideFactory) {
         if (!this.IsEnemyAllowedInside(eyelessDog, targetPlayer, willTeleportEnemy, overrideInsideFactory)) return false;
+        if (eyelessDog.isEnemyDead) return false;
         this.TeleportEnemyToPlayer(eyelessDog, targetPlayer, willTeleportEnemy, true);
         eyelessDog.TakeOwnership();
         eyelessDog.targetPlayer = targetPlayer;
@@ -66,6 +68,7 @@ class EnemyPromptHandler {
 
     bool HandleBaboonHawk(BaboonBirdAI baboonHawk, PlayerControllerB targetPlayer, bool willTeleportEnemy, bool overrideInsideFactory) {
         if (!this.IsEnemyAllowedInside(baboonHawk, targetPlayer, willTeleportEnemy, overrideInsideFactory)) return false;
+        if (baboonHawk.isEnemyDead) return false;
         this.TeleportEnemyToPlayer(baboonHawk, targetPlayer, willTeleportEnemy, true);
         baboonHawk.TakeOwnership();
         baboonHawk.targetPlayer = targetPlayer;
@@ -78,6 +81,7 @@ class EnemyPromptHandler {
 
     bool HandleForestGiant(ForestGiantAI forestGiant, PlayerControllerB targetPlayer, bool willTeleportEnemy, bool overrideInsideFactory) {
         if (!this.IsEnemyAllowedInside(forestGiant, targetPlayer, willTeleportEnemy, overrideInsideFactory)) return false;
+        if (forestGiant.isEnemyDead) return false;
         this.TeleportEnemyToPlayer(forestGiant, targetPlayer, willTeleportEnemy, true);
         forestGiant.TakeOwnership();
         forestGiant.targetPlayer = targetPlayer;
@@ -93,6 +97,7 @@ class EnemyPromptHandler {
     }
 
     bool HandleSnareFlea(CentipedeAI snareFlea, PlayerControllerB targetPlayer) {
+        if (snareFlea.isEnemyDead) return false;
         if (!targetPlayer.isInsideFactory) return false;
         snareFlea.TakeOwnership();
         snareFlea.targetPlayer = targetPlayer;
@@ -104,6 +109,7 @@ class EnemyPromptHandler {
 
     bool HandleBracken(FlowermanAI bracken, PlayerControllerB targetPlayer, bool willTeleportEnemy, bool overrideInsideFactory) {
         if (!this.IsEnemyAllowedOutside(bracken, targetPlayer, willTeleportEnemy, overrideInsideFactory)) return false;
+        if (bracken.isEnemyDead) return false;
         this.TeleportEnemyToPlayer(bracken, targetPlayer, willTeleportEnemy, allowedInside: true);
         bracken.TakeOwnership();
         bracken.targetPlayer = targetPlayer;
@@ -115,6 +121,7 @@ class EnemyPromptHandler {
 
     bool HandleBunkerSpider(SandSpiderAI bunkerSpider, PlayerControllerB targetPlayer, bool willTeleportEnemy, bool overrideInsideFactory) {
         if (!this.IsEnemyAllowedOutside(bunkerSpider, targetPlayer, willTeleportEnemy, overrideInsideFactory)) return false;
+        if (bunkerSpider.isEnemyDead) return false;
         this.TeleportEnemyToPlayer(bunkerSpider, targetPlayer, willTeleportEnemy, allowedInside: true);
         bunkerSpider.TakeOwnership();
         bunkerSpider.targetPlayer = targetPlayer;
@@ -140,6 +147,7 @@ class EnemyPromptHandler {
 
     bool HandleBee(RedLocustBees bee, PlayerControllerB targetPlayer, bool willTeleportEnemy, bool overrideInsideFactory) {
         if (!this.IsEnemyAllowedInside(bee, targetPlayer, willTeleportEnemy, overrideInsideFactory)) return false;
+        if (bee.isEnemyDead) return false;
         this.TeleportEnemyToPlayer(bee, targetPlayer, willTeleportEnemy, true);
         bee.TakeOwnership();
         bee.targetPlayer = targetPlayer;
@@ -151,6 +159,7 @@ class EnemyPromptHandler {
 
     bool HandleHoardingBug(HoarderBugAI hoardingBug, PlayerControllerB targetPlayer, bool willTeleportEnemy, bool overrideInsideFactory) {
         if (!this.IsEnemyAllowedOutside(hoardingBug, targetPlayer, willTeleportEnemy, overrideInsideFactory)) return false;
+        if (hoardingBug.isEnemyDead) return false;
         this.TeleportEnemyToPlayer(hoardingBug, targetPlayer, willTeleportEnemy, allowedInside: true);
         hoardingBug.TakeOwnership();
         hoardingBug.targetPlayer = targetPlayer;
@@ -167,6 +176,7 @@ class EnemyPromptHandler {
 
     bool HandleNutcracker(NutcrackerEnemyAI nutcracker, PlayerControllerB targetPlayer, bool willTeleportEnemy, bool overrideInsideFactory) {
         if (!this.IsEnemyAllowedOutside(nutcracker, targetPlayer, willTeleportEnemy, overrideInsideFactory)) return false;
+        if (nutcracker.isEnemyDead) return false;
 
         this.TeleportEnemyToPlayer(nutcracker, targetPlayer, willTeleportEnemy, true, true);
         nutcracker.TakeOwnership();
@@ -184,6 +194,7 @@ class EnemyPromptHandler {
     }
 
     bool HandleMaskedPlayer(MaskedPlayerEnemy maskedPlayer, PlayerControllerB targetPlayer, bool willTeleportEnemy) {
+        if (maskedPlayer.isEnemyDead) return false;
 
         this.TeleportEnemyToPlayer(maskedPlayer, targetPlayer, willTeleportEnemy, true, true);
         maskedPlayer.TakeOwnership();
@@ -199,6 +210,7 @@ class EnemyPromptHandler {
 
     bool HandleCoilHead(SpringManAI coilHead, PlayerControllerB targetPlayer, bool willTeleportEnemy, bool overrideInsideFactory) {
         if (!this.IsEnemyAllowedOutside(coilHead, targetPlayer, willTeleportEnemy, overrideInsideFactory)) return false;
+        if (coilHead.isEnemyDead) return false;
         this.TeleportEnemyToPlayer(coilHead, targetPlayer, willTeleportEnemy, allowedInside: true);
         coilHead.TakeOwnership();
         coilHead.targetPlayer = targetPlayer;
@@ -213,6 +225,7 @@ class EnemyPromptHandler {
 
     bool HandleSporeLizard(PufferAI sporeLizard, PlayerControllerB targetPlayer, bool willTeleportEnemy, bool overrideInsideFactory) {
         if (!this.IsEnemyAllowedOutside(sporeLizard, targetPlayer, willTeleportEnemy, overrideInsideFactory)) return false;
+        if (sporeLizard.isEnemyDead) return false;
         this.TeleportEnemyToPlayer(sporeLizard, targetPlayer, willTeleportEnemy, allowedInside: true);
         sporeLizard.TakeOwnership();
         sporeLizard.targetPlayer = targetPlayer;
@@ -224,6 +237,7 @@ class EnemyPromptHandler {
 
     bool HandleJester(JesterAI jester, PlayerControllerB targetPlayer, bool willTeleportEnemy, bool overrideInsideFactory) {
         if (!this.IsEnemyAllowedOutside(jester, targetPlayer, willTeleportEnemy, overrideInsideFactory)) return false;
+        if (jester.isEnemyDead) return false;
         this.TeleportEnemyToPlayer(jester, targetPlayer, willTeleportEnemy, allowedInside: true);
         jester.TakeOwnership();
         jester.targetPlayer = targetPlayer;
@@ -238,6 +252,7 @@ class EnemyPromptHandler {
 
     bool HandleEarthLeviathan(SandWormAI earthLeviathan, PlayerControllerB targetPlayer, bool willTeleportEnemy) {
         if (!this.IsEnemyAllowedInside(earthLeviathan, targetPlayer, willTeleportEnemy, false)) return false;
+        if (earthLeviathan.isEnemyDead) return false;
         this.TeleportEnemyToPlayer(earthLeviathan, targetPlayer, willTeleportEnemy, true);
         earthLeviathan.TakeOwnership();
         earthLeviathan.targetPlayer = targetPlayer;
@@ -247,6 +262,7 @@ class EnemyPromptHandler {
     }
 
     bool HandleDressGirl(DressGirlAI dressGirl, PlayerControllerB targetPlayer, bool willTeleportEnemy) {
+        if (dressGirl.isEnemyDead) return false;
         this.TeleportEnemyToPlayer(dressGirl, targetPlayer, willTeleportEnemy, true);
         dressGirl.TakeOwnership();
         dressGirl.targetPlayer = targetPlayer;
@@ -258,6 +274,7 @@ class EnemyPromptHandler {
     }
     bool HandleRadMech(RadMechAI radMech, PlayerControllerB targetPlayer, bool willTeleportEnemy, bool overrideInsideFactory) {
         if (!this.IsEnemyAllowedInside(radMech, targetPlayer, willTeleportEnemy, overrideInsideFactory)) return false;
+        if (radMech.isEnemyDead) return false;
         if (!Helper.LocalPlayer.IsHost) return false;
         this.TeleportEnemyToPlayer(radMech, targetPlayer, willTeleportEnemy, true);
         radMech.TakeOwnership();
@@ -275,6 +292,7 @@ class EnemyPromptHandler {
 
     bool HandleButler(ButlerEnemyAI butler, PlayerControllerB targetPlayer, bool willTeleportEnemy, bool overrideInsideFactory) {
         if (!this.IsEnemyAllowedOutside(butler, targetPlayer, willTeleportEnemy, overrideInsideFactory)) return false;
+        if (butler.isEnemyDead) return false;
         this.TeleportEnemyToPlayer(butler, targetPlayer, willTeleportEnemy, true);
         butler.TakeOwnership();
         butler.targetPlayer = targetPlayer;
@@ -285,6 +303,7 @@ class EnemyPromptHandler {
     }
     bool HandleButlerBees(ButlerBeesEnemyAI butlerBees, PlayerControllerB targetPlayer, bool willTeleportEnemy, bool overrideInsideFactory) {
         if (!this.IsEnemyAllowedOutside(butlerBees, targetPlayer, willTeleportEnemy, overrideInsideFactory)) return false;
+        if (butlerBees.isEnemyDead) return false;
         this.TeleportEnemyToPlayer(butlerBees, targetPlayer, willTeleportEnemy, true);
         butlerBees.TakeOwnership();
         butlerBees.targetPlayer = targetPlayer;
@@ -296,6 +315,7 @@ class EnemyPromptHandler {
 
     bool HandleDoublewingBird(DoublewingAI doublewingBird, PlayerControllerB targetPlayer, bool willTeleportEnemy) {
         if(this.IsEnemyAllowedInside(doublewingBird, targetPlayer, willTeleportEnemy, false)) return false;
+        if (doublewingBird.isEnemyDead) return false;
         this.TeleportEnemyToPlayer(doublewingBird, targetPlayer, willTeleportEnemy, true);
         doublewingBird.TakeOwnership();
         doublewingBird.SetMovingTowardsTargetPlayer(targetPlayer);
@@ -304,6 +324,7 @@ class EnemyPromptHandler {
 
     bool HandleDocileLocustBees(DocileLocustBeesAI docileLocustBees, PlayerControllerB targetPlayer, bool willTeleportEnemy) {
         this.TeleportEnemyToPlayer(docileLocustBees, targetPlayer, willTeleportEnemy, true);
+        if (docileLocustBees.isEnemyDead) return false;
         docileLocustBees.TakeOwnership();
         docileLocustBees.SetMovingTowardsTargetPlayer(targetPlayer);
         docileLocustBees.SetBehaviourState(BehaviourState.IDLE);

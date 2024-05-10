@@ -119,6 +119,46 @@ internal static partial class Helper {
         return Grab;
     }
 
+    internal static RagdollGrabbableObject? SpawnBody(Vector3 position, int id)
+    {
+        if (Helper.StartOfRound is not StartOfRound round) return null;
+        if (round.ragdollGrabbableObjectPrefab == null) return null;
+        if (Helper.LocalPlayer is not PlayerControllerB player) return null;
+        if (player.playersManager is null) return null;
+        if (player.playersManager.propsContainer is null) return null;
+        GameObject Item = Object.Instantiate<GameObject>(round.ragdollGrabbableObjectPrefab, player.playersManager.propsContainer);
+        Item.transform.SetPositionAndRotation(position, Quaternion.identity);
+        if (!Item.TryGetComponent(out NetworkObject networkObject))
+        {
+            Object.Destroy(Item);
+            return null;
+        }
+
+        networkObject.Spawn(false);
+        if (!Item.TryGetComponent(out RagdollGrabbableObject Grab))
+        {
+            Object.Destroy(Item);
+            return null;
+        }
+        Grab.bodyID.Value = id;
+        Grab.SetScrapValue(5);
+        return Grab;
+    }
+
+    internal static List<RagdollGrabbableObject> SpawnBodies(Vector3 position, int playerid, int amount)
+    {
+        List<RagdollGrabbableObject> spawnedItems = new();
+        for (int i = 0; i < amount; i++)
+        {
+            RagdollGrabbableObject? newItem = SpawnBody(position, playerid);
+            if (newItem != null)
+            {
+                spawnedItems.Add(newItem);
+            }
+        }
+        return spawnedItems;
+    }
+
     internal static List<GrabbableObject> SpawnItems(Vector3 position, Item prefab, int amount) {
         List<GrabbableObject> spawnedItems = new();
         for (int i = 0; i < amount; i++) {

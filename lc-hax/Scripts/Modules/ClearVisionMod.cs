@@ -23,7 +23,7 @@ internal sealed class ClearVisionMod : MonoBehaviour
             float Light = this.IsInsideFactory ? this.InternalLight : this.OutsideLight;
             if (this.IsDead)
             {
-                Light *= 2f;
+                Light *= 15f;
             }
             return Light;
         }
