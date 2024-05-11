@@ -21,13 +21,13 @@ internal class AutomaticKnifePatch
 
             if (IsUsingAttack)
             {
-                if (item.RequireCooldown())
-                {
-                    return;
-                }
                 AttackDelay += Time.deltaTime;
                 if (AttackDelay >= AttackCooldown)
                 {
+                    if (item.RequireCooldown())
+                    {
+                        return;
+                    }
                     AttackDelay = 0f;
                     item.UseItemOnClient(true);
                 }
