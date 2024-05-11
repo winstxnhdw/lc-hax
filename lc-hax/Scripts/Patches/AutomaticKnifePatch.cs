@@ -4,15 +4,15 @@ using Hax;
 using JetBrains.Annotations;
 using UnityEngine;
 
-[HarmonyPatch(typeof(PlayerControllerB))]
+[HarmonyPatch]
 internal class AutomaticKnifePatch
 {
-    internal static float AttackCooldown = 0.07f;
+    internal static float AttackCooldown = 0.1f;
     private static float AttackDelay = 0.0f;
     private static bool IsUsingAttack => IngamePlayerSettings.Instance.playerInput.actions.FindAction("ActivateItem", false).IsPressed();
 
+    [HarmonyPatch(typeof(PlayerControllerB), "Update")]
     [HarmonyPostfix]
-    [HarmonyPatch("Update")]
     internal static void ItemActivatePostfix(PlayerControllerB __instance)
     {
         if (!__instance.IsSelf()) return;
@@ -31,6 +31,22 @@ internal class AutomaticKnifePatch
                     AttackDelay = 0f;
                     item.UseItemOnClient(true);
                 }
+            }
+        }
+    }
+    [HarmonyPatch(typeof(KnifeItem), "HitKnife")]
+    [HarmonyPrefix]
+    public static void Prefix(ref KnifeItem __instance, bool cancel, ref float ___timeAtLastDamageDealt)
+    {
+        if(__instance.playerHeldBy is not PlayerControllerB player)
+        {
+            return;
+        }
+        if (player.IsSelf())
+        {
+            if (!cancel)
+            {
+                ___timeAtLastDamageDealt = 0;
             }
         }
     }
