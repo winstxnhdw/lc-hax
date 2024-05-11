@@ -107,7 +107,7 @@ class HealCommand : ICommand, IStun {
 
 
     PlayerControllerB HealLocalPlayer(HUDManager hudManager) {
-        if (!hudManager.localPlayer.isPlayerControlled) {
+        if (hudManager.localPlayer.IsDead()) {
             this.RespawnLocalPlayer(hudManager.localPlayer, hudManager.localPlayer.playersManager, hudManager);
 
             Helper.CreateComponent<WaitForBehaviour>("Respawn")

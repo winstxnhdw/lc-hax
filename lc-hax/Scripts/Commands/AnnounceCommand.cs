@@ -10,7 +10,8 @@ class AnnounceCommand : ICommand
             Chat.Print("Usage: /announce <message>");
             return;
         }
+        string message = string.Join(" ", args[0..]);
 
-        Chat.Announce(string.Join(' ', args.Span.ToArray(), true));
+        Chat.Announce(string.Join(' ', message), true);
     }
 }

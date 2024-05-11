@@ -367,8 +367,9 @@ internal sealed class PossessionMod : MonoBehaviour
     // Possesses the specified enemy
     internal void Possess(EnemyAI enemy)
     {
+        if (Helper.LocalPlayer is not PlayerControllerB localPlayer) return;
         if (enemy.isEnemyDead) return;
-        if (this.isHostEnemyOnly(enemy))
+        if (this.isHostEnemyOnly(enemy) && !localPlayer.IsHost)
         {
             Helper.SendNotification("Possession", $"This {enemy.enemyType.enemyName} Control is Host Only", true);
             return;

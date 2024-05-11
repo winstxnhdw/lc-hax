@@ -18,7 +18,10 @@ class GiftBoxPatch {
 
     [HarmonyPatch(nameof(GiftBoxItem.OpenGiftBoxClientRpc))]
     static bool Prefix(GiftBoxItem __instance, NetworkObjectReference netObjectRef, int presentValue, Vector3 startFallingPos) {
-        if (!Setting.EnableUnlimitedGiftBox) return true;
+        if (!Setting.EnableUnlimitedGiftBox)
+        {
+            return true;
+        }
 
         bool skipFlag = !GiftBoxPatch.LocalPlayerActivated;
         GiftBoxPatch.LocalPlayerActivated = false;

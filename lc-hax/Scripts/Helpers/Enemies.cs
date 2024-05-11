@@ -94,22 +94,35 @@ internal static partial class Helper {
     internal static void Kill(this EnemyAI enemy) {
         enemy.TakeOwnerShipIfNotOwned();
         bool Destroy = true;
-        switch (enemy) {
-            case NutcrackerEnemyAI nutcracker:
-                nutcracker.KillEnemy();
-                Destroy = false;
-                break;
-            case ButlerEnemyAI butler:
-                butler.KillEnemy();
-                Destroy = false;
-                break;
-            case FlowermanAI flowerman:
-                flowerman.KillEnemy();
-                break;
-            default:
-                break;
+        if (!enemy.isEnemyDead)
+        {
+            switch (enemy) {
+                case NutcrackerEnemyAI nutcracker:
+                    nutcracker.KillEnemy();
+                    Destroy = false;
+                    break;
+                case ButlerEnemyAI butler:
+                    butler.KillEnemy();
+                    Destroy = false;
+                    break;
+                case FlowermanAI flowerman:
+                    flowerman.KillEnemy();
+                    break;
+                default:
+                    break;
+            }
+            enemy.KillEnemyServerRpc(Destroy);
         }
-        enemy.KillEnemyServerRpc(Destroy);
+        if(Helper.LocalPlayer is not PlayerControllerB localPlayer) return;
+        if (!Destroy) return;
+        if (localPlayer.IsHost)
+        {
+            if (enemy.TryGetComponent(out NetworkObject networkObject))
+            {
+                networkObject.Despawn(true);
+            }
+        }
+
     }
     /// <summary>
     /// Updates enemy navmesh and resets the searchs routines

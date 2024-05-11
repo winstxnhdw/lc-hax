@@ -72,15 +72,16 @@ internal sealed class ESPMod : MonoBehaviour {
 
         Helper.Grabbables.WhereIsNotNull().ForEach(grabbableObject => {
             if (grabbableObject == null) return;
+            if (Helper.LocalPlayer is not PlayerControllerB player) return;
             if ((grabbableObject.mainObjectRenderer is Renderer renderer) && !renderer.enabled) return;
             Vector3 rendererCentrePoint = camera.WorldToEyesPoint(grabbableObject.transform.position);
             if (PossessionMod.Instance is { IsPossessed: true } and not ({ PossessedEnemy: HoarderBugAI } or { PossessedEnemy: BaboonBirdAI })) return;
-
-            if (rendererCentrePoint.z <= 2.0f) {
+            if(player.HasItemInSlot(grabbableObject)) return;
+            if (rendererCentrePoint.z <= 1f) {
                 return;
             }
 
-            this.RenderLabel($"{grabbableObject.ToEspLabel()} ${grabbableObject.GetScrapValue()}").Invoke(
+            this.RenderLabel(grabbableObject.BuildGrabbableLabel()).Invoke(
                 Helper.GetLootColor(grabbableObject),
                 rendererCentrePoint
             );
@@ -304,7 +305,7 @@ internal sealed class ESPMod : MonoBehaviour {
         Bounds bounds,
         Color colour,
         Action<Color, Vector3>? action,
-        float cutOffDistance = 4.0f
+        float cutOffDistance = 1f
     ) {
         Vector3 rendererCentrePoint = camera.WorldToEyesPoint(bounds.center);
 

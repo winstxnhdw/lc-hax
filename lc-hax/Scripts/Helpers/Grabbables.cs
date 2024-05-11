@@ -1,9 +1,12 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
+using System.Text;
 using GameNetcodeStuff;
 using Unity.Netcode;
 using UnityEngine;
+using static UnityEngine.Rendering.DebugUI;
 using Object = UnityEngine.Object;
 using Random = System.Random;
 
@@ -63,10 +66,15 @@ internal static partial class Helper {
 
     internal static int GetGiftBoxActualValue(this GiftBoxItem giftBox) {
         if (giftBox == null) return 0;
-        return giftBox.Reflect().GetInternalField<int>("objectInPresentValue");
+        var content = giftBox.Reflect().GetInternalField<int>("objectInPresentValue");
+        if(content == 0)
+        {
+            content = giftBox.scrapValue;
+        }
+        return content;
     }
 
-    internal static string ToEspLabel(this GrabbableObject grabbable) {
+    internal static string GetGrabbableNameESP(this GrabbableObject grabbable) {
         if (grabbable == null) return "";
         if (grabbable is RagdollGrabbableObject ragdollGrabbableObject) {
             PlayerControllerB? player = ragdollGrabbableObject.GetPlayerFromBody();
@@ -81,6 +89,40 @@ internal static partial class Helper {
 
         return grabbable.itemProperties.itemName;
     }
+
+    internal static string BuildGrabbableLabel(this GrabbableObject grabbable)
+    {
+        StringBuilder builder = new();
+        string Name = grabbable.GetGrabbableNameESP();
+        int ScrapValue = grabbable.GetScrapValue();
+        float weight = grabbable.ItemWeight();
+        builder.Append($"{Name} ");
+        if (ScrapValue > 0)
+        {
+            builder.Append($"${ScrapValue} ");
+        }
+        if (weight - 1 > 0)
+        {
+            builder.Append($"({weight.ToKilograms()}) ");
+        }
+        return builder.ToString();
+    }
+
+    internal static float ItemWeight(this GrabbableObject item)
+    {
+        return item.itemProperties.weight;
+    }
+
+    internal static string ToKilograms(this float value)
+    {
+        float weight_in_lbs = UnityEngine.Mathf.Clamp(value - 1, 0f, 100f) * 105f;
+        float weight_in_kgs = weight_in_lbs / 2.205f;
+
+        return string.Format("{0:0.#}", weight_in_kgs) + " kg";
+
+    }
+
+
 
     internal static int GetScrapValue(this GrabbableObject grabbable) =>
         grabbable switch {
@@ -199,5 +241,28 @@ internal static partial class Helper {
         }
     }
 
+    //internal static void ChangeGiftContent(this GiftBoxItem gift, Item item, bool RandomizeValue = false)
+    //{
+    //    if (gift is null || item is null) return;
+    //    Reflector<GiftBoxItem> giftReflector = gift.Reflect();
+    //    _ = giftReflector.SetInternalField("objectInPresent", item.spawnPrefab);
+        
+
+    //    System.Random random = new((int)gift.targetFloorPosition.x + (int)gift.targetFloorPosition.y);
+
+    //    int objectInPresentValue = (int)(random.Next(item.minValue + 25, item.maxValue + 35) *
+    //                                     Helper.RoundManager.scrapValueMultiplier);
+    //    _ = giftReflector.SetInternalField("objectInPresentValue", objectInPresentValue);
+
+    //}
+
+    //internal static void UpdateGiftContent(this GiftBoxItem gift, Item item, bool RandomizeValue = false)
+    //{
+    //    if (gift is null || item is null) return;
+    //    Reflector<GiftBoxItem> giftReflector = gift.Reflect();
+    //    _ = giftReflector.SetInternalField("objectInPresent", item.spawnPrefab);
+    //    _ = giftReflector.SetInternalField("objectInPresentValue", item.scrapValue);
+
+    //}
 
 }
