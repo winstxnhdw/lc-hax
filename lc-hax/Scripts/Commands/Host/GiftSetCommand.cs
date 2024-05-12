@@ -2,7 +2,7 @@ using System.Linq;
 using GameNetcodeStuff;
 using Hax;
 
-[PrivilegedCommand("setgift")]
+[HostCommand("setgift")]
 internal class GiftSetCommand : ICommand {
     public void Execute(StringArray args) {
         if (Helper.LocalPlayer is not PlayerControllerB localPlayer) return;

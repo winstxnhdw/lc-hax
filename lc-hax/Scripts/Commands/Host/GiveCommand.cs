@@ -10,7 +10,7 @@ using Unity.Netcode;
 using UnityEngine;
 using Object = UnityEngine.Object;
 
-[PrivilegedCommand("give")]
+[HostCommand("give")]
 internal class GiveCommand : ICommand
 {
     private readonly Dictionary<string, Dictionary<string, int>> kits = new() {
@@ -165,7 +165,7 @@ internal class GiveCommand : ICommand
             {
                 string itemName = itemEntry.Key;
                 int itemAmount = itemEntry.Value * baseAmount; // Multiply the specified amount by the base amount.
-                Item? item = this.FindItem(itemName);
+                Item? item = Helper.FindItem(itemName);
                 if (item is null) continue;
                 _ = this.Spawn(player, item, itemAmount).Start();
             }
@@ -179,25 +179,12 @@ internal class GiveCommand : ICommand
 
     private void GiveItem(PlayerControllerB player, string itemName, int amount)
     {
-        Item? item = this.FindItem(itemName);
+        Item? item = Helper.FindItem(itemName);
         if (item is null) return;
         _ = this.Spawn(player, item, amount).Start();
     }
 
-    private Item? FindItem(string itemName)
-    {
-        Item? item = Helper.GetItem(itemName);
-        if (item == null)
-        {
-            Chat.Print($"{itemName} not found!");
-            return null;
-        }
-        return item;
-    }
-
-    private void GiveBody(int bodyID)
-    {
-    }
+   
 
     private IEnumerator SpawnBodies(PlayerControllerB player, int bodyID, int amount)
     {

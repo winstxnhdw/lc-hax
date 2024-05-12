@@ -1,6 +1,6 @@
 using Hax;
 
-[PrivilegedCommand("quota")]
+[HostCommand("quota")]
 class QuotaCommand : ICommand {
     public void Execute(StringArray args) {
         if (Helper.TimeOfDay is not TimeOfDay timeOfDay) return;

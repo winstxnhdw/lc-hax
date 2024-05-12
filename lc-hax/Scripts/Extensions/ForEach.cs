@@ -12,8 +12,9 @@ static partial class Extensions {
             catch (Exception e)
             {
                 if (ThrowException)
-                    throw e;
-            }   
+                    Logger.Write(e);
+
+            }
         }
     }
 

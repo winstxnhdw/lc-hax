@@ -1,6 +1,6 @@
 using Hax;
 
-[PrivilegedCommand("eject")]
+[HostCommand("eject")]
 class EjectCommand : ICommand {
     public void Execute(StringArray _) => Helper.StartOfRound?.ManuallyEjectPlayersServerRpc();
 }

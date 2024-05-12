@@ -36,9 +36,9 @@ static class Chat {
             .GetExecutingAssembly()
             .GetTypes()
             .Where(type => typeof(ICommand).IsAssignableFrom(type))
-            .Where(type => type.GetCustomAttribute<PrivilegedCommandAttribute>() is not null)
+            .Where(type => type.GetCustomAttribute<HostCommandAttribute>() is not null)
             .ToDictionary(
-                type => type.GetCustomAttribute<PrivilegedCommandAttribute>().Syntax,
+                type => type.GetCustomAttribute<HostCommandAttribute>().Syntax,
                 type => (ICommand)new PrivilegedCommand((ICommand)Activator.CreateInstance(type))
             );
 

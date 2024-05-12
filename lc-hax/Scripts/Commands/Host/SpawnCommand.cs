@@ -2,7 +2,7 @@ using GameNetcodeStuff;
 using Hax;
 using UnityEngine;
 
-[PrivilegedCommand("spawn")]
+[HostCommand("spawn")]
 internal class SpawnCommand : ICommand {
     public void Execute(StringArray args) {
         if (Helper.RoundManager?.currentLevel is null) return;

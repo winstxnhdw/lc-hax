@@ -138,6 +138,16 @@ internal static partial class Helper {
             item.itemName.Contains(itemName, StringComparison.InvariantCultureIgnoreCase)) ?? Items.First(item =>
             item.name.Contains(itemName, StringComparison.InvariantCultureIgnoreCase));
 
+    internal static Item? FindItem(string itemName)
+    {
+        Item? item = Helper.GetItem(itemName);
+        if (item == null)
+        {
+            Chat.Print($"{itemName} not found!");
+            return null;
+        }
+        return item;
+    }
 
 
     internal static GrabbableObject? SpawnItem(Vector3 position, Item prefab) {
