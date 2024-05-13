@@ -13,7 +13,7 @@ sealed class BreakerTrollMod : MonoBehaviour
 
     internal float TimeBetweenSwitches { get; set; } = 10f;
     private int lastToggledIndex = -1;
-    private float nextToggleTime = 0.0f;
+    private float Delay = 0.0f;
 
     internal void Awake()
     {
@@ -41,7 +41,10 @@ sealed class BreakerTrollMod : MonoBehaviour
         if(Switches == null || Switches.Length == 0)
             return;
 
-        if(Time.time >= nextToggleTime)
+
+        Delay += Time.deltaTime;
+
+        if (Delay >= TimeBetweenSwitches)
         {
             int randomIndex;
             do
@@ -55,7 +58,7 @@ sealed class BreakerTrollMod : MonoBehaviour
 
 
             lastToggledIndex = randomIndex;
-            nextToggleTime = Time.time + TimeBetweenSwitches;
+            Delay = 0f;
         }
     }
 }

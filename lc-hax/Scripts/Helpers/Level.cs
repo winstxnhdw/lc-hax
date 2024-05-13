@@ -1,3 +1,5 @@
+using System.Linq;
+
 namespace Hax;
 
 static partial class Helper {
@@ -25,4 +27,10 @@ static partial class Helper {
         if (Helper.RoundManager is not RoundManager roundmanager) return;
         roundmanager.FlickerLights(flickerFlashlights, disableFlashlights);
     }
+
+    /// <summary>
+    /// Returns the active breakerbox Managing the level's power.
+    /// </summary>
+    internal static BreakerBox BreakerBox => Helper.FindObjects<BreakerBox>().FirstOrDefault(breaker => breaker.name.Contains("(Clone)"));
+
 }

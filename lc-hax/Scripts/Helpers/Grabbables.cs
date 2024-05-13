@@ -41,6 +41,9 @@ internal static partial class Helper {
             case GiftBoxItem giftBoxItem:
                 giftBoxItem.OpenGiftBoxServerRpc();
                 break;
+            case KnifeItem knifeItem:
+                knifeItem.HitKnife(false);
+                break;
             default:
                 grabbable.UseItemOnClient(true);
                 break;

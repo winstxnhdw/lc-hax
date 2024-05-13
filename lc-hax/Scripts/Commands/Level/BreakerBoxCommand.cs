@@ -12,7 +12,11 @@ class BreakerBoxCommand : ICommand {
             return;
         }
 
-        BreakerBox Breaker = Helper.FindObjects<BreakerBox>().FirstOrDefault(breaker => breaker.name.Contains("(Clone)"));
+        if(Helper.BreakerBox is not BreakerBox Breaker)
+        {
+            Chat.Print("Breaker box is not found!");
+            return;
+        }
 
         if (Breaker == null) {
             Chat.Print("Breaker box is not found!");

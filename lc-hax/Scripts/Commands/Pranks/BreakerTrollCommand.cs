@@ -12,9 +12,8 @@ internal class BreakerTrollCommand : ICommand
             return;
         }
 
-        BreakerBox[] Breakers = Helper.FindObjects<BreakerBox>().Where(breaker => breaker.name.Contains("(Clone)")).ToArray();
 
-        if (Breakers.Count() is 0)
+        if(Helper.BreakerBox is not BreakerBox Breaker)
         {
             Chat.Print("Breaker box is not found!");
             return;
@@ -24,19 +23,15 @@ internal class BreakerTrollCommand : ICommand
         {
             if (args.Length == 1)
             {
-                Breakers.ForEach(breaker => breaker.GetOrAddComponent<BreakerTrollMod>());
+                Breaker.GetOrAddComponent<BreakerTrollMod>();  
                 Chat.Print("BreakerBox Troll Mod installed.");
                 return;
             }
 
             if (float.TryParse(args[1], out float Timer))
             {
-                Breakers.ForEach(breaker =>
-                {
-                    BreakerTrollMod breakerTrollMod = breaker.GetOrAddComponent<BreakerTrollMod>();
-                    breakerTrollMod.TimeBetweenSwitches = Timer;
-                }
-                );
+                BreakerTrollMod breakerTrollMod = Breaker.GetOrAddComponent<BreakerTrollMod>();
+                breakerTrollMod.TimeBetweenSwitches = Timer;
                 Chat.Print($"BreakerBox Troll Mod Installed & set with delay {Timer}.");
                 return;
             }
@@ -49,7 +44,7 @@ internal class BreakerTrollCommand : ICommand
 
         if (args[0].ToLower() == "off")
         {
-            Breakers.ForEach(breaker => breaker.RemoveComponent<BreakerTrollMod>());
+            Breaker.RemoveComponent<BreakerTrollMod>();
             Chat.Print("BreakerBox Troll Mod uninstalled.");
         }
     }
