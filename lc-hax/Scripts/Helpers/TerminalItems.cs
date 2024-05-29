@@ -1,13 +1,14 @@
 namespace Hax;
 
-static partial class Helper {
-
+internal static partial class Helper
+{
     /// <summary>
     /// Returns if the door is open or not
     /// </summary>
     /// <param name="door"></param>
     /// <returns></returns>
     internal static bool isDoorOpen(this TerminalAccessibleObject door) => door.Reflect().GetInternalField<bool>("isDoorOpen");
+
     /// <summary>
     /// This method is used to toggle the door using it's isDoorOpen property.
     /// </summary>
@@ -22,6 +23,7 @@ static partial class Helper {
     /// Detonates the Landmine
     /// </summary>
     internal static void TriggerMine(this Landmine landmine) => landmine.Reflect().InvokeInternalMethod("TriggerMineOnLocalClientByExiting");
+
     /// <summary>
     /// Returns if the Landmine is active or not
     /// </summary>
@@ -33,6 +35,7 @@ static partial class Helper {
     /// This method is used to toggle the Landmine using it's mineActivated property.
     /// </summary>
     internal static void ToggleLandmine(this Landmine landmine) => landmine?.SetLandmine(!landmine.isLandmineActive());
+
     /// <summary>
     /// This method is used to set the Landmine using RPC
     /// </summary>
@@ -49,6 +52,7 @@ static partial class Helper {
     /// This method is used to toggle the turret using it's TurrectActive property.
     /// </summary>
     internal static void ToggleTurret(this Turret turret) => turret?.SetTurret(!turret.isTurretActive());
+
     /// <summary>
     /// This method is used to set the turret using RPC
     /// </summary>
@@ -58,7 +62,6 @@ static partial class Helper {
     /// This makes the Turret go into berserk mode
     /// </summary>
     internal static void BerserkMode(this Turret turret) => turret?.EnterBerserkModeServerRpc(-1);
-
 
     /// <summary>
     /// Returns if the trap is active or not
@@ -73,18 +76,15 @@ static partial class Helper {
     /// <param name="spike"></param>
     internal static void ToggleSpikes(this SpikeRoofTrap spike) => spike?.SetSpikes(!spike.isTrapActive());
 
-
     /// <summary>
     /// This method is used to toggle the spikes using RPC
     /// </summary>
     /// <param name="spike"></param>
     internal static void SetSpikes(this SpikeRoofTrap spike, bool trapActive) => spike?.ToggleSpikesServerRpc(trapActive);
 
-
     /// <summary>
     /// This method is used to slam the spikes using RPC
     /// </summary>
     /// <param name="spike"></param>
     internal static void Slam(this SpikeRoofTrap spike) => spike?.SpikeTrapSlamServerRpc(-1);
-
 }

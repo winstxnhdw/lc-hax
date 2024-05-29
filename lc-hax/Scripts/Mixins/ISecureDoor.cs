@@ -8,7 +8,7 @@ static class SecureGateMixin {
     internal static void SetSecureDoorState(this ISecureGate _, bool isUnlocked) {
         SecureGateMixin.TerminalAccessibleObjects ??= Helper.FindObjects<TerminalAccessibleObject>();
         SecureGateMixin.TerminalAccessibleObjects.ForEach(
-            terminalObject => terminalObject.SetDoorOpenServerRpc(isUnlocked)
+            terminalObject => terminalObject.SetDoor(isUnlocked)
         );
     }
 }

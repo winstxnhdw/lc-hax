@@ -6,44 +6,68 @@ using GameNetcodeStuff;
 using HarmonyLib;
 using Hax;
 
-[HarmonyPatch(typeof(HUDManager), "EnableChat_performed")]
-class EnableChatPatch {
-    static void Prefix(HUDManager __instance, ref bool __state) {
-        if (__instance.localPlayer is not PlayerControllerB localPlayer) return;
+[HarmonyPatch]
+class ChatPatches
+{
+    private static bool isLocalPlayerDeadStatus;
+    private static bool isLocalPlayerDeadStatus2;
 
-        __instance.chatTextField.characterLimit = int.MaxValue;
-        __state = localPlayer.isPlayerDead;
+    [HarmonyPatch(typeof(HUDManager), "EnableChat_performed")]
+    [HarmonyPrefix]
+    static void EnableChatPrefix(HUDManager __instance)
+    {
+        if (__instance.localPlayer is not PlayerControllerB localPlayer) return;
+        if (!localPlayer.IsSelf()) return;
+
+        isLocalPlayerDeadStatus = localPlayer.isPlayerDead;
         localPlayer.isPlayerDead = false;
     }
 
-    static void Postfix(ref PlayerControllerB ___localPlayer, bool __state) => ___localPlayer.isPlayerDead = __state;
-}
+    [HarmonyPatch(typeof(HUDManager), "EnableChat_performed")]
+    [HarmonyPostfix]
+    static void EnableChatPostfix(HUDManager __instance)
+    {
+        if (__instance.localPlayer is not PlayerControllerB localPlayer) return;
+        if (!localPlayer.IsSelf()) return;
+        localPlayer.isPlayerDead = isLocalPlayerDeadStatus;
+    }
 
-[HarmonyBefore]
-[HarmonyPatch(typeof(HUDManager), "SubmitChat_performed")]
-class SubmitChatPatch {
-    static bool Prefix(HUDManager __instance, ref bool __state) {
-        __state = __instance.localPlayer.isPlayerDead;
-        __instance.localPlayer.isPlayerDead = false;
+    [HarmonyBefore]
+    [HarmonyPatch(typeof(HUDManager), "SubmitChat_performed")]
+    [HarmonyPrefix]
+    static bool SubmitChatPrefix(HUDManager __instance)
+    {
+        if(__instance is not HUDManager hudManager) return true;
+        if (__instance.localPlayer is not PlayerControllerB localPlayer) return true;
+        if (!localPlayer.IsSelf()) return true;
+        isLocalPlayerDeadStatus2 = localPlayer.isPlayerDead;
+        localPlayer.isPlayerDead = false;
 
-        if (Helper.HUDManager is not HUDManager hudManager) {
+
+        if (!new[] { '!', State.CommandPrefix }.Any(hudManager.chatTextField.text.StartsWith))
+        {
             return true;
         }
 
-        if (!new[] { '!', State.CommandPrefix }.Any(hudManager.chatTextField.text.StartsWith)) {
-            return true;
-        }
-
-        try {
+        try
+        {
             Chat.ExecuteCommand(hudManager.chatTextField.text.TrimEnd());
         }
-
-        catch (Exception exception) {
+        catch (Exception exception)
+        {
             Logger.Write(exception.ToString());
         }
 
         return false;
     }
 
-    static void Postfix(HUDManager __instance, bool __state) => __instance.localPlayer.isPlayerDead = __state;
+    [HarmonyPatch(typeof(HUDManager), "SubmitChat_performed")]
+    [HarmonyPostfix]
+    static void SubmitChatPostfix(HUDManager __instance)
+    {
+        if (__instance is not HUDManager hudManager) return;
+        if (hudManager.localPlayer is not PlayerControllerB localPlayer) return;
+        if (!localPlayer.IsSelf()) return;
+        localPlayer.isPlayerDead = isLocalPlayerDeadStatus2;
+    }
 }
