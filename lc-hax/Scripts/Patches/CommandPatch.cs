@@ -12,6 +12,7 @@ internal class ChatPatches
     private static bool isLocalPlayerDeadStatus;
     private static bool isLocalPlayerDeadStatus2;
 
+    [HarmonyBefore]
     [HarmonyPatch(typeof(HUDManager), "EnableChat_performed")]
     [HarmonyPrefix]
     private static void EnableChatPrefix(HUDManager __instance)
