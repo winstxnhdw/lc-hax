@@ -27,6 +27,10 @@ internal class HealCommand : ICommand, IStun
     private void RespawnLocalPlayer(PlayerControllerB localPlayer, StartOfRound startOfRound, HUDManager hudManager)
     {
         if (Helper.SoundManager is not SoundManager soundManager) return;
+        if (localPlayer is not PlayerControllerB) return;
+        if (startOfRound is not StartOfRound) return;
+        if (hudManager is not HUDManager) return;
+
         startOfRound.allPlayersDead = false;
         localPlayer.ResetPlayerBloodObjects(localPlayer.isPlayerDead);
         if (localPlayer.isPlayerDead || localPlayer.isPlayerControlled)
@@ -98,15 +102,14 @@ internal class HealCommand : ICommand, IStun
             }
         }
 
-        var playerControllerB = GameNetworkManager.Instance.localPlayerController;
-        playerControllerB.bleedingHeavily = false;
-        playerControllerB.criticallyInjured = false;
-        playerControllerB.playerBodyAnimator.SetBool("Limp", false);
-        playerControllerB.health = 100;
+        localPlayer.bleedingHeavily = false;
+        localPlayer.criticallyInjured = false;
+        localPlayer.playerBodyAnimator.SetBool("Limp", false);
+        localPlayer.health = 100;
         hudManager.UpdateHealthUI(100, false);
-        playerControllerB.spectatedPlayerScript = null;
+        localPlayer.spectatedPlayerScript = null;
         hudManager.audioListenerLowPass.enabled = false;
-        startOfRound.SetSpectateCameraToGameOverMode(false, playerControllerB);
+        startOfRound.SetSpectateCameraToGameOverMode(false, localPlayer);
         var array = Object.FindObjectsOfType<RagdollGrabbableObject>();
         for (var j = 0; j < array.Length; j++)
             if (!array[j].isHeld)
@@ -132,16 +135,16 @@ internal class HealCommand : ICommand, IStun
         startOfRound.shipAnimator.ResetTrigger("ShipLeave");
     }
 
-
     private PlayerControllerB HealLocalPlayer(HUDManager hudManager)
     {
-        if (hudManager.localPlayer.IsDead())
+        if(Helper.LocalPlayer is not PlayerControllerB localPlayer) return null;
+        if (localPlayer.IsDead())
         {
-            RespawnLocalPlayer(hudManager.localPlayer, hudManager.localPlayer.playersManager, hudManager);
+            RespawnLocalPlayer(localPlayer, hudManager.localPlayer.playersManager, hudManager);
 
             Helper.CreateComponent<WaitForBehaviour>("Respawn")
                 .SetPredicate(() => hudManager.localPlayer.playersManager.shipIsLeaving)
-                .Init(hudManager.localPlayer.KillPlayer);
+                .Init(localPlayer.KillPlayer);
         }
 
         hudManager.localPlayer.health = 100;
