@@ -1,7 +1,9 @@
 using UnityEngine;
 
-static partial class Extensions {
-    internal static Vector3 Copy(this Vector3 vector) {
+internal static partial class Extensions
+{
+    internal static Vector3 Copy(this Vector3 vector)
+    {
         return new Vector3(
             vector.x,
             vector.y,
@@ -9,7 +11,8 @@ static partial class Extensions {
         );
     }
 
-    internal static Quaternion Copy(this Quaternion quaternion) {
+    internal static Quaternion Copy(this Quaternion quaternion)
+    {
         return new Quaternion(
             quaternion.x,
             quaternion.y,
@@ -18,7 +21,8 @@ static partial class Extensions {
         );
     }
 
-    internal static Transform Copy(this Transform transform) {
+    internal static Transform Copy(this Transform transform)
+    {
         GameObject gameObject = new();
         gameObject.transform.position = transform.position.Copy();
         gameObject.transform.eulerAngles = transform.eulerAngles.Copy();

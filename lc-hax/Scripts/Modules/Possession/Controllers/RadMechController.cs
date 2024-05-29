@@ -1,110 +1,143 @@
-using GameNetcodeStuff;
 using Hax;
 using UnityEngine;
 
-public enum RadMechBehaviorState {
+public enum RadMechBehaviorState
+{
     Default,
     Alert,
-    Flying,
+    Flying
 }
-internal class RadMechController : IEnemyController<RadMechAI> {
 
-    bool isFiring = false;
-    float shootTimer = 0f;
+internal class RadMechController : IEnemyController<RadMechAI>
+{
+    private readonly Vector3 camOffset = new(0, 8f, -8f);
 
-    Vector3 camOffset = new(0, 8f, -8f);
+    private bool isFiring = false;
+    private float shootTimer = 0f;
 
-    public void OnMovement(RadMechAI enemy , bool isMoving, bool isSprinting) {
-        bool inFlyingMode = enemy.Reflect().GetInternalField<bool>("inFlyingMode");
+    public void OnMovement(RadMechAI enemy, bool isMoving, bool isSprinting)
+    {
+        var inFlyingMode = enemy.Reflect().GetInternalField<bool>("inFlyingMode");
         if (inFlyingMode) return;
-        if (isSprinting) {
+        if (isSprinting)
             enemy.timeBetweenSteps = 0.2f;
-        }
-        else {
+        else
             enemy.timeBetweenSteps = 0.7f;
-        }
     }
 
-    public Vector3 GetCameraOffset(RadMechAI enemy) => this.camOffset;
+    public Vector3 GetCameraOffset(RadMechAI enemy)
+    {
+        return camOffset;
+    }
 
-    public bool IsAbleToMove(RadMechAI enemy) => !enemy.inTorchPlayerAnimation || !this.isFiring;
+    public bool IsAbleToMove(RadMechAI enemy)
+    {
+        return !enemy.inTorchPlayerAnimation || !isFiring;
+    }
 
-    public bool CanUseEntranceDoors(RadMechAI _) => false;
+    public bool CanUseEntranceDoors(RadMechAI _)
+    {
+        return false;
+    }
 
-    public float InteractRange(RadMechAI _) => 0f;
+    public float InteractRange(RadMechAI _)
+    {
+        return 0f;
+    }
 
-    public bool SyncAnimationSpeedEnabled(RadMechAI _) => false;
+    public bool SyncAnimationSpeedEnabled(RadMechAI _)
+    {
+        return false;
+    }
 
-    public void OnOutsideStatusChange(RadMechAI enemy) => enemy.StopSearch(enemy.searchForPlayers, true);
+    public void OnOutsideStatusChange(RadMechAI enemy)
+    {
+        enemy.StopSearch(enemy.searchForPlayers, true);
+    }
 
-    public void UseSecondarySkill(RadMechAI enemy) {
+    public void UseSecondarySkill(RadMechAI enemy)
+    {
         enemy.SetBehaviourState(RadMechBehaviorState.Alert);
-        if (!enemy.spotlight.activeSelf) {
+        if (!enemy.spotlight.activeSelf)
             enemy.EnableSpotlight();
-        }
-        else {
+        else
             enemy.DisableSpotlight();
-        }
     }
-    public void GetCurrentTarget(RadMechAI enemy) {
-
-        // if we have a player to target, else look for one
-        if (enemy.targetPlayer is not null) {
-            enemy.targetedThreat = enemy.targetPlayer.ToThreat();
-        }
-        else {
-            enemy.targetPlayer = enemy.FindClosestPlayer(4f);
-            enemy.targetedThreat = enemy.targetPlayer.ToThreat();
-        }
-    }
-
 
 
     // set special ability to flying mode
-    public void UseSpecialAbility(RadMechAI enemy) {
-        bool inFlyingMode = enemy.Reflect().GetInternalField<bool>("inFlyingMode");
-        if (!inFlyingMode) {
+    public void UseSpecialAbility(RadMechAI enemy)
+    {
+        var inFlyingMode = enemy.Reflect().GetInternalField<bool>("inFlyingMode");
+        if (!inFlyingMode)
+        {
             enemy.SetBehaviourState(RadMechBehaviorState.Flying);
             enemy.StartFlying();
         }
-        else {
+        else
+        {
             enemy.EndFlight();
         }
     }
 
 
-    public void OnPrimarySkillHold(RadMechAI enemy) {
+    public void OnPrimarySkillHold(RadMechAI enemy)
+    {
         enemy.SetBehaviourState(RadMechBehaviorState.Alert);
-        PlayerControllerB player = enemy.FindClosestPlayer(4f);
+        var player = enemy.FindClosestPlayer(4f);
         enemy.targetPlayer = player;
         enemy.targetedThreat = player.ToThreat();
 
-        this.GetCurrentTarget(enemy);
-        this.isFiring = true;
+        GetCurrentTarget(enemy);
+        isFiring = true;
     }
 
-    public void ReleasePrimarySkill(RadMechAI enemy) {
-        if (this.isFiring) {
+    public void ReleasePrimarySkill(RadMechAI enemy)
+    {
+        if (isFiring)
+        {
             enemy.SetBehaviourState(RadMechBehaviorState.Default);
             enemy.SetAimingGun(false);
-            this.isFiring = false;
+            isFiring = false;
         }
     }
-    public bool isHostOnly(RadMechAI _) => true;
 
-    public void OnUnpossess(RadMechAI _) => this.isFiring = false;
+    public bool isHostOnly(RadMechAI _)
+    {
+        return true;
+    }
 
-    public void Update(RadMechAI enemy, bool isAIControlled) {
-        if(isAIControlled) return;
-        if (this.isFiring) {
-            this.shootTimer += Time.deltaTime;
-            if (!enemy.aimingGun) {
-                enemy.SetAimingGun(true);
-            }
-            if (this.shootTimer >= enemy.fireRate) {
-                this.shootTimer = 0f;
+    public void OnUnpossess(RadMechAI _)
+    {
+        isFiring = false;
+    }
+
+    public void Update(RadMechAI enemy, bool isAIControlled)
+    {
+        if (isAIControlled) return;
+        if (isFiring)
+        {
+            shootTimer += Time.deltaTime;
+            if (!enemy.aimingGun) enemy.SetAimingGun(true);
+            if (shootTimer >= enemy.fireRate)
+            {
+                shootTimer = 0f;
                 enemy.StartShootGun();
             }
+        }
+    }
+
+    public void GetCurrentTarget(RadMechAI enemy)
+    {
+        // if we have a player to target, else look for one
+        if (enemy.targetPlayer is not null)
+        {
+            enemy.targetedThreat = enemy.targetPlayer.ToThreat();
+        }
+        else
+        {
+            enemy.targetPlayer = enemy.FindClosestPlayer(4f);
+            enemy.targetedThreat = enemy.targetPlayer.ToThreat();
         }
     }
 }

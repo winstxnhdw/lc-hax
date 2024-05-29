@@ -1,25 +1,24 @@
-using System.Collections;
 using GameNetcodeStuff;
 using Hax;
 using UnityEngine;
 
-
 internal sealed class StaminaMod : MonoBehaviour
 {
+    internal float regenerationRate = 0.1f;
     internal static StaminaMod? Instance { get; private set; }
-    internal float regenerationRate = 0.1f; 
 
     private void Awake()
     {
-        if (StaminaMod.Instance != null)
+        if (Instance != null)
         {
             Destroy(this);
             return;
         }
-        StaminaMod.Instance = this;
+
+        Instance = this;
     }
 
-    void Update()
+    private void Update()
     {
         if (Helper.LocalPlayer is not PlayerControllerB player) return;
         player.isSpeedCheating = false;
@@ -30,15 +29,8 @@ internal sealed class StaminaMod : MonoBehaviour
         player.sourcesCausingSinking = 0;
 
         if (player.sprintMeter <= 0.2f)
-        {
             player.sprintMeter = Mathf.Lerp(player.sprintMeter, 1.0f, Time.deltaTime * regenerationRate);
-        }
         else if (player.sprintMeter < 1.0f)
-        {
             player.sprintMeter = Mathf.Min(player.sprintMeter + Time.deltaTime * regenerationRate, 1.0f);
-        }
-
     }
 }
-
-    

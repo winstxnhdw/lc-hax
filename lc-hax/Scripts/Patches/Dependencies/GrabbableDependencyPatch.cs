@@ -5,14 +5,17 @@ using Hax;
 using Unity.Netcode;
 
 [HarmonyPatch]
-class GrabbableDependencyPatch {
+internal class GrabbableDependencyPatch
+{
     [HarmonyPatch(typeof(GrabbableObject), nameof(GrabbableObject.Update))]
-    static void Postfix(GrabbableObject __instance) => Helper.Grabbables.Add(__instance);
+    private static void Postfix(GrabbableObject __instance)
+    {
+        Helper.Grabbables.Add(__instance);
+    }
 
     [HarmonyPatch(typeof(NetworkBehaviour), nameof(NetworkBehaviour.OnDestroy))]
-    static void Prefix(NetworkBehaviour __instance) {
-        if (__instance is GrabbableObject grabbableObject) {
-            _ = Helper.Grabbables.Remove(grabbableObject);
-        }
+    private static void Prefix(NetworkBehaviour __instance)
+    {
+        if (__instance is GrabbableObject grabbableObject) _ = Helper.Grabbables.Remove(grabbableObject);
     }
 }

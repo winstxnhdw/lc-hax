@@ -1,7 +1,9 @@
-static partial class Extensions {
-    [RequireNamedArgs]
-    internal static bool TryParse(this string? value, ushort defaultValue, out ushort result) {
-        if (string.IsNullOrWhiteSpace(value)) {
+internal static partial class Extensions
+{
+    internal static bool TryParse(this string? value, ushort defaultValue, out ushort result)
+    {
+        if (string.IsNullOrWhiteSpace(value))
+        {
             result = defaultValue;
             return true;
         }
@@ -9,9 +11,10 @@ static partial class Extensions {
         return ushort.TryParse(value, out result);
     }
 
-    [RequireNamedArgs]
-    internal static bool TryParse(this string? value, ulong defaultValue, out ulong result) {
-        if (string.IsNullOrWhiteSpace(value)) {
+    internal static bool TryParse(this string? value, ulong defaultValue, out ulong result)
+    {
+        if (string.IsNullOrWhiteSpace(value))
+        {
             result = defaultValue;
             return true;
         }

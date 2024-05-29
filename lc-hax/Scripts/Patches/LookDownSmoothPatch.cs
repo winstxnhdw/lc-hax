@@ -5,30 +5,34 @@ using GameNetcodeStuff;
 using HarmonyLib;
 
 [HarmonyPatch]
-internal class LookDownSmoothPatch {
+internal class LookDownSmoothPatch
+{
     [HarmonyPatch(typeof(PlayerControllerB), "CalculateSmoothLookingInput")]
-    private static IEnumerable<CodeInstruction> Transpiler(IEnumerable<CodeInstruction> instructions) =>
-        instructions.Select(AdjustInstruction);
+    private static IEnumerable<CodeInstruction> Transpiler(IEnumerable<CodeInstruction> instructions)
+    {
+        return instructions.Select(AdjustInstruction);
+    }
 
-    private static CodeInstruction AdjustInstruction(CodeInstruction instruction) {
-        if (instruction.opcode == OpCodes.Ldc_R4 && (float)instruction.operand == 60f) {
-            instruction.operand = 90f;
-        }
+    private static CodeInstruction AdjustInstruction(CodeInstruction instruction)
+    {
+        if (instruction.opcode == OpCodes.Ldc_R4 && (float)instruction.operand == 60f) instruction.operand = 90f;
 
         return instruction;
     }
 }
 
 [HarmonyPatch]
-internal class LookDownNormalPatch {
+internal class LookDownNormalPatch
+{
     [HarmonyPatch(typeof(PlayerControllerB), "CalculateNormalLookingInput")]
-    private static IEnumerable<CodeInstruction> Transpiler(IEnumerable<CodeInstruction> instructions) =>
-        instructions.Select(AdjustInstruction);
+    private static IEnumerable<CodeInstruction> Transpiler(IEnumerable<CodeInstruction> instructions)
+    {
+        return instructions.Select(AdjustInstruction);
+    }
 
-    private static CodeInstruction AdjustInstruction(CodeInstruction instruction) {
-        if (instruction.opcode == OpCodes.Ldc_R4 && (float)instruction.operand == 60f) {
-            instruction.operand = 90f;
-        }
+    private static CodeInstruction AdjustInstruction(CodeInstruction instruction)
+    {
+        if (instruction.opcode == OpCodes.Ldc_R4 && (float)instruction.operand == 60f) instruction.operand = 90f;
 
         return instruction;
     }

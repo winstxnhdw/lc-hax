@@ -5,30 +5,34 @@ using Unity.Netcode;
 using UnityEngine;
 
 [HarmonyPatch(typeof(GiftBoxItem))]
-class GiftBoxPatch {
-    static bool LocalPlayerActivated { get; set; } = false;
+internal class GiftBoxPatch
+{
+    private static bool LocalPlayerActivated { get; set; } = false;
 
     [HarmonyPatch(nameof(GiftBoxItem.ItemActivate))]
-    static bool Prefix(GiftBoxItem __instance) {
+    private static bool Prefix(GiftBoxItem __instance)
+    {
         if (!Setting.EnableUnlimitedGiftBox) return true;
-        GiftBoxPatch.LocalPlayerActivated = true;
+        LocalPlayerActivated = true;
         __instance.OpenGiftBoxServerRpc();
         return false;
     }
 
     [HarmonyPatch(nameof(GiftBoxItem.OpenGiftBoxClientRpc))]
-    static bool Prefix(GiftBoxItem __instance, NetworkObjectReference netObjectRef, int presentValue, Vector3 startFallingPos) {
-        if (!Setting.EnableUnlimitedGiftBox)
-        {
-            return true;
-        }
+    private static bool Prefix(GiftBoxItem __instance, NetworkObjectReference netObjectRef, int presentValue,
+        Vector3 startFallingPos)
+    {
+        if (!Setting.EnableUnlimitedGiftBox) return true;
 
-        bool skipFlag = !GiftBoxPatch.LocalPlayerActivated;
-        GiftBoxPatch.LocalPlayerActivated = false;
+        var skipFlag = !LocalPlayerActivated;
+        LocalPlayerActivated = false;
         return skipFlag;
     }
 
     [HarmonyPrefix]
     [HarmonyPatch(nameof(GiftBoxItem.OpenGiftBoxNoPresentClientRpc))]
-    static bool Prefix() => !Setting.EnableUnlimitedGiftBox;
+    private static bool Prefix()
+    {
+        return !Setting.EnableUnlimitedGiftBox;
+    }
 }

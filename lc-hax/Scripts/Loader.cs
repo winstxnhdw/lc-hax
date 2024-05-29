@@ -1,99 +1,117 @@
 using System;
 using System.IO;
-using System.Reflection;
-using UnityEngine;
-using HarmonyLib;
 using System.Linq;
+using System.Reflection;
+using HarmonyLib;
+using UnityEngine;
 
 namespace Hax;
 
-class Loader : MonoBehaviour {
-    const string HarmonyID = "winstxnhdw.lc-hax";
+internal class Loader : MonoBehaviour
+{
+    private const string HarmonyID = "winstxnhdw.lc-hax";
 
-    static GameObject HaxGameObjects { get; } = new("Hax GameObjects");
-    static GameObject HaxModules { get; } = new("Hax Modules");
+    private static GameObject HaxGameObjects { get; } = new("Hax GameObjects");
+    private static GameObject HaxModules { get; } = new("Hax Modules");
 
-    static void AddHaxModules<T>() where T : Component => Loader.HaxModules.AddComponent<T>();
-    static void AddHaxGameObject<T>() where T : Component => Loader.HaxGameObjects.AddComponent<T>();
+    private static bool HasLoaded => Harmony.HasAnyPatches(HarmonyID);
 
-    static bool HasLoaded => Harmony.HasAnyPatches(Loader.HarmonyID);
+    private static void AddHaxModules<T>() where T : Component
+    {
+        HaxModules.AddComponent<T>();
+    }
 
-    static void LoadLibraries() {
-        Assembly assembly = Assembly.GetExecutingAssembly();
+    private static void AddHaxGameObject<T>() where T : Component
+    {
+        HaxGameObjects.AddComponent<T>();
+    }
+
+    private static void LoadLibraries()
+    {
+        var assembly = Assembly.GetExecutingAssembly();
 
         ReadOnlySpan<string> resourceNames =
             assembly.GetManifestResourceNames()
-                    .Where(name => name.EndsWith(".dll"))
-                    .ToArray();
+                .Where(name => name.EndsWith(".dll"))
+                .ToArray();
 
-        foreach (string resourceName in resourceNames) {
-            using Stream stream = assembly.GetManifestResourceStream(resourceName);
+        foreach (var resourceName in resourceNames)
+        {
+            using var stream = assembly.GetManifestResourceStream(resourceName);
             using MemoryStream memoryStream = new();
             stream.CopyTo(memoryStream);
             _ = AppDomain.CurrentDomain.Load(memoryStream.ToArray());
         }
     }
 
-    internal static void Load() {
-        Loader.LoadLibraries();
+    internal static void Load()
+    {
+        LoadLibraries();
 
-        if (Loader.HasLoaded) {
+        if (HasLoaded)
+        {
             Logger.Write("lc-hax has already loaded!");
             return;
         }
 
-        Loader.LoadHarmonyPatches();
-        Loader.LoadHaxModules();
-        Loader.LoadHaxGameObjects();
+        LoadHarmonyPatches();
+        LoadHaxModules();
+        LoadHaxGameObjects();
     }
 
 
-    static void LoadHarmonyPatches() {
-        try {
-            new Harmony(Loader.HarmonyID).PatchAll();
+    private static void LoadHarmonyPatches()
+    {
+        try
+        {
+            new Harmony(HarmonyID).PatchAll();
         }
 
-        catch (Exception exception) {
+        catch (Exception exception)
+        {
             Logger.Write(exception.ToString());
             throw exception;
         }
     }
 
-    static void LoadHaxGameObjects() {
-        DontDestroyOnLoad(Loader.HaxGameObjects);
+    private static void LoadHaxGameObjects()
+    {
+        DontDestroyOnLoad(HaxGameObjects);
 
-        Loader.AddHaxGameObject<HaxObjects>();
-        Loader.AddHaxGameObject<InputListener>();
-        Loader.AddHaxGameObject<ScreenListener>();
-        Loader.AddHaxGameObject<GameListener>();
-        Loader.AddHaxGameObject<HaxCamera>();
+        AddHaxGameObject<HaxObjects>();
+        AddHaxGameObject<InputListener>();
+        AddHaxGameObject<ScreenListener>();
+        AddHaxGameObject<GameListener>();
+        AddHaxGameObject<HaxCamera>();
     }
 
-    static void LoadHaxModules() {
-        DontDestroyOnLoad(Loader.HaxModules);
+    private static void LoadHaxModules()
+    {
+        DontDestroyOnLoad(HaxModules);
 
-        Loader.AddHaxModules<ESPMod>();
-        Loader.AddHaxModules<SaneMod>();
-        Loader.AddHaxModules<ChatMod>();
-        Loader.AddHaxModules<FollowMod>();
-        Loader.AddHaxModules<WeightMod>();
-        Loader.AddHaxModules<StaminaMod>();
-        Loader.AddHaxModules<PhantomMod>();
-        Loader.AddHaxModules<TriggerMod>();
-        Loader.AddHaxModules<AntiKickMod>();
-        Loader.AddHaxModules<StunClickMod>();
-        Loader.AddHaxModules<KillClickMod>();
-        Loader.AddHaxModules<CrosshairMod>();
-        Loader.AddHaxModules<MinimalGUIMod>();
-        Loader.AddHaxModules<PossessionMod>();
-        Loader.AddHaxModules<DisconnectMod>();
-        Loader.AddHaxModules<ClearVisionMod>();
-        Loader.AddHaxModules<InstantInteractMod>();
+        AddHaxModules<ESPMod>();
+        AddHaxModules<SaneMod>();
+        AddHaxModules<ChatMod>();
+        AddHaxModules<FollowMod>();
+        AddHaxModules<WeightMod>();
+        AddHaxModules<StaminaMod>();
+        AddHaxModules<PhantomMod>();
+        AddHaxModules<TriggerMod>();
+        AddHaxModules<AntiKickMod>();
+        AddHaxModules<StunClickMod>();
+        AddHaxModules<KillClickMod>();
+        AddHaxModules<CrosshairMod>();
+        AddHaxModules<MinimalGUIMod>();
+        AddHaxModules<PossessionMod>();
+        AddHaxModules<DisconnectMod>();
+        AddHaxModules<ClearVisionMod>();
+        AddHaxModules<InstantInteractMod>();
     }
 
-    internal static void Unload() {
-        Destroy(Loader.HaxModules);
-        Destroy(Loader.HaxGameObjects);
-        new Harmony(Loader.HarmonyID).UnpatchAll();
+    internal static void Unload()
+    {
+        Destroy(HaxModules);
+        Destroy(HaxGameObjects);
+        new Harmony(HarmonyID).UnpatchAll();
     }
 }

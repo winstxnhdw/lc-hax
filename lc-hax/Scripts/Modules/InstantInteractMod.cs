@@ -1,12 +1,16 @@
 using System.Collections;
 using UnityEngine;
 
-sealed class InstantInteractMod : MonoBehaviour {
-    IEnumerator SetTimeToHold(object[] args) {
+internal sealed class InstantInteractMod : MonoBehaviour
+{
+    private IEnumerator SetTimeToHold(object[] args)
+    {
         WaitForSeconds waitForFiveSeconds = new(5.0f);
 
-        while (true) {
-            HaxObjects.Instance?.InteractTriggers?.WhereIsNotNull().ForEach(interactTrigger => {
+        while (true)
+        {
+            HaxObjects.Instance?.InteractTriggers?.WhereIsNotNull().ForEach(interactTrigger =>
+            {
                 interactTrigger.interactable = true;
                 interactTrigger.timeToHold = interactTrigger.name is "EntranceTeleportB(Clone)" ? 0.3f : 0.0f;
             });
@@ -15,5 +19,8 @@ sealed class InstantInteractMod : MonoBehaviour {
         }
     }
 
-    void Start() => this.StartResilientCoroutine(this.SetTimeToHold);
+    private void Start()
+    {
+        this.StartResilientCoroutine(SetTimeToHold);
+    }
 }

@@ -1,25 +1,25 @@
+using System;
 using System.Collections;
-using UnityEngine.Networking;
+using System.Collections.Generic;
 using GameNetcodeStuff;
 using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
+using UnityEngine.Networking;
 
 namespace Hax;
 
-readonly struct TranslateRequest(string source, string target, string text) {
-    [JsonProperty("source")]
-    internal string Source { get; } = source;
+internal readonly struct TranslateRequest(string source, string target, string text)
+{
+    [JsonProperty("source")] internal string Source { get; } = source;
 
-    [JsonProperty("target")]
-    internal string Target { get; } = target;
+    [JsonProperty("target")] internal string Target { get; } = target;
 
-    [JsonProperty("text")]
-    internal string Text { get; } = text;
+    [JsonProperty("text")] internal string Text { get; } = text;
 }
 
-static partial class Helper {
-    static Lazy<Dictionary<string, string>> FLORES200 { get; } = new(() => new Dictionary<string, string>() {
+internal static partial class Helper
+{
+    private static Lazy<Dictionary<string, string>> FLORES200 { get; } = new(() => new Dictionary<string, string>()
+    {
         { "acehnese", "ace_Latn" },
         { "mesopotamian", "acm_Arab" },
         { "tunisian", "aeb_Arab" },
@@ -209,13 +209,14 @@ static partial class Helper {
         { "yue", "yue_Hant" },
         { "chinese", "zho_Hans" },
         { "malay", "zsm_Latn" },
-        { "zulu", "zul_Latn" },
+        { "zulu", "zul_Latn" }
     });
 
-    static IEnumerator Translate(TranslateRequest request) {
-        if (Helper.LocalPlayer is not PlayerControllerB player) yield break;
+    private static IEnumerator Translate(TranslateRequest request)
+    {
+        if (LocalPlayer is not PlayerControllerB player) yield break;
 
-        using UnityWebRequest www = UnityWebRequest.Post(
+        using var www = UnityWebRequest.Post(
             "https://winstxnhdw-nllb-api.hf.space/api/v2/translate",
             JsonConvert.SerializeObject(request),
             "application/json"
@@ -223,36 +224,42 @@ static partial class Helper {
 
         yield return www.SendWebRequest();
 
-        if (www.result != UnityWebRequest.Result.Success) {
+        if (www.result != UnityWebRequest.Result.Success)
+        {
             State.TranslateDetachedState = null;
-            Helper.HUDManager?.AddTextToChatOnServer(request.Text, player.PlayerIndex());
+            HUDManager?.AddTextToChatOnServer(request.Text, player.PlayerIndex());
             Chat.Print("Translation server is down!");
         }
 
-        else {
-            _ = Helper.HUDManager?.Reflect().InvokeInternalMethod("AddPlayerChatMessageServerRpc", www.downloadHandler.text.Trim(), player.PlayerIndex());
+        else
+        {
+            _ = HUDManager?.Reflect().InvokeInternalMethod("AddPlayerChatMessageServerRpc",
+                www.downloadHandler.text.Trim(), player.PlayerIndex());
         }
     }
 
-    internal static void Translate(string sourceLanguage, string targetLanguage, string? text) {
+    internal static void Translate(string sourceLanguage, string targetLanguage, string? text)
+    {
         if (string.IsNullOrWhiteSpace(text)) return;
 
-        if (!sourceLanguage.FuzzyMatch(Helper.FLORES200.Value.Keys, out string source)) {
+        if (!sourceLanguage.FuzzyMatch(FLORES200.Value.Keys, out var source))
+        {
             Chat.Print("Failed to find the source language!");
             return;
         }
 
-        if (!targetLanguage.FuzzyMatch(Helper.FLORES200.Value.Keys, out string target)) {
+        if (!targetLanguage.FuzzyMatch(FLORES200.Value.Keys, out var target))
+        {
             Chat.Print("Failed to find the target language!");
             return;
         }
 
         TranslateRequest request = new(
-            Helper.FLORES200.Value[source],
-            Helper.FLORES200.Value[target],
+            FLORES200.Value[source],
+            FLORES200.Value[target],
             text
         );
 
-        Helper.CreateComponent<AsyncBehaviour>().Init(() => Helper.Translate(request));
+        CreateComponent<AsyncBehaviour>().Init(() => Translate(request));
     }
 }

@@ -1,12 +1,16 @@
 [Command("shovel")]
-class ShovelCommand : ICommand {
-    public void Execute(StringArray args) {
-        if (args.Length is 0) {
+internal class ShovelCommand : ICommand
+{
+    public void Execute(StringArray args)
+    {
+        if (args.Length is 0)
+        {
             Chat.Print("Usage: shovel <force=1>");
             return;
         }
 
-        if (!ushort.TryParse(args[0], out ushort shovelHitForce)) {
+        if (!ushort.TryParse(args[0], out var shovelHitForce))
+        {
             Chat.Print("Invalid value!");
             return;
         }

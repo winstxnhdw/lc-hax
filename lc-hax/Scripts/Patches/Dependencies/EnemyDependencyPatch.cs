@@ -4,19 +4,33 @@ using HarmonyLib;
 using Hax;
 
 [HarmonyPatch(typeof(EnemyAI))]
-class EnemyDependencyPatch {
+internal class EnemyDependencyPatch
+{
     [HarmonyPatch(nameof(EnemyAI.OnDestroy))]
-    static void Prefix(EnemyAI __instance) => Helper.Enemies.Remove(__instance);
+    private static void Prefix(EnemyAI __instance)
+    {
+        Helper.Enemies.Remove(__instance);
+    }
 
     [HarmonyPatch(nameof(EnemyAI.Start))]
-    static void Postfix(EnemyAI __instance) => Helper.Enemies.Add(__instance);
+    private static void Postfix(EnemyAI __instance)
+    {
+        Helper.Enemies.Add(__instance);
+    }
 }
 
 [HarmonyPatch(typeof(MaskedPlayerEnemy))]
-class MaskedDependencyPatch {
+internal class MaskedDependencyPatch
+{
     [HarmonyPatch(nameof(MaskedPlayerEnemy.OnDestroy))]
-    static void Prefix(MaskedPlayerEnemy __instance) => Helper.Enemies.Remove(__instance);
+    private static void Prefix(MaskedPlayerEnemy __instance)
+    {
+        Helper.Enemies.Remove(__instance);
+    }
 
     [HarmonyPatch(nameof(MaskedPlayerEnemy.Start))]
-    static void Postfix(MaskedPlayerEnemy __instance) => Helper.Enemies.Add(__instance);
+    private static void Postfix(MaskedPlayerEnemy __instance)
+    {
+        Helper.Enemies.Add(__instance);
+    }
 }

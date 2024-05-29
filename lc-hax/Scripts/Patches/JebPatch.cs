@@ -3,12 +3,17 @@
 using HarmonyLib;
 
 [HarmonyPatch(typeof(DepositItemsDesk), nameof(DepositItemsDesk.AttackPlayersServerRpc))]
-class JebPatch {
-    static void Prefix(DepositItemsDesk __instance, ref bool __state) {
+internal class JebPatch
+{
+    private static void Prefix(DepositItemsDesk __instance, ref bool __state)
+    {
         __state = __instance.inGrabbingObjectsAnimation;
         __instance.attacking = false;
         __instance.inGrabbingObjectsAnimation = false;
     }
 
-    static void Postfix(DepositItemsDesk __instance, bool __state) => __instance.inGrabbingObjectsAnimation = __state;
+    private static void Postfix(DepositItemsDesk __instance, bool __state)
+    {
+        __instance.inGrabbingObjectsAnimation = __state;
+    }
 }

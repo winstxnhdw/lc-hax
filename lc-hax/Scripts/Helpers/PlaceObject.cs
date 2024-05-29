@@ -3,22 +3,26 @@ using UnityEngine;
 
 namespace Hax;
 
-static partial class Helper {
+internal static partial class Helper
+{
     internal static ShipBuildModeManager? ShipBuildModeManager => ShipBuildModeManager.Instance;
 
-    static NetworkObject GetNetworkObject<M>(M gameObject) where M : MonoBehaviour =>
-        gameObject.GetComponentInChildren<PlaceableShipObject>()
-                  .parentObject
-                  .GetComponent<NetworkObject>();
+    private static NetworkObject GetNetworkObject<M>(M gameObject) where M : MonoBehaviour
+    {
+        return gameObject.GetComponentInChildren<PlaceableShipObject>()
+            .parentObject
+            .GetComponent<NetworkObject>();
+    }
 
     internal static void PlaceObjectAtTransform<T, M>(
         T targetObject,
         M gameObject,
         Vector3 positionOffset = new(),
         Vector3 rotationOffset = new()
-    ) where T : Transform where M : MonoBehaviour {
-        NetworkObject networkObject = Helper.GetNetworkObject(gameObject);
-        Helper.ShipBuildModeManager?.PlaceShipObjectServerRpc(
+    ) where T : Transform where M : MonoBehaviour
+    {
+        var networkObject = GetNetworkObject(gameObject);
+        ShipBuildModeManager?.PlaceShipObjectServerRpc(
             targetObject.position + positionOffset,
             targetObject.eulerAngles + rotationOffset,
             networkObject,
@@ -28,21 +32,25 @@ static partial class Helper {
 
     internal static void PlaceObjectAtTransform<T, M>(
         ObjectPlacement<T, M> placement
-    ) where T : Transform where M : MonoBehaviour => Helper.PlaceObjectAtTransform(
-        placement.TargetObject,
-        placement.GameObject,
-        placement.PositionOffset,
-        placement.RotationOffset
-    );
+    ) where T : Transform where M : MonoBehaviour
+    {
+        PlaceObjectAtTransform(
+            placement.TargetObject,
+            placement.GameObject,
+            placement.PositionOffset,
+            placement.RotationOffset
+        );
+    }
 
     internal static void PlaceObjectAtPosition<T, M>(
         T targetObject,
         M gameObject,
         Vector3 positionOffset = new(),
         Vector3 rotationOffset = new()
-    ) where T : Transform where M : MonoBehaviour {
-        NetworkObject networkObject = Helper.GetNetworkObject(gameObject);
-        Helper.ShipBuildModeManager?.PlaceShipObjectServerRpc(
+    ) where T : Transform where M : MonoBehaviour
+    {
+        var networkObject = GetNetworkObject(gameObject);
+        ShipBuildModeManager?.PlaceShipObjectServerRpc(
             targetObject.position + positionOffset,
             rotationOffset,
             networkObject,
@@ -54,9 +62,10 @@ static partial class Helper {
         M gameObject,
         Vector3 position,
         Vector3 rotation = new()
-    ) where M : MonoBehaviour {
-        NetworkObject networkObject = Helper.GetNetworkObject(gameObject);
-        Helper.ShipBuildModeManager?.PlaceShipObjectServerRpc(
+    ) where M : MonoBehaviour
+    {
+        var networkObject = GetNetworkObject(gameObject);
+        ShipBuildModeManager?.PlaceShipObjectServerRpc(
             position,
             rotation,
             networkObject,
@@ -66,10 +75,13 @@ static partial class Helper {
 
     internal static void PlaceObjectAtPosition<T, M>(
         ObjectPlacement<T, M> placement
-    ) where T : Transform where M : MonoBehaviour => Helper.PlaceObjectAtPosition(
-        placement.TargetObject,
-        placement.GameObject,
-        placement.PositionOffset,
-        placement.RotationOffset
-    );
+    ) where T : Transform where M : MonoBehaviour
+    {
+        PlaceObjectAtPosition(
+            placement.TargetObject,
+            placement.GameObject,
+            placement.PositionOffset,
+            placement.RotationOffset
+        );
+    }
 }

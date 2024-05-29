@@ -1,15 +1,18 @@
 using System;
 using System.IO;
 
-static class Logger {
-    const string LogFileName = "lc-hax.log";
-    static object LockObject { get; } = new();
+internal static class Logger
+{
+    private const string LogFileName = "lc-hax.log";
+    private static object LockObject { get; } = new();
 
-    internal static void Write(string message) {
+    internal static void Write(string message)
+    {
         Console.WriteLine(message);
 
-        lock (Logger.LockObject) {
-            string timeNow = DateTime.Now.ToString("dd-MM-yy HH:mm:ss");
+        lock (LockObject)
+        {
+            var timeNow = DateTime.Now.ToString("dd-MM-yy HH:mm:ss");
 
             File.AppendAllText(
                 LogFileName,
@@ -18,5 +21,8 @@ static class Logger {
         }
     }
 
-    internal static void Write(Exception exception) => Logger.Write(exception.ToString());
+    internal static void Write(Exception exception)
+    {
+        Write(exception.ToString());
+    }
 }

@@ -1,24 +1,24 @@
 using Hax;
-using System.Linq;
 
 [Command("breaker")]
-class BreakerBoxCommand : ICommand {
-
-
-    public void Execute(StringArray args) {
+internal class BreakerBoxCommand : ICommand
+{
+    public void Execute(StringArray args)
+    {
         if (args.Length is 0)
         {
             Chat.Print("Usage: breaker <on/off> [all/index 1-5]");
             return;
         }
 
-        if(Helper.BreakerBox is not BreakerBox Breaker)
+        if (Helper.BreakerBox is not BreakerBox Breaker)
         {
             Chat.Print("Breaker box is not found!");
             return;
         }
 
-        if (Breaker == null) {
+        if (Breaker == null)
+        {
             Chat.Print("Breaker box is not found!");
             return;
         }
@@ -33,7 +33,7 @@ class BreakerBoxCommand : ICommand {
                 return;
             }
 
-            if (int.TryParse(args[1], out int index) && index >= 1 && index <= 5)
+            if (int.TryParse(args[1], out var index) && index >= 1 && index <= 5)
             {
                 Breaker.RemoveComponent<BreakerTrollMod>();
                 Breaker.Set_BreakerBox_Switch(index - 1, true);
@@ -57,7 +57,7 @@ class BreakerBoxCommand : ICommand {
                 return;
             }
 
-            if (int.TryParse(args[1], out int index) && index >= 1 && index <= 5)
+            if (int.TryParse(args[1], out var index) && index >= 1 && index <= 5)
             {
                 Breaker.RemoveComponent<BreakerTrollMod>();
                 Breaker.Set_BreakerBox_Switch(index - 1, false);

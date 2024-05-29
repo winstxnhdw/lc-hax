@@ -1,6 +1,4 @@
-using GameNetcodeStuff;
 using Hax;
-using UnityEngine;
 
 [Command("triggermod")]
 internal class TriggerToggle : ICommand

@@ -1,7 +1,8 @@
 using UnityEngine;
 using UnityEngine.Rendering.HighDefinition;
 
-class HaxObjects : MonoBehaviour {
+internal class HaxObjects : MonoBehaviour
+{
     internal static HaxObjects? Instance { get; private set; }
 
     internal SingleObjectPool<DepositItemsDesk>? DepositItemsDesk { get; private set; }
@@ -10,12 +11,13 @@ class HaxObjects : MonoBehaviour {
     internal MultiObjectPool<SteamValveHazard>? SteamValves { get; private set; }
     internal MultiObjectPool<InteractTrigger>? InteractTriggers { get; private set; }
 
-    void Awake() {
-        this.DepositItemsDesk = new(this, 3.0f);
-        this.ShipTeleporters = new(this);
-        this.LocalVolumetricFogs = new(this);
-        this.InteractTriggers = new(this);
-        this.SteamValves = new(this, 5.0f);
-        HaxObjects.Instance = this;
+    private void Awake()
+    {
+        DepositItemsDesk = new SingleObjectPool<DepositItemsDesk>(this, 3.0f);
+        ShipTeleporters = new MultiObjectPool<ShipTeleporter>(this);
+        LocalVolumetricFogs = new MultiObjectPool<LocalVolumetricFog>(this);
+        InteractTriggers = new MultiObjectPool<InteractTrigger>(this);
+        SteamValves = new MultiObjectPool<SteamValveHazard>(this, 5.0f);
+        Instance = this;
     }
 }

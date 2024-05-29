@@ -3,8 +3,10 @@ using HarmonyLib;
 using Hax;
 
 [HarmonyPatch(typeof(PlayerControllerB), "KillPlayerClientRpc")]
-class DeathNotificationPatch {
-    static void Postfix(int playerId, int causeOfDeath) {
+internal class DeathNotificationPatch
+{
+    private static void Postfix(int playerId, int causeOfDeath)
+    {
         if (Helper.GetPlayer(playerId) is not PlayerControllerB player) return;
         if (player.IsSelf()) return;
 

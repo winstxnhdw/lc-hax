@@ -5,22 +5,21 @@ using Hax;
 using UnityEngine;
 
 [HarmonyPatch(typeof(StartOfRound), nameof(StartOfRound.UpdatePlayerVoiceEffects))]
-class HearPatch {
-    static void Postfix(StartOfRound __instance) {
+internal class HearPatch
+{
+    private static void Postfix(StartOfRound __instance)
+    {
         if (!Setting.EnableEavesdrop) return;
         if (Helper.StartOfRound is { shipIsLeaving: true }) return;
         if (Helper.SoundManager is not SoundManager soundManager) return;
 
-        __instance.allPlayerScripts.ForEach(player => {
-            AudioSource currentVoiceChatAudioSource = player.currentVoiceChatAudioSource;
+        __instance.allPlayerScripts.ForEach(player =>
+        {
+            var currentVoiceChatAudioSource = player.currentVoiceChatAudioSource;
 
-            if (!currentVoiceChatAudioSource.TryGetComponent(out AudioLowPassFilter audioLowPassFilter)) {
-                return;
-            }
+            if (!currentVoiceChatAudioSource.TryGetComponent(out AudioLowPassFilter audioLowPassFilter)) return;
 
-            if (!currentVoiceChatAudioSource.TryGetComponent(out AudioHighPassFilter audioHighPassFilter)) {
-                return;
-            }
+            if (!currentVoiceChatAudioSource.TryGetComponent(out AudioHighPassFilter audioHighPassFilter)) return;
 
             audioLowPassFilter.enabled = false;
             audioHighPassFilter.enabled = false;

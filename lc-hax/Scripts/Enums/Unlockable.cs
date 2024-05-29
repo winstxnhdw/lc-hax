@@ -1,4 +1,5 @@
-enum Unlockable {
+internal enum Unlockable
+{
     ORANGE_SUIT = 0,
     GREEN_SUIT = 1,
     HAZARD_SUIT = 2,
@@ -26,6 +27,5 @@ enum Unlockable {
     PURPLE_SUIT = 24,
     BEE_SUIT = 25,
     BUNNY_SUIT = 26,
-    DISCO_BALL = 27,
-
+    DISCO_BALL = 27
 }

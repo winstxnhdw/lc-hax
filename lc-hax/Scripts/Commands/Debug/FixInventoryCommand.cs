@@ -2,21 +2,22 @@ using GameNetcodeStuff;
 using Hax;
 
 [DebugCommand("fixinventory")]
-class FixInventoryCommand : ICommand {
-    public void Execute(StringArray _) {
-        if(Helper.LocalPlayer is not PlayerControllerB player) return;
-        Helper.Grabbables.ForEach(grabbable => {
-            if(grabbable is not null) {
-                if(player.HasItemInSlot(grabbable)) return; // only target the unheld items that are bugged in player's hand.
-                if(grabbable.playerHeldBy == player) {
+internal class FixInventoryCommand : ICommand
+{
+    public void Execute(StringArray _)
+    {
+        if (Helper.LocalPlayer is not PlayerControllerB player) return;
+        Helper.Grabbables.ForEach(grabbable =>
+        {
+            if (grabbable is not null)
+            {
+                if (player.HasItemInSlot(grabbable))
+                    return; // only target the unheld items that are bugged in player's hand.
+                if (grabbable.playerHeldBy == player)
                     grabbable.Detach();
-                }
-                else if(grabbable.parentObject == player.localItemHolder) {
+                else if (grabbable.parentObject == player.localItemHolder)
                     grabbable.Detach();
-                }
-                else if (grabbable.parentObject == player.serverItemHolder) {
-                    grabbable.Detach();
-                }
+                else if (grabbable.parentObject == player.serverItemHolder) grabbable.Detach();
             }
         });
     }

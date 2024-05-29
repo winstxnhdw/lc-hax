@@ -1,16 +1,26 @@
 using UnityEngine;
 
-internal class LassoManController : IEnemyController<LassoManAI> {
+internal class LassoManController : IEnemyController<LassoManAI>
+{
+    private readonly Vector3 CamOffset = new(0, 2.8f, -3.5f);
 
-    Vector3 CamOffset = new Vector3(0, 2.8f, -3.5f);
+    public Vector3 GetCameraOffset(LassoManAI enemy)
+    {
+        return CamOffset;
+    }
 
-    public Vector3 GetCameraOffset(LassoManAI enemy) => this.CamOffset;
+    public void UsePrimarySkill(LassoManAI enemy)
+    {
+        enemy.MakeScreechNoiseServerRpc();
+    }
 
-    public void UsePrimarySkill(LassoManAI enemy) => enemy.MakeScreechNoiseServerRpc();
+    public bool SyncAnimationSpeedEnabled(LassoManAI enemy)
+    {
+        return false;
+    }
 
-    public bool SyncAnimationSpeedEnabled(LassoManAI enemy) => false;
-
-    public void OnOutsideStatusChange(LassoManAI enemy) => enemy.StopSearch(enemy.searchForPlayers, true);
-
+    public void OnOutsideStatusChange(LassoManAI enemy)
+    {
+        enemy.StopSearch(enemy.searchForPlayers, true);
+    }
 }
-

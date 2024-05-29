@@ -2,9 +2,15 @@ using UnityEngine;
 
 namespace Hax;
 
-static partial class Helper {
-    internal static T? FindObject<T>() where T : Component => Object.FindAnyObjectByType<T>();
+internal static partial class Helper
+{
+    internal static T? FindObject<T>() where T : Component
+    {
+        return Object.FindAnyObjectByType<T>();
+    }
 
-    internal static T[] FindObjects<T>(FindObjectsSortMode sortMode = FindObjectsSortMode.None) where T : Component =>
-        Object.FindObjectsByType<T>(sortMode);
+    internal static T[] FindObjects<T>(FindObjectsSortMode sortMode = FindObjectsSortMode.None) where T : Component
+    {
+        return Object.FindObjectsByType<T>(sortMode);
+    }
 }

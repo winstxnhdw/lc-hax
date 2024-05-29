@@ -1,28 +1,32 @@
 using System;
-using System.Linq;
 using System.Collections.Generic;
+using System.Linq;
 using Hax;
 
 [Command("suit")]
-class SuitCommand : ICommand {
+internal class SuitCommand : ICommand
+{
     internal Dictionary<string, Unlockable> SuitUnlockables =>
         Enum.GetValues(typeof(Unlockable))
             .Cast<Unlockable>()
             .Where(u => u.ToString().EndsWith("_SUIT"))
             .ToDictionary(suit => suit.ToString().Replace("_SUIT", "").ToLower(), suit => suit);
 
-    public void Execute(StringArray args) {
-        if (args[0] is not string suit) {
+    public void Execute(StringArray args)
+    {
+        if (args[0] is not string suit)
+        {
             Chat.Print("Usage: suit <suit>");
             return;
         }
 
-        if (!suit.FuzzyMatch(this.SuitUnlockables.Keys, out string key)) {
+        if (!suit.FuzzyMatch(SuitUnlockables.Keys, out var key))
+        {
             Chat.Print("Suit is not found!");
             return;
         }
 
-        Unlockable selectedSuit = this.SuitUnlockables[key];
+        var selectedSuit = SuitUnlockables[key];
         Helper.BuyUnlockable(selectedSuit);
 
         Helper
@@ -30,6 +34,7 @@ class SuitCommand : ICommand {
             .First(suit => selectedSuit.Is(suit.suitID))?
             .SwitchSuitToThis(Helper.LocalPlayer);
 
-        Chat.Print($"Wearing {string.Join(" ", selectedSuit.ToString().Split('_').Select(s => s.ToLower())).ToTitleCase()}!");
+        Chat.Print(
+            $"Wearing {string.Join(" ", selectedSuit.ToString().Split('_').Select(s => s.ToLower())).ToTitleCase()}!");
     }
 }

@@ -3,8 +3,10 @@ using Hax;
 using UnityEngine;
 
 [Command("fakedeath")]
-class FakeDeathCommand : ICommand {
-    public void Execute(StringArray args) {
+internal class FakeDeathCommand : ICommand
+{
+    public void Execute(StringArray args)
+    {
         if (Helper.LocalPlayer is not PlayerControllerB player) return;
 
         Setting.EnableFakeDeath = true;
@@ -19,7 +21,7 @@ class FakeDeathCommand : ICommand {
         );
 
         Helper.CreateComponent<WaitForBehaviour>("Respawn")
-              .SetPredicate(() => player.playersManager.shipIsLeaving)
-              .Init(player.KillPlayer);
+            .SetPredicate(() => player.playersManager.shipIsLeaving)
+            .Init(player.KillPlayer);
     }
 }

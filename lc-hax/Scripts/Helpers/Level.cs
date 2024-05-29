@@ -2,35 +2,30 @@ using System.Linq;
 
 namespace Hax;
 
-static partial class Helper {
-    
+internal static partial class Helper
+{
     /// <summary>
-    /// Sets the power switch on or off regardless of the BreakerBox state.
+    ///     Returns the active breakerbox Managing the level's power.
+    /// </summary>
+    internal static BreakerBox BreakerBox =>
+        FindObjects<BreakerBox>().FirstOrDefault(breaker => breaker.name.Contains("(Clone)"));
+
+    /// <summary>
+    ///     Sets the power switch on or off regardless of the BreakerBox state.
     /// </summary>
     /// <param name="On"></param>
     internal static void SetPowerSwitch(bool On)
     {
-        if (Helper.RoundManager is not RoundManager roundmanager) return;
+        if (RoundManager is not RoundManager roundmanager) return;
         if (On)
-        {
             roundmanager.PowerSwitchOnClientRpc();
-        }
         else
-        {
             roundmanager.PowerSwitchOffClientRpc();
-        }
-
     }
 
     internal static void FlickerLights(bool flickerFlashlights = false, bool disableFlashlights = false)
     {
-        if (Helper.RoundManager is not RoundManager roundmanager) return;
+        if (RoundManager is not RoundManager roundmanager) return;
         roundmanager.FlickerLights(flickerFlashlights, disableFlashlights);
     }
-
-    /// <summary>
-    /// Returns the active breakerbox Managing the level's power.
-    /// </summary>
-    internal static BreakerBox BreakerBox => Helper.FindObjects<BreakerBox>().FirstOrDefault(breaker => breaker.name.Contains("(Clone)"));
-
 }

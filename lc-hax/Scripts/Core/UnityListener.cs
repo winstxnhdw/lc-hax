@@ -4,13 +4,13 @@ using UnityEngine;
 public class UnityListener : MonoBehaviour
 {
     public Action AwakeAction;
-    public Action StartAction;
-    public Action UpdateAction;
     public Action FixedUpdateAction;
     public Action LateUpdateAction;
     public Action OnDestroyAction;
     public Action OnDisableAction;
     public Action OnEnableAction;
+    public Action StartAction;
+    public Action UpdateAction;
 
     private void Awake()
     {

@@ -1,5 +1,6 @@
 using HarmonyLib;
 using UnityEngine;
+using Random = System.Random;
 
 [HarmonyPatch(typeof(GrabbableObject), "ItemActivate")]
 public static class GrabbableInteractionPatch
@@ -7,29 +8,23 @@ public static class GrabbableInteractionPatch
     public static void Postfix(GrabbableObject __instance, bool used, ref bool buttonDown)
     {
         if (__instance != null)
-        {
             if (buttonDown)
             {
-
-
                 // toggle item noises and animations
                 if (__instance is AnimatedItem animation)
                 {
                     if (animation.itemAnimator != null)
                     {
                         if (animation.itemAudio.isPlaying)
-                        {
                             StopAnimatedNoise(animation);
-                        }
                         else
-                        {
                             StartAnimatedNoise(animation);
-                        }
                     }
                     else
                     {
                         PlayStaticPropNoise(animation);
                     }
+
                     return;
                 }
 
@@ -38,10 +33,7 @@ public static class GrabbableInteractionPatch
                     cushion.Fart();
                     return;
                 }
-
             }
-        }
-        
     }
 
     internal static void PlayStaticPropNoise(AnimatedItem item)
@@ -63,6 +55,7 @@ public static class GrabbableInteractionPatch
                 item.itemAudio.clip = item.dropAudio;
                 item.itemAudio.loop = item.loopDropAudio;
             }
+
             item.itemAudio.Play();
         }
     }
@@ -71,17 +64,12 @@ public static class GrabbableInteractionPatch
     {
         if (item == null) return;
         var reflector = item.Reflect();
-        System.Random itemRandomChance = reflector.GetInternalField<System.Random>("itemRandomChance");
+        var itemRandomChance = reflector.GetInternalField<Random>("itemRandomChance");
 
-        if (item.itemAnimator != null)
-        {
-            item.itemAnimator.SetBool(item.grabItemBoolString, value: false);
-        }
+        if (item.itemAnimator != null) item.itemAnimator.SetBool(item.grabItemBoolString, false);
 
         if (item.chanceToTriggerAlternateMesh > 0)
-        {
             item.gameObject.GetComponent<MeshFilter>().mesh = reflector.GetInternalField<Mesh>("normalMesh");
-        }
 
         if (!item.makeAnimationWhenDropping)
         {
@@ -95,20 +83,14 @@ public static class GrabbableInteractionPatch
             return;
         }
 
-        if (item.itemAnimator != null)
-        {
-            item.itemAnimator.SetTrigger(item.dropItemTriggerString);
-        }
+        if (item.itemAnimator != null) item.itemAnimator.SetTrigger(item.dropItemTriggerString);
 
         if (item.itemAudio != null)
         {
             item.itemAudio.loop = item.loopDropAudio;
             item.itemAudio.clip = item.dropAudio;
             item.itemAudio.Play();
-            if (item.itemAudioLowPassFilter != null)
-            {
-                item.itemAudioLowPassFilter.cutoffFrequency = 20000f;
-            }
+            if (item.itemAudioLowPassFilter != null) item.itemAudioLowPassFilter.cutoffFrequency = 20000f;
 
             item.itemAudio.volume = 1f;
         }
@@ -118,11 +100,8 @@ public static class GrabbableInteractionPatch
     {
         if (item == null) return;
         var reflector = item.Reflect();
-        System.Random itemRandomChance = reflector.GetInternalField<System.Random>("itemRandomChance");
-        if (item.itemAudioLowPassFilter != null)
-        {
-            item.itemAudioLowPassFilter.cutoffFrequency = 20000f;
-        }
+        var itemRandomChance = reflector.GetInternalField<Random>("itemRandomChance");
+        if (item.itemAudioLowPassFilter != null) item.itemAudioLowPassFilter.cutoffFrequency = 20000f;
         item.itemAudio.volume = 1f;
         if (item.chanceToTriggerAlternateMesh > 0)
         {
@@ -132,8 +111,10 @@ public static class GrabbableInteractionPatch
                 item.itemAudio.Stop();
                 return;
             }
+
             item.gameObject.GetComponent<MeshFilter>().mesh = reflector.GetInternalField<Mesh>("normalMesh");
         }
+
         if (!reflector.GetInternalField<bool>("wasInPocket"))
         {
             if (itemRandomChance.Next(0, 100) > item.chanceToTriggerAnimation)
@@ -146,10 +127,8 @@ public static class GrabbableInteractionPatch
         {
             reflector.SetInternalField("wasInPocket", false);
         }
-        if (item.itemAnimator != null)
-        {
-            item.itemAnimator.SetBool(item.grabItemBoolString, true);
-        }
+
+        if (item.itemAnimator != null) item.itemAnimator.SetBool(item.grabItemBoolString, true);
         if (item.itemAudio != null)
         {
             item.itemAudio.clip = item.grabAudio;
@@ -157,5 +136,4 @@ public static class GrabbableInteractionPatch
             item.itemAudio.Play();
         }
     }
-
 }

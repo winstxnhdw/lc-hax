@@ -1,45 +1,51 @@
-using System.Linq;
-using System.Collections.Generic;
-using Hax;
 using System;
+using System.Collections.Generic;
+using System.Linq;
+using Hax;
 
 [Command("visit")]
-class VisitCommand : ICommand {
-    static Dictionary<string, int>? Levels { get; set; }
+internal class VisitCommand : ICommand
+{
+    private static Dictionary<string, int>? Levels { get; set; }
 
-    public void Execute(StringArray args) {
+    public void Execute(StringArray args)
+    {
         if (Helper.Terminal is not Terminal terminal) return;
         if (Helper.StartOfRound is not StartOfRound startOfRound) return;
-        VisitCommand.Levels ??= startOfRound.levels.ToDictionary(
+        Levels ??= startOfRound.levels.ToDictionary(
             level => level.name[..(level.name.Length - "Level".Length)].ToLower(),
             level => level.levelID
         );
 
-        if (args[0] is not string moon) {
+        if (args[0] is not string moon)
+        {
             Chat.Print("Usage: visit <moon>");
-            Chat.Print("Moons: " + string.Join(", ", VisitCommand.Levels.Keys));
+            Chat.Print("Moons: " + string.Join(", ", Levels.Keys));
             // dump to console as well
-            Console.WriteLine("Moons: " + string.Join(", ", VisitCommand.Levels.Keys));
+            Console.WriteLine("Moons: " + string.Join(", ", Levels.Keys));
             return;
         }
 
-        if (!startOfRound.inShipPhase) {
+        if (!startOfRound.inShipPhase)
+        {
             Chat.Print("You cannot use this command outside of the ship phase!");
             return;
         }
 
-        if (startOfRound.travellingToNewLevel) {
+        if (startOfRound.travellingToNewLevel)
+        {
             Chat.Print("You cannot use this command while travelling to a new level!");
             return;
         }
 
 
-        if (!moon.FuzzyMatch(VisitCommand.Levels.Keys, out string key)) {
+        if (!moon.FuzzyMatch(Levels.Keys, out var key))
+        {
             Chat.Print("Failed to find moon!");
             return;
         }
 
-        startOfRound.ChangeLevelServerRpc(VisitCommand.Levels[key], terminal.groupCredits);
+        startOfRound.ChangeLevelServerRpc(Levels[key], terminal.groupCredits);
         Chat.Print($"Visiting {key.ToTitleCase()}!");
     }
 }

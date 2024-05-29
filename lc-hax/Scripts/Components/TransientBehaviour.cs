@@ -2,62 +2,76 @@ using System;
 using System.Collections;
 using UnityEngine;
 
-class TransientBehaviour : MonoBehaviour {
-    Action<float>? Action { get; set; }
-    Action? DisposeAction { get; set; }
-    float ExpireTime { get; set; } = 0.0f;
+internal class TransientBehaviour : MonoBehaviour
+{
+    private Action<float>? Action { get; set; }
+    private Action? DisposeAction { get; set; }
+    private float ExpireTime { get; set; } = 0.0f;
 
-    internal TransientBehaviour Init(Action<float> action, float expireTime, float delay = 0.0f) {
-        this.Action = action;
-        this.ExpireTime = expireTime;
+    internal TransientBehaviour Init(Action<float> action, float expireTime, float delay = 0.0f)
+    {
+        Action = action;
+        ExpireTime = expireTime;
 
         _ = delay > 0.0f
-            ? this.StartCoroutine(this.TransientCoroutine(delay))
-            : this.StartCoroutine(this.TransientCoroutine());
+            ? StartCoroutine(TransientCoroutine(delay))
+            : StartCoroutine(TransientCoroutine());
 
         return this;
     }
 
-    internal void Dispose(Action disposeAction) => this.DisposeAction = disposeAction;
-
-    internal void Unless(Func<bool> predicate) => this.StartCoroutine(this.UnlessCoroutine(predicate));
-
-    IEnumerator UnlessCoroutine(Func<bool> predicate) {
-        yield return new WaitUntil(predicate);
-        this.Finalise();
+    internal void Dispose(Action disposeAction)
+    {
+        DisposeAction = disposeAction;
     }
 
-    IEnumerator TransientCoroutine(float delay) {
-        WaitForSeconds waitForDelay = new(delay);
-        float timeElapsed = 0.0f;
+    internal void Unless(Func<bool> predicate)
+    {
+        StartCoroutine(UnlessCoroutine(predicate));
+    }
 
-        while (this.ExpireTime > 0.0f) {
-            this.ExpireTime -= delay;
-            this.Action?.Invoke(timeElapsed += delay);
+    private IEnumerator UnlessCoroutine(Func<bool> predicate)
+    {
+        yield return new WaitUntil(predicate);
+        Finalise();
+    }
+
+    private IEnumerator TransientCoroutine(float delay)
+    {
+        WaitForSeconds waitForDelay = new(delay);
+        var timeElapsed = 0.0f;
+
+        while (ExpireTime > 0.0f)
+        {
+            ExpireTime -= delay;
+            Action?.Invoke(timeElapsed += delay);
 
             yield return waitForDelay;
         }
 
-        this.Finalise();
+        Finalise();
     }
 
-    IEnumerator TransientCoroutine() {
+    private IEnumerator TransientCoroutine()
+    {
         WaitForEndOfFrame waitForEndOfFrame = new();
-        float timeElapsed = 0.0f;
+        var timeElapsed = 0.0f;
 
-        while (this.ExpireTime > 0.0f) {
-            float deltaTime = Time.deltaTime;
-            this.ExpireTime -= deltaTime;
-            this.Action?.Invoke(timeElapsed += deltaTime);
+        while (ExpireTime > 0.0f)
+        {
+            var deltaTime = Time.deltaTime;
+            ExpireTime -= deltaTime;
+            Action?.Invoke(timeElapsed += deltaTime);
 
             yield return waitForEndOfFrame;
         }
 
-        this.Finalise();
+        Finalise();
     }
 
-    void Finalise() {
-        this.DisposeAction?.Invoke();
-        Destroy(this.gameObject);
+    private void Finalise()
+    {
+        DisposeAction?.Invoke();
+        Destroy(gameObject);
     }
 }

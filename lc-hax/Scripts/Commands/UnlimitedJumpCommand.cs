@@ -1,9 +1,11 @@
 using Hax;
 
 [Command("jump")]
-class UnlimitedJumpCommand : ICommand {
-    public void Execute(StringArray _) {
+internal class UnlimitedJumpCommand : ICommand
+{
+    public void Execute(StringArray _)
+    {
         Setting.EnableUnlimitedJump = !Setting.EnableUnlimitedJump;
-        Helper.SendNotification(title: "Unlimited Jump", body: Setting.EnableUnlimitedJump ? " enabled" : "disabled");
+        Helper.SendNotification("Unlimited Jump", Setting.EnableUnlimitedJump ? " enabled" : "disabled");
     }
 }

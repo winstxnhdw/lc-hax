@@ -1,18 +1,22 @@
-using Hax;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-class KeyboardMovement : MonoBehaviour {
-    const float BaseSpeed = 20;
-    float SprintMultiplier { get; set; } = 1;
+internal class KeyboardMovement : MonoBehaviour
+{
+    private const float BaseSpeed = 20;
+    private float SprintMultiplier { get; set; } = 1;
 
     internal Vector3 LastPosition { get; set; }
     internal bool IsPaused { get; set; } = false;
 
-    void OnEnable() => this.LastPosition = this.transform.position;
+    private void OnEnable()
+    {
+        LastPosition = transform.position;
+    }
 
-    void LateUpdate() {
-        if (this.IsPaused) return;
+    private void LateUpdate()
+    {
+        if (IsPaused) return;
 
         Vector3 direction = new(
             Keyboard.current.dKey.ReadValue() - Keyboard.current.aKey.ReadValue(),
@@ -20,22 +24,25 @@ class KeyboardMovement : MonoBehaviour {
             Keyboard.current.wKey.ReadValue() - Keyboard.current.sKey.ReadValue()
         );
 
-        this.UpdateSprintMultiplier(Keyboard.current);
-        this.Move(direction);
+        UpdateSprintMultiplier(Keyboard.current);
+        Move(direction);
     }
 
-    void UpdateSprintMultiplier(Keyboard keyboard) =>
-        this.SprintMultiplier = keyboard.shiftKey.IsPressed()
-            ? Mathf.Min(this.SprintMultiplier + (5.0f * Time.deltaTime), 5.0f)
+    private void UpdateSprintMultiplier(Keyboard keyboard)
+    {
+        SprintMultiplier = keyboard.shiftKey.IsPressed()
+            ? Mathf.Min(SprintMultiplier + 5.0f * Time.deltaTime, 5.0f)
             : 1.0f;
+    }
 
-    void Move(Vector3 direction) {
-        Vector3 translatedDirection =
-            (this.transform.right * direction.x) +
-            (this.transform.up * direction.y) +
-            (this.transform.forward * direction.z);
+    private void Move(Vector3 direction)
+    {
+        var translatedDirection =
+            transform.right * direction.x +
+            transform.up * direction.y +
+            transform.forward * direction.z;
 
-        this.LastPosition += translatedDirection * Time.deltaTime * KeyboardMovement.BaseSpeed * this.SprintMultiplier;
-        this.transform.position = this.LastPosition;
+        LastPosition += translatedDirection * Time.deltaTime * BaseSpeed * SprintMultiplier;
+        transform.position = LastPosition;
     }
 }

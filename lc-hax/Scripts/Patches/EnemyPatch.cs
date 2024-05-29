@@ -3,6 +3,10 @@
 using HarmonyLib;
 
 [HarmonyPatch(typeof(EnemyAI), nameof(EnemyAI.SyncPositionToClients))]
-class EnemyPatch {
-    static void Prefix(EnemyAI __instance) => __instance.updatePositionThreshold = 0.0f;
+internal class EnemyPatch
+{
+    private static void Prefix(EnemyAI __instance)
+    {
+        __instance.updatePositionThreshold = 0.0f;
+    }
 }

@@ -1,7 +1,5 @@
-using Hax;
-
 [Command("announce")]
-class AnnounceCommand : ICommand
+internal class AnnounceCommand : ICommand
 {
     public void Execute(StringArray args)
     {
@@ -10,7 +8,8 @@ class AnnounceCommand : ICommand
             Chat.Print("Usage: /announce <message>");
             return;
         }
-        string message = string.Join(" ", args[0..]);
+
+        var message = string.Join(" ", args[0..]);
 
         Chat.Announce(string.Join(' ', message), true);
     }

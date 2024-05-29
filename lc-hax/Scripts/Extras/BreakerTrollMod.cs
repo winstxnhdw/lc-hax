@@ -1,10 +1,10 @@
-using System.Collections;
-using GameNetcodeStuff;
 using Hax;
 using UnityEngine;
 
-sealed class BreakerTrollMod : MonoBehaviour
+internal sealed class BreakerTrollMod : MonoBehaviour
 {
+    private float Delay = 0.0f;
+    private int lastToggledIndex = -1;
     internal static BreakerTrollMod? Instance { get; private set; }
 
     internal BreakerBox Breaker { get; private set; }
@@ -12,33 +12,32 @@ sealed class BreakerTrollMod : MonoBehaviour
     internal InteractTrigger[] Switches { get; private set; }
 
     internal float TimeBetweenSwitches { get; set; } = 10f;
-    private int lastToggledIndex = -1;
-    private float Delay = 0.0f;
 
     internal void Awake()
     {
-        if(Instance != null)
+        if (Instance != null)
         {
             Destroy(this);
             return;
         }
+
         Instance = this;
     }
 
     internal void Start()
     {
-        if(!this.gameObject.GetComponent<BreakerBox>())
+        if (!gameObject.GetComponent<BreakerBox>())
             Destroy(this);
-        Breaker = this.gameObject.GetComponent<BreakerBox>();
+        Breaker = gameObject.GetComponent<BreakerBox>();
         Switches = Breaker.Get_BreakerBox_Switches();
-        if(Switches.Length == 0)
+        if (Switches.Length == 0)
             Destroy(this);
     }
 
 
-    void Update()
+    private void Update()
     {
-        if(Switches == null || Switches.Length == 0)
+        if (Switches == null || Switches.Length == 0)
             return;
 
 
@@ -51,8 +50,9 @@ sealed class BreakerTrollMod : MonoBehaviour
             {
                 randomIndex = Random.Range(0, Switches.Length);
             } while (randomIndex == lastToggledIndex);
+
             var PickedSwitch = Switches[randomIndex];
-            bool isOn = PickedSwitch.Get_BreakerBoxSwitch_State();
+            var isOn = PickedSwitch.Get_BreakerBoxSwitch_State();
             PickedSwitch.Set_BreakerBox_Switch_state(!isOn);
             Helper.SetPowerSwitch(!isOn);
 

@@ -1,9 +1,13 @@
 using Hax;
 
 [Command("toggleweb")]
-class NoSpiderWebSlownessCommand : ICommand {
-    public void Execute(StringArray _) {
+internal class NoSpiderWebSlownessCommand : ICommand
+{
+    public void Execute(StringArray _)
+    {
         Setting.DisableSpiderWebSlowness = !Setting.DisableSpiderWebSlowness;
-        Helper.DisplayFlatHudMessage(Setting.DisableSpiderWebSlowness ? "Spider Web Slowness Disabled" : "Spider Web Slowness Enabled");
+        Helper.DisplayFlatHudMessage(Setting.DisableSpiderWebSlowness
+            ? "Spider Web Slowness Disabled"
+            : "Spider Web Slowness Enabled");
     }
 }

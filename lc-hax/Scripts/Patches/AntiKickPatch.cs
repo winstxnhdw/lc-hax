@@ -6,15 +6,18 @@ using Hax;
 using Steamworks;
 
 [HarmonyPatch(typeof(PlayerControllerB))]
-class AntiKickPatch {
+internal class AntiKickPatch
+{
     [HarmonyPatch("SendNewPlayerValuesServerRpc")]
-    static bool Prefix(PlayerControllerB __instance) {
+    private static bool Prefix(PlayerControllerB __instance)
+    {
         if (!Setting.EnableAntiKick) return true;
 
-        Helper.GameNetworkManager?.currentLobby?.Members.ForEach((i, member) => {
+        Helper.GameNetworkManager?.currentLobby?.Members.ForEach((i, member) =>
+        {
             if (Helper.LocalPlayer?.playerSteamId == member.Id.Value) return;
 
-            PlayerControllerB player = __instance.playersManager.allPlayerScripts[i];
+            var player = __instance.playersManager.allPlayerScripts[i];
             player.playerSteamId = member.Id.Value;
             player.playerUsername = member.Name;
             player.usernameBillboardText.text = member.Name;
@@ -26,7 +29,8 @@ class AntiKickPatch {
     }
 
     [HarmonyPatch("SendNewPlayerValuesClientRpc")]
-    static void Postfix(PlayerControllerB __instance) {
+    private static void Postfix(PlayerControllerB __instance)
+    {
         if (!Setting.EnableAntiKick) return;
         if (Helper.LocalPlayer is not PlayerControllerB localPlayer) return;
 
@@ -34,6 +38,7 @@ class AntiKickPatch {
         localPlayer.playerUsername = SteamClient.Name;
         localPlayer.usernameBillboardText.text = SteamClient.Name;
         __instance.playersManager.mapScreen.radarTargets[localPlayer.PlayerIndex()].name = localPlayer.playerUsername;
-        __instance.quickMenuManager.AddUserToPlayerList(localPlayer.playerSteamId, localPlayer.playerUsername, localPlayer.PlayerIndex());
+        __instance.quickMenuManager.AddUserToPlayerList(localPlayer.playerSteamId, localPlayer.playerUsername,
+            localPlayer.PlayerIndex());
     }
 }

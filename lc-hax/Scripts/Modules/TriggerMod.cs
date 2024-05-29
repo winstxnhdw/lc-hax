@@ -2,52 +2,66 @@ using GameNetcodeStuff;
 using Hax;
 using UnityEngine;
 
-sealed class TriggerMod : MonoBehaviour, IEnemyPrompter {
-
+internal sealed class TriggerMod : MonoBehaviour, IEnemyPrompter
+{
     internal static TriggerMod? Instance { get; private set; }
-    RaycastHit[] RaycastHits { get; set; } = new RaycastHit[100];
+    private RaycastHit[] RaycastHits { get; } = new RaycastHit[100];
 
-    bool UsingInteractRay { get; set; } = false;
-    bool UsingFollowRay { get; set; } = false;
-    void Awake()
+    private bool UsingInteractRay { get; set; } = false;
+    private bool UsingFollowRay { get; set; } = false;
+
+    private void Awake()
     {
-        if (TriggerMod.Instance != null)
+        if (Instance != null)
         {
             Destroy(this);
             return;
         }
-        TriggerMod.Instance = this;
-    }   
 
-    void OnEnable() {
-        InputListener.OnMiddleButtonPress += this.Fire;
-        InputListener.OnEButtonHold += this.SetUsingInteractRay;
-        InputListener.OnFButtonHold += this.SetUsingFollowRay;
+        Instance = this;
     }
 
-    void OnDisable() {
-        InputListener.OnMiddleButtonPress -= this.Fire;
-        InputListener.OnEButtonHold -= this.SetUsingInteractRay;
-        InputListener.OnFButtonHold -= this.SetUsingFollowRay;
+    private void OnEnable()
+    {
+        InputListener.OnMiddleButtonPress += Fire;
+        InputListener.OnEButtonHold += SetUsingInteractRay;
+        InputListener.OnFButtonHold += SetUsingFollowRay;
     }
 
-    void SetUsingInteractRay(bool isHeld) => this.UsingInteractRay = isHeld;
+    private void OnDisable()
+    {
+        InputListener.OnMiddleButtonPress -= Fire;
+        InputListener.OnEButtonHold -= SetUsingInteractRay;
+        InputListener.OnFButtonHold -= SetUsingFollowRay;
+    }
 
-    void SetUsingFollowRay(bool isHeld) => this.UsingFollowRay = isHeld;
+    private void SetUsingInteractRay(bool isHeld)
+    {
+        UsingInteractRay = isHeld;
+    }
 
-    void Fire() {
+    private void SetUsingFollowRay(bool isHeld)
+    {
+        UsingFollowRay = isHeld;
+    }
+
+    private void Fire()
+    {
         if (Helper.CurrentCamera is not Camera camera) return;
         if (Helper.LocalPlayer is not PlayerControllerB localplayer) return;
 
-        if (this.UsingFollowRay) {
-            if (FollowMod.PlayerToFollow is not null) {
+        if (UsingFollowRay)
+        {
+            if (FollowMod.PlayerToFollow is not null)
+            {
                 FollowMod.PlayerToFollow = null;
                 Chat.Print("Stopped following!");
                 return;
             }
 
-            foreach (int i in this.RaycastHits.SphereCastForward(camera.transform).Range()) {
-                if (!this.RaycastHits[i].collider.TryGetComponent(out PlayerControllerB player)) continue;
+            foreach (var i in RaycastHits.SphereCastForward(camera.transform).Range())
+            {
+                if (!RaycastHits[i].collider.TryGetComponent(out PlayerControllerB player)) continue;
                 if (player.IsSelf()) continue;
 
                 Chat.Print($"Following {player.playerUsername}!");
@@ -58,9 +72,11 @@ sealed class TriggerMod : MonoBehaviour, IEnemyPrompter {
             return;
         }
 
-        if (this.UsingInteractRay) {
-            foreach (int i in this.RaycastHits.SphereCastForward(camera.transform, 0.25f).Range()) {
-                if (!this.RaycastHits[i].collider.TryGetComponent(out InteractTrigger interactTrigger)) continue;
+        if (UsingInteractRay)
+        {
+            foreach (var i in RaycastHits.SphereCastForward(camera.transform, 0.25f).Range())
+            {
+                if (!RaycastHits[i].collider.TryGetComponent(out InteractTrigger interactTrigger)) continue;
 
                 interactTrigger.Interact(Helper.LocalPlayer?.transform);
                 break;
@@ -69,61 +85,64 @@ sealed class TriggerMod : MonoBehaviour, IEnemyPrompter {
             return;
         }
 
-        foreach (RaycastHit raycastHit in camera.transform.SphereCastForward()) {
-            Collider collider = raycastHit.collider;
+        foreach (var raycastHit in camera.transform.SphereCastForward())
+        {
+            var collider = raycastHit.collider;
 
-            if (collider.TryGetComponent(out TerminalAccessibleObject terminalObject)) {
-                terminalObject.ToggleDoor();
-            }
+            if (collider.TryGetComponent(out TerminalAccessibleObject terminalObject)) terminalObject.ToggleDoor();
 
-            if (collider.TryGetComponent(out Turret turret)) {
-                if(!Setting.EnableStunOnLeftClick) {
+            if (collider.TryGetComponent(out Turret turret))
+            {
+                if (!Setting.EnableStunOnLeftClick)
                     turret.BerserkMode();
-                }
-                else {
+                else
                     turret.ToggleTurret();
-                }
             }
 
-            if (collider.TryGetComponent(out SpikeRoofTrap spike)) {
-                if (!Setting.EnableStunOnLeftClick) {
+            if (collider.TryGetComponent(out SpikeRoofTrap spike))
+            {
+                if (!Setting.EnableStunOnLeftClick)
                     spike.Slam();
-                }
-                else {
+                else
                     spike.ToggleSpikes();
-                }
             }
 
-            if (collider.TryGetComponent(out Landmine landmine)) {
-                if (!Setting.EnableStunOnLeftClick) {
+            if (collider.TryGetComponent(out Landmine landmine))
+            {
+                if (!Setting.EnableStunOnLeftClick)
                     landmine.TriggerMine();
-                }
-                else {
+                else
                     landmine.ToggleLandmine();
-                }
                 break;
             }
 
-            if (collider.TryGetComponent(out JetpackItem jetpack)) {
+            if (collider.TryGetComponent(out JetpackItem jetpack))
+            {
                 jetpack.ExplodeJetpackServerRpc();
                 break;
             }
 
-            if (collider.TryGetComponent(out DoorLock doorLock)) {
+            if (collider.TryGetComponent(out DoorLock doorLock))
+            {
                 doorLock.UnlockDoorSyncWithServer();
                 break;
             }
 
-            if (collider.GetComponentInParent<EnemyAI>().Unfake() is EnemyAI enemy && Setting.EnablePhantom && PossessionMod.Instance?.PossessedEnemy != enemy) {
+            if (collider.GetComponentInParent<EnemyAI>().Unfake() is EnemyAI enemy && Setting.EnablePhantom &&
+                PossessionMod.Instance?.PossessedEnemy != enemy)
+            {
                 PossessionMod.Instance?.Possess(enemy);
                 break;
             }
-            if (collider.TryGetComponent(out PlayerControllerB player)) {
-                this.PromptEnemiesToTarget(targetPlayer: player).ForEach(enemy => Chat.Print($"{enemy} prompted!"));
+
+            if (collider.TryGetComponent(out PlayerControllerB player))
+            {
+                this.PromptEnemiesToTarget(player).ForEach(enemy => Chat.Print($"{enemy} prompted!"));
                 break;
             }
 
-            if (collider.TryGetComponent(out DepositItemsDesk depositItemDesk)) {
+            if (collider.TryGetComponent(out DepositItemsDesk depositItemDesk))
+            {
                 depositItemDesk.AttackPlayersServerRpc();
                 break;
             }

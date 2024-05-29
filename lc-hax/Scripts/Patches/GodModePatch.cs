@@ -5,8 +5,10 @@ using HarmonyLib;
 using Hax;
 
 [HarmonyPatch(typeof(PlayerControllerB), nameof(PlayerControllerB.AllowPlayerDeath))]
-class GodModePatch {
-    static bool Prefix(PlayerControllerB __instance, ref bool __result) {
+internal class GodModePatch
+{
+    private static bool Prefix(PlayerControllerB __instance, ref bool __result)
+    {
         if (!Setting.EnableGodMode || !__instance.IsSelf()) return true;
 
         __result = false;

@@ -7,14 +7,14 @@ using HarmonyLib;
 using Hax;
 
 [HarmonyPatch]
-class ChatPatches
+internal class ChatPatches
 {
     private static bool isLocalPlayerDeadStatus;
     private static bool isLocalPlayerDeadStatus2;
 
     [HarmonyPatch(typeof(HUDManager), "EnableChat_performed")]
     [HarmonyPrefix]
-    static void EnableChatPrefix(HUDManager __instance)
+    private static void EnableChatPrefix(HUDManager __instance)
     {
         if (__instance.localPlayer is not PlayerControllerB localPlayer) return;
         if (!localPlayer.IsSelf()) return;
@@ -25,7 +25,7 @@ class ChatPatches
 
     [HarmonyPatch(typeof(HUDManager), "EnableChat_performed")]
     [HarmonyPostfix]
-    static void EnableChatPostfix(HUDManager __instance)
+    private static void EnableChatPostfix(HUDManager __instance)
     {
         if (__instance.localPlayer is not PlayerControllerB localPlayer) return;
         if (!localPlayer.IsSelf()) return;
@@ -35,19 +35,16 @@ class ChatPatches
     [HarmonyBefore]
     [HarmonyPatch(typeof(HUDManager), "SubmitChat_performed")]
     [HarmonyPrefix]
-    static bool SubmitChatPrefix(HUDManager __instance)
+    private static bool SubmitChatPrefix(HUDManager __instance)
     {
-        if(__instance is not HUDManager hudManager) return true;
+        if (__instance is not HUDManager hudManager) return true;
         if (__instance.localPlayer is not PlayerControllerB localPlayer) return true;
         if (!localPlayer.IsSelf()) return true;
         isLocalPlayerDeadStatus2 = localPlayer.isPlayerDead;
         localPlayer.isPlayerDead = false;
 
 
-        if (!new[] { '!', State.CommandPrefix }.Any(hudManager.chatTextField.text.StartsWith))
-        {
-            return true;
-        }
+        if (!new[] { '!', State.CommandPrefix }.Any(hudManager.chatTextField.text.StartsWith)) return true;
 
         try
         {
@@ -63,7 +60,7 @@ class ChatPatches
 
     [HarmonyPatch(typeof(HUDManager), "SubmitChat_performed")]
     [HarmonyPostfix]
-    static void SubmitChatPostfix(HUDManager __instance)
+    private static void SubmitChatPostfix(HUDManager __instance)
     {
         if (__instance is not HUDManager hudManager) return;
         if (hudManager.localPlayer is not PlayerControllerB localPlayer) return;

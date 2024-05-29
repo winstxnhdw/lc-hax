@@ -2,8 +2,10 @@ using HarmonyLib;
 using Hax;
 
 [HarmonyPatch(typeof(HUDManager), nameof(HUDManager.AddTextToChatOnServer))]
-class TranslatePatch {
-    static bool Prefix(string chatMessage, int playerId) {
+internal class TranslatePatch
+{
+    private static bool Prefix(string chatMessage, int playerId)
+    {
         if (State.TranslateDetachedState is not TranslatePipe translateRequest) return true;
         if (Helper.LocalPlayer?.PlayerIndex() != playerId) return true;
 

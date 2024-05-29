@@ -2,33 +2,43 @@ using System;
 using System.Collections;
 using UnityEngine;
 
-enum CoroutineState {
+internal enum CoroutineState
+{
     RUNNING,
     EXHAUSTED,
     ERROR
 }
 
-class InvalidCoroutineState(CoroutineState state) : Exception($"Invalid CoroutineState: {state}") { }
+internal class InvalidCoroutineState(CoroutineState state) : Exception($"Invalid CoroutineState: {state}")
+{
+}
 
-static partial class Extensions {
-    static CoroutineState ExecuteCoroutineStep(IEnumerator coroutine) {
-        try {
+internal static partial class Extensions
+{
+    private static CoroutineState ExecuteCoroutineStep(IEnumerator coroutine)
+    {
+        try
+        {
             return coroutine.MoveNext() ? CoroutineState.RUNNING : CoroutineState.EXHAUSTED;
         }
 
-        catch {
+        catch
+        {
             return CoroutineState.ERROR;
         }
     }
 
-    static IEnumerator ResilientCoroutine(Func<object[], IEnumerator> coroutineFactory, object[] args) {
-        IEnumerator coroutine = coroutineFactory(args);
+    private static IEnumerator ResilientCoroutine(Func<object[], IEnumerator> coroutineFactory, object[] args)
+    {
+        var coroutine = coroutineFactory(args);
         WaitForSeconds waitForOneSecond = new(1.0f);
 
-        while (true) {
-            CoroutineState state = Extensions.ExecuteCoroutineStep(coroutine);
+        while (true)
+        {
+            var state = ExecuteCoroutineStep(coroutine);
 
-            switch (state) {
+            switch (state)
+            {
                 case CoroutineState.RUNNING:
                     yield return coroutine.Current;
                     break;
@@ -47,9 +57,15 @@ static partial class Extensions {
         }
     }
 
-    internal static Coroutine StartResilientCoroutine(this MonoBehaviour self, Func<object[], IEnumerator> coroutineFactory, params object[] args) =>
-        self.StartCoroutine(Extensions.ResilientCoroutine(coroutineFactory, args));
+    internal static Coroutine StartResilientCoroutine(this MonoBehaviour self,
+        Func<object[], IEnumerator> coroutineFactory, params object[] args)
+    {
+        return self.StartCoroutine(ResilientCoroutine(coroutineFactory, args));
+    }
 
-    internal static Coroutine StartResilientCoroutine(this MonoBehaviour self, Func<object[], IEnumerator> coroutineFactory) =>
-        self.StartResilientCoroutine(coroutineFactory, []);
+    internal static Coroutine StartResilientCoroutine(this MonoBehaviour self,
+        Func<object[], IEnumerator> coroutineFactory)
+    {
+        return self.StartResilientCoroutine(coroutineFactory, []);
+    }
 }

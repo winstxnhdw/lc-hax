@@ -2,10 +2,17 @@
 
 namespace System.Runtime.CompilerServices;
 
-static class IsExternalInit { }
+internal static class IsExternalInit
+{
+}
 
-[AttributeUsage(AttributeTargets.Class | AttributeTargets.Field | AttributeTargets.Property | AttributeTargets.Struct, AllowMultiple = false, Inherited = false)]
-sealed class RequiredMemberAttribute : Attribute { }
+[AttributeUsage(AttributeTargets.Class | AttributeTargets.Field | AttributeTargets.Property | AttributeTargets.Struct,
+    AllowMultiple = false, Inherited = false)]
+internal sealed class RequiredMemberAttribute : Attribute
+{
+}
 
 [AttributeUsage(AttributeTargets.All, AllowMultiple = true, Inherited = false)]
-sealed class CompilerFeatureRequiredAttribute(string name) : Attribute { }
+internal sealed class CompilerFeatureRequiredAttribute(string name) : Attribute
+{
+}

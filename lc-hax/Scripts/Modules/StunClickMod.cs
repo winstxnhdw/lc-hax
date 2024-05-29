@@ -1,46 +1,54 @@
 using Hax;
 using UnityEngine;
 
-sealed class StunClickMod : MonoBehaviour {
-    Collider[] Colliders { get; set; } = new Collider[100];
-    RaycastHit[] RaycastHits { get; set; } = new RaycastHit[100];
+internal sealed class StunClickMod : MonoBehaviour
+{
+    private Collider[] Colliders { get; } = new Collider[100];
+    private RaycastHit[] RaycastHits { get; } = new RaycastHit[100];
 
-    void OnEnable() => InputListener.OnLeftButtonPress += this.Stun;
+    private void OnEnable()
+    {
+        InputListener.OnLeftButtonPress += Stun;
+    }
 
-    void OnDisable() => InputListener.OnLeftButtonPress -= this.Stun;
+    private void OnDisable()
+    {
+        InputListener.OnLeftButtonPress -= Stun;
+    }
 
-    bool IsHoldingADefensiveWeapon() =>
-        Helper.LocalPlayer?.currentlyHeldObjectServer.itemProperties is { isDefensiveWeapon: true };
+    private bool IsHoldingADefensiveWeapon()
+    {
+        return Helper.LocalPlayer?.currentlyHeldObjectServer.itemProperties is { isDefensiveWeapon: true };
+    }
 
-    void StunJam(Collider collider) {
-        if (collider.TryGetComponent(out EnemyAICollisionDetect enemy)) {
-            enemy.mainScript.SetEnemyStunned(true, 5.0f);
-        }
+    private void StunJam(Collider collider)
+    {
+        if (collider.TryGetComponent(out EnemyAICollisionDetect enemy)) enemy.mainScript.SetEnemyStunned(true, 5.0f);
 
-        if (!collider.TryGetComponent(out Turret _) && !collider.TryGetComponent(out Landmine _) && !collider.TryGetComponent(out SpikeRoofTrap _)) {
-            return;
-        }
+        if (!collider.TryGetComponent(out Turret _) && !collider.TryGetComponent(out Landmine _) &&
+            !collider.TryGetComponent(out SpikeRoofTrap _)) return;
 
-        if (!collider.TryGetComponent(out TerminalAccessibleObject terminalAccessibleObject)) {
-            return;
-        }
+        if (!collider.TryGetComponent(out TerminalAccessibleObject terminalAccessibleObject)) return;
 
         terminalAccessibleObject.CallFunctionFromTerminal();
     }
 
-    void Stun() {
+    private void Stun()
+    {
         if (!Setting.EnableStunOnLeftClick) return;
         if (Helper.CurrentCamera is not Camera camera) return;
-        if (this.IsHoldingADefensiveWeapon()) return;
+        if (IsHoldingADefensiveWeapon()) return;
 
-        this.RaycastHits.SphereCastForward(camera.transform).Range().ForEach(i => {
-            Collider collider = this.RaycastHits[i].collider;
-            this.StunJam(collider);
+        RaycastHits.SphereCastForward(camera.transform).Range().ForEach(i =>
+        {
+            var collider = RaycastHits[i].collider;
+            StunJam(collider);
         });
 
-        Physics.OverlapSphereNonAlloc(camera.transform.position, 5.0f, this.Colliders).Range().ForEach(i => {
-            Collider collider = this.Colliders[i];
-            this.StunJam(collider);
+        Physics.OverlapSphereNonAlloc(camera.transform.position, 5.0f, Colliders).Range().ForEach(i =>
+        {
+            var collider = Colliders[i];
+            StunJam(collider);
         });
     }
 }

@@ -1,68 +1,85 @@
 using Hax;
 using UnityEngine;
 
-sealed class CrosshairMod : MonoBehaviour {
-    const float GapSize = 7.0f;
-    const float Thickness = 3.0f;
-    const float Length = 10.0f;
+internal sealed class CrosshairMod : MonoBehaviour
+{
+    private const float GapSize = 7.0f;
+    private const float Thickness = 3.0f;
+    private const float Length = 10.0f;
 
-    Vector2 TopCrosshairPosition { get; set; }
-    Vector2 BottomCrosshairPosition { get; set; }
-    Vector2 LeftCrosshairPosition { get; set; }
-    Vector2 RightCrosshairPosition { get; set; }
+    private Vector2 TopCrosshairPosition { get; set; }
+    private Vector2 BottomCrosshairPosition { get; set; }
+    private Vector2 LeftCrosshairPosition { get; set; }
+    private Vector2 RightCrosshairPosition { get; set; }
 
-    bool InGame { get; set; } = false;
+    private bool InGame { get; set; } = false;
 
-    void OnEnable() {
-        ScreenListener.OnScreenSizeChange += this.InitialiseCrosshairPositions;
-        GameListener.OnGameStart += this.ToggleInGame;
-        GameListener.OnGameEnd += this.ToggleNotInGame;
+    private void OnEnable()
+    {
+        ScreenListener.OnScreenSizeChange += InitialiseCrosshairPositions;
+        GameListener.OnGameStart += ToggleInGame;
+        GameListener.OnGameEnd += ToggleNotInGame;
     }
 
-    void OnDisable() {
-        ScreenListener.OnScreenSizeChange -= this.InitialiseCrosshairPositions;
-        GameListener.OnGameStart -= this.ToggleInGame;
-        GameListener.OnGameEnd -= this.ToggleNotInGame;
+    private void OnDisable()
+    {
+        ScreenListener.OnScreenSizeChange -= InitialiseCrosshairPositions;
+        GameListener.OnGameStart -= ToggleInGame;
+        GameListener.OnGameEnd -= ToggleNotInGame;
     }
 
-    void Start() => this.InitialiseCrosshairPositions();
-
-    void OnGUI() {
-        if (!this.InGame) return;
-        this.RenderCrosshair();
+    private void Start()
+    {
+        InitialiseCrosshairPositions();
     }
 
-    void ToggleInGame() => this.InGame = true;
-
-    void ToggleNotInGame() => this.InGame = false;
-
-    void InitialiseCrosshairPositions() {
-        Vector2 screenCentre = Helper.GetScreenCentre();
-        float halfWidth = 0.5f * CrosshairMod.Thickness;
-        float lengthToCentre = CrosshairMod.GapSize + CrosshairMod.Length;
-        float topLeftX = screenCentre.x - halfWidth;
-        float topLeftY = screenCentre.y - halfWidth;
-
-        this.TopCrosshairPosition = new Vector2(topLeftX, screenCentre.y - lengthToCentre);
-        this.BottomCrosshairPosition = new Vector2(topLeftX, screenCentre.y + CrosshairMod.GapSize);
-        this.RightCrosshairPosition = new Vector2(screenCentre.x + CrosshairMod.GapSize, topLeftY);
-        this.LeftCrosshairPosition = new Vector2(screenCentre.x - lengthToCentre, topLeftY);
+    private void OnGUI()
+    {
+        if (!InGame) return;
+        RenderCrosshair();
     }
 
-    void RenderCrosshair() {
-        Size verticalSize = new() {
-            Width = CrosshairMod.Thickness,
-            Height = CrosshairMod.Length
+    private void ToggleInGame()
+    {
+        InGame = true;
+    }
+
+    private void ToggleNotInGame()
+    {
+        InGame = false;
+    }
+
+    private void InitialiseCrosshairPositions()
+    {
+        var screenCentre = Helper.GetScreenCentre();
+        var halfWidth = 0.5f * Thickness;
+        var lengthToCentre = GapSize + Length;
+        var topLeftX = screenCentre.x - halfWidth;
+        var topLeftY = screenCentre.y - halfWidth;
+
+        TopCrosshairPosition = new Vector2(topLeftX, screenCentre.y - lengthToCentre);
+        BottomCrosshairPosition = new Vector2(topLeftX, screenCentre.y + GapSize);
+        RightCrosshairPosition = new Vector2(screenCentre.x + GapSize, topLeftY);
+        LeftCrosshairPosition = new Vector2(screenCentre.x - lengthToCentre, topLeftY);
+    }
+
+    private void RenderCrosshair()
+    {
+        Size verticalSize = new()
+        {
+            Width = Thickness,
+            Height = Length
         };
 
-        Size horizontalSize = new() {
-            Width = CrosshairMod.Length,
-            Height = CrosshairMod.Thickness
+        Size horizontalSize = new()
+        {
+            Width = Length,
+            Height = Thickness
         };
 
-        Helper.DrawBox(this.TopCrosshairPosition, verticalSize);
-        Helper.DrawBox(this.BottomCrosshairPosition, verticalSize);
-        Helper.DrawBox(this.RightCrosshairPosition, horizontalSize);
-        Helper.DrawBox(this.LeftCrosshairPosition, horizontalSize);
+        Helper.DrawBox(TopCrosshairPosition, verticalSize);
+        Helper.DrawBox(BottomCrosshairPosition, verticalSize);
+        Helper.DrawBox(RightCrosshairPosition, horizontalSize);
+        Helper.DrawBox(LeftCrosshairPosition, horizontalSize);
     }
 }

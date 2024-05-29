@@ -6,29 +6,31 @@ using Hax;
 using UnityEngine;
 
 [HarmonyPatch(typeof(PlayerControllerB))]
-class InvisiblePatch {
-    static Vector3 LastNewPos { get; set; }
-    static bool LastInElevator { get; set; }
-    static bool LastInShipRoom { get; set; }
-    static bool LastExhausted { get; set; }
-    static bool LastIsPlayerGrounded { get; set; }
+internal class InvisiblePatch
+{
+    private static Vector3 LastNewPos { get; set; }
+    private static bool LastInElevator { get; set; }
+    private static bool LastInShipRoom { get; set; }
+    private static bool LastExhausted { get; set; }
+    private static bool LastIsPlayerGrounded { get; set; }
 
     [HarmonyPatch("UpdatePlayerPositionServerRpc")]
-    static void Prefix(
+    private static void Prefix(
         ulong ___actualClientId,
         ref Vector3 newPos,
         ref bool inElevator,
         ref bool inShipRoom,
         ref bool exhausted,
         ref bool isPlayerGrounded
-    ) {
+    )
+    {
         if (!Setting.EnableInvisible || Helper.LocalPlayer?.actualClientId != ___actualClientId) return;
 
-        InvisiblePatch.LastNewPos = newPos;
-        InvisiblePatch.LastInElevator = inElevator;
-        InvisiblePatch.LastInShipRoom = inShipRoom;
-        InvisiblePatch.LastExhausted = exhausted;
-        InvisiblePatch.LastIsPlayerGrounded = isPlayerGrounded;
+        LastNewPos = newPos;
+        LastInElevator = inElevator;
+        LastInShipRoom = inShipRoom;
+        LastExhausted = exhausted;
+        LastIsPlayerGrounded = isPlayerGrounded;
 
         newPos = new Vector3(0.0f, -100.0f, 0.0f);
         inElevator = false;
@@ -38,20 +40,21 @@ class InvisiblePatch {
     }
 
     [HarmonyPatch("UpdatePlayerPositionClientRpc")]
-    static void Prefix(
+    private static void Prefix(
         PlayerControllerB __instance,
         ref Vector3 newPos,
         ref bool inElevator,
         ref bool isInShip,
         ref bool exhausted,
         ref bool isPlayerGrounded
-    ) {
+    )
+    {
         if (!Setting.EnableInvisible || !__instance.IsSelf()) return;
 
-        newPos = InvisiblePatch.LastNewPos;
-        inElevator = InvisiblePatch.LastInElevator;
-        isInShip = InvisiblePatch.LastInShipRoom;
-        exhausted = InvisiblePatch.LastExhausted;
-        isPlayerGrounded = InvisiblePatch.LastIsPlayerGrounded;
+        newPos = LastNewPos;
+        inElevator = LastInElevator;
+        isInShip = LastInShipRoom;
+        exhausted = LastExhausted;
+        isPlayerGrounded = LastIsPlayerGrounded;
     }
 }

@@ -1,19 +1,43 @@
 using GameNetcodeStuff;
 using Hax;
+using UnityEngine;
 
 [Command("heal")]
-class HealCommand : ICommand, IStun {
-    void RespawnLocalPlayer(PlayerControllerB localPlayer, StartOfRound startOfRound, HUDManager hudManager) {
+internal class HealCommand : ICommand, IStun
+{
+    public void Execute(StringArray args)
+    {
+        if (Helper.HUDManager is not HUDManager hudManager) return;
+
+        var healedPlayer = args.Length switch
+        {
+            0 => HealLocalPlayer(hudManager),
+            _ => HealPlayer(args[0])
+        };
+
+        if (healedPlayer is null)
+        {
+            Chat.Print("Target player is not alive or found!");
+            return;
+        }
+
+        this.Stun(healedPlayer.transform.position, 5.0f, 1.0f);
+    }
+
+    private void RespawnLocalPlayer(PlayerControllerB localPlayer, StartOfRound startOfRound, HUDManager hudManager)
+    {
         if (Helper.SoundManager is not SoundManager soundManager) return;
         startOfRound.allPlayersDead = false;
         localPlayer.ResetPlayerBloodObjects(localPlayer.isPlayerDead);
-        if (localPlayer.isPlayerDead || localPlayer.isPlayerControlled) {
+        if (localPlayer.isPlayerDead || localPlayer.isPlayerControlled)
+        {
             localPlayer.isClimbingLadder = false;
             localPlayer.ResetZAndXRotation();
             localPlayer.thisController.enabled = true;
             localPlayer.health = 100;
             localPlayer.disableLookInput = false;
-            if (localPlayer.isPlayerDead) {
+            if (localPlayer.isPlayerDead)
+            {
                 localPlayer.isPlayerDead = false;
                 localPlayer.isPlayerControlled = true;
                 localPlayer.isInElevator = true;
@@ -43,7 +67,8 @@ class HealCommand : ICommand, IStun {
                 localPlayer.DisableJetpackControlsLocally();
                 localPlayer.health = 100;
                 localPlayer.mapRadarDotAnimator.SetBool("dead", false);
-                if (localPlayer.IsOwner) {
+                if (localPlayer.IsOwner)
+                {
                     hudManager.gasHelmetAnimator.SetBool("gasEmitting", false);
                     localPlayer.hasBegunSpectating = false;
                     hudManager.RemoveSpectateUI();
@@ -54,24 +79,26 @@ class HealCommand : ICommand, IStun {
                     localPlayer.reverbPreset = startOfRound.shipReverb;
                 }
             }
+
             soundManager.earsRingingTimer = 0f;
             localPlayer.voiceMuffledByEnemy = false;
             soundManager.playerVoicePitchTargets[localPlayer.playerClientId] = 1f;
             soundManager.SetPlayerPitch(1f, (int)localPlayer.playerClientId);
-            if (localPlayer.currentVoiceChatIngameSettings == null) {
-                startOfRound.RefreshPlayerVoicePlaybackObjects();
-            }
-            if (localPlayer.currentVoiceChatIngameSettings != null) {
+            if (localPlayer.currentVoiceChatIngameSettings == null) startOfRound.RefreshPlayerVoicePlaybackObjects();
+            if (localPlayer.currentVoiceChatIngameSettings != null)
+            {
                 if (localPlayer.currentVoiceChatIngameSettings.voiceAudio == null)
                     localPlayer.currentVoiceChatIngameSettings.InitializeComponents();
 
                 if (localPlayer.currentVoiceChatIngameSettings.voiceAudio == null)
                     return;
 
-                localPlayer.currentVoiceChatIngameSettings.voiceAudio.GetComponent<OccludeAudio>().overridingLowPass = false;
+                localPlayer.currentVoiceChatIngameSettings.voiceAudio.GetComponent<OccludeAudio>().overridingLowPass =
+                    false;
             }
         }
-        PlayerControllerB playerControllerB = GameNetworkManager.Instance.localPlayerController;
+
+        var playerControllerB = GameNetworkManager.Instance.localPlayerController;
         playerControllerB.bleedingHeavily = false;
         playerControllerB.criticallyInjured = false;
         playerControllerB.playerBodyAnimator.SetBool("Limp", false);
@@ -80,24 +107,25 @@ class HealCommand : ICommand, IStun {
         playerControllerB.spectatedPlayerScript = null;
         hudManager.audioListenerLowPass.enabled = false;
         startOfRound.SetSpectateCameraToGameOverMode(false, playerControllerB);
-        RagdollGrabbableObject[] array = UnityEngine.Object.FindObjectsOfType<RagdollGrabbableObject>();
-        for (int j = 0; j < array.Length; j++) {
-            if (!array[j].isHeld) {
-                if (startOfRound.IsServer) {
+        var array = Object.FindObjectsOfType<RagdollGrabbableObject>();
+        for (var j = 0; j < array.Length; j++)
+            if (!array[j].isHeld)
+            {
+                if (startOfRound.IsServer)
+                {
                     if (array[j].NetworkObject.IsSpawned)
                         array[j].NetworkObject.Despawn(true);
                     else
-                        UnityEngine.Object.Destroy(array[j].gameObject);
+                        Object.Destroy(array[j].gameObject);
                 }
             }
-            else if (array[j].isHeld && array[j].playerHeldBy != null) {
+            else if (array[j].isHeld && array[j].playerHeldBy != null)
+            {
                 array[j].playerHeldBy.DropAllHeldItems(true, false);
             }
-        }
-        DeadBodyInfo[] array2 = UnityEngine.Object.FindObjectsOfType<DeadBodyInfo>();
-        for (int k = 0; k < array2.Length; k++) {
-            UnityEngine.Object.Destroy(array2[k].gameObject);
-        }
+
+        var array2 = Object.FindObjectsOfType<DeadBodyInfo>();
+        for (var k = 0; k < array2.Length; k++) Object.Destroy(array2[k].gameObject);
         startOfRound.livingPlayers = startOfRound.connectedPlayersAmount + 1;
         startOfRound.allPlayersDead = false;
         startOfRound.UpdatePlayerVoiceEffects();
@@ -105,14 +133,15 @@ class HealCommand : ICommand, IStun {
     }
 
 
-
-    PlayerControllerB HealLocalPlayer(HUDManager hudManager) {
-        if (hudManager.localPlayer.IsDead()) {
-            this.RespawnLocalPlayer(hudManager.localPlayer, hudManager.localPlayer.playersManager, hudManager);
+    private PlayerControllerB HealLocalPlayer(HUDManager hudManager)
+    {
+        if (hudManager.localPlayer.IsDead())
+        {
+            RespawnLocalPlayer(hudManager.localPlayer, hudManager.localPlayer.playersManager, hudManager);
 
             Helper.CreateComponent<WaitForBehaviour>("Respawn")
-                  .SetPredicate(() => hudManager.localPlayer.playersManager.shipIsLeaving)
-                  .Init(hudManager.localPlayer.KillPlayer);
+                .SetPredicate(() => hudManager.localPlayer.playersManager.shipIsLeaving)
+                .Init(hudManager.localPlayer.KillPlayer);
         }
 
         hudManager.localPlayer.health = 100;
@@ -127,26 +156,11 @@ class HealCommand : ICommand, IStun {
         return hudManager.localPlayer;
     }
 
-    PlayerControllerB? HealPlayer(string? playerNameOrId) {
-        PlayerControllerB? targetPlayer = Helper.GetActivePlayer(playerNameOrId);
+    private PlayerControllerB? HealPlayer(string? playerNameOrId)
+    {
+        var targetPlayer = Helper.GetActivePlayer(playerNameOrId);
         targetPlayer?.HealPlayer();
 
         return targetPlayer;
-    }
-
-    public void Execute(StringArray args) {
-        if (Helper.HUDManager is not HUDManager hudManager) return;
-
-        PlayerControllerB? healedPlayer = args.Length switch {
-            0 => this.HealLocalPlayer(hudManager),
-            _ => this.HealPlayer(args[0])
-        };
-
-        if (healedPlayer is null) {
-            Chat.Print("Target player is not alive or found!");
-            return;
-        }
-
-        this.Stun(healedPlayer.transform.position, 5.0f, 1.0f);
     }
 }

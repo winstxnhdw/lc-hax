@@ -1,14 +1,17 @@
 using Hax;
 
-class PrivilegedCommand(ICommand command) : ICommand {
-    ICommand Command { get; } = command;
+internal class PrivilegedCommand(ICommand command) : ICommand
+{
+    private ICommand Command { get; } = command;
 
-    public void Execute(StringArray args) {
-        if (Helper.LocalPlayer is not { IsHost: true }) {
+    public void Execute(StringArray args)
+    {
+        if (Helper.LocalPlayer is not { IsHost: true })
+        {
             Chat.Print("You must be the host to use this command!");
             return;
         }
 
-        this.Command.Execute(args);
+        Command.Execute(args);
     }
 }

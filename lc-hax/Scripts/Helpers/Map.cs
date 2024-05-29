@@ -2,12 +2,22 @@ using GameNetcodeStuff;
 
 namespace Hax;
 
-static partial class Helper {
-    static ManualCameraRenderer? ManualCameraRenderer => Helper.StartOfRound?.mapScreen;
+internal static partial class Helper
+{
+    private static ManualCameraRenderer? ManualCameraRenderer => StartOfRound?.mapScreen;
 
-    internal static bool IsRadarTarget(ulong playerClientId) => Helper.ManualCameraRenderer?.targetTransformIndex == unchecked((int)playerClientId);
+    internal static bool IsRadarTarget(ulong playerClientId)
+    {
+        return ManualCameraRenderer?.targetTransformIndex == unchecked((int)playerClientId);
+    }
 
-    internal static void SwitchRadarTarget(int playerClientId) => Helper.ManualCameraRenderer?.SwitchRadarTargetServerRpc(playerClientId);
+    internal static void SwitchRadarTarget(int playerClientId)
+    {
+        ManualCameraRenderer?.SwitchRadarTargetServerRpc(playerClientId);
+    }
 
-    internal static void SwitchRadarTarget(PlayerControllerB player) => Helper.SwitchRadarTarget(player.PlayerIndex());
+    internal static void SwitchRadarTarget(PlayerControllerB player)
+    {
+        SwitchRadarTarget(player.PlayerIndex());
+    }
 }

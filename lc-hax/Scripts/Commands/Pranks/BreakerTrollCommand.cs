@@ -1,5 +1,4 @@
 using Hax;
-using System.Linq;
 
 [Command("breakertroll")]
 internal class BreakerTrollCommand : ICommand
@@ -13,7 +12,7 @@ internal class BreakerTrollCommand : ICommand
         }
 
 
-        if(Helper.BreakerBox is not BreakerBox Breaker)
+        if (Helper.BreakerBox is not BreakerBox Breaker)
         {
             Chat.Print("Breaker box is not found!");
             return;
@@ -23,14 +22,14 @@ internal class BreakerTrollCommand : ICommand
         {
             if (args.Length == 1)
             {
-                Breaker.GetOrAddComponent<BreakerTrollMod>();  
+                Breaker.GetOrAddComponent<BreakerTrollMod>();
                 Chat.Print("BreakerBox Troll Mod installed.");
                 return;
             }
 
-            if (float.TryParse(args[1], out float Timer))
+            if (float.TryParse(args[1], out var Timer))
             {
-                BreakerTrollMod breakerTrollMod = Breaker.GetOrAddComponent<BreakerTrollMod>();
+                var breakerTrollMod = Breaker.GetOrAddComponent<BreakerTrollMod>();
                 breakerTrollMod.TimeBetweenSwitches = Timer;
                 Chat.Print($"BreakerBox Troll Mod Installed & set with delay {Timer}.");
                 return;

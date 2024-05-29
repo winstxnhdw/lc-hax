@@ -1,5 +1,5 @@
-using Hax;
 using System.Linq;
+using Hax;
 
 [Command("doortroll")]
 internal class DoorTrollCommand : ICommand
@@ -12,7 +12,7 @@ internal class DoorTrollCommand : ICommand
             return;
         }
 
-        TerminalAccessibleObject[] Doors = Helper.FindObjects<TerminalAccessibleObject>().Where(door => door.isBigDoor).ToArray();
+        var Doors = Helper.FindObjects<TerminalAccessibleObject>().Where(door => door.isBigDoor).ToArray();
 
         if (Doors.Count() is 0)
         {
@@ -29,13 +29,13 @@ internal class DoorTrollCommand : ICommand
                 return;
             }
 
-            if (float.TryParse(args[1], out float Timer))
+            if (float.TryParse(args[1], out var Timer))
             {
                 Doors.ForEach(breaker =>
-                {
-                    DoorTrollMod DoorTrollMod = breaker.GetOrAddComponent<DoorTrollMod>();
-                    DoorTrollMod.TimeForToggles = Timer;
-                }
+                    {
+                        var DoorTrollMod = breaker.GetOrAddComponent<DoorTrollMod>();
+                        DoorTrollMod.TimeForToggles = Timer;
+                    }
                 );
                 Chat.Print($"Door Troll Mod Installed & set with delay {Timer}.");
                 return;

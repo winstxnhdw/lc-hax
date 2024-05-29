@@ -3,47 +3,54 @@ using Hax;
 using Steamworks;
 using UnityEngine;
 
-sealed class DisconnectMod : MonoBehaviour {
-    bool IsShiftHeld { get; set; } = false;
+internal sealed class DisconnectMod : MonoBehaviour
+{
+    private bool IsShiftHeld { get; set; } = false;
 
-    void OnEnable() {
-        InputListener.OnShiftButtonHold += this.HoldShift;
-        InputListener.OnF4Press += this.TryToDisconnect;
-        InputListener.OnF5Press += this.TryToConnect;
+    private void OnEnable()
+    {
+        InputListener.OnShiftButtonHold += HoldShift;
+        InputListener.OnF4Press += TryToDisconnect;
+        InputListener.OnF5Press += TryToConnect;
     }
 
-    void OnDisable() {
-        InputListener.OnShiftButtonHold -= this.HoldShift;
-        InputListener.OnF4Press -= this.TryToDisconnect;
-        InputListener.OnF5Press -= this.TryToConnect;
+    private void OnDisable()
+    {
+        InputListener.OnShiftButtonHold -= HoldShift;
+        InputListener.OnF4Press -= TryToDisconnect;
+        InputListener.OnF5Press -= TryToConnect;
     }
 
-    void HoldShift(bool isHeld) => this.IsShiftHeld = isHeld;
+    private void HoldShift(bool isHeld)
+    {
+        IsShiftHeld = isHeld;
+    }
 
-    SteamId? GetSteamIdFromClipboard() {
-        string clipboardText = GUIUtility.systemCopyBuffer;
+    private SteamId? GetSteamIdFromClipboard()
+    {
+        var clipboardText = GUIUtility.systemCopyBuffer;
 
         return !string.IsNullOrWhiteSpace(clipboardText) && Regex.IsMatch(clipboardText, @"^\d{17}$")
             ? new SteamId { Value = ulong.Parse(clipboardText) }
             : null;
     }
 
-    void TryToDisconnect() {
-        if (!this.IsShiftHeld) return;
+    private void TryToDisconnect()
+    {
+        if (!IsShiftHeld) return;
         if (Helper.LocalPlayer is null) return;
 
         Helper.GameNetworkManager?.Disconnect();
         State.DisconnectedVoluntarily = true;
     }
 
-    void TryToConnect() {
-        if (!this.IsShiftHeld) return;
-        if (this.GetSteamIdFromClipboard() is SteamId playerSteamId) {
+    private void TryToConnect()
+    {
+        if (!IsShiftHeld) return;
+        if (GetSteamIdFromClipboard() is SteamId playerSteamId)
             Helper.GameNetworkManager?.StartClient(playerSteamId);
-        }
 
-        else if (State.ConnectedLobby is ConnectedLobby connectedLobby) {
+        else if (State.ConnectedLobby is ConnectedLobby connectedLobby)
             Helper.GameNetworkManager?.JoinLobby(connectedLobby.Lobby, connectedLobby.SteamId);
-        }
     }
 }

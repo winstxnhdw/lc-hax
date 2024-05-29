@@ -3,11 +3,14 @@ using UnityEngine;
 
 namespace Hax;
 
-static partial class Helper {
-    internal static int SphereCastForward(this RaycastHit[] array, Transform transform, float sphereRadius = 1.0f) {
-        try {
+internal static partial class Helper
+{
+    internal static int SphereCastForward(this RaycastHit[] array, Transform transform, float sphereRadius = 1.0f)
+    {
+        try
+        {
             return Physics.SphereCastNonAlloc(
-                transform.position + (transform.forward * (sphereRadius + 1.75f)),
+                transform.position + transform.forward * (sphereRadius + 1.75f),
                 sphereRadius,
                 transform.forward,
                 array,
@@ -15,22 +18,26 @@ static partial class Helper {
             );
         }
 
-        catch (NullReferenceException) {
+        catch (NullReferenceException)
+        {
             return 0;
         }
     }
 
-    internal static RaycastHit[] SphereCastForward(this Transform transform, float sphereRadius = 1.0f) {
-        try {
+    internal static RaycastHit[] SphereCastForward(this Transform transform, float sphereRadius = 1.0f)
+    {
+        try
+        {
             return Physics.SphereCastAll(
-                transform.position + (transform.forward * (sphereRadius + 1.75f)),
+                transform.position + transform.forward * (sphereRadius + 1.75f),
                 sphereRadius,
                 transform.forward,
                 float.MaxValue
             );
         }
 
-        catch (NullReferenceException) {
+        catch (NullReferenceException)
+        {
             return [];
         }
     }

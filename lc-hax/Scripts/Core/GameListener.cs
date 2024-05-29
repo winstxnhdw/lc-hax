@@ -1,59 +1,69 @@
 using System;
-using UnityEngine;
 using Hax;
+using UnityEngine;
 
-class GameListener : MonoBehaviour {
+internal class GameListener : MonoBehaviour
+{
+    private bool InGame { get; set; } = false;
+    private bool HasShipBegunDescent { get; set; } = false;
+    private bool HasShipLeft { get; set; } = false;
     internal static event Action? OnGameStart;
     internal static event Action? OnGameEnd;
     internal static event Action? OnShipDescent;
     internal static event Action? OnShipLeave;
     internal static event Action? OnLevelGenerated;
 
-    bool InGame { get; set; } = false;
-    bool HasShipBegunDescent { get; set; } = false;
-    bool HasShipLeft { get; set; } = false;
-
-    void OnEnable() => LevelDependencyPatch.OnFinishLevelGeneration += this.OnFinishLevelGeneration;
-
-    void OnDisable() => LevelDependencyPatch.OnFinishLevelGeneration -= this.OnFinishLevelGeneration;
-
-    void LateUpdate() {
-        this.InGameListener();
-        this.ShipListener();
+    private void OnEnable()
+    {
+        LevelDependencyPatch.OnFinishLevelGeneration += OnFinishLevelGeneration;
     }
 
-    void OnFinishLevelGeneration() => GameListener.OnLevelGenerated?.Invoke();
+    private void OnDisable()
+    {
+        LevelDependencyPatch.OnFinishLevelGeneration -= OnFinishLevelGeneration;
+    }
 
-    void ShipListener() {
+    private void LateUpdate()
+    {
+        InGameListener();
+        ShipListener();
+    }
+
+    private void OnFinishLevelGeneration()
+    {
+        OnLevelGenerated?.Invoke();
+    }
+
+    private void ShipListener()
+    {
         if (Helper.StartOfRound is not StartOfRound startOfRound) return;
-        if (!startOfRound.inShipPhase && !this.HasShipBegunDescent) {
-            this.HasShipBegunDescent = true;
-            this.HasShipLeft = false;
-            GameListener.OnShipDescent?.Invoke();
+        if (!startOfRound.inShipPhase && !HasShipBegunDescent)
+        {
+            HasShipBegunDescent = true;
+            HasShipLeft = false;
+            OnShipDescent?.Invoke();
         }
 
-        else if (startOfRound.shipIsLeaving && !this.HasShipLeft) {
-            this.HasShipLeft = true;
-            this.HasShipBegunDescent = false;
-            GameListener.OnShipLeave?.Invoke();
+        else if (startOfRound.shipIsLeaving && !HasShipLeft)
+        {
+            HasShipLeft = true;
+            HasShipBegunDescent = false;
+            OnShipLeave?.Invoke();
         }
     }
 
-    void InGameListener() {
-        bool inGame = Helper.LocalPlayer is not null;
+    private void InGameListener()
+    {
+        var inGame = Helper.LocalPlayer is not null;
 
-        if (this.InGame == inGame) {
-            return;
-        }
+        if (InGame == inGame) return;
 
-        this.InGame = inGame;
+        InGame = inGame;
 
-        if (this.InGame) {
-            GameListener.OnGameStart?.Invoke();
-        }
+        if (InGame)
+            OnGameStart?.Invoke();
 
-        else {
-            GameListener.OnGameEnd?.Invoke();
-        }
+        else
+            OnGameEnd?.Invoke();
     }
 }

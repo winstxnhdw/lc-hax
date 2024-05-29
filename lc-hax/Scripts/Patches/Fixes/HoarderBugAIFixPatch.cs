@@ -4,9 +4,11 @@ using HarmonyLib;
 using Unity.Netcode;
 
 [HarmonyPatch(typeof(HoarderBugAI))]
-class HoarderBugAIFixPatch {
+internal class HoarderBugAIFixPatch
+{
     [HarmonyPatch(nameof(HoarderBugAI.HitEnemy))]
-    static void Prefix(HoarderBugAI __instance) {
+    private static void Prefix(HoarderBugAI __instance)
+    {
         if (!__instance.isEnemyDead) return;
         if (!__instance.heldItem.itemGrabbableObject.TryGetComponent(out NetworkObject networkObject)) return;
 

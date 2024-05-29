@@ -1,13 +1,10 @@
-using DunGen.Tags;
 using GameNetcodeStuff;
 using Hax;
-using System;
 using UnityEngine;
-using UnityEngine.InputSystem;
 using UnityEngine.Rendering.HighDefinition;
 
-internal class HaxCamera : MonoBehaviour {
-
+internal class HaxCamera : MonoBehaviour
+{
     internal KeyboardMovement? KeyboardMovement { get; private set; }
     internal MousePan? MousePan { get; private set; }
 
@@ -23,91 +20,94 @@ internal class HaxCamera : MonoBehaviour {
     internal AudioListener? HaxCamAudioListener { get; private set; }
 
 
-    internal void OnEnable() {
-        GameListener.OnGameStart += this.DisableCamera;
-        GameListener.OnGameEnd += this.DisableCamera;
+    internal void OnEnable()
+    {
+        GameListener.OnGameStart += DisableCamera;
+        GameListener.OnGameEnd += DisableCamera;
         if (Helper.StartOfRound is not StartOfRound startOfRound) return;
         if (Helper.LocalPlayer is not PlayerControllerB player) return;
         if (player.activeAudioListener is not AudioListener playerlistener) return;
-        if (this.HaxCamContainer is null) return;
-        if (this.HaxCamAudioListener is not AudioListener haxListener) return;
-        if (this.GetCamera() is not Camera cam) return;
-        this.HaxCamContainer.SetActive(true);
-        this.CopyFromCamera(startOfRound.activeCamera.transform, ref cam, ref startOfRound.activeCamera);
+        if (HaxCamContainer is null) return;
+        if (HaxCamAudioListener is not AudioListener haxListener) return;
+        if (GetCamera() is not Camera cam) return;
+        HaxCamContainer.SetActive(true);
+        CopyFromCamera(startOfRound.activeCamera.transform, ref cam, ref startOfRound.activeCamera);
         startOfRound.activeCamera.enabled = false;
         playerlistener.enabled = false;
         startOfRound.audioListener = haxListener;
-
     }
 
-    internal void OnDisable() {
-        GameListener.OnGameStart -= this.DisableCamera;
-        GameListener.OnGameEnd -= this.DisableCamera;
+    internal void OnDisable()
+    {
+        GameListener.OnGameStart -= DisableCamera;
+        GameListener.OnGameEnd -= DisableCamera;
         if (Helper.StartOfRound is not StartOfRound startOfRound) return;
         if (Helper.LocalPlayer is not PlayerControllerB player) return;
         if (player.activeAudioListener is not AudioListener playerlistener) return;
-        if (this.HaxCamContainer is null) return;
-        if (this.HaxCamAudioListener is not AudioListener haxListener) return;
-        if (this.GetCamera() is not Camera cam) return;
-        this.HaxCamContainer.SetActive(false);
+        if (HaxCamContainer is null) return;
+        if (HaxCamAudioListener is not AudioListener haxListener) return;
+        if (GetCamera() is not Camera cam) return;
+        HaxCamContainer.SetActive(false);
         playerlistener.enabled = true;
         startOfRound.audioListener = playerlistener;
         startOfRound.activeCamera.enabled = true;
     }
 
 
-    void LateUpdate() {
-        if (this.HaxCamContainer is null) return;
-        if(this.KeyboardMovement is null) return;
-        if (this.HaxCamContainer.activeSelf) {
-            this.KeyboardMovement.IsPaused = Helper.LocalPlayer is { isTypingChat: true };
-        }
+    private void LateUpdate()
+    {
+        if (HaxCamContainer is null) return;
+        if (KeyboardMovement is null) return;
+        if (HaxCamContainer.activeSelf) KeyboardMovement.IsPaused = Helper.LocalPlayer is { isTypingChat: true };
     }
 
 
-    internal void DisableCamera() {
+    internal void DisableCamera()
+    {
         if (PhantomMod.Instance is PhantomMod phantom) phantom.SetPhantom(false);
-        this.HaxCamContainer?.SetActive(false);
+        HaxCamContainer?.SetActive(false);
     }
 
 
-    internal Camera? GetCamera() {
-        if (this.CustomCamera != null) return this.CustomCamera;
+    internal Camera? GetCamera()
+    {
+        if (CustomCamera != null) return CustomCamera;
 
-        this.HaxCamContainer ??= new GameObject("lc-hax Camera Parent");
-        Camera newCam = this.HaxCamContainer.AddComponent<Camera>();
+        HaxCamContainer ??= new GameObject("lc-hax Camera Parent");
+        var newCam = HaxCamContainer.AddComponent<Camera>();
 
-        this.HaxCamAudioContainer ??= new GameObject("lc-hax Audio Listener");
-        this.HaxCamAudioListener = this.HaxCamAudioContainer.GetComponent<AudioListener>();
-        this.HaxCamAudioListener ??= this.HaxCamAudioContainer.AddComponent<AudioListener>();
-        this.HaxCamAudioListener.transform.SetParent(this.HaxCamContainer.transform, false);
-        this.HaxCamAudioListener.transform.localScale = new Vector3(0.8196f, 0.8196f, 0.8196f);
+        HaxCamAudioContainer ??= new GameObject("lc-hax Audio Listener");
+        HaxCamAudioListener = HaxCamAudioContainer.GetComponent<AudioListener>();
+        HaxCamAudioListener ??= HaxCamAudioContainer.AddComponent<AudioListener>();
+        HaxCamAudioListener.transform.SetParent(HaxCamContainer.transform, false);
+        HaxCamAudioListener.transform.localScale = new Vector3(0.8196f, 0.8196f, 0.8196f);
         // zero both local pos and rot
-        this.HaxCamAudioListener.transform.localPosition = Vector3.zero;
-        this.HaxCamAudioListener.transform.localRotation = Quaternion.identity;
+        HaxCamAudioListener.transform.localPosition = Vector3.zero;
+        HaxCamAudioListener.transform.localRotation = Quaternion.identity;
 
         // Set HaxCamAudioContainer as a child of HaxCamContainer
-        this.HaxCamAudioContainer.transform.SetParent(this.HaxCamContainer.transform, false);
+        HaxCamAudioContainer.transform.SetParent(HaxCamContainer.transform, false);
 
-        this.KeyboardMovement = newCam.GetComponent<KeyboardMovement>();
-        this.KeyboardMovement ??= newCam.gameObject.AddComponent<KeyboardMovement>();
-
-
-        this.MousePan = newCam.GetComponent<MousePan>();
-        this.MousePan ??= newCam.gameObject.AddComponent<MousePan>();
+        KeyboardMovement = newCam.GetComponent<KeyboardMovement>();
+        KeyboardMovement ??= newCam.gameObject.AddComponent<KeyboardMovement>();
 
 
-        this.MousePan.enabled = true;
-        this.KeyboardMovement.enabled = true;
-        this.HaxCamAudioListener.enabled = true;
-        this.HaxCamContainer.SetActive(false);
-        this.CustomCamera = newCam;
-        DontDestroyOnLoad(this.HaxCamContainer);
+        MousePan = newCam.GetComponent<MousePan>();
+        MousePan ??= newCam.gameObject.AddComponent<MousePan>();
+
+
+        MousePan.enabled = true;
+        KeyboardMovement.enabled = true;
+        HaxCamAudioListener.enabled = true;
+        HaxCamContainer.SetActive(false);
+        CustomCamera = newCam;
+        DontDestroyOnLoad(HaxCamContainer);
         return newCam;
     }
 
 
-    internal void CopyFromCamera(Transform container, ref Camera Cam, ref Camera camData) {
+    internal void CopyFromCamera(Transform container, ref Camera Cam, ref Camera camData)
+    {
         Cam.transform.position = Vector3.zero;
         Cam.transform.rotation = Quaternion.identity;
         Cam.transform.localPosition = Vector3.zero;
@@ -133,11 +133,13 @@ internal class HaxCamera : MonoBehaviour {
         Cam.tag = camData.tag;
 
         // Get or add the HDAdditionalCameraData component
-        HDAdditionalCameraData? hdData = Cam.GetComponent<HDAdditionalCameraData>();
+        var hdData = Cam.GetComponent<HDAdditionalCameraData>();
         hdData ??= Cam.gameObject.AddComponent<HDAdditionalCameraData>();
 
-        if (camData.TryGetComponent(out HDAdditionalCameraData dataToCopy)) {
-            if (hdData != null && dataToCopy != null) {
+        if (camData.TryGetComponent(out HDAdditionalCameraData dataToCopy))
+        {
+            if (hdData != null && dataToCopy != null)
+            {
                 hdData.customRenderingSettings = true;
                 hdData.renderingPathCustomFrameSettingsOverrideMask.mask =
                     dataToCopy.renderingPathCustomFrameSettingsOverrideMask.mask;
@@ -153,34 +155,32 @@ internal class HaxCamera : MonoBehaviour {
                     dataToCopy.renderingPathCustomFrameSettings.IsEnabled(FrameSettingsField.ShadowMaps));
             }
         }
-        else {
+        else
+        {
             Destroy(hdData);
         }
 
-        this.UpdateCameraTrasform(container);
+        UpdateCameraTrasform(container);
     }
 
-    void UpdateCameraTrasform(Transform target) {
-        if (this.HaxCamContainer is not GameObject Cam) return;
+    private void UpdateCameraTrasform(Transform target)
+    {
+        if (HaxCamContainer is not GameObject Cam) return;
         // Transform local position and rotation to world space
-        Vector3 worldPosition = target.TransformPoint(target.localPosition);
-        Quaternion worldRotation = target.rotation;
+        var worldPosition = target.TransformPoint(target.localPosition);
+        var worldRotation = target.rotation;
         // Copy transform properties
         Cam.transform.position = worldPosition;
         Cam.transform.rotation = worldRotation;
         Cam.gameObject.layer = target.gameObject.layer;
 
-        if (this.KeyboardMovement != null) {
-            this.KeyboardMovement.LastPosition = worldPosition;
-        }
+        if (KeyboardMovement != null) KeyboardMovement.LastPosition = worldPosition;
     }
 
-    internal void Awake() {
+    internal void Awake()
+    {
         Instance = this;
-        _ = this.GetCamera();
-        this.enabled = false;
+        _ = GetCamera();
+        enabled = false;
     }
-
-
-
 }

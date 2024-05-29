@@ -2,10 +2,17 @@
 
 using HarmonyLib;
 
-class AntiFlashPatch {
+internal class AntiFlashPatch
+{
     [HarmonyPatch(typeof(HUDManager), "Update")]
-    static void Prefix(HUDManager __instance) => __instance.flashFilter = 0.0f;
+    private static void Prefix(HUDManager __instance)
+    {
+        __instance.flashFilter = 0.0f;
+    }
 
     [HarmonyPatch(typeof(SoundManager), "SetEarsRinging")]
-    static bool Prefix() => false;
+    private static bool Prefix()
+    {
+        return false;
+    }
 }

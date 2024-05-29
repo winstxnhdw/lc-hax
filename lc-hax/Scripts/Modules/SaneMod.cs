@@ -3,28 +3,33 @@ using GameNetcodeStuff;
 using Hax;
 using UnityEngine;
 
-internal sealed class SaneMod : MonoBehaviour {
-
+internal sealed class SaneMod : MonoBehaviour
+{
     internal static SaneMod? Instance { get; private set; }
 
-    void Awake() {
-        if (SaneMod.Instance != null) {
+    private Coroutine? SaneModCoroutine { get; set; }
+
+    private void Awake()
+    {
+        if (Instance != null)
+        {
             Destroy(this);
             return;
         }
 
-        SaneMod.Instance = this;
-        this.enabled = false;
+        Instance = this;
+        enabled = false;
     }
 
-    Coroutine? SaneModCoroutine { get; set; }
 
-
-    IEnumerator SetSanity(object[] args) {
+    private IEnumerator SetSanity(object[] args)
+    {
         WaitForEndOfFrame waitForEndOfFrame = new();
 
-        while (true) {
-            if (Helper.LocalPlayer is not PlayerControllerB localPlayer) {
+        while (true)
+        {
+            if (Helper.LocalPlayer is not PlayerControllerB localPlayer)
+            {
                 yield return waitForEndOfFrame;
                 continue;
             }
@@ -39,19 +44,37 @@ internal sealed class SaneMod : MonoBehaviour {
         }
     }
 
-    internal void StartRoutine() => this.SaneModCoroutine ??= this.StartResilientCoroutine(this.SetSanity);
+    internal void StartRoutine()
+    {
+        SaneModCoroutine ??= this.StartResilientCoroutine(SetSanity);
+    }
 
-    internal void OnStopRoutine() {
-        if (this.SaneModCoroutine != null) {
-            this.StopCoroutine(this.SaneModCoroutine);
-            this.SaneModCoroutine = null;
+    internal void OnStopRoutine()
+    {
+        if (SaneModCoroutine != null)
+        {
+            StopCoroutine(SaneModCoroutine);
+            SaneModCoroutine = null;
         }
     }
 
-    public void Start() => this.StartRoutine();
+    public void Start()
+    {
+        StartRoutine();
+    }
 
-    public void OnDisable() => this.OnStopRoutine();
+    public void OnDisable()
+    {
+        OnStopRoutine();
+    }
 
-    public void OnEnable() => this.StartRoutine();
-    public void OnDestroy() => this.OnStopRoutine();
+    public void OnEnable()
+    {
+        StartRoutine();
+    }
+
+    public void OnDestroy()
+    {
+        OnStopRoutine();
+    }
 }

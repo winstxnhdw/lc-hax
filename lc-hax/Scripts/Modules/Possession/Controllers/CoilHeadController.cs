@@ -1,29 +1,53 @@
 using Hax;
 using UnityEngine;
 
-enum CoilHeadState {
+internal enum CoilHeadState
+{
     Idle = 0,
     Chase = 1
 }
 
-internal class CoilHeadController : IEnemyController<SpringManAI> {
+internal class CoilHeadController : IEnemyController<SpringManAI>
+{
+    private Vector3 CamOffset { get; } = new(0, 2.8f, -3.5f);
 
-    Vector3 CamOffset { get; } = new(0, 2.8f, -3.5f);
+    public Vector3 GetCameraOffset(SpringManAI _)
+    {
+        return CamOffset;
+    }
 
-    public Vector3 GetCameraOffset(SpringManAI _) => this.CamOffset;
+    public void UsePrimarySkill(SpringManAI enemy)
+    {
+        enemy.SetBehaviourState(enemy.IsBehaviourState(CoilHeadState.Chase) ? CoilHeadState.Idle : CoilHeadState.Chase);
+    }
 
-    bool GetStoppingMovement(SpringManAI enemy) => enemy.Reflect().GetInternalField<bool>("stoppingMovement");
+    public void OnSecondarySkillHold(SpringManAI enemy)
+    {
+        enemy.SetAnimationGoServerRpc();
+    }
 
-    public void UsePrimarySkill(SpringManAI enemy) => enemy.SetBehaviourState(enemy.IsBehaviourState(CoilHeadState.Chase) ? CoilHeadState.Idle : CoilHeadState.Chase);
+    public void ReleaseSecondarySkill(SpringManAI enemy)
+    {
+        enemy.SetAnimationStopServerRpc();
+    }
 
-    public void OnSecondarySkillHold(SpringManAI enemy) => enemy.SetAnimationGoServerRpc();
+    public bool IsAbleToMove(SpringManAI enemy)
+    {
+        return !GetStoppingMovement(enemy) || (enemy.IsBehaviourState(CoilHeadState.Idle) && enemy.agent.speed >= 0);
+    }
 
-    public void ReleaseSecondarySkill(SpringManAI enemy) => enemy.SetAnimationStopServerRpc();
+    public bool IsAbleToRotate(SpringManAI enemy)
+    {
+        return !GetStoppingMovement(enemy) || (enemy.IsBehaviourState(CoilHeadState.Idle) && enemy.agent.speed >= 0);
+    }
 
-    public bool IsAbleToMove(SpringManAI enemy) => !this.GetStoppingMovement(enemy) || enemy.IsBehaviourState(CoilHeadState.Idle) && enemy.agent.speed >= 0;
+    public void OnOutsideStatusChange(SpringManAI enemy)
+    {
+        enemy.StopSearch(enemy.searchForPlayers, true);
+    }
 
-    public bool IsAbleToRotate(SpringManAI enemy) => !this.GetStoppingMovement(enemy) || enemy.IsBehaviourState(CoilHeadState.Idle) && enemy.agent.speed >= 0;
-    public void OnOutsideStatusChange(SpringManAI enemy) => enemy.StopSearch(enemy.searchForPlayers, true);
-
+    private bool GetStoppingMovement(SpringManAI enemy)
+    {
+        return enemy.Reflect().GetInternalField<bool>("stoppingMovement");
+    }
 }
-

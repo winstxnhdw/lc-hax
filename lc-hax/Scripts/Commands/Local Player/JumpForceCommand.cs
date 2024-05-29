@@ -1,45 +1,49 @@
-#pragma warning disable CS8602 
+#pragma warning disable CS8602
 
 using System;
 using GameNetcodeStuff;
 using Hax;
 
 [Command("jumpforce")]
-internal class JumpForceCommand : ICommand {
-    public void Execute(StringArray args) {
+internal class JumpForceCommand : ICommand
+{
+    public void Execute(StringArray args)
+    {
         if (Helper.LocalPlayer is not PlayerControllerB player) return;
-        if (args.Length == 0 || args[0] == null || args[0].Equals("default", StringComparison.OrdinalIgnoreCase)) {
-            this.Reset(player);
+        if (args.Length == 0 || args[0] == null || args[0].Equals("default", StringComparison.OrdinalIgnoreCase))
+        {
+            Reset(player);
         }
-        else if (float.TryParse(args[0], out float speed)) {
-            if (speed <= 0) {
-                this.Reset(player);
-            }
-            else {
-                this.SetJumpForce(player, speed);
-            }
+        else if (float.TryParse(args[0], out var speed))
+        {
+            if (speed <= 0)
+                Reset(player);
+            else
+                SetJumpForce(player, speed);
         }
     }
 
-   void SetJumpForce(PlayerControllerB player, float Force) {
-        if (!Setting.OverrideJumpForce) {
+    private void SetJumpForce(PlayerControllerB player, float Force)
+    {
+        if (!Setting.OverrideJumpForce)
+        {
             Setting.Default_JumpForce = player.jumpForce;
             Setting.OverrideJumpForce = true;
         }
+
         Setting.New_JumpForce = Force;
         player.jumpForce = Force;
         Helper.DisplayFlatHudMessage($"Jump Force set to {Force}!");
     }
 
-    void Reset(PlayerControllerB player) {
-        if (Setting.OverrideJumpForce) {
+    private void Reset(PlayerControllerB player)
+    {
+        if (Setting.OverrideJumpForce)
+        {
             Setting.New_JumpForce = Setting.Default_JumpForce;
             player.jumpForce = Setting.Default_JumpForce;
             Setting.OverrideJumpForce = false;
             Helper.DisplayFlatHudMessage("Jump Force reset to default!");
         }
-
     }
-
-
 }

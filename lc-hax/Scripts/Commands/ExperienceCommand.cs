@@ -1,6 +1,7 @@
 using Hax;
 
-enum Rank {
+internal enum Rank
+{
     INTERN,
     PART_TIME,
     EMPLOYEE,
@@ -9,20 +10,25 @@ enum Rank {
 }
 
 [Command("xp")]
-class ExperienceCommand : ICommand {
-    public void Execute(StringArray args) {
+internal class ExperienceCommand : ICommand
+{
+    public void Execute(StringArray args)
+    {
         if (Helper.HUDManager is not HUDManager hudManager) return;
-        if (args.Length is 0) {
+        if (args.Length is 0)
+        {
             Chat.Print("Usage: xp <amount>");
             return;
         }
 
-        if (!int.TryParse(args[0], out int amount)) {
+        if (!int.TryParse(args[0], out var amount))
+        {
             Chat.Print("Invalid amount!");
             return;
         }
 
-        Rank rank = (hudManager.localPlayerXP += amount) switch {
+        var rank = (hudManager.localPlayerXP += amount) switch
+        {
             < 50 => Rank.INTERN,
             < 100 => Rank.PART_TIME,
             < 200 => Rank.EMPLOYEE,

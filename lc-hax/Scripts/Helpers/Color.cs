@@ -3,35 +3,41 @@ using Color = UnityEngine.Color;
 
 namespace Hax;
 
-static partial class Helper {
-    internal static Color HexToColor(string hexColor) {
+internal static partial class Helper
+{
+    internal static Color HexToColor(string hexColor)
+    {
         if (hexColor.IndexOf('#') != -1) hexColor = hexColor.Replace("#", "");
 
-        float r = int.Parse(hexColor[..2], NumberStyles.AllowHexSpecifier) / 255f;
-        float g = int.Parse(hexColor.Substring(2, 2), NumberStyles.AllowHexSpecifier) / 255f;
-        float b = int.Parse(hexColor.Substring(4, 2), NumberStyles.AllowHexSpecifier) / 255f;
+        var r = int.Parse(hexColor[..2], NumberStyles.AllowHexSpecifier) / 255f;
+        var g = int.Parse(hexColor.Substring(2, 2), NumberStyles.AllowHexSpecifier) / 255f;
+        var b = int.Parse(hexColor.Substring(4, 2), NumberStyles.AllowHexSpecifier) / 255f;
         return new Color(r, g, b);
     }
 
 
-    internal static Color GetLootColor(GrabbableObject scrap) =>
-        scrap switch {
-            null => Helper.ExtraColors.Transparent,
-            RagdollGrabbableObject => Helper.ExtraColors.HotPink,
-            LungProp => Helper.ExtraColors.LightBlue,
-            ShotgunItem => Helper.ExtraColors.Khaki,
-            KnifeItem => Helper.ExtraColors.DarkKhaki,
-            HauntedMaskItem => Helper.ExtraColors.MediumVioletRed,
-            _ when scrap.itemProperties.isDefensiveWeapon => Helper.ExtraColors.LawnGreen,
-            _ when scrap.GetScrapValue() > 50 => Helper.ExtraColors.Gold, 
-            _ when scrap.GetScrapValue() is > 15 and <= 35 => Helper.ExtraColors.LightSalmon,
-            _ when scrap.GetScrapValue() >= 36 => Helper.ExtraColors.GreenYellow,
-            _ when scrap.GetScrapValue() == 0 && scrap is GiftBoxItem => Helper.ExtraColors.PapayaWhip,
-            _ => Helper.ExtraColors.Silver,
+    internal static Color GetLootColor(GrabbableObject scrap)
+    {
+        return scrap switch
+        {
+            null => ExtraColors.Transparent,
+            RagdollGrabbableObject => ExtraColors.HotPink,
+            LungProp => ExtraColors.LightBlue,
+            ShotgunItem => ExtraColors.Khaki,
+            KnifeItem => ExtraColors.DarkKhaki,
+            HauntedMaskItem => ExtraColors.MediumVioletRed,
+            _ when scrap.itemProperties.isDefensiveWeapon => ExtraColors.LawnGreen,
+            _ when scrap.GetScrapValue() > 50 => ExtraColors.Gold,
+            _ when scrap.GetScrapValue() is > 15 and <= 35 => ExtraColors.LightSalmon,
+            _ when scrap.GetScrapValue() >= 36 => ExtraColors.GreenYellow,
+            _ when scrap.GetScrapValue() == 0 && scrap is GiftBoxItem => ExtraColors.PapayaWhip,
+            _ => ExtraColors.Silver
         };
+    }
 
 
-    internal readonly struct ExtraColors {
+    internal readonly struct ExtraColors
+    {
         internal static Color MediumPurple { get; } = new(0.5764706f, 0.4392157f, 0.8588235f, 1f);
         internal static Color MediumSeaGreen { get; } = new(0.2352941f, 0.7019608f, 0.4431373f, 1f);
         internal static Color MediumSlateBlue { get; } = new(0.4823529f, 0.4078431f, 0.9333333f, 1f);

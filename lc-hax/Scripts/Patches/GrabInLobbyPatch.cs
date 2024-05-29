@@ -3,6 +3,10 @@
 using HarmonyLib;
 
 [HarmonyPatch(typeof(GrabbableObject), nameof(GrabbableObject.Update))]
-class GrabInLobbyPatch {
-    static void Postfix(GrabbableObject __instance) => __instance.itemProperties.canBeGrabbedBeforeGameStart = true;
+internal class GrabInLobbyPatch
+{
+    private static void Postfix(GrabbableObject __instance)
+    {
+        __instance.itemProperties.canBeGrabbedBeforeGameStart = true;
+    }
 }

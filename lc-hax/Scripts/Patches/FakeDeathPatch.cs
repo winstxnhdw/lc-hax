@@ -3,8 +3,10 @@ using HarmonyLib;
 using Hax;
 
 [HarmonyPatch(typeof(PlayerControllerB), "KillPlayerClientRpc")]
-class FakeDeathPatch {
-    static bool Prefix(int playerId) {
+internal class FakeDeathPatch
+{
+    private static bool Prefix(int playerId)
+    {
         if (!Setting.EnableFakeDeath) return true;
 
         Setting.EnableFakeDeath = false;

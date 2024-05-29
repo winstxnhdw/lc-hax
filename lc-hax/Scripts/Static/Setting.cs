@@ -1,4 +1,5 @@
-static class Setting {
+internal static class Setting
+{
     internal static bool EnableGodMode { get; set; } = false;
     internal static bool EnableBlockCredits { get; set; } = false;
     internal static bool EnableBlockRadar { get; set; } = false;
@@ -32,6 +33,4 @@ static class Setting {
     internal static float New_MovementSpeed { get; set; } = Default_MovementSpeed;
     internal static float New_ClimbSpeed { get; set; } = Default_climbSpeed;
     internal static float New_JumpForce { get; set; } = Default_JumpForce;
-
-
 }

@@ -1,6 +1,26 @@
 [Command("block")]
-class BlockCommand : ICommand {
-    string BlockEnemy() {
+internal class BlockCommand : ICommand
+{
+    public void Execute(StringArray args)
+    {
+        if (args.Length is 0)
+        {
+            Chat.Print("Usage: block <property>");
+            return;
+        }
+
+        var result = args[0] switch
+        {
+            "enemy" => BlockEnemy(),
+            "radar" => BlockRadar(),
+            _ => "Invalid property!"
+        };
+
+        Chat.Print(result);
+    }
+
+    private string BlockEnemy()
+    {
         Setting.EnableUntargetable = !Setting.EnableUntargetable;
 
         return $"{(Setting.EnableUntargetable
@@ -8,26 +28,12 @@ class BlockCommand : ICommand {
             : "Enemies can now target you!")}";
     }
 
-    string BlockRadar() {
+    private string BlockRadar()
+    {
         Setting.EnableBlockRadar = !Setting.EnableBlockRadar;
 
         return $"{(Setting.EnableBlockRadar
             ? "Blocking radar targets!"
             : "No longer blocking radar targets!")}";
-    }
-
-    public void Execute(StringArray args) {
-        if (args.Length is 0) {
-            Chat.Print("Usage: block <property>");
-            return;
-        }
-
-        string result = args[0] switch {
-            "enemy" => this.BlockEnemy(),
-            "radar" => this.BlockRadar(),
-            _ => "Invalid property!"
-        };
-
-        Chat.Print(result);
     }
 }
