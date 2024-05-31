@@ -6,60 +6,75 @@ using UnityEngine;
 [Command("build")]
 internal class BuildCommand : ICommand
 {
-    private static Dictionary<string, int>? Unlockables { get; set; }
-
     public void Execute(StringArray args)
     {
         if (Helper.StartOfRound is not StartOfRound startOfRound) return;
         if (Helper.CurrentCamera is not Camera camera) return;
 
-        InitializeUnlockables(startOfRound);
-
         if (args.Length == 0)
         {
-            Chat.Print("Usage: build <unlockable|all>");
+            Chat.Print("Usage: build <unlockable|suits|all>");
             return;
         }
 
-        if (args[0].ToLower() == "all")
+        var unlockables = InitializeUnlockables(startOfRound);
+
+        if (args[0].ToLower() == "suits")
         {
-            BuildAllUnlockables(camera);
+            BuildSuits(unlockables);
+        }
+        else if (args[0].ToLower() == "all")
+        {
+            BuildAllUnlockables(unlockables, camera);
         }
         else
         {
-            BuildSingleUnlockable(args[0], camera);
+            BuildSingleUnlockable(args[0], unlockables, camera);
         }
     }
 
-    private void InitializeUnlockables(StartOfRound startOfRound)
+    private Dictionary<string, Unlockable> InitializeUnlockables(StartOfRound startOfRound)
     {
-        if (Unlockables != null) return;
-
-        Unlockables = startOfRound.unlockablesList.unlockables
+        return startOfRound.unlockablesList.unlockables
             .Select((unlockable, i) => (unlockable, i))
             .ToDictionary(
                 pair => pair.unlockable.unlockableName.ToLower(),
-                pair => pair.i
+                pair => (Unlockable)pair.i
             );
     }
 
-    private void BuildSingleUnlockable(string unlockableName, Camera camera)
+    private void BuildSingleUnlockable(string? unlockableName, Dictionary<string, Unlockable> unlockables, Camera camera)
     {
-        if (!unlockableName.FuzzyMatch(Unlockables.Keys, out var key))
+        if (unlockableName is null)
         {
             Chat.Print("Failed to find unlockable!");
             return;
         }
 
-        var unlockable = (Unlockable)Unlockables[key];
+        if (!unlockableName.FuzzyMatch(unlockables.Keys, out var key))
+        {
+            Chat.Print("Failed to find unlockable!");
+            return;
+        }
+
+        var unlockable = unlockables[key];
         BuildUnlockable(unlockable, camera);
     }
 
-    private void BuildAllUnlockables(Camera camera)
+    private void BuildAllUnlockables(Dictionary<string, Unlockable> unlockables, Camera camera)
     {
-        foreach (var unlockable in Unlockables.Values.Select(index => (Unlockable)index))
+        foreach (var unlockable in unlockables.Values)
         {
             BuildUnlockable(unlockable, camera);
+        }
+    }
+
+    private void BuildSuits(Dictionary<string, Unlockable> unlockables)
+    {
+        var suitUnlockables = unlockables.Values.Where(u => u.ToString().EndsWith("_SUIT"));
+        foreach (var suit in suitUnlockables)
+        {
+            Helper.BuyUnlockable(suit);
         }
     }
 
