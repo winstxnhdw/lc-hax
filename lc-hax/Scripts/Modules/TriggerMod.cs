@@ -94,7 +94,7 @@ internal sealed class TriggerMod : MonoBehaviour, IEnemyPrompter
             if (collider.TryGetComponent(out Turret turret))
             {
                 if (!Setting.EnableStunOnLeftClick)
-                    turret.BerserkMode();
+                    turret.Berserk();
                 else
                     turret.ToggleTurret();
             }
@@ -110,7 +110,7 @@ internal sealed class TriggerMod : MonoBehaviour, IEnemyPrompter
             if (collider.TryGetComponent(out Landmine landmine))
             {
                 if (!Setting.EnableStunOnLeftClick)
-                    landmine.TriggerMine();
+                    landmine.Explode();
                 else
                     landmine.ToggleLandmine();
                 break;

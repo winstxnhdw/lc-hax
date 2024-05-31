@@ -11,6 +11,6 @@ internal class ExplodeCommand : ICommand
 
         else if (args[0] is "mine")
             Helper.FindObjects<Landmine>()
-                .ForEach(landmine => landmine.TriggerMine());
+                .ForEach(landmine => landmine.Explode());
     }
 }

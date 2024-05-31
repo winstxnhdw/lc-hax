@@ -1,14 +1,12 @@
-using System;
 using GameNetcodeStuff;
 using Hax;
+using System;
 using UnityEngine;
 
 internal sealed class TrapControllerMod : MonoBehaviour
 {
-    internal bool DisableTrapWhenPlayerNearby = true;
+    internal bool UseTerminalToControl = true;
 
-    private bool HasTrapBeenDisabled = false;
-    private float nextToggleTime = 0.0f;
     internal bool OnlyForLocalPlayer = true;
     internal string TrapType { get; private set; }
     internal float Radius { get; private set; } = 5f;
@@ -47,26 +45,12 @@ internal sealed class TrapControllerMod : MonoBehaviour
 
     private void Update()
     {
-        if (!HasTrapBeenDisabled)
-        {
-            CheckForPlayerNearby();
-        }
-        else
-        {
-            // reactivate the trap after 10 seconds after it has been disabled
-            if (Time.time >= nextToggleTime)
-            {
-                ToggleTrap(true);
-                Console.WriteLine($"{TrapType} has been reactivated.");
-                HasTrapBeenDisabled = false;
-                nextToggleTime = 0;
-            }
-        }
+        CheckForPlayerNearby();
     }
 
     private void CheckForPlayerNearby()
     {
-        if (DisableTrapWhenPlayerNearby)
+        if (isTrapActive())
         {
             Collider[] hitColliders = Physics.OverlapSphere(transform.position, Radius, Mask.Player);
             foreach (var hitCollider in hitColliders)
@@ -75,15 +59,12 @@ internal sealed class TrapControllerMod : MonoBehaviour
                 if (player != null)
                 {
                     if (OnlyForLocalPlayer && !player.IsSelf()) return;
-                    if (isTrapActive())
+                    if (!isTrapInCooldown())
                     {
-                        ToggleTrap(false);
+                        ToggleTrap(false, UseTerminalToControl);
                         Console.WriteLine($"{TrapType} Detected {player.playerUsername}'s nearby, Turning trap off.");
-                        HasTrapBeenDisabled = true;
-                        // add a delay of 10 seconds before reactivating the trap
-                        nextToggleTime = Time.time + 10f;
-                        break;
                     }
+                    break;
                 }
             }
         }
@@ -99,10 +80,23 @@ internal sealed class TrapControllerMod : MonoBehaviour
         return false;
     }
 
-    internal void ToggleTrap(bool Active)
+    internal bool isTrapInCooldown()
     {
-        if (SpikeRoofTrap != null) SpikeRoofTrap.SetSpikes(Active);
-        if (Landmine != null) Landmine.SetLandmine(Active);
-        if (Turret != null) Turret.SetTurret(Active);
+        if (UseTerminalToControl)
+        {
+            if (SpikeRoofTrap != null)
+                return SpikeRoofTrap.IsInCooldown();
+            else if (Landmine != null)
+                return Landmine.IsInCooldown();
+            else if (Turret != null) return Turret.IsInCooldown();
+        }
+        return false;
+    }
+
+    internal void ToggleTrap(bool Active, bool UseTerminal)
+    {
+        if (SpikeRoofTrap != null) SpikeRoofTrap.SetSpikes(Active, UseTerminal);
+        if (Landmine != null) Landmine.SetLandmine(Active, UseTerminal);
+        if (Turret != null) Turret.SetTurret(Active, UseTerminal);
     }
 }
