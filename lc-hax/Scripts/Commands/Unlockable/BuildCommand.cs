@@ -12,18 +12,39 @@ internal class BuildCommand : ICommand
     {
         if (Helper.StartOfRound is not StartOfRound startOfRound) return;
         if (Helper.CurrentCamera is not Camera camera) return;
-        if (args[0] is not string unlockableName)
+
+        InitializeUnlockables(startOfRound);
+
+        if (args.Length == 0)
         {
-            Chat.Print("Usage: build <unlockable>");
+            Chat.Print("Usage: build <unlockable|all>");
             return;
         }
 
-        Unlockables ??=
-            startOfRound.unlockablesList.unlockables.Select((unlockable, i) => (unlockable, i)).ToDictionary(
+        if (args[0].ToLower() == "all")
+        {
+            BuildAllUnlockables(camera);
+        }
+        else
+        {
+            BuildSingleUnlockable(args[0], camera);
+        }
+    }
+
+    private void InitializeUnlockables(StartOfRound startOfRound)
+    {
+        if (Unlockables != null) return;
+
+        Unlockables = startOfRound.unlockablesList.unlockables
+            .Select((unlockable, i) => (unlockable, i))
+            .ToDictionary(
                 pair => pair.unlockable.unlockableName.ToLower(),
                 pair => pair.i
             );
+    }
 
+    private void BuildSingleUnlockable(string unlockableName, Camera camera)
+    {
         if (!unlockableName.FuzzyMatch(Unlockables.Keys, out var key))
         {
             Chat.Print("Failed to find unlockable!");
@@ -31,6 +52,19 @@ internal class BuildCommand : ICommand
         }
 
         var unlockable = (Unlockable)Unlockables[key];
+        BuildUnlockable(unlockable, camera);
+    }
+
+    private void BuildAllUnlockables(Camera camera)
+    {
+        foreach (var unlockable in Unlockables.Values.Select(index => (Unlockable)index))
+        {
+            BuildUnlockable(unlockable, camera);
+        }
+    }
+
+    private void BuildUnlockable(Unlockable unlockable, Camera camera)
+    {
         Helper.BuyUnlockable(unlockable);
         Helper.ReturnUnlockable(unlockable);
 
@@ -46,10 +80,6 @@ internal class BuildCommand : ICommand
         var newRotation = camera.transform.eulerAngles;
         newRotation.x = -90.0f;
 
-        Helper.PlaceObjectAtPosition(
-            shipObject,
-            newPosition,
-            newRotation
-        );
+        Helper.PlaceObjectAtPosition(shipObject, newPosition, newRotation);
     }
 }
