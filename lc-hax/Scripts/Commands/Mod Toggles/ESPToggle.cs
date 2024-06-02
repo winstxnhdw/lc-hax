@@ -7,6 +7,6 @@ internal class ESPToggle : ICommand
     {
         if (ESPMod.Instance is not ESPMod esp) return;
         esp.enabled = !esp.enabled;
-        Helper.DisplayFlatHudMessage(esp.enabled ? "ESP Mod enabled" : "ESP Mod disabled");
+        Helper.SendFlatNotification(esp.enabled ? "ESP Mod enabled" : "ESP Mod disabled");
     }
 }

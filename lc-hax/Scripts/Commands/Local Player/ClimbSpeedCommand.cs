@@ -33,7 +33,7 @@ internal class ClimbSpeedCommand : ICommand
 
         Setting.New_ClimbSpeed = Force;
         player.climbSpeed = Force;
-        Helper.DisplayFlatHudMessage($"Climb Speed set to {Force}!");
+        Helper.SendFlatNotification($"Climb Speed set to {Force}!");
     }
 
     private void Reset(PlayerControllerB player)
@@ -43,7 +43,7 @@ internal class ClimbSpeedCommand : ICommand
             Setting.New_ClimbSpeed = Setting.Default_climbSpeed;
             player.climbSpeed = Setting.Default_climbSpeed;
             Setting.OverrideClimbSpeed = false;
-            Helper.DisplayFlatHudMessage($"Climb Speed reset to default {player.climbSpeed}!");
+            Helper.SendFlatNotification($"Climb Speed reset to default {player.climbSpeed}!");
         }
     }
 }

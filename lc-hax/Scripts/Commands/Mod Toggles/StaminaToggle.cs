@@ -7,6 +7,6 @@ internal class StaminaToggle : ICommand
     {
         if (StaminaMod.Instance is not StaminaMod stamina) return;
         stamina.enabled = !stamina.enabled;
-        Helper.DisplayFlatHudMessage(stamina.enabled ? "Stamina Mod enabled" : "Stamina Mod disabled");
+        Helper.SendFlatNotification(stamina.enabled ? "Stamina Mod enabled" : "Stamina Mod disabled");
     }
 }

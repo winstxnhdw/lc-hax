@@ -7,6 +7,6 @@ internal class TriggerToggle : ICommand
     {
         if (TriggerMod.Instance is not TriggerMod triggermod) return;
         triggermod.enabled = !triggermod.enabled;
-        Helper.DisplayFlatHudMessage(triggermod.enabled ? "Trigger Mod enabled" : "Trigger Mod disabled");
+        Helper.SendFlatNotification(triggermod.enabled ? "Trigger Mod enabled" : "Trigger Mod disabled");
     }
 }

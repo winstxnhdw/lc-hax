@@ -48,7 +48,7 @@ internal class GiftSetCommand : ICommand
         }
 
         SetGift(gift, scrap);
-        Helper.DisplayFlatHudMessage($"Gift Content Replaced with {scrap.name}!");
+        Helper.SendFlatNotification($"Gift Content Replaced with {scrap.name}!");
     }
 
     private void SetGift(GiftBoxItem gift, Item item)

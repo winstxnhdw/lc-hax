@@ -9,7 +9,7 @@ internal class WeightToggle : ICommand
     {
         if (WeightMod.Instance is not WeightMod weight) return;
         weight.enabled = !weight.enabled;
-        Helper.DisplayFlatHudMessage(weight.enabled ? "Weight Mod enabled" : "Weight Mod disabled");
+        Helper.SendFlatNotification(weight.enabled ? "Weight Mod enabled" : "Weight Mod disabled");
         if (Helper.LocalPlayer is not PlayerControllerB player) return;
         player.carryWeight = 1.0f;
         if (!weight.enabled)

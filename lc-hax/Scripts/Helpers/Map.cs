@@ -18,6 +18,6 @@ internal static partial class Helper
 
     internal static void SwitchRadarTarget(PlayerControllerB player)
     {
-        SwitchRadarTarget(player.PlayerIndex());
+        SwitchRadarTarget(player.GetPlayerID());
     }
 }

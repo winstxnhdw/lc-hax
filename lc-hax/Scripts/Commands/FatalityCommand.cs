@@ -65,43 +65,43 @@ internal class FatalityCommand : ICommand
 
     private void GiantFatality(PlayerControllerB targetPlayer, ForestGiantAI forestGiant)
     {
-        forestGiant.GrabPlayerServerRpc(targetPlayer.PlayerIndex());
+        forestGiant.GrabPlayerServerRpc(targetPlayer.GetPlayerID());
     }
 
     private void JesterFatality(PlayerControllerB targetPlayer, JesterAI jester)
     {
-        jester.KillPlayerServerRpc(targetPlayer.PlayerIndex());
+        jester.KillPlayerServerRpc(targetPlayer.GetPlayerID());
     }
 
     private void MaskedFatality(PlayerControllerB targetPlayer, MaskedPlayerEnemy masked)
     {
-        masked.KillPlayerAnimationServerRpc(targetPlayer.PlayerIndex());
+        masked.KillPlayerAnimationServerRpc(targetPlayer.GetPlayerID());
     }
 
     private void BaboonHawkFatality(PlayerControllerB targetPlayer, BaboonBirdAI baboonHawk)
     {
-        baboonHawk.StabPlayerDeathAnimServerRpc(targetPlayer.PlayerIndex());
+        baboonHawk.StabPlayerDeathAnimServerRpc(targetPlayer.GetPlayerID());
     }
 
     private void BeesFatality(PlayerControllerB targetPlayer, RedLocustBees bees)
     {
-        bees.BeeKillPlayerServerRpc(targetPlayer.PlayerIndex());
+        bees.BeeKillPlayerServerRpc(targetPlayer.GetPlayerID());
     }
 
     private void EyelessDogFatality(PlayerControllerB targetPlayer, MouthDogAI eyelessDog)
     {
-        eyelessDog.KillPlayerServerRpc(targetPlayer.PlayerIndex());
+        eyelessDog.KillPlayerServerRpc(targetPlayer.GetPlayerID());
     }
 
     private void BrackenFatality(PlayerControllerB targetPlayer, FlowermanAI bracken)
     {
-        bracken.KillPlayerAnimationServerRpc(targetPlayer.PlayerIndex());
+        bracken.KillPlayerAnimationServerRpc(targetPlayer.GetPlayerID());
     }
 
     private void NutcrackerFatality(PlayerControllerB targetPlayer, NutcrackerEnemyAI nutcracker)
     {
         nutcracker.AimGunServerRpc(targetPlayer.transform.position);
         nutcracker.FireGunServerRpc();
-        nutcracker.LegKickPlayerServerRpc(targetPlayer.PlayerIndex());
+        nutcracker.LegKickPlayerServerRpc(targetPlayer.GetPlayerID());
     }
 }

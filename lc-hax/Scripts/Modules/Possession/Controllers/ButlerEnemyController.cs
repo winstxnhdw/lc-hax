@@ -26,7 +26,7 @@ internal class ButlerEnemyController : IEnemyController<ButlerEnemyAI>
     public void OnPrimarySkillHold(ButlerEnemyAI enemy)
     {
         enemy.SetBehaviourState(ButlerBehaviorState.Murder);
-        enemy.StabPlayerServerRpc(enemy.FindClosestPlayer(4f).PlayerIndex(), Random.value < 0.8f);
+        enemy.StabPlayerServerRpc(enemy.FindClosestPlayer(4f).GetPlayerID(), Random.value < 0.8f);
     }
 
 

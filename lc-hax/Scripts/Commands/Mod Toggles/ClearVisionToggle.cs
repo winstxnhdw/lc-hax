@@ -7,6 +7,6 @@ internal class ClearVisionToggle : ICommand
     {
         if (ClearVisionMod.Instance is not ClearVisionMod clearvision) return;
         clearvision.enabled = !clearvision.enabled;
-        Helper.DisplayFlatHudMessage(clearvision.enabled ? "Clear Vision Mod enabled" : "Clear Vision Mod disabled");
+        Helper.SendFlatNotification(clearvision.enabled ? "Clear Vision Mod enabled" : "Clear Vision Mod disabled");
     }
 }

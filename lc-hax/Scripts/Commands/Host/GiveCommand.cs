@@ -76,7 +76,7 @@ internal class GiveCommand : ICommand
                 if (targetPlayer is null)
                     bodyID = 0;
                 else
-                    bodyID = targetPlayer.PlayerIndex();
+                    bodyID = targetPlayer.GetPlayerID();
                 // spawn the body
                 ushort Bodies = 1;
                 if (args.Length > 2 && args[2] != null && ushort.TryParse(args[2], out var BodyAmount))

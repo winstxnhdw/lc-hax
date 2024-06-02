@@ -41,7 +41,7 @@ internal static partial class Helper
         if (player is null) return false;
         var currentOwnershipOnThisClient = enemy.currentOwnershipOnThisClient;
         var networkOwner = enemy.thisNetworkObject.OwnerClientId;
-        var playerID = player.IsSelf() ? player.actualClientId : (ulong)player.PlayerIndex();
+        var playerID = player.IsSelf() ? player.actualClientId : (ulong)player.GetPlayerID();
         return currentOwnershipOnThisClient == (int)playerID && networkOwner == playerID;
     }
 
@@ -81,7 +81,7 @@ internal static partial class Helper
         if (player.IsSelf())
             enemy.SetOwner(player.actualClientId);
         else
-            enemy.SetOwner((ulong)player.PlayerIndex());
+            enemy.SetOwner((ulong)player.GetPlayerID());
     }
 
     /// <summary>

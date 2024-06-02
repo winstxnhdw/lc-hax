@@ -34,13 +34,22 @@ internal static partial class Helper
     internal static PlayerControllerB[] ActivePlayers =>
         Players.Where(player => player.isPlayerControlled && !player.isPlayerDead).ToArray();
 
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    internal static int PlayerIndex(this PlayerControllerB player)
+    internal static int GetPlayerID(this PlayerControllerB player)
     {
+        if(player == null) return -1;
+        if (player.IsSelf())
+        {
+            return unchecked((int)player.actualClientId);
+        }
+
         return unchecked((int)player.playerClientId);
     }
 
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    internal static string GetPlayerIDString(this PlayerControllerB player)
+    {
+        return player.GetPlayerID().ToString();
+    }
+
     internal static bool IsSelf(this PlayerControllerB? player)
     {
         return LocalPlayer is PlayerControllerB localPlayer && player?.actualClientId == localPlayer.actualClientId;

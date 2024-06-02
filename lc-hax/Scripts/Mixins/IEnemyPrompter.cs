@@ -56,7 +56,7 @@ internal class EnemyPromptHandler
         thumper.TakeOwnership();
         thumper.targetPlayer = targetPlayer;
         thumper.SetMovingTowardsTargetPlayer(targetPlayer);
-        thumper.BeginChasingPlayerServerRpc(targetPlayer.PlayerIndex());
+        thumper.BeginChasingPlayerServerRpc(targetPlayer.GetPlayerID());
         return true;
     }
 
@@ -173,7 +173,7 @@ internal class EnemyPromptHandler
         bee.targetPlayer = targetPlayer;
         bee.SetMovingTowardsTargetPlayer(targetPlayer);
         bee.SetBehaviourState(BeesState.ATTACK);
-        bee.EnterAttackZapModeServerRpc(targetPlayer.PlayerIndex());
+        bee.EnterAttackZapModeServerRpc(targetPlayer.GetPlayerID());
         return true;
     }
 
@@ -208,7 +208,7 @@ internal class EnemyPromptHandler
         nutcracker.SetMovingTowardsTargetPlayer(targetPlayer);
 
         nutcracker.StopInspection();
-        nutcracker.SeeMovingThreatServerRpc(targetPlayer.PlayerIndex());
+        nutcracker.SeeMovingThreatServerRpc(targetPlayer.GetPlayerID());
         nutcracker.AimGunServerRpc(targetPlayer.transform.position);
 
         _ = nutcracker.Reflect()

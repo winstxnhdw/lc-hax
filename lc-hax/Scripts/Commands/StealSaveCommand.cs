@@ -15,7 +15,7 @@ internal class StealSaveCommand : ICommand
         if (round.shipHasLanded)
         {
             Console.WriteLine("Ship has landed. Aborting.");
-            Helper.DisplayFlatHudMessage("Savegame Stealer : Ship must be in orbit.");
+            Helper.SendFlatNotification("Savegame Stealer : Ship must be in orbit.");
             return;
         }
 
@@ -48,7 +48,7 @@ internal class StealSaveCommand : ICommand
 
         if (saveFileName == "")
         {
-            Helper.DisplayFlatHudMessage("Savegame Stealer : No Open Save Slot found.");
+            Helper.SendFlatNotification("Savegame Stealer : No Open Save Slot found.");
             return;
         }
 
@@ -64,13 +64,13 @@ internal class StealSaveCommand : ICommand
         catch (Exception e)
         {
             Logger.Write(e);
-            Helper.DisplayFlatHudMessage("Savegame Stealer : Saving Failed.");
+            Helper.SendFlatNotification("Savegame Stealer : Saving Failed.");
             return;
         }
 
         manager.isHostingGame = oldIsHostingGame;
         manager.currentSaveFileName = oldSaveFileName;
         round.maxShipItemCapacity = oldMaxItemCap;
-        Helper.DisplayFlatHudMessage($"Savegame Stealer : Save Successful with alias: {alias}.");
+        Helper.SendFlatNotification($"Savegame Stealer : Save Successful with alias: {alias}.");
     }
 }

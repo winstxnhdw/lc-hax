@@ -7,7 +7,7 @@ internal static partial class Helper
         HUDManager?.DisplayTip(title, body, isWarning, false);
     }
 
-    internal static void DisplayFlatHudMessage(string msg)
+    internal static void SendFlatNotification(string msg)
     {
         HUDManager.globalNotificationAnimator.SetTrigger("TriggerNotif");
         HUDManager.globalNotificationText.text = msg;

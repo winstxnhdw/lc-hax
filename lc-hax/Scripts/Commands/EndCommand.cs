@@ -10,6 +10,6 @@ internal class EndCommand : ICommand
             Helper.StartOfRound?.EndGameServerRpc(-1);
 
         else if (Helper.GetPlayer(args[0]) is PlayerControllerB player)
-            player.playersManager.EndGameServerRpc(player.PlayerIndex());
+            player.playersManager.EndGameServerRpc(player.GetPlayerID());
     }
 }

@@ -12,7 +12,7 @@ internal class EnemyHealthPatch
         if (!playerWhoHit.IsSelf()) return;
         if (!__instance.CanEnemyDie()) return;
         if (__instance.isEnemyDead) return;
-        Helper.DisplayFlatHudMessage(
+        Helper.SendFlatNotification(
             $"Remaining Hits to kill {__instance.enemyType.enemyName} : {__instance.enemyHP - 1}, You are hitting with Force : {force}");
     }
 }

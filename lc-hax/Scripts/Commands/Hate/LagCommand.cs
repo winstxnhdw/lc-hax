@@ -45,7 +45,7 @@ internal class LagCommand : ICommand
     {
         WaitForEndOfFrame waitForEndOfFrame = new();
 
-        while (enemyReflector.GetInternalField<int>("currentOwnershipOnThisClient") != player.PlayerIndex())
+        while (enemyReflector.GetInternalField<int>("currentOwnershipOnThisClient") != player.GetPlayerID())
         {
             if (Helper.StartOfRound is { inShipPhase: true }) yield break;
 

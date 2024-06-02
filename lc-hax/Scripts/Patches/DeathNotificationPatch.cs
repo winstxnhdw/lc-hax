@@ -10,6 +10,6 @@ internal class DeathNotificationPatch
         if (Helper.GetPlayer(playerId) is not PlayerControllerB player) return;
         if (player.IsSelf()) return;
 
-        Helper.DisplayFlatHudMessage($"{player.playerUsername} was killed by {(CauseOfDeath)causeOfDeath}");
+        Helper.SendFlatNotification($"{player.playerUsername} was killed by {(CauseOfDeath)causeOfDeath}");
     }
 }

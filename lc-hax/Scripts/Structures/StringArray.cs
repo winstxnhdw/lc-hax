@@ -14,13 +14,11 @@ internal readonly ref struct StringArray
         Span = Span[range]
     };
 
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static implicit operator ReadOnlySpan<string>(StringArray stringArray)
     {
         return stringArray.Span;
     }
 
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static implicit operator StringArray(ReadOnlySpan<string> span)
     {
         return new StringArray
@@ -29,7 +27,6 @@ internal readonly ref struct StringArray
         };
     }
 
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static implicit operator StringArray(string[] array)
     {
         return new StringArray
@@ -38,7 +35,6 @@ internal readonly ref struct StringArray
         };
     }
 
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static implicit operator string[](StringArray stringArray)
     {
         return stringArray.Span.ToArray();

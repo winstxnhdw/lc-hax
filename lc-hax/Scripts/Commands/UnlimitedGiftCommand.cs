@@ -6,7 +6,7 @@ internal class UnlimitedGiftCommand : ICommand
     public void Execute(StringArray _)
     {
         Setting.EnableUnlimitedGiftBox = !Setting.EnableUnlimitedGiftBox;
-        Helper.DisplayFlatHudMessage(Setting.EnableUnlimitedGiftBox
+        Helper.SendFlatNotification(Setting.EnableUnlimitedGiftBox
             ? "Unlimited Gift Box enabled"
             : "Unlimited Gift Box disabled");
     }

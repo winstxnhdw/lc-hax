@@ -37,8 +37,8 @@ internal class AntiKickPatch
         localPlayer.playerSteamId = SteamClient.SteamId;
         localPlayer.playerUsername = SteamClient.Name;
         localPlayer.usernameBillboardText.text = SteamClient.Name;
-        __instance.playersManager.mapScreen.radarTargets[localPlayer.PlayerIndex()].name = localPlayer.playerUsername;
+        __instance.playersManager.mapScreen.radarTargets[localPlayer.GetPlayerID()].name = localPlayer.playerUsername;
         __instance.quickMenuManager.AddUserToPlayerList(localPlayer.playerSteamId, localPlayer.playerUsername,
-            localPlayer.PlayerIndex());
+            localPlayer.GetPlayerID());
     }
 }

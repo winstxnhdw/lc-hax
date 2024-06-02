@@ -42,7 +42,7 @@ internal class ExperienceCommand : ICommand
         ES3.Save("PlayerLevel", hudManager.localPlayerLevel, "LCGeneralSaveData");
 
         hudManager.SyncPlayerLevelServerRpc(
-            hudManager.localPlayer.PlayerIndex(),
+            hudManager.localPlayer.GetPlayerID(),
             hudManager.localPlayerLevel,
             ES3.Load("playedDuringBeta", "LCGeneralSaveData", true)
         );

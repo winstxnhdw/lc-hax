@@ -10,6 +10,6 @@ internal class FakeDeathPatch
         if (!Setting.EnableFakeDeath) return true;
 
         Setting.EnableFakeDeath = false;
-        return Helper.LocalPlayer?.PlayerIndex() != playerId;
+        return Helper.LocalPlayer?.GetPlayerID() != playerId;
     }
 }

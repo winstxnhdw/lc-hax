@@ -7,6 +7,6 @@ internal class SanityToggle : ICommand
     {
         if (SaneMod.Instance is not SaneMod sane) return;
         sane.enabled = !sane.enabled;
-        Helper.DisplayFlatHudMessage(sane.enabled ? "Sanity Mod enabled" : "Sanity Mod disabled");
+        Helper.SendFlatNotification(sane.enabled ? "Sanity Mod enabled" : "Sanity Mod disabled");
     }
 }

@@ -22,6 +22,6 @@ internal class SayCommand : ICommand
             return;
         }
 
-        Helper.HUDManager?.AddTextToChatOnServer(message, player.PlayerIndex());
+        Helper.HUDManager?.AddTextToChatOnServer(message, player.GetPlayerID());
     }
 }

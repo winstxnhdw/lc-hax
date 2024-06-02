@@ -44,7 +44,7 @@ internal class SpawnCommand : ICommand
             if (!args[2].TryParse(1, out ulong amount)) Chat.Print("Invalid amount specified. Defaulting to 1.");
 
             Helper.SpawnEnemies(targetPlayer.transform.position, Helper.HostileEnemies[key], amount);
-            Helper.DisplayFlatHudMessage(
+            Helper.SendFlatNotification(
                 $"Spawning {(amount > 1 ? amount.ToString() : "a")} {(amount > 1 ? key + "s" : key)} on {targetPlayer.playerUsername}.");
         }
 
@@ -75,7 +75,7 @@ internal class SpawnCommand : ICommand
             if (enemy is not null)
             {
                 PossessionMod.Instance?.Possess(enemy);
-                Helper.DisplayFlatHudMessage($"Spawning {key} and possessing it.");
+                Helper.SendFlatNotification($"Spawning {key} and possessing it.");
             }
         }
     }
