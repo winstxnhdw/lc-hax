@@ -1,8 +1,12 @@
-using GameNetcodeStuff;
-using Hax;
+#region
+
 using System;
 using System.Collections.Generic;
+using GameNetcodeStuff;
+using Hax;
 using Object = UnityEngine.Object;
+
+#endregion
 
 [Command("heal")]
 internal class HealCommand : ICommand, IStun
@@ -13,10 +17,7 @@ internal class HealCommand : ICommand, IStun
         if (args.Length == 0 || args[0].Equals("self", StringComparison.OrdinalIgnoreCase))
         {
             if (Helper.LocalPlayer is null) return;
-            if (!HealPlayer(Helper.LocalPlayer))
-            {
-                Chat.Print("Failed to heal the local player!");
-            }
+            if (!HealPlayer(Helper.LocalPlayer)) Chat.Print("Failed to heal the local player!");
 
             return;
         }
@@ -30,22 +31,16 @@ internal class HealCommand : ICommand, IStun
                 var username = player.GetPlayerUsername();
                 if (player.IsSelf())
                 {
-                    HealLocalPlayer();
-                    healedPlayersNames.Add(username);
-                    continue;
+                    if (HealLocalPlayer(false)) healedPlayersNames.Add(username);
                 }
-
-                if (!player.IsDead())
+                else
                 {
-                    if(HealPlayer(player))
-                    { 
-                        healedPlayersNames.Add(username);
-                    }
+                    if (player.IsDead()) continue;
+                    if (HealPlayer(player)) healedPlayersNames.Add(username);
                 }
             }
 
-
-            Helper.SendFlatNotification("All players have been healed!");
+            Helper.SendFlatNotification($"Healed: {string.Join(", ", healedPlayersNames)}");
             return;
         }
         else
@@ -60,10 +55,10 @@ internal class HealCommand : ICommand, IStun
         if (Helper.StartOfRound is not StartOfRound startOfRound) return;
         if (Helper.HUDManager is not HUDManager hudManager) return;
         if (Helper.LocalPlayer is not PlayerControllerB localPlayer) return;
-
+        
         startOfRound.allPlayersDead = false;
         localPlayer.ResetPlayerBloodObjects(localPlayer.IsDead());
-        if (localPlayer.isDeactivatedPlayer())
+        if (localPlayer.isDeadAndNotControlled())
         {
             localPlayer.isClimbingLadder = false;
             localPlayer.ResetZAndXRotation();
@@ -109,22 +104,17 @@ internal class HealCommand : ICommand, IStun
             localPlayer.reverbPreset = startOfRound.shipReverb;
             soundManager.earsRingingTimer = 0f;
             localPlayer.voiceMuffledByEnemy = false;
-            soundManager.playerVoicePitchTargets[localPlayer.playerClientId] = 1f;
-            soundManager.SetPlayerPitch(1f, (int)localPlayer.playerClientId);
+            soundManager.playerVoicePitchTargets[localPlayer.GetPlayerID_ULong()] = 1f;
+            soundManager.SetPlayerPitch(1f, (int)localPlayer.GetPlayerID());
             if (localPlayer.currentVoiceChatIngameSettings == null) startOfRound.RefreshPlayerVoicePlaybackObjects();
             if (localPlayer.currentVoiceChatIngameSettings != null)
             {
                 if (localPlayer.currentVoiceChatIngameSettings.voiceAudio == null)
-                {
                     localPlayer.currentVoiceChatIngameSettings.InitializeComponents();
-                }
                 if (localPlayer.currentVoiceChatIngameSettings.voiceAudio != null)
-                {
-                    if (localPlayer.currentVoiceChatIngameSettings.voiceAudio.TryGetComponent<OccludeAudio>(out var occludeAudio))
-                    {
+                    if (localPlayer.currentVoiceChatIngameSettings.voiceAudio.TryGetComponent<OccludeAudio>(
+                            out var occludeAudio))
                         occludeAudio.overridingLowPass = false;
-                    }
-                }
             }
         }
 
@@ -161,11 +151,11 @@ internal class HealCommand : ICommand, IStun
         startOfRound.shipAnimator.ResetTrigger("ShipLeave");
     }
 
-    private void HealLocalPlayer()
+    private bool HealLocalPlayer(bool revive = false)
     {
-        if (Helper.LocalPlayer is not PlayerControllerB localPlayer) return;
-        if (Helper.HUDManager is not HUDManager hudManager) return;
-        if (localPlayer.IsDead())
+        if (Helper.LocalPlayer is not PlayerControllerB localPlayer) return false;
+        if (Helper.HUDManager is not HUDManager hudManager) return false;
+        if (localPlayer.IsDead() && revive)
         {
             RespawnLocalPlayer();
 
@@ -173,7 +163,7 @@ internal class HealCommand : ICommand, IStun
                 .SetPredicate(() => hudManager.localPlayer.playersManager.shipIsLeaving)
                 .Init(localPlayer.KillPlayer);
             Helper.SendFlatNotification("You got Respawned Locally (You will die once ship leaves)");
-            return;
+            return true;
         }
 
         hudManager.localPlayer.health = 100;
@@ -184,7 +174,7 @@ internal class HealCommand : ICommand, IStun
         hudManager.HUDAnimator.SetBool("biohazardDamage", false);
         hudManager.HUDAnimator.SetTrigger("HealFromCritical");
         hudManager.UpdateHealthUI(hudManager.localPlayer.health, false);
-        Helper.SendFlatNotification("You got Healed!");
+        return true;
     }
 
     private bool HealPlayer(string? playerNameOrId)
@@ -192,7 +182,7 @@ internal class HealCommand : ICommand, IStun
         var targetPlayer = Helper.GetPlayer(playerNameOrId);
         if (targetPlayer == null)
         {
-            Helper.SendFlatNotification("Player not found!");
+            Helper.SendFlatNotification($"Player {playerNameOrId} not found!");
             return false;
         }
 
@@ -202,10 +192,10 @@ internal class HealCommand : ICommand, IStun
     private bool HealPlayer(PlayerControllerB? player)
     {
         if (player is null) return false;
-        var username = player.GetPlayerUsername(); 
+        var username = player.GetPlayerUsername();
         if (player.IsSelf())
         {
-            HealLocalPlayer();
+            HealLocalPlayer(true);
             this.Stun(player.transform.position, 5.0f, 1.0f);
             return true;
         }
@@ -219,10 +209,7 @@ internal class HealCommand : ICommand, IStun
             }
             else
             {
-                if (username != null)
-                {
-                    Helper.SendFlatNotification($"Cannot Heal {username} (DEAD)");
-                }
+                if (username != null) Helper.SendFlatNotification($"Cannot Heal {username} (DEAD)");
             }
         }
 

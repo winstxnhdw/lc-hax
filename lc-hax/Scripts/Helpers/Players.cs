@@ -33,19 +33,24 @@ namespace Hax
             Players.Where(player => player.isPlayerControlled && !player.isPlayerDead).ToArray();
 
         /// <summary>
-        /// Gets the player ID.
+        /// Gets the player ID as an integer.
         /// </summary>
         /// <param name="player">The player.</param>
-        /// <returns>The player ID as an integer.</returns>
+        /// <returns>The player ID as an integer. Returns <c>-1</c> if the player is <c>null</c>.</returns>
         internal static int GetPlayerID(this PlayerControllerB player)
         {
-            if (player == null) return -1;
-            if (player.IsSelf())
-            {
-                return unchecked((int)player.actualClientId);
-            }
+            return unchecked((int)player.GetPlayerID_ULong());
+        }
 
-            return unchecked((int)player.playerClientId);
+        /// <summary>
+        /// Gets the player ID as a ulong.
+        /// </summary>
+        /// <param name="player">The player.</param>
+        /// <returns>The player ID as a ulong. Returns <c>(ulong)-1</c> if the player is <c>null</c>.</returns>
+        internal static ulong GetPlayerID_ULong(this PlayerControllerB player)
+        {
+            if (player == null) return unchecked((ulong)-1);
+            return player.IsSelf() ? player.actualClientId : player.playerClientId;
         }
 
         /// <summary>
@@ -55,7 +60,7 @@ namespace Hax
         /// <returns>The player ID as a string.</returns>
         internal static string GetPlayerIDString(this PlayerControllerB player)
         {
-            return player.GetPlayerID().ToString();
+            return player.GetPlayerID_ULong().ToString();
         }
 
         /// <summary>
@@ -277,8 +282,8 @@ namespace Hax
         /// Determines whether the player is Deactivated (dead and not controlled).
         /// </summary>
         /// <param name="instance">The player instance.</param>
-        /// <returns><c>true</c> if the player is Deactivated; otherwise, <c>false</c>.</returns>
-        internal static bool isDeactivatedPlayer(this PlayerControllerB instance) => instance.IsDead() && !instance.IsControlled();
+        /// <returns><c>true</c> if the player is Dead and Not Player Controlled; otherwise, <c>false</c>.</returns>
+        internal static bool isDeadAndNotControlled(this PlayerControllerB instance) => instance.IsDead() && !instance.IsControlled();
 
         /// <summary>
         /// Gets a player from a body.
