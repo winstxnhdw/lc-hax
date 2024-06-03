@@ -1,10 +1,12 @@
+#region
+
 using Hax;
 
+#endregion
+
 [Command("explode")]
-internal class ExplodeCommand : ICommand
-{
-    public void Execute(StringArray args)
-    {
+class ExplodeCommand : ICommand {
+    public void Execute(StringArray args) {
         if (args.Length is 0)
             Helper.FindObjects<JetpackItem>()
                 .ForEach(jetpack => jetpack.ExplodeJetpackServerRpc());

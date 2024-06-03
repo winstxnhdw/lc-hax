@@ -1,9 +1,12 @@
+#region
+
 using System.Linq;
+
+#endregion
 
 namespace Hax;
 
-internal static partial class Helper
-{
+static partial class Helper {
     /// <summary>
     ///     Returns the active breakerbox Managing the level's power.
     /// </summary>
@@ -14,8 +17,7 @@ internal static partial class Helper
     ///     Sets the power switch on or off regardless of the BreakerBox state.
     /// </summary>
     /// <param name="On"></param>
-    internal static void SetPowerSwitch(bool On)
-    {
+    internal static void SetPowerSwitch(bool On) {
         if (RoundManager is not RoundManager roundmanager) return;
         if (On)
             roundmanager.PowerSwitchOnClientRpc();
@@ -23,8 +25,7 @@ internal static partial class Helper
             roundmanager.PowerSwitchOffClientRpc();
     }
 
-    internal static void FlickerLights(bool flickerFlashlights = false, bool disableFlashlights = false)
-    {
+    internal static void FlickerLights(bool flickerFlashlights = false, bool disableFlashlights = false) {
         if (RoundManager is not RoundManager roundmanager) return;
         roundmanager.FlickerLights(flickerFlashlights, disableFlashlights);
     }

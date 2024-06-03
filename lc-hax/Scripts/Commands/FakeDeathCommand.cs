@@ -1,19 +1,21 @@
+#region
+
 using GameNetcodeStuff;
 using Hax;
 using UnityEngine;
 
+#endregion
+
 [Command("fakedeath")]
-internal class FakeDeathCommand : ICommand
-{
-    public void Execute(StringArray args)
-    {
+class FakeDeathCommand : ICommand {
+    public void Execute(StringArray args) {
         if (Helper.LocalPlayer is not PlayerControllerB player) return;
 
         Setting.EnableFakeDeath = true;
 
         _ = player.Reflect().InvokeInternalMethod(
             "KillPlayerServerRpc",
-            player.GetPlayerID(),
+            player.GetPlayerId(),
             true,
             Vector3.zero,
             CauseOfDeath.Unknown,

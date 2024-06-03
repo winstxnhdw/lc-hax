@@ -1,7 +1,10 @@
+#region
+
 using System;
 
+#endregion
+
 [AttributeUsage(AttributeTargets.Class)]
-internal class DebugCommandAttribute(string syntax) : Attribute
-{
+class DebugCommandAttribute(string syntax) : Attribute {
     internal string Syntax { get; } = syntax;
 }

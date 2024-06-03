@@ -1,14 +1,16 @@
 #pragma warning disable IDE1006
 
+#region
+
 using GameNetcodeStuff;
 using HarmonyLib;
 using Hax;
 
+#endregion
+
 [HarmonyPatch(typeof(PlayerControllerB), nameof(PlayerControllerB.AllowPlayerDeath))]
-internal class GodModePatch
-{
-    private static bool Prefix(PlayerControllerB __instance, ref bool __result)
-    {
+class GodModePatch {
+    static bool Prefix(PlayerControllerB __instance, ref bool __result) {
         if (!Setting.EnableGodMode || !__instance.IsSelf()) return true;
 
         __result = false;

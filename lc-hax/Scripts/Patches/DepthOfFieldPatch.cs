@@ -1,13 +1,15 @@
 #pragma warning disable IDE1006
 
+#region
+
 using HarmonyLib;
 using UnityEngine.Rendering.HighDefinition;
 
+#endregion
+
 [HarmonyPatch(typeof(DepthOfField), nameof(DepthOfField.IsActive))]
-internal class DepthOfFieldPatch
-{
-    private static bool Prefix(ref bool __result)
-    {
+class DepthOfFieldPatch {
+    static bool Prefix(ref bool __result) {
         __result = false;
         return false;
     }

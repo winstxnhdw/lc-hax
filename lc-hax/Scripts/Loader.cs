@@ -1,3 +1,5 @@
+#region
+
 using System;
 using System.IO;
 using System.Linq;
@@ -5,51 +7,42 @@ using System.Reflection;
 using HarmonyLib;
 using UnityEngine;
 
+#endregion
+
 namespace Hax;
 
-internal class Loader : MonoBehaviour
-{
-    private const string HarmonyID = "winstxnhdw.lc-hax";
+class Loader : MonoBehaviour {
+    const string HarmonyID = "winstxnhdw.lc-hax";
 
-    private static GameObject HaxGameObjects { get; } = new("Hax GameObjects");
-    private static GameObject HaxModules { get; } = new("Hax Modules");
+    static GameObject HaxGameObjects { get; } = new("Hax GameObjects");
+    static GameObject HaxModules { get; } = new("Hax Modules");
 
-    private static bool HasLoaded => Harmony.HasAnyPatches(HarmonyID);
+    static bool HasLoaded => Harmony.HasAnyPatches(HarmonyID);
 
-    private static void AddHaxModules<T>() where T : Component
-    {
-        HaxModules.AddComponent<T>();
-    }
+    static void AddHaxModules<T>() where T : Component => HaxModules.AddComponent<T>();
 
-    private static void AddHaxGameObject<T>() where T : Component
-    {
-        HaxGameObjects.AddComponent<T>();
-    }
+    static void AddHaxGameObject<T>() where T : Component => HaxGameObjects.AddComponent<T>();
 
-    private static void LoadLibraries()
-    {
-        var assembly = Assembly.GetExecutingAssembly();
+    static void LoadLibraries() {
+        Assembly assembly = Assembly.GetExecutingAssembly();
 
         ReadOnlySpan<string> resourceNames =
             assembly.GetManifestResourceNames()
                 .Where(name => name.EndsWith(".dll"))
                 .ToArray();
 
-        foreach (var resourceName in resourceNames)
-        {
-            using var stream = assembly.GetManifestResourceStream(resourceName);
+        foreach (string? resourceName in resourceNames) {
+            using Stream? stream = assembly.GetManifestResourceStream(resourceName);
             using MemoryStream memoryStream = new();
             stream.CopyTo(memoryStream);
             _ = AppDomain.CurrentDomain.Load(memoryStream.ToArray());
         }
     }
 
-    internal static void Load()
-    {
+    internal static void Load() {
         LoadLibraries();
 
-        if (HasLoaded)
-        {
+        if (HasLoaded) {
             Logger.Write("lc-hax has already loaded!");
             return;
         }
@@ -60,22 +53,18 @@ internal class Loader : MonoBehaviour
     }
 
 
-    private static void LoadHarmonyPatches()
-    {
-        try
-        {
+    static void LoadHarmonyPatches() {
+        try {
             new Harmony(HarmonyID).PatchAll();
         }
 
-        catch (Exception exception)
-        {
+        catch (Exception exception) {
             Logger.Write(exception.ToString());
             throw exception;
         }
     }
 
-    private static void LoadHaxGameObjects()
-    {
+    static void LoadHaxGameObjects() {
         DontDestroyOnLoad(HaxGameObjects);
 
         AddHaxGameObject<HaxObjects>();
@@ -85,8 +74,7 @@ internal class Loader : MonoBehaviour
         AddHaxGameObject<HaxCamera>();
     }
 
-    private static void LoadHaxModules()
-    {
+    static void LoadHaxModules() {
         DontDestroyOnLoad(HaxModules);
 
         AddHaxModules<ESPMod>();
@@ -108,8 +96,7 @@ internal class Loader : MonoBehaviour
         AddHaxModules<InstantInteractMod>();
     }
 
-    internal static void Unload()
-    {
+    internal static void Unload() {
         Destroy(HaxModules);
         Destroy(HaxGameObjects);
         new Harmony(HarmonyID).UnpatchAll();

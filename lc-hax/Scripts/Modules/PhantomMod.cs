@@ -1,61 +1,55 @@
+#region
+
 using GameNetcodeStuff;
 using Hax;
 using UnityEngine;
 
-internal sealed class PhantomMod : MonoBehaviour
-{
+#endregion
+
+sealed class PhantomMod : MonoBehaviour {
     internal static PhantomMod? Instance { get; private set; }
-    private bool IsShiftHeld { get; set; } = false;
-    private bool EnabledPossession { get; set; } = false;
-    private int CurrentSpectatorIndex { get; set; } = 0;
+    bool IsShiftHeld { get; set; } = false;
+    bool EnabledPossession { get; set; } = false;
+    int CurrentSpectatorIndex { get; set; } = 0;
 
-    private void Awake()
-    {
-        Instance = this;
+    void Awake() => Instance = this;
+
+    void OnEnable() {
+        InputListener.OnShiftButtonHold += this.HoldShift;
+        InputListener.OnEqualsPress += this.TogglePhantom;
+        InputListener.OnRightArrowKeyPress += this.LookAtNextPlayer;
+        InputListener.OnLeftArrowKeyPress += this.LookAtPreviousPlayer;
     }
 
-    private void OnEnable()
-    {
-        InputListener.OnShiftButtonHold += HoldShift;
-        InputListener.OnEqualsPress += TogglePhantom;
-        InputListener.OnRightArrowKeyPress += LookAtNextPlayer;
-        InputListener.OnLeftArrowKeyPress += LookAtPreviousPlayer;
+    void OnDisable() {
+        InputListener.OnShiftButtonHold -= this.HoldShift;
+        InputListener.OnEqualsPress -= this.TogglePhantom;
+        InputListener.OnRightArrowKeyPress -= this.LookAtNextPlayer;
+        InputListener.OnLeftArrowKeyPress -= this.LookAtPreviousPlayer;
     }
 
-    private void OnDisable()
-    {
-        InputListener.OnShiftButtonHold -= HoldShift;
-        InputListener.OnEqualsPress -= TogglePhantom;
-        InputListener.OnRightArrowKeyPress -= LookAtNextPlayer;
-        InputListener.OnLeftArrowKeyPress -= LookAtPreviousPlayer;
-    }
-
-    private void Update()
-    {
+    void Update() {
         if (PossessionMod.Instance is not PossessionMod possessionMod) return;
         if (Helper.CurrentCamera is not Camera { enabled: true } camera) return;
         if (!camera.gameObject.TryGetComponent(out KeyboardMovement keyboard)) return;
         if (!camera.gameObject.TryGetComponent(out MousePan mouse)) return;
 
-        var isPossessed = possessionMod.IsPossessed;
-        if (!Setting.EnablePhantom)
-        {
-            if (!EnabledPossession) return;
+        bool isPossessed = possessionMod.IsPossessed;
+        if (!Setting.EnablePhantom) {
+            if (!this.EnabledPossession) return;
             possessionMod.Unpossess();
             possessionMod.enabled = false;
-            EnabledPossession = false;
+            this.EnabledPossession = false;
         }
-        else if (!isPossessed)
-        {
+        else if (!isPossessed) {
             // If neither is currently possessed
-            EnabledPossession = false;
+            this.EnabledPossession = false;
             keyboard.enabled = true;
             mouse.enabled = true;
         }
-        else if (!EnabledPossession)
-        {
+        else if (!this.EnabledPossession) {
             // Possessing for the first frame
-            EnabledPossession = true;
+            this.EnabledPossession = true;
             if (possessionMod.IsPossessed)
                 possessionMod.enabled = true;
 
@@ -67,41 +61,29 @@ internal sealed class PhantomMod : MonoBehaviour
     }
 
 
-    private void HoldShift(bool isHeld)
-    {
-        IsShiftHeld = isHeld;
-    }
+    void HoldShift(bool isHeld) => this.IsShiftHeld = isHeld;
 
-    private void LookAtNextPlayer()
-    {
-        LookAtPlayer(1);
-    }
+    void LookAtNextPlayer() => this.LookAtPlayer(1);
 
-    private void LookAtPreviousPlayer()
-    {
-        LookAtPlayer(-1);
-    }
+    void LookAtPreviousPlayer() => this.LookAtPlayer(-1);
 
-    private void LookAtPlayer(int indexChange)
-    {
+    void LookAtPlayer(int indexChange) {
         if (!Setting.EnablePhantom || Helper.CurrentCamera is not Camera camera) return;
         if (!camera.gameObject.TryGetComponent(out KeyboardMovement keyboard)) return;
 
-        var playerCount = Helper.Players?.Length ?? 0;
-        CurrentSpectatorIndex = (CurrentSpectatorIndex + indexChange) % playerCount;
+        int playerCount = Helper.Players?.Length ?? 0;
+        this.CurrentSpectatorIndex = (this.CurrentSpectatorIndex + indexChange) % playerCount;
 
 
-        if (Helper.GetActivePlayer(CurrentSpectatorIndex) is not PlayerControllerB targetPlayer)
-        {
-            LookAtNextPlayer();
+        if (Helper.GetActivePlayer(this.CurrentSpectatorIndex) is not PlayerControllerB targetPlayer) {
+            this.LookAtNextPlayer();
             return;
         }
 
         keyboard.LastPosition = targetPlayer.playerEye.position;
     }
 
-    private void PhantomEnabled(PlayerControllerB player, Camera camera)
-    {
+    void PhantomEnabled(PlayerControllerB player, Camera camera) {
         if (!camera.TryGetComponent(out KeyboardMovement keyboard))
             keyboard = camera.gameObject.AddComponent<KeyboardMovement>();
 
@@ -111,24 +93,19 @@ internal sealed class PhantomMod : MonoBehaviour
         mouse.enabled = true;
     }
 
-    private void PhantomDisabled(PlayerControllerB player, Camera camera)
-    {
+    void PhantomDisabled(PlayerControllerB player, Camera camera) {
         if (player.gameplayCamera is not Camera gameplayCamera) return;
         if (Helper.StartOfRound is not StartOfRound round) return;
         if (HaxCamera.Instance is not HaxCamera haxCamera) return;
         if (haxCamera.HaxCamContainer is not GameObject container) return;
 
-        if (IsShiftHeld) player.TeleportPlayer(container.transform.position);
+        if (this.IsShiftHeld) player.TeleportPlayer(container.transform.position);
         if (PossessionMod.Instance is PossessionMod { IsPossessed: true } possession) possession.Unpossess();
     }
 
-    private void TogglePhantom()
-    {
-        SetPhantom(!Setting.EnablePhantom);
-    }
+    void TogglePhantom() => this.SetPhantom(!Setting.EnablePhantom);
 
-    internal void SetPhantom(bool EnablePhantom)
-    {
+    internal void SetPhantom(bool EnablePhantom) {
         if (Helper.LocalPlayer is not PlayerControllerB player) return;
         if (HaxCamera.Instance is not HaxCamera haxCamera) return;
         if (haxCamera.GetCamera() is not Camera camera) return;
@@ -138,9 +115,9 @@ internal sealed class PhantomMod : MonoBehaviour
         player.thisController.enabled = !Setting.EnablePhantom;
         player.isFreeCamera = Setting.EnablePhantom;
         if (Setting.EnablePhantom)
-            PhantomEnabled(player, camera);
+            this.PhantomEnabled(player, camera);
         else
-            PhantomDisabled(player, camera);
+            this.PhantomDisabled(player, camera);
 
         haxCamera.enabled = Setting.EnablePhantom;
     }

@@ -1,8 +1,11 @@
+#region
+
 using System;
 using UnityEngine;
 
-public class UnityListener : MonoBehaviour
-{
+#endregion
+
+public class UnityListener : MonoBehaviour {
     public Action AwakeAction;
     public Action FixedUpdateAction;
     public Action LateUpdateAction;
@@ -12,43 +15,19 @@ public class UnityListener : MonoBehaviour
     public Action StartAction;
     public Action UpdateAction;
 
-    private void Awake()
-    {
-        AwakeAction?.Invoke();
-    }
+    void Awake() => this.AwakeAction?.Invoke();
 
-    private void Start()
-    {
-        StartAction?.Invoke();
-    }
+    void Start() => this.StartAction?.Invoke();
 
-    private void Update()
-    {
-        UpdateAction?.Invoke();
-    }
+    void Update() => this.UpdateAction?.Invoke();
 
-    private void FixedUpdate()
-    {
-        FixedUpdateAction?.Invoke();
-    }
+    void FixedUpdate() => this.FixedUpdateAction?.Invoke();
 
-    private void LateUpdate()
-    {
-        LateUpdateAction?.Invoke();
-    }
+    void LateUpdate() => this.LateUpdateAction?.Invoke();
 
-    private void OnDestroy()
-    {
-        OnDestroyAction?.Invoke();
-    }
+    void OnDestroy() => this.OnDestroyAction?.Invoke();
 
-    private void OnDisable()
-    {
-        OnDisableAction?.Invoke();
-    }
+    void OnDisable() => this.OnDisableAction?.Invoke();
 
-    private void OnEnable()
-    {
-        OnEnableAction?.Invoke();
-    }
+    void OnEnable() => this.OnEnableAction?.Invoke();
 }

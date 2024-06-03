@@ -1,7 +1,10 @@
+#region
+
 using System;
 
+#endregion
+
 [AttributeUsage(AttributeTargets.Class)]
-internal class HostCommandAttribute(string syntax) : Attribute
-{
+class HostCommandAttribute(string syntax) : Attribute {
     internal string Syntax { get; } = syntax;
 }

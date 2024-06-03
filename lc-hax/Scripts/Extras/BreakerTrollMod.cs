@@ -1,10 +1,13 @@
+#region
+
 using Hax;
 using UnityEngine;
 
-internal sealed class BreakerTrollMod : MonoBehaviour
-{
-    private float Delay = 0.0f;
-    private int lastToggledIndex = -1;
+#endregion
+
+sealed class BreakerTrollMod : MonoBehaviour {
+    float Delay = 0.0f;
+    int lastToggledIndex = -1;
     internal static BreakerTrollMod? Instance { get; private set; }
 
     internal BreakerBox Breaker { get; private set; }
@@ -13,10 +16,8 @@ internal sealed class BreakerTrollMod : MonoBehaviour
 
     internal float TimeBetweenSwitches { get; set; } = 10f;
 
-    internal void Awake()
-    {
-        if (Instance != null)
-        {
+    internal void Awake() {
+        if (Instance != null) {
             Destroy(this);
             return;
         }
@@ -24,41 +25,37 @@ internal sealed class BreakerTrollMod : MonoBehaviour
         Instance = this;
     }
 
-    internal void Start()
-    {
-        if (!gameObject.GetComponent<BreakerBox>())
+    internal void Start() {
+        if (!this.gameObject.GetComponent<BreakerBox>())
             Destroy(this);
-        Breaker = gameObject.GetComponent<BreakerBox>();
-        Switches = Breaker.Get_BreakerBox_Switches();
-        if (Switches.Length == 0)
+        this.Breaker = this.gameObject.GetComponent<BreakerBox>();
+        this.Switches = this.Breaker.Get_BreakerBox_Switches();
+        if (this.Switches.Length == 0)
             Destroy(this);
     }
 
 
-    private void Update()
-    {
-        if (Switches == null || Switches.Length == 0)
+    void Update() {
+        if (this.Switches == null || this.Switches.Length == 0)
             return;
 
 
-        Delay += Time.deltaTime;
+        this.Delay += Time.deltaTime;
 
-        if (Delay >= TimeBetweenSwitches)
-        {
+        if (this.Delay >= this.TimeBetweenSwitches) {
             int randomIndex;
             do
-            {
-                randomIndex = Random.Range(0, Switches.Length);
-            } while (randomIndex == lastToggledIndex);
+                randomIndex = Random.Range(0, this.Switches.Length);
+            while (randomIndex == this.lastToggledIndex);
 
-            var PickedSwitch = Switches[randomIndex];
-            var isOn = PickedSwitch.Get_BreakerBoxSwitch_State();
+            InteractTrigger PickedSwitch = this.Switches[randomIndex];
+            bool isOn = PickedSwitch.Get_BreakerBoxSwitch_State();
             PickedSwitch.Set_BreakerBox_Switch_state(!isOn);
             Helper.SetPowerSwitch(!isOn);
 
 
-            lastToggledIndex = randomIndex;
-            Delay = 0f;
+            this.lastToggledIndex = randomIndex;
+            this.Delay = 0f;
         }
     }
 }

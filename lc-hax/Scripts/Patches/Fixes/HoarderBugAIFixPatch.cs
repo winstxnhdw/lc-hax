@@ -1,14 +1,16 @@
 #pragma warning disable IDE1006
 
+#region
+
 using HarmonyLib;
 using Unity.Netcode;
 
+#endregion
+
 [HarmonyPatch(typeof(HoarderBugAI))]
-internal class HoarderBugAIFixPatch
-{
+class HoarderBugAIFixPatch {
     [HarmonyPatch(nameof(HoarderBugAI.HitEnemy))]
-    private static void Prefix(HoarderBugAI __instance)
-    {
+    static void Prefix(HoarderBugAI __instance) {
         if (!__instance.isEnemyDead) return;
         if (!__instance.heldItem.itemGrabbableObject.TryGetComponent(out NetworkObject networkObject)) return;
 

@@ -1,16 +1,17 @@
+#region
+
 using System.Collections.Generic;
 using System.Reflection.Emit;
 using GameNetcodeStuff;
 using HarmonyLib;
 
+#endregion
+
 [HarmonyPatch(typeof(PlayerControllerB))]
-internal class LookDownPatch
-{
-    private static IEnumerable<CodeInstruction> CalculateLookingInputTranspiler(
-        IEnumerable<CodeInstruction> instructions)
-    {
-        foreach (var instruction in instructions)
-        {
+class LookDownPatch {
+    static IEnumerable<CodeInstruction> CalculateLookingInputTranspiler(
+        IEnumerable<CodeInstruction> instructions) {
+        foreach (CodeInstruction? instruction in instructions) {
             if (instruction.opcode == OpCodes.Ldc_R4 && instruction.operand.Equals(60.0f)) instruction.operand = 90.0f;
 
             yield return instruction;
@@ -19,15 +20,11 @@ internal class LookDownPatch
 
     [HarmonyTranspiler]
     [HarmonyPatch("CalculateSmoothLookingInput")]
-    private static IEnumerable<CodeInstruction> SmoothLookingTranspiler(IEnumerable<CodeInstruction> instructions)
-    {
-        return CalculateLookingInputTranspiler(instructions);
-    }
+    static IEnumerable<CodeInstruction> SmoothLookingTranspiler(IEnumerable<CodeInstruction> instructions) =>
+        CalculateLookingInputTranspiler(instructions);
 
     [HarmonyTranspiler]
     [HarmonyPatch("CalculateNormalLookingInput")]
-    private static IEnumerable<CodeInstruction> NormalLookingTranspiler(IEnumerable<CodeInstruction> instructions)
-    {
-        return CalculateLookingInputTranspiler(instructions);
-    }
+    static IEnumerable<CodeInstruction> NormalLookingTranspiler(IEnumerable<CodeInstruction> instructions) =>
+        CalculateLookingInputTranspiler(instructions);
 }

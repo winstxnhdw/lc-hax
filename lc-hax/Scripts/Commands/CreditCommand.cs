@@ -1,20 +1,20 @@
+#region
+
 using System;
 using Hax;
 
+#endregion
+
 [Command("credit")]
-internal class CreditCommand : ICommand
-{
-    public void Execute(StringArray args)
-    {
+class CreditCommand : ICommand {
+    public void Execute(StringArray args) {
         if (Helper.Terminal is not Terminal terminal) return;
-        if (args.Length is 0)
-        {
+        if (args.Length is 0) {
             Chat.Print("Usage: credit <amount>");
             return;
         }
 
-        if (!int.TryParse(args[0], out var amount))
-        {
+        if (!int.TryParse(args[0], out int amount)) {
             Chat.Print("Invalid amount!");
             return;
         }

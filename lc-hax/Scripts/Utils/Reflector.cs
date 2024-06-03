@@ -1,190 +1,140 @@
+#region
+
 using System;
 using System.Collections.Generic;
 using System.Reflection;
 
-internal class Reflector<R>
-{
-    private const BindingFlags PrivateOrInternal = BindingFlags.NonPublic | BindingFlags.Instance;
-    private const BindingFlags InternalStatic = BindingFlags.NonPublic | BindingFlags.Static;
-    private const BindingFlags InternalField = PrivateOrInternal | BindingFlags.GetField;
-    private const BindingFlags InternalProperty = PrivateOrInternal | BindingFlags.GetProperty;
-    private const BindingFlags InternalMethod = PrivateOrInternal | BindingFlags.InvokeMethod;
-    private const BindingFlags InternalStaticField = InternalStatic | BindingFlags.GetField;
-    private const BindingFlags InternalStaticProperty = InternalStatic | BindingFlags.GetProperty;
-    private const BindingFlags InternalStaticMethod = InternalStatic | BindingFlags.InvokeMethod;
+#endregion
 
-    internal Reflector(R obj)
-    {
-        Object = obj;
-        ObjectType = typeof(R);
+class Reflector<R> {
+    const BindingFlags PrivateOrInternal = BindingFlags.NonPublic | BindingFlags.Instance;
+    const BindingFlags InternalStatic = BindingFlags.NonPublic | BindingFlags.Static;
+    const BindingFlags InternalField = PrivateOrInternal | BindingFlags.GetField;
+    const BindingFlags InternalProperty = PrivateOrInternal | BindingFlags.GetProperty;
+    const BindingFlags InternalMethod = PrivateOrInternal | BindingFlags.InvokeMethod;
+    const BindingFlags InternalStaticField = InternalStatic | BindingFlags.GetField;
+    const BindingFlags InternalStaticProperty = InternalStatic | BindingFlags.GetProperty;
+    const BindingFlags InternalStaticMethod = InternalStatic | BindingFlags.InvokeMethod;
+
+    internal Reflector(R obj) {
+        this.Object = obj;
+        this.ObjectType = typeof(R);
     }
 
-    private R Object { get; }
-    private Type ObjectType { get; }
+    R Object { get; }
+    Type ObjectType { get; }
 
-    private Dictionary<string, MemberInfo> Cache { get; } = [];
+    Dictionary<string, MemberInfo> Cache { get; } = [];
 
-    private FieldInfo CachedField(string variableName, BindingFlags flags)
-    {
-        if (!Cache.TryGetValue(variableName, out var field))
-            Cache[variableName] = field = ObjectType.GetField(variableName, flags);
+    FieldInfo CachedField(string variableName, BindingFlags flags) {
+        if (!this.Cache.TryGetValue(variableName, out MemberInfo? field))
+            this.Cache[variableName] = field = this.ObjectType.GetField(variableName, flags);
 
         return (FieldInfo)field;
     }
 
-    private PropertyInfo CachedProperty(string propertyName, BindingFlags flags)
-    {
-        if (!Cache.TryGetValue(propertyName, out var property))
-            Cache[propertyName] = property = ObjectType.GetProperty(propertyName, flags);
+    PropertyInfo CachedProperty(string propertyName, BindingFlags flags) {
+        if (!this.Cache.TryGetValue(propertyName, out MemberInfo? property))
+            this.Cache[propertyName] = property = this.ObjectType.GetProperty(propertyName, flags);
 
         return (PropertyInfo)property;
     }
 
-    private MethodInfo CachedMethod(string methodName, BindingFlags flags)
-    {
-        if (!Cache.TryGetValue(methodName, out var method))
-            Cache[methodName] = method = ObjectType.GetMethod(methodName, flags);
+    MethodInfo CachedMethod(string methodName, BindingFlags flags) {
+        if (!this.Cache.TryGetValue(methodName, out MemberInfo? method))
+            this.Cache[methodName] = method = this.ObjectType.GetMethod(methodName, flags);
 
         return (MethodInfo)method;
     }
 
-    private T? GetField<T>(string variableName, BindingFlags flags)
-    {
-        try
-        {
-            return (T)CachedField(variableName, flags).GetValue(Object);
+    T? GetField<T>(string variableName, BindingFlags flags) {
+        try {
+            return (T)this.CachedField(variableName, flags).GetValue(this.Object);
         }
 
-        catch (InvalidCastException)
-        {
+        catch (InvalidCastException) {
             return default;
         }
     }
 
-    private T? GetProperty<T>(string propertyName, BindingFlags flags)
-    {
-        try
-        {
-            return (T)CachedProperty(propertyName, flags).GetValue(Object);
+    T? GetProperty<T>(string propertyName, BindingFlags flags) {
+        try {
+            return (T)this.CachedProperty(propertyName, flags).GetValue(this.Object);
         }
 
-        catch (InvalidCastException)
-        {
+        catch (InvalidCastException) {
             return default;
         }
     }
 
-    private Reflector<R>? SetField(string variableName, object value, BindingFlags flags)
-    {
-        try
-        {
-            CachedField(variableName, flags).SetValue(Object, value);
+    Reflector<R>? SetField(string variableName, object value, BindingFlags flags) {
+        try {
+            this.CachedField(variableName, flags).SetValue(this.Object, value);
             return this;
         }
 
-        catch (Exception)
-        {
+        catch (Exception) {
             return null;
         }
     }
 
-    private Reflector<R>? SetProperty(string propertyName, object value, BindingFlags flags)
-    {
-        try
-        {
-            CachedProperty(propertyName, flags).SetValue(Object, value);
+    Reflector<R>? SetProperty(string propertyName, object value, BindingFlags flags) {
+        try {
+            this.CachedProperty(propertyName, flags).SetValue(this.Object, value);
             return this;
         }
 
-        catch (Exception)
-        {
+        catch (Exception) {
             return null;
         }
     }
 
-    private T? InvokeMethod<T>(string methodName, BindingFlags flags, params object[] args)
-    {
-        try
-        {
-            return (T)CachedMethod(methodName, flags).Invoke(Object, args);
+    T? InvokeMethod<T>(string methodName, BindingFlags flags, params object[] args) {
+        try {
+            return (T)this.CachedMethod(methodName, flags).Invoke(this.Object, args);
         }
 
-        catch (InvalidCastException)
-        {
+        catch (InvalidCastException) {
             return default;
         }
     }
 
-    internal T? GetInternalField<T>(string variableName)
-    {
-        return GetField<T>(variableName, InternalField);
-    }
+    internal T? GetInternalField<T>(string variableName) => this.GetField<T>(variableName, InternalField);
 
-    internal T? GetInternalStaticField<T>(string variableName)
-    {
-        return GetField<T>(variableName, InternalStaticField);
-    }
+    internal T? GetInternalStaticField<T>(string variableName) => this.GetField<T>(variableName, InternalStaticField);
 
-    internal T? GetInternalProperty<T>(string propertyName)
-    {
-        return GetProperty<T>(propertyName, InternalProperty);
-    }
+    internal T? GetInternalProperty<T>(string propertyName) => this.GetProperty<T>(propertyName, InternalProperty);
 
-    internal T? InvokeInternalMethod<T>(string methodName, params object[] args)
-    {
-        return InvokeMethod<T>(methodName, InternalMethod, args);
-    }
+    internal T? InvokeInternalMethod<T>(string methodName, params object[] args) =>
+        this.InvokeMethod<T>(methodName, InternalMethod, args);
 
-    internal T? InvokeInternalStaticMethod<T>(string methodName, params object[] args)
-    {
-        return InvokeMethod<T>(methodName, InternalStaticMethod, args);
-    }
+    internal T? InvokeInternalStaticMethod<T>(string methodName, params object[] args) =>
+        this.InvokeMethod<T>(methodName, InternalStaticMethod, args);
 
-    internal Reflector<R>? SetInternalField(string variableName, object value)
-    {
-        return SetField(variableName, value, InternalField);
-    }
+    internal Reflector<R>? SetInternalField(string variableName, object value) =>
+        this.SetField(variableName, value, InternalField);
 
-    internal Reflector<R>? SetInternalStaticField(string variableName, object value)
-    {
-        return SetField(variableName, value, InternalStaticField);
-    }
+    internal Reflector<R>? SetInternalStaticField(string variableName, object value) =>
+        this.SetField(variableName, value, InternalStaticField);
 
-    internal Reflector<R>? SetInternalProperty(string propertyName, object value)
-    {
-        return SetProperty(propertyName, value, InternalProperty);
-    }
+    internal Reflector<R>? SetInternalProperty(string propertyName, object value) =>
+        this.SetProperty(propertyName, value, InternalProperty);
 
-    internal Reflector<R>? GetInternalField(string variableName)
-    {
-        return GetInternalField<R>(variableName)?.Reflect();
-    }
+    internal Reflector<R>? GetInternalField(string variableName) => this.GetInternalField<R>(variableName)?.Reflect();
 
-    internal Reflector<R>? GetInternalStaticField(string variableName)
-    {
-        return GetInternalStaticField<R>(variableName)?.Reflect();
-    }
+    internal Reflector<R>? GetInternalStaticField(string variableName) =>
+        this.GetInternalStaticField<R>(variableName)?.Reflect();
 
-    internal Reflector<R>? GetInternalProperty(string propertyName)
-    {
-        return GetInternalProperty<R>(propertyName)?.Reflect();
-    }
+    internal Reflector<R>? GetInternalProperty(string propertyName) =>
+        this.GetInternalProperty<R>(propertyName)?.Reflect();
 
-    internal Reflector<R>? InvokeInternalMethod(string methodName, params object[] args)
-    {
-        return InvokeInternalMethod<R>(methodName, args)?.Reflect();
-    }
+    internal Reflector<R>? InvokeInternalMethod(string methodName, params object[] args) =>
+        this.InvokeInternalMethod<R>(methodName, args)?.Reflect();
 
-    internal Reflector<R>? InvokeInternalStaticMethod(string methodName, params object[] args)
-    {
-        return InvokeInternalStaticMethod<R>(methodName, args)?.Reflect();
-    }
+    internal Reflector<R>? InvokeInternalStaticMethod(string methodName, params object[] args) =>
+        this.InvokeInternalStaticMethod<R>(methodName, args)?.Reflect();
 }
 
-internal static class ReflectorExtensions
-{
-    internal static Reflector<R> Reflect<R>(this R obj)
-    {
-        return new Reflector<R>(obj);
-    }
+static class ReflectorExtensions {
+    internal static Reflector<R> Reflect<R>(this R obj) => new(obj);
 }

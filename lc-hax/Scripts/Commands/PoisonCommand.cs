@@ -1,13 +1,14 @@
+#region
+
 using GameNetcodeStuff;
 using Hax;
 
+#endregion
+
 [Command("poison")]
-internal class PoisonCommand : ICommand
-{
-    public void Execute(StringArray args)
-    {
-        if (args.Length < 4)
-        {
+class PoisonCommand : ICommand {
+    public void Execute(StringArray args) {
+        if (args.Length < 4) {
             Chat.Print("Usages:",
                 "poison <player> <damage> <duration> <delay=1>",
                 "poison --all <damage> <duration> <delay=1>"
@@ -16,38 +17,33 @@ internal class PoisonCommand : ICommand
             return;
         }
 
-        if (!int.TryParse(args[1], out var damage))
-        {
+        if (!int.TryParse(args[1], out int damage)) {
             Chat.Print("Invalid damage!");
             return;
         }
 
-        if (!ulong.TryParse(args[2], out var duration))
-        {
+        if (!ulong.TryParse(args[2], out ulong duration)) {
             Chat.Print("Invalid duration!");
             return;
         }
 
-        if (!args[3].TryParse(1, out ulong delay))
-        {
+        if (!args[3].TryParse(1, out ulong delay)) {
             Chat.Print("Invalid delay!");
             return;
         }
 
         if (args[0] is "--all")
-            Helper.ActivePlayers.ForEach(player => PoisonPlayer(player, damage, delay, duration));
+            Helper.ActivePlayers.ForEach(player => this.PoisonPlayer(player, damage, delay, duration));
 
         else if (Helper.GetActivePlayer(args[0]) is PlayerControllerB player)
-            PoisonPlayer(player, damage, delay, duration);
+            this.PoisonPlayer(player, damage, delay, duration);
 
         else
             Chat.Print("Target player is not alive or found!");
     }
 
-    private void PoisonPlayer(PlayerControllerB player, int damage, ulong delay, ulong duration)
-    {
+    void PoisonPlayer(PlayerControllerB player, int damage, ulong delay, ulong duration) =>
         Helper.CreateComponent<TransientBehaviour>()
             .Init(_ => player.DamagePlayerRpc(damage), duration, delay)
             .Unless(() => player.playersManager.inShipPhase);
-    }
 }

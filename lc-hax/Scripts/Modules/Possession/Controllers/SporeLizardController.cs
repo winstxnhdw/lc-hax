@@ -1,48 +1,35 @@
+#region
+
 using Hax;
 
-public enum SporeLizardState
-{
+#endregion
+
+public enum SporeLizardState {
     IDLE,
     ALERTED,
     HOSTILE
 }
 
-internal class SporeLizardController : IEnemyController<PufferAI>
-{
-    public void UsePrimarySkill(PufferAI enemy)
-    {
+class SporeLizardController : IEnemyController<PufferAI> {
+    public void UsePrimarySkill(PufferAI enemy) {
         enemy.SetBehaviourState(SporeLizardState.HOSTILE);
         enemy.StompServerRpc();
     }
 
-    public void UseSecondarySkill(PufferAI enemy)
-    {
+    public void UseSecondarySkill(PufferAI enemy) {
         enemy.SetBehaviourState(SporeLizardState.HOSTILE);
         enemy.ShakeTailServerRpc();
     }
 
-    public string GetPrimarySkillName(PufferAI _)
-    {
-        return "Stomp";
-    }
+    public string GetPrimarySkillName(PufferAI _) => "Stomp";
 
-    public string GetSecondarySkillName(PufferAI _)
-    {
-        return "Smoke";
-    }
+    public string GetSecondarySkillName(PufferAI _) => "Smoke";
 
-    public void OnOutsideStatusChange(PufferAI enemy)
-    {
-        enemy.StopSearch(enemy.roamMap, true);
-    }
+    public void OnOutsideStatusChange(PufferAI enemy) => enemy.StopSearch(enemy.roamMap, true);
 
-    private float GetTimeSinceHittingPlayer(PufferAI enemy)
-    {
-        return enemy.Reflect().GetInternalField<float>("timeSinceHittingPlayer");
-    }
+    float GetTimeSinceHittingPlayer(PufferAI enemy) =>
+        enemy.Reflect().GetInternalField<float>("timeSinceHittingPlayer");
 
-    private void SetTimeSinceHittingPlayer(PufferAI enemy, float value)
-    {
+    void SetTimeSinceHittingPlayer(PufferAI enemy, float value) =>
         enemy.Reflect().SetInternalField("timeSinceHittingPlayer", value);
-    }
 }

@@ -1,3 +1,5 @@
+#region
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -6,9 +8,10 @@ using GameNetcodeStuff;
 using Hax;
 using UnityEngine.EventSystems;
 
-internal static class Chat
-{
-    private static Dictionary<string, ICommand> Commands { get; } =
+#endregion
+
+static class Chat {
+    static Dictionary<string, ICommand> Commands { get; } =
         Assembly
             .GetExecutingAssembly()
             .GetTypes()
@@ -19,7 +22,7 @@ internal static class Chat
                 type => (ICommand)Activator.CreateInstance(type)
             );
 
-    private static Dictionary<string, ICommand> DebugCommands { get; } =
+    static Dictionary<string, ICommand> DebugCommands { get; } =
         Assembly
             .GetExecutingAssembly()
             .GetTypes()
@@ -30,7 +33,7 @@ internal static class Chat
                 type => (ICommand)new DebugCommand((ICommand)Activator.CreateInstance(type))
             );
 
-    private static Dictionary<string, ICommand> PrivilegeCommands { get; } =
+    static Dictionary<string, ICommand> PrivilegeCommands { get; } =
         Assembly
             .GetExecutingAssembly()
             .GetTypes()
@@ -43,20 +46,16 @@ internal static class Chat
 
     internal static event Action<string>? OnExecuteCommandAttempt;
 
-    internal static void Clear()
-    {
+    internal static void Clear() =>
         Helper.HUDManager?.AddTextToChatOnServer(
             $"</color>\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n<color=#FFFFFF00>"
         );
-    }
 
-    internal static void Print(string name, string? message, bool isSystem = false)
-    {
+    internal static void Print(string name, string? message, bool isSystem = false) {
         if (string.IsNullOrWhiteSpace(message) || Helper.HUDManager is not HUDManager hudManager) return;
         _ = hudManager.Reflect().InvokeInternalMethod("AddChatMessage", message, name);
 
-        if (!isSystem && hudManager.localPlayer.isTypingChat)
-        {
+        if (!isSystem && hudManager.localPlayer.isTypingChat) {
             hudManager.localPlayer.isTypingChat = false;
             hudManager.typingIndicator.enabled = false;
             hudManager.chatTextField.text = "";
@@ -65,29 +64,21 @@ internal static class Chat
         }
     }
 
-    internal static void Print(string? message)
-    {
-        Print("SYSTEM", message, true);
-    }
+    internal static void Print(string? message) => Print("SYSTEM", message, true);
 
-    internal static void Print(string? message, params string[] args)
-    {
-        Print($"{message}\n{string.Join('\n', args)}");
-    }
+    internal static void Print(string? message, params string[] args) => Print($"{message}\n{string.Join('\n', args)}");
 
-    internal static void ExecuteCommand(string commandString)
-    {
+    internal static void ExecuteCommand(string commandString) {
         Print("USER", commandString);
         OnExecuteCommandAttempt?.Invoke(commandString);
         StringArray args = commandString[1..].Split(' ');
 
-        var command =
+        ICommand? command =
             Commands.GetValue(args[0]) ??
             PrivilegeCommands.GetValue(args[0]) ??
             DebugCommands.GetValue(args[0]);
 
-        if (command is null)
-        {
+        if (command is null) {
             Print("The command is not found!");
             return;
         }
@@ -96,17 +87,16 @@ internal static class Chat
     }
 
 
-    public static void Announce(string announcement, bool keepHistory = false)
-    {
+    public static void Announce(string announcement, bool keepHistory = false) {
         if (Helper.LocalPlayer is not PlayerControllerB player) return;
         if (Helper.HUDManager is not HUDManager hudManager) return;
 
-        var actualHistory = string.Join('\n', hudManager.ChatMessageHistory.Where(message =>
+        string? actualHistory = string.Join('\n', hudManager.ChatMessageHistory.Where(message =>
             !message.StartsWith("<color=#FF0000>USER</color>: <color=#FFFF00>'") &&
             !message.StartsWith("<color=#FF0000>SYSTEM</color>: <color=#FFFF00>'")
         ));
 
-        var chatText = keepHistory ? $"{actualHistory}\n<color=#7069ff>{announcement}</color>" : announcement;
+        string chatText = keepHistory ? $"{actualHistory}\n<color=#7069ff>{announcement}</color>" : announcement;
 
         hudManager.AddTextToChatOnServer(
             $"</color>\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n{chatText}<color=#FFFFFF00>",

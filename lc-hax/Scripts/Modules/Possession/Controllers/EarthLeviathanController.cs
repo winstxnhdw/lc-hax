@@ -1,57 +1,32 @@
+#region
+
 using UnityEngine;
 
-internal class EarthLeviathanController : IEnemyController<SandWormAI>
-{
-    private Vector3 CamOffset { get; } = new(0, 8f, -13f);
+#endregion
 
-    public Vector3 GetCameraOffset(SandWormAI _)
-    {
-        return CamOffset;
-    }
+class EarthLeviathanController : IEnemyController<SandWormAI> {
+    Vector3 CamOffset { get; } = new(0, 8f, -13f);
 
-    public void UseSecondarySkill(SandWormAI enemy)
-    {
-        if (IsEmerged(enemy)) return;
+    public Vector3 GetCameraOffset(SandWormAI _) => this.CamOffset;
+
+    public void UseSecondarySkill(SandWormAI enemy) {
+        if (this.IsEmerged(enemy)) return;
         enemy.StartEmergeAnimation();
     }
 
-    public bool IsAbleToMove(SandWormAI enemy)
-    {
-        return !enemy.inSpecialAnimation;
-    }
+    public bool IsAbleToMove(SandWormAI enemy) => !enemy.inSpecialAnimation;
 
-    public bool IsAbleToRotate(SandWormAI enemy)
-    {
-        return !enemy.inSpecialAnimation;
-    }
+    public bool IsAbleToRotate(SandWormAI enemy) => !enemy.inSpecialAnimation;
 
-    public string GetSecondarySkillName(SandWormAI _)
-    {
-        return "Emerge";
-    }
+    public string GetSecondarySkillName(SandWormAI _) => "Emerge";
 
-    public bool CanUseEntranceDoors(SandWormAI _)
-    {
-        return false;
-    }
+    public bool CanUseEntranceDoors(SandWormAI _) => false;
 
-    public float InteractRange(SandWormAI _)
-    {
-        return 0.0f;
-    }
+    public float InteractRange(SandWormAI _) => 0.0f;
 
-    public bool SyncAnimationSpeedEnabled(SandWormAI _)
-    {
-        return false;
-    }
+    public bool SyncAnimationSpeedEnabled(SandWormAI _) => false;
 
-    public void OnOutsideStatusChange(SandWormAI enemy)
-    {
-        enemy.StopSearch(enemy.roamMap, true);
-    }
+    public void OnOutsideStatusChange(SandWormAI enemy) => enemy.StopSearch(enemy.roamMap, true);
 
-    private bool IsEmerged(SandWormAI enemy)
-    {
-        return enemy.inEmergingState || enemy.emerged;
-    }
+    bool IsEmerged(SandWormAI enemy) => enemy.inEmergingState || enemy.emerged;
 }

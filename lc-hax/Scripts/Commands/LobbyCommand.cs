@@ -1,10 +1,12 @@
+#region
+
 using UnityEngine;
 
+#endregion
+
 [Command("lobby")]
-internal class LobbyCommand : ICommand
-{
-    public void Execute(StringArray _)
-    {
+class LobbyCommand : ICommand {
+    public void Execute(StringArray _) {
         if (State.ConnectedLobby is not ConnectedLobby connectedLobby) return;
 
         GUIUtility.systemCopyBuffer = connectedLobby.Lobby.Owner.Id.ToString();

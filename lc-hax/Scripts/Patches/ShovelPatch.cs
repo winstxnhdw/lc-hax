@@ -1,12 +1,12 @@
 #pragma warning disable IDE1006
 
+#region
+
 using HarmonyLib;
 
+#endregion
+
 [HarmonyPatch(typeof(Shovel), nameof(Shovel.HitShovel))]
-internal class ShovelPatch
-{
-    private static void Prefix(Shovel __instance)
-    {
-        __instance.shovelHitForce = State.ShovelHitForce;
-    }
+class ShovelPatch {
+    static void Prefix(Shovel __instance) => __instance.shovelHitForce = State.ShovelHitForce;
 }

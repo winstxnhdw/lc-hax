@@ -1,13 +1,13 @@
 #pragma warning disable IDE1006
 
+#region
+
 using GameNetcodeStuff;
 using HarmonyLib;
 
+#endregion
+
 [HarmonyPatch(typeof(PlayerControllerB), nameof(PlayerControllerB.DropAllHeldItems))]
-internal class TeleportWithItemsPatch
-{
-    private static bool Prefix(PlayerControllerB __instance)
-    {
-        return __instance.shipTeleporterId is not -1 or 1;
-    }
+class TeleportWithItemsPatch {
+    static bool Prefix(PlayerControllerB __instance) => __instance.shipTeleporterId is not -1 or 1;
 }

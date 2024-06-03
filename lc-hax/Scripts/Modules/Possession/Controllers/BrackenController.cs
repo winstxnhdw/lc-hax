@@ -1,75 +1,55 @@
+#region
+
 using Hax;
 using UnityEngine;
 
-internal enum BrackenState
-{
+#endregion
+
+enum BrackenState {
     SCOUTING,
     STAND,
     ANGER
 }
 
-internal class BrackenController : IEnemyController<FlowermanAI>
-{
+class BrackenController : IEnemyController<FlowermanAI> {
     public Vector3 CamOffsets = new(0, 2f, -3f);
     public float transitionSpeed = 0f;
 
-    public Vector3 GetCameraOffset(FlowermanAI enemy)
-    {
+    public Vector3 GetCameraOffset(FlowermanAI enemy) {
         float targetCamOffsetY, targetCamOffsetZ;
 
-        if (enemy.IsBehaviourState(BrackenState.SCOUTING))
-        {
-            transitionSpeed = 4.0f;
+        if (enemy.IsBehaviourState(BrackenState.SCOUTING)) {
+            this.transitionSpeed = 4.0f;
             targetCamOffsetY = 2f;
             targetCamOffsetZ = -3f;
         }
-        else
-        {
-            transitionSpeed = 4.0f;
+        else {
+            this.transitionSpeed = 4.0f;
             targetCamOffsetY = 2.6f;
             targetCamOffsetZ = -3.2f;
         }
 
-        CamOffsets.y = Mathf.Lerp(CamOffsets.y, targetCamOffsetY, Time.deltaTime * transitionSpeed);
-        CamOffsets.z = Mathf.Lerp(CamOffsets.z, targetCamOffsetZ, Time.deltaTime * transitionSpeed);
+        this.CamOffsets.y = Mathf.Lerp(this.CamOffsets.y, targetCamOffsetY, Time.deltaTime * this.transitionSpeed);
+        this.CamOffsets.z = Mathf.Lerp(this.CamOffsets.z, targetCamOffsetZ, Time.deltaTime * this.transitionSpeed);
 
-        return CamOffsets;
+        return this.CamOffsets;
     }
 
-    public void UsePrimarySkill(FlowermanAI enemy)
-    {
+    public void UsePrimarySkill(FlowermanAI enemy) {
         if (!enemy.carryingPlayerBody) enemy.SetBehaviourState(BrackenState.ANGER);
 
         enemy.DropPlayerBodyServerRpc();
     }
 
-    public void UseSecondarySkill(FlowermanAI enemy)
-    {
-        enemy.SetBehaviourState(BrackenState.STAND);
-    }
+    public void UseSecondarySkill(FlowermanAI enemy) => enemy.SetBehaviourState(BrackenState.STAND);
 
-    public void ReleaseSecondarySkill(FlowermanAI enemy)
-    {
-        enemy.SetBehaviourState(BrackenState.SCOUTING);
-    }
+    public void ReleaseSecondarySkill(FlowermanAI enemy) => enemy.SetBehaviourState(BrackenState.SCOUTING);
 
-    public bool IsAbleToMove(FlowermanAI enemy)
-    {
-        return !enemy.inSpecialAnimation;
-    }
+    public bool IsAbleToMove(FlowermanAI enemy) => !enemy.inSpecialAnimation;
 
-    public string GetPrimarySkillName(FlowermanAI enemy)
-    {
-        return enemy.carryingPlayerBody ? "Drop body" : "";
-    }
+    public string GetPrimarySkillName(FlowermanAI enemy) => enemy.carryingPlayerBody ? "Drop body" : "";
 
-    public string GetSecondarySkillName(FlowermanAI _)
-    {
-        return "Stand";
-    }
+    public string GetSecondarySkillName(FlowermanAI _) => "Stand";
 
-    public bool SyncAnimationSpeedEnabled(FlowermanAI _)
-    {
-        return false;
-    }
+    public bool SyncAnimationSpeedEnabled(FlowermanAI _) => false;
 }

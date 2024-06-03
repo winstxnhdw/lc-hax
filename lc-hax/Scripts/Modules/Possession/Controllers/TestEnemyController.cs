@@ -1,18 +1,15 @@
+#region
+
 using UnityEngine;
 
-internal class TestEnemyController : IEnemyController<TestEnemy>
-{
-    private readonly Vector3 camOffset = new(0, 2f, -4.5f);
+#endregion
 
-    private readonly Vector3 enemyPositionOffset = new(0, 1.5f, 0);
+class TestEnemyController : IEnemyController<TestEnemy> {
+    readonly Vector3 camOffset = new(0, 2f, -4.5f);
 
-    public Vector3 GetCameraOffset(TestEnemy enemy)
-    {
-        return camOffset;
-    }
+    readonly Vector3 enemyPositionOffset = new(0, 1.5f, 0);
 
-    public Vector3 GetEnemyPositionOffset(TestEnemy enemy)
-    {
-        return enemyPositionOffset;
-    }
+    public Vector3 GetCameraOffset(TestEnemy enemy) => this.camOffset;
+
+    public Vector3 GetEnemyPositionOffset(TestEnemy enemy) => this.enemyPositionOffset;
 }

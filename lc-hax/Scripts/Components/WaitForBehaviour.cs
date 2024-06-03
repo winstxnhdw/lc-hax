@@ -1,57 +1,53 @@
+#region
+
 using System;
 using System.Collections;
 using UnityEngine;
 
-internal class WaitForBehaviour : MonoBehaviour
-{
-    private Action? Action { get; set; }
-    private Func<float, bool>? TimerPredicate { get; set; }
-    private Func<bool>? Predicate { get; set; }
+#endregion
 
-    internal void Init(Action action)
-    {
-        Action = action;
-        _ = Predicate is null
-            ? StartCoroutine(WaitForTimerPredicateCoroutine())
-            : StartCoroutine(WaitForPredicateCoroutine());
+class WaitForBehaviour : MonoBehaviour {
+    Action? Action { get; set; }
+    Func<float, bool>? TimerPredicate { get; set; }
+    Func<bool>? Predicate { get; set; }
+
+    internal void Init(Action action) {
+        this.Action = action;
+        _ = this.Predicate is null
+            ? this.StartCoroutine(this.WaitForTimerPredicateCoroutine())
+            : this.StartCoroutine(this.WaitForPredicateCoroutine());
     }
 
-    internal WaitForBehaviour SetPredicate(Func<float, bool> predicate)
-    {
-        TimerPredicate = predicate;
+    internal WaitForBehaviour SetPredicate(Func<float, bool> predicate) {
+        this.TimerPredicate = predicate;
         return this;
     }
 
-    internal WaitForBehaviour SetPredicate(Func<bool> predicate)
-    {
-        Predicate = predicate;
+    internal WaitForBehaviour SetPredicate(Func<bool> predicate) {
+        this.Predicate = predicate;
         return this;
     }
 
-    private IEnumerator WaitForPredicateCoroutine()
-    {
-        yield return new WaitUntil(Predicate);
-        Finalise();
+    IEnumerator WaitForPredicateCoroutine() {
+        yield return new WaitUntil(this.Predicate);
+        this.Finalise();
     }
 
-    private IEnumerator WaitForTimerPredicateCoroutine()
-    {
+    IEnumerator WaitForTimerPredicateCoroutine() {
         WaitForEndOfFrame waitForEndOfFrame = new();
-        var timer = 0.0f;
+        float timer = 0.0f;
 
-        while (true)
-        {
-            if (TimerPredicate?.Invoke(timer) is not false) break;
+        while (true) {
+            if (this.TimerPredicate?.Invoke(timer) is not false) break;
             timer += Time.deltaTime;
             yield return waitForEndOfFrame;
         }
 
-        Finalise();
+        this.Finalise();
     }
 
-    private void Finalise()
-    {
-        Action?.Invoke();
-        Destroy(gameObject);
+    void Finalise() {
+        this.Action?.Invoke();
+        Destroy(this.gameObject);
     }
 }

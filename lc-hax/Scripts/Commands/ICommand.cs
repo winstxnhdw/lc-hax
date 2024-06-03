@@ -1,4 +1,3 @@
-internal interface ICommand
-{
+interface ICommand {
     void Execute(StringArray args);
 }

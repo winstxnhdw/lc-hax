@@ -1,13 +1,13 @@
+#region
+
 using System;
 using HarmonyLib;
 
+#endregion
+
 [HarmonyPatch(typeof(ItemDropship), "OpenShipClientRpc")]
-internal class DropShipDependencyPatch
-{
+class DropShipDependencyPatch {
     internal static event Action? OnDropShipDoorOpen;
 
-    private static void Postfix()
-    {
-        OnDropShipDoorOpen?.Invoke();
-    }
+    static void Postfix() => OnDropShipDoorOpen?.Invoke();
 }

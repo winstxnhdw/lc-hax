@@ -1,17 +1,18 @@
+#region
+
 using Hax;
+using UnityEngine;
+
+#endregion
 
 [Command("upright")]
-internal class UprightCommand : ICommand
-{
-    public void Execute(StringArray _)
-    {
+class UprightCommand : ICommand {
+    public void Execute(StringArray _) =>
         Helper.FindObjects<PlaceableShipObject>()
-            .ForEach(SetObjectUpright);
-    }
+            .ForEach(this.SetObjectUpright);
 
-    private void SetObjectUpright(PlaceableShipObject shipObject)
-    {
-        var uprightRotation = shipObject.transform.eulerAngles;
+    void SetObjectUpright(PlaceableShipObject shipObject) {
+        Vector3 uprightRotation = shipObject.transform.eulerAngles;
 
         if (uprightRotation.x == -90.0f) return;
 

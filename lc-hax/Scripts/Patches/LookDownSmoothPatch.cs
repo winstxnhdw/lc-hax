@@ -1,20 +1,20 @@
+#region
+
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection.Emit;
 using GameNetcodeStuff;
 using HarmonyLib;
 
-[HarmonyPatch]
-internal class LookDownSmoothPatch
-{
-    [HarmonyPatch(typeof(PlayerControllerB), "CalculateSmoothLookingInput")]
-    private static IEnumerable<CodeInstruction> Transpiler(IEnumerable<CodeInstruction> instructions)
-    {
-        return instructions.Select(AdjustInstruction);
-    }
+#endregion
 
-    private static CodeInstruction AdjustInstruction(CodeInstruction instruction)
-    {
+[HarmonyPatch]
+class LookDownSmoothPatch {
+    [HarmonyPatch(typeof(PlayerControllerB), "CalculateSmoothLookingInput")]
+    static IEnumerable<CodeInstruction> Transpiler(IEnumerable<CodeInstruction> instructions) =>
+        instructions.Select(AdjustInstruction);
+
+    static CodeInstruction AdjustInstruction(CodeInstruction instruction) {
         if (instruction.opcode == OpCodes.Ldc_R4 && (float)instruction.operand == 60f) instruction.operand = 90f;
 
         return instruction;
@@ -22,16 +22,12 @@ internal class LookDownSmoothPatch
 }
 
 [HarmonyPatch]
-internal class LookDownNormalPatch
-{
+class LookDownNormalPatch {
     [HarmonyPatch(typeof(PlayerControllerB), "CalculateNormalLookingInput")]
-    private static IEnumerable<CodeInstruction> Transpiler(IEnumerable<CodeInstruction> instructions)
-    {
-        return instructions.Select(AdjustInstruction);
-    }
+    static IEnumerable<CodeInstruction> Transpiler(IEnumerable<CodeInstruction> instructions) =>
+        instructions.Select(AdjustInstruction);
 
-    private static CodeInstruction AdjustInstruction(CodeInstruction instruction)
-    {
+    static CodeInstruction AdjustInstruction(CodeInstruction instruction) {
         if (instruction.opcode == OpCodes.Ldc_R4 && (float)instruction.operand == 60f) instruction.operand = 90f;
 
         return instruction;

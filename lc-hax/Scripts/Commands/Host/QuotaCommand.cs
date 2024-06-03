@@ -1,25 +1,24 @@
+#region
+
 using Hax;
 
+#endregion
+
 [HostCommand("quota")]
-internal class QuotaCommand : ICommand
-{
-    public void Execute(StringArray args)
-    {
+class QuotaCommand : ICommand {
+    public void Execute(StringArray args) {
         if (Helper.TimeOfDay is not TimeOfDay timeOfDay) return;
-        if (args.Length < 1)
-        {
+        if (args.Length < 1) {
             Chat.Print("Usage: quota <amount> <fulfilled?>");
             return;
         }
 
-        if (!ushort.TryParse(args[0], out var amount))
-        {
+        if (!ushort.TryParse(args[0], out ushort amount)) {
             Chat.Print("Invalid amount!");
             return;
         }
 
-        if (!args[1].TryParse(0, out var fulfilled))
-        {
+        if (!args[1].TryParse(0, out ushort fulfilled)) {
             Chat.Print("Invalid fulfilled amount!");
             return;
         }

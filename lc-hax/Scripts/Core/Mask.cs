@@ -1,8 +1,11 @@
+#region
+
 using System.Collections.Generic;
 using UnityEngine;
 
-public static class Mask
-{
+#endregion
+
+public static class Mask {
     public static readonly LayerMask Default = LayerMask.GetMask("Default");
     public static readonly LayerMask TransparentFX = LayerMask.GetMask("TransparentFX");
     public static readonly LayerMask IgnoreRaycast = LayerMask.GetMask("Ignore Raycast");
@@ -41,24 +44,21 @@ public static class Mask
     public static readonly LayerMask All = ~0;
 
 
-    public static LayerMask Combine(params LayerMask[] layerMasks)
-    {
+    public static LayerMask Combine(params LayerMask[] layerMasks) {
         LayerMask combinedLayerMask = 0;
-        foreach (var mask in layerMasks) combinedLayerMask |= mask;
+        foreach (LayerMask mask in layerMasks) combinedLayerMask |= mask;
         return combinedLayerMask;
     }
 
-    public static LayerMask ToLayerMask(this HashSet<LayerMask> layerMasks)
-    {
+    public static LayerMask ToLayerMask(this HashSet<LayerMask> layerMasks) {
         LayerMask combinedMask = 0;
-        foreach (var mask in layerMasks) combinedMask |= mask;
+        foreach (LayerMask mask in layerMasks) combinedMask |= mask;
         return combinedMask;
     }
 
-    public static LayerMask ToLayerMask(this List<LayerMask> layerMasks)
-    {
+    public static LayerMask ToLayerMask(this List<LayerMask> layerMasks) {
         LayerMask combinedMask = 0;
-        foreach (var mask in layerMasks) combinedMask |= mask;
+        foreach (LayerMask mask in layerMasks) combinedMask |= mask;
         return combinedMask;
     }
 }

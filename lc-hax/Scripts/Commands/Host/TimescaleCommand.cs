@@ -1,18 +1,18 @@
+#region
+
 using UnityEngine;
 
+#endregion
+
 [HostCommand("timescale")]
-internal class TimescaleCommand : ICommand
-{
-    public void Execute(StringArray args)
-    {
-        if (args.Length is 0)
-        {
+class TimescaleCommand : ICommand {
+    public void Execute(StringArray args) {
+        if (args.Length is 0) {
             Chat.Print("Usage: timescale <scale>");
             return;
         }
 
-        if (!float.TryParse(args[0], out var timescale))
-        {
+        if (!float.TryParse(args[0], out float timescale)) {
             Chat.Print("Invalid timescale!");
             return;
         }

@@ -1,23 +1,25 @@
 #pragma warning disable IDE1006
 
+#region
+
 using HarmonyLib;
 using Hax;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-[HarmonyPatch]
-internal class BetterBuildingModePatch
-{
-    private static bool ShiftKeyisPressed;
-    private static PlaceableShipObject? PlacingObject;
+#endregion
 
-    private static Keyboard Keyboard { get; } = Keyboard.current;
+[HarmonyPatch]
+class BetterBuildingModePatch {
+    static bool ShiftKeyisPressed;
+    static PlaceableShipObject? PlacingObject;
+
+    static Keyboard Keyboard { get; } = Keyboard.current;
 
 
     [HarmonyPatch(typeof(HUDManager), "Update")]
     [HarmonyPrefix]
-    private static void BuldTipPrefix(HUDManager __instance)
-    {
+    static void BuldTipPrefix(HUDManager __instance) {
         if (Helper.StartOfRound is not StartOfRound startOfRound) return;
         if (startOfRound.localPlayerUsingController) return;
         if (PlacingObject is not PlaceableShipObject shipobject) return;
@@ -30,8 +32,7 @@ internal class BetterBuildingModePatch
 
     [HarmonyPatch(typeof(ShipBuildModeManager), "Update")]
     [HarmonyPostfix]
-    private static void UpdatePostfix(ShipBuildModeManager __instance, ref PlaceableShipObject? ___placingObject)
-    {
+    static void UpdatePostfix(ShipBuildModeManager __instance, ref PlaceableShipObject? ___placingObject) {
         if (Helper.StartOfRound is not StartOfRound startOfRound) return;
         if (startOfRound.localPlayerUsingController) return;
         if (!__instance.InBuildMode) return;
@@ -44,10 +45,9 @@ internal class BetterBuildingModePatch
             ShiftKeyisPressed = true;
         else
             ShiftKeyisPressed = false;
-        var RotationDirection = ShiftKeyisPressed ? -155f : 155f;
+        float RotationDirection = ShiftKeyisPressed ? -155f : 155f;
 
-        if (Keyboard.rKey.isPressed)
-        {
+        if (Keyboard.rKey.isPressed) {
             RotateObject(__instance.ghostObject, Quaternion.Euler(Time.deltaTime * RotationDirection, 0f, 0f));
 
             __instance.ghostObject.eulerAngles = new Vector3(
@@ -68,9 +68,8 @@ internal class BetterBuildingModePatch
 
     [HarmonyPatch(typeof(ShipBuildModeManager), "PlayerMeetsConditionsToBuild")]
     [HarmonyPrefix]
-    private static bool PlayerMeetsConditionsToBuildPrefix(ref bool __result, ref bool ___CanConfirmPosition,
-        ref PlaceableShipObject? ___placingObject)
-    {
+    static bool PlayerMeetsConditionsToBuildPrefix(ref bool __result, ref bool ___CanConfirmPosition,
+        ref PlaceableShipObject? ___placingObject) {
         if (___placingObject is null) return true;
 
         ___placingObject.AllowPlacementOnCounters = true;
@@ -81,8 +80,5 @@ internal class BetterBuildingModePatch
         return false;
     }
 
-    private static void RotateObject(Transform objTransform, Quaternion rotation)
-    {
-        objTransform.rotation *= rotation;
-    }
+    static void RotateObject(Transform objTransform, Quaternion rotation) => objTransform.rotation *= rotation;
 }

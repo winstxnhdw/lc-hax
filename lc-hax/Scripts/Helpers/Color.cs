@@ -1,25 +1,25 @@
+#region
+
 using System.Globalization;
 using Color = UnityEngine.Color;
 
+#endregion
+
 namespace Hax;
 
-internal static partial class Helper
-{
-    internal static Color HexToColor(string hexColor)
-    {
+static partial class Helper {
+    internal static Color HexToColor(string hexColor) {
         if (hexColor.IndexOf('#') != -1) hexColor = hexColor.Replace("#", "");
 
-        var r = int.Parse(hexColor[..2], NumberStyles.AllowHexSpecifier) / 255f;
-        var g = int.Parse(hexColor.Substring(2, 2), NumberStyles.AllowHexSpecifier) / 255f;
-        var b = int.Parse(hexColor.Substring(4, 2), NumberStyles.AllowHexSpecifier) / 255f;
+        float r = int.Parse(hexColor[..2], NumberStyles.AllowHexSpecifier) / 255f;
+        float g = int.Parse(hexColor.Substring(2, 2), NumberStyles.AllowHexSpecifier) / 255f;
+        float b = int.Parse(hexColor.Substring(4, 2), NumberStyles.AllowHexSpecifier) / 255f;
         return new Color(r, g, b);
     }
 
 
-    internal static Color GetLootColor(GrabbableObject scrap)
-    {
-        return scrap switch
-        {
+    internal static Color GetLootColor(GrabbableObject scrap) =>
+        scrap switch {
             null => ExtraColors.Transparent,
             RagdollGrabbableObject => ExtraColors.HotPink,
             LungProp => ExtraColors.LightBlue,
@@ -33,11 +33,9 @@ internal static partial class Helper
             _ when scrap.GetScrapValue() == 0 && scrap is GiftBoxItem => ExtraColors.PapayaWhip,
             _ => ExtraColors.Silver
         };
-    }
 
 
-    internal readonly struct ExtraColors
-    {
+    internal readonly struct ExtraColors {
         internal static Color MediumPurple { get; } = new(0.5764706f, 0.4392157f, 0.8588235f, 1f);
         internal static Color MediumSeaGreen { get; } = new(0.2352941f, 0.7019608f, 0.4431373f, 1f);
         internal static Color MediumSlateBlue { get; } = new(0.4823529f, 0.4078431f, 0.9333333f, 1f);

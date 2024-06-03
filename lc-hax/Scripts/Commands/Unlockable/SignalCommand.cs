@@ -1,20 +1,20 @@
+#region
+
 using Hax;
 
+#endregion
+
 [Command("signal")]
-internal class SignalCommand : ICommand
-{
-    public void Execute(StringArray args)
-    {
-        if (args.Length is 0)
-        {
+class SignalCommand : ICommand {
+    public void Execute(StringArray args) {
+        if (args.Length is 0) {
             Chat.Print("Usage: signal <message>");
             return;
         }
 
-        var message = string.Join(" ", args);
+        string message = string.Join(" ", args);
 
-        if (message.Length > 12)
-        {
+        if (message.Length > 12) {
             Chat.Print($"You've exceeded the maximum message length by {message.Length - 12} character(s)!");
             return;
         }

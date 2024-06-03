@@ -1,44 +1,41 @@
+#region
+
 using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
 using GameNetcodeStuff;
 using Hax;
 using UnityEngine;
 
+#endregion
+
 [Command("grab")]
-internal class GrabCommand : ICommand
-{
-    public void Execute(StringArray args)
-    {
+class GrabCommand : ICommand {
+    public void Execute(StringArray args) {
         if (Helper.LocalPlayer is not PlayerControllerB localPlayer) return;
-        if (!localPlayer.HasFreeSlots())
-        {
+        if (!localPlayer.HasFreeSlots()) {
             Chat.Print("You must have an empty inventory slot!");
             return;
         }
 
-        var currentPlayerPosition = localPlayer.transform.position;
+        Vector3 currentPlayerPosition = localPlayer.transform.position;
 
-        var message = args.Length switch
-        {
-            0 => GrabAllItems(localPlayer, currentPlayerPosition),
-            _ => GrabItem(localPlayer, currentPlayerPosition, string.Join(' ', args))
+        string message = args.Length switch {
+            0 => this.GrabAllItems(localPlayer, currentPlayerPosition),
+            _ => this.GrabItem(localPlayer, currentPlayerPosition, string.Join(' ', args))
         };
 
         Chat.Print(message);
     }
 
-    private bool CanGrabItem(GrabbableObject grabbableObject, Vector3 currentPlayerPosition)
-    {
-        return grabbableObject is { isHeld: false } and { isHeldByEnemy: false } &&
-               (grabbableObject.transform.position - currentPlayerPosition).sqrMagnitude >= 20.0f * 20.0f;
-    }
+    bool CanGrabItem(GrabbableObject grabbableObject, Vector3 currentPlayerPosition) =>
+        grabbableObject is { isHeld: false } and { isHeldByEnemy: false } &&
+        (grabbableObject.transform.position - currentPlayerPosition).sqrMagnitude >= 20.0f * 20.0f;
 
-    private IEnumerator GrabAllItemsAsync(PlayerControllerB player, GrabbableObject[] grabbables)
-    {
-        var currentWeight = player.carryWeight;
+    IEnumerator GrabAllItemsAsync(PlayerControllerB player, GrabbableObject[] grabbables) {
+        float currentWeight = player.carryWeight;
 
-        foreach (var grabbable in grabbables)
-        {
+        foreach (GrabbableObject grabbable in grabbables) {
             if (!player.GrabObject(grabbable)) continue;
             yield return new WaitUntil(() => player.IsHoldingGrabbable(grabbable));
             player.DiscardObject(grabbable);
@@ -47,35 +44,33 @@ internal class GrabCommand : ICommand
         player.carryWeight = currentWeight;
     }
 
-    private string GrabAllItems(PlayerControllerB player, Vector3 currentPlayerPosition)
-    {
-        var grabbables =
+    string GrabAllItems(PlayerControllerB player, Vector3 currentPlayerPosition) {
+        GrabbableObject[] grabbables =
             Helper.Grabbables
                 .WhereIsNotNull()
-                .Where(grabbable => CanGrabItem(grabbable, currentPlayerPosition))
+                .Where(grabbable => this.CanGrabItem(grabbable, currentPlayerPosition))
                 .ToArray();
 
         Helper.CreateComponent<AsyncBehaviour>()
-            .Init(() => GrabAllItemsAsync(player, grabbables));
+            .Init(() => this.GrabAllItemsAsync(player, grabbables));
 
         return "Successfully grabbed all items!";
     }
 
-    private string GrabItem(PlayerControllerB player, Vector3 currentPlayerPosition, string itemName)
-    {
-        var grabbableObjects =
+    string GrabItem(PlayerControllerB player, Vector3 currentPlayerPosition, string itemName) {
+        Dictionary<string, GrabbableObject> grabbableObjects =
             Helper.Grabbables?
                 .WhereIsNotNull()
-                .Where(grabbable => CanGrabItem(grabbable, currentPlayerPosition))
+                .Where(grabbable => this.CanGrabItem(grabbable, currentPlayerPosition))
                 .GroupBy(grabbable => grabbable.itemProperties.name.ToLower())
                 .ToDictionary(
                     group => group.Key,
                     group => Enumerable.First(group)
                 ) ?? [];
 
-        if (!itemName.ToLower().FuzzyMatch(grabbableObjects.Keys, out var key)) return "Failed to find item!";
+        if (!itemName.ToLower().FuzzyMatch(grabbableObjects.Keys, out string key)) return "Failed to find item!";
 
-        var grabbable = grabbableObjects[key];
+        GrabbableObject? grabbable = grabbableObjects[key];
 
         if (!player.GrabObject(grabbable)) return "You must have an empty inventory slot!";
 

@@ -1,29 +1,31 @@
 #pragma warning disable IDE1006
 
+#region
+
 using GameNetcodeStuff;
 using HarmonyLib;
 using Hax;
 using UnityEngine;
 
+#endregion
+
 [HarmonyPatch(typeof(PlayerControllerB))]
-internal class InvisiblePatch
-{
-    private static Vector3 LastNewPos { get; set; }
-    private static bool LastInElevator { get; set; }
-    private static bool LastInShipRoom { get; set; }
-    private static bool LastExhausted { get; set; }
-    private static bool LastIsPlayerGrounded { get; set; }
+class InvisiblePatch {
+    static Vector3 LastNewPos { get; set; }
+    static bool LastInElevator { get; set; }
+    static bool LastInShipRoom { get; set; }
+    static bool LastExhausted { get; set; }
+    static bool LastIsPlayerGrounded { get; set; }
 
     [HarmonyPatch("UpdatePlayerPositionServerRpc")]
-    private static void Prefix(
+    static void Prefix(
         ulong ___actualClientId,
         ref Vector3 newPos,
         ref bool inElevator,
         ref bool inShipRoom,
         ref bool exhausted,
         ref bool isPlayerGrounded
-    )
-    {
+    ) {
         if (!Setting.EnableInvisible || Helper.LocalPlayer?.actualClientId != ___actualClientId) return;
 
         LastNewPos = newPos;
@@ -40,15 +42,14 @@ internal class InvisiblePatch
     }
 
     [HarmonyPatch("UpdatePlayerPositionClientRpc")]
-    private static void Prefix(
+    static void Prefix(
         PlayerControllerB __instance,
         ref Vector3 newPos,
         ref bool inElevator,
         ref bool isInShip,
         ref bool exhausted,
         ref bool isPlayerGrounded
-    )
-    {
+    ) {
         if (!Setting.EnableInvisible || !__instance.IsSelf()) return;
 
         newPos = LastNewPos;

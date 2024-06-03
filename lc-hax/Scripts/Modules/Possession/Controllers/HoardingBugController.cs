@@ -1,10 +1,14 @@
+#region
+
 using System.Collections.Generic;
+using GameNetcodeStuff;
 using Hax;
 using Unity.Netcode;
 using UnityEngine;
 
-internal enum HoardingBugState
-{
+#endregion
+
+enum HoardingBugState {
     IDLE,
     SEARCHING_FOR_ITEMS,
     RETURNING_TO_NEST,
@@ -13,18 +17,15 @@ internal enum HoardingBugState
     AT_NEST
 }
 
-internal class HoardingBugController : IEnemyController<HoarderBugAI>
-{
-    private static readonly HashSet<HoarderBugItem> _FakeStolenItems = [];
+class HoardingBugController : IEnemyController<HoarderBugAI> {
+    static readonly HashSet<HoarderBugItem> _FakeStolenItems = [];
 
     internal bool angry = false;
 
-    public void Update(HoarderBugAI enemy, bool isAIControlled)
-    {
+    public void Update(HoarderBugAI enemy, bool isAIControlled) {
         if (isAIControlled) return;
-        if (enemy.heldItem?.itemGrabbableObject is null)
-        {
-            if (angry) enemy.angryTimer = 15.0f;
+        if (enemy.heldItem?.itemGrabbableObject is null) {
+            if (this.angry) enemy.angryTimer = 15.0f;
             return;
         }
 
@@ -32,8 +33,7 @@ internal class HoardingBugController : IEnemyController<HoarderBugAI>
         enemy.SetBehaviourState(HoardingBugState.IDLE);
     }
 
-    public void OnDeath(HoarderBugAI enemy)
-    {
+    public void OnDeath(HoarderBugAI enemy) {
         if (enemy.heldItem.itemGrabbableObject.TryGetComponent(out NetworkObject networkObject)) return;
 
         _ = enemy.Reflect().InvokeInternalMethod(
@@ -43,34 +43,29 @@ internal class HoardingBugController : IEnemyController<HoarderBugAI>
         );
     }
 
-    public void UsePrimarySkill(HoarderBugAI enemy)
-    {
+    public void UsePrimarySkill(HoarderBugAI enemy) {
         if (enemy.heldItem is null && enemy.FindNearbyItem() is GrabbableObject grabbable)
-            GrabItem(enemy, grabbable);
+            this.GrabItem(enemy, grabbable);
 
         else
-            UseHeldItem(enemy);
+            this.UseHeldItem(enemy);
     }
 
-    public void UseSecondarySkill(HoarderBugAI enemy)
-    {
-        if (enemy.heldItem?.itemGrabbableObject is null)
-        {
-            if (!angry)
-            {
-                var closePlayer = enemy.FindClosestPlayer();
+    public void UseSecondarySkill(HoarderBugAI enemy) {
+        if (enemy.heldItem?.itemGrabbableObject is null) {
+            if (!this.angry) {
+                PlayerControllerB closePlayer = enemy.FindClosestPlayer();
                 enemy.watchingPlayer = closePlayer;
                 enemy.angryAtPlayer = closePlayer;
                 enemy.angryTimer = 15.0f;
-                angry = true;
-                AttackPlayer(enemy, true);
+                this.angry = true;
+                this.AttackPlayer(enemy, true);
                 enemy.SetBehaviourState(HoardingBugState.CHASING_PLAYER);
             }
-            else
-            {
+            else {
                 enemy.angryAtPlayer = null;
                 enemy.angryTimer = 0.0f;
-                AttackPlayer(enemy, false);
+                this.AttackPlayer(enemy, false);
             }
 
             return;
@@ -80,77 +75,51 @@ internal class HoardingBugController : IEnemyController<HoarderBugAI>
             _ = enemy.Reflect().InvokeInternalMethod("DropItemAndCallDropRPC", networkObject, false);
     }
 
-    public void UseSpecialAbility(HoarderBugAI enemy)
-    {
+    public void UseSpecialAbility(HoarderBugAI enemy) =>
         _ = RoundManager.PlayRandomClip(enemy.creatureVoice, enemy.chitterSFX, true, 1f, 0);
-    }
 
-    public string GetPrimarySkillName(HoarderBugAI enemy)
-    {
-        return enemy.heldItem is not null ? "Use item" : "Grab Item";
-    }
+    public string GetPrimarySkillName(HoarderBugAI enemy) => enemy.heldItem is not null ? "Use item" : "Grab Item";
 
-    public string GetSecondarySkillName(HoarderBugAI enemy)
-    {
-        return enemy.heldItem is null ? "" : "Drop item";
-    }
+    public string GetSecondarySkillName(HoarderBugAI enemy) => enemy.heldItem is null ? "" : "Drop item";
 
-    public void OnOutsideStatusChange(HoarderBugAI enemy)
-    {
+    public void OnOutsideStatusChange(HoarderBugAI enemy) {
         enemy.StopSearch(enemy.searchForItems, true);
         enemy.StopSearch(enemy.searchForPlayer, true);
     }
 
 
-    private void EnableAIControl(HoarderBugAI enemy, bool enabled)
-    {
-        if (enabled)
-        {
+    void EnableAIControl(HoarderBugAI enemy, bool enabled) {
+        if (enabled) {
             enemy.Reflect().InvokeInternalMethod("ChooseNestPosition");
             enemy.SetBehaviourState(HoardingBugState.IDLE);
         }
         else
-        {
             enemy.nestPosition = new Vector3(2000f, 2000f, 2000f);
-        }
     }
 
 
-    private void OnUnpossess(HoarderBugAI _)
-    {
-        angry = false;
-    }
+    void OnUnpossess(HoarderBugAI _) => this.angry = false;
 
-    private void OnPossess(HoarderBugAI enemy)
-    {
-        angry = false;
+    void OnPossess(HoarderBugAI enemy) {
+        this.angry = false;
         // calm the bug down when possessed
         enemy.angryTimer = 0.0f;
         enemy.SetBehaviourState(HoardingBugState.IDLE);
     }
 
-    private bool GetInChase(HoarderBugAI enemy)
-    {
-        return enemy.Reflect().GetInternalField<bool>("inChase");
-    }
+    bool GetInChase(HoarderBugAI enemy) => enemy.Reflect().GetInternalField<bool>("inChase");
 
-    private float GettimeSinceHittingPlayer(HoarderBugAI enemy)
-    {
-        return enemy.Reflect().GetInternalField<float>("timeSinceHittingPlayer");
-    }
+    float GettimeSinceHittingPlayer(HoarderBugAI enemy) =>
+        enemy.Reflect().GetInternalField<float>("timeSinceHittingPlayer");
 
-    private void SettimeSinceHittingPlayer(HoarderBugAI enemy, float value)
-    {
+    void SettimeSinceHittingPlayer(HoarderBugAI enemy, float value) =>
         enemy.Reflect().SetInternalField("timeSinceHittingPlayer", value);
-    }
 
 
-    private void UseHeldItem(HoarderBugAI enemy)
-    {
+    void UseHeldItem(HoarderBugAI enemy) {
         if (enemy.heldItem is not { itemGrabbableObject: GrabbableObject grabbable }) return;
 
-        switch (grabbable)
-        {
+        switch (grabbable) {
             case ShotgunItem gun:
                 gun.ShootShotgun(enemy.transform);
                 break;
@@ -161,8 +130,7 @@ internal class HoardingBugController : IEnemyController<HoarderBugAI>
         }
     }
 
-    private void GrabItem(HoarderBugAI enemy, GrabbableObject item)
-    {
+    void GrabItem(HoarderBugAI enemy, GrabbableObject item) {
         if (!item.TryGetComponent(out NetworkObject netItem)) return;
 
         _ = enemy.Reflect()
@@ -174,12 +142,9 @@ internal class HoardingBugController : IEnemyController<HoarderBugAI>
         item.EquipItem();
     }
 
-    public void AttackPlayer(HoarderBugAI enemy, bool isAttacking)
-    {
-        if (!isAttacking)
-        {
-            foreach (var fakeStolenItem in (HoarderBugItem[]) [.._FakeStolenItems])
-            {
+    public void AttackPlayer(HoarderBugAI enemy, bool isAttacking) {
+        if (!isAttacking) {
+            foreach (HoarderBugItem fakeStolenItem in (HoarderBugItem[]) [.._FakeStolenItems]) {
                 _FakeStolenItems.Remove(fakeStolenItem);
                 HoarderBugAI.HoarderBugItems.Remove(fakeStolenItem);
             }
@@ -187,15 +152,15 @@ internal class HoardingBugController : IEnemyController<HoarderBugAI>
             return;
         }
 
-        foreach (var playerControllerB in RoundManager.Instance.playersManager.allPlayerScripts)
-        foreach (var itemSlot in playerControllerB.ItemSlots)
-        {
+        foreach (PlayerControllerB? playerControllerB in RoundManager.Instance.playersManager.allPlayerScripts)
+        foreach (GrabbableObject? itemSlot in playerControllerB.ItemSlots) {
             if (itemSlot is null)
                 continue;
 
-            var fakeStolenItem = new HoarderBugItem(itemSlot, HoarderBugItemStatus.Stolen, enemy.nestPosition);
+            HoarderBugItem fakeStolenItem =
+                new(itemSlot, HoarderBugItemStatus.Stolen, enemy.nestPosition);
 
-            _FakeStolenItems.Add(fakeStolenItem);
+            _ = _FakeStolenItems.Add(fakeStolenItem);
 
             HoarderBugAI.HoarderBugItems.Add(fakeStolenItem);
         }

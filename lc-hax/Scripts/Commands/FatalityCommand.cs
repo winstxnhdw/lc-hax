@@ -1,39 +1,37 @@
+#region
+
 using System;
 using System.Collections.Generic;
 using GameNetcodeStuff;
 using Hax;
 
+#endregion
+
 [Command("fatality")]
-internal class FatalityCommand : ICommand
-{
-    public void Execute(StringArray args)
-    {
-        if (args.Length < 2)
-        {
+class FatalityCommand : ICommand {
+    public void Execute(StringArray args) {
+        if (args.Length < 2) {
             Chat.Print("Usage: fatality <player> <enemy>");
             return;
         }
 
-        if (Helper.GetActivePlayer(args[0]) is not PlayerControllerB targetPlayer)
-        {
+        if (Helper.GetActivePlayer(args[0]) is not PlayerControllerB targetPlayer) {
             Chat.Print("Target player is not alive or found!");
             return;
         }
 
-        Dictionary<string, Func<bool>> enemyHandlers = new()
-        {
-            { "Forest Giant", () => HandleEnemy<ForestGiantAI>(targetPlayer, GiantFatality) },
-            { "Jester", () => HandleEnemy<JesterAI>(targetPlayer, JesterFatality) },
-            { "Masked", () => HandleEnemy<MaskedPlayerEnemy>(targetPlayer, MaskedFatality) },
-            { "Baboon Hawk", () => HandleEnemy<BaboonBirdAI>(targetPlayer, BaboonHawkFatality) },
-            { "Circuit Bees", () => HandleEnemy<RedLocustBees>(targetPlayer, BeesFatality) },
-            { "Eyeless Dog", () => HandleEnemy<MouthDogAI>(targetPlayer, EyelessDogFatality) },
-            { "Bracken", () => HandleEnemy<FlowermanAI>(targetPlayer, BrackenFatality) },
-            { "Nutcracker", () => HandleEnemy<NutcrackerEnemyAI>(targetPlayer, NutcrackerFatality) }
+        Dictionary<string, Func<bool>> enemyHandlers = new() {
+            { "Forest Giant", () => this.HandleEnemy<ForestGiantAI>(targetPlayer, this.GiantFatality) },
+            { "Jester", () => this.HandleEnemy<JesterAI>(targetPlayer, this.JesterFatality) },
+            { "Masked", () => this.HandleEnemy<MaskedPlayerEnemy>(targetPlayer, this.MaskedFatality) },
+            { "Baboon Hawk", () => this.HandleEnemy<BaboonBirdAI>(targetPlayer, this.BaboonHawkFatality) },
+            { "Circuit Bees", () => this.HandleEnemy<RedLocustBees>(targetPlayer, this.BeesFatality) },
+            { "Eyeless Dog", () => this.HandleEnemy<MouthDogAI>(targetPlayer, this.EyelessDogFatality) },
+            { "Bracken", () => this.HandleEnemy<FlowermanAI>(targetPlayer, this.BrackenFatality) },
+            { "Nutcracker", () => this.HandleEnemy<NutcrackerEnemyAI>(targetPlayer, this.NutcrackerFatality) }
         };
 
-        if (!string.Join(" ", args[1..]).ToTitleCase().FuzzyMatch(enemyHandlers.Keys, out var key))
-        {
+        if (!string.Join(" ", args[1..]).ToTitleCase().FuzzyMatch(enemyHandlers.Keys, out string key)) {
             Chat.Print("Failed to find enemy!");
             return;
         }
@@ -48,9 +46,8 @@ internal class FatalityCommand : ICommand
     ///     Teleporting certain enemies outside of the factory can lag the user, so this burden is passed to the target player.
     /// </summary>
     /// <returns>true if the enemy was successfully teleported and the fatality was performed</returns>
-    private bool HandleEnemy<T>(PlayerControllerB targetPlayer, Action<PlayerControllerB, T> enemyHandler)
-        where T : EnemyAI
-    {
+    bool HandleEnemy<T>(PlayerControllerB targetPlayer, Action<PlayerControllerB, T> enemyHandler)
+        where T : EnemyAI {
         if (Helper.LocalPlayer is not PlayerControllerB localPlayer || Helper.GetEnemy<T>() is not T enemy)
             return false;
 
@@ -63,45 +60,30 @@ internal class FatalityCommand : ICommand
         return true;
     }
 
-    private void GiantFatality(PlayerControllerB targetPlayer, ForestGiantAI forestGiant)
-    {
-        forestGiant.GrabPlayerServerRpc(targetPlayer.GetPlayerID());
-    }
+    void GiantFatality(PlayerControllerB targetPlayer, ForestGiantAI forestGiant) =>
+        forestGiant.GrabPlayerServerRpc(targetPlayer.GetPlayerId());
 
-    private void JesterFatality(PlayerControllerB targetPlayer, JesterAI jester)
-    {
-        jester.KillPlayerServerRpc(targetPlayer.GetPlayerID());
-    }
+    void JesterFatality(PlayerControllerB targetPlayer, JesterAI jester) =>
+        jester.KillPlayerServerRpc(targetPlayer.GetPlayerId());
 
-    private void MaskedFatality(PlayerControllerB targetPlayer, MaskedPlayerEnemy masked)
-    {
-        masked.KillPlayerAnimationServerRpc(targetPlayer.GetPlayerID());
-    }
+    void MaskedFatality(PlayerControllerB targetPlayer, MaskedPlayerEnemy masked) =>
+        masked.KillPlayerAnimationServerRpc(targetPlayer.GetPlayerId());
 
-    private void BaboonHawkFatality(PlayerControllerB targetPlayer, BaboonBirdAI baboonHawk)
-    {
-        baboonHawk.StabPlayerDeathAnimServerRpc(targetPlayer.GetPlayerID());
-    }
+    void BaboonHawkFatality(PlayerControllerB targetPlayer, BaboonBirdAI baboonHawk) =>
+        baboonHawk.StabPlayerDeathAnimServerRpc(targetPlayer.GetPlayerId());
 
-    private void BeesFatality(PlayerControllerB targetPlayer, RedLocustBees bees)
-    {
-        bees.BeeKillPlayerServerRpc(targetPlayer.GetPlayerID());
-    }
+    void BeesFatality(PlayerControllerB targetPlayer, RedLocustBees bees) =>
+        bees.BeeKillPlayerServerRpc(targetPlayer.GetPlayerId());
 
-    private void EyelessDogFatality(PlayerControllerB targetPlayer, MouthDogAI eyelessDog)
-    {
-        eyelessDog.KillPlayerServerRpc(targetPlayer.GetPlayerID());
-    }
+    void EyelessDogFatality(PlayerControllerB targetPlayer, MouthDogAI eyelessDog) =>
+        eyelessDog.KillPlayerServerRpc(targetPlayer.GetPlayerId());
 
-    private void BrackenFatality(PlayerControllerB targetPlayer, FlowermanAI bracken)
-    {
-        bracken.KillPlayerAnimationServerRpc(targetPlayer.GetPlayerID());
-    }
+    void BrackenFatality(PlayerControllerB targetPlayer, FlowermanAI bracken) =>
+        bracken.KillPlayerAnimationServerRpc(targetPlayer.GetPlayerId());
 
-    private void NutcrackerFatality(PlayerControllerB targetPlayer, NutcrackerEnemyAI nutcracker)
-    {
+    void NutcrackerFatality(PlayerControllerB targetPlayer, NutcrackerEnemyAI nutcracker) {
         nutcracker.AimGunServerRpc(targetPlayer.transform.position);
         nutcracker.FireGunServerRpc();
-        nutcracker.LegKickPlayerServerRpc(targetPlayer.GetPlayerID());
+        nutcracker.LegKickPlayerServerRpc(targetPlayer.GetPlayerId());
     }
 }

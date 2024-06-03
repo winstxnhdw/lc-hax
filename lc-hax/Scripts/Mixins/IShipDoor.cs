@@ -1,15 +1,16 @@
+#region
+
 using Hax;
 
-internal interface IShipDoor
-{
+#endregion
+
+interface IShipDoor {
 }
 
-internal static class ShipDoorMixin
-{
-    private static HangarShipDoor? HangarShipDoor { get; set; }
+static class ShipDoorMixin {
+    static HangarShipDoor? HangarShipDoor { get; set; }
 
-    internal static void SetShipDoorState(this IShipDoor _, bool closed)
-    {
+    internal static void SetShipDoorState(this IShipDoor _, bool closed) {
         HangarShipDoor ??= Helper.FindObject<HangarShipDoor>();
 
         HangarShipDoor?

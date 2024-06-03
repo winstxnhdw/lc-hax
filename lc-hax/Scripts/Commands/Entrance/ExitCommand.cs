@@ -1,10 +1,10 @@
+#region
+
 using Hax;
 
+#endregion
+
 [Command("exit")]
-internal class ExitCommand : ICommand
-{
-    public void Execute(StringArray _)
-    {
-        Helper.LocalPlayer?.EntranceTeleport(true);
-    }
+class ExitCommand : ICommand {
+    public void Execute(StringArray _) => Helper.LocalPlayer?.EntranceTeleport(true);
 }

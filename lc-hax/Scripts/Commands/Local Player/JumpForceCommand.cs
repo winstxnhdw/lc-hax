@@ -1,32 +1,29 @@
 #pragma warning disable CS8602
 
+#region
+
 using System;
 using GameNetcodeStuff;
 using Hax;
 
+#endregion
+
 [Command("jumpforce")]
-internal class JumpForceCommand : ICommand
-{
-    public void Execute(StringArray args)
-    {
+class JumpForceCommand : ICommand {
+    public void Execute(StringArray args) {
         if (Helper.LocalPlayer is not PlayerControllerB player) return;
         if (args.Length == 0 || args[0] == null || args[0].Equals("default", StringComparison.OrdinalIgnoreCase))
-        {
-            Reset(player);
-        }
-        else if (float.TryParse(args[0], out var speed))
-        {
+            this.Reset(player);
+        else if (float.TryParse(args[0], out float speed)) {
             if (speed <= 0)
-                Reset(player);
+                this.Reset(player);
             else
-                SetJumpForce(player, speed);
+                this.SetJumpForce(player, speed);
         }
     }
 
-    private void SetJumpForce(PlayerControllerB player, float Force)
-    {
-        if (!Setting.OverrideJumpForce)
-        {
+    void SetJumpForce(PlayerControllerB player, float Force) {
+        if (!Setting.OverrideJumpForce) {
             Setting.Default_JumpForce = player.jumpForce;
             Setting.OverrideJumpForce = true;
         }
@@ -36,10 +33,8 @@ internal class JumpForceCommand : ICommand
         Helper.SendFlatNotification($"Jump Force set to {Force}!");
     }
 
-    private void Reset(PlayerControllerB player)
-    {
-        if (Setting.OverrideJumpForce)
-        {
+    void Reset(PlayerControllerB player) {
+        if (Setting.OverrideJumpForce) {
             Setting.New_JumpForce = Setting.Default_JumpForce;
             player.jumpForce = Setting.Default_JumpForce;
             Setting.OverrideJumpForce = false;

@@ -1,13 +1,13 @@
+#region
+
 using System;
 using HarmonyLib;
 
+#endregion
+
 [HarmonyPatch(typeof(RoundManager), nameof(RoundManager.FinishGeneratingNewLevelClientRpc))]
-internal class LevelDependencyPatch
-{
+class LevelDependencyPatch {
     internal static event Action? OnFinishLevelGeneration;
 
-    private static void Postfix()
-    {
-        OnFinishLevelGeneration?.Invoke();
-    }
+    static void Postfix() => OnFinishLevelGeneration?.Invoke();
 }

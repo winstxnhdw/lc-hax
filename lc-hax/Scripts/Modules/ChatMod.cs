@@ -1,58 +1,53 @@
+#region
+
 using System;
 using System.Collections.Generic;
 using Hax;
 using UnityEngine;
 
-internal sealed class ChatMod : MonoBehaviour
-{
-    private List<string> CommandHistory { get; } = [];
-    private int HistoryIndex { get; set; } = -1;
+#endregion
 
-    private void OnEnable()
-    {
-        InputListener.OnUpArrowPress += CycleBackInHistory;
-        InputListener.OnDownArrowPress += CycleForwardInHistory;
-        Chat.OnExecuteCommandAttempt += OnHistoryAdded;
+sealed class ChatMod : MonoBehaviour {
+    List<string> CommandHistory { get; } = [];
+    int HistoryIndex { get; set; } = -1;
+
+    void OnEnable() {
+        InputListener.OnUpArrowPress += this.CycleBackInHistory;
+        InputListener.OnDownArrowPress += this.CycleForwardInHistory;
+        Chat.OnExecuteCommandAttempt += this.OnHistoryAdded;
     }
 
-    private void OnDisable()
-    {
-        InputListener.OnUpArrowPress -= CycleBackInHistory;
-        InputListener.OnDownArrowPress -= CycleForwardInHistory;
-        Chat.OnExecuteCommandAttempt -= OnHistoryAdded;
+    void OnDisable() {
+        InputListener.OnUpArrowPress -= this.CycleBackInHistory;
+        InputListener.OnDownArrowPress -= this.CycleForwardInHistory;
+        Chat.OnExecuteCommandAttempt -= this.OnHistoryAdded;
     }
 
-    private void OnHistoryAdded(string command)
-    {
-        _ = CommandHistory.Remove(command);
-        CommandHistory.Add(command);
+    void OnHistoryAdded(string command) {
+        _ = this.CommandHistory.Remove(command);
+        this.CommandHistory.Add(command);
     }
 
-    private void CycleBackInHistory()
-    {
+    void CycleBackInHistory() {
         if (Helper.LocalPlayer is not { isTypingChat: true }) return;
         if (Helper.HUDManager is not HUDManager hudManager) return;
 
-        HistoryIndex = Math.Clamp(HistoryIndex + 1, 0, CommandHistory.Count - 1);
-        var commandHistoryIndex = CommandHistory.Count - HistoryIndex - 1;
-        hudManager.chatTextField.text = CommandHistory[commandHistoryIndex];
+        this.HistoryIndex = Math.Clamp(this.HistoryIndex + 1, 0, this.CommandHistory.Count - 1);
+        int commandHistoryIndex = this.CommandHistory.Count - this.HistoryIndex - 1;
+        hudManager.chatTextField.text = this.CommandHistory[commandHistoryIndex];
         hudManager.chatTextField.caretPosition = hudManager.chatTextField.text.Length;
     }
 
-    private void CycleForwardInHistory()
-    {
-        if (HistoryIndex < 0) return;
+    void CycleForwardInHistory() {
+        if (this.HistoryIndex < 0) return;
         if (Helper.LocalPlayer is not { isTypingChat: true }) return;
         if (Helper.HUDManager is not HUDManager hudManager) return;
 
-        HistoryIndex = Math.Clamp(HistoryIndex - 1, 0, CommandHistory.Count - 1);
-        var commandHistoryIndex = CommandHistory.Count - HistoryIndex - 1;
-        hudManager.chatTextField.text = CommandHistory[commandHistoryIndex];
+        this.HistoryIndex = Math.Clamp(this.HistoryIndex - 1, 0, this.CommandHistory.Count - 1);
+        int commandHistoryIndex = this.CommandHistory.Count - this.HistoryIndex - 1;
+        hudManager.chatTextField.text = this.CommandHistory[commandHistoryIndex];
         hudManager.chatTextField.caretPosition = hudManager.chatTextField.text.Length;
     }
 
-    private void Update()
-    {
-        HistoryIndex = Helper.LocalPlayer is { isTypingChat: true } ? HistoryIndex : -1;
-    }
+    void Update() => this.HistoryIndex = Helper.LocalPlayer is { isTypingChat: true } ? this.HistoryIndex : -1;
 }

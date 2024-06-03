@@ -1,49 +1,44 @@
+#region
+
 using System.Linq;
 using Hax;
 
+#endregion
+
 [Command("trapshield")]
-internal class TrapShieldCommand : ICommand
-{
-    public void Execute(StringArray args)
-    {
-        if (args.Length is 0)
-        {
+class TrapShieldCommand : ICommand {
+    public void Execute(StringArray args) {
+        if (args.Length is 0) {
             Chat.Print("Usage: trapshield <on/off> --all");
             return;
         }
 
-        var AllPlayers = args.Length > 1 && args[1].ToLower() == "--all";
-        if (args[0].ToLower() == "on")
-        {
-            InstallTrapShield(AllPlayers);
+        bool AllPlayers = args.Length > 1 && args[1].ToLower() == "--all";
+        if (args[0].ToLower() == "on") {
+            this.InstallTrapShield(AllPlayers);
             return;
         }
 
-        else if (args[0].ToLower() == "off")
-        {
-            UninstallTrapShield();
+        else if (args[0].ToLower() == "off") {
+            this.UninstallTrapShield();
             return;
         }
     }
 
-    private void InstallTrapShield(bool AllPlayers = false)
-    {
-        var Turrets = Helper.FindObjects<Turret>().Count();
-        var SpikeRoofTraps = Helper.FindObjects<SpikeRoofTrap>().Count();
-        var Landmines = Helper.FindObjects<Landmine>().Count();
-        Helper.FindObjects<Turret>().ForEach(x =>
-        {
-            var Controller = x.GetOrAddComponent<TrapControllerMod>();
+    void InstallTrapShield(bool AllPlayers = false) {
+        int Turrets = Helper.FindObjects<Turret>().Count();
+        int SpikeRoofTraps = Helper.FindObjects<SpikeRoofTrap>().Count();
+        int Landmines = Helper.FindObjects<Landmine>().Count();
+        Helper.FindObjects<Turret>().ForEach(x => {
+            TrapControllerMod? Controller = x.GetOrAddComponent<TrapControllerMod>();
             if (Controller != null) Controller.OnlyForLocalPlayer = !AllPlayers;
         });
-        Helper.FindObjects<Landmine>().ForEach(x =>
-        {
-            var Controller = x.GetOrAddComponent<TrapControllerMod>();
+        Helper.FindObjects<Landmine>().ForEach(x => {
+            TrapControllerMod? Controller = x.GetOrAddComponent<TrapControllerMod>();
             if (Controller != null) Controller.OnlyForLocalPlayer = !AllPlayers;
         });
-        Helper.FindObjects<SpikeRoofTrap>().ForEach(x =>
-        {
-            var Controller = x.GetOrAddComponent<TrapControllerMod>();
+        Helper.FindObjects<SpikeRoofTrap>().ForEach(x => {
+            TrapControllerMod? Controller = x.GetOrAddComponent<TrapControllerMod>();
             if (Controller != null) Controller.OnlyForLocalPlayer = !AllPlayers;
         });
         Chat.Print(
@@ -54,8 +49,7 @@ internal class TrapShieldCommand : ICommand
             Chat.Print("Trapshield is enabled for local player only.");
     }
 
-    private void UninstallTrapShield()
-    {
+    void UninstallTrapShield() {
         Helper.FindObjects<Turret>().ForEach(turret => turret.RemoveComponent<TrapControllerMod>());
         Helper.FindObjects<SpikeRoofTrap>()
             .ForEach(spikeRoofTrap => spikeRoofTrap.RemoveComponent<TrapControllerMod>());

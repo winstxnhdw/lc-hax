@@ -1,41 +1,38 @@
+#region
+
 using System;
 using GameNetcodeStuff;
 using Hax;
 
+#endregion
+
 [Command("home")]
-internal class HomeCommand : ICommand
-{
-    private ShipTeleporter? Teleporter => Helper.ShipTeleporters.First(
+class HomeCommand : ICommand {
+    ShipTeleporter? Teleporter => Helper.ShipTeleporters.First(
         teleporter => teleporter is not null && !teleporter.isInverseTeleporter
     );
 
-    public void Execute(StringArray args)
-    {
+    public void Execute(StringArray args) {
         if (Helper.StartOfRound is not StartOfRound startOfRound) return;
-        if (args.Length is 0)
-        {
+        if (args.Length is 0) {
             startOfRound.ForcePlayerIntoShip();
             startOfRound.localPlayerController.isInsideFactory = false;
             return;
         }
 
-        if (Helper.GetPlayer(args[0]) is not PlayerControllerB targetPlayer)
-        {
+        if (Helper.GetPlayer(args[0]) is not PlayerControllerB targetPlayer) {
             Chat.Print("Player not found!");
             return;
         }
 
-        PrepareToTeleport(TeleportPlayerToBaseLater(targetPlayer));
+        this.PrepareToTeleport(this.TeleportPlayerToBaseLater(targetPlayer));
     }
 
-    private Action TeleportPlayerToBaseLater(PlayerControllerB targetPlayer)
-    {
-        return () =>
-        {
+    Action TeleportPlayerToBaseLater(PlayerControllerB targetPlayer) =>
+        () => {
             HaxObjects.Instance?.ShipTeleporters?.Renew();
 
-            if (Teleporter is not ShipTeleporter teleporter)
-            {
+            if (this.Teleporter is not ShipTeleporter teleporter) {
                 Chat.Print("ShipTeleporter not found!");
                 return;
             }
@@ -45,21 +42,18 @@ internal class HomeCommand : ICommand
                 .SetPredicate(() => Helper.IsRadarTarget(targetPlayer.playerClientId))
                 .Init(teleporter.PressTeleportButtonServerRpc);
         };
-    }
 
-    private bool TeleporterExists()
-    {
+    bool TeleporterExists() {
         HaxObjects.Instance?.ShipTeleporters?.Renew();
-        return Teleporter is not null;
+        return this.Teleporter is not null;
     }
 
-    private void PrepareToTeleport(Action action)
-    {
+    void PrepareToTeleport(Action action) {
         Helper.BuyUnlockable(Unlockable.TELEPORTER);
         Helper.ReturnUnlockable(Unlockable.TELEPORTER);
 
         Helper.CreateComponent<WaitForBehaviour>()
-            .SetPredicate(TeleporterExists)
+            .SetPredicate(this.TeleporterExists)
             .Init(action);
     }
 }

@@ -1,20 +1,21 @@
+#region
+
 using System;
 using System.Collections;
 using UnityEngine;
 
-internal class AsyncBehaviour : MonoBehaviour
-{
-    private Func<IEnumerator>? Func { get; set; }
+#endregion
 
-    internal void Init(Func<IEnumerator> func)
-    {
-        Func = func;
-        _ = StartCoroutine(AsyncCoroutine());
+class AsyncBehaviour : MonoBehaviour {
+    Func<IEnumerator>? Func { get; set; }
+
+    internal void Init(Func<IEnumerator> func) {
+        this.Func = func;
+        _ = this.StartCoroutine(this.AsyncCoroutine());
     }
 
-    private IEnumerator AsyncCoroutine()
-    {
-        if (Func != null) yield return StartCoroutine(Func());
-        Destroy(gameObject);
+    IEnumerator AsyncCoroutine() {
+        if (this.Func != null) yield return this.StartCoroutine(this.Func());
+        Destroy(this.gameObject);
     }
 }

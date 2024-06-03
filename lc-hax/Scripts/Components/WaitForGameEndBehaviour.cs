@@ -1,51 +1,36 @@
+#region
+
 using System;
 using UnityEngine;
 
-internal class WaitForGameEndBehaviour : MonoBehaviour
-{
-    private Action? ActionBefore { get; set; }
-    private Action? ActionAfter { get; set; }
-    private bool HasGameEnded { get; set; } = false;
+#endregion
 
-    private void OnEnable()
-    {
-        GameListener.OnGameEnd += OnGameEnd;
-    }
+class WaitForGameEndBehaviour : MonoBehaviour {
+    Action? ActionBefore { get; set; }
+    Action? ActionAfter { get; set; }
+    bool HasGameEnded { get; set; } = false;
 
-    private void OnDisable()
-    {
-        GameListener.OnGameEnd -= OnGameEnd;
-    }
+    void OnEnable() => GameListener.OnGameEnd += this.OnGameEnd;
 
-    private void OnGameEnd()
-    {
-        HasGameEnded = true;
-    }
+    void OnDisable() => GameListener.OnGameEnd -= this.OnGameEnd;
 
-    internal void AddActionBefore(Action action)
-    {
-        ActionBefore = action;
-    }
+    void OnGameEnd() => this.HasGameEnded = true;
 
-    internal void AddActionAfter(Action action)
-    {
-        ActionAfter = action;
-    }
+    internal void AddActionBefore(Action action) => this.ActionBefore = action;
 
-    private void Update()
-    {
-        if (HasGameEnded)
-        {
-            Finalise();
+    internal void AddActionAfter(Action action) => this.ActionAfter = action;
+
+    void Update() {
+        if (this.HasGameEnded) {
+            this.Finalise();
             return;
         }
 
-        ActionBefore?.Invoke();
+        this.ActionBefore?.Invoke();
     }
 
-    private void Finalise()
-    {
-        ActionAfter?.Invoke();
-        Destroy(gameObject);
+    void Finalise() {
+        this.ActionAfter?.Invoke();
+        Destroy(this.gameObject);
     }
 }

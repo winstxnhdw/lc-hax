@@ -1,53 +1,49 @@
+#region
+
 using Hax;
 using UnityEngine;
 
-internal sealed class DoorTrollMod : MonoBehaviour
-{
+#endregion
+
+sealed class DoorTrollMod : MonoBehaviour {
     internal BreakerBox breaker;
-    private float Delay = 0.0f;
+    float Delay = 0.0f;
     internal float TimeForToggles = 10f;
     internal TerminalAccessibleObject door { get; private set; }
 
-    internal void Start()
-    {
-        if (!gameObject.GetComponent<TerminalAccessibleObject>())
+    internal void Start() {
+        if (!this.gameObject.GetComponent<TerminalAccessibleObject>())
             Destroy(this);
-        door = gameObject.GetComponent<TerminalAccessibleObject>();
-        if (!door.isBigDoor)
+        this.door = this.gameObject.GetComponent<TerminalAccessibleObject>();
+        if (!this.door.isBigDoor)
             Destroy(this);
 
         if (Helper.BreakerBox is not BreakerBox breakerBox)
             Destroy(this);
         else
-            breaker = breakerBox;
+            this.breaker = breakerBox;
     }
 
 
-    private void Update()
-    {
+    void Update() {
         if (Helper.RoundManager is not RoundManager round) return;
-        if (breaker is not BreakerBox breakerBox) return;
-        if (door == null)
+        if (this.breaker is not BreakerBox breakerBox) return;
+        if (this.door == null)
             return;
-        if (round.powerOffPermanently)
-        {
-            door.SetDoor(true);
+        if (round.powerOffPermanently) {
+            this.door.SetDoor(true);
             Destroy(this);
             return;
         }
 
-        Delay += Time.deltaTime;
-        if (breakerBox.isPowerOn)
-        {
-            if (Delay >= TimeForToggles)
-            {
-                door.ToggleDoor();
-                Delay = 0f;
+        this.Delay += Time.deltaTime;
+        if (breakerBox.isPowerOn) {
+            if (this.Delay >= this.TimeForToggles) {
+                this.door.ToggleDoor();
+                this.Delay = 0f;
             }
         }
         else
-        {
             Destroy(this);
-        }
     }
 }

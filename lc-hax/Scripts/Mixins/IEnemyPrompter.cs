@@ -1,25 +1,27 @@
+#region
+
 using System.Collections.Generic;
 using GameNetcodeStuff;
 using Hax;
+using UnityEngine;
 
-internal enum BehaviourState
-{
+#endregion
+
+enum BehaviourState {
     IDLE = 0,
     CHASE = 1,
     AGGRAVATED = 2,
     UNKNOWN = 3
 }
 
-internal class EnemyPromptHandler
-{
-    private void TeleportEnemyToPlayer(
+class EnemyPromptHandler {
+    void TeleportEnemyToPlayer(
         EnemyAI enemy,
         PlayerControllerB targetPlayer,
         bool willTeleportEnemy,
         bool allowedOutside = false,
         bool allowedInside = false
-    )
-    {
+    ) {
         if (!willTeleportEnemy) return;
         if (!allowedOutside && !targetPlayer.isInsideFactory) return;
         if (!allowedInside && targetPlayer.isInsideFactory) return;
@@ -29,43 +31,40 @@ internal class EnemyPromptHandler
         enemy.SyncPositionToClients();
     }
 
-    private bool IsEnemyAllowedInside(EnemyAI enemy, PlayerControllerB targetPlayer, bool willTeleportEnemy,
-        bool overrideInsideFactory)
-    {
+    bool IsEnemyAllowedInside(EnemyAI enemy, PlayerControllerB targetPlayer, bool willTeleportEnemy,
+        bool overrideInsideFactory) {
         if (overrideInsideFactory) return true;
         if (willTeleportEnemy) return true;
         if (enemy is MaskedPlayerEnemy or DressGirlAI) return true;
         return !targetPlayer.isInsideFactory;
     }
 
-    private bool IsEnemyAllowedOutside(EnemyAI enemy, PlayerControllerB targetPlayer, bool willTeleportEnemy,
-        bool overrideInsideFactory)
-    {
+    bool IsEnemyAllowedOutside(EnemyAI enemy, PlayerControllerB targetPlayer, bool willTeleportEnemy,
+        bool overrideInsideFactory) {
         if (overrideInsideFactory) return true;
         if (willTeleportEnemy) return true;
         if (enemy is MaskedPlayerEnemy or DressGirlAI) return true;
         return targetPlayer.isInsideFactory;
     }
 
-    private bool HandleThumper(CrawlerAI thumper, PlayerControllerB targetPlayer, bool willTeleportEnemy,
-        bool overrideInsideFactory)
-    {
-        if (!IsEnemyAllowedOutside(thumper, targetPlayer, willTeleportEnemy, overrideInsideFactory)) return false;
+    bool HandleThumper(CrawlerAI thumper, PlayerControllerB targetPlayer, bool willTeleportEnemy,
+        bool overrideInsideFactory) {
+        if (!this.IsEnemyAllowedOutside(thumper, targetPlayer, willTeleportEnemy, overrideInsideFactory)) return false;
         if (thumper.isEnemyDead) return false;
-        TeleportEnemyToPlayer(thumper, targetPlayer, willTeleportEnemy, allowedInside: true);
+        this.TeleportEnemyToPlayer(thumper, targetPlayer, willTeleportEnemy, allowedInside: true);
         thumper.TakeOwnership();
         thumper.targetPlayer = targetPlayer;
         thumper.SetMovingTowardsTargetPlayer(targetPlayer);
-        thumper.BeginChasingPlayerServerRpc(targetPlayer.GetPlayerID());
+        thumper.BeginChasingPlayerServerRpc(targetPlayer.GetPlayerId());
         return true;
     }
 
-    private bool HandleEyelessDog(MouthDogAI eyelessDog, PlayerControllerB targetPlayer, bool willTeleportEnemy,
-        bool overrideInsideFactory)
-    {
-        if (!IsEnemyAllowedInside(eyelessDog, targetPlayer, willTeleportEnemy, overrideInsideFactory)) return false;
+    bool HandleEyelessDog(MouthDogAI eyelessDog, PlayerControllerB targetPlayer, bool willTeleportEnemy,
+        bool overrideInsideFactory) {
+        if (!this.IsEnemyAllowedInside(eyelessDog, targetPlayer, willTeleportEnemy, overrideInsideFactory))
+            return false;
         if (eyelessDog.isEnemyDead) return false;
-        TeleportEnemyToPlayer(eyelessDog, targetPlayer, willTeleportEnemy, true);
+        this.TeleportEnemyToPlayer(eyelessDog, targetPlayer, willTeleportEnemy, true);
         eyelessDog.TakeOwnership();
         eyelessDog.targetPlayer = targetPlayer;
         eyelessDog.SetMovingTowardsTargetPlayer(targetPlayer);
@@ -73,12 +72,12 @@ internal class EnemyPromptHandler
         return true;
     }
 
-    private bool HandleBaboonHawk(BaboonBirdAI baboonHawk, PlayerControllerB targetPlayer, bool willTeleportEnemy,
-        bool overrideInsideFactory)
-    {
-        if (!IsEnemyAllowedInside(baboonHawk, targetPlayer, willTeleportEnemy, overrideInsideFactory)) return false;
+    bool HandleBaboonHawk(BaboonBirdAI baboonHawk, PlayerControllerB targetPlayer, bool willTeleportEnemy,
+        bool overrideInsideFactory) {
+        if (!this.IsEnemyAllowedInside(baboonHawk, targetPlayer, willTeleportEnemy, overrideInsideFactory))
+            return false;
         if (baboonHawk.isEnemyDead) return false;
-        TeleportEnemyToPlayer(baboonHawk, targetPlayer, willTeleportEnemy, true);
+        this.TeleportEnemyToPlayer(baboonHawk, targetPlayer, willTeleportEnemy, true);
         baboonHawk.TakeOwnership();
         baboonHawk.targetPlayer = targetPlayer;
         baboonHawk.SetMovingTowardsTargetPlayer(targetPlayer);
@@ -88,12 +87,12 @@ internal class EnemyPromptHandler
         return true;
     }
 
-    private bool HandleForestGiant(ForestGiantAI forestGiant, PlayerControllerB targetPlayer, bool willTeleportEnemy,
-        bool overrideInsideFactory)
-    {
-        if (!IsEnemyAllowedInside(forestGiant, targetPlayer, willTeleportEnemy, overrideInsideFactory)) return false;
+    bool HandleForestGiant(ForestGiantAI forestGiant, PlayerControllerB targetPlayer, bool willTeleportEnemy,
+        bool overrideInsideFactory) {
+        if (!this.IsEnemyAllowedInside(forestGiant, targetPlayer, willTeleportEnemy, overrideInsideFactory))
+            return false;
         if (forestGiant.isEnemyDead) return false;
-        TeleportEnemyToPlayer(forestGiant, targetPlayer, willTeleportEnemy, true);
+        this.TeleportEnemyToPlayer(forestGiant, targetPlayer, willTeleportEnemy, true);
         forestGiant.TakeOwnership();
         forestGiant.targetPlayer = targetPlayer;
         forestGiant.SetBehaviourState(GiantState.CHASE);
@@ -107,8 +106,7 @@ internal class EnemyPromptHandler
         return true;
     }
 
-    private bool HandleSnareFlea(CentipedeAI snareFlea, PlayerControllerB targetPlayer)
-    {
+    bool HandleSnareFlea(CentipedeAI snareFlea, PlayerControllerB targetPlayer) {
         if (snareFlea.isEnemyDead) return false;
         if (!targetPlayer.isInsideFactory) return false;
         snareFlea.TakeOwnership();
@@ -119,12 +117,11 @@ internal class EnemyPromptHandler
         return true;
     }
 
-    private bool HandleBracken(FlowermanAI bracken, PlayerControllerB targetPlayer, bool willTeleportEnemy,
-        bool overrideInsideFactory)
-    {
-        if (!IsEnemyAllowedOutside(bracken, targetPlayer, willTeleportEnemy, overrideInsideFactory)) return false;
+    bool HandleBracken(FlowermanAI bracken, PlayerControllerB targetPlayer, bool willTeleportEnemy,
+        bool overrideInsideFactory) {
+        if (!this.IsEnemyAllowedOutside(bracken, targetPlayer, willTeleportEnemy, overrideInsideFactory)) return false;
         if (bracken.isEnemyDead) return false;
-        TeleportEnemyToPlayer(bracken, targetPlayer, willTeleportEnemy, allowedInside: true);
+        this.TeleportEnemyToPlayer(bracken, targetPlayer, willTeleportEnemy, allowedInside: true);
         bracken.TakeOwnership();
         bracken.targetPlayer = targetPlayer;
         bracken.SetMovingTowardsTargetPlayer(targetPlayer);
@@ -133,24 +130,23 @@ internal class EnemyPromptHandler
         return true;
     }
 
-    private bool HandleBunkerSpider(SandSpiderAI bunkerSpider, PlayerControllerB targetPlayer, bool willTeleportEnemy,
-        bool overrideInsideFactory)
-    {
-        if (!IsEnemyAllowedOutside(bunkerSpider, targetPlayer, willTeleportEnemy, overrideInsideFactory)) return false;
+    bool HandleBunkerSpider(SandSpiderAI bunkerSpider, PlayerControllerB targetPlayer, bool willTeleportEnemy,
+        bool overrideInsideFactory) {
+        if (!this.IsEnemyAllowedOutside(bunkerSpider, targetPlayer, willTeleportEnemy, overrideInsideFactory))
+            return false;
         if (bunkerSpider.isEnemyDead) return false;
-        TeleportEnemyToPlayer(bunkerSpider, targetPlayer, willTeleportEnemy, allowedInside: true);
+        this.TeleportEnemyToPlayer(bunkerSpider, targetPlayer, willTeleportEnemy, allowedInside: true);
         bunkerSpider.TakeOwnership();
         bunkerSpider.targetPlayer = targetPlayer;
         bunkerSpider.SetMovingTowardsTargetPlayer(targetPlayer);
-        if (willTeleportEnemy)
-        {
+        if (willTeleportEnemy) {
             bunkerSpider.meshContainerPosition = targetPlayer.transform.position;
             bunkerSpider.SyncMeshContainerPositionToClients();
         }
 
         bunkerSpider.SwitchToBehaviourServerRpc(2);
         bunkerSpider.TriggerChaseWithPlayer(targetPlayer);
-        var playerPosition = targetPlayer.transform.position;
+        Vector3 playerPosition = targetPlayer.transform.position;
 
         bunkerSpider.SpawnWebTrapServerRpc(
             playerPosition,
@@ -163,26 +159,25 @@ internal class EnemyPromptHandler
         return true;
     }
 
-    private bool HandleBee(RedLocustBees bee, PlayerControllerB targetPlayer, bool willTeleportEnemy,
-        bool overrideInsideFactory)
-    {
-        if (!IsEnemyAllowedInside(bee, targetPlayer, willTeleportEnemy, overrideInsideFactory)) return false;
+    bool HandleBee(RedLocustBees bee, PlayerControllerB targetPlayer, bool willTeleportEnemy,
+        bool overrideInsideFactory) {
+        if (!this.IsEnemyAllowedInside(bee, targetPlayer, willTeleportEnemy, overrideInsideFactory)) return false;
         if (bee.isEnemyDead) return false;
-        TeleportEnemyToPlayer(bee, targetPlayer, willTeleportEnemy, true);
+        this.TeleportEnemyToPlayer(bee, targetPlayer, willTeleportEnemy, true);
         bee.TakeOwnership();
         bee.targetPlayer = targetPlayer;
         bee.SetMovingTowardsTargetPlayer(targetPlayer);
         bee.SetBehaviourState(BeesState.ATTACK);
-        bee.EnterAttackZapModeServerRpc(targetPlayer.GetPlayerID());
+        bee.EnterAttackZapModeServerRpc(targetPlayer.GetPlayerId());
         return true;
     }
 
-    private bool HandleHoardingBug(HoarderBugAI hoardingBug, PlayerControllerB targetPlayer, bool willTeleportEnemy,
-        bool overrideInsideFactory)
-    {
-        if (!IsEnemyAllowedOutside(hoardingBug, targetPlayer, willTeleportEnemy, overrideInsideFactory)) return false;
+    bool HandleHoardingBug(HoarderBugAI hoardingBug, PlayerControllerB targetPlayer, bool willTeleportEnemy,
+        bool overrideInsideFactory) {
+        if (!this.IsEnemyAllowedOutside(hoardingBug, targetPlayer, willTeleportEnemy, overrideInsideFactory))
+            return false;
         if (hoardingBug.isEnemyDead) return false;
-        TeleportEnemyToPlayer(hoardingBug, targetPlayer, willTeleportEnemy, allowedInside: true);
+        this.TeleportEnemyToPlayer(hoardingBug, targetPlayer, willTeleportEnemy, allowedInside: true);
         hoardingBug.TakeOwnership();
         hoardingBug.targetPlayer = targetPlayer;
         hoardingBug.SetMovingTowardsTargetPlayer(targetPlayer);
@@ -196,19 +191,19 @@ internal class EnemyPromptHandler
         return true;
     }
 
-    private bool HandleNutcracker(NutcrackerEnemyAI nutcracker, PlayerControllerB targetPlayer, bool willTeleportEnemy,
-        bool overrideInsideFactory)
-    {
-        if (!IsEnemyAllowedOutside(nutcracker, targetPlayer, willTeleportEnemy, overrideInsideFactory)) return false;
+    bool HandleNutcracker(NutcrackerEnemyAI nutcracker, PlayerControllerB targetPlayer, bool willTeleportEnemy,
+        bool overrideInsideFactory) {
+        if (!this.IsEnemyAllowedOutside(nutcracker, targetPlayer, willTeleportEnemy, overrideInsideFactory))
+            return false;
         if (nutcracker.isEnemyDead) return false;
 
-        TeleportEnemyToPlayer(nutcracker, targetPlayer, willTeleportEnemy, true, true);
+        this.TeleportEnemyToPlayer(nutcracker, targetPlayer, willTeleportEnemy, true, true);
         nutcracker.TakeOwnership();
         nutcracker.targetPlayer = targetPlayer;
         nutcracker.SetMovingTowardsTargetPlayer(targetPlayer);
 
         nutcracker.StopInspection();
-        nutcracker.SeeMovingThreatServerRpc(targetPlayer.GetPlayerID());
+        nutcracker.SeeMovingThreatServerRpc(targetPlayer.GetPlayerId());
         nutcracker.AimGunServerRpc(targetPlayer.transform.position);
 
         _ = nutcracker.Reflect()
@@ -217,12 +212,11 @@ internal class EnemyPromptHandler
         return true;
     }
 
-    private bool HandleMaskedPlayer(MaskedPlayerEnemy maskedPlayer, PlayerControllerB targetPlayer,
-        bool willTeleportEnemy)
-    {
+    bool HandleMaskedPlayer(MaskedPlayerEnemy maskedPlayer, PlayerControllerB targetPlayer,
+        bool willTeleportEnemy) {
         if (maskedPlayer.isEnemyDead) return false;
 
-        TeleportEnemyToPlayer(maskedPlayer, targetPlayer, willTeleportEnemy, true, true);
+        this.TeleportEnemyToPlayer(maskedPlayer, targetPlayer, willTeleportEnemy, true, true);
         maskedPlayer.TakeOwnership();
         maskedPlayer.targetPlayer = targetPlayer;
         maskedPlayer.SetMovingTowardsTargetPlayer(targetPlayer);
@@ -234,12 +228,11 @@ internal class EnemyPromptHandler
         return true;
     }
 
-    private bool HandleCoilHead(SpringManAI coilHead, PlayerControllerB targetPlayer, bool willTeleportEnemy,
-        bool overrideInsideFactory)
-    {
-        if (!IsEnemyAllowedOutside(coilHead, targetPlayer, willTeleportEnemy, overrideInsideFactory)) return false;
+    bool HandleCoilHead(SpringManAI coilHead, PlayerControllerB targetPlayer, bool willTeleportEnemy,
+        bool overrideInsideFactory) {
+        if (!this.IsEnemyAllowedOutside(coilHead, targetPlayer, willTeleportEnemy, overrideInsideFactory)) return false;
         if (coilHead.isEnemyDead) return false;
-        TeleportEnemyToPlayer(coilHead, targetPlayer, willTeleportEnemy, allowedInside: true);
+        this.TeleportEnemyToPlayer(coilHead, targetPlayer, willTeleportEnemy, allowedInside: true);
         coilHead.TakeOwnership();
         coilHead.targetPlayer = targetPlayer;
         coilHead.SetMovingTowardsTargetPlayer(targetPlayer);
@@ -251,12 +244,12 @@ internal class EnemyPromptHandler
         return true;
     }
 
-    private bool HandleSporeLizard(PufferAI sporeLizard, PlayerControllerB targetPlayer, bool willTeleportEnemy,
-        bool overrideInsideFactory)
-    {
-        if (!IsEnemyAllowedOutside(sporeLizard, targetPlayer, willTeleportEnemy, overrideInsideFactory)) return false;
+    bool HandleSporeLizard(PufferAI sporeLizard, PlayerControllerB targetPlayer, bool willTeleportEnemy,
+        bool overrideInsideFactory) {
+        if (!this.IsEnemyAllowedOutside(sporeLizard, targetPlayer, willTeleportEnemy, overrideInsideFactory))
+            return false;
         if (sporeLizard.isEnemyDead) return false;
-        TeleportEnemyToPlayer(sporeLizard, targetPlayer, willTeleportEnemy, allowedInside: true);
+        this.TeleportEnemyToPlayer(sporeLizard, targetPlayer, willTeleportEnemy, allowedInside: true);
         sporeLizard.TakeOwnership();
         sporeLizard.targetPlayer = targetPlayer;
         sporeLizard.SetMovingTowardsTargetPlayer(targetPlayer);
@@ -265,12 +258,11 @@ internal class EnemyPromptHandler
         return true;
     }
 
-    private bool HandleJester(JesterAI jester, PlayerControllerB targetPlayer, bool willTeleportEnemy,
-        bool overrideInsideFactory)
-    {
-        if (!IsEnemyAllowedOutside(jester, targetPlayer, willTeleportEnemy, overrideInsideFactory)) return false;
+    bool HandleJester(JesterAI jester, PlayerControllerB targetPlayer, bool willTeleportEnemy,
+        bool overrideInsideFactory) {
+        if (!this.IsEnemyAllowedOutside(jester, targetPlayer, willTeleportEnemy, overrideInsideFactory)) return false;
         if (jester.isEnemyDead) return false;
-        TeleportEnemyToPlayer(jester, targetPlayer, willTeleportEnemy, allowedInside: true);
+        this.TeleportEnemyToPlayer(jester, targetPlayer, willTeleportEnemy, allowedInside: true);
         jester.TakeOwnership();
         jester.targetPlayer = targetPlayer;
         jester.SetMovingTowardsTargetPlayer(targetPlayer);
@@ -282,11 +274,10 @@ internal class EnemyPromptHandler
         return true;
     }
 
-    private bool HandleEarthLeviathan(SandWormAI earthLeviathan, PlayerControllerB targetPlayer, bool willTeleportEnemy)
-    {
-        if (!IsEnemyAllowedInside(earthLeviathan, targetPlayer, willTeleportEnemy, false)) return false;
+    bool HandleEarthLeviathan(SandWormAI earthLeviathan, PlayerControllerB targetPlayer, bool willTeleportEnemy) {
+        if (!this.IsEnemyAllowedInside(earthLeviathan, targetPlayer, willTeleportEnemy, false)) return false;
         if (earthLeviathan.isEnemyDead) return false;
-        TeleportEnemyToPlayer(earthLeviathan, targetPlayer, willTeleportEnemy, true);
+        this.TeleportEnemyToPlayer(earthLeviathan, targetPlayer, willTeleportEnemy, true);
         earthLeviathan.TakeOwnership();
         earthLeviathan.targetPlayer = targetPlayer;
         earthLeviathan.SetMovingTowardsTargetPlayer(targetPlayer);
@@ -294,10 +285,9 @@ internal class EnemyPromptHandler
         return true;
     }
 
-    private bool HandleDressGirl(DressGirlAI dressGirl, PlayerControllerB targetPlayer, bool willTeleportEnemy)
-    {
+    bool HandleDressGirl(DressGirlAI dressGirl, PlayerControllerB targetPlayer, bool willTeleportEnemy) {
         if (dressGirl.isEnemyDead) return false;
-        TeleportEnemyToPlayer(dressGirl, targetPlayer, willTeleportEnemy, true);
+        this.TeleportEnemyToPlayer(dressGirl, targetPlayer, willTeleportEnemy, true);
         dressGirl.TakeOwnership();
         dressGirl.targetPlayer = targetPlayer;
         dressGirl.hauntingPlayer = targetPlayer;
@@ -307,13 +297,12 @@ internal class EnemyPromptHandler
         return true;
     }
 
-    private bool HandleRadMech(RadMechAI radMech, PlayerControllerB targetPlayer, bool willTeleportEnemy,
-        bool overrideInsideFactory)
-    {
-        if (!IsEnemyAllowedInside(radMech, targetPlayer, willTeleportEnemy, overrideInsideFactory)) return false;
+    bool HandleRadMech(RadMechAI radMech, PlayerControllerB targetPlayer, bool willTeleportEnemy,
+        bool overrideInsideFactory) {
+        if (!this.IsEnemyAllowedInside(radMech, targetPlayer, willTeleportEnemy, overrideInsideFactory)) return false;
         if (radMech.isEnemyDead) return false;
         if (!Helper.LocalPlayer.IsHost) return false;
-        TeleportEnemyToPlayer(radMech, targetPlayer, willTeleportEnemy, true);
+        this.TeleportEnemyToPlayer(radMech, targetPlayer, willTeleportEnemy, true);
         radMech.TakeOwnership();
         radMech.targetPlayer = targetPlayer;
         radMech.targetedThreat = targetPlayer.ToThreat();
@@ -327,12 +316,11 @@ internal class EnemyPromptHandler
         return true;
     }
 
-    private bool HandleButler(ButlerEnemyAI butler, PlayerControllerB targetPlayer, bool willTeleportEnemy,
-        bool overrideInsideFactory)
-    {
-        if (!IsEnemyAllowedOutside(butler, targetPlayer, willTeleportEnemy, overrideInsideFactory)) return false;
+    bool HandleButler(ButlerEnemyAI butler, PlayerControllerB targetPlayer, bool willTeleportEnemy,
+        bool overrideInsideFactory) {
+        if (!this.IsEnemyAllowedOutside(butler, targetPlayer, willTeleportEnemy, overrideInsideFactory)) return false;
         if (butler.isEnemyDead) return false;
-        TeleportEnemyToPlayer(butler, targetPlayer, willTeleportEnemy, true);
+        this.TeleportEnemyToPlayer(butler, targetPlayer, willTeleportEnemy, true);
         butler.TakeOwnership();
         butler.targetPlayer = targetPlayer;
         butler.SetMovingTowardsTargetPlayer(targetPlayer);
@@ -341,12 +329,12 @@ internal class EnemyPromptHandler
         return true;
     }
 
-    private bool HandleButlerBees(ButlerBeesEnemyAI butlerBees, PlayerControllerB targetPlayer, bool willTeleportEnemy,
-        bool overrideInsideFactory)
-    {
-        if (!IsEnemyAllowedOutside(butlerBees, targetPlayer, willTeleportEnemy, overrideInsideFactory)) return false;
+    bool HandleButlerBees(ButlerBeesEnemyAI butlerBees, PlayerControllerB targetPlayer, bool willTeleportEnemy,
+        bool overrideInsideFactory) {
+        if (!this.IsEnemyAllowedOutside(butlerBees, targetPlayer, willTeleportEnemy, overrideInsideFactory))
+            return false;
         if (butlerBees.isEnemyDead) return false;
-        TeleportEnemyToPlayer(butlerBees, targetPlayer, willTeleportEnemy, true);
+        this.TeleportEnemyToPlayer(butlerBees, targetPlayer, willTeleportEnemy, true);
         butlerBees.TakeOwnership();
         butlerBees.targetPlayer = targetPlayer;
         butlerBees.SetMovingTowardsTargetPlayer(targetPlayer);
@@ -355,21 +343,19 @@ internal class EnemyPromptHandler
     }
 
 
-    private bool HandleDoublewingBird(DoublewingAI doublewingBird, PlayerControllerB targetPlayer,
-        bool willTeleportEnemy)
-    {
-        if (IsEnemyAllowedInside(doublewingBird, targetPlayer, willTeleportEnemy, false)) return false;
+    bool HandleDoublewingBird(DoublewingAI doublewingBird, PlayerControllerB targetPlayer,
+        bool willTeleportEnemy) {
+        if (this.IsEnemyAllowedInside(doublewingBird, targetPlayer, willTeleportEnemy, false)) return false;
         if (doublewingBird.isEnemyDead) return false;
-        TeleportEnemyToPlayer(doublewingBird, targetPlayer, willTeleportEnemy, true);
+        this.TeleportEnemyToPlayer(doublewingBird, targetPlayer, willTeleportEnemy, true);
         doublewingBird.TakeOwnership();
         doublewingBird.SetMovingTowardsTargetPlayer(targetPlayer);
         return true;
     }
 
-    private bool HandleDocileLocustBees(DocileLocustBeesAI docileLocustBees, PlayerControllerB targetPlayer,
-        bool willTeleportEnemy)
-    {
-        TeleportEnemyToPlayer(docileLocustBees, targetPlayer, willTeleportEnemy, true);
+    bool HandleDocileLocustBees(DocileLocustBeesAI docileLocustBees, PlayerControllerB targetPlayer,
+        bool willTeleportEnemy) {
+        this.TeleportEnemyToPlayer(docileLocustBees, targetPlayer, willTeleportEnemy, true);
         if (docileLocustBees.isEnemyDead) return false;
         docileLocustBees.TakeOwnership();
         docileLocustBees.SetMovingTowardsTargetPlayer(targetPlayer);
@@ -378,79 +364,76 @@ internal class EnemyPromptHandler
     }
 
     internal bool HandleEnemy(EnemyAI enemy, PlayerControllerB targetPlayer, bool willTeleportEnemy,
-        bool overrideInsideFactory)
-    {
-        switch (enemy)
-        {
+        bool overrideInsideFactory) {
+        switch (enemy) {
             #region Special Enemies
 
             case MaskedPlayerEnemy maskedPlayer:
-                return HandleMaskedPlayer(maskedPlayer, targetPlayer, willTeleportEnemy);
+                return this.HandleMaskedPlayer(maskedPlayer, targetPlayer, willTeleportEnemy);
 
             case DressGirlAI dressGirl:
-                return HandleDressGirl(dressGirl, targetPlayer, willTeleportEnemy);
+                return this.HandleDressGirl(dressGirl, targetPlayer, willTeleportEnemy);
 
             #endregion
 
             #region Outside Enemies
 
             case MouthDogAI eyelessDog:
-                return HandleEyelessDog(eyelessDog, targetPlayer, willTeleportEnemy, overrideInsideFactory);
+                return this.HandleEyelessDog(eyelessDog, targetPlayer, willTeleportEnemy, overrideInsideFactory);
 
             case BaboonBirdAI baboonHawk:
-                return HandleBaboonHawk(baboonHawk, targetPlayer, willTeleportEnemy, overrideInsideFactory);
+                return this.HandleBaboonHawk(baboonHawk, targetPlayer, willTeleportEnemy, overrideInsideFactory);
 
             case ForestGiantAI forestGiant:
-                return HandleForestGiant(forestGiant, targetPlayer, willTeleportEnemy, overrideInsideFactory);
+                return this.HandleForestGiant(forestGiant, targetPlayer, willTeleportEnemy, overrideInsideFactory);
 
             case RadMechAI RadMech:
-                return HandleRadMech(RadMech, targetPlayer, willTeleportEnemy, overrideInsideFactory);
+                return this.HandleRadMech(RadMech, targetPlayer, willTeleportEnemy, overrideInsideFactory);
 
             case RedLocustBees bee:
-                return HandleBee(bee, targetPlayer, willTeleportEnemy, overrideInsideFactory);
+                return this.HandleBee(bee, targetPlayer, willTeleportEnemy, overrideInsideFactory);
 
             case SandWormAI earthLeviathan:
-                return HandleEarthLeviathan(earthLeviathan, targetPlayer, willTeleportEnemy);
+                return this.HandleEarthLeviathan(earthLeviathan, targetPlayer, willTeleportEnemy);
 
             case DoublewingAI doublewingBird:
-                return HandleDoublewingBird(doublewingBird, targetPlayer, willTeleportEnemy);
+                return this.HandleDoublewingBird(doublewingBird, targetPlayer, willTeleportEnemy);
 
             case DocileLocustBeesAI docileLocustBees:
-                return HandleDocileLocustBees(docileLocustBees, targetPlayer, willTeleportEnemy);
+                return this.HandleDocileLocustBees(docileLocustBees, targetPlayer, willTeleportEnemy);
 
             #endregion
 
             #region Inside Enemies
 
             case CrawlerAI thumper:
-                return HandleThumper(thumper, targetPlayer, willTeleportEnemy, overrideInsideFactory);
+                return this.HandleThumper(thumper, targetPlayer, willTeleportEnemy, overrideInsideFactory);
             case CentipedeAI snareFlea:
-                return HandleSnareFlea(snareFlea, targetPlayer);
+                return this.HandleSnareFlea(snareFlea, targetPlayer);
             case FlowermanAI bracken:
-                return HandleBracken(bracken, targetPlayer, willTeleportEnemy, overrideInsideFactory);
+                return this.HandleBracken(bracken, targetPlayer, willTeleportEnemy, overrideInsideFactory);
             case ButlerEnemyAI butler:
-                return HandleButler(butler, targetPlayer, willTeleportEnemy, overrideInsideFactory);
+                return this.HandleButler(butler, targetPlayer, willTeleportEnemy, overrideInsideFactory);
             case SandSpiderAI bunkerSpider:
-                return HandleBunkerSpider(bunkerSpider, targetPlayer, willTeleportEnemy, overrideInsideFactory);
+                return this.HandleBunkerSpider(bunkerSpider, targetPlayer, willTeleportEnemy, overrideInsideFactory);
             case HoarderBugAI hoardingBug:
-                return HandleHoardingBug(hoardingBug, targetPlayer, willTeleportEnemy, overrideInsideFactory);
+                return this.HandleHoardingBug(hoardingBug, targetPlayer, willTeleportEnemy, overrideInsideFactory);
             case ButlerBeesEnemyAI butlerbees:
-                return HandleButlerBees(butlerbees, targetPlayer, willTeleportEnemy, overrideInsideFactory);
+                return this.HandleButlerBees(butlerbees, targetPlayer, willTeleportEnemy, overrideInsideFactory);
             case NutcrackerEnemyAI nutcracker:
-                return HandleNutcracker(nutcracker, targetPlayer, willTeleportEnemy, overrideInsideFactory);
+                return this.HandleNutcracker(nutcracker, targetPlayer, willTeleportEnemy, overrideInsideFactory);
             case SpringManAI coilHead:
-                return HandleCoilHead(coilHead, targetPlayer, willTeleportEnemy, overrideInsideFactory);
+                return this.HandleCoilHead(coilHead, targetPlayer, willTeleportEnemy, overrideInsideFactory);
             case PufferAI sporeLizard:
-                return HandleSporeLizard(sporeLizard, targetPlayer, willTeleportEnemy, overrideInsideFactory);
+                return this.HandleSporeLizard(sporeLizard, targetPlayer, willTeleportEnemy, overrideInsideFactory);
             case JesterAI jester:
-                return HandleJester(jester, targetPlayer, willTeleportEnemy, overrideInsideFactory);
+                return this.HandleJester(jester, targetPlayer, willTeleportEnemy, overrideInsideFactory);
 
             #endregion
 
             default:
-                if (enemy.enemyType.isOutsideEnemy && !targetPlayer.isInsideFactory)
-                {
-                    TeleportEnemyToPlayer(enemy, targetPlayer, willTeleportEnemy, true);
+                if (enemy.enemyType.isOutsideEnemy && !targetPlayer.isInsideFactory) {
+                    this.TeleportEnemyToPlayer(enemy, targetPlayer, willTeleportEnemy, true);
                     enemy.TakeOwnership();
                     enemy.targetPlayer = targetPlayer;
                     enemy.SetMovingTowardsTargetPlayer(targetPlayer);
@@ -458,9 +441,8 @@ internal class EnemyPromptHandler
                     return true;
                 }
 
-                if (!enemy.enemyType.isOutsideEnemy && targetPlayer.isInsideFactory)
-                {
-                    TeleportEnemyToPlayer(enemy, targetPlayer, willTeleportEnemy, true);
+                if (!enemy.enemyType.isOutsideEnemy && targetPlayer.isInsideFactory) {
+                    this.TeleportEnemyToPlayer(enemy, targetPlayer, willTeleportEnemy, true);
                     enemy.TakeOwnership();
                     enemy.targetPlayer = targetPlayer;
                     enemy.SetMovingTowardsTargetPlayer(targetPlayer);
@@ -473,26 +455,22 @@ internal class EnemyPromptHandler
     }
 }
 
-internal interface IEnemyPrompter
-{
+interface IEnemyPrompter {
 }
 
-internal static class EnemyPromptMixin
-{
+static class EnemyPromptMixin {
     internal static List<string> PromptEnemiesToTarget(
         this IEnemyPrompter _,
         PlayerControllerB targetPlayer,
         bool willTeleportEnemies = false,
         bool overrideInsideFactory = false
-    )
-    {
+    ) {
         if (Helper.LocalPlayer is not PlayerControllerB localPlayer) return [];
 
         List<string> enemyNames = [];
         EnemyPromptHandler enemyPromptHandler = new();
 
-        Helper.Enemies.WhereIsNotNull().ForEach((enemy) =>
-        {
+        Helper.Enemies.WhereIsNotNull().ForEach((enemy) => {
             if (enemy is DocileLocustBeesAI or DoublewingAI or BlobAI or TestEnemy or LassoManAI) return;
 
             if (enemyPromptHandler.HandleEnemy(enemy, targetPlayer, willTeleportEnemies, overrideInsideFactory))

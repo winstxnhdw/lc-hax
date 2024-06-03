@@ -1,15 +1,16 @@
+#region
+
 using Hax;
 
-internal interface ISecureGate
-{
+#endregion
+
+interface ISecureGate {
 }
 
-internal static class SecureGateMixin
-{
-    private static TerminalAccessibleObject[]? TerminalAccessibleObjects { get; set; }
+static class SecureGateMixin {
+    static TerminalAccessibleObject[]? TerminalAccessibleObjects { get; set; }
 
-    internal static void SetSecureDoorState(this ISecureGate _, bool isUnlocked)
-    {
+    internal static void SetSecureDoorState(this ISecureGate _, bool isUnlocked) {
         TerminalAccessibleObjects ??= Helper.FindObjects<TerminalAccessibleObject>();
         TerminalAccessibleObjects.ForEach(
             terminalObject => terminalObject.SetDoor(isUnlocked)

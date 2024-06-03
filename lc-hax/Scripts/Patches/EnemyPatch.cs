@@ -1,12 +1,12 @@
 #pragma warning disable IDE1006
 
+#region
+
 using HarmonyLib;
 
+#endregion
+
 [HarmonyPatch(typeof(EnemyAI), nameof(EnemyAI.SyncPositionToClients))]
-internal class EnemyPatch
-{
-    private static void Prefix(EnemyAI __instance)
-    {
-        __instance.updatePositionThreshold = 0.0f;
-    }
+class EnemyPatch {
+    static void Prefix(EnemyAI __instance) => __instance.updatePositionThreshold = 0.0f;
 }

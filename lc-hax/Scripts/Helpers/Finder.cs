@@ -1,11 +1,14 @@
+#region
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-internal static class Finder
-{
+#endregion
+
+static class Finder {
     internal static List<GameObject> RootSceneObjects => SceneManager.GetActiveScene().GetRootGameObjects().ToList();
 
     /// <summary>
@@ -13,24 +16,20 @@ internal static class Finder
     /// </summary>
     /// <param name="path"></param>
     /// <returns></returns>
-    internal static GameObject? Find(string path, bool dontWarn = true)
-    {
-        if (path.IsNotNullOrEmptyOrWhiteSpace())
-        {
+    internal static GameObject? Find(string path, bool dontWarn = true) {
+        if (path.IsNotNullOrEmptyOrWhiteSpace()) {
             // Get all paths
             string[] paths = path.Split('/');
             // Get the root path
-            var RootPath = paths[0];
+            string RootPath = paths[0];
             // get the rest of the child path minus the root
-            var ChildPaths = paths.Skip(1).ToArray();
+            string[] ChildPaths = paths.Skip(1).ToArray();
             // Get the root gameobject
-            var Root = GameObject.Find(RootPath);
+            GameObject? Root = GameObject.Find(RootPath);
             // If the root gameobject is null, return null
-            if (Root == null)
-            {
+            if (Root == null) {
                 Root = FindRootSceneObject(RootPath);
-                if (Root == null)
-                {
+                if (Root == null) {
                     if (!dontWarn)
                         Logger.Write(
                             $"[ERROR (Find) ]  Gameobject on path [ {path} ]  is Invalid, No Root Object Found!");
@@ -40,11 +39,10 @@ internal static class Finder
 
             if (ChildPaths.Length == 0) return Root;
             // convert the rest of the childs into a string
-            var ChildPath = string.Join("/", ChildPaths);
+            string ChildPath = string.Join("/", ChildPaths);
             // Find the child gameobject
-            var result = Root.FindObject(ChildPath, true);
-            if (result == null)
-            {
+            GameObject? result = Root.FindObject(ChildPath, true);
+            if (result == null) {
                 if (!dontWarn)
                     Logger.Write($"[ERROR (Find) ]  Gameobject on path [ {path} ]  is Invalid, No Child Object Found!");
                 return null;
@@ -56,40 +54,33 @@ internal static class Finder
         return null;
     }
 
-    public static List<T>? GetRootGameObjectsComponents<T>(bool includeInactive = true) where T : Component
-    {
-        try
-        {
+    public static List<T>? GetRootGameObjectsComponents<T>(bool includeInactive = true) where T : Component {
+        try {
             List<T> results = new();
-            for (var i = 0; i < RootSceneObjects.Count; i++)
-            {
-                var obj = RootSceneObjects[i];
-                var objects = obj.GetComponentsInChildren<T>(includeInactive);
+            for (int i = 0; i < RootSceneObjects.Count; i++) {
+                GameObject? obj = RootSceneObjects[i];
+                T[]? objects = obj.GetComponentsInChildren<T>(includeInactive);
                 if (objects.Count() != 0)
-                    for (var i1 = 0; i1 < objects.Count(); i1++)
-                    {
-                        var component = objects[i1];
+                    for (int i1 = 0; i1 < objects.Count(); i1++) {
+                        T? component = objects[i1];
                         if (!results.Contains(component)) results.Add(component);
                     }
             }
 
             return results;
         }
-        catch (Exception e)
-        {
+        catch (Exception e) {
             Logger.Write("Error parsing Components from Root Objects");
             Logger.Write(e);
             return null;
         }
     }
 
-    internal static GameObject? FindRootSceneObject(string name, bool dontWarn = true)
-    {
+    internal static GameObject? FindRootSceneObject(string name, bool dontWarn = true) {
         GameObject[] list = SceneManager.GetActiveScene().GetRootGameObjects();
 
-        for (var i = 0; i < list.Count(); i++)
-        {
-            var obj = list[i];
+        for (int i = 0; i < list.Count(); i++) {
+            GameObject? obj = list[i];
             if (obj != null && obj.name.Equals(name)) return obj;
         }
 
@@ -100,12 +91,10 @@ internal static class Finder
     }
 
 
-    internal static GameObject? FindObject(this GameObject gameobject, string path, bool dontWarn = false)
-    {
+    internal static GameObject? FindObject(this GameObject gameobject, string path, bool dontWarn = false) {
         if (gameobject == null) return null;
-        var obj = gameobject.transform.Find(path);
-        if (obj == null)
-        {
+        Transform? obj = gameobject.transform.Find(path);
+        if (obj == null) {
             if (!dontWarn)
                 Logger.Write(
                     $"[WARNING (FindObject) ]  Transform {gameobject.name} Doesnt have a object in path [ {path} ] !");
@@ -116,12 +105,10 @@ internal static class Finder
     }
 
 
-    internal static Transform? FindObject(this Transform transform, string path, bool dontWarn = false)
-    {
+    internal static Transform? FindObject(this Transform transform, string path, bool dontWarn = false) {
         if (transform == null) return null;
-        var obj = transform.Find(path);
-        if (obj == null)
-        {
+        Transform? obj = transform.Find(path);
+        if (obj == null) {
             if (!dontWarn)
                 Logger.Write(
                     $"[WARNING (FindObject) ]  Transform {transform.name} Doesnt have a object in path [ {path} ] !");

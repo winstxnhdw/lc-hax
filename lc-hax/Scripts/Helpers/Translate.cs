@@ -1,3 +1,5 @@
+#region
+
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -5,10 +7,11 @@ using GameNetcodeStuff;
 using Newtonsoft.Json;
 using UnityEngine.Networking;
 
+#endregion
+
 namespace Hax;
 
-internal readonly struct TranslateRequest(string source, string target, string text)
-{
+readonly struct TranslateRequest(string source, string target, string text) {
     [JsonProperty("source")] internal string Source { get; } = source;
 
     [JsonProperty("target")] internal string Target { get; } = target;
@@ -16,10 +19,8 @@ internal readonly struct TranslateRequest(string source, string target, string t
     [JsonProperty("text")] internal string Text { get; } = text;
 }
 
-internal static partial class Helper
-{
-    private static Lazy<Dictionary<string, string>> FLORES200 { get; } = new(() => new Dictionary<string, string>()
-    {
+static partial class Helper {
+    static Lazy<Dictionary<string, string>> FLORES200 { get; } = new(() => new Dictionary<string, string>() {
         { "acehnese", "ace_Latn" },
         { "mesopotamian", "acm_Arab" },
         { "tunisian", "aeb_Arab" },
@@ -212,11 +213,10 @@ internal static partial class Helper
         { "zulu", "zul_Latn" }
     });
 
-    private static IEnumerator Translate(TranslateRequest request)
-    {
+    static IEnumerator Translate(TranslateRequest request) {
         if (LocalPlayer is not PlayerControllerB player) yield break;
 
-        using var www = UnityWebRequest.Post(
+        using UnityWebRequest? www = UnityWebRequest.Post(
             "https://winstxnhdw-nllb-api.hf.space/api/v2/translate",
             JsonConvert.SerializeObject(request),
             "application/json"
@@ -224,32 +224,26 @@ internal static partial class Helper
 
         yield return www.SendWebRequest();
 
-        if (www.result != UnityWebRequest.Result.Success)
-        {
+        if (www.result != UnityWebRequest.Result.Success) {
             State.TranslateDetachedState = null;
-            HUDManager?.AddTextToChatOnServer(request.Text, player.GetPlayerID());
+            HUDManager?.AddTextToChatOnServer(request.Text, player.GetPlayerId());
             Chat.Print("Translation server is down!");
         }
 
         else
-        {
             _ = HUDManager?.Reflect().InvokeInternalMethod("AddPlayerChatMessageServerRpc",
-                www.downloadHandler.text.Trim(), player.GetPlayerID());
-        }
+                www.downloadHandler.text.Trim(), player.GetPlayerId());
     }
 
-    internal static void Translate(string sourceLanguage, string targetLanguage, string? text)
-    {
+    internal static void Translate(string sourceLanguage, string targetLanguage, string? text) {
         if (string.IsNullOrWhiteSpace(text)) return;
 
-        if (!sourceLanguage.FuzzyMatch(FLORES200.Value.Keys, out var source))
-        {
+        if (!sourceLanguage.FuzzyMatch(FLORES200.Value.Keys, out string source)) {
             Chat.Print("Failed to find the source language!");
             return;
         }
 
-        if (!targetLanguage.FuzzyMatch(FLORES200.Value.Keys, out var target))
-        {
+        if (!targetLanguage.FuzzyMatch(FLORES200.Value.Keys, out string target)) {
             Chat.Print("Failed to find the target language!");
             return;
         }

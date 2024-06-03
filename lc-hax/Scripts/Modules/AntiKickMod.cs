@@ -1,25 +1,25 @@
+#region
+
 using System.Collections;
 using Hax;
 using UnityEngine;
 
-internal sealed class AntiKickMod : MonoBehaviour
-{
-    private void OnEnable()
-    {
-        InputListener.OnBackslashPress += ToggleAntiKick;
-        GameListener.OnGameStart += OnGameStart;
-        GameListener.OnGameEnd += OnGameEnd;
+#endregion
+
+sealed class AntiKickMod : MonoBehaviour {
+    void OnEnable() {
+        InputListener.OnBackslashPress += this.ToggleAntiKick;
+        GameListener.OnGameStart += this.OnGameStart;
+        GameListener.OnGameEnd += this.OnGameEnd;
     }
 
-    private void OnDisable()
-    {
-        InputListener.OnBackslashPress -= ToggleAntiKick;
-        GameListener.OnGameStart -= OnGameStart;
-        GameListener.OnGameEnd -= OnGameEnd;
+    void OnDisable() {
+        InputListener.OnBackslashPress -= this.ToggleAntiKick;
+        GameListener.OnGameStart -= this.OnGameStart;
+        GameListener.OnGameEnd -= this.OnGameEnd;
     }
 
-    private IEnumerator RejoinLobby()
-    {
+    IEnumerator RejoinLobby() {
         if (State.ConnectedLobby is not ConnectedLobby connectedLobby) yield break;
 
         WaitForEndOfFrame waitForEndOfFrame = new();
@@ -31,14 +31,12 @@ internal sealed class AntiKickMod : MonoBehaviour
         Helper.GameNetworkManager?.JoinLobby(connectedLobby.Lobby, connectedLobby.SteamId);
     }
 
-    private void OnGameEnd()
-    {
+    void OnGameEnd() {
         if (State.DisconnectedVoluntarily || !Setting.EnableAntiKick) return;
-        _ = StartCoroutine(RejoinLobby());
+        _ = this.StartCoroutine(this.RejoinLobby());
     }
 
-    private void OnGameStart()
-    {
+    void OnGameStart() {
         if (!Setting.EnableAntiKick || !Setting.EnableInvisible) return;
 
         Chat.Clear();
@@ -49,10 +47,8 @@ internal sealed class AntiKickMod : MonoBehaviour
         );
     }
 
-    private void ToggleAntiKick()
-    {
-        if (Helper.LocalPlayer is not null)
-        {
+    void ToggleAntiKick() {
+        if (Helper.LocalPlayer is not null) {
             Chat.Print("You cannot toggle anti-kick while in-game!");
             return;
         }

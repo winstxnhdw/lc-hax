@@ -1,22 +1,24 @@
 #pragma warning disable IDE1006
 
+#region
+
 using System;
 using System.Linq;
 using GameNetcodeStuff;
 using HarmonyLib;
 using Hax;
 
+#endregion
+
 [HarmonyPatch]
-internal class ChatPatches
-{
-    private static bool isLocalPlayerDeadStatus;
-    private static bool isLocalPlayerDeadStatus2;
+class ChatPatches {
+    static bool isLocalPlayerDeadStatus;
+    static bool isLocalPlayerDeadStatus2;
 
     [HarmonyBefore]
     [HarmonyPatch(typeof(HUDManager), "EnableChat_performed")]
     [HarmonyPrefix]
-    private static void EnableChatPrefix(HUDManager __instance)
-    {
+    static void EnableChatPrefix(HUDManager __instance) {
         if (__instance.localPlayer is not PlayerControllerB localPlayer) return;
         if (!localPlayer.IsSelf()) return;
 
@@ -26,8 +28,7 @@ internal class ChatPatches
 
     [HarmonyPatch(typeof(HUDManager), "EnableChat_performed")]
     [HarmonyPostfix]
-    private static void EnableChatPostfix(HUDManager __instance)
-    {
+    static void EnableChatPostfix(HUDManager __instance) {
         if (__instance.localPlayer is not PlayerControllerB localPlayer) return;
         if (!localPlayer.IsSelf()) return;
         localPlayer.isPlayerDead = isLocalPlayerDeadStatus;
@@ -36,8 +37,7 @@ internal class ChatPatches
     [HarmonyBefore]
     [HarmonyPatch(typeof(HUDManager), "SubmitChat_performed")]
     [HarmonyPrefix]
-    private static bool SubmitChatPrefix(HUDManager __instance)
-    {
+    static bool SubmitChatPrefix(HUDManager __instance) {
         if (__instance is not HUDManager hudManager) return true;
         if (__instance.localPlayer is not PlayerControllerB localPlayer) return true;
         if (!localPlayer.IsSelf()) return true;
@@ -47,12 +47,10 @@ internal class ChatPatches
 
         if (!new[] { '!', State.CommandPrefix }.Any(hudManager.chatTextField.text.StartsWith)) return true;
 
-        try
-        {
+        try {
             Chat.ExecuteCommand(hudManager.chatTextField.text.TrimEnd());
         }
-        catch (Exception exception)
-        {
+        catch (Exception exception) {
             Logger.Write(exception.ToString());
         }
 
@@ -61,8 +59,7 @@ internal class ChatPatches
 
     [HarmonyPatch(typeof(HUDManager), "SubmitChat_performed")]
     [HarmonyPostfix]
-    private static void SubmitChatPostfix(HUDManager __instance)
-    {
+    static void SubmitChatPostfix(HUDManager __instance) {
         if (__instance is not HUDManager hudManager) return;
         if (hudManager.localPlayer is not PlayerControllerB localPlayer) return;
         if (!localPlayer.IsSelf()) return;

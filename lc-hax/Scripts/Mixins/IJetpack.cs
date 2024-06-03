@@ -1,24 +1,22 @@
+#region
+
 using System.Linq;
 using Hax;
 
-internal interface IJetpack
-{
+#endregion
+
+interface IJetpack {
 }
 
-internal static class JetpackMixin
-{
-    internal static JetpackItem[] GetAvailableJetpacks(this IJetpack _)
-    {
-        return Helper
+static class JetpackMixin {
+    internal static JetpackItem[] GetAvailableJetpacks(this IJetpack _) =>
+        Helper
             .FindObjects<JetpackItem>()
             .Where(jetpack => !jetpack.Reflect().GetInternalField<bool>("jetpackBroken"))
             .ToArray();
-    }
 
-    internal static JetpackItem? GetAvailableJetpack(this IJetpack _)
-    {
-        return Helper
+    internal static JetpackItem? GetAvailableJetpack(this IJetpack _) =>
+        Helper
             .FindObjects<JetpackItem>()
             .First(jetpack => !jetpack.Reflect().GetInternalField<bool>("jetpackBroken"));
-    }
 }

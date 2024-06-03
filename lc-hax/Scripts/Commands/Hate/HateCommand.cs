@@ -1,27 +1,27 @@
+#region
+
+using System.Collections.Generic;
 using GameNetcodeStuff;
 using Hax;
 
+#endregion
+
 [Command("hate")]
-internal class HateCommand : IEnemyPrompter, ICommand
-{
-    public void Execute(StringArray args)
-    {
-        if (args.Length is 0)
-        {
+class HateCommand : IEnemyPrompter, ICommand {
+    public void Execute(StringArray args) {
+        if (args.Length is 0) {
             Chat.Print("Usage: hate <player> <funnyRevive>");
             return;
         }
 
-        if (Helper.GetActivePlayer(args[0]) is not PlayerControllerB targetPlayer)
-        {
+        if (Helper.GetActivePlayer(args[0]) is not PlayerControllerB targetPlayer) {
             Chat.Print("Target player is not alive or found!");
             return;
         }
 
-        var promptedEnemies = this.PromptEnemiesToTarget(targetPlayer);
+        List<string> promptedEnemies = this.PromptEnemiesToTarget(targetPlayer);
 
-        if (promptedEnemies.Count is 0)
-        {
+        if (promptedEnemies.Count is 0) {
             Chat.Print("No enemies found!");
             return;
         }

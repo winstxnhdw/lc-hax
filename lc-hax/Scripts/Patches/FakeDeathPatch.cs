@@ -1,15 +1,17 @@
+#region
+
 using GameNetcodeStuff;
 using HarmonyLib;
 using Hax;
 
+#endregion
+
 [HarmonyPatch(typeof(PlayerControllerB), "KillPlayerClientRpc")]
-internal class FakeDeathPatch
-{
-    private static bool Prefix(int playerId)
-    {
+class FakeDeathPatch {
+    static bool Prefix(int playerId) {
         if (!Setting.EnableFakeDeath) return true;
 
         Setting.EnableFakeDeath = false;
-        return Helper.LocalPlayer?.GetPlayerID() != playerId;
+        return Helper.LocalPlayer?.GetPlayerId() != playerId;
     }
 }

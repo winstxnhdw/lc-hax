@@ -1,59 +1,46 @@
+#region
+
 using Hax;
 using UnityEngine;
 
-internal enum DoublewingBirdState
-{
+#endregion
+
+enum DoublewingBirdState {
     IDLE,
     GLIDING
 }
 
-internal class DoublewingBirdController : IEnemyController<DoublewingAI>
-{
+class DoublewingBirdController : IEnemyController<DoublewingAI> {
     public Vector3 camOffsets = new(0, 2.3f, -3f);
     public float transitionSpeed = 0f;
 
-    public Vector3 GetCameraOffset(DoublewingAI enemy)
-    {
+    public Vector3 GetCameraOffset(DoublewingAI enemy) {
         float targetCamOffsetY, targetCamOffsetZ;
 
-        if (enemy.IsBehaviourState(DoublewingBirdState.GLIDING))
-        {
+        if (enemy.IsBehaviourState(DoublewingBirdState.GLIDING)) {
             // In Air
-            transitionSpeed = 1.2f;
+            this.transitionSpeed = 1.2f;
             targetCamOffsetY = 22.5f;
             targetCamOffsetZ = -3.5f;
         }
-        else
-        {
+        else {
             // On Ground
-            transitionSpeed = 1.3f;
+            this.transitionSpeed = 1.3f;
             targetCamOffsetY = 2.3f;
             targetCamOffsetZ = -3f;
         }
 
-        camOffsets.y = Mathf.Lerp(camOffsets.y, targetCamOffsetY, Time.deltaTime * transitionSpeed);
-        camOffsets.z = Mathf.Lerp(camOffsets.z, targetCamOffsetZ, Time.deltaTime * transitionSpeed);
+        this.camOffsets.y = Mathf.Lerp(this.camOffsets.y, targetCamOffsetY, Time.deltaTime * this.transitionSpeed);
+        this.camOffsets.z = Mathf.Lerp(this.camOffsets.z, targetCamOffsetZ, Time.deltaTime * this.transitionSpeed);
 
-        return camOffsets;
+        return this.camOffsets;
     }
 
-    public void UsePrimarySkill(DoublewingAI enemy)
-    {
-        enemy.SetBehaviourState(DoublewingBirdState.IDLE);
-    }
+    public void UsePrimarySkill(DoublewingAI enemy) => enemy.SetBehaviourState(DoublewingBirdState.IDLE);
 
-    public void UseSecondarySkill(DoublewingAI enemy)
-    {
-        enemy.SetBehaviourState(DoublewingBirdState.GLIDING);
-    }
+    public void UseSecondarySkill(DoublewingAI enemy) => enemy.SetBehaviourState(DoublewingBirdState.GLIDING);
 
-    public bool IsAbleToRotate(DoublewingAI enemy)
-    {
-        return !enemy.IsBehaviourState(DoublewingBirdState.IDLE);
-    }
+    public bool IsAbleToRotate(DoublewingAI enemy) => !enemy.IsBehaviourState(DoublewingBirdState.IDLE);
 
-    public bool SyncAnimationSpeedEnabled(DoublewingAI enemy)
-    {
-        return true;
-    }
+    public bool SyncAnimationSpeedEnabled(DoublewingAI enemy) => true;
 }

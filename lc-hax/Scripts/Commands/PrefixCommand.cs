@@ -1,16 +1,12 @@
 [Command("prefix")]
-internal class PrefixCommand : ICommand
-{
-    public void Execute(StringArray args)
-    {
-        if (args.Length is 0)
-        {
+class PrefixCommand : ICommand {
+    public void Execute(StringArray args) {
+        if (args.Length is 0) {
             Chat.Print("Usage: prefix <prefix>");
             return;
         }
 
-        if (!char.TryParse(args[0], out var prefix))
-        {
+        if (!char.TryParse(args[0], out char prefix)) {
             Chat.Print("The prefix must be a single character!");
             return;
         }

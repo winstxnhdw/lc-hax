@@ -1,18 +1,19 @@
+#region
+
 using System.Collections;
 using GameNetcodeStuff;
 using Hax;
 using UnityEngine;
 
-internal sealed class WeightMod : MonoBehaviour
-{
+#endregion
+
+sealed class WeightMod : MonoBehaviour {
     internal static WeightMod? Instance { get; private set; }
 
-    private Coroutine? WeightCoroutine { get; set; }
+    Coroutine? WeightCoroutine { get; set; }
 
-    private void Awake()
-    {
-        if (Instance != null)
-        {
+    void Awake() {
+        if (Instance != null) {
             Destroy(this);
             return;
         }
@@ -20,15 +21,12 @@ internal sealed class WeightMod : MonoBehaviour
         Instance = this;
     }
 
-    private IEnumerator SetWeight(object[] args)
-    {
+    IEnumerator SetWeight(object[] args) {
         WaitForEndOfFrame waitForEndOfFrame = new();
         WaitForSeconds waitForOneSecond = new(1.0f);
 
-        while (true)
-        {
-            if (Helper.LocalPlayer is not PlayerControllerB player)
-            {
+        while (true) {
+            if (Helper.LocalPlayer is not PlayerControllerB player) {
                 yield return waitForEndOfFrame;
                 continue;
             }
@@ -38,40 +36,23 @@ internal sealed class WeightMod : MonoBehaviour
         }
     }
 
-    internal void StartRoutine()
-    {
-        WeightCoroutine ??= this.StartResilientCoroutine(SetWeight);
-    }
+    internal void StartRoutine() => this.WeightCoroutine ??= this.StartResilientCoroutine(this.SetWeight);
 
-    internal void OnStopRoutine()
-    {
-        if (WeightCoroutine != null)
-        {
-            StopCoroutine(WeightCoroutine);
-            WeightCoroutine = null;
+    internal void OnStopRoutine() {
+        if (this.WeightCoroutine != null) {
+            this.StopCoroutine(this.WeightCoroutine);
+            this.WeightCoroutine = null;
         }
 
         if (Helper.LocalPlayer is not PlayerControllerB player) return;
         player.carryWeight = 1.0f;
     }
 
-    public void Start()
-    {
-        StartRoutine();
-    }
+    public void Start() => this.StartRoutine();
 
-    public void OnDisable()
-    {
-        OnStopRoutine();
-    }
+    public void OnDisable() => this.OnStopRoutine();
 
-    public void OnEnable()
-    {
-        StartRoutine();
-    }
+    public void OnEnable() => this.StartRoutine();
 
-    public void OnDestroy()
-    {
-        OnStopRoutine();
-    }
+    public void OnDestroy() => this.OnStopRoutine();
 }

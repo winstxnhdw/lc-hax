@@ -1,10 +1,10 @@
+#region
+
 using HarmonyLib;
 
+#endregion
+
 [HarmonyPatch(typeof(HUDManager), nameof(HUDManager.HideHUD))]
-internal class HUDPatch
-{
-    private static void Prefix(ref bool hide)
-    {
-        hide = false;
-    }
+class HUDPatch {
+    static void Prefix(ref bool hide) => hide = false;
 }

@@ -1,15 +1,17 @@
+#region
+
 using GameNetcodeStuff;
 using Hax;
 
+#endregion
+
 [Command("end")]
-internal class EndCommand : ICommand
-{
-    public void Execute(StringArray args)
-    {
+class EndCommand : ICommand {
+    public void Execute(StringArray args) {
         if (args.Length is 0)
             Helper.StartOfRound?.EndGameServerRpc(-1);
 
         else if (Helper.GetPlayer(args[0]) is PlayerControllerB player)
-            player.playersManager.EndGameServerRpc(player.GetPlayerID());
+            player.playersManager.EndGameServerRpc(player.GetPlayerId());
     }
 }

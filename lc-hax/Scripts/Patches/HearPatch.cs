@@ -1,21 +1,22 @@
 #pragma warning disable IDE1006
 
+#region
+
 using HarmonyLib;
 using Hax;
 using UnityEngine;
 
+#endregion
+
 [HarmonyPatch(typeof(StartOfRound), nameof(StartOfRound.UpdatePlayerVoiceEffects))]
-internal class HearPatch
-{
-    private static void Postfix(StartOfRound __instance)
-    {
+class HearPatch {
+    static void Postfix(StartOfRound __instance) {
         if (!Setting.EnableEavesdrop) return;
         if (Helper.StartOfRound is { shipIsLeaving: true }) return;
         if (Helper.SoundManager is not SoundManager soundManager) return;
 
-        __instance.allPlayerScripts.ForEach(player =>
-        {
-            var currentVoiceChatAudioSource = player.currentVoiceChatAudioSource;
+        __instance.allPlayerScripts.ForEach(player => {
+            AudioSource? currentVoiceChatAudioSource = player.currentVoiceChatAudioSource;
 
             if (!currentVoiceChatAudioSource.TryGetComponent(out AudioLowPassFilter audioLowPassFilter)) return;
 

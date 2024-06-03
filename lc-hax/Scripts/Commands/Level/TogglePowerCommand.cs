@@ -1,14 +1,17 @@
+#region
+
 using System.Linq;
 using Hax;
 
+#endregion
+
 [Command("togglepower")]
-internal class TogglePowerCommand : ICommand
-{
-    public void Execute(StringArray _)
-    {
+class TogglePowerCommand : ICommand {
+    public void Execute(StringArray _) {
         if (Helper.RoundManager is not RoundManager round) return;
         if (round.powerOffPermanently) Chat.Print("Power Can't be toggled, Someone pulled the apparatus.");
-        var Breaker = Helper.FindObjects<BreakerBox>().FirstOrDefault(breaker => breaker.name.Contains("(Clone)"));
+        BreakerBox? Breaker = Helper.FindObjects<BreakerBox>()
+            .FirstOrDefault(breaker => breaker.name.Contains("(Clone)"));
         if (Breaker != null)
             Helper.SetPowerSwitch(!Breaker.isPowerOn);
         else

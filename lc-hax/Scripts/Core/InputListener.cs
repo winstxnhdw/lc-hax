@@ -1,12 +1,14 @@
+#region
+
 using System;
 using Hax;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-internal class InputListener : MonoBehaviour
-{
-    private (Func<bool>, Action)[] InputActions { get; } =
-    [
+#endregion
+
+class InputListener : MonoBehaviour {
+    (Func<bool>, Action)[] InputActions { get; } = [
         (() => Mouse.current.middleButton.wasPressedThisFrame, () => OnMiddleButtonPress?.Invoke()),
         (() => Mouse.current.leftButton.wasPressedThisFrame, () => OnLeftButtonPress?.Invoke()),
         (() => Mouse.current.leftButton.wasReleasedThisFrame, () => OnLeftButtonRelease?.Invoke()),
@@ -62,15 +64,10 @@ internal class InputListener : MonoBehaviour
     internal static event Action? OnQPress;
     internal static event Action? OnEPress;
 
-    private static bool IsNotTyping()
-    {
-        return Helper.LocalPlayer == null || !Helper.LocalPlayer.isTypingChat;
-    }
+    static bool IsNotTyping() => Helper.LocalPlayer == null || !Helper.LocalPlayer.isTypingChat;
 
-    private void Update()
-    {
-        if (IsNotTyping())
-        {
+    void Update() {
+        if (IsNotTyping()) {
             OnFButtonHold?.Invoke(Keyboard.current[Key.F].isPressed);
             OnEButtonHold?.Invoke(Keyboard.current[Key.E].isPressed);
         }
@@ -80,8 +77,7 @@ internal class InputListener : MonoBehaviour
         OnRightButtonHold?.Invoke(Mouse.current.rightButton.isPressed);
         OnLeftAltButtonHold?.Invoke(Keyboard.current[Key.LeftAlt].isPressed);
 
-        foreach ((var keyPressed, var eventAction) in InputActions)
-        {
+        foreach ((Func<bool> keyPressed, Action eventAction) in this.InputActions) {
             if (!keyPressed()) continue;
             eventAction();
         }

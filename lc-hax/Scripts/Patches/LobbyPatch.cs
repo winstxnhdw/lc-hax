@@ -1,13 +1,15 @@
 #pragma warning disable IDE1006
 
+#region
+
 using HarmonyLib;
 
+#endregion
+
 [HarmonyPatch(typeof(SteamLobbyManager))]
-internal class LobbyPatch
-{
+class LobbyPatch {
     [HarmonyPatch(nameof(SteamLobbyManager.RefreshServerListButton))]
-    private static void Prefix(SteamLobbyManager __instance, ref float ___refreshServerListTimer)
-    {
+    static void Prefix(SteamLobbyManager __instance, ref float ___refreshServerListTimer) {
         ___refreshServerListTimer = 1.0f;
         __instance.censorOffensiveLobbyNames = false;
     }

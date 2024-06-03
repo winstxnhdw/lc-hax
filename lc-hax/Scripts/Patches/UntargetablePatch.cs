@@ -1,22 +1,23 @@
 #pragma warning disable IDE1006
 
+#region
+
 using GameNetcodeStuff;
 using HarmonyLib;
 using Hax;
 
+#endregion
+
 [HarmonyPatch(typeof(EnemyAI))]
-internal class UntargetableEnemyPatch
-{
+class UntargetableEnemyPatch {
     [HarmonyPatch(nameof(EnemyAI.PlayerIsTargetable))]
-    private static void Postfix(PlayerControllerB playerScript, ref bool __result)
-    {
+    static void Postfix(PlayerControllerB playerScript, ref bool __result) {
         if (!Setting.EnableUntargetable || !playerScript.IsSelf()) return;
         __result = false;
     }
 
     [HarmonyPatch(nameof(EnemyAI.Update))]
-    private static bool Prefix(EnemyAI __instance)
-    {
+    static bool Prefix(EnemyAI __instance) {
         if (!Setting.EnableUntargetable) return true;
         if (!__instance.targetPlayer.IsSelf()) return true;
 
@@ -27,10 +28,6 @@ internal class UntargetableEnemyPatch
 }
 
 [HarmonyPatch(typeof(NutcrackerEnemyAI), nameof(NutcrackerEnemyAI.CheckLineOfSightForLocalPlayer))]
-internal class UntargetableNutcrackerPatch
-{
-    private static bool Prefix()
-    {
-        return !Setting.EnableUntargetable;
-    }
+class UntargetableNutcrackerPatch {
+    static bool Prefix() => !Setting.EnableUntargetable;
 }

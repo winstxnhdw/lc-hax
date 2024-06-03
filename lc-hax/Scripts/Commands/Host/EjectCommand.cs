@@ -1,10 +1,10 @@
+#region
+
 using Hax;
 
+#endregion
+
 [HostCommand("eject")]
-internal class EjectCommand : ICommand
-{
-    public void Execute(StringArray _)
-    {
-        Helper.StartOfRound?.ManuallyEjectPlayersServerRpc();
-    }
+class EjectCommand : ICommand {
+    public void Execute(StringArray _) => Helper.StartOfRound?.ManuallyEjectPlayersServerRpc();
 }

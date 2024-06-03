@@ -1,18 +1,15 @@
 #pragma warning disable IDE1006
 
+#region
+
 using HarmonyLib;
 
-internal class AntiFlashPatch
-{
+#endregion
+
+class AntiFlashPatch {
     [HarmonyPatch(typeof(HUDManager), "Update")]
-    private static void Prefix(HUDManager __instance)
-    {
-        __instance.flashFilter = 0.0f;
-    }
+    static void Prefix(HUDManager __instance) => __instance.flashFilter = 0.0f;
 
     [HarmonyPatch(typeof(SoundManager), "SetEarsRinging")]
-    private static bool Prefix()
-    {
-        return false;
-    }
+    static bool Prefix() => false;
 }

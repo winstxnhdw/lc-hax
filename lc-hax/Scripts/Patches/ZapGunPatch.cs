@@ -1,12 +1,12 @@
 #pragma warning disable IDE1006
 
+#region
+
 using HarmonyLib;
 
+#endregion
+
 [HarmonyPatch(typeof(PatcherTool), nameof(PatcherTool.ShiftBendRandomizer))]
-internal class ZapGunPatch
-{
-    private static void Postfix(PatcherTool __instance)
-    {
-        __instance.bendMultiplier = 0.0f;
-    }
+class ZapGunPatch {
+    static void Postfix(PatcherTool __instance) => __instance.bendMultiplier = 0.0f;
 }

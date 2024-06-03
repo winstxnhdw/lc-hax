@@ -1,5 +1,4 @@
-internal static class Setting
-{
+static class Setting {
     internal static bool EnableGodMode { get; set; } = false;
     internal static bool EnableBlockCredits { get; set; } = false;
     internal static bool EnableBlockRadar { get; set; } = false;
