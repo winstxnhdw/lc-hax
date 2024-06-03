@@ -14,7 +14,7 @@ class HealCommand : ICommand, IStun {
         // Handle different cases based on args
         if (args.Length == 0 || args[0].Equals("self", StringComparison.OrdinalIgnoreCase)) {
             if (Helper.LocalPlayer is null) return;
-            if (!this.HealPlayer(Helper.LocalPlayer)) Chat.Print("Failed to heal the local player!");
+            if (!this.HealPlayer(Helper.LocalPlayer)) Chat.Print("Failed to Heal Self!");
 
             return;
         }
@@ -156,6 +156,7 @@ class HealCommand : ICommand, IStun {
         hudManager.HUDAnimator.SetBool("biohazardDamage", false);
         hudManager.HUDAnimator.SetTrigger("HealFromCritical");
         hudManager.UpdateHealthUI(hudManager.localPlayer.health, false);
+        Helper.SendFlatNotification("You got Healed!");
         return true;
     }
 
@@ -175,7 +176,7 @@ class HealCommand : ICommand, IStun {
         bool Healed = false;
         if (player.IsSelf()) {
             this.HealLocalPlayer(true);
-            return true;
+            Healed = true;
         }
         else {
             if (!player.IsDead()) {
@@ -187,10 +188,9 @@ class HealCommand : ICommand, IStun {
         if (Healed)
             this.Stun(player.transform.position, 5.0f, 1.0f);
         else {
-            if (!player.IsDead())
-                Helper.SendFlatNotification($"Failed to heal {username}!");
-            else
-                Helper.SendFlatNotification($"Failed to Heal {username} : DEAD PLAYER");
+            Helper.SendFlatNotification(!player.IsDead()
+                ? $"Failed to heal {username}!"
+                : $"Failed to Heal {username} : DEAD PLAYER");
         }
 
         return Healed;

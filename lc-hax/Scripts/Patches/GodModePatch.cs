@@ -16,7 +16,7 @@ class GodModePatch {
         __result = false;
         __instance.inAnimationWithEnemy = null;
         __instance.inSpecialInteractAnimation = false;
-
+        __instance.health = 100;
         return false;
     }
 }
