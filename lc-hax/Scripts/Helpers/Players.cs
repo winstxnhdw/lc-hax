@@ -265,25 +265,33 @@ namespace Hax
         }
 
         /// <summary>
-        /// Determines whether the player is dead.
+        /// Determines if the specified player controller instance is dead.
         /// </summary>
-        /// <param name="instance">The player instance.</param>
-        /// <returns><c>true</c> if the player is dead; otherwise, <c>false</c>.</returns>
-        internal static bool IsDead(this PlayerControllerB instance) => instance.isPlayerDead;
+        /// <param name="instance">The player controller instance.</param>
+        /// <returns>True if the player controller instance is dead or null, otherwise returns the value of <see cref="PlayerControllerB.isPlayerDead"/>.</returns>
+        internal static bool IsDead(this PlayerControllerB? instance) => instance?.isPlayerDead ?? true;
 
         /// <summary>
         /// Determines whether the player is controlled.
         /// </summary>
         /// <param name="instance">The player instance.</param>
-        /// <returns><c>true</c> if the player is controlled; otherwise, <c>false</c>.</returns>
-        internal static bool IsControlled(this PlayerControllerB instance) => instance.isPlayerControlled;
+        /// <returns>False if the player controller instance is dead or null, otherwise returns the value of <see cref="PlayerControllerB.isPlayerControlled"/>.</returns>
+        internal static bool IsControlled(this PlayerControllerB? instance) => instance?.isPlayerControlled ?? false;
 
         /// <summary>
         /// Determines whether the player is Deactivated (dead and not controlled).
         /// </summary>
         /// <param name="instance">The player instance.</param>
-        /// <returns><c>true</c> if the player is Dead and Not Player Controlled; otherwise, <c>false</c>.</returns>
-        internal static bool isDeadAndNotControlled(this PlayerControllerB instance) => instance.IsDead() && !instance.IsControlled();
+        /// <returns>True if the player controller instance is null, otherwise Checks for <see cref="PlayerControllerB.isPlayerDead"/> and not <see cref="PlayerControllerB.isPlayerControlled"/>.</returns>
+        internal static bool IsDeadAndNotControlled(this PlayerControllerB? instance)
+        {
+            if (instance == null)
+            {
+                return true;
+            }
+
+            return instance.IsDead() && !instance.IsControlled();
+        }
 
         /// <summary>
         /// Gets a player from a body.
@@ -297,7 +305,7 @@ namespace Hax
         /// </summary>
         /// <param name="player">The player controller.</param>
         /// <returns>The username of the player, or <c>null</c> if the player is not initialized or the username is not set.</returns>
-        internal static string GetPlayerUsername(this PlayerControllerB player)
+        internal static string GetPlayerUsername(this PlayerControllerB? player)
         {
             if (player == null) return null;
             if (player.playerUsername == "Player") return null; // means not initialized

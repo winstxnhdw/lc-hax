@@ -58,7 +58,7 @@ internal class HealCommand : ICommand, IStun
         
         startOfRound.allPlayersDead = false;
         localPlayer.ResetPlayerBloodObjects(localPlayer.IsDead());
-        if (localPlayer.isDeadAndNotControlled())
+        if (localPlayer.IsDeadAndNotControlled())
         {
             localPlayer.isClimbingLadder = false;
             localPlayer.ResetZAndXRotation();
@@ -177,26 +177,26 @@ internal class HealCommand : ICommand, IStun
         return true;
     }
 
-    private bool HealPlayer(string? playerNameOrId)
+    private void HealPlayer(string? playerNameOrId)
     {
         var targetPlayer = Helper.GetPlayer(playerNameOrId);
         if (targetPlayer == null)
         {
             Helper.SendFlatNotification($"Player {playerNameOrId} not found!");
-            return false;
+            return;
         }
 
-        return HealPlayer(targetPlayer);
+        HealPlayer(targetPlayer);
     }
 
-    private bool HealPlayer(PlayerControllerB? player)
+    private bool HealPlayer(PlayerControllerB player)
     {
         if (player is null) return false;
         var username = player.GetPlayerUsername();
+        bool Healed = false;
         if (player.IsSelf())
         {
             HealLocalPlayer(true);
-            this.Stun(player.transform.position, 5.0f, 1.0f);
             return true;
         }
         else
@@ -204,15 +204,26 @@ internal class HealCommand : ICommand, IStun
             if (!player.IsDead())
             {
                 player?.HealPlayer();
-                this.Stun(player.transform.position, 5.0f, 1.0f);
-                return true;
-            }
-            else
-            {
-                if (username != null) Helper.SendFlatNotification($"Cannot Heal {username} (DEAD)");
+                Healed = true;
             }
         }
 
-        return false;
+        if (Healed)
+        {
+            this.Stun(player.transform.position, 5.0f, 1.0f);
+        }
+        else
+        {
+            if (!player.IsDead())
+            {
+                Helper.SendFlatNotification($"Failed to heal {username}!");
+            }
+            else
+            {
+                Helper.SendFlatNotification($"Failed to Heal {username} : DEAD PLAYER");
+            }
+        }
+
+        return Healed;
     }
 }
