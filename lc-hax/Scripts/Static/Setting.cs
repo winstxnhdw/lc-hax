@@ -32,4 +32,7 @@ static class Setting {
     internal static float New_MovementSpeed { get; set; } = Default_MovementSpeed;
     internal static float New_ClimbSpeed { get; set; } = Default_climbSpeed;
     internal static float New_JumpForce { get; set; } = Default_JumpForce;
+
+
+    internal static bool isEditorMode = false;
 }
