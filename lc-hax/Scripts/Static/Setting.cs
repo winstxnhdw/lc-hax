@@ -35,4 +35,6 @@ static class Setting {
 
 
     internal static bool isEditorMode = false;
+
+    internal static float IsInsideFactoryTreshold { get; set; } = 140f;
 }

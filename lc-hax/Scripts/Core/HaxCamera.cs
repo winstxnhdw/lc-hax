@@ -1,10 +1,12 @@
 #region
 
+using System;
 using System.Text;
 using GameNetcodeStuff;
 using Hax;
 using UnityEngine;
 using UnityEngine.Rendering.HighDefinition;
+using static UnityEngine.EventSystems.EventTrigger;
 
 #endregion
 
@@ -23,13 +25,20 @@ class HaxCamera : MonoBehaviour {
 
     internal AudioListener? HaxCamAudioListener { get; private set; }
 
-    internal Reflector<PlayerControllerB> PlayerReflector {
-        get {
-            if (Helper.LocalPlayer != null) return Helper.LocalPlayer.Reflect();
-            return null;
+
+    internal void Awake() {
+        if (Instance != null) {
+            Destroy(this);
+            return;
         }
+
+        Instance = this;
+        _ = this.GetCamera();
+        this.enabled = false;
     }
 
+
+    
 
     internal void ClearCursor() {
         if (Helper.LocalPlayer is not PlayerControllerB player) return;
@@ -163,6 +172,7 @@ class HaxCamera : MonoBehaviour {
 
         foreach (RaycastHit raycastHit in camera.transform.SphereCastForward()) {
             Collider? collider = raycastHit.collider;
+            Transform rootTransform = collider.transform.root;
 
 
             if (collider.TryGetComponent(out TerminalAccessibleObject terminalObject)) {
@@ -186,15 +196,18 @@ class HaxCamera : MonoBehaviour {
                 }
             }
 
-            if (collider.TryGetComponent(out SpikeRoofTrap spike)) {
-                if (!Setting.EnableStunOnLeftClick)
-                    this.SetOnlyCursorText($"Trigger Spike Slam [M3]");
+            if (rootTransform.name.ToLower().Contains("spikerooftraphazard")) {
+                SpikeRoofTrap spike = rootTransform.GetComponentInChildren<SpikeRoofTrap>();
+                if (spike != null) {
+                    if (!Setting.EnableStunOnLeftClick)
+                        this.SetOnlyCursorText($"Trigger Spike Slam [M3]");
 
-                else {
-                    if (spike.isTrapActive())
-                        this.SetOnlyCursorText("Set Spike Trap Off [M3]");
-                    else
-                        this.SetOnlyCursorText("Set Spike Trap On [M3]");
+                    else {
+                        if (spike.isTrapActive())
+                            this.SetOnlyCursorText("Set Spike Trap Off [M3]");
+                        else
+                            this.SetOnlyCursorText("Set Spike Trap On [M3]");
+                    }
                 }
             }
 
@@ -274,6 +287,7 @@ class HaxCamera : MonoBehaviour {
         }
     }
 
+
     internal void DisableCamera() {
         if (PhantomMod.Instance is PhantomMod phantom) phantom.SetPhantom(false);
         this.HaxCamContainer?.SetActive(false);
@@ -282,10 +296,10 @@ class HaxCamera : MonoBehaviour {
     internal Camera? GetCamera() {
         if (this.CustomCamera != null) return this.CustomCamera;
 
-        this.HaxCamContainer ??= new GameObject("lc-hax Camera Parent[M3] ");
+        this.HaxCamContainer ??= new GameObject("lc-hax Camera Parent");
         Camera? newCam = this.HaxCamContainer.AddComponent<Camera>();
 
-        this.HaxCamAudioContainer ??= new GameObject("lc-hax Audio Listener[M3] ");
+        this.HaxCamAudioContainer ??= new GameObject("lc-hax Audio Listener");
         this.HaxCamAudioListener = this.HaxCamAudioContainer.GetComponent<AudioListener>();
         this.HaxCamAudioListener ??= this.HaxCamAudioContainer.AddComponent<AudioListener>();
         this.HaxCamAudioListener.transform.SetParent(this.HaxCamContainer.transform, false);
@@ -377,9 +391,5 @@ class HaxCamera : MonoBehaviour {
         if (this.KeyboardMovement != null) this.KeyboardMovement.LastPosition = worldPosition;
     }
 
-    internal void Awake() {
-        Instance = this;
-        _ = this.GetCamera();
-        this.enabled = false;
-    }
+
 }

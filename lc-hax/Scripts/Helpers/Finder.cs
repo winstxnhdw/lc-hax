@@ -117,4 +117,11 @@ static class Finder {
 
         return obj;
     }
+
+    // recurse method to return full path of a transform
+    internal static string GetPath(this Transform transform) {
+        if (transform == null) return string.Empty;
+        return transform.parent == null ? transform.name : transform.parent.GetPath() + "/" + transform.name;
+    }
+
 }

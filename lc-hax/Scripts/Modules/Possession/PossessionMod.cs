@@ -159,6 +159,12 @@ sealed class PossessionMod : MonoBehaviour {
         if (this.Possession.Enemy is not EnemyAI enemy) return;
         if (enemy.agent is not NavMeshAgent agent) return;
 
+        if (enemy == null) {
+            this.Unpossess();
+            this.Reset();
+            return;
+        }
+
         enemy.TakeOwnerShipIfNotOwned();
         this.UpdateCameraPosition(camera, enemy);
         this.UpdateCameraRotation(camera, enemy);
@@ -190,6 +196,12 @@ sealed class PossessionMod : MonoBehaviour {
     ///     This Allows to possess an enemy without a controller Registered to it..
     /// </summary>
     void UnregisteredEnemy(EnemyAI enemy) {
+        if (enemy == null) {
+            this.Unpossess();
+            this.Reset();
+            return;
+        }
+
         if (!this.IsAIControlled) {
             this.UpdateEnemyPosition(enemy);
             this.UpdateEnemyRotation();
@@ -197,7 +209,8 @@ sealed class PossessionMod : MonoBehaviour {
 
         if (this.NoClipEnabled)
             if (this.MainEntrance != null)
-                enemy.SetOutsideStatus(enemy.transform.position.y > this.MainEntrance.transform.position.y + 5.0f);
+                enemy.SetOutsideStatus(enemy.transform.position.y < this.MainEntrance.transform.position.y +
+                    Setting.IsInsideFactoryTreshold);
 
         if (enemy.isEnemyDead) this.Unpossess();
     }
@@ -207,11 +220,17 @@ sealed class PossessionMod : MonoBehaviour {
     /// </summary>
     void CompatibilityMode(PlayerControllerB player, EnemyAI enemy, IController controller,
         CharacterMovement movement, NavMeshAgent agent) {
+        if (enemy == null) {
+            this.Unpossess();
+            this.Reset();
+            return;
+        }
+
         if (this.NoClipEnabled)
             if (this.MainEntrance != null)
-                enemy.SetOutsideStatus(enemy.transform.position.y > this.MainEntrance.transform.position.y + 5.0f,
+                enemy.SetOutsideStatus(enemy.transform.position.y < this.MainEntrance.transform.position.y +
+                    Setting.IsInsideFactoryTreshold,
                     controller);
-
         if (enemy.isEnemyDead) {
             controller.OnDeath(enemy);
             this.Unpossess();
@@ -288,6 +307,7 @@ sealed class PossessionMod : MonoBehaviour {
     // Updates enemy's position to match the possessed object's position
     void UpdateEnemyPosition(EnemyAI enemy) {
         if (this.CharacterMovement is not CharacterMovement characterMovement) return;
+        if(enemy is null) return;
         Vector3 offsets = this.GetEnemyPositionOffset();
 
         Vector3 enemyEuler = enemy.transform.eulerAngles;
@@ -334,24 +354,32 @@ sealed class PossessionMod : MonoBehaviour {
 
     // Releases possession of the current enemy
     internal void Unpossess() {
-        if (this.Possession.Enemy is EnemyAI enemy) {
-            if (enemy.agent is NavMeshAgent agent) {
-                agent.updatePosition = true;
-                agent.updateRotation = true;
-                agent.isStopped = false;
-                _ = enemy.agent.Warp(enemy.transform.position);
-            }
+        if (this.Possession.Enemy != null) {
+            if (this.Possession.Enemy is EnemyAI enemy) {
+                if (enemy.agent is NavMeshAgent agent) {
+                    agent.updatePosition = true;
+                    agent.updateRotation = true;
+                    agent.isStopped = false;
+                    if (enemy.transform != null) {
+                        _ = enemy.agent.Warp(enemy.transform.position);
+                    }
+                }
 
-            enemy.SyncPositionToClients();
-            this.UpdateEnemyPosition(enemy);
-            this.SetAIControl(true);
-            this.Controller?.OnUnpossess(enemy);
+                enemy.SyncPositionToClients();
+
+                this.UpdateEnemyPosition(enemy);
+                this.SetAIControl(true);
+                this.Controller?.OnUnpossess(enemy);
+            }
         }
 
+        this.Reset();
+    }
 
-        this.IsAIControlled = false;
-        this.Possession.Clear();
+    void Reset() {
         this.Controller = null;
+        this.Possession.Clear();
+        this.IsAIControlled = false;
         if (this.CharacterMovementInstance is not null) Destroy(this.CharacterMovementInstance);
     }
 

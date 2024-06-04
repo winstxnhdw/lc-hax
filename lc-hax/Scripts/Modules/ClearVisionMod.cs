@@ -10,16 +10,17 @@ using UnityEngine.Rendering.HighDefinition;
 
 sealed class ClearVisionMod : MonoBehaviour {
     internal static ClearVisionMod? Instance { get; private set; }
-    bool IsInsideFactory => Helper.LocalPlayer is PlayerControllerB player && player.isInsideFactory;
-    bool IsDead => Helper.LocalPlayer is PlayerControllerB player && player.IsDead();
+    EntranceTeleport? MainEntrance => RoundManager.FindMainEntranceScript(false);
+    internal bool IsInsideFactory { get;  set; }
+    internal bool IsDead => Helper.LocalPlayer is PlayerControllerB player && player.IsDead();
 
-    float LightIntensity_Min => 0f;
-    float LightIntensity_Max => 35f;
+    internal float LightIntensity_Min => 0f;
+    internal float LightIntensity_Max => 35f;
 
-    float InternalLight { get; set; } = 25.0f;
-    float OutsideLight { get; set; } = 0.5f;
+    internal float InternalLight { get; set; } = 25.0f;
+    internal float OutsideLight { get; set; } = 0.5f;
 
-    float LightIntensity {
+    internal float LightIntensity {
         get {
             float Light = this.IsInsideFactory ? this.InternalLight : this.OutsideLight;
             if (this.IsDead) Light *= 15f;
@@ -31,6 +32,16 @@ sealed class ClearVisionMod : MonoBehaviour {
             else
                 this.OutsideLight = value;
         }
+    }
+
+
+
+
+
+    internal void DetectPosition() {
+        if (Helper.CurrentCamera is not Camera cam) return;
+        if (this.MainEntrance is not EntranceTeleport entrance) return;
+        this.IsInsideFactory = cam.transform.position.y < entrance.transform.position.y + Setting.IsInsideFactoryTreshold;
     }
 
     internal GameObject SunObject { get; set; }
@@ -107,6 +118,7 @@ sealed class ClearVisionMod : MonoBehaviour {
     }
 
     void Update() {
+        this.DetectPosition();
         this.UpdateNewSun();
         this.RemoveBlackSkybox();
         this.ToggleVisor(false);

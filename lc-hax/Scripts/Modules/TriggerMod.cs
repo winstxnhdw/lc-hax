@@ -37,7 +37,6 @@ sealed class TriggerMod : MonoBehaviour, IEnemyPrompter {
 
     void Fire() {
         if (Helper.CurrentCamera is not Camera camera) return;
-        if (Helper.LocalPlayer is not PlayerControllerB localplayer) return;
 
         if (this.UsingFollowRay) {
             if (FollowMod.PlayerToFollow is not null) {
@@ -60,6 +59,7 @@ sealed class TriggerMod : MonoBehaviour, IEnemyPrompter {
 
         foreach (RaycastHit raycastHit in camera.transform.SphereCastForward()) {
             Collider? collider = raycastHit.collider;
+            Transform rootTransform = collider.transform.root;
 
             if (collider.TryGetComponent(out TerminalAccessibleObject terminalObject)) terminalObject.ToggleDoor();
 
@@ -70,11 +70,14 @@ sealed class TriggerMod : MonoBehaviour, IEnemyPrompter {
                     turret.ToggleTurret();
             }
 
-            if (collider.TryGetComponent(out SpikeRoofTrap spike)) {
-                if (!Setting.EnableStunOnLeftClick)
-                    spike.Slam();
-                else
-                    spike.ToggleSpikes();
+            if (rootTransform.name.ToLower().Contains("spikerooftraphazard")) {
+                SpikeRoofTrap spike = rootTransform.GetComponentInChildren<SpikeRoofTrap>();
+                if (spike != null) {
+                    if (!Setting.EnableStunOnLeftClick)
+                        spike.Slam();
+                    else
+                        spike.ToggleSpikes();
+                }
             }
 
             if (collider.TryGetComponent(out Landmine landmine)) {
@@ -97,7 +100,14 @@ sealed class TriggerMod : MonoBehaviour, IEnemyPrompter {
 
             if (collider.GetComponentInParent<EnemyAI>().Unfake() is EnemyAI enemy && Setting.EnablePhantom &&
                 PossessionMod.Instance?.PossessedEnemy != enemy) {
-                PossessionMod.Instance?.Possess(enemy);
+                if (PossessionMod.Instance?.PossessedEnemy != null) {
+                    PossessionMod.Instance?.Unpossess();
+                    Helper.Delay(0.5f, () => { PossessionMod.Instance?.Possess(enemy); });
+                }
+                else {
+                    PossessionMod.Instance?.Possess(enemy);
+                }
+
                 break;
             }
 
