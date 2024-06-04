@@ -24,7 +24,7 @@ class HaxCamera : MonoBehaviour {
     internal Camera? CustomCamera { get; private set; }
 
     internal AudioListener? HaxCamAudioListener { get; private set; }
-
+    private bool wasInteracting = false;
 
     internal void Awake() {
         if (Instance != null) {
@@ -174,7 +174,6 @@ class HaxCamera : MonoBehaviour {
             Collider? collider = raycastHit.collider;
             Transform rootTransform = collider.transform.root;
 
-
             if (collider.TryGetComponent(out TerminalAccessibleObject terminalObject)) {
                 if (terminalObject.isBigDoor) {
                     if (terminalObject.isDoorOpen())
@@ -187,7 +186,6 @@ class HaxCamera : MonoBehaviour {
             if (collider.TryGetComponent(out Turret turret)) {
                 if (!Setting.EnableStunOnLeftClick)
                     this.SetOnlyCursorText($"Start Berserk Mode [M3]");
-
                 else {
                     if (turret.isTurretActive())
                         this.SetOnlyCursorText("Set Turret Off [M3]");
@@ -201,7 +199,6 @@ class HaxCamera : MonoBehaviour {
                 if (spike != null) {
                     if (!Setting.EnableStunOnLeftClick)
                         this.SetOnlyCursorText($"Trigger Spike Slam [M3]");
-
                     else {
                         if (spike.isTrapActive())
                             this.SetOnlyCursorText("Set Spike Trap Off [M3]");
@@ -214,7 +211,6 @@ class HaxCamera : MonoBehaviour {
             if (collider.TryGetComponent(out Landmine landmine)) {
                 if (!Setting.EnableStunOnLeftClick)
                     this.SetOnlyCursorText($"Explode Landmine [M3]");
-
                 else {
                     if (landmine.isLandmineActive())
                         this.SetOnlyCursorText("Set Landmine Off [M3]");
@@ -234,13 +230,15 @@ class HaxCamera : MonoBehaviour {
                 // extract interactTrigger and use it
                 InteractTrigger? trigger = doorLock.Reflect().GetInternalField<InteractTrigger>("doorTrigger");
                 if (trigger != null) {
-                    if (isPossessingEnemy) break;
                     this.SetCursorFromInteractTrigger(trigger);
-                    if (isInteracting) {
+                    if (isPossessingEnemy) break;
+                    if (isInteracting && !this.wasInteracting) {
                         if (doorLock.isLocked)
                             doorLock.UnlockDoorServerRpc();
                         else
                             trigger.Interact(Helper.LocalPlayer?.transform);
+
+                        this.wasInteracting = true;
                     }
                 }
 
@@ -266,9 +264,10 @@ class HaxCamera : MonoBehaviour {
 
             if (collider.TryGetComponent(out InteractTrigger interactTrigger)) {
                 this.SetCursorFromInteractTrigger(interactTrigger);
-                if (isInteracting) {
+                if (isInteracting && !this.wasInteracting) {
                     interactTrigger.Interact(Helper.LocalPlayer?.transform);
                     this.ClearCursor();
+                    this.wasInteracting = true;
                 }
 
                 break;
@@ -276,16 +275,24 @@ class HaxCamera : MonoBehaviour {
 
             if (collider.TryGetComponent(out GrabbableObject item)) {
                 if (isPossessingEnemy) break;
+                if(localplayer.IsDead()) return;
                 this.SetCursorFromGrabbable(item);
-                if (isInteracting) {
+                if (isInteracting && !this.wasInteracting) {
                     localplayer.GrabObject(item);
                     this.ClearCursor();
+                    this.wasInteracting = true;
                 }
 
                 break;
             }
         }
+
+        if (!isInteracting) {
+            this.wasInteracting = false;
+        }
     }
+
+
 
 
     internal void DisableCamera() {

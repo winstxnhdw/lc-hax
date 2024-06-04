@@ -15,15 +15,15 @@ sealed class ClearVisionMod : MonoBehaviour {
     internal bool IsDead => Helper.LocalPlayer is PlayerControllerB player && player.IsDead();
 
     internal float LightIntensity_Min => 0f;
-    internal float LightIntensity_Max => 35f;
+    internal float LightIntensity_Max => 100f;
 
-    internal float InternalLight { get; set; } = 25.0f;
+    internal float InternalLight { get; set; } = 15.0f;
     internal float OutsideLight { get; set; } = 0.5f;
 
     internal float LightIntensity {
         get {
             float Light = this.IsInsideFactory ? this.InternalLight : this.OutsideLight;
-            if (this.IsDead) Light *= 15f;
+            if (this.IsDead) Light *= 2f;
             return Light;
         }
         set {
