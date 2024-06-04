@@ -24,17 +24,14 @@ sealed class TriggerMod : MonoBehaviour, IEnemyPrompter {
 
     void OnEnable() {
         InputListener.OnMiddleButtonPress += this.Fire;
-        InputListener.OnEButtonHold += this.SetUsingInteractRay;
         InputListener.OnFButtonHold += this.SetUsingFollowRay;
     }
 
     void OnDisable() {
         InputListener.OnMiddleButtonPress -= this.Fire;
-        InputListener.OnEButtonHold -= this.SetUsingInteractRay;
         InputListener.OnFButtonHold -= this.SetUsingFollowRay;
     }
 
-    void SetUsingInteractRay(bool isHeld) => this.UsingInteractRay = isHeld;
 
     void SetUsingFollowRay(bool isHeld) => this.UsingFollowRay = isHeld;
 
@@ -55,17 +52,6 @@ sealed class TriggerMod : MonoBehaviour, IEnemyPrompter {
 
                 Chat.Print($"Following {player.playerUsername}!");
                 FollowMod.PlayerToFollow = player;
-                break;
-            }
-
-            return;
-        }
-
-        if (this.UsingInteractRay) {
-            foreach (int i in this.RaycastHits.SphereCastForward(camera.transform, 0.25f).Range()) {
-                if (!this.RaycastHits[i].collider.TryGetComponent(out InteractTrigger interactTrigger)) continue;
-
-                interactTrigger.Interact(Helper.LocalPlayer?.transform);
                 break;
             }
 

@@ -1,5 +1,6 @@
 #region
 
+using System.Text;
 using GameNetcodeStuff;
 using Hax;
 using UnityEngine;
@@ -8,9 +9,9 @@ using UnityEngine.Rendering.HighDefinition;
 #endregion
 
 class HaxCamera : MonoBehaviour {
+
     internal KeyboardMovement? KeyboardMovement { get; private set; }
     internal MousePan? MousePan { get; private set; }
-
 
     internal static HaxCamera? Instance { get; private set; }
 
@@ -22,7 +23,96 @@ class HaxCamera : MonoBehaviour {
 
     internal AudioListener? HaxCamAudioListener { get; private set; }
 
+    internal Reflector<PlayerControllerB> PlayerReflector {
+        get {
+            if (Helper.LocalPlayer != null) return Helper.LocalPlayer.Reflect();
+            return null;
+        }
+    }
 
+
+    internal void ClearCursor() {
+        if (Helper.LocalPlayer is not PlayerControllerB player) return;
+        player.cursorIcon.enabled = false;
+        player.cursorTip.text = "";
+        if (player.hoveringOverTrigger != null) player.previousHoveringOverTrigger = player.hoveringOverTrigger;
+        player.hoveringOverTrigger = null;
+    }
+
+    internal void SetOnlyCursorText(string Text) {
+        if (Helper.LocalPlayer is not PlayerControllerB player) return;
+        player.cursorTip.text = Text;
+        player.cursorIcon.enabled = false;
+        player.cursorTip.text = this.FixCursorTipText(player.cursorTip.text);
+    }
+
+    internal void SetCursorFromInteractTrigger(InteractTrigger interactTrigger) {
+        if (Helper.LocalPlayer is not PlayerControllerB player) return;
+        if (interactTrigger == null) {
+            this.ClearCursor();
+            return;
+        }
+
+        if (interactTrigger.isPlayingSpecialAnimation) {
+            this.ClearCursor();
+            return;
+        }
+
+        if (interactTrigger.interactable) {
+            player.cursorIcon.enabled = true;
+            player.cursorIcon.sprite = interactTrigger.hoverIcon;
+            player.cursorTip.text = interactTrigger.hoverTip;
+        }
+        else {
+            player.cursorIcon.sprite = interactTrigger.disabledHoverIcon;
+            player.cursorIcon.enabled = interactTrigger.disabledHoverIcon != null;
+            player.cursorTip.text = interactTrigger.disabledHoverTip;
+        }
+
+        player.cursorIcon.enabled = player.cursorIcon.sprite != null;
+        player.cursorTip.text = this.FixCursorTipText(player.cursorTip.text);
+
+    }
+
+    internal void SetCursorFromGrabbable(GrabbableObject grabbable) {
+        if (Helper.LocalPlayer is not PlayerControllerB player) return;
+        if (grabbable == null) {
+            this.ClearCursor();
+            return;
+        }
+
+        if (!player.HasFreeSlots()) {
+            player.cursorIcon.enabled = false;
+            player.cursorTip.text = "Inventory Full";
+            return;
+        }
+
+
+        player.cursorIcon.enabled = true;
+        player.cursorIcon.sprite = player.grabItemIcon;
+        if (!string.IsNullOrEmpty(grabbable.customGrabTooltip))
+            player.cursorTip.text = grabbable.customGrabTooltip;
+        else
+            player.cursorTip.text = "Grab : [E]";
+
+        player.cursorIcon.enabled = player.cursorIcon.sprite != null;
+        player.cursorTip.text = this.FixCursorTipText(player.cursorTip.text);
+    }
+
+
+    internal string FixCursorTipText(string text) {
+        if (Helper.StartOfRound is not StartOfRound startOfRound) return text;
+        if (startOfRound.localPlayerUsingController) {
+            StringBuilder stringBuilder = new StringBuilder(text);
+            stringBuilder.Replace("[E]", "[X]");
+            stringBuilder.Replace("[LMB]", "[X]");
+            stringBuilder.Replace("[RMB]", "[R-Trigger]");
+            stringBuilder.Replace("[F]", "[R-Shoulder]");
+            return stringBuilder.ToString();
+        }
+
+        return text.Replace("[LMB]", "[E]");
+    }
     internal void OnEnable() {
         GameListener.OnGameStart += this.DisableCamera;
         GameListener.OnGameEnd += this.DisableCamera;
@@ -52,30 +142,150 @@ class HaxCamera : MonoBehaviour {
         playerlistener.enabled = true;
         startOfRound.audioListener = playerlistener;
         startOfRound.activeCamera.enabled = true;
+        this.ClearCursor();
     }
-
 
     void LateUpdate() {
         if (this.HaxCamContainer is null) return;
         if (this.KeyboardMovement is null) return;
-        if (this.HaxCamContainer.activeSelf)
-            this.KeyboardMovement.IsPaused = Helper.LocalPlayer is { isTypingChat: true };
+        if (!this.HaxCamContainer.activeSelf) return;
+        this.OnCameraInteract();
+        this.KeyboardMovement.IsPaused = Helper.LocalPlayer is { isTypingChat: true };
     }
 
+    void OnCameraInteract() {
+        if (Helper.CurrentCamera is not Camera camera) return;
+        if (Helper.LocalPlayer is not PlayerControllerB localplayer) return;
+
+        bool isInteracting =
+            IngamePlayerSettings.Instance.playerInput.actions.FindAction("Interact", false).IsPressed();
+        bool isPossessingEnemy = PossessionMod.Instance?.PossessedEnemy != null;
+
+        foreach (RaycastHit raycastHit in camera.transform.SphereCastForward()) {
+            Collider? collider = raycastHit.collider;
+
+
+            if (collider.TryGetComponent(out TerminalAccessibleObject terminalObject)) {
+                if (terminalObject.isBigDoor) {
+                    if (terminalObject.isDoorOpen())
+                        this.SetOnlyCursorText($"Close {terminalObject.objectCode} Big Door [M3]");
+                    else
+                        this.SetOnlyCursorText($"Open {terminalObject.objectCode} Big Door [M3]");
+                }
+            }
+
+            if (collider.TryGetComponent(out Turret turret)) {
+                if (!Setting.EnableStunOnLeftClick)
+                    this.SetOnlyCursorText($"Start Berserk Mode [M3]");
+
+                else {
+                    if (turret.isTurretActive())
+                        this.SetOnlyCursorText("Set Turret Off [M3]");
+                    else
+                        this.SetOnlyCursorText("Set Turret On [M3]");
+                }
+            }
+
+            if (collider.TryGetComponent(out SpikeRoofTrap spike)) {
+                if (!Setting.EnableStunOnLeftClick)
+                    this.SetOnlyCursorText($"Trigger Spike Slam [M3]");
+
+                else {
+                    if (spike.isTrapActive())
+                        this.SetOnlyCursorText("Set Spike Trap Off [M3]");
+                    else
+                        this.SetOnlyCursorText("Set Spike Trap On [M3]");
+                }
+            }
+
+            if (collider.TryGetComponent(out Landmine landmine)) {
+                if (!Setting.EnableStunOnLeftClick)
+                    this.SetOnlyCursorText($"Explode Landmine [M3]");
+
+                else {
+                    if (landmine.isLandmineActive())
+                        this.SetOnlyCursorText("Set Landmine Off [M3]");
+                    else
+                        this.SetOnlyCursorText("Set Landmine On [M3]");
+                }
+
+                break;
+            }
+
+            if (collider.TryGetComponent(out JetpackItem jetpack)) {
+                this.SetOnlyCursorText($"Explode Jetpack [M3]");
+                break;
+            }
+
+            if (collider.TryGetComponent(out DoorLock doorLock)) {
+                // extract interactTrigger and use it
+                InteractTrigger? trigger = doorLock.Reflect().GetInternalField<InteractTrigger>("doorTrigger");
+                if (trigger != null) {
+                    if (isPossessingEnemy) break;
+                    this.SetCursorFromInteractTrigger(trigger);
+                    if (isInteracting) {
+                        if (doorLock.isLocked)
+                            doorLock.UnlockDoorServerRpc();
+                        else
+                            trigger.Interact(Helper.LocalPlayer?.transform);
+                    }
+                }
+
+                break;
+            }
+
+            if (collider.GetComponentInParent<EnemyAI>().Unfake() is EnemyAI enemy && Setting.EnablePhantom &&
+                PossessionMod.Instance?.PossessedEnemy != enemy) {
+                this.SetOnlyCursorText($"Possess {enemy.enemyType.enemyName} [M3]");
+                break;
+            }
+
+            if (collider.TryGetComponent(out PlayerControllerB player)) {
+                this.SetOnlyCursorText(
+                    $"Set {player.GetPlayerUsername()} as Enemy Target. [M3] \n Follow Player [F + M3]");
+                break;
+            }
+
+            if (collider.TryGetComponent(out DepositItemsDesk depositItemDesk)) {
+                this.SetOnlyCursorText("Jeb : Attack Players [M3]");
+                break;
+            }
+
+            if (collider.TryGetComponent(out InteractTrigger interactTrigger)) {
+                this.SetCursorFromInteractTrigger(interactTrigger);
+                if (isInteracting) {
+                    interactTrigger.Interact(Helper.LocalPlayer?.transform);
+                    this.ClearCursor();
+                }
+
+                break;
+            }
+
+            if (collider.TryGetComponent(out GrabbableObject item)) {
+                if (isPossessingEnemy) break;
+                this.SetCursorFromGrabbable(item);
+                if (isInteracting) {
+                    localplayer.GrabObject(item);
+                    this.ClearCursor();
+                }
+
+                break;
+            }
+        }
+    }
 
     internal void DisableCamera() {
         if (PhantomMod.Instance is PhantomMod phantom) phantom.SetPhantom(false);
         this.HaxCamContainer?.SetActive(false);
     }
 
-
     internal Camera? GetCamera() {
         if (this.CustomCamera != null) return this.CustomCamera;
 
-        this.HaxCamContainer ??= new GameObject("lc-hax Camera Parent");
+        this.HaxCamContainer ??= new GameObject("lc-hax Camera Parent[M3] ");
         Camera? newCam = this.HaxCamContainer.AddComponent<Camera>();
 
-        this.HaxCamAudioContainer ??= new GameObject("lc-hax Audio Listener");
+        this.HaxCamAudioContainer ??= new GameObject("lc-hax Audio Listener[M3] ");
         this.HaxCamAudioListener = this.HaxCamAudioContainer.GetComponent<AudioListener>();
         this.HaxCamAudioListener ??= this.HaxCamAudioContainer.AddComponent<AudioListener>();
         this.HaxCamAudioListener.transform.SetParent(this.HaxCamContainer.transform, false);
@@ -90,10 +300,8 @@ class HaxCamera : MonoBehaviour {
         this.KeyboardMovement = newCam.GetComponent<KeyboardMovement>();
         this.KeyboardMovement ??= newCam.gameObject.AddComponent<KeyboardMovement>();
 
-
         this.MousePan = newCam.GetComponent<MousePan>();
         this.MousePan ??= newCam.gameObject.AddComponent<MousePan>();
-
 
         this.MousePan.enabled = true;
         this.KeyboardMovement.enabled = true;
@@ -103,7 +311,6 @@ class HaxCamera : MonoBehaviour {
         DontDestroyOnLoad(this.HaxCamContainer);
         return newCam;
     }
-
 
     internal void CopyFromCamera(Transform container, ref Camera Cam, ref Camera camData) {
         Cam.transform.position = Vector3.zero;

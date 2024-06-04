@@ -400,7 +400,7 @@ sealed class PossessionMod : MonoBehaviour {
         if (door.isLocked) door.UnlockDoorSyncWithServer();
 
         if (isDoorOpened)
-            door.OpenOrCloseDoor(Helper.Players[0]);
+            door.OpenOrCloseDoor(Helper.LocalPlayer);
         else
             door.OpenDoorAsEnemyServerRpc();
     }
