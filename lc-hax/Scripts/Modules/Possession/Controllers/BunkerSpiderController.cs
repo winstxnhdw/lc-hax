@@ -26,6 +26,7 @@ class BunkerSpiderController : IEnemyController<SandSpiderAI> {
     public bool SyncAnimationSpeedEnabled(SandSpiderAI enemy) => false;
 
     public void UsePrimarySkill(SandSpiderAI enemy) => this.PlaceWebTrap(enemy);
+    public string GetPrimarySkillName(SandSpiderAI enemy) => "Place Web Trap";
 
     public void OnOutsideStatusChange(SandSpiderAI enemy) => enemy.StopSearch(enemy.patrolHomeBase, true);
 

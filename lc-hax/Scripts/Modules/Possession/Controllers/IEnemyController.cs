@@ -54,6 +54,8 @@ interface IController {
 
     string? GetSecondarySkillName(EnemyAI enemy);
 
+    string? GetSpecialAbilityName(EnemyAI enemy);
+
     float InteractRange(EnemyAI enemy);
 
     bool isHostOnly(EnemyAI enemy);
@@ -108,6 +110,8 @@ interface IEnemyController<T> : IController where T : EnemyAI {
     string? IController.GetPrimarySkillName(EnemyAI enemy) => this.GetPrimarySkillName((T)enemy);
 
     string? IController.GetSecondarySkillName(EnemyAI enemy) => this.GetSecondarySkillName((T)enemy);
+
+    string? IController.GetSpecialAbilityName(EnemyAI enemy) => this.GetSpecialAbilityName((T)enemy);
 
     bool IController.isHostOnly(EnemyAI enemy) => this.isHostOnly((T)enemy);
 
@@ -174,6 +178,8 @@ interface IEnemyController<T> : IController where T : EnemyAI {
     string? GetPrimarySkillName(T enemy) => null;
 
     string? GetSecondarySkillName(T enemy) => null;
+
+    string? GetSpecialAbilityName(T enemy) => null;
 
     bool isHostOnly(T enemy) => false;
 

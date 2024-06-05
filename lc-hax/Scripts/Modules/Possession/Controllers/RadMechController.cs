@@ -103,4 +103,27 @@ class RadMechController : IEnemyController<RadMechAI> {
             enemy.targetedThreat = enemy.targetPlayer.ToThreat();
         }
     }
+
+    public string GetPrimarySkillName(RadMechAI _) => "(HOLD) Fire weapon";
+
+    public string GetSecondarySkillName(RadMechAI enemy)
+    {
+        enemy.SetBehaviourState(RadMechBehaviorState.Alert);
+        if (!enemy.spotlight.activeSelf)
+            return "Enable Spotlight";
+        else {
+            return "Disable Spotlight";
+        }
+    }
+    
+
+public string GetSpecialAbilityName(RadMechAI enemy) {
+        bool inFlyingMode = enemy.Reflect().GetInternalField<bool>("inFlyingMode");
+        if (!inFlyingMode) {
+            return "Enable Flight";
+        }
+        else
+            return "Disable Flight";
+    }
+
 }

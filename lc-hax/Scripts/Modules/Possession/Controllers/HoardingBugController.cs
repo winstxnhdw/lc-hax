@@ -66,6 +66,7 @@ class HoardingBugController : IEnemyController<HoarderBugAI> {
                 enemy.angryAtPlayer = null;
                 enemy.angryTimer = 0.0f;
                 this.AttackPlayer(enemy, false);
+                this.angry = false;
             }
 
             return;
@@ -78,9 +79,26 @@ class HoardingBugController : IEnemyController<HoarderBugAI> {
     public void UseSpecialAbility(HoarderBugAI enemy) =>
         _ = RoundManager.PlayRandomClip(enemy.creatureVoice, enemy.chitterSFX, true, 1f, 0);
 
-    public string GetPrimarySkillName(HoarderBugAI enemy) => enemy.heldItem is not null ? "Use item" : "Grab Item";
+    public string GetPrimarySkillName(HoarderBugAI enemy) {
+        if(enemy.heldItem?.itemGrabbableObject != null)
+            return "Use item";
+        else
+            return "Grab item";
+    }
 
-    public string GetSecondarySkillName(HoarderBugAI enemy) => enemy.heldItem is null ? "" : "Drop item";
+    public string GetSecondarySkillName(HoarderBugAI enemy) {
+        if (enemy.heldItem?.itemGrabbableObject != null) {
+            return "Drop item";
+        }
+        else if (this.angry) {
+            return "Stop Attack Mode";
+        }
+        else {
+            return "Enter Attack Mode";
+        }
+    }
+
+    public string GetSpecialAbilityName(HoarderBugAI _) => "Chitter";
 
     public void OnOutsideStatusChange(HoarderBugAI enemy) {
         enemy.StopSearch(enemy.searchForItems, true);
@@ -88,7 +106,7 @@ class HoardingBugController : IEnemyController<HoarderBugAI> {
     }
 
 
-    void EnableAIControl(HoarderBugAI enemy, bool enabled) {
+    public void OnEnableAIControl(HoarderBugAI enemy, bool enabled){
         if (enabled) {
             enemy.Reflect().InvokeInternalMethod("ChooseNestPosition");
             enemy.SetBehaviourState(HoardingBugState.IDLE);
@@ -98,9 +116,9 @@ class HoardingBugController : IEnemyController<HoarderBugAI> {
     }
 
 
-    void OnUnpossess(HoarderBugAI _) => this.angry = false;
+    public void OnUnpossess(HoarderBugAI _) => this.angry = false;
 
-    void OnPossess(HoarderBugAI enemy) {
+    public void OnPossess(HoarderBugAI enemy) {
         this.angry = false;
         // calm the bug down when possessed
         enemy.angryTimer = 0.0f;

@@ -159,7 +159,6 @@ static partial class Helper {
     ///     reset its searches.
     /// </param>
     internal static void SetOutsideStatus(this EnemyAI enemy, bool isOutside, IController? controller = null) {
-        if (enemy.isOutside == isOutside) return;
 
         enemy.isOutside = isOutside;
         enemy.allAINodes = GameObject.FindGameObjectsWithTag(enemy.isOutside ? "OutsideAINode" : "AINode");

@@ -26,4 +26,9 @@ class HygrodereController : IEnemyController<BlobAI> {
     void SetTamedTimer(BlobAI enemy, float time) => enemy.Reflect().SetInternalField("tamedTimer", time);
 
     void SetAngeredTimer(BlobAI enemy, float time) => enemy.Reflect().SetInternalField("angeredTimer", time);
+
+    public string GetPrimarySkillName(BlobAI enemy) => "Anger";
+
+    public string GetSecondarySkillName(BlobAI enemy) => "Dance";
+
 }

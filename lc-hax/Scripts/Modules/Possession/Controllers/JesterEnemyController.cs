@@ -65,9 +65,9 @@ class JesterController : IEnemyController<JesterAI> {
 
     public bool IsAbleToRotate(JesterAI enemy) => !enemy.IsBehaviourState(JesterState.CRANKING);
 
-    public string GetPrimarySkillName(JesterAI _) => "Close box";
+    public string GetPrimarySkillName(JesterAI enemy) => enemy.IsBehaviourState(JesterState.CLOSED) ? "" : "Close box";
 
-    public string GetSecondarySkillName(JesterAI _) => "(HOLD) Begin cranking";
+    public string GetSecondarySkillName(JesterAI enemy) => enemy.IsBehaviourState(JesterState.CLOSED) ? "(HOLD) Begin cranking" : "(RELEASE) Aggro Mode";
 
     public void OnOutsideStatusChange(JesterAI enemy) => enemy.StopSearch(enemy.roamMap, true);
 

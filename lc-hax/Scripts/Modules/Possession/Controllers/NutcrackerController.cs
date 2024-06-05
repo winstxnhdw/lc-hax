@@ -79,9 +79,9 @@ class NutcrackerController : IEnemyController<NutcrackerEnemyAI> {
 
     public void OnUnpossess(NutcrackerEnemyAI enemy) => this.InSentryMode = false;
 
-    public string GetPrimarySkillName(NutcrackerEnemyAI enemy) => enemy.gun is null ? "" : "Fire";
+    public string GetPrimarySkillName(NutcrackerEnemyAI enemy) => "Fire weapon";
 
-    public string GetSecondarySkillName(NutcrackerEnemyAI _) => "(HOLD) Sentry mode";
+    public string GetSecondarySkillName(NutcrackerEnemyAI _) => "(HOLD) Activate Sentry Mode";
 
     public void OnOutsideStatusChange(NutcrackerEnemyAI enemy) {
         enemy.StopSearch(enemy.attackSearch, true);

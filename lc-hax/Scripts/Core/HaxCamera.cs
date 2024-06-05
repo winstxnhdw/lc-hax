@@ -264,6 +264,12 @@ class HaxCamera : MonoBehaviour {
 
             if (collider.TryGetComponent(out InteractTrigger interactTrigger)) {
                 this.SetCursorFromInteractTrigger(interactTrigger);
+                if (isPossessingEnemy) {
+                    if (interactTrigger.TryGetComponent(out EntranceTeleport entrance)) {
+                        break;
+                    }
+                }
+
                 if (isInteracting && !this.wasInteracting) {
                     interactTrigger.Interact(Helper.LocalPlayer?.transform);
                     this.ClearCursor();

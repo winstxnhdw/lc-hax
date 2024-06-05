@@ -22,7 +22,10 @@ class EyelessDogController : IEnemyController<MouthDogAI> {
 
     public void UseSecondarySkill(MouthDogAI enemy) => enemy.SetBehaviourState(DogState.LUNGE);
 
+    public void OnOutsideStatusChange(MouthDogAI enemy) => enemy.StopSearch(enemy.roamPlanet, true);
+    public string GetPrimarySkillName(MouthDogAI enemy) => enemy.IsBehaviourState(DogState.CHASE) ? "Roam" : "Chase";
+
     public string GetSecondarySkillName(MouthDogAI _) => "Lunge";
 
-    public void OnOutsideStatusChange(MouthDogAI enemy) => enemy.StopSearch(enemy.roamPlanet, true);
+
 }

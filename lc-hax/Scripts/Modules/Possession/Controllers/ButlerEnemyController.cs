@@ -49,4 +49,10 @@ class ButlerEnemyController : IEnemyController<ButlerEnemyAI> {
         enemy.StopSearch(enemy.roamAndSweepFloor, true);
         enemy.StopSearch(enemy.hoverAroundTargetPlayer, true);
     }
+
+    public string GetPrimarySkillName(ButlerEnemyAI enemy) => "Stab";
+
+    public string GetSecondarySkillName(ButlerEnemyAI _) => "Sweep Floor";
+
+
 }

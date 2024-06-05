@@ -24,4 +24,10 @@ class CircuitBeesController : IEnemyController<RedLocustBees> {
     public void UseSecondarySkill(RedLocustBees enemy) => enemy.SetBehaviourState(BeesState.IDLE);
 
     public void OnOutsideStatusChange(RedLocustBees enemy) => enemy.StopSearch(enemy.searchForHive, true);
+
+    public string GetPrimarySkillName(RedLocustBees _) => "Attack";
+
+    public string GetSecondarySkillName(RedLocustBees _) => "Idle";
+
+
 }

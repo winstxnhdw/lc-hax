@@ -56,11 +56,11 @@ class BaboonHawkController : IEnemyController<BaboonBirdAI> {
         _ = enemy.Reflect().InvokeInternalMethod("DropHeldItemAndSync");
     }
 
-    public string GetPrimarySkillName(BaboonBirdAI enemy) => enemy.heldScrap is not null ? "" : "Grab Item";
+    public string GetPrimarySkillName(BaboonBirdAI enemy) => enemy.heldScrap is not null ? "Interact with Item" : "Grab Item";
 
-    public string GetSecondarySkillName(BaboonBirdAI enemy) => enemy.heldScrap is null ? "" : "Drop item";
+    public string GetSecondarySkillName(BaboonBirdAI enemy) => enemy.heldScrap is null ? "" : "Drop Item";
 
-    void EnableAIControl(BaboonBirdAI enemy, bool enabled) {
+    public void OnEnableAIControl(BaboonBirdAI enemy, bool enabled) {
         if (enabled)
             BaboonBirdAI.baboonCampPosition = this.OriginalCamp;
         else

@@ -2,7 +2,9 @@
 
 using System;
 using System.Collections.Generic;
+using System.Text;
 using GameNetcodeStuff;
+using hax;
 using Hax;
 using Unity.Netcode;
 using UnityEngine;
@@ -202,6 +204,8 @@ sealed class PossessionMod : MonoBehaviour {
             return;
         }
 
+        this.UpdateLabel(enemy);
+
         if (!this.IsAIControlled) {
             this.UpdateEnemyPosition(enemy);
             this.UpdateEnemyRotation();
@@ -209,7 +213,7 @@ sealed class PossessionMod : MonoBehaviour {
 
         if (this.NoClipEnabled)
             if (this.MainEntrance != null)
-                enemy.SetOutsideStatus(enemy.transform.position.y < this.MainEntrance.transform.position.y +
+                enemy.SetOutsideStatus(enemy.transform.position.y > this.MainEntrance.transform.position.y +
                     Setting.IsInsideFactoryTreshold);
 
         if (enemy.isEnemyDead) this.Unpossess();
@@ -228,7 +232,7 @@ sealed class PossessionMod : MonoBehaviour {
 
         if (this.NoClipEnabled)
             if (this.MainEntrance != null)
-                enemy.SetOutsideStatus(enemy.transform.position.y < this.MainEntrance.transform.position.y +
+                enemy.SetOutsideStatus(enemy.transform.position.y > this.MainEntrance.transform.position.y +
                     Setting.IsInsideFactoryTreshold,
                     controller);
         if (enemy.isEnemyDead) {
@@ -237,8 +241,7 @@ sealed class PossessionMod : MonoBehaviour {
         }
 
         controller.Update(enemy, this.IsAIControlled);
-        player.cursorTip.text = controller.GetPrimarySkillName(enemy);
-
+        this.UpdateLabel(enemy, controller);
         if (this.IsAIControlled) return;
         if (controller.SyncAnimationSpeedEnabled(enemy)) movement.CharacterSpeed = agent.speed;
 
@@ -253,6 +256,48 @@ sealed class PossessionMod : MonoBehaviour {
         if (controller.IsAbleToRotate(enemy)) this.UpdateEnemyRotation();
     }
 
+    void UpdateLabel(EnemyAI enemy, IController controller = null) {
+        if (enemy is null) return;
+        if (controller != null) {
+            string? primary = controller.GetPrimarySkillName(enemy);
+            string? secondary = controller.GetSecondarySkillName(enemy);
+            string? special = controller.GetSpecialAbilityName(enemy);
+
+            StringBuilder actionTextBuilder = new();
+
+            if (!string.IsNullOrEmpty(primary))
+                actionTextBuilder.AppendLine($"[Mouse Left] {primary}");
+
+            if (!string.IsNullOrEmpty(secondary))
+                actionTextBuilder.AppendLine($"[Mouse Right] {secondary}");
+
+            if (!string.IsNullOrEmpty(special))
+                actionTextBuilder.AppendLine($"[Q] {special}");
+
+            string actionText = actionTextBuilder.ToString();
+
+            MinimalGUIHelper.AddText("Possession_Action", actionText);
+        }
+
+        // Add fixed labels for constant features
+        MinimalGUIHelper.AddText("Possession_AIControl", $"[F9] Toggle AI Control: {(this.IsAIControlled ? "<color=green>Enabled</color>" : "<color=red>Disabled</color>")}");
+        MinimalGUIHelper.AddText("Possession_IsOutside", $"Enemy Is Outside: {(enemy.isOutside ? "<color=green>Yes</color>" : "<color=red>No</color>")}");
+        MinimalGUIHelper.AddText("Possession_NoClip", "[N] Toggle NoClip");
+        MinimalGUIHelper.AddText("Possession_Unpossess", "[Z] Unpossess");
+        MinimalGUIHelper.AddText("Possession_Interact", "[E] Interact");
+        MinimalGUIHelper.AddText("Possession_KillUnpossess", "[Del] Kill and Unpossess");
+    }
+
+
+    void RemoveLabels() {
+        MinimalGUIHelper.Remove("Possession_Action");
+        MinimalGUIHelper.Remove("Possession_NoClip");
+        MinimalGUIHelper.Remove("Possession_Unpossess");
+        MinimalGUIHelper.Remove("Possession_AIControl");
+        MinimalGUIHelper.Remove("Possession_IsOutside");
+        MinimalGUIHelper.Remove("Possession_Interact");
+        MinimalGUIHelper.Remove("Possession_KillUnpossess");
+    }
 
     void OnInteract() {
         if (this.PossessedEnemy is not EnemyAI enemy) return;
@@ -307,7 +352,7 @@ sealed class PossessionMod : MonoBehaviour {
     // Updates enemy's position to match the possessed object's position
     void UpdateEnemyPosition(EnemyAI enemy) {
         if (this.CharacterMovement is not CharacterMovement characterMovement) return;
-        if(enemy is null) return;
+        if (enemy is null) return;
         Vector3 offsets = this.GetEnemyPositionOffset();
 
         Vector3 enemyEuler = enemy.transform.eulerAngles;
@@ -354,15 +399,13 @@ sealed class PossessionMod : MonoBehaviour {
 
     // Releases possession of the current enemy
     internal void Unpossess() {
-        if (this.Possession.Enemy != null) {
+        if (this.Possession.Enemy != null)
             if (this.Possession.Enemy is EnemyAI enemy) {
                 if (enemy.agent is NavMeshAgent agent) {
                     agent.updatePosition = true;
                     agent.updateRotation = true;
                     agent.isStopped = false;
-                    if (enemy.transform != null) {
-                        _ = enemy.agent.Warp(enemy.transform.position);
-                    }
+                    if (enemy.transform != null) _ = enemy.agent.Warp(enemy.transform.position);
                 }
 
                 enemy.SyncPositionToClients();
@@ -371,7 +414,6 @@ sealed class PossessionMod : MonoBehaviour {
                 this.SetAIControl(true);
                 this.Controller?.OnUnpossess(enemy);
             }
-        }
 
         this.Reset();
     }
@@ -381,6 +423,7 @@ sealed class PossessionMod : MonoBehaviour {
         this.Possession.Clear();
         this.IsAIControlled = false;
         if (this.CharacterMovementInstance is not null) Destroy(this.CharacterMovementInstance);
+        this.RemoveLabels();
     }
 
     void ToggleAIControl() {

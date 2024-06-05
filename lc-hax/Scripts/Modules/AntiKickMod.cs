@@ -1,22 +1,42 @@
 #region
 
 using System.Collections;
+using hax;
 using Hax;
 using UnityEngine;
 
 #endregion
 
 sealed class AntiKickMod : MonoBehaviour {
+    AntiKickMod Instance;
+
+    void Awake() {
+        if (this.Instance != null) {
+            Destroy(this);
+            return;
+        }
+
+        this.Instance = this;
+        this.UpdateLabel();
+    }
+
+    void DisableLabel() => MinimalGUIHelper.Remove("Anti-Kick");
+
+    void UpdateLabel() => MinimalGUIHelper.AddText("Anti-Kick",
+        $"Anti-Kick: {(Setting.EnableAntiKick ? "<color=green>On</color>" : "<color=red>Off</color>")}");
+
     void OnEnable() {
         InputListener.OnBackslashPress += this.ToggleAntiKick;
         GameListener.OnGameStart += this.OnGameStart;
         GameListener.OnGameEnd += this.OnGameEnd;
+        this.UpdateLabel();
     }
 
     void OnDisable() {
         InputListener.OnBackslashPress -= this.ToggleAntiKick;
         GameListener.OnGameStart -= this.OnGameStart;
         GameListener.OnGameEnd -= this.OnGameEnd;
+        this.DisableLabel();
     }
 
     IEnumerator RejoinLobby() {
@@ -53,6 +73,7 @@ sealed class AntiKickMod : MonoBehaviour {
             return;
         }
 
+        this.UpdateLabel();
         Setting.EnableAntiKick = !Setting.EnableAntiKick;
         Setting.EnableInvisible = Setting.EnableAntiKick;
     }

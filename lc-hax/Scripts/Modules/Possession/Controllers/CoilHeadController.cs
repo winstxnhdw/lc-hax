@@ -33,4 +33,10 @@ class CoilHeadController : IEnemyController<SpringManAI> {
     public void OnOutsideStatusChange(SpringManAI enemy) => enemy.StopSearch(enemy.searchForPlayers, true);
 
     bool GetStoppingMovement(SpringManAI enemy) => enemy.Reflect().GetInternalField<bool>("stoppingMovement");
+
+    public string GetPrimarySkillName(SpringManAI enemy) =>
+        enemy.IsBehaviourState(CoilHeadState.Chase) ? "Idle" : "Chase";
+
+    public string GetSecondarySkillName(SpringManAI _) => "Toggle Animation";
+
 }

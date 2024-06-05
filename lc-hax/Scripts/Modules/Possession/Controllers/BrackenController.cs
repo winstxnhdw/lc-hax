@@ -47,9 +47,10 @@ class BrackenController : IEnemyController<FlowermanAI> {
 
     public bool IsAbleToMove(FlowermanAI enemy) => !enemy.inSpecialAnimation;
 
-    public string GetPrimarySkillName(FlowermanAI enemy) => enemy.carryingPlayerBody ? "Drop body" : "";
+    public string GetPrimarySkillName(FlowermanAI enemy) => enemy.carryingPlayerBody ? "Drop body" : "Anger";
 
-    public string GetSecondarySkillName(FlowermanAI _) => "Stand";
+    public string GetSecondarySkillName(FlowermanAI enemy) =>
+        enemy.IsBehaviourState(BrackenState.STAND) ? "Crouch" : "Stand";
 
     public bool SyncAnimationSpeedEnabled(FlowermanAI _) => false;
 }

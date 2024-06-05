@@ -36,4 +36,7 @@ class DocileLocustBeesController : IEnemyController<DocileLocustBeesAI> {
     }
 
     public bool SyncAnimationSpeedEnabled(DocileLocustBeesAI enemy) => false;
+
+    public string GetSecondarySkillName(DocileLocustBeesAI _) => this.isRoaming ? "Enter Hiding" : "Exit Hiding";
+
 }

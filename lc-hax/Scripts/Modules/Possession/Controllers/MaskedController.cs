@@ -22,4 +22,11 @@ class MaskedPlayerController : IEnemyController<MaskedPlayerEnemy> {
     public bool SyncAnimationSpeedEnabled(MaskedPlayerEnemy _) => false;
 
     public void OnOutsideStatusChange(MaskedPlayerEnemy enemy) => enemy.StopSearch(enemy.searchForPlayers, true);
+
+    public string GetPrimarySkillName(MaskedPlayerEnemy enemy) =>
+        enemy.Reflect().GetInternalField<bool>("HandsOut") ? "Put hands down" : "Put hands up";
+
+    public string GetSecondarySkillName(MaskedPlayerEnemy enemy) =>
+        enemy.Reflect().GetInternalField<bool>("crouching") ? "Stand up" : "Crouch down";
+
 }

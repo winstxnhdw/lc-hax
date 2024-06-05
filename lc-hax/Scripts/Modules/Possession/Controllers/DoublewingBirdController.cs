@@ -43,4 +43,9 @@ class DoublewingBirdController : IEnemyController<DoublewingAI> {
     public bool IsAbleToRotate(DoublewingAI enemy) => !enemy.IsBehaviourState(DoublewingBirdState.IDLE);
 
     public bool SyncAnimationSpeedEnabled(DoublewingAI enemy) => true;
+
+    public string GetPrimarySkillName(DoublewingAI enemy) => "Glide";
+
+    public string GetSecondarySkillName(DoublewingAI enemy) => "Land";
+
 }
