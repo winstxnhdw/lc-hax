@@ -31,32 +31,21 @@ static partial class Helper {
         roundmanager.FlickerLights(flickerFlashlights, disableFlashlights);
     }
 
-    static EntranceTeleport _InsideMainEntrance;
+    static EntranceTeleport? _InsideMainEntrance;
 
     internal static EntranceTeleport? InsideMainEntrance {
         get {
-            if (Helper.LocalPlayer is not PlayerControllerB) {
+            if (Helper.LocalPlayer is not PlayerControllerB ||
+                Helper.StartOfRound is not StartOfRound round ||
+                round.inShipPhase) {
                 _InsideMainEntrance = null;
                 return null;
             }
 
-            if (Helper.StartOfRound is not StartOfRound round) {
-                _InsideMainEntrance = null;
-                return null;
-            }
-
-            if (round.inShipPhase) {
-                _InsideMainEntrance = null;
-                return null;
-            }
-
-            if (_InsideMainEntrance is not null) {
-                return _InsideMainEntrance;
-            }
-
-            return _InsideMainEntrance = RoundManager.FindMainEntranceScript(true);
+            return _InsideMainEntrance ??= RoundManager.FindMainEntranceScript(true);
         }
     }
+
 
 
 }
