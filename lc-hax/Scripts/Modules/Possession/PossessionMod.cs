@@ -23,7 +23,6 @@ sealed class PossessionMod : MonoBehaviour {
     Possession Possession { get; } = new();
     GameObject? CharacterMovementInstance { get; set; } = null;
     CharacterMovement? CharacterMovement { get; set; } = null;
-    EntranceTeleport? MainEntrance => RoundManager.FindMainEntranceScript(false);
 
     MousePan? MousePan { get; set; } = null;
 
@@ -212,8 +211,8 @@ sealed class PossessionMod : MonoBehaviour {
         }
 
         if (this.NoClipEnabled)
-            if (this.MainEntrance != null)
-                enemy.SetOutsideStatus(enemy.transform.position.y > this.MainEntrance.transform.position.y +
+            if (Helper.InsideMainEntrance != null)
+                enemy.SetOutsideStatus(enemy.transform.position.y > Helper.InsideMainEntrance.transform.position.y +
                     Setting.IsInsideFactoryTreshold);
 
         if (enemy.isEnemyDead) this.Unpossess();
@@ -231,8 +230,8 @@ sealed class PossessionMod : MonoBehaviour {
         }
 
         if (this.NoClipEnabled)
-            if (this.MainEntrance != null)
-                enemy.SetOutsideStatus(enemy.transform.position.y > this.MainEntrance.transform.position.y +
+            if (Helper.InsideMainEntrance != null)
+                enemy.SetOutsideStatus(enemy.transform.position.y > Helper.InsideMainEntrance.transform.position.y +
                     Setting.IsInsideFactoryTreshold,
                     controller);
         if (enemy.isEnemyDead) {

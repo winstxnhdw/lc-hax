@@ -1,6 +1,7 @@
 #region
 
 using System.Linq;
+using GameNetcodeStuff;
 
 #endregion
 
@@ -29,4 +30,33 @@ static partial class Helper {
         if (RoundManager is not RoundManager roundmanager) return;
         roundmanager.FlickerLights(flickerFlashlights, disableFlashlights);
     }
+
+    static EntranceTeleport _InsideMainEntrance;
+
+    internal static EntranceTeleport? InsideMainEntrance {
+        get {
+            if (Helper.LocalPlayer is not PlayerControllerB) {
+                _InsideMainEntrance = null;
+                return null;
+            }
+
+            if (Helper.StartOfRound is not StartOfRound round) {
+                _InsideMainEntrance = null;
+                return null;
+            }
+
+            if (round.inShipPhase) {
+                _InsideMainEntrance = null;
+                return null;
+            }
+
+            if (_InsideMainEntrance is not null) {
+                return _InsideMainEntrance;
+            }
+
+            return _InsideMainEntrance = RoundManager.FindMainEntranceScript(true);
+        }
+    }
+
+
 }

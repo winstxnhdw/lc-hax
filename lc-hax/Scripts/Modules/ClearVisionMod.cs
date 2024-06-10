@@ -10,9 +10,9 @@ using UnityEngine.Rendering.HighDefinition;
 
 sealed class ClearVisionMod : MonoBehaviour {
     internal static ClearVisionMod? Instance { get; private set; }
-    EntranceTeleport? MainEntrance => RoundManager.FindMainEntranceScript(false);
+
     internal bool IsInsideFactory { get;  set; }
-    internal bool IsDead => Helper.LocalPlayer is PlayerControllerB player && player.IsDead();
+    internal bool IsDead => Helper.LocalPlayer is PlayerControllerB player && player.IsDeadAndNotControlled();
 
     internal float LightIntensity_Min => 0f;
     internal float LightIntensity_Max => 100f;
@@ -40,8 +40,21 @@ sealed class ClearVisionMod : MonoBehaviour {
 
     internal void DetectPosition() {
         if (Helper.CurrentCamera is not Camera cam) return;
-        if (this.MainEntrance is not EntranceTeleport entrance) return;
-        this.IsInsideFactory = cam.transform.position.y < entrance.transform.position.y + Setting.IsInsideFactoryTreshold;
+        if (Helper.InsideMainEntrance is not EntranceTeleport entrance) return;
+        if(Helper.LocalPlayer is not PlayerControllerB player) return;
+        if(PossessionMod.Instance is not PossessionMod possessionMod) return;
+        if (possessionMod.PossessedEnemy is not EnemyAI enemy) {
+            if (player.IsDead() || Setting.EnablePhantom) {
+                this.IsInsideFactory = cam.transform.position.y <
+                                       entrance.transform.position.y + Setting.IsInsideFactoryTreshold;
+            }
+            else {
+                this.IsInsideFactory = player.isInsideFactory;
+            }
+        }
+        else {
+            this.IsInsideFactory = !enemy.isOutside;
+        }
     }
 
     internal GameObject SunObject { get; set; }
@@ -82,9 +95,7 @@ sealed class ClearVisionMod : MonoBehaviour {
         if (this.SunObject == null) return;
         if (this.SunLight == null) return;
         if (this.Data == null) return;
-        if (Helper.LocalPlayer is not PlayerControllerB player) return;
-        if (Helper.TimeOfDay is not TimeOfDay timeOfDay) return;
-        if (Helper.CurrentCamera is not Camera camera) return;
+        if (Helper.LocalPlayer is not PlayerControllerB) return;
         if (Helper.StartOfRound is not StartOfRound round) {
             this.SunLight.enabled = false;
             return;
@@ -138,7 +149,7 @@ sealed class ClearVisionMod : MonoBehaviour {
     void DisableMod() {
         if (this.SunLight is not null) this.SunLight.enabled = false;
         this.ToggleFog(true);
-        this.ToggleVisor(true);
+        //this.ToggleVisor(true);
     }
 
     void OnEnable() {
