@@ -1,5 +1,6 @@
 #region
 
+using GameNetcodeStuff;
 using Hax;
 using UnityEngine;
 
@@ -13,8 +14,15 @@ sealed class StunClickMod : MonoBehaviour {
 
     void OnDisable() => InputListener.OnLeftButtonPress -= this.Stun;
 
-    bool IsHoldingADefensiveWeapon() => Helper.LocalPlayer?.currentlyHeldObjectServer.itemProperties is
-        { isDefensiveWeapon: true };
+    bool IsHoldingADefensiveWeapon(PlayerControllerB player) {
+        if(player is null) return false;
+        if (player.IsDeadAndNotControlled()) return false;
+        if(player.currentlyHeldObjectServer is null) return false;
+        return player.currentlyHeldObjectServer.itemProperties is { isDefensiveWeapon: true };
+
+    }
+
+
 
     void StunJam(Collider collider) {
         if (collider.TryGetComponent(out EnemyAICollisionDetect enemy)) enemy.mainScript.SetEnemyStunned(true, 5.0f);
@@ -29,7 +37,10 @@ sealed class StunClickMod : MonoBehaviour {
 
     void Stun() {
         if (!Setting.EnableStunOnLeftClick) return;
+        if(Helper.LocalPlayer is not PlayerControllerB player) return;
+        
         if (Helper.CurrentCamera is not Camera camera) return;
+
         if (this.IsHoldingADefensiveWeapon()) return;
 
         this.RaycastHits.SphereCastForward(camera.transform).Range().ForEach(i => {
