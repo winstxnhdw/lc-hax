@@ -41,7 +41,7 @@ sealed class StunClickMod : MonoBehaviour {
         
         if (Helper.CurrentCamera is not Camera camera) return;
 
-        if (this.IsHoldingADefensiveWeapon()) return;
+        if (this.IsHoldingADefensiveWeapon(player)) return;
 
         this.RaycastHits.SphereCastForward(camera.transform).Range().ForEach(i => {
             Collider? collider = this.RaycastHits[i].collider;
