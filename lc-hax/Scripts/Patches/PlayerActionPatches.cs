@@ -43,18 +43,33 @@ class PlayerActionPatches {
 
     [HarmonyPatch(typeof(PlayerControllerB), "Crouch_performed")]
     [HarmonyPrefix]
-    static bool Prefix(PlayerControllerB __instance, InputAction.CallbackContext context) {
+    static bool CrouchPerformedPatch(PlayerControllerB __instance, InputAction.CallbackContext context) {
         if (!__instance.IsSelf()) return true;
         Reflector<PlayerControllerB> playerReflector = __instance.Reflect();
         if (!context.performed) return false;
         if (__instance.quickMenuManager.isMenuOpen) return false;
-        if ((!__instance.IsOwner || !__instance.isPlayerControlled ||
-             (__instance.IsServer && !__instance.isHostPlayerObject)) && !__instance.isTestingPlayer) return false;
-        if (__instance.inSpecialInteractAnimation || !__instance.thisController.isGrounded ||
-            __instance.isTypingChat) return false;
+        if (__instance.IsDeadAndNotControlled()) return false;
+        if (__instance.inSpecialInteractAnimation || __instance.isTypingChat) return false;
         float crouchmeter = playerReflector.GetInternalField<float>("crouchMeter");
         playerReflector.SetInternalField("crouchMeter", Mathf.Min(crouchmeter + 0.3f, 1.3f));
         __instance.Crouch(!__instance.isCrouching);
+        return false;
+    }
+
+    [HarmonyPatch(typeof(PlayerControllerB), nameof(PlayerControllerB.Crouch))]
+    [HarmonyPrefix]
+    static bool OnCrouchPatch(PlayerControllerB __instance, bool crouch) {
+        if (!__instance.IsSelf()) return true;
+        if (__instance.IsDeadAndNotControlled()) return true;
+        if(Helper.StartOfRound is not StartOfRound startOfRound) return true;
+        __instance.isCrouching = crouch;
+        startOfRound.timeAtMakingLastPersonalMovement = Time.realtimeSinceStartup;
+        if (crouch) {
+            __instance.playerBodyAnimator.SetTrigger("startCrouching");
+        }
+        __instance.playerBodyAnimator.SetBool("crouching", crouch);
+
+
         return false;
     }
 }
