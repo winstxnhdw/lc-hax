@@ -14,8 +14,10 @@ class GodModePatch {
         if (Helper.StartOfRound is not StartOfRound startOfRound) return true;
         if (!Setting.EnableGodMode || !__instance.IsSelf()) return true;
 
-        if (startOfRound.shipIsLeaving) {
-            return true; // Allow player death if the ship is leaving (Missing)
+        if (!__instance.IsHost) {
+            if (startOfRound.shipIsLeaving) {
+                return true; // Allow player death if the ship is leaving (Missing)
+            }
         }
 
         __result = false;
