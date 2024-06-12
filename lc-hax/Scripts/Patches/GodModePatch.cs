@@ -11,7 +11,12 @@ using Hax;
 [HarmonyPatch(typeof(PlayerControllerB), nameof(PlayerControllerB.AllowPlayerDeath))]
 class GodModePatch {
     static bool Prefix(PlayerControllerB __instance, ref bool __result) {
+        if (Helper.StartOfRound is not StartOfRound startOfRound) return true;
         if (!Setting.EnableGodMode || !__instance.IsSelf()) return true;
+
+        if (startOfRound.shipIsLeaving) {
+            return true; // Allow player death if the ship is leaving (Missing)
+        }
 
         __result = false;
         __instance.inAnimationWithEnemy = null;
