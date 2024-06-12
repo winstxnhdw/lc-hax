@@ -16,6 +16,8 @@ class BuildCommand : ICommand {
 
         if (args.Length == 0) {
             Chat.Print("Usage: build <unlockable|suits|all>");
+            Chat.Print("Available unlockables: " + string.Join(", ", Helper.Unlockables.Keys.OrderBy(s => s)));
+            Console.WriteLine("Available unlockables: " + string.Join(", ", Helper.Unlockables.Keys.OrderBy(s => s)));
             return;
         }
 
@@ -36,8 +38,6 @@ class BuildCommand : ICommand {
 
         if (!unlockableName.FuzzyMatch(Helper.Unlockables.Keys, out string key)) {
             Chat.Print("Failed to find unlockable!");
-            Chat.Print("Available unlockables: " + string.Join(", ", Helper.Unlockables.Keys.OrderBy(s => s)));
-            Console.WriteLine("Available unlockables: " + string.Join(", ", Helper.Unlockables.Keys.OrderBy(s => s)));
             return;
         }
 
