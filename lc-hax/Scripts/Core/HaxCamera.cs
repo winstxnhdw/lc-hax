@@ -163,6 +163,7 @@ class HaxCamera : MonoBehaviour {
     }
 
     void OnCameraInteract() {
+        if(Helper.RoundManager is not RoundManager roundManager) return;
         if (Helper.CurrentCamera is not Camera camera) return;
         if (Helper.LocalPlayer is not PlayerControllerB localplayer) return;
 
@@ -175,11 +176,14 @@ class HaxCamera : MonoBehaviour {
             Transform rootTransform = collider.transform.root;
 
             if (collider.TryGetComponent(out TerminalAccessibleObject terminalObject)) {
-                if (terminalObject.isBigDoor) {
-                    if (terminalObject.isDoorOpen())
-                        this.SetOnlyCursorText($"Close {terminalObject.objectCode} Big Door [M3]");
-                    else
-                        this.SetOnlyCursorText($"Open {terminalObject.objectCode} Big Door [M3]");
+
+                if (!roundManager.powerOffPermanently) {
+                    if (terminalObject.isBigDoor) {
+                        if (terminalObject.isDoorOpen())
+                            this.SetOnlyCursorText($"Close {terminalObject.objectCode} Big Door [M3]");
+                        else
+                            this.SetOnlyCursorText($"Open {terminalObject.objectCode} Big Door [M3]");
+                    }
                 }
             }
 
@@ -245,9 +249,30 @@ class HaxCamera : MonoBehaviour {
                 break;
             }
 
-            if (collider.GetComponentInParent<EnemyAI>().Unfake() is EnemyAI enemy && Setting.EnablePhantom &&
-                PossessionMod.Instance?.PossessedEnemy != enemy) {
-                this.SetOnlyCursorText($"Possess {enemy.enemyType.enemyName} [M3]");
+            if (collider.GetComponentInParent<EnemyAI>().Unfake() is EnemyAI enemy && Setting.EnablePhantom)
+            {
+                if(enemy.isEnemyDead) break;
+                if (PossessionMod.Instance?.PossessedEnemy is not EnemyAI PossessedEnemy) {
+
+                    if (Setting.EnableStunOnLeftClick) {
+                        this.SetOnlyCursorText($"Stun {enemy.enemyType.enemyName} [M3]");
+                    }
+                    else {
+                        this.SetOnlyCursorText($"Possess {enemy.enemyType.enemyName} [M3]");
+                    }
+                }
+                else {
+                    if (PossessedEnemy != enemy) {
+
+                        if (Setting.EnableStunOnLeftClick) {
+                            this.SetOnlyCursorText($"Stun {enemy.enemyType.enemyName} [M3]");
+                        }
+                        else {
+                            this.SetOnlyCursorText($"Possess {enemy.enemyType.enemyName} [M3]");
+                        }
+                    }
+                }
+
                 break;
             }
 
@@ -281,7 +306,7 @@ class HaxCamera : MonoBehaviour {
 
             if (collider.TryGetComponent(out GrabbableObject item)) {
                 if (isPossessingEnemy) break;
-                if(localplayer.IsDead()) return;
+                if(localplayer.IsDead()) break;
                 this.SetCursorFromGrabbable(item);
                 if (isInteracting && !this.wasInteracting) {
                     localplayer.GrabObject(item);

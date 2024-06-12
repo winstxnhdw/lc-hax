@@ -98,14 +98,27 @@ sealed class TriggerMod : MonoBehaviour, IEnemyPrompter {
                 break;
             }
 
-            if (collider.GetComponentInParent<EnemyAI>().Unfake() is EnemyAI enemy && Setting.EnablePhantom &&
-                PossessionMod.Instance?.PossessedEnemy != enemy) {
-                if (PossessionMod.Instance?.PossessedEnemy != null) {
-                    PossessionMod.Instance?.Unpossess();
-                    Helper.Delay(0.5f, () => { PossessionMod.Instance?.Possess(enemy); });
+            if (collider.GetComponentInParent<EnemyAI>().Unfake() is EnemyAI enemy && Setting.EnablePhantom) {
+                if (enemy.isEnemyDead) break;
+                if (PossessionMod.Instance?.PossessedEnemy is not EnemyAI PossessedEnemy) {
+
+                    if (Setting.EnableStunOnLeftClick) {
+                        enemy.SetEnemyStunned(true, 5.0f);
+                    }
+                    else {
+                        PossessionMod.Instance?.Possess(enemy);
+                    }
                 }
                 else {
-                    PossessionMod.Instance?.Possess(enemy);
+                    if (PossessedEnemy != enemy) {
+                        if (Setting.EnableStunOnLeftClick) {
+                            enemy.SetEnemyStunned(true, 5.0f);
+                        }
+                        else {
+                            PossessionMod.Instance?.Unpossess();
+                            Helper.Delay(0.5f, () => { PossessionMod.Instance?.Possess(enemy); });
+                        }
+                    }
                 }
 
                 break;

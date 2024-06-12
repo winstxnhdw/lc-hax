@@ -86,7 +86,6 @@ class Loader : MonoBehaviour {
         AddHaxModules<PhantomMod>();
         AddHaxModules<TriggerMod>();
         AddHaxModules<AntiKickMod>();
-        AddHaxModules<StunClickMod>();
         AddHaxModules<KillClickMod>();
         AddHaxModules<CrosshairMod>();
         AddHaxModules<MinimalGUIMod>();

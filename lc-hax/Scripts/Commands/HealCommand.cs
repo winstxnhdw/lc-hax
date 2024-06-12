@@ -138,7 +138,7 @@ class HealCommand : ICommand, IStun {
     bool HealLocalPlayer(bool revive = false) {
         if (Helper.LocalPlayer is not PlayerControllerB localPlayer) return false;
         if (Helper.HUDManager is not HUDManager hudManager) return false;
-        if (localPlayer.IsDead() && revive) {
+        if (localPlayer.IsDeadAndNotControlled() && revive) {
             this.RespawnLocalPlayer();
 
             Helper.CreateComponent<WaitForBehaviour>("Respawn")
