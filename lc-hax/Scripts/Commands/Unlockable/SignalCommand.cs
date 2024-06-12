@@ -19,8 +19,8 @@ class SignalCommand : ICommand {
             return;
         }
 
-        Helper.BuyUnlockable(Unlockable.SIGNAL_TRANSMITTER);
-        Helper.ReturnUnlockable(Unlockable.SIGNAL_TRANSMITTER);
+        Helper.BuyUnlockable("Signal translator");
+        Helper.ReturnUnlockable("Signal translator");
         Helper.HUDManager?.UseSignalTranslatorServerRpc(message);
     }
 }

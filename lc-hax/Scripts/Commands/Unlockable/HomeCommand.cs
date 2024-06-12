@@ -49,8 +49,8 @@ class HomeCommand : ICommand {
     }
 
     void PrepareToTeleport(Action action) {
-        Helper.BuyUnlockable(Unlockable.TELEPORTER);
-        Helper.ReturnUnlockable(Unlockable.TELEPORTER);
+        Helper.BuyUnlockable("Teleporter");
+        Helper.ReturnUnlockable("Teleporter");
 
         Helper.CreateComponent<WaitForBehaviour>()
             .SetPredicate(this.TeleporterExists)

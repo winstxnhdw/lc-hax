@@ -1,5 +1,6 @@
 #region
 
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Hax;
@@ -18,53 +19,56 @@ class BuildCommand : ICommand {
             return;
         }
 
-        Dictionary<string, Unlockable> unlockables = this.InitializeUnlockables(startOfRound);
 
         if (args[0].ToLower() == "suits")
-            this.BuildSuits(unlockables);
+            this.BuildSuits();
         else if (args[0].ToLower() == "all")
-            this.BuildAllUnlockables(unlockables, camera);
+            this.BuildAllUnlockables(camera);
         else
-            this.BuildSingleUnlockable(args[0], unlockables, camera);
+            this.BuildSingleUnlockable(args[0], camera);
     }
 
-    Dictionary<string, Unlockable> InitializeUnlockables(StartOfRound startOfRound) =>
-        startOfRound.unlockablesList.unlockables
-            .Select((unlockable, i) => (unlockable, i))
-            .ToDictionary(
-                pair => pair.unlockable.unlockableName.ToLower(),
-                pair => (Unlockable)pair.i
-            );
-
-    void BuildSingleUnlockable(string? unlockableName, Dictionary<string, Unlockable> unlockables, Camera camera) {
+    void BuildSingleUnlockable(string? unlockableName,  Camera camera) {
         if (unlockableName is null) {
             Chat.Print("Failed to find unlockable!");
             return;
         }
 
-        if (!unlockableName.FuzzyMatch(unlockables.Keys, out string key)) {
+        if (!unlockableName.FuzzyMatch(Helper.Unlockables.Keys, out string key)) {
             Chat.Print("Failed to find unlockable!");
+            Chat.Print("Available unlockables: " + string.Join(", ", Helper.Unlockables.Keys.OrderBy(s => s)));
+            Console.WriteLine("Available unlockables: " + string.Join(", ", Helper.Unlockables.Keys.OrderBy(s => s)));
             return;
         }
 
-        Unlockable unlockable = unlockables[key];
+        var unlockable = Helper.Unlockables[key];
         this.BuildUnlockable(unlockable, camera);
     }
 
-    void BuildAllUnlockables(Dictionary<string, Unlockable> unlockables, Camera camera) {
-        foreach (Unlockable unlockable in unlockables.Values) this.BuildUnlockable(unlockable, camera);
+    void BuildAllUnlockables(Camera camera) {
+        foreach (var item in Helper.Unlockables) {
+            this.BuildUnlockable(item.Value, camera);
+        }
     }
 
-    void BuildSuits(Dictionary<string, Unlockable> unlockables) {
-        IEnumerable<Unlockable> suitUnlockables = unlockables.Values.Where(u => u.ToString().EndsWith("_SUIT"));
-        foreach (Unlockable suit in suitUnlockables) Helper.BuyUnlockable(suit);
+    void BuildSuits() {
+        foreach (var suit in Helper.Suits) {
+            Helper.BuyUnlockable(suit.Value);
+        }
     }
 
-    void BuildUnlockable(Unlockable unlockable, Camera camera) {
-        Helper.BuyUnlockable(unlockable);
-        Helper.ReturnUnlockable(unlockable);
+    void BuildUnlockable(int UnlockableID, Camera camera) {
 
-        Chat.Print($"Attempting to build a {string.Join(' ', unlockable.ToString().Split('_')).ToTitleCase()}!");
+        var unlockable = Helper.GetUnlockableByID(UnlockableID);
+        if (unlockable is null) {
+            Chat.Print("Unlockable is not found!");
+            return;
+        }
+
+        Helper.BuyUnlockable(UnlockableID);
+        Helper.ReturnUnlockable(UnlockableID);
+
+        Chat.Print($"Attempting to build a {unlockable.unlockableName}!");
 
         if (Helper.GetUnlockable(unlockable) is not PlaceableShipObject shipObject) {
             Chat.Print("Unlockable is not found or placeable!");

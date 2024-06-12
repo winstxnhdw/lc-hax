@@ -2,6 +2,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Quickenshtein;
 
 #endregion
@@ -73,10 +74,38 @@ static partial class Extensions {
     }
 
     /// <summary>
-    ///     Find the closest match to the query from a list of strings.
+    ///     Find the closest match to the query from a List.
     ///     If the string is empty or the list is empty, we return null.
     /// </summary>
     /// <returns>true if a match was found, false otherwise</returns>
     internal static bool FuzzyMatch(this string query, IEnumerable<string> strings, out string closestMatch) =>
         query.FuzzyMatchInternal([.. strings], out closestMatch);
+
+    /// <summary>
+    /// Finds the closest match in the dictionary based on a query string and a value filter.
+    /// </summary>
+    /// <typeparam name="TKey">The type of dictionary keys.</typeparam>
+    /// <typeparam name="TValue">The type of dictionary values.</typeparam>
+    /// <param name="query">The query string to match.</param>
+    /// <param name="dictionary">The dictionary to search.</param>
+    /// <param name="valueFilter">A predicate to filter dictionary values.</param>
+    /// <param name="closestMatch">The closest matching value (if found).</param>
+    /// <returns>True if a match was found, false otherwise.</returns>
+    internal static bool FuzzyMatch<TKey, TValue>(
+        this string query,
+        Dictionary<TKey, TValue> dictionary,
+        Func<TValue, bool> valueFilter,
+        out TValue closestMatch) {
+        if (dictionary == null || string.IsNullOrWhiteSpace(query)) {
+            closestMatch = default(TValue);
+            return false;
+        }
+
+        closestMatch = dictionary.Values
+            .Where(valueFilter)
+            .OrderBy(item => GetSimilarityWeight(query, item.ToString()))
+            .FirstOrDefault();
+
+        return closestMatch != null;
+    }
 }

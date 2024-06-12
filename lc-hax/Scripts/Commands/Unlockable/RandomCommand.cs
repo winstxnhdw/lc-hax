@@ -24,9 +24,9 @@ class RandomCommand : ICommand {
             return;
         }
 
-        Helper.BuyUnlockable(Unlockable.INVERSE_TELEPORTER);
-        Helper.ReturnUnlockable(Unlockable.INVERSE_TELEPORTER);
-        Helper.ReturnUnlockable(Unlockable.CUPBOARD);
+        Helper.BuyUnlockable("Inverse Teleporter");
+        Helper.ReturnUnlockable("Inverse Teleporter");
+        Helper.ReturnUnlockable("Cupboard");
 
         Helper.CreateComponent<WaitForBehaviour>()
             .SetPredicate(this.InverseTeleporterExists)
@@ -65,7 +65,7 @@ class RandomCommand : ICommand {
     }
 
     ObjectPlacements<Transform, PlaceableShipObject>? GetCupboardPlacements(Component target) {
-        if (Helper.GetUnlockable(Unlockable.CUPBOARD) is not PlaceableShipObject cupboard) return null;
+        if (Helper.GetUnlockable("Cupboard") is not PlaceableShipObject cupboard) return null;
 
         ObjectPlacement<Transform, PlaceableShipObject> cupboardPlacement = new() {
             TargetObject = target.transform,

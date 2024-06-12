@@ -53,7 +53,11 @@ static partial class Extensions {
             yield return line;
     }
 
-
+    internal static KeyValuePair<TKey, TValue>? FirstOrDefaultNull<TKey, TValue>(
+        this IDictionary<TKey, TValue> dictionary, Func<KeyValuePair<TKey, TValue>, bool> predicate) {
+        var result = dictionary.FirstOrDefault(predicate);
+        return result.Equals(default(KeyValuePair<TKey, TValue>)) ? (KeyValuePair<TKey, TValue>?)null : result;
+    }
     internal static bool IsPositive(this int number) => number > 0;
 
     internal static bool IsDigitsOnly(this string s) {

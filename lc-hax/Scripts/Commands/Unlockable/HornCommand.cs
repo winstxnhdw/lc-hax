@@ -18,8 +18,8 @@ class HornCommand : ICommand {
             return;
         }
 
-        Helper.BuyUnlockable(Unlockable.LOUD_HORN);
-        Helper.ReturnUnlockable(Unlockable.LOUD_HORN);
+        Helper.BuyUnlockable("Loud horn");
+        Helper.ReturnUnlockable("Loud horn");
         Helper.ShortDelay(this.PullHornLater(hornDuration));
     }
 
