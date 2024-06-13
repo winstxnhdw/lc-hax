@@ -17,13 +17,7 @@
     <NoWarn>CS9057</NoWarn>
 
   </PropertyGroup>
-
-  <ItemGroup>
-    <Compile Remove="References\NuGet\system.memory\4.5.5\**" />
-    <EmbeddedResource Remove="References\NuGet\system.memory\4.5.5\**" />
-    <None Remove="References\NuGet\system.memory\4.5.5\**" />
-  </ItemGroup>
-
+  
   <ItemGroup>
 
        <Reference Include="Unity.AI.Navigation">
