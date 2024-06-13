@@ -30,7 +30,7 @@ class BuildCommand : ICommand {
             this.BuildSingleUnlockable(args[0], camera);
     }
 
-    void BuildSingleUnlockable(string? unlockableName,  Camera camera) {
+    void BuildSingleUnlockable(string? unlockableName, Camera camera) {
         if (unlockableName is null) {
             Chat.Print("Failed to find unlockable!");
             return;
@@ -41,25 +41,20 @@ class BuildCommand : ICommand {
             return;
         }
 
-        var unlockable = Helper.Unlockables[key];
+        int unlockable = Helper.Unlockables[key];
         this.BuildUnlockable(unlockable, camera);
     }
 
     void BuildAllUnlockables(Camera camera) {
-        foreach (var item in Helper.Unlockables) {
-            this.BuildUnlockable(item.Value, camera);
-        }
+        foreach (KeyValuePair<string, int> item in Helper.Unlockables) this.BuildUnlockable(item.Value, camera);
     }
 
     void BuildSuits() {
-        foreach (var suit in Helper.Suits) {
-            Helper.BuyUnlockable(suit.Value);
-        }
+        foreach (KeyValuePair<string, int> suit in Helper.Suits) Helper.BuyUnlockable(suit.Value);
     }
 
     void BuildUnlockable(int UnlockableID, Camera camera) {
-
-        var unlockable = Helper.GetUnlockableByID(UnlockableID);
+        UnlockableItem? unlockable = Helper.GetUnlockableByID(UnlockableID);
         if (unlockable is null) {
             Chat.Print("Unlockable is not found!");
             return;
@@ -70,7 +65,7 @@ class BuildCommand : ICommand {
 
         Chat.Print($"Attempting to build a {unlockable.unlockableName}!");
 
-        if (Helper.GetUnlockable(unlockable) is not PlaceableShipObject shipObject) {
+        if (Helper.GetPlaceableShipObject(unlockable) is not PlaceableShipObject shipObject) {
             Chat.Print("Unlockable is not found or placeable!");
             return;
         }

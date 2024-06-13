@@ -3,6 +3,8 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using GameNetcodeStuff;
+using Unity.Netcode;
 
 #endregion
 
@@ -24,7 +26,6 @@ static partial class Helper {
                     int index = i;
                     UnlockableItem? unlockable = startOfRound.unlockablesList.unlockables[index];
                     if (_UnlockableItems == null) _UnlockableItems = new Dictionary<int, UnlockableItem>();
-                    Console.WriteLine($"Unlockable ID: {index} - Unlockable Name: {unlockable.unlockableName}");
                     _ = _UnlockableItems.TryAdd(index, unlockable);
                 }
             }
@@ -66,6 +67,23 @@ static partial class Helper {
 
             return _Suits;
         }
+    }
+
+
+    internal static bool CanBeReturnedToStorage(this UnlockableItem item) {
+        if (!item.canBeStored) {
+            return false;
+        }
+
+        if (item.unlockableName.ToLower().EndsWith(" suit")) {
+            return false;
+        }
+
+        if (item.hasBeenUnlockedByPlayer || item.alreadyUnlocked) {
+            return !item.inStorage;
+        }
+
+        return false;
     }
 
 
@@ -172,13 +190,32 @@ static partial class Helper {
         StartOfRound?.ReturnUnlockableFromStorageServerRpc(unlockableId);
     }
 
+    internal static void ReturnUnlockableToStorage(int unlockableId) {
+        UnlockableItem? unlockable = GetUnlockableByID(unlockableId);
+        if (unlockable == null) return;
+        ReturnUnlockableToStorage(unlockable);
+    }
+
+
+    internal static void ReturnUnlockableToStorage(UnlockableItem item) => ReturnUnlockableToStorage(GetPlaceableShipObject(item));
+
+    internal static void ReturnUnlockableToStorage(PlaceableShipObject? item) {
+        if (Helper.LocalPlayer is not PlayerControllerB player) return;
+        if (Terminal is not Terminal terminal) return;
+        if (Helper.ShipBuildModeManager is not ShipBuildModeManager shipBuildModeManager) return;
+        if (item == null) return;
+        var networkobj = item.parentObject.GetComponent<NetworkObject>();
+        if (networkobj == null) return;
+        shipBuildModeManager.StoreObjectServerRpc(networkobj, player.GetPlayerId());
+    }
+
 
     /// <summary>
     ///     Gets the unlockable item associated with a specific unlockable ID.
     /// </summary>
     /// <param name="unlockable">The unlockable item.</param>
     /// <returns>The placeable ship object associated with the unlockable.</returns>
-    internal static PlaceableShipObject? GetUnlockable(UnlockableItem unlockable) =>
+    internal static PlaceableShipObject? GetPlaceableShipObject(UnlockableItem unlockable) =>
         FindObjects<PlaceableShipObject>()
             .FirstOrDefault(placeableObject => unlockable.IsUnlockable(placeableObject.unlockableID));
 
@@ -187,10 +224,10 @@ static partial class Helper {
     /// </summary>
     /// <param name="unlockableId">The unlockable item ID.</param>
     /// <returns>The placeable ship object associated with the unlockable.</returns
-    internal static PlaceableShipObject? GetUnlockable(int unlockableId) {
+    internal static PlaceableShipObject? GetPlaceableShipObject(int unlockableId) {
         UnlockableItem? unlockable = GetUnlockableByID(unlockableId);
         if (unlockable == null) return null;
-        return GetUnlockable(unlockable);
+        return GetPlaceableShipObject(unlockable);
     }
 
     /// <summary>
@@ -198,11 +235,19 @@ static partial class Helper {
     /// </summary>
     /// <param name="unlockableId">The unlockable item Name.</param>
     /// <returns>The placeable ship object associated with the unlockable.</returns
-    internal static PlaceableShipObject? GetUnlockable(string unlockableName) {
+    internal static PlaceableShipObject? GetPlaceableShipObject(string unlockableName) {
         UnlockableItem? unlockable = GetUnlockableByName(unlockableName);
         if (unlockable == null) return null;
-        return GetUnlockable(unlockable);
+        return GetPlaceableShipObject(unlockable);
     }
+
+
+    // Extension to get the placeableshipobject back as a unlockable item
+    internal static UnlockableItem? GetUnlockable(this PlaceableShipObject placeableShipObject) {
+        if (placeableShipObject is null) return null;
+        return GetUnlockableByID(placeableShipObject.unlockableID);
+    }
+
 
     /// <summary>
     /// Verifies if a given unlockable item is a Unlockable Item.

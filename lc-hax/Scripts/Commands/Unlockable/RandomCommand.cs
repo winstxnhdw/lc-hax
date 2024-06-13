@@ -65,7 +65,7 @@ class RandomCommand : ICommand {
     }
 
     ObjectPlacements<Transform, PlaceableShipObject>? GetCupboardPlacements(Component target) {
-        if (Helper.GetUnlockable("Cupboard") is not PlaceableShipObject cupboard) return null;
+        if (Helper.GetPlaceableShipObject("Cupboard") is not PlaceableShipObject cupboard) return null;
 
         ObjectPlacement<Transform, PlaceableShipObject> cupboardPlacement = new() {
             TargetObject = target.transform,
