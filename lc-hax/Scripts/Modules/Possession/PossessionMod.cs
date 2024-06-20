@@ -102,6 +102,7 @@ sealed class PossessionMod : MonoBehaviour {
         InputListener.OnF9Press += this.ToggleAIControl;
         InputListener.OnLeftAltButtonHold += this.HoldAlt;
         InputListener.OnEPress += this.OnInteract;
+        GameListener.OnGameEnd += this.Reset;
         this.UpdateComponentsOnCurrentState(true);
     }
 
@@ -262,20 +263,13 @@ sealed class PossessionMod : MonoBehaviour {
             string? secondary = controller.GetSecondarySkillName(enemy);
             string? special = controller.GetSpecialAbilityName(enemy);
 
-            StringBuilder actionTextBuilder = new();
-
             if (!string.IsNullOrEmpty(primary))
-                actionTextBuilder.AppendLine($"[Mouse Left] {primary}");
-
+                MinimalGUIHelper.AddText("Possession_MouseLeft", $"[Mouse Left] {primary}");
             if (!string.IsNullOrEmpty(secondary))
-                actionTextBuilder.AppendLine($"[Mouse Right] {secondary}");
+                MinimalGUIHelper.AddText("Possession_MouseRight", $"[Mouse Right] {secondary}");
 
             if (!string.IsNullOrEmpty(special))
-                actionTextBuilder.AppendLine($"[Q] {special}");
-
-            string actionText = actionTextBuilder.ToString();
-
-            MinimalGUIHelper.AddText("Possession_Action", actionText);
+                MinimalGUIHelper.AddText("Possession_SpecialAbility", $"[Q] {special}");
         }
 
         // Add fixed labels for constant features
@@ -289,11 +283,13 @@ sealed class PossessionMod : MonoBehaviour {
 
 
     void RemoveLabels() {
-        MinimalGUIHelper.Remove("Possession_Action");
-        MinimalGUIHelper.Remove("Possession_NoClip");
-        MinimalGUIHelper.Remove("Possession_Unpossess");
+        MinimalGUIHelper.Remove("Possession_MouseLeft");
+        MinimalGUIHelper.Remove("Possession_MouseRight");
+        MinimalGUIHelper.Remove("Possession_SpecialAbility");
         MinimalGUIHelper.Remove("Possession_AIControl");
         MinimalGUIHelper.Remove("Possession_IsOutside");
+        MinimalGUIHelper.Remove("Possession_NoClip");
+        MinimalGUIHelper.Remove("Possession_Unpossess");
         MinimalGUIHelper.Remove("Possession_Interact");
         MinimalGUIHelper.Remove("Possession_KillUnpossess");
     }

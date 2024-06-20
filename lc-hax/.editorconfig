@@ -101,3 +101,6 @@ dotnet_diagnostic.IDE0008.severity = none
 
 # IDE0009: Member access should be qualified.
 dotnet_diagnostic.IDE0009.severity = none
+
+# CS0649: Field 'CustomPlayerTrigger.onPlayerExit' is never assigned to, and will always have its default value null
+dotnet_diagnostic.CS0649.severity = none

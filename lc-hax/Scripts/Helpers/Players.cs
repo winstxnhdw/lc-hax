@@ -273,4 +273,120 @@ static partial class Helper {
         if (player == null) return null;
         return player.playerUsername == "Player" ? null : player.playerUsername;
     }
+    /// <summary>
+    /// A helper method to respawn the local player.
+    /// </summary>
+    internal static void RespawnLocalPlayer() {
+        if (Helper.SoundManager is not SoundManager soundManager) return;
+        if (Helper.StartOfRound is not StartOfRound startOfRound) return;
+        if (Helper.HUDManager is not HUDManager hudManager) return;
+        if (Helper.LocalPlayer is not PlayerControllerB localPlayer) return;
+
+        startOfRound.allPlayersDead = false;
+        localPlayer.ResetPlayerBloodObjects(localPlayer.isPlayerDead);
+
+        if (localPlayer.isPlayerDead || localPlayer.isPlayerControlled) {
+            localPlayer.isClimbingLadder = false;
+            localPlayer.ResetZAndXRotation();
+            localPlayer.thisController.enabled = true;
+            localPlayer.health = 100;
+            localPlayer.disableLookInput = false;
+
+            if (localPlayer.isPlayerDead) {
+                localPlayer.isPlayerDead = false;
+                localPlayer.isPlayerControlled = true;
+                localPlayer.isInElevator = true;
+                localPlayer.isInHangarShipRoom = true;
+                localPlayer.isInsideFactory = false;
+                localPlayer.wasInElevatorLastFrame = false;
+                startOfRound.SetPlayerObjectExtrapolate(false);
+                localPlayer.TeleportPlayer(startOfRound.playerSpawnPositions[0].position);
+                localPlayer.setPositionOfDeadPlayer = false;
+                localPlayer.DisablePlayerModel(startOfRound.allPlayerObjects[localPlayer.GetPlayerId()], true, true);
+                localPlayer.helmetLight.enabled = false;
+                localPlayer.Crouch(false);
+                localPlayer.criticallyInjured = false;
+
+                if (localPlayer.playerBodyAnimator != null)
+                    localPlayer.playerBodyAnimator.SetBool("Limp", false);
+
+                localPlayer.bleedingHeavily = false;
+                localPlayer.activatingItem = false;
+                localPlayer.twoHanded = false;
+                localPlayer.inSpecialInteractAnimation = false;
+                localPlayer.freeRotationInInteractAnimation = false;
+                localPlayer.disableSyncInAnimation = false;
+                localPlayer.inAnimationWithEnemy = null;
+                localPlayer.holdingWalkieTalkie = false;
+                localPlayer.speakingToWalkieTalkie = false;
+                localPlayer.isSinking = false;
+                localPlayer.isUnderwater = false;
+                localPlayer.sinkingValue = 0.0f;
+                localPlayer.statusEffectAudio.Stop();
+                localPlayer.DisableJetpackControlsLocally();
+                localPlayer.mapRadarDotAnimator.SetBool("dead", false);
+
+                if (localPlayer.IsOwner) {
+                    hudManager.gasHelmetAnimator.SetBool("gasEmitting", false);
+                    localPlayer.hasBegunSpectating = false;
+                    hudManager.RemoveSpectateUI();
+                    hudManager.gameOverAnimator.SetTrigger("revive");
+                    localPlayer.hinderedMultiplier = 1f;
+                    localPlayer.isMovementHindered = 0;
+                    localPlayer.sourcesCausingSinking = 0;
+                    localPlayer.reverbPreset = startOfRound.shipReverb;
+                }
+            }
+
+            soundManager.earsRingingTimer = 0.0f;
+            localPlayer.voiceMuffledByEnemy = false;
+            soundManager.playerVoicePitchTargets[localPlayer.GetPlayerId()] = 1f;
+            soundManager.SetPlayerPitch(1f, localPlayer.GetPlayerId());
+
+            if (localPlayer.currentVoiceChatIngameSettings == null)
+                startOfRound.RefreshPlayerVoicePlaybackObjects();
+
+            if (localPlayer.currentVoiceChatIngameSettings != null) {
+                if (localPlayer.currentVoiceChatIngameSettings.voiceAudio == null)
+                    localPlayer.currentVoiceChatIngameSettings.InitializeComponents();
+
+                if (localPlayer.currentVoiceChatIngameSettings.voiceAudio != null)
+                    localPlayer.currentVoiceChatIngameSettings.voiceAudio.GetComponent<OccludeAudio>().overridingLowPass = false;
+            }
+        }
+
+        localPlayer.bleedingHeavily = false;
+        localPlayer.criticallyInjured = false;
+        localPlayer.playerBodyAnimator.SetBool("Limp", false);
+        localPlayer.health = 100;
+        hudManager.UpdateHealthUI(100, false);
+        localPlayer.spectatedPlayerScript = null;
+        hudManager.audioListenerLowPass.enabled = false;
+        startOfRound.SetSpectateCameraToGameOverMode(false, localPlayer);
+
+        RagdollGrabbableObject[] objectsOfType = UnityEngine.Object.FindObjectsOfType<RagdollGrabbableObject>();
+        for (int index = 0; index < objectsOfType.Length; ++index) {
+            if (!objectsOfType[index].isHeld) {
+                if (startOfRound.IsServer) {
+                    if (objectsOfType[index].NetworkObject.IsSpawned)
+                        objectsOfType[index].NetworkObject.Despawn();
+                    else
+                        UnityEngine.Object.Destroy(objectsOfType[index].gameObject);
+                }
+            }
+            else if (objectsOfType[index].isHeld && objectsOfType[index].playerHeldBy != null) {
+                objectsOfType[index].playerHeldBy.DropAllHeldItems();
+            }
+        }
+
+        DeadBodyInfo[] deadBodies = UnityEngine.Object.FindObjectsOfType<DeadBodyInfo>();
+        foreach (var deadBody in deadBodies) {
+            UnityEngine.Object.Destroy(deadBody.gameObject);
+        }
+
+        startOfRound.livingPlayers = startOfRound.connectedPlayersAmount + 1;
+        startOfRound.allPlayersDead = false;
+        startOfRound.UpdatePlayerVoiceEffects();
+        startOfRound.shipAnimator.ResetTrigger("ShipLeave");
+    }
 }
