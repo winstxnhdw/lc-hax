@@ -14,10 +14,7 @@ class EarthLeviathanController : IEnemyController<SandWormAI> {
 
 
     public void UsePrimarySkill(SandWormAI enemy) {
-        if (this.IsEmerged(enemy)) {
-            enemy.SetInGround();
-        }
-        else {
+        if (!this.IsEmerged(enemy)) {
             ForceEmergeAnimation(enemy);
         }
     }
@@ -43,7 +40,7 @@ class EarthLeviathanController : IEnemyController<SandWormAI> {
 
     public string GetPrimarySkillName(SandWormAI worm) {
         if(worm is not SandWormAI enemy) return string.Empty;
-        return this.IsEmerged(enemy) ? "Reset" : "Emerge";
+        return this.IsEmerged(enemy) ? "Emerge is on Cooldown..." : "Emerge";
     }
 
 
@@ -56,11 +53,7 @@ class EarthLeviathanController : IEnemyController<SandWormAI> {
             return "Start Ground Rumble";
         }
     }
-
-    public string GetSpecialAbilityName(SandWormAI _) => "Play Roar Noise";
-
     
-
 
     public bool CanUseEntranceDoors(SandWormAI _) => false;
 

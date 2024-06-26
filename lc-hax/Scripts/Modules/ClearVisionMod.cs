@@ -39,21 +39,26 @@ sealed class ClearVisionMod : MonoBehaviour {
 
 
     internal void DetectPosition() {
-        if (Helper.CurrentCamera is not Camera cam) return;
-        if (Helper.InsideMainEntrance is not EntranceTeleport entrance) return;
-        if(Helper.LocalPlayer is not PlayerControllerB player) return;
-        if(PossessionMod.Instance is not PossessionMod possessionMod) return;
-        if (possessionMod.PossessedEnemy is not EnemyAI enemy) {
-            if (player.IsDead() || Setting.EnablePhantom) {
-                this.IsInsideFactory = cam.transform.position.y <
-                                       entrance.transform.position.y + Setting.IsInsideFactoryTreshold;
+        try {
+            if (Helper.CurrentCamera is not Camera cam) return;
+            if (Helper.InsideMainEntrance is not EntranceTeleport entrance) return;
+            if (Helper.LocalPlayer is not PlayerControllerB player) return;
+            if (PossessionMod.Instance is not PossessionMod possessionMod) return;
+            if (possessionMod.PossessedEnemy is not EnemyAI enemy) {
+                if (player.IsDead() || Setting.EnablePhantom) {
+                    this.IsInsideFactory = cam.transform.position.y <
+                                           entrance.transform.position.y + Setting.IsInsideFactoryTreshold;
+                }
+                else {
+                    this.IsInsideFactory = player.isInsideFactory;
+                }
             }
             else {
-                this.IsInsideFactory = player.isInsideFactory;
+                this.IsInsideFactory = !enemy.isOutside;
             }
         }
-        else {
-            this.IsInsideFactory = !enemy.isOutside;
+        catch {
+
         }
     }
 
