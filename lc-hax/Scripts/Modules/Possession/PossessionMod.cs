@@ -9,6 +9,7 @@ using Hax;
 using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.AI;
+using static UnityEngine.EventSystems.EventTrigger;
 
 #endregion
 
@@ -211,13 +212,18 @@ sealed class PossessionMod : MonoBehaviour {
             this.UpdateEnemyRotation();
         }
 
-        if (this.NoClipEnabled)
-            if (Helper.InsideMainEntrance != null)
-                enemy.SetOutsideStatus(enemy.transform.position.y > Helper.InsideMainEntrance.transform.position.y +
-                    Setting.IsInsideFactoryTreshold);
+        this.NoClipEnemyUpdate(enemy);
 
         if (enemy.isEnemyDead) this.Unpossess();
     }
+
+    void NoClipEnemyUpdate(EnemyAI enemy, IController? controller = null) {
+        if (Helper.CurrentCamera is not Camera cam) return;
+        if (Helper.InsideMainEntrance is not EntranceTeleport entrance) return;
+        if (!this.NoClipEnabled) return;
+        enemy.SetOutsideStatus(cam.transform.position.y < entrance.transform.position.y + Setting.IsInsideFactoryTreshold, controller);
+    }
+
 
     /// <summary>
     ///     This Allows To possess an Enemy with full compatibility thanks to IController.
@@ -230,11 +236,9 @@ sealed class PossessionMod : MonoBehaviour {
             return;
         }
 
-        if (this.NoClipEnabled)
-            if (Helper.InsideMainEntrance != null)
-                enemy.SetOutsideStatus(enemy.transform.position.y > Helper.InsideMainEntrance.transform.position.y +
-                    Setting.IsInsideFactoryTreshold,
-                    controller);
+        this.NoClipEnemyUpdate(enemy,controller);
+
+
         if (enemy.isEnemyDead) {
             controller.OnDeath(enemy);
             this.Unpossess();

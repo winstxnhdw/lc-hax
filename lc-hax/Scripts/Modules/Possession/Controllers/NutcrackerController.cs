@@ -32,7 +32,7 @@ class NutcrackerController : IEnemyController<NutcrackerEnemyAI> {
         }
 
         if (this.InSentryMode) return;
-        enemy.SwitchToBehaviourServerRpc(unchecked((int)NutcrackerState.WALKING));
+        enemy.SetBehaviourState(NutcrackerState.WALKING);
     }
 
     public bool IsAbleToRotate(NutcrackerEnemyAI enemy) => !enemy.IsBehaviourState(NutcrackerState.SENTRY);
@@ -60,8 +60,8 @@ class NutcrackerController : IEnemyController<NutcrackerEnemyAI> {
     }
 
     public void UseSpecialAbility(NutcrackerEnemyAI enemy) {
-        bool reloadingGun = enemy.Reflect().GetInternalField<bool>("reloadingGun");
         Reflector<NutcrackerEnemyAI> Nutcracker = enemy.Reflect();
+        bool reloadingGun = Nutcracker.GetInternalField<bool>("reloadingGun");
         int SaveTimesSeeingSamePlayer = Nutcracker.GetInternalField<int>("timesSeeingSamePlayer");
         int SaveHP = enemy.enemyHP;
         int SaveShellsLoaded = enemy.gun.shellsLoaded;

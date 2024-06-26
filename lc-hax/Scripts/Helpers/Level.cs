@@ -35,16 +35,18 @@ static partial class Helper {
 
     internal static EntranceTeleport? InsideMainEntrance {
         get {
-            if (Helper.LocalPlayer is not PlayerControllerB ||
-                Helper.StartOfRound is not StartOfRound round ||
-                round.inShipPhase) {
-                _InsideMainEntrance = null;
-                return null;
+            if (Helper.LocalPlayer is not PlayerControllerB
+                || Helper.StartOfRound is not StartOfRound startOfRound
+                || Helper.RoundManager is not RoundManager roundManager
+                || startOfRound.inShipPhase
+                || roundManager.currentLevel.levelID == 3) {
+                return _InsideMainEntrance = null;
             }
 
             return _InsideMainEntrance ??= RoundManager.FindMainEntranceScript(true);
         }
     }
+
 
 
 

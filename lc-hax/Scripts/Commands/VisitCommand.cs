@@ -44,6 +44,6 @@ class VisitCommand : ICommand {
         }
 
         startOfRound.ChangeLevelServerRpc(Levels[key], terminal.groupCredits);
-        Chat.Print($"Visiting {key.ToTitleCase()}!");
+        Helper.SendFlatNotification($"Visiting {key.ToTitleCase()}!");
     }
 }
