@@ -221,7 +221,7 @@ sealed class PossessionMod : MonoBehaviour {
         if (Helper.CurrentCamera is not Camera cam) return;
         if (Helper.InsideMainEntrance is not EntranceTeleport entrance) return;
         if (!this.NoClipEnabled) return;
-        enemy.SetOutsideStatus(cam.transform.position.y < entrance.transform.position.y + Setting.IsInsideFactoryTreshold, controller);
+        enemy.SetOutsideStatus(cam.transform.position.y > entrance.transform.position.y + Setting.IsInsideFactoryTreshold, controller);
     }
 
 

@@ -46,7 +46,7 @@ sealed class ClearVisionMod : MonoBehaviour {
             if (PossessionMod.Instance is not PossessionMod possessionMod) return;
             if (possessionMod.PossessedEnemy is not EnemyAI enemy) {
                 if (player.IsDead() || Setting.EnablePhantom) {
-                    this.IsInsideFactory = cam.transform.position.y <
+                    this.IsInsideFactory = cam.transform.position.y >
                                            entrance.transform.position.y + Setting.IsInsideFactoryTreshold;
                 }
                 else {
