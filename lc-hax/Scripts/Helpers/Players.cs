@@ -298,7 +298,7 @@ static partial class Helper {
                 localPlayer.isInElevator = true;
                 localPlayer.isInHangarShipRoom = true;
                 localPlayer.isInsideFactory = false;
-                localPlayer.wasInElevatorLastFrame = false;
+                localPlayer.parentedToElevatorLastFrame = false;
                 startOfRound.SetPlayerObjectExtrapolate(false);
                 localPlayer.TeleportPlayer(startOfRound.playerSpawnPositions[0].position);
                 localPlayer.setPositionOfDeadPlayer = false;

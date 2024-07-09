@@ -363,6 +363,34 @@ class EnemyPromptHandler {
         return true;
     }
 
+
+    bool HandleClaySurgeon(ClaySurgeonAI surgeon, PlayerControllerB targetPlayer, bool willTeleportEnemy,
+        bool overrideInsideFactory) {
+        if (!this.IsEnemyAllowedOutside(surgeon, targetPlayer, willTeleportEnemy, overrideInsideFactory)) return false;
+        if (surgeon.isEnemyDead) return false;
+        this.TeleportEnemyToPlayer(surgeon, targetPlayer, willTeleportEnemy, true);
+        surgeon.TakeOwnership();
+        surgeon.targetPlayer = targetPlayer;
+        surgeon.SetMovingTowardsTargetPlayer(targetPlayer);
+        surgeon.SetBehaviourState(SurgeonState.Chasing);
+        surgeon.SetOwner(targetPlayer);
+        return true;
+    }
+
+    bool HandleBushWolf(BushWolfEnemy wolf, PlayerControllerB targetPlayer, bool willTeleportEnemy,
+        bool overrideInsideFactory) {
+        if (!this.IsEnemyAllowedInside(wolf, targetPlayer, willTeleportEnemy, overrideInsideFactory)) return false;
+        if (wolf.isEnemyDead) return false;
+        this.TeleportEnemyToPlayer(wolf, targetPlayer, willTeleportEnemy, true);
+        wolf.TakeOwnership();
+        wolf.targetPlayer = targetPlayer;
+        wolf.SetMovingTowardsTargetPlayer(targetPlayer);
+        wolf.SetBehaviourState(BushWolfState.Attacking);
+        wolf.SetOwner(targetPlayer);
+        return true;
+    }
+
+
     internal bool HandleEnemy(EnemyAI enemy, PlayerControllerB targetPlayer, bool willTeleportEnemy,
         bool overrideInsideFactory) {
         switch (enemy) {
@@ -401,7 +429,8 @@ class EnemyPromptHandler {
 
             case DocileLocustBeesAI docileLocustBees:
                 return this.HandleDocileLocustBees(docileLocustBees, targetPlayer, willTeleportEnemy);
-
+            case BushWolfEnemy wolf:
+                return this.HandleBushWolf(wolf, targetPlayer, willTeleportEnemy, overrideInsideFactory);
             #endregion
 
             #region Inside Enemies
@@ -428,6 +457,8 @@ class EnemyPromptHandler {
                 return this.HandleSporeLizard(sporeLizard, targetPlayer, willTeleportEnemy, overrideInsideFactory);
             case JesterAI jester:
                 return this.HandleJester(jester, targetPlayer, willTeleportEnemy, overrideInsideFactory);
+            case ClaySurgeonAI surgeon:
+                return this.HandleClaySurgeon(surgeon, targetPlayer, willTeleportEnemy, overrideInsideFactory);
 
             #endregion
 

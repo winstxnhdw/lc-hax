@@ -57,7 +57,10 @@ sealed class PossessionMod : MonoBehaviour {
         { typeof(ButlerEnemyAI), new ButlerEnemyController() },
         { typeof(ButlerBeesEnemyAI), new ButlerBeesController() },
         { typeof(RadMechAI), new RadMechController() },
-        { typeof(FlowerSnakeEnemy), new FlowerSnakeController() }
+        { typeof(FlowerSnakeEnemy), new FlowerSnakeController() },
+        { typeof(BushWolfEnemy), new BushWolfController()},
+        { typeof(ClaySurgeonAI), new ClaySurgeonController()},
+
     };
 
     internal IController? GetEnemyController(EnemyAI enemy) =>

@@ -33,6 +33,16 @@ class BuyCommand : ICommand {
 
         Item? TargetedItem = Helper.FindItem(item);
         if (TargetedItem == null) {
+            // If no item found, check inside the buyableVehicles
+            for (int i = 0; i < terminal.buyableVehicles.Length; i++) {
+                string vehiclename = terminal.buyableVehicles[i].vehicleDisplayName;
+                if (vehiclename.Equals(item, StringComparison.InvariantCultureIgnoreCase)) {
+                    terminal.BuyVehicleServerRpc(i, terminal.groupCredits - 1, false);
+                    Chat.Print($"Buying {vehiclename}!");
+                    return;
+                }
+            }
+
             Chat.Print("Item not found!");
             return;
         }
