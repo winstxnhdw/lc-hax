@@ -36,4 +36,7 @@ class BushWolfController : IEnemyController<BushWolfEnemy> {
     public string? GetSpecialAbilityName(BushWolfEnemy enemy) => "Mating Call";
 
     public void UseSpecialAbility(BushWolfEnemy enemy) => enemy.MatingCallServerRpc();
+
+    public bool SyncAnimationSpeedEnabled(BushWolfEnemy enemy) => false;
+
 }

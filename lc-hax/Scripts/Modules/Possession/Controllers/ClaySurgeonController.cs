@@ -32,4 +32,8 @@ class ClaySurgeonController : IEnemyController<ClaySurgeonAI> {
         if(mat == null) return;
         mat.SetFloat("_AlphaCutoff", 0);
     }
+
+    public bool CanUseEntranceDoors(ClaySurgeonAI enemy) => true;
+
+    public bool SyncAnimationSpeedEnabled(ClaySurgeonAI enemy) => false;
 }

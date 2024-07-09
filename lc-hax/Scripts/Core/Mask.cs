@@ -22,7 +22,7 @@ public static class Mask {
     public static readonly LayerMask Triggers = LayerMask.GetMask("Triggers");
     public static readonly LayerMask MapRadar = LayerMask.GetMask("MapRadar");
     public static readonly LayerMask NavigationSurface = LayerMask.GetMask("NavigationSurface");
-    public static readonly LayerMask RoomLight = LayerMask.GetMask("RoomLight");
+    public static readonly LayerMask MoldSpore = LayerMask.GetMask("MoldSpore");
     public static readonly LayerMask Anomaly = LayerMask.GetMask("Anomaly");
     public static readonly LayerMask LineOfSight = LayerMask.GetMask("LineOfSight");
     public static readonly LayerMask Enemies = LayerMask.GetMask("Enemies");
@@ -36,9 +36,8 @@ public static class Mask {
     public static readonly LayerMask PlacementBlocker = LayerMask.GetMask("PlacementBlocker");
     public static readonly LayerMask Railing = LayerMask.GetMask("Railing");
     public static readonly LayerMask DecalStickableSurface = LayerMask.GetMask("DecalStickableSurface");
-    public static readonly LayerMask Ship = LayerMask.GetMask("Ship");
-    public static readonly LayerMask ShipInterior = LayerMask.GetMask("ShipInterior");
-    public static readonly LayerMask Unused1 = 1 << 30;
+    public static readonly LayerMask Vehicle = LayerMask.GetMask("Vehicle");
+    public static readonly LayerMask Unused1 = LayerMask.GetMask("Unused1");
     public static readonly LayerMask Unused2 = 1 << 31;
 
     public static readonly LayerMask All = ~0;
