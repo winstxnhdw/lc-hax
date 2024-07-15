@@ -36,7 +36,7 @@ jobs:
           restore-keys: dotnet-tools-${{ runner.os }}-
 
       - name: Setup .NET
-        uses: actions/setup-dotnet@v4.0.0
+        uses: actions/setup-dotnet@v4.0.1
         with:
           dotnet-version: 8.0.x
 
