@@ -1,4 +1,4 @@
-name: v50
+name: v55
 
 on:
   push:
@@ -16,7 +16,7 @@ on:
     - cron: 0 0 * * *
 
 env:
-  SUPPORTED_VERSION: 14074548
+  SUPPORTED_VERSION: 14957783
 
 jobs:
   check-version:
