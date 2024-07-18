@@ -7,15 +7,9 @@ using System.Collections.Generic;
 
 namespace Hax;
 
-readonly struct TranslateRequest(string source, string target, string text) {
-    [JsonProperty("source")]
-    internal string Source { get; } = source;
-
-    [JsonProperty("target")]
-    internal string Target { get; } = target;
-
-    [JsonProperty("text")]
-    internal string Text { get; } = text;
+readonly struct TranslateResponse {
+    [JsonProperty("result")]
+    internal string Result { get; }
 }
 
 static partial class Helper {
@@ -212,25 +206,27 @@ static partial class Helper {
         { "zulu", "zul_Latn" },
     });
 
-    static IEnumerator Translate(TranslateRequest request) {
+    static IEnumerator FetchTranslateResult(string sourceLanguage, string targetLanguage, string text) {
         if (Helper.LocalPlayer is not PlayerControllerB player) yield break;
 
-        using UnityWebRequest www = UnityWebRequest.Post(
-            "https://winstxnhdw-nllb-api.hf.space/api/v2/translate",
-            JsonConvert.SerializeObject(request),
-            "application/json"
+        using UnityWebRequest www = UnityWebRequest.Get(
+            $"https://winstxnhdw-nllb-api.hf.space/api/v3/translate?text={text}&source={sourceLanguage}&target={targetLanguage}"
         );
 
         yield return www.SendWebRequest();
 
         if (www.result != UnityWebRequest.Result.Success) {
             State.TranslateDetachedState = null;
-            Helper.HUDManager?.AddTextToChatOnServer(request.Text, player.PlayerIndex());
+            Helper.HUDManager?.AddTextToChatOnServer(text, player.PlayerIndex());
             Chat.Print("Translation server is down!");
         }
 
         else {
-            _ = Helper.HUDManager?.Reflect().InvokeInternalMethod("AddPlayerChatMessageServerRpc", www.downloadHandler.text.Trim(), player.PlayerIndex());
+            _ = Helper.HUDManager?.Reflect().InvokeInternalMethod(
+                "AddPlayerChatMessageServerRpc",
+                JsonConvert.DeserializeObject<TranslateResponse>(www.downloadHandler.text).Result.Trim(),
+                player.PlayerIndex()
+            );
         }
     }
 
@@ -247,12 +243,10 @@ static partial class Helper {
             return;
         }
 
-        TranslateRequest request = new(
+        Helper.CreateComponent<AsyncBehaviour>().Init(() => Helper.FetchTranslateResult(
             Helper.FLORES200.Value[source],
             Helper.FLORES200.Value[target],
             text
-        );
-
-        Helper.CreateComponent<AsyncBehaviour>().Init(() => Helper.Translate(request));
+        ));
     }
 }
