@@ -1,4 +1,5 @@
 using Hax;
+using UnityEngine;
 
 enum DogState {
     ROAMING,
@@ -8,20 +9,13 @@ enum DogState {
 }
 
 class EyelessDogController : IEnemyController<MouthDogAI> {
-    public void OnMovement(MouthDogAI enemy, bool isMoving, bool isSprinting) {
-        if (!isSprinting) {
-            if (!isMoving) return;
-            enemy.SetBehaviourState(DogState.ROAMING);
-        }
+    public Vector3 GetCameraOffset(MouthDogAI enemy) => new(0.0f, 3.2f, -4.0f);
 
-        else {
-            enemy.SetBehaviourState(DogState.CHASE);
-        }
-    }
+    public void UsePrimarySkill(MouthDogAI enemy) => enemy.SetBehaviourState(enemy.IsBehaviourState(DogState.CHASE) ? DogState.ROAMING : DogState.CHASE);
 
     public void UseSecondarySkill(MouthDogAI enemy) => enemy.SetBehaviourState(DogState.LUNGE);
 
     public string GetSecondarySkillName(MouthDogAI _) => "Lunge";
 
-    public float InteractRange(MouthDogAI _) => 2.5f;
+    public void OnOutsideStatusChange(MouthDogAI enemy) => enemy.StopSearch(enemy.roamPlanet, true);
 }

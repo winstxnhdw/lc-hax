@@ -4,7 +4,6 @@ using Hax;
 
 sealed class TriggerMod : MonoBehaviour, IEnemyPrompter {
     RaycastHit[] RaycastHits { get; set; } = new RaycastHit[100];
-
     bool UsingInteractRay { get; set; } = false;
     bool UsingFollowRay { get; set; } = false;
 
@@ -23,6 +22,13 @@ sealed class TriggerMod : MonoBehaviour, IEnemyPrompter {
     void SetUsingInteractRay(bool isHeld) => this.UsingInteractRay = isHeld;
 
     void SetUsingFollowRay(bool isHeld) => this.UsingFollowRay = isHeld;
+
+    EnemyAI? GetPossessableEnemy(Collider collider) =>
+        Setting.EnablePhantom &&
+        collider.GetComponentInParent<EnemyAI>().Unfake() is EnemyAI enemy &&
+        PossessionMod.Instance?.PossessedEnemy != enemy
+            ? enemy
+            : null;
 
     void Fire() {
         if (Helper.CurrentCamera is not Camera camera) return;
@@ -83,7 +89,7 @@ sealed class TriggerMod : MonoBehaviour, IEnemyPrompter {
                 break;
             }
 
-            if (collider.GetComponentInParent<EnemyAI>().Unfake() is EnemyAI enemy && Setting.EnablePhantom) {
+            if (this.GetPossessableEnemy(collider) is EnemyAI enemy) {
                 PossessionMod.Instance?.Possess(enemy);
                 break;
             }
