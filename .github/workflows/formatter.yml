@@ -22,7 +22,7 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4.1.6
+        uses: actions/checkout@v4.1.7
         with:
           show-progress: false
           repository: ${{ github.event.pull_request.head.repo.full_name }}
@@ -36,7 +36,7 @@ jobs:
           restore-keys: dotnet-tools-${{ runner.os }}-
 
       - name: Setup .NET
-        uses: actions/setup-dotnet@v4.0.0
+        uses: actions/setup-dotnet@v4.0.1
         with:
           dotnet-version: 8.0.x
 
