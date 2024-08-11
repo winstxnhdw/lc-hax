@@ -170,6 +170,8 @@ These commands are only available when the user is host.
 | Spawn enem(ies) on player     | `/spawn <enemy> <player> <amount=1>`             |
 | Give or take credit(s)        | `/credit <amount>`                               |
 | Eject all players             | `/eject`                                         |
+| Revive all players            | `/revive`                                        |
+| Toggle God mode for all       | `/gods`                                          |
 
 ## Special Commands
 
