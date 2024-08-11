@@ -69,9 +69,9 @@ internal sealed class ClearVisionMod : MonoBehaviour {
         if (this.SunObject == null) return;
         if (this.SunLight == null) return;
         if (this.Data == null) return;
-        if (Helper.LocalPlayer is not PlayerControllerB) return;
-        if (Helper.TimeOfDay is not TimeOfDay) return;
-        if (Helper.CurrentCamera is not Camera) return;
+        if (Helper.LocalPlayer is null) return;
+        if (Helper.TimeOfDay is null) return;
+        if (Helper.CurrentCamera is null) return;
         if (Helper.StartOfRound is not StartOfRound round) {
             this.SunLight.enabled = false;
             return;
