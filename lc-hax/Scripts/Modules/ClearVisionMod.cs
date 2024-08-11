@@ -1,5 +1,6 @@
 using System.Collections;
 using UnityEngine;
+using UnityEngine.Rendering;
 using UnityEngine.Rendering.HighDefinition;
 using Hax;
 using System;
@@ -50,6 +51,10 @@ sealed class ClearVisionMod : MonoBehaviour {
                 continue;
             }
 
+            if (startOfRound.blackSkyVolume is Volume blackSkyVolume) {
+                Destroy(blackSkyVolume);
+            }
+
             sunAnimator.enabled = false;
             timeOfDay.sunIndirect.transform.eulerAngles = new Vector3(90, 0, 0);
             timeOfDay.sunIndirect.transform.position = camera.transform.position;
@@ -61,7 +66,6 @@ sealed class ClearVisionMod : MonoBehaviour {
             lightData.lightDimmer = float.MaxValue;
             lightData.distance = float.MaxValue;
             timeOfDay.insideLighting = false;
-            startOfRound.blackSkyVolume.weight = 0;
 
             yield return waitForEndOfFrame;
         }
