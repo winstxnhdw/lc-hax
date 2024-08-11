@@ -1,9 +1,9 @@
 #pragma warning disable IDE1006
 
-using GameNetcodeStuff;
 using HarmonyLib;
-using Hax;
 using Steamworks;
+using GameNetcodeStuff;
+using Hax;
 
 [HarmonyPatch(typeof(PlayerControllerB))]
 class AntiKickPatch {

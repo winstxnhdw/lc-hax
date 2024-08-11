@@ -1,8 +1,8 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
-using Unity.Netcode;
 using UnityEngine.AI;
+using Unity.Netcode;
 using GameNetcodeStuff;
 using Hax;
 

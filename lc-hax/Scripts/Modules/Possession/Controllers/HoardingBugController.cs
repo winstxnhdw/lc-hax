@@ -1,6 +1,6 @@
+using Unity.Netcode;
 using GameNetcodeStuff;
 using Hax;
-using Unity.Netcode;
 
 enum HoardingBugState {
     IDLE,
