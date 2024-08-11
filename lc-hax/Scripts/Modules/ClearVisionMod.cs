@@ -1,9 +1,9 @@
+using System;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.Rendering;
 using UnityEngine.Rendering.HighDefinition;
 using Hax;
-using System;
 
 sealed class ClearVisionMod : MonoBehaviour {
     float LightIntensity { get; set; } = 2.0f;

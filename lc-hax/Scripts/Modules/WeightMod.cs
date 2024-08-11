@@ -1,6 +1,6 @@
 using System.Collections;
-using GameNetcodeStuff;
 using UnityEngine;
+using GameNetcodeStuff;
 using Hax;
 
 sealed class WeightMod : MonoBehaviour {
