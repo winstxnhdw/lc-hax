@@ -44,7 +44,9 @@ jobs:
         run: dotnet tool restore
 
       - name: Format scripts
-        run: dotnet format lc-hax
+        run: |
+          dotnet format lc-hax
+          dotnet format analysers
 
       - name: Set Git config
         run: |
