@@ -33,4 +33,4 @@ jobs:
           cache-dependency-path: lc-hax
 
       - name: Build
-        run: dotnet build lc-hax /warnaserror
+        run: dotnet build lc-hax /warnaserror --locked-mode
