@@ -29,8 +29,6 @@
 
     <PackageReference Include="Quickenshtein" Version="1.5.1" />
 
-    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
-
     <PackageReference Include="Lib.Harmony" Version="2.3.3" />
 
     <EmbeddedResource Include="$(NuGetPath)/lib.harmony/2.3.3/lib/net48/0Harmony.dll" />
