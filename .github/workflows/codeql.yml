@@ -34,10 +34,10 @@ jobs:
       with:
         dotnet-version: 8.0.x
         cache: true
-        cache-dependency-path: lc-hax
+        cache-dependency-path: lc-hax/packages.lock.json
 
     - name: Build
-      run: dotnet build lc-hax
+      run: dotnet build lc-hax -restoreProperty:RestoreLockedMode=true
 
     - name: Perform CodeQL Analysis
       uses: github/codeql-action/analyze@v3.26.2

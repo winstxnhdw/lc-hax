@@ -15,7 +15,7 @@ on:
       - lc-hax/**
 
 env:
-  NUGET_PACKAGES: ${{ github.workspace }}/lc-hax/References/NuGet
+  NUGET_PACKAGES: ${{ github.workspace }}/.nuget/packages
 
 jobs:
   build:
@@ -30,7 +30,7 @@ jobs:
         with:
           dotnet-version: 8.0.x
           cache: true
-          cache-dependency-path: lc-hax
+          cache-dependency-path: lc-hax/packages.lock.json
 
       - name: Build
         run: dotnet build lc-hax -restoreProperty:RestoreLockedMode=true /warnaserror
