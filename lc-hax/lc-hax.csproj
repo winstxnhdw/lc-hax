@@ -21,6 +21,8 @@
 
     <ProjectReference Include="..\analysers\analysers.csproj" />
 
+    <PackageReference Include="UnityEngine.Modules" Version="2022.3.9" />
+
     <PackageReference Include="LethalCompany.GameLibs.Steam" Version="62.0.1-ngd.0" />
 
     <PackageReference Include="Nullable.Extended.Analyzer" Version="1.15.6169" />
