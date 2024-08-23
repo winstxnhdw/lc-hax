@@ -2,6 +2,16 @@
   "version": 1,
   "dependencies": {
     ".NETStandard,Version=v2.1": {
+      "LethalCompany.GameLibs.Steam": {
+        "type": "Direct",
+        "requested": "[62.0.1-ngd.0, )",
+        "resolved": "62.0.1-ngd.0",
+        "contentHash": "+P0if0+8bteaDwepmwGD6gTpaoNg+R/xJf0L6DLQ8Uoh2y+aKN2Ev4veGwq+UtjWrpqGJoPbV+DOWxoqA6ArpQ==",
+        "dependencies": {
+          "Newtonsoft.JSON": "13.0.3",
+          "UnityEngine.Modules": "2022.3.9"
+        }
+      },
       "Lib.Harmony": {
         "type": "Direct",
         "requested": "[2.3.3, )",
@@ -10,12 +20,6 @@
         "dependencies": {
           "Lib.Harmony.Ref": "2.3.3"
         }
-      },
-      "Newtonsoft.Json": {
-        "type": "Direct",
-        "requested": "[13.0.3, )",
-        "resolved": "13.0.3",
-        "contentHash": "HrC5BXdl00IP9zeV+0Z848QWPAoCr9P3bDEZguI+gkLcBKAOxix/tLEAAHC+UvDNPv4a2d18lOReHMOagPa+zQ=="
       },
       "Nullable.Extended.Analyzer": {
         "type": "Direct",
@@ -142,6 +146,11 @@
           "System.Threading.Channels": "7.0.0",
           "System.Threading.Tasks.Extensions": "4.5.4"
         }
+      },
+      "Newtonsoft.Json": {
+        "type": "Transitive",
+        "resolved": "13.0.3",
+        "contentHash": "HrC5BXdl00IP9zeV+0Z848QWPAoCr9P3bDEZguI+gkLcBKAOxix/tLEAAHC+UvDNPv4a2d18lOReHMOagPa+zQ=="
       },
       "System.Buffers": {
         "type": "Transitive",
@@ -270,6 +279,11 @@
         "dependencies": {
           "System.Runtime.CompilerServices.Unsafe": "4.5.3"
         }
+      },
+      "UnityEngine.Modules": {
+        "type": "Transitive",
+        "resolved": "2022.3.9",
+        "contentHash": "sSxqZjd05U0NWlX+eappdlsEuXFvDRHkUaClDVTocGRzCmIwNvgGJIPh22lGklIpNZ3cJZneYJkIUnEIazR8VA=="
       },
       "analysers": {
         "type": "Project",

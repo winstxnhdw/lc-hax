@@ -19,120 +19,15 @@
 
   <ItemGroup>
 
-    <Reference Include="Assembly-CSharp">
-      <HintPath>$(ReferencePath)/Assembly-CSharp.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-
-    <Reference Include="Assembly-CSharp-firstpass">
-      <HintPath>$(ReferencePath)/Assembly-CSharp-firstpass.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-
-    <Reference Include="UnityEngine">
-      <HintPath>$(ReferencePath)/UnityEngine.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-
-    <Reference Include="UnityEngine.CoreModule">
-      <HintPath>$(ReferencePath)/UnityEngine.CoreModule.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-
-    <Reference Include="UnityEngine.PhysicsModule">
-      <HintPath>$(ReferencePath)/UnityEngine.PhysicsModule.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-
-    <Reference Include="UnityEngine.UI">
-      <HintPath>$(ReferencePath)/UnityEngine.UI.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-
-    <Reference Include="UnityEngine.UIModule">
-      <HintPath>$(ReferencePath)/UnityEngine.UIModule.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-
-    <Reference Include="UnityEngine.IMGUIModule">
-      <HintPath>$(ReferencePath)/UnityEngine.IMGUIModule.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-
-    <Reference Include="UnityEngine.ParticleSystemModule">
-      <HintPath>$(ReferencePath)/UnityEngine.ParticleSystemModule.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-
-    <Reference Include="UnityEngine.AIModule">
-      <HintPath>$(ReferencePath)/UnityEngine.AIModule.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-
-    <Reference Include="UnityEngine.TextRenderingModule">
-      <HintPath>$(ReferencePath)/UnityEngine.TextRenderingModule.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-
-    <Reference Include="UnityEngine.AnimationModule">
-      <HintPath>$(ReferencePath)/UnityEngine.AnimationModule.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-
-    <Reference Include="UnityEngine.UnityWebRequestModule">
-      <HintPath>$(ReferencePath)/UnityEngine.UnityWebRequestModule.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-
-    <Reference Include="UnityEngine.AudioModule">
-      <HintPath>$(ReferencePath)/UnityEngine.AudioModule.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-
-    <Reference Include="Unity.InputSystem">
-      <HintPath>$(ReferencePath)/Unity.InputSystem.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-
-    <Reference Include="Unity.TextMeshPro">
-      <HintPath>$(ReferencePath)/Unity.TextMeshPro.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-
-    <Reference Include="Unity.Rendering.Volume">
-      <HintPath>$(ReferencePath)/Unity.RenderPipelines.Core.Runtime.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-
-    <Reference Include="Unity.Rendering.HighDefinition">
-      <HintPath>$(ReferencePath)/Unity.RenderPipelines.HighDefinition.Runtime.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-
-    <Reference Include="Unity.Netcode.Runtime">
-      <HintPath>$(ReferencePath)/Unity.Netcode.Runtime.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-
-    <Reference Include="Facepunch.Steamworks.Win64">
-      <HintPath>$(ReferencePath)/Facepunch.Steamworks.Win64.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-
-    <Reference Include="DissonanceVoip">
-      <HintPath>$(ReferencePath)/DissonanceVoip.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-
     <ProjectReference Include="..\analysers\analysers.csproj" />
+
+    <PackageReference Include="LethalCompany.GameLibs.Steam" Version="62.0.1-ngd.0" />
 
     <PackageReference Include="Nullable.Extended.Analyzer" Version="1.15.6169" />
 
     <PackageReference Include="RequireNamedArgs" Version="0.0.7" />
 
     <PackageReference Include="Quickenshtein" Version="1.5.1" />
-
-    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
 
     <PackageReference Include="Lib.Harmony" Version="2.3.3" />
 
