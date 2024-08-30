@@ -4,6 +4,7 @@ using System.Reflection;
 using System.Collections.Generic;
 using UnityEngine.EventSystems;
 using Hax;
+using GameNetcodeStuff;
 
 static class Chat {
     internal static event Action<string>? OnExecuteCommandAttempt;
@@ -26,8 +27,8 @@ static class Chat {
         );
 
     static Dictionary<string, ICommand> PrivilegeCommands { get; } =
-        Chat.CommandTypes.Where(type => type.GetCustomAttribute<PrivilegedCommandAttribute>() is not null).ToDictionary(
-            type => type.GetCustomAttribute<PrivilegedCommandAttribute>().Syntax,
+        Chat.CommandTypes.Where(type => type.GetCustomAttribute<HostCommandAttribute>() is not null).ToDictionary(
+            type => type.GetCustomAttribute<HostCommandAttribute>().Syntax,
             type => (ICommand)new PrivilegedCommand((ICommand)Activator.CreateInstance(type))
         );
 
@@ -53,6 +54,23 @@ static class Chat {
     internal static void Print(string? message) => Chat.Print("SYSTEM", message, true);
 
     internal static void Print(string? message, params string[] args) => Chat.Print($"{message}\n{string.Join('\n', args)}");
+
+    public static void Announce(string announcement, bool keepHistory = false) {
+        if (Helper.LocalPlayer is not PlayerControllerB player) return;
+        if (Helper.HUDManager is not HUDManager hudManager) return;
+
+        string? actualHistory = string.Join('\n', hudManager.ChatMessageHistory.Where(message =>
+            !message.StartsWith("<color=#FF0000>USER</color>: <color=#FFFF00>'") &&
+            !message.StartsWith("<color=#FF0000>SYSTEM</color>: <color=#FFFF00>'")
+        ));
+
+        string chatText = keepHistory ? $"{actualHistory}\n<color=#7069ff>{announcement}</color>" : announcement;
+
+        hudManager.AddTextToChatOnServer(
+            $"</color>\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n{chatText}<color=#FFFFFF00>",
+            (int)player.playerClientId
+        );
+    }
 
     internal static void ExecuteCommand(string commandString) {
         Chat.Print("USER", commandString);

@@ -65,25 +65,24 @@ class Loader : MonoBehaviour {
     }
 
     static void LoadHaxModules() {
-        DontDestroyOnLoad(Loader.HaxModules);
+        DontDestroyOnLoad(HaxModules);
 
-        Loader.AddHaxModules<ESPMod>();
-        Loader.AddHaxModules<SaneMod>();
-        Loader.AddHaxModules<ChatMod>();
-        Loader.AddHaxModules<FollowMod>();
-        Loader.AddHaxModules<WeightMod>();
-        Loader.AddHaxModules<StaminaMod>();
-        Loader.AddHaxModules<PhantomMod>();
-        Loader.AddHaxModules<TriggerMod>();
-        Loader.AddHaxModules<AntiKickMod>();
-        Loader.AddHaxModules<StunClickMod>();
-        Loader.AddHaxModules<KillClickMod>();
-        Loader.AddHaxModules<CrosshairMod>();
-        Loader.AddHaxModules<MinimalGUIMod>();
-        Loader.AddHaxModules<PossessionMod>();
-        Loader.AddHaxModules<DisconnectMod>();
-        Loader.AddHaxModules<ClearVisionMod>();
-        Loader.AddHaxModules<InstantInteractMod>();
+        AddHaxModules<ESPMod>();
+        AddHaxModules<SaneMod>();
+        AddHaxModules<ChatMod>();
+        AddHaxModules<FollowMod>();
+        AddHaxModules<WeightMod>();
+        AddHaxModules<StaminaMod>();
+        AddHaxModules<PhantomMod>();
+        AddHaxModules<TriggerMod>();
+        AddHaxModules<AntiKickMod>();
+        AddHaxModules<KillClickMod>();
+        AddHaxModules<CrosshairMod>();
+        AddHaxModules<MinimalGUIMod>();
+        AddHaxModules<PossessionMod>();
+        AddHaxModules<DisconnectMod>();
+        AddHaxModules<ClearVisionMod>();
+        AddHaxModules<InstantInteractMod>();
     }
 
     internal static void Unload() {

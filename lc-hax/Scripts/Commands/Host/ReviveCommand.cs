@@ -1,6 +1,6 @@
 using Hax;
 
-[PrivilegedCommand("revive")]
+[HostCommand("revive")]
 class ReviveCommand : ICommand {
     public void Execute(StringArray args) => Helper.StartOfRound?.Debug_ReviveAllPlayersServerRpc();
 }

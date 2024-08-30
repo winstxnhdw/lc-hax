@@ -217,7 +217,7 @@ static partial class Helper {
 
         if (www.result != UnityWebRequest.Result.Success) {
             State.TranslateDetachedState = null;
-            Helper.HUDManager?.AddTextToChatOnServer(text, player.PlayerIndex());
+            Helper.HUDManager?.AddTextToChatOnServer(text, player.GetPlayerId());
             Chat.Print("Translation server is down!");
         }
 
@@ -225,7 +225,7 @@ static partial class Helper {
             _ = Helper.HUDManager?.Reflect().InvokeInternalMethod(
                 "AddPlayerChatMessageServerRpc",
                 JsonConvert.DeserializeObject<TranslateResponse>(www.downloadHandler.text).Result.Trim(),
-                player.PlayerIndex()
+                player.GetPlayerId()
             );
         }
     }

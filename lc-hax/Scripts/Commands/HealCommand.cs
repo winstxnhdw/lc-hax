@@ -66,7 +66,7 @@ class HealCommand : ICommand, IStun {
 
         soundManager.earsRingingTimer = 0.0f;
         soundManager.playerVoicePitchTargets[localPlayer.playerClientId] = 1.0f;
-        soundManager.SetPlayerPitch(1.0f, localPlayer.PlayerIndex());
+        soundManager.SetPlayerPitch(1.0f, localPlayer.GetPlayerId());
 
         if (localPlayer.currentVoiceChatIngameSettings == null) {
             startOfRound.RefreshPlayerVoicePlaybackObjects();
