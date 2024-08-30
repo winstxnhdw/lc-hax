@@ -1,108 +1,78 @@
-#region
-
-using System;
-using System.Collections.Generic;
 using System.Linq;
-using GameNetcodeStuff;
-using Hax;
+using System.Collections.Generic;
 using UnityEngine;
+using Hax;
 
-#endregion
+enum BuyableItemType {
+    DEFAULT,
+    VEHICLE
+};
+
+readonly record struct BuyableItem {
+    internal required int Id { get; init; }
+    internal required BuyableItemType Type { get; init; }
+}
 
 [Command("buy")]
 class BuyCommand : ICommand {
-    bool HasRegisteredEvent = false;
+    static Dictionary<string, BuyableItem>? BuyableItems { get; set; }
 
-    internal HashSet<Item> ExtraItems { get; set; } = new();
-    static Dictionary<string, int>? BuyableItems { get; set; }
+    Dictionary<string, BuyableItem> PopulateBuyableItems(Terminal terminal) {
+        Dictionary<string, BuyableItem> buyableItems = [];
+
+        for (int i = 0; i < terminal.buyableItemsList.Length; i++) {
+            buyableItems[terminal.buyableItemsList[i].itemName.ToLower()] = new BuyableItem {
+                Id = i,
+                Type = BuyableItemType.DEFAULT
+            };
+        }
+
+        for (int i = 0; i < terminal.buyableVehicles.Length; i++) {
+            buyableItems[terminal.buyableVehicles[i].vehicleDisplayName.ToLower()] = new BuyableItem {
+                Id = i,
+                Type = BuyableItemType.VEHICLE
+            };
+        }
+
+        return buyableItems;
+    }
 
     public void Execute(StringArray args) {
         if (Helper.Terminal is not Terminal terminal) return;
-        if (Helper.LocalPlayer is not PlayerControllerB LocalPlayer) return;
-        if (!this.HasRegisteredEvent) {
-            DropShipDependencyPatch.OnDropShipDoorOpen += () => { this.RemoveRegistedItems(); };
-            GameListener.OnGameEnd += () => { this.RemoveRegistedItems(); };
-
-            this.HasRegisteredEvent = true;
-        }
-
         if (args[0] is not string item) {
             Chat.Print("Usage: buy <item> <quantity?>");
             return;
         }
 
-        Item? TargetedItem = Helper.FindItem(item);
-        if (TargetedItem == null) {
-            // If no item found, check inside the buyableVehicles
-            for (int i = 0; i < terminal.buyableVehicles.Length; i++) {
-                string vehiclename = terminal.buyableVehicles[i].vehicleDisplayName;
-                if (vehiclename.Equals(item, StringComparison.InvariantCultureIgnoreCase)) {
-                    terminal.BuyVehicleServerRpc(i, terminal.groupCredits - 1, false);
-                    Chat.Print($"Buying {vehiclename}!");
-                    return;
-                }
-            }
-
-            Chat.Print("Item not found!");
-            return;
-        }
-
-        if (!args[1].TryParse(1, out ushort quantity)) {
+        if (!args[1].TryParse(defaultValue: 1, result: out ushort quantity)) {
             Chat.Print("The quantity must be a positive number!");
             return;
         }
 
-        if (LocalPlayer.IsHost)
-            if (!terminal.buyableItemsList.Contains(TargetedItem))
-                this.RegisterItem(TargetedItem);
-        BuyableItems ??= terminal.buyableItemsList.Select((item, i) => (item, i)).ToDictionary(
-            pair => pair.item.itemName.ToLower(),
-            pair => pair.i
-        );
+        int clampedQuantity = Mathf.Clamp(quantity, 1, 12);
+        BuyCommand.BuyableItems ??= this.PopulateBuyableItems(terminal);
 
-        if (!item.FuzzyMatch(BuyableItems.Keys, out string key)) {
+        if (!item.FuzzyMatch(BuyCommand.BuyableItems.Keys, out string key)) {
             Chat.Print("Failed to find purchase!");
             return;
         }
 
-        this.MakeOrder(key, quantity);
-        Chat.Print($"Buying {quantity}x {key.ToTitleCase()}(s)!");
-    }
+        BuyableItem buyableItem = BuyCommand.BuyableItems[key];
 
-
-    void RegisterItem(Item item) {
-        if (Helper.Terminal is not Terminal terminal) return;
-        List<Item> TerminalStore = terminal.buyableItemsList.ToList();
-        if (!terminal.buyableItemsList.Contains(item)) {
-            TerminalStore.Add(item);
-            this.ExtraItems.Add(item);
-            terminal.buyableItemsList = TerminalStore.ToArray();
-            Console.WriteLine($"Added Extra Item {item.itemName} to buyable items list");
+        if (buyableItem.Type is BuyableItemType.VEHICLE) {
+            clampedQuantity = 1;
+            terminal.BuyVehicleServerRpc(buyableItem.Id, terminal.groupCredits - 1, false);
         }
-    }
 
-    void RemoveRegistedItems() {
-        if (Helper.Terminal is not Terminal terminal) return;
-        List<Item> TerminalStore = terminal.buyableItemsList.ToList();
+        else if (buyableItem.Type is BuyableItemType.DEFAULT) {
+            terminal.orderedItemsFromTerminal.Clear();
+            terminal.BuyItemsServerRpc(
+                [.. Enumerable.Repeat(buyableItem.Id, clampedQuantity)],
+                terminal.groupCredits - 1,
+                terminal.numberOfItemsInDropship
+            );
+        }
 
-        foreach (Item? item in this.ExtraItems)
-            if (terminal.buyableItemsList.Contains(item)) {
-                TerminalStore.Remove(item);
-                Console.WriteLine($"Removed Extra Item {item.itemName} from buyable items list");
-            }
-
-        terminal.buyableItemsList = TerminalStore.ToArray();
-        this.ExtraItems.Clear();
-    }
-
-    void MakeOrder(string key, int quantity) {
-        if (Helper.Terminal is not Terminal terminal) return;
-        int clampedQuantity = Mathf.Clamp(quantity, 1, 12);
-        terminal.orderedItemsFromTerminal.Clear();
-        terminal.BuyItemsServerRpc(
-            [.. Enumerable.Repeat(BuyableItems[key], clampedQuantity)],
-            terminal.groupCredits - 1,
-            terminal.numberOfItemsInDropship
-        );
+        Chat.Print($"Buying {clampedQuantity}x {key.ToTitleCase()}(s)!");
     }
 }

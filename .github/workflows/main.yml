@@ -15,7 +15,7 @@ on:
       - lc-hax/**
 
 env:
-  NUGET_PACKAGES: ${{ github.workspace }}/lc-hax/References/NuGet
+  NUGET_PACKAGES: ${{ github.workspace }}/.nuget/packages
 
 jobs:
   build:
@@ -23,14 +23,14 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4.1.6
+        uses: actions/checkout@v4.1.7
 
       - name: Setup .NET
-        uses: actions/setup-dotnet@v4.0.0
+        uses: actions/setup-dotnet@v4.0.1
         with:
           dotnet-version: 8.0.x
           cache: true
-          cache-dependency-path: lc-hax
+          cache-dependency-path: lc-hax/packages.lock.json
 
       - name: Build
-        run: dotnet build lc-hax /warnaserror
+        run: dotnet build lc-hax -restoreProperty:RestoreLockedMode=true /warnaserror

@@ -1,13 +1,9 @@
 #pragma warning disable IDE1006
 
-#region
-
-using GameNetcodeStuff;
 using HarmonyLib;
-using Hax;
 using Steamworks;
-
-#endregion
+using GameNetcodeStuff;
+using Hax;
 
 [HarmonyPatch(typeof(PlayerControllerB))]
 class AntiKickPatch {
@@ -18,7 +14,7 @@ class AntiKickPatch {
         Helper.GameNetworkManager?.currentLobby?.Members.ForEach((i, member) => {
             if (Helper.LocalPlayer?.playerSteamId == member.Id.Value) return;
 
-            PlayerControllerB? player = __instance.playersManager.allPlayerScripts[i];
+            PlayerControllerB player = __instance.playersManager.allPlayerScripts[i];
             player.playerSteamId = member.Id.Value;
             player.playerUsername = member.Name;
             player.usernameBillboardText.text = member.Name;
@@ -37,8 +33,7 @@ class AntiKickPatch {
         localPlayer.playerSteamId = SteamClient.SteamId;
         localPlayer.playerUsername = SteamClient.Name;
         localPlayer.usernameBillboardText.text = SteamClient.Name;
-        __instance.playersManager.mapScreen.radarTargets[localPlayer.GetPlayerId()].name = localPlayer.playerUsername;
-        __instance.quickMenuManager.AddUserToPlayerList(localPlayer.playerSteamId, localPlayer.playerUsername,
-            localPlayer.GetPlayerId());
+        __instance.playersManager.mapScreen.radarTargets[localPlayer.PlayerIndex()].name = localPlayer.playerUsername;
+        __instance.quickMenuManager.AddUserToPlayerList(localPlayer.playerSteamId, localPlayer.playerUsername, localPlayer.PlayerIndex());
     }
 }

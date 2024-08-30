@@ -1,58 +1,93 @@
-#region
-
-using System;
-using System.Collections.Generic;
 using GameNetcodeStuff;
+using UnityEngine;
 using Hax;
-using Object = UnityEngine.Object;
-
-#endregion
 
 [Command("heal")]
 class HealCommand : ICommand, IStun {
-    public void Execute(StringArray args) {
-        // Handle different cases based on args
-        if (args.Length == 0 || args[0].Equals("self", StringComparison.OrdinalIgnoreCase)) {
-            if (Helper.LocalPlayer is null) return;
-            if (!this.HealPlayer(Helper.LocalPlayer)) Chat.Print("Failed to Heal Self!");
+    void RespawnLocalPlayer(PlayerControllerB localPlayer, StartOfRound startOfRound, HUDManager hudManager) {
+        if (Helper.SoundManager is not SoundManager soundManager) return;
 
+        startOfRound.allPlayersDead = false;
+        startOfRound.SetPlayerObjectExtrapolate(false);
+        localPlayer.ResetPlayerBloodObjects();
+        localPlayer.ResetZAndXRotation();
+        localPlayer.isClimbingLadder = false;
+        localPlayer.thisController.enabled = true;
+        localPlayer.disableLookInput = false;
+        localPlayer.isPlayerDead = false;
+        localPlayer.isPlayerControlled = true;
+        localPlayer.isInElevator = true;
+        localPlayer.isInHangarShipRoom = true;
+        localPlayer.isInsideFactory = false;
+        localPlayer.parentedToElevatorLastFrame = false;
+        localPlayer.setPositionOfDeadPlayer = false;
+        localPlayer.TeleportPlayer(startOfRound.playerSpawnPositions[0].position, false, 0.0f, false, true);
+        localPlayer.DisablePlayerModel(startOfRound.allPlayerObjects[localPlayer.playerClientId], true, true);
+
+        if (localPlayer.TryGetComponent(out Light helmetLight)) {
+            helmetLight.enabled = false;
+        }
+
+        localPlayer.Crouch(false);
+        localPlayer.activatingItem = false;
+        localPlayer.twoHanded = false;
+        localPlayer.inSpecialInteractAnimation = false;
+        localPlayer.disableSyncInAnimation = false;
+        localPlayer.inAnimationWithEnemy = null;
+        localPlayer.holdingWalkieTalkie = false;
+        localPlayer.speakingToWalkieTalkie = false;
+        localPlayer.isSinking = false;
+        localPlayer.isUnderwater = false;
+        localPlayer.sinkingValue = 0.0f;
+
+        if (localPlayer.TryGetComponent(out AudioSource statusEffectAudio)) {
+            statusEffectAudio.Stop();
+        }
+
+        localPlayer.DisableJetpackControlsLocally();
+        localPlayer.mapRadarDotAnimator?.SetBool("dead", false);
+
+        if (hudManager.TryGetComponent(out Animator gasHelmetAnimator)) {
+            gasHelmetAnimator.SetBool("gasEmitting", false);
+        }
+
+        localPlayer.hasBegunSpectating = false;
+        hudManager.RemoveSpectateUI();
+
+        if (hudManager.TryGetComponent(out Animator gameOverAnimator)) {
+            gameOverAnimator.SetTrigger("revive");
+        }
+
+        localPlayer.hinderedMultiplier = 1.0f;
+        localPlayer.isMovementHindered = 0;
+        localPlayer.sourcesCausingSinking = 0;
+        localPlayer.reverbPreset = startOfRound.shipReverb;
+        localPlayer.voiceMuffledByEnemy = false;
+
+        soundManager.earsRingingTimer = 0.0f;
+        soundManager.playerVoicePitchTargets[localPlayer.playerClientId] = 1.0f;
+        soundManager.SetPlayerPitch(1.0f, localPlayer.PlayerIndex());
+
+        if (localPlayer.currentVoiceChatIngameSettings == null) {
+            startOfRound.RefreshPlayerVoicePlaybackObjects();
+        }
+
+        localPlayer.currentVoiceChatIngameSettings?.InitializeComponents();
+
+        if (localPlayer.currentVoiceChatIngameSettings?.voiceAudio?.TryGetComponent(out OccludeAudio occludeAudio) is not true) {
             return;
         }
-        else if (args[0].ToLower() == "all") {
-            HashSet<string> healedPlayersNames = new HashSet<string>();
-            // Heal all players
-            foreach (PlayerControllerB? player in Helper.Players) {
-                if (player is null) continue;
-                string username = player.GetPlayerUsername();
-                if (player.IsSelf()) {
-                    if (this.HealLocalPlayer(false)) healedPlayersNames.Add(username);
-                }
-                else {
-                    if (player.IsDead()) continue;
-                    if (this.HealPlayer(player)) healedPlayersNames.Add(username);
-                }
-            }
 
-            Helper.SendFlatNotification($"Healed: {string.Join(", ", healedPlayersNames)}");
-            return;
-        }
-        else
-            this.HealPlayer(string.Join(" ", args));
+        occludeAudio.overridingLowPass = false;
     }
 
-    
-
-    bool HealLocalPlayer(bool revive = false) {
-        if (Helper.LocalPlayer is not PlayerControllerB localPlayer) return false;
-        if (Helper.HUDManager is not HUDManager hudManager) return false;
-        if (localPlayer.IsDeadAndNotControlled() && revive) {
-            Helper.RespawnLocalPlayer();
+    PlayerControllerB HealLocalPlayer(HUDManager hudManager) {
+        if (!hudManager.localPlayer.isPlayerControlled) {
+            this.RespawnLocalPlayer(hudManager.localPlayer, hudManager.localPlayer.playersManager, hudManager);
 
             Helper.CreateComponent<WaitForBehaviour>("Respawn")
-                .SetPredicate(() => hudManager.localPlayer.playersManager.shipIsLeaving)
-                .Init(localPlayer.KillPlayer);
-            Helper.SendFlatNotification("You got Respawned Locally (You will die once ship leaves)");
-            return true;
+                  .SetPredicate(() => hudManager.localPlayer.playersManager.shipIsLeaving)
+                  .Init(hudManager.localPlayer.KillPlayer);
         }
 
         hudManager.localPlayer.health = 100;
@@ -63,43 +98,30 @@ class HealCommand : ICommand, IStun {
         hudManager.HUDAnimator.SetBool("biohazardDamage", false);
         hudManager.HUDAnimator.SetTrigger("HealFromCritical");
         hudManager.UpdateHealthUI(hudManager.localPlayer.health, false);
-        Helper.SendFlatNotification("You got Healed!");
-        return true;
+
+        return hudManager.localPlayer;
     }
 
-    void HealPlayer(string? playerNameOrId) {
-        PlayerControllerB? targetPlayer = Helper.GetPlayer(playerNameOrId);
-        if (targetPlayer == null) {
-            Helper.SendFlatNotification($"Player {playerNameOrId} not found!");
+    PlayerControllerB? HealPlayer(string? playerNameOrId) {
+        PlayerControllerB? targetPlayer = Helper.GetActivePlayer(playerNameOrId);
+        targetPlayer?.HealPlayer();
+
+        return targetPlayer;
+    }
+
+    public void Execute(StringArray args) {
+        if (Helper.HUDManager is not HUDManager hudManager) return;
+
+        PlayerControllerB? healedPlayer = args.Length switch {
+            0 => this.HealLocalPlayer(hudManager),
+            _ => this.HealPlayer(args[0])
+        };
+
+        if (healedPlayer is null) {
+            Chat.Print("Target player is not alive or found!");
             return;
         }
 
-        this.HealPlayer(targetPlayer);
-    }
-
-    bool HealPlayer(PlayerControllerB player) {
-        if (player is null) return false;
-        string username = player.GetPlayerUsername();
-        bool Healed = false;
-        if (player.IsSelf()) {
-            this.HealLocalPlayer(true);
-            Healed = true;
-        }
-        else {
-            if (!player.IsDead()) {
-                player?.HealPlayer();
-                Healed = true;
-            }
-        }
-
-        if (Healed)
-            this.Stun(player.transform.position, 5.0f, 1.0f);
-        else {
-            Helper.SendFlatNotification(!player.IsDead()
-                ? $"Failed to heal {username}!"
-                : $"Failed to Heal {username} : DEAD PLAYER");
-        }
-
-        return Healed;
+        this.Stun(healedPlayer.transform.position, 5.0f, 1.0f);
     }
 }

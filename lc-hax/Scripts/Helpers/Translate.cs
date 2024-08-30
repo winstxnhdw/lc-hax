@@ -1,22 +1,15 @@
-#region
-
-using System;
 using System.Collections;
-using System.Collections.Generic;
+using UnityEngine.Networking;
 using GameNetcodeStuff;
 using Newtonsoft.Json;
-using UnityEngine.Networking;
-
-#endregion
+using System;
+using System.Collections.Generic;
 
 namespace Hax;
 
-readonly struct TranslateRequest(string source, string target, string text) {
-    [JsonProperty("source")] internal string Source { get; } = source;
-
-    [JsonProperty("target")] internal string Target { get; } = target;
-
-    [JsonProperty("text")] internal string Text { get; } = text;
+readonly struct TranslateResponse {
+    [JsonProperty("result")]
+    internal string Result { get; }
 }
 
 static partial class Helper {
@@ -210,50 +203,50 @@ static partial class Helper {
         { "yue", "yue_Hant" },
         { "chinese", "zho_Hans" },
         { "malay", "zsm_Latn" },
-        { "zulu", "zul_Latn" }
+        { "zulu", "zul_Latn" },
     });
 
-    static IEnumerator Translate(TranslateRequest request) {
-        if (LocalPlayer is not PlayerControllerB player) yield break;
+    static IEnumerator FetchTranslateResult(string sourceLanguage, string targetLanguage, string text) {
+        if (Helper.LocalPlayer is not PlayerControllerB player) yield break;
 
-        using UnityWebRequest? www = UnityWebRequest.Post(
-            "https://winstxnhdw-nllb-api.hf.space/api/v2/translate",
-            JsonConvert.SerializeObject(request),
-            "application/json"
+        using UnityWebRequest www = UnityWebRequest.Get(
+            $"https://winstxnhdw-nllb-api.hf.space/api/v3/translate?text={text}&source={sourceLanguage}&target={targetLanguage}"
         );
 
         yield return www.SendWebRequest();
 
         if (www.result != UnityWebRequest.Result.Success) {
             State.TranslateDetachedState = null;
-            HUDManager?.AddTextToChatOnServer(request.Text, player.GetPlayerId());
+            Helper.HUDManager?.AddTextToChatOnServer(text, player.PlayerIndex());
             Chat.Print("Translation server is down!");
         }
 
-        else
-            _ = HUDManager?.Reflect().InvokeInternalMethod("AddPlayerChatMessageServerRpc",
-                www.downloadHandler.text.Trim(), player.GetPlayerId());
+        else {
+            _ = Helper.HUDManager?.Reflect().InvokeInternalMethod(
+                "AddPlayerChatMessageServerRpc",
+                JsonConvert.DeserializeObject<TranslateResponse>(www.downloadHandler.text).Result.Trim(),
+                player.PlayerIndex()
+            );
+        }
     }
 
     internal static void Translate(string sourceLanguage, string targetLanguage, string? text) {
         if (string.IsNullOrWhiteSpace(text)) return;
 
-        if (!sourceLanguage.FuzzyMatch(FLORES200.Value.Keys, out string source)) {
+        if (!sourceLanguage.FuzzyMatch(Helper.FLORES200.Value.Keys, out string source)) {
             Chat.Print("Failed to find the source language!");
             return;
         }
 
-        if (!targetLanguage.FuzzyMatch(FLORES200.Value.Keys, out string target)) {
+        if (!targetLanguage.FuzzyMatch(Helper.FLORES200.Value.Keys, out string target)) {
             Chat.Print("Failed to find the target language!");
             return;
         }
 
-        TranslateRequest request = new(
-            FLORES200.Value[source],
-            FLORES200.Value[target],
+        Helper.CreateComponent<AsyncBehaviour>().Init(() => Helper.FetchTranslateResult(
+            Helper.FLORES200.Value[source],
+            Helper.FLORES200.Value[target],
             text
-        );
-
-        CreateComponent<AsyncBehaviour>().Init(() => Translate(request));
+        ));
     }
 }
