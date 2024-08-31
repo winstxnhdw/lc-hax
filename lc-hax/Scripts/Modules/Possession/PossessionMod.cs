@@ -60,6 +60,7 @@ sealed class PossessionMod : MonoBehaviour {
         { typeof(FlowerSnakeEnemy), new FlowerSnakeController() },
         { typeof(BushWolfEnemy), new BushWolfController()},
         { typeof(ClaySurgeonAI), new ClaySurgeonController()},
+        { typeof(CaveDwellerAI), new CaveDwellerController()}
 
     };
 

@@ -377,6 +377,18 @@ class EnemyPromptHandler {
         return true;
     }
 
+    bool HandleCaveDweller(CaveDwellerAI caveDweller, PlayerControllerB targetPlayer, bool willTeleportEnemy,
+        bool overrideInsideFactory) {
+        if (caveDweller.isEnemyDead) return false;
+        this.TeleportEnemyToPlayer(caveDweller, targetPlayer, willTeleportEnemy, true);
+        caveDweller.TakeOwnership();
+        caveDweller.targetPlayer = targetPlayer;
+        caveDweller.SetMovingTowardsTargetPlayer(targetPlayer);
+        caveDweller.SetBehaviourState(SurgeonState.Chasing);
+        caveDweller.SetOwner(targetPlayer);
+        return true;
+    }
+
     bool HandleBushWolf(BushWolfEnemy wolf, PlayerControllerB targetPlayer, bool willTeleportEnemy,
         bool overrideInsideFactory) {
         if (!this.IsEnemyAllowedInside(wolf, targetPlayer, willTeleportEnemy, overrideInsideFactory)) return false;
@@ -459,6 +471,8 @@ class EnemyPromptHandler {
                 return this.HandleJester(jester, targetPlayer, willTeleportEnemy, overrideInsideFactory);
             case ClaySurgeonAI surgeon:
                 return this.HandleClaySurgeon(surgeon, targetPlayer, willTeleportEnemy, overrideInsideFactory);
+            case CaveDwellerAI caveDweller:
+                return this.HandleCaveDweller(caveDweller, targetPlayer, willTeleportEnemy, overrideInsideFactory);
 
             #endregion
 
