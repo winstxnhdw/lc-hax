@@ -1,11 +1,6 @@
-#region
-
-using System;
 using Hax;
 
-#endregion
-
-[Command("credit")]
+[PrivilegedCommand("credit")]
 class CreditCommand : ICommand {
     public void Execute(StringArray args) {
         if (Helper.Terminal is not Terminal terminal) return;
@@ -19,7 +14,7 @@ class CreditCommand : ICommand {
             return;
         }
 
-        terminal.groupCredits = Math.Clamp(terminal.groupCredits + amount, 0, int.MaxValue);
+        terminal.groupCredits += amount;
         terminal.SyncGroupCreditsServerRpc(terminal.groupCredits, terminal.numberOfItemsInDropship);
         Chat.Print($"You now have {terminal.groupCredits} credits!");
     }
