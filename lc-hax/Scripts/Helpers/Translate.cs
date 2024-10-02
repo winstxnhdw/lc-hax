@@ -9,7 +9,7 @@ namespace Hax;
 
 readonly struct TranslateResponse {
     [JsonProperty("result")]
-    internal string Result { get; }
+    internal string Result { get; init; }
 }
 
 static partial class Helper {
