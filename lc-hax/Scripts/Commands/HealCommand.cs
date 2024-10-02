@@ -19,7 +19,7 @@ class HealCommand : ICommand, IStun {
         localPlayer.isInElevator = true;
         localPlayer.isInHangarShipRoom = true;
         localPlayer.isInsideFactory = false;
-        localPlayer.wasInElevatorLastFrame = false;
+        localPlayer.parentedToElevatorLastFrame = false;
         localPlayer.setPositionOfDeadPlayer = false;
         localPlayer.TeleportPlayer(startOfRound.playerSpawnPositions[0].position, false, 0.0f, false, true);
         localPlayer.DisablePlayerModel(startOfRound.allPlayerObjects[localPlayer.playerClientId], true, true);

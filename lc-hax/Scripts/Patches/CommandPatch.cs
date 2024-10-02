@@ -2,8 +2,8 @@
 
 using System;
 using System.Linq;
-using GameNetcodeStuff;
 using HarmonyLib;
+using GameNetcodeStuff;
 using Hax;
 
 [HarmonyPatch(typeof(HUDManager), "EnableChat_performed")]

@@ -1,6 +1,6 @@
 # lc-hax
 
-[![version-check.yml](https://github.com/winstxnhdw/lc-hax/actions/workflows/version-check.yml/badge.svg)](https://github.com/winstxnhdw/lc-hax/actions/workflows/version-check.yml)
+![NuGet Version](https://img.shields.io/nuget/v/LethalCompany.GameLibs.Steam?style=flat&label=lc-hax&color=red)
 [![main.yml](https://github.com/winstxnhdw/lc-hax/actions/workflows/main.yml/badge.svg)](https://github.com/winstxnhdw/lc-hax/actions/workflows/main.yml)
 [![formatter.yml](https://github.com/winstxnhdw/lc-hax/actions/workflows/formatter.yml/badge.svg)](https://github.com/winstxnhdw/lc-hax/actions/workflows/formatter.yml)
 [![CodeQL](https://github.com/winstxnhdw/lc-hax/actions/workflows/codeql.yml/badge.svg)](https://github.com/winstxnhdw/lc-hax/actions/workflows/codeql.yml)
@@ -170,6 +170,8 @@ These commands are only available when the user is host.
 | Spawn enem(ies) on player     | `/spawn <enemy> <player> <amount=1>`             |
 | Give or take credit(s)        | `/credit <amount>`                               |
 | Eject all players             | `/eject`                                         |
+| Revive all players            | `/revive`                                        |
+| Toggle God mode for all       | `/gods`                                          |
 
 ## Special Commands
 

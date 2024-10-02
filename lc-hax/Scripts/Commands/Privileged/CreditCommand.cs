@@ -1,4 +1,3 @@
-using System;
 using Hax;
 
 [PrivilegedCommand("credit")]
@@ -15,7 +14,7 @@ class CreditCommand : ICommand {
             return;
         }
 
-        terminal.groupCredits = Math.Clamp(terminal.groupCredits + amount, 0, int.MaxValue);
+        terminal.groupCredits += amount;
         terminal.SyncGroupCreditsServerRpc(terminal.groupCredits, terminal.numberOfItemsInDropship);
         Chat.Print($"You now have {terminal.groupCredits} credits!");
     }

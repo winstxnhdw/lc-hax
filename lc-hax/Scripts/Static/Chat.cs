@@ -8,38 +8,28 @@ using Hax;
 static class Chat {
     internal static event Action<string>? OnExecuteCommandAttempt;
 
+    static IEnumerable<Type> CommandTypes { get; } =
+        Assembly.GetExecutingAssembly()
+                .GetTypes()
+                .Where(type => typeof(ICommand).IsAssignableFrom(type));
+
     static Dictionary<string, ICommand> Commands { get; } =
-        Assembly
-            .GetExecutingAssembly()
-            .GetTypes()
-            .Where(type => typeof(ICommand).IsAssignableFrom(type))
-            .Where(type => type.GetCustomAttribute<CommandAttribute>() is not null)
-            .ToDictionary(
-                type => type.GetCustomAttribute<CommandAttribute>().Syntax,
-                type => (ICommand)Activator.CreateInstance(type)
-            );
+        Chat.CommandTypes.Where(type => type.GetCustomAttribute<CommandAttribute>() is not null).ToDictionary(
+            type => type.GetCustomAttribute<CommandAttribute>().Syntax,
+            type => (ICommand)Activator.CreateInstance(type)
+        );
 
     static Dictionary<string, ICommand> DebugCommands { get; } =
-        Assembly
-            .GetExecutingAssembly()
-            .GetTypes()
-            .Where(type => typeof(ICommand).IsAssignableFrom(type))
-            .Where(type => type.GetCustomAttribute<DebugCommandAttribute>() is not null)
-            .ToDictionary(
-                type => type.GetCustomAttribute<DebugCommandAttribute>().Syntax,
-                type => (ICommand)new DebugCommand((ICommand)Activator.CreateInstance(type))
-            );
+        Chat.CommandTypes.Where(type => type.GetCustomAttribute<DebugCommandAttribute>() is not null).ToDictionary(
+            type => type.GetCustomAttribute<DebugCommandAttribute>().Syntax,
+            type => (ICommand)new DebugCommand((ICommand)Activator.CreateInstance(type))
+        );
 
     static Dictionary<string, ICommand> PrivilegeCommands { get; } =
-        Assembly
-            .GetExecutingAssembly()
-            .GetTypes()
-            .Where(type => typeof(ICommand).IsAssignableFrom(type))
-            .Where(type => type.GetCustomAttribute<PrivilegedCommandAttribute>() is not null)
-            .ToDictionary(
-                type => type.GetCustomAttribute<PrivilegedCommandAttribute>().Syntax,
-                type => (ICommand)new PrivilegedCommand((ICommand)Activator.CreateInstance(type))
-            );
+        Chat.CommandTypes.Where(type => type.GetCustomAttribute<PrivilegedCommandAttribute>() is not null).ToDictionary(
+            type => type.GetCustomAttribute<PrivilegedCommandAttribute>().Syntax,
+            type => (ICommand)new PrivilegedCommand((ICommand)Activator.CreateInstance(type))
+        );
 
     internal static void Clear() {
         Helper.HUDManager?.AddTextToChatOnServer(
