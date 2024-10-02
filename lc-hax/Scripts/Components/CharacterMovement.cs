@@ -1,8 +1,8 @@
-using UnityEngine;
-using GameNetcodeStuff;
-using UnityEngine.InputSystem;
-using Hax;
 using System.Linq;
+using UnityEngine;
+using UnityEngine.InputSystem;
+using GameNetcodeStuff;
+using Hax;
 
 class CharacterMovement : MonoBehaviour {
     const float WalkingSpeed = 0.5f;
