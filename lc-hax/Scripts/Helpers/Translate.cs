@@ -210,7 +210,7 @@ static partial class Helper {
         if (Helper.LocalPlayer is not PlayerControllerB player) yield break;
 
         using UnityWebRequest www = UnityWebRequest.Get(
-            $"https://winstxnhdw-nllb-api.hf.space/api/v3/translate?text={text}&source={sourceLanguage}&target={targetLanguage}"
+            $"https://winstxnhdw-nllb-api.hf.space/api/v4/translator?text={text}&source={sourceLanguage}&target={targetLanguage}"
         );
 
         yield return www.SendWebRequest();
