@@ -279,7 +279,7 @@ static class EnemyPromptMixin {
         EnemyPromptHandler enemyPromptHandler = new();
 
         Helper.Enemies.WhereIsNotNull().ForEach((enemy) => {
-            if (enemy is DocileLocustBeesAI or DoublewingAI or BlobAI or TestEnemy or LassoManAI) return;
+            if (enemy is DocileLocustBeesAI or DoublewingAI or BlobAI or DressGirlAI or LassoManAI or RadMechAI) return;
 
             enemy.targetPlayer = targetPlayer;
             enemy.ChangeEnemyOwnerServerRpc(localPlayer.actualClientId);

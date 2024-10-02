@@ -1,7 +1,6 @@
 using Hax;
 using UnityEngine;
 
-
 enum BeesState {
     IDLE,
     DEFENSIVE,
