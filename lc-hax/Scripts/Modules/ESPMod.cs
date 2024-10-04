@@ -55,6 +55,8 @@ sealed class ESPMod : MonoBehaviour {
         });
 
         Helper.Grabbables.WhereIsNotNull().ForEach(grabbableObject => {
+            if (PossessionMod.Instance is { IsPossessed: true } and not { PossessedEnemy: HoarderBugAI or BaboonBirdAI }) return;
+
             Vector3 rendererCentrePoint = camera.WorldToEyesPoint(grabbableObject.transform.position);
 
             if (rendererCentrePoint.z <= 2.0f) {
@@ -104,6 +106,7 @@ sealed class ESPMod : MonoBehaviour {
 
         Helper.Enemies.WhereIsNotNull().ForEach(enemy => {
             if (enemy.isEnemyDead) return;
+            if (PossessionMod.Instance?.PossessedEnemy == enemy) return;
             if (enemy is DocileLocustBeesAI or DoublewingAI) return;
 
             Renderer? nullableRenderer = enemy is RedLocustBees

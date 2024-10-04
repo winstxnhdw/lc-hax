@@ -1,10 +1,16 @@
+using UnityEngine;
+
 class EarthLeviathanController : IEnemyController<SandWormAI> {
-    bool IsEmerged(SandWormAI enemy) => enemy.inEmergingState || enemy.emerged;
+    public Vector3 GetCameraOffset(SandWormAI _) => new(0.0f, 8.0f, -13.0f);
 
     public void UseSecondarySkill(SandWormAI enemy) {
-        if (this.IsEmerged(enemy)) return;
+        if (enemy.inEmergingState || enemy.emerged) return;
         enemy.StartEmergeAnimation();
     }
+
+    public bool IsAbleToMove(SandWormAI enemy) => !enemy.inSpecialAnimation;
+
+    public bool IsAbleToRotate(SandWormAI enemy) => !enemy.inSpecialAnimation;
 
     public string GetSecondarySkillName(SandWormAI _) => "Emerge";
 
@@ -14,4 +20,5 @@ class EarthLeviathanController : IEnemyController<SandWormAI> {
 
     public bool SyncAnimationSpeedEnabled(SandWormAI _) => false;
 
+    public void OnOutsideStatusChange(SandWormAI enemy) => enemy.StopSearch(enemy.roamMap, true);
 }

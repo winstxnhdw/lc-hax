@@ -4,9 +4,9 @@ namespace Hax;
 
 static partial class Helper {
     internal static Camera? CurrentCamera =>
-        Helper.LocalPlayer?.gameplayCamera is Camera { enabled: true } gameplayCamera
-            ? gameplayCamera
-            : Helper.StartOfRound?.spectateCamera;
+        HaxCamera.Instance?.HaxCameraContainer is { activeSelf: true }
+            ? HaxCamera.Instance.CustomCamera
+            : Helper.StartOfRound?.activeCamera;
 
     internal static Vector3 WorldToEyesPoint(this Camera camera, Vector3 worldPosition) {
         Vector3 screen = camera.WorldToViewportPoint(worldPosition);

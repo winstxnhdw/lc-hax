@@ -5,26 +5,33 @@ using GameNetcodeStuff;
 using Hax;
 
 class CharacterMovement : MonoBehaviour {
-    // Movement constants
-    const float WalkingSpeed = 0.5f; // Walking speed when left control is held
-    const float SprintDuration = 0.0f; // Duration sprint key must be held for sprinting (adjust as needed)
+    const float WalkingSpeed = 0.5f;
+    const float SprintDuration = 0.0f;
     const float JumpForce = 9.2f;
     const float Gravity = 18.0f;
 
     internal float CharacterSpeed { get; set; } = 5.0f;
     internal float CharacterSprintSpeed { get; set; } = 2.8f;
-
-    // used to sync with the enemy to make sure it plays the correct animation when it is moving
+    internal bool CanMove { get; set; } = true;
     internal bool IsMoving { get; private set; } = false;
     internal bool IsSprinting { get; private set; } = false;
 
-    // Components and state variables
     float VelocityY { get; set; } = 0.0f;
-    bool IsSprintHeld { get; set; } = false;
     float SprintTimer { get; set; } = 0.0f;
-    Keyboard Keyboard { get; set; } = Keyboard.current;
-    KeyboardMovement? NoClipKeyboard { get; set; } = null;
+    bool IsSprintHeld { get; set; } = false;
+
+    Keyboard Keyboard { get; } = Keyboard.current;
+    KeyboardMovement? NoClipKeyboard { get; set; }
     CharacterController? CharacterController { get; set; }
+
+    void Awake() {
+        this.NoClipKeyboard = this.gameObject.AddComponent<KeyboardMovement>();
+        this.CharacterController = this.gameObject.AddComponent<CharacterController>();
+    }
+
+    void OnEnable() => InputListener.OnSpacePress += this.Jump;
+
+    void OnDisable() => InputListener.OnSpacePress -= this.Jump;
 
     internal void SetNoClipMode(bool enabled) {
         if (this.NoClipKeyboard is null) return;
@@ -44,7 +51,6 @@ class CharacterMovement : MonoBehaviour {
         this.CharacterController.enabled = true;
     }
 
-
     internal void CalibrateCollision(EnemyAI enemy) {
         if (this.CharacterController is null) return;
 
@@ -60,56 +66,11 @@ class CharacterMovement : MonoBehaviour {
              .ForEach(collider => Physics.IgnoreCollision(this.CharacterController, collider));
     }
 
-
-    void Awake() {
-        this.Keyboard = Keyboard.current;
-        this.NoClipKeyboard = this.gameObject.AddComponent<KeyboardMovement>();
-        this.CharacterController = this.gameObject.AddComponent<CharacterController>();
-    }
-
-    // Update is called once per frame
-    void Update() {
-        if (this.NoClipKeyboard is { enabled: true }) return;
-        if (this.CharacterController is { enabled: false }) return;
-
-        Vector2 moveInput = new Vector2(
-            this.Keyboard.dKey.ReadValue() - this.Keyboard.aKey.ReadValue(),
-            this.Keyboard.wKey.ReadValue() - this.Keyboard.sKey.ReadValue()
-        ).normalized;
-
-        this.IsMoving = moveInput.magnitude > 0.0f;
-
-        float speedModifier = this.Keyboard.leftCtrlKey.isPressed
-            ? CharacterMovement.WalkingSpeed
-            : 1.0f;
-
-        // Calculate movement direction relative to character's forward direction
-        Vector3 forward = Vector3.ProjectOnPlane(this.transform.forward, Vector3.up);
-        Vector3 right = Vector3.ProjectOnPlane(this.transform.right, Vector3.up);
-        Vector3 moveDirection = (forward * moveInput.y) + (right * moveInput.x);
-
-        // Apply speed and sprint modifiers
-        moveDirection *= speedModifier * (
-            this.IsSprinting
-                ? this.CharacterSpeed * this.CharacterSprintSpeed
-                : this.CharacterSpeed
-            );
-
-        // Apply gravity
-        this.ApplyGravity();
-
-        // Attempt to move
-        _ = this.CharacterController?.Move(moveDirection * Time.deltaTime);
-
-        // Jump if jump key is pressed
-        if (this.Keyboard.spaceKey.wasPressedThisFrame) {
-            this.Jump();
-        }
-
-        // Sprinting mechanic: Hold to sprint
+    void Move(Vector3 moveDirection) {
+        if (Helper.LocalPlayer is { isTypingChat: true } || !this.CanMove) return;
         if (this.Keyboard.leftShiftKey.isPressed) {
             if (!this.IsSprintHeld) {
-                this.SprintTimer = 0f;
+                this.SprintTimer = 0.0f;
                 this.IsSprintHeld = true;
             }
 
@@ -122,23 +83,46 @@ class CharacterMovement : MonoBehaviour {
 
         else {
             this.IsSprintHeld = false;
-
-            if (this.IsSprinting) {
-                this.IsSprinting = false;
-            }
+            this.IsSprinting = !this.IsSprinting;
         }
+
+        _ = this.CharacterController?.Move(moveDirection * Time.deltaTime);
     }
 
-    // Apply gravity to the character controller
+    Vector3 GetMovementDirection() {
+        Vector2 moveInput = new(
+            this.Keyboard.dKey.ReadValue() - this.Keyboard.aKey.ReadValue(),
+            this.Keyboard.wKey.ReadValue() - this.Keyboard.sKey.ReadValue()
+        );
+
+        float speedModifier = this.Keyboard.leftCtrlKey.isPressed ? CharacterMovement.WalkingSpeed : 1.0f;
+        float sprintModifier = this.IsSprinting ? this.CharacterSpeed * this.CharacterSprintSpeed : this.CharacterSpeed;
+
+        return sprintModifier * (
+            (this.transform.forward * moveInput.y) +
+            (this.transform.right * moveInput.x * speedModifier)
+        );
+    }
+
+    void Update() {
+        if (this.NoClipKeyboard is { enabled: true }) return;
+        if (this.CharacterController is { enabled: false }) return;
+
+        Vector3 moveDirection = this.GetMovementDirection();
+        this.IsMoving = moveDirection != Vector3.zero;
+        this.ApplyGravity();
+        this.Move(moveDirection);
+    }
+
     void ApplyGravity() {
         this.VelocityY = this.CharacterController is { isGrounded: false }
             ? this.VelocityY - (CharacterMovement.Gravity * Time.deltaTime)
             : 0.0f;
 
-        Vector3 motion = new(0.0f, this.VelocityY, 0.0f);
-        _ = this.CharacterController?.Move(motion * Time.deltaTime);
+        _ = this.CharacterController?.Move(
+            new Vector3(0.0f, this.VelocityY, 0.0f) * Time.deltaTime
+        );
     }
 
-    // Jumping action
     void Jump() => this.VelocityY = CharacterMovement.JumpForce;
 }

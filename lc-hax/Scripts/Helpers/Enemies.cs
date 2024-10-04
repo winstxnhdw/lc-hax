@@ -28,11 +28,20 @@ static partial class Helper {
         }
     }
 
-    internal static void SetOutsideStatus(this EnemyAI enemy, bool isOutside) {
+    internal static void SetOutsideStatus(this EnemyAI enemy, bool isOutside, IController? controller = null) {
         if (enemy.isOutside == isOutside) return;
 
         enemy.isOutside = isOutside;
         enemy.allAINodes = GameObject.FindGameObjectsWithTag(enemy.isOutside ? "OutsideAINode" : "AINode");
+        Transform closestNodePos = enemy.ChooseClosestNodeToPosition(enemy.transform.position, false, 0);
+        _ = enemy.SetDestinationToPosition(closestNodePos.position, true);
+        _ = enemy.agent.Warp(enemy.transform.position);
+        enemy.SyncPositionToClients();
+        enemy.agent.ResetPath();
+        enemy.EnableEnemyMesh(true, false);
+        enemy.FinishedCurrentSearchRoutine();
+        enemy.StopSearch(enemy.currentSearch, true);
+        controller?.OnOutsideStatusChange(enemy);
     }
 
     internal static void Kill(EnemyAI enemy) {

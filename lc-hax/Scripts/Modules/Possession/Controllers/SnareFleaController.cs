@@ -1,4 +1,5 @@
 using Hax;
+using UnityEngine;
 
 enum SnareFleaState {
     SEARCHING,
@@ -8,6 +9,32 @@ enum SnareFleaState {
 }
 
 class SnareFleaController : IEnemyController<CentipedeAI> {
+    public Vector3 GetCameraOffset(CentipedeAI enemy) {
+        Vector3 cameraOffset = new(0.0f, 2.5f, -3.0f);
+        float transitionSpeed = 2.5f;
+        float targetCameraOffsetY = 2.5f;
+        float targetCameraOffsetZ = 0.0f;
+
+        // Snare Flea is roaming
+        if (!enemy.IsBehaviourState(SnareFleaState.HIDING) && enemy.clingingToPlayer is null) {
+            transitionSpeed = 8.0f;
+            targetCameraOffsetY = 2.0f;
+            targetCameraOffsetZ = -4.0f;
+        }
+
+        else if (enemy.clingingToPlayer is not null) {
+            transitionSpeed = 4.5f;
+            targetCameraOffsetY = 0.0f;
+            targetCameraOffsetZ = -2.0f;
+        }
+
+        float transitionSpeedDelta = transitionSpeed * Time.deltaTime;
+        cameraOffset.y = Mathf.Lerp(cameraOffset.y, targetCameraOffsetY, transitionSpeedDelta);
+        cameraOffset.z = Mathf.Lerp(cameraOffset.z, targetCameraOffsetZ, transitionSpeedDelta);
+
+        return cameraOffset;
+    }
+
     bool IsClingingToSomething(CentipedeAI enemy) {
         Reflector<CentipedeAI> centipedeReflector = enemy.Reflect();
 
@@ -25,6 +52,7 @@ class SnareFleaController : IEnemyController<CentipedeAI> {
 
     public void UseSecondarySkill(CentipedeAI enemy) {
         if (this.IsClingingToSomething(enemy)) return;
+
         _ = enemy.Reflect().InvokeInternalMethod("RaycastToCeiling");
         enemy.SetBehaviourState(SnareFleaState.HIDING);
     }
@@ -36,8 +64,6 @@ class SnareFleaController : IEnemyController<CentipedeAI> {
     public string GetPrimarySkillName(CentipedeAI _) => "Drop";
 
     public string GetSecondarySkillName(CentipedeAI _) => "Attach to ceiling";
-
-    public float InteractRange(CentipedeAI _) => 1.5f;
 
     public bool CanUseEntranceDoors(CentipedeAI _) => false;
 

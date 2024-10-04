@@ -1,4 +1,5 @@
 using Hax;
+using UnityEngine;
 
 enum GiantState {
     DEFAULT = 0,
@@ -8,9 +9,14 @@ enum GiantState {
 class ForestGiantController : IEnemyController<ForestGiantAI> {
     bool IsUsingSecondarySkill { get; set; } = false;
 
-    public void OnMovement(ForestGiantAI enemy, bool isMoving, bool isSprinting) {
+    public Vector3 GetCameraOffset(ForestGiantAI enemy) => new(0.0f, 8.0f, -8.0f);
+
+    public void Update(ForestGiantAI enemy, bool isAIControlled) {
         if (!this.IsUsingSecondarySkill) {
             enemy.SetBehaviourState(GiantState.DEFAULT);
+        }
+        else {
+            enemy.SetBehaviourState(GiantState.CHASE);
         }
     }
 
@@ -35,4 +41,9 @@ class ForestGiantController : IEnemyController<ForestGiantAI> {
     public void OnUnpossess(ForestGiantAI enemy) => this.IsUsingSecondarySkill = false;
 
     public bool SyncAnimationSpeedEnabled(ForestGiantAI _) => false;
+
+    public void OnOutsideStatusChange(ForestGiantAI enemy) {
+        enemy.StopSearch(enemy.roamPlanet, true);
+        enemy.StopSearch(enemy.searchForPlayers, true);
+    }
 }

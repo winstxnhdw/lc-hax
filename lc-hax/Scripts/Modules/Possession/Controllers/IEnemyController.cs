@@ -1,7 +1,17 @@
+using UnityEngine;
+
 interface IController {
     const float DefaultSprintMultiplier = 2.8f;
 
-    const float DefaultInteractRange = 2.5f;
+    const float DefaultInteractRange = 4.5f;
+
+    static Vector3 DefaultCamOffsets => new(0, 2.5f, -3f);
+
+    static Vector3 DefaultEnemyOffset => new();
+
+    Vector3 GetCameraOffset(EnemyAI enemy);
+
+    Vector3 GetEnemyPositionOffset(EnemyAI enemy);
 
     void OnPossess(EnemyAI enemy);
 
@@ -9,17 +19,21 @@ interface IController {
 
     void OnDeath(EnemyAI enemy);
 
+    void OnMovement(EnemyAI enemy, bool isMoving, bool isSprinting);
+
     void Update(EnemyAI enemy, bool isAIControlled);
 
     void UsePrimarySkill(EnemyAI enemy);
 
     void OnSecondarySkillHold(EnemyAI enemy);
 
+    void OnOutsideStatusChange(EnemyAI enemy);
+
     void UseSecondarySkill(EnemyAI enemy);
 
     void ReleaseSecondarySkill(EnemyAI enemy);
 
-    void OnMovement(EnemyAI enemy, bool isMoving, bool isSprinting);
+    void UseSpecialAbility(EnemyAI enemy);
 
     bool IsAbleToMove(EnemyAI enemy);
 
@@ -55,6 +69,10 @@ interface IEnemyController<T> : IController where T : EnemyAI {
 
     void ReleaseSecondarySkill(T enemy) { }
 
+    void UseSpecialAbility(T enemy) { }
+
+    void OnOutsideStatusChange(T enemy) { }
+
     void OnMovement(T enemy, bool isMoving, bool isSprinting) { }
 
     bool IsAbleToMove(T enemy) => true;
@@ -62,6 +80,8 @@ interface IEnemyController<T> : IController where T : EnemyAI {
     bool IsAbleToRotate(T enemy) => true;
 
     bool CanUseEntranceDoors(T enemy) => true;
+
+    bool SyncAnimationSpeedEnabled(T enemy) => true;
 
     string? GetPrimarySkillName(T enemy) => null;
 
@@ -71,7 +91,9 @@ interface IEnemyController<T> : IController where T : EnemyAI {
 
     float SprintMultiplier(T enemy) => IController.DefaultSprintMultiplier;
 
-    bool SyncAnimationSpeedEnabled(T enemy) => true;
+    Vector3 GetCameraOffset(T enemy) => IController.DefaultCamOffsets;
+
+    Vector3 GetEnemyPositionOffset(T enemy) => IController.DefaultEnemyOffset;
 
     void IController.OnPossess(EnemyAI enemy) => this.OnPossess((T)enemy);
 
@@ -89,6 +111,8 @@ interface IEnemyController<T> : IController where T : EnemyAI {
 
     void IController.ReleaseSecondarySkill(EnemyAI enemy) => this.ReleaseSecondarySkill((T)enemy);
 
+    void IController.UseSpecialAbility(EnemyAI enemy) => this.UseSpecialAbility((T)enemy);
+
     void IController.OnMovement(EnemyAI enemy, bool isMoving, bool isSprinting) => this.OnMovement((T)enemy, isMoving, isSprinting);
 
     bool IController.IsAbleToMove(EnemyAI enemy) => this.IsAbleToMove((T)enemy);
@@ -105,5 +129,11 @@ interface IEnemyController<T> : IController where T : EnemyAI {
 
     float IController.SprintMultiplier(EnemyAI enemy) => this.SprintMultiplier((T)enemy);
 
+    Vector3 IController.GetCameraOffset(EnemyAI enemy) => this.GetCameraOffset((T)enemy);
+
+    Vector3 IController.GetEnemyPositionOffset(EnemyAI enemy) => this.GetEnemyPositionOffset((T)enemy);
+
     bool IController.SyncAnimationSpeedEnabled(EnemyAI enemy) => this.SyncAnimationSpeedEnabled((T)enemy);
+
+    void IController.OnOutsideStatusChange(EnemyAI enemy) => this.OnOutsideStatusChange((T)enemy);
 }
