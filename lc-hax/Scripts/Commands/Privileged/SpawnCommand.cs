@@ -1,3 +1,5 @@
+using System.Threading;
+using System.Threading.Tasks;
 using System;
 using System.Linq;
 using System.Collections.Generic;
@@ -39,7 +41,7 @@ class SpawnCommand : ICommand {
         }
     }
 
-    public void Execute(StringArray args) {
+    public async Task Execute(string[] args, CancellationToken cancellationToken) {
         if (args.Length < 2) {
             Chat.Print("Usage: spawn <enemy> <player> <amount?>");
             return;

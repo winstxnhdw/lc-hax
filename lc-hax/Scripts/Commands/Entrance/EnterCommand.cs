@@ -1,6 +1,8 @@
+using System.Threading;
+using System.Threading.Tasks;
 using Hax;
 
 [Command("enter")]
 class EnterCommand : ICommand {
-    public void Execute(StringArray _) => Helper.LocalPlayer?.EntranceTeleport(false);
+    public async Task Execute(string[] args, CancellationToken cancellationToken) => Helper.LocalPlayer?.EntranceTeleport(false);
 }

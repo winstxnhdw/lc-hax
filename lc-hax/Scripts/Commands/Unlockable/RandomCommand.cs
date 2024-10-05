@@ -1,3 +1,5 @@
+using System.Threading;
+using System.Threading.Tasks;
 using System;
 using UnityEngine;
 using GameNetcodeStuff;
@@ -87,7 +89,7 @@ class RandomCommand : ICommand {
         teleporterPlacements.Value.Placement.GameObject.PressTeleportButtonServerRpc();
     };
 
-    public void Execute(StringArray args) {
+    public async Task Execute(string[] args, CancellationToken cancellationToken) {
         if (args.Length is 0) {
             Chat.Print("Usage: random <player>");
             return;

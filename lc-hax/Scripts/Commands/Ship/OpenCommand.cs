@@ -1,4 +1,7 @@
+using System.Threading;
+using System.Threading.Tasks;
+
 [Command("open")]
 class OpenCommand : ICommand, IShipDoor {
-    public void Execute(StringArray _) => this.SetShipDoorState(false);
+    public async Task Execute(string[] args, CancellationToken cancellationToken) => this.SetShipDoorState(false);
 }

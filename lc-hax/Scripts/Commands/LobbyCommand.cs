@@ -1,8 +1,10 @@
+using System.Threading;
+using System.Threading.Tasks;
 using UnityEngine;
 
 [Command("lobby")]
 class LobbyCommand : ICommand {
-    public void Execute(StringArray _) {
+    public async Task Execute(string[] args, CancellationToken cancellationToken) {
         if (State.ConnectedLobby is not ConnectedLobby connectedLobby) return;
 
         GUIUtility.systemCopyBuffer = connectedLobby.Lobby.Owner.Id.ToString();

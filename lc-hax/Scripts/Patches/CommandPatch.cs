@@ -1,6 +1,5 @@
 #pragma warning disable IDE1006
 
-using System;
 using System.Linq;
 using HarmonyLib;
 using GameNetcodeStuff;
@@ -34,13 +33,7 @@ class SubmitChatPatch {
             return true;
         }
 
-        try {
-            Chat.ExecuteCommand(hudManager.chatTextField.text.TrimEnd());
-        }
-
-        catch (Exception exception) {
-            Logger.Write(exception.ToString());
-        }
+        Chat.ExecuteCommand(hudManager.chatTextField.text.TrimEnd());
 
         return false;
     }

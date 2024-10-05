@@ -1,3 +1,5 @@
+using System.Threading;
+using System.Threading.Tasks;
 using System;
 using UnityEngine;
 using Hax;
@@ -15,7 +17,7 @@ class SpinCommand : ICommand {
         Helper.CreateComponent<TransientBehaviour>()
               .Init(this.PlaceObjectAtRotation(shipObject), duration);
 
-    public void Execute(StringArray args) {
+    public async Task Execute(string[] args, CancellationToken cancellationToken) {
         if (args.Length is 0) {
             Chat.Print("Usage: spin <duration>");
         }

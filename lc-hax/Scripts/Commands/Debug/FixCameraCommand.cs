@@ -1,9 +1,11 @@
+using System.Threading;
+using System.Threading.Tasks;
 using GameNetcodeStuff;
 using Hax;
 
 [DebugCommand("fixcamera")]
 class FixCameraCommand : ICommand {
-    public void Execute(StringArray _) {
+    public async Task Execute(string[] args, CancellationToken cancellationToken) {
         if (Helper.LocalPlayer is not PlayerControllerB localPlayer) return;
 
         Helper.Terminal?

@@ -1,34 +1,29 @@
+using System.Threading;
+using System.Threading.Tasks;
+using GameNetcodeStuff;
 using Hax;
 
 [Command("translate")]
 class TranslateCommand : ICommand {
-    public void Execute(StringArray args) {
-        if (args.Length < 3) {
-            Chat.Print("Usages:",
-                "translate <language> <language> <text>",
-                "translate <language> <language> -d"
-            );
-
+    public async Task Execute(string[] args, CancellationToken cancellationToken) {
+        if (Helper.LocalPlayer is not PlayerControllerB player) return;
+        if (args.Length < 2) {
+            Chat.Print("Usages: translate <language> <text>");
             return;
         }
 
-        if (args[0] is not string source || args[1] is not string target) {
-            Chat.Print("Invalid source or target language!");
+        using Translator translator = new(args[0], cancellationToken);
+        string? translatedText = await translator.Translate(string.Join(' ', args[1..]));
+
+        if (string.IsNullOrWhiteSpace(translatedText)) {
+            Chat.Print("Failed to translate the text!");
             return;
         }
 
-        if (args[2] is "-d") {
-            State.TranslateDetachedState = new TranslatePipe() {
-                SourceLanguage = source,
-                TargetLanguage = target
-            };
-
-            Helper.CreateToggleableComponent<WaitForGameEndBehaviour>("Translate Detached")?
-                  .AddActionAfter(() => State.TranslateDetachedState = null);
-        }
-
-        else {
-            Helper.Translate(source, target, string.Join(' ', args[2..]));
-        }
+        _ = Helper.HUDManager?.Reflect().InvokeInternalMethod(
+            "AddPlayerChatMessageServerRpc",
+            translatedText,
+            player.PlayerIndex()
+        );
     }
 }

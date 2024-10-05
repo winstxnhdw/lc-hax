@@ -1,3 +1,5 @@
+using System.Threading;
+using System.Threading.Tasks;
 using System;
 using Hax;
 
@@ -12,7 +14,7 @@ class HornCommand : ICommand {
               .Init(() => shipAlarmCord?.StopPullingCordServerRpc(-1));
     };
 
-    public void Execute(StringArray args) {
+    public async Task Execute(string[] args, CancellationToken cancellationToken) {
         if (args.Length is 0) {
             Chat.Print("Usage: horn <duration>");
             return;

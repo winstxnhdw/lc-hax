@@ -1,10 +1,12 @@
+using System.Threading;
+using System.Threading.Tasks;
 using GameNetcodeStuff;
 using UnityEngine;
 using Hax;
 
 [Command("fakedeath")]
 class FakeDeathCommand : ICommand {
-    public void Execute(StringArray args) {
+    public async Task Execute(string[] args, CancellationToken cancellationToken) {
         if (Helper.LocalPlayer is not PlayerControllerB player) return;
 
         Setting.EnableFakeDeath = true;

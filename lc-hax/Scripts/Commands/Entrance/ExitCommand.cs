@@ -1,6 +1,8 @@
+using System.Threading;
+using System.Threading.Tasks;
 using Hax;
 
 [Command("exit")]
 class ExitCommand : ICommand {
-    public void Execute(StringArray _) => Helper.LocalPlayer?.EntranceTeleport(true);
+    public async Task Execute(string[] args, CancellationToken cancellationToken) => Helper.LocalPlayer?.EntranceTeleport(true);
 }

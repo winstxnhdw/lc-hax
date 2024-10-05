@@ -1,6 +1,9 @@
+using System.Threading;
+using System.Threading.Tasks;
+
 [Command("shovel")]
 class ShovelCommand : ICommand {
-    public void Execute(StringArray args) {
+    public async Task Execute(string[] args, CancellationToken cancellationToken) {
         if (args.Length is 0) {
             Chat.Print("Usage: shovel <force=1>");
             return;

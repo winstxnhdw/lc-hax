@@ -1,8 +1,11 @@
+using System.Threading;
+using System.Threading.Tasks;
+
 class DebugCommand(ICommand command) : ICommand {
     ICommand Command { get; } = command;
 
-    public void Execute(StringArray args) {
+    public async Task Execute(string[] args, CancellationToken cancellationToken) {
         Chat.Print("This debug command is for testing purposes and is not meant for use!");
-        this.Command.Execute(args);
+        await this.Command.Execute(args, cancellationToken);
     }
 }

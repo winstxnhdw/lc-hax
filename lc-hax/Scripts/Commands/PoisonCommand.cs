@@ -1,3 +1,5 @@
+using System.Threading;
+using System.Threading.Tasks;
 using GameNetcodeStuff;
 using Hax;
 
@@ -8,7 +10,7 @@ class PoisonCommand : ICommand {
               .Init(_ => player.DamagePlayerRpc(damage), duration, delay)
               .Unless(() => player.playersManager.inShipPhase);
 
-    public void Execute(StringArray args) {
+    public async Task Execute(string[] args, CancellationToken cancellationToken) {
         if (args.Length < 4) {
             Chat.Print("Usages:",
                 "poison <player> <damage> <duration> <delay=1>",

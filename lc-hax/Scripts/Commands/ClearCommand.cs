@@ -1,4 +1,7 @@
+using System.Threading;
+using System.Threading.Tasks;
+
 [Command("clear")]
 class ClearCommand : ICommand {
-    public void Execute(StringArray _) => Chat.Clear();
+    public async Task Execute(string[] args, CancellationToken cancellationToken) => Chat.Clear();
 }

@@ -1,6 +1,9 @@
+using System.Threading;
+using System.Threading.Tasks;
+
 [Command("god")]
 class GodCommand : ICommand {
-    public void Execute(StringArray _) {
+    public async Task Execute(string[] args, CancellationToken cancellationToken) {
         Setting.EnableGodMode = !Setting.EnableGodMode;
         Chat.Print($"God mode: {(Setting.EnableGodMode ? "Enabled" : "Disabled")}");
     }

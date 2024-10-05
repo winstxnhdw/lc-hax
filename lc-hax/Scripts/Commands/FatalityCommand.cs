@@ -1,3 +1,5 @@
+using System.Threading;
+using System.Threading.Tasks;
 using System;
 using System.Collections.Generic;
 using GameNetcodeStuff;
@@ -44,7 +46,7 @@ class FatalityCommand : ICommand {
         nutcracker.LegKickPlayerServerRpc(targetPlayer.PlayerIndex());
     }
 
-    public void Execute(StringArray args) {
+    public async Task Execute(string[] args, CancellationToken cancellationToken) {
         if (args.Length < 2) {
             Chat.Print("Usage: fatality <player> <enemy>");
             return;

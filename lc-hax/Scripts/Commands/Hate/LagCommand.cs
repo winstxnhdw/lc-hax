@@ -1,3 +1,5 @@
+using System.Threading;
+using System.Threading.Tasks;
 using System.Collections;
 using UnityEngine;
 using GameNetcodeStuff;
@@ -41,7 +43,7 @@ class LagCommand : ICommand {
         yield return this.WaitForEnemyOwnershipChange(targetPlayer, bracken, enemyReflector);
     }
 
-    public void Execute(StringArray args) {
+    public async Task Execute(string[] args, CancellationToken cancellationToken) {
         if (Helper.LocalPlayer is not PlayerControllerB localPlayer) return;
         if (args.Length is 0) {
             Chat.Print("Usage: lag <player>");

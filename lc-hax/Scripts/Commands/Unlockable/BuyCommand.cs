@@ -1,3 +1,5 @@
+using System.Threading;
+using System.Threading.Tasks;
 using System.Linq;
 using System.Collections.Generic;
 using UnityEngine;
@@ -37,7 +39,7 @@ class BuyCommand : ICommand {
         return buyableItems;
     }
 
-    public void Execute(StringArray args) {
+    public async Task Execute(string[] args, CancellationToken cancellationToken) {
         if (Helper.Terminal is not Terminal terminal) return;
         if (args[0] is not string item) {
             Chat.Print("Usage: buy <item> <quantity?>");

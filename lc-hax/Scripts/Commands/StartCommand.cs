@@ -1,8 +1,10 @@
+using System.Threading;
+using System.Threading.Tasks;
 using Hax;
 
 [Command("start")]
 class StartGameCommand : ICommand {
-    public void Execute(StringArray _) {
+    public async Task Execute(string[] args, CancellationToken cancellationToken) {
         if (Helper.StartOfRound is not StartOfRound startOfRound) return;
         if (startOfRound.travellingToNewLevel) {
             Chat.Print("You cannot start the game while travelling to new level!");

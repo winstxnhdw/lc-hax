@@ -1,9 +1,11 @@
+using System.Threading;
+using System.Threading.Tasks;
 using GameNetcodeStuff;
 using Hax;
 
 [Command("say")]
 class SayCommand : ICommand {
-    public void Execute(StringArray args) {
+    public async Task Execute(string[] args, CancellationToken cancellationToken) {
         if (args.Length < 2) {
             Chat.Print("Usage: say <player> <message>");
         }

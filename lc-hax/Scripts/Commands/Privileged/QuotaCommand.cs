@@ -1,8 +1,10 @@
+using System.Threading;
+using System.Threading.Tasks;
 using Hax;
 
 [PrivilegedCommand("quota")]
 class QuotaCommand : ICommand {
-    public void Execute(StringArray args) {
+    public async Task Execute(string[] args, CancellationToken cancellationToken) {
         if (Helper.TimeOfDay is not TimeOfDay timeOfDay) return;
         if (args.Length < 1) {
             Chat.Print("Usage: quota <amount> <fulfilled?>");

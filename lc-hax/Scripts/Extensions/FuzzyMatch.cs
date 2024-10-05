@@ -2,8 +2,6 @@ using System;
 using System.Collections.Generic;
 using Quickenshtein;
 
-namespace Hax;
-
 static partial class Extensions {
     /// <summary>
     /// Find the longest common substring between two strings.

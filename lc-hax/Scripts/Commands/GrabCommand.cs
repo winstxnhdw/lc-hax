@@ -1,3 +1,5 @@
+using System.Threading;
+using System.Threading.Tasks;
 using System.Linq;
 using System.Collections;
 using System.Collections.Generic;
@@ -64,7 +66,7 @@ class GrabCommand : ICommand {
         return $"Grabbed a {key.ToTitleCase()}!";
     }
 
-    public void Execute(StringArray args) {
+    public async Task Execute(string[] args, CancellationToken cancellationToken) {
         if (Helper.LocalPlayer is not PlayerControllerB localPlayer) return;
         if (localPlayer.ItemSlots.WhereIsNotNull().Count() >= 4) {
             Chat.Print("You must have an empty inventory slot!");

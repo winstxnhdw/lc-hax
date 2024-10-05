@@ -1,3 +1,5 @@
+using System.Threading;
+using System.Threading.Tasks;
 using System.Collections;
 using System.Linq;
 using GameNetcodeStuff;
@@ -20,21 +22,21 @@ class DestroyCommand : ICommand {
 
     Result DestroyHeldItem(PlayerControllerB player) {
         if (player.currentlyHeldObjectServer is null) {
-            return new Result(message: "You are not holding anything!");
+            return new Result { Message = "You are not holding anything!" };
         }
 
         player.DespawnHeldObject();
-        return new Result(true);
+        return new Result { Success = true };
     }
 
     Result DestroyAllItems(PlayerControllerB player) {
         Helper.CreateComponent<AsyncBehaviour>()
               .Init(() => this.DestroyAllItemsAsync(player));
 
-        return new Result(true);
+        return new Result { Success = true };
     }
 
-    public void Execute(StringArray args) {
+    public async Task Execute(string[] args, CancellationToken cancellationToken) {
         if (Helper.LocalPlayer is not PlayerControllerB player) return;
 
         if (player.ItemSlots.WhereIsNotNull().Count() >= 4) {
@@ -45,7 +47,7 @@ class DestroyCommand : ICommand {
         Result result = args[0] switch {
             null => this.DestroyHeldItem(player),
             "--all" => this.DestroyAllItems(player),
-            _ => new Result(message: "Invalid arguments!")
+            _ => new Result { Message = "Invalid arguments!" }
         };
 
         if (!result.Success) {

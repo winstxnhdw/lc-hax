@@ -1,14 +1,16 @@
+using System.Threading;
+using System.Threading.Tasks;
 using Hax;
 
 class PrivilegedCommand(ICommand command) : ICommand {
     ICommand Command { get; } = command;
 
-    public void Execute(StringArray args) {
+    public async Task Execute(string[] args, CancellationToken cancellationToken) {
         if (Helper.LocalPlayer is not { IsHost: true }) {
             Chat.Print("You must be the host to use this command!");
             return;
         }
 
-        this.Command.Execute(args);
+        await this.Command.Execute(args, cancellationToken);
     }
 }

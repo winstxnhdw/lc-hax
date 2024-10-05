@@ -1,3 +1,5 @@
+using System.Threading;
+using System.Threading.Tasks;
 using Hax;
 
 enum Rank {
@@ -10,7 +12,7 @@ enum Rank {
 
 [Command("xp")]
 class ExperienceCommand : ICommand {
-    public void Execute(StringArray args) {
+    public async Task Execute(string[] args, CancellationToken cancellationToken) {
         if (Helper.HUDManager is not HUDManager hudManager) return;
         if (args.Length is 0) {
             Chat.Print("Usage: xp <amount>");

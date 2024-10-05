@@ -1,3 +1,5 @@
+using System.Threading;
+using System.Threading.Tasks;
 using GameNetcodeStuff;
 using Hax;
 
@@ -10,9 +12,9 @@ class KillCommand : ICommand {
         return new Result(true);
     }
 
-    Result KillTargetPlayer(StringArray args) {
+    Result KillTargetPlayer(string[] args) {
         if (Helper.GetActivePlayer(args[0]) is not PlayerControllerB targetPlayer) {
-            return new Result(message: "Target player is not alive or found!");
+            return new Result { Message = "Target player is not alive or found!" };
         }
 
         targetPlayer.KillPlayer();
@@ -34,7 +36,7 @@ class KillCommand : ICommand {
         Chat.Print(result.Message);
     }
 
-    public void Execute(StringArray args) {
+    public async Task Execute(string[] args, CancellationToken cancellationToken) {
         if (args.Length is 0) {
             this.HandleResult(this.KillSelf());
             return;

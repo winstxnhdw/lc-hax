@@ -1,3 +1,5 @@
+using System.Threading;
+using System.Threading.Tasks;
 using System;
 using GameNetcodeStuff;
 using Hax;
@@ -9,7 +11,7 @@ class BombCommand : ICommand, IJetpack {
         Helper.ShortDelay(jetpack.ExplodeJetpackServerRpc);
     };
 
-    public void Execute(StringArray args) {
+    public async Task Execute(string[] args, CancellationToken cancellationToken) {
         if (Helper.LocalPlayer is not PlayerControllerB localPlayer) return;
         if (args.Length is 0) {
             Chat.Print("Usage: bomb <player>");

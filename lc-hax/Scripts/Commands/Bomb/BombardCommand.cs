@@ -1,3 +1,5 @@
+using System.Threading;
+using System.Threading.Tasks;
 using System.Collections;
 using System.Linq;
 using GameNetcodeStuff;
@@ -31,7 +33,7 @@ class BombardCommand : ICommand, IJetpack {
         player.carryWeight = currentWeight;
     }
 
-    public void Execute(StringArray args) {
+    public async Task Execute(string[] args, CancellationToken cancellationToken) {
         if (Helper.LocalPlayer is not PlayerControllerB localPlayer) return;
         if (args.Length is 0) {
             Chat.Print("Usage: bombard <player>");

@@ -1,3 +1,5 @@
+using System.Threading;
+using System.Threading.Tasks;
 using System.Linq;
 using System.Collections.Generic;
 using UnityEngine;
@@ -7,7 +9,7 @@ using Hax;
 class BuildCommand : ICommand {
     static Dictionary<string, int>? Unlockables { get; set; }
 
-    public void Execute(StringArray args) {
+    public async Task Execute(string[] args, CancellationToken cancellationToken) {
         if (Helper.StartOfRound is not StartOfRound startOfRound) return;
         if (Helper.CurrentCamera is not Camera camera) return;
         if (args[0] is not string unlockableName) {

@@ -1,3 +1,5 @@
+using System.Threading;
+using System.Threading.Tasks;
 using System;
 using GameNetcodeStuff;
 using UnityEngine;
@@ -13,7 +15,7 @@ class NoiseCommand : ICommand {
               .Init(this.PlayNoise(position), duration)
               .Unless(() => Helper.LocalPlayer?.playersManager is { inShipPhase: true });
 
-    public void Execute(StringArray args) {
+    public async Task Execute(string[] args, CancellationToken cancellationToken) {
         if (args.Length is 0) {
             Chat.Print("Usage: noise <player> <duration=30>");
             return;

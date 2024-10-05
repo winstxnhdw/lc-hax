@@ -1,6 +1,8 @@
+using System.Threading;
+using System.Threading.Tasks;
 using Hax;
 
 [PrivilegedCommand("gods")]
 class GodsCommand : ICommand {
-    public void Execute(StringArray args) => Helper.StartOfRound?.Debug_ToggleAllowDeathServerRpc();
+    public async Task Execute(string[] args, CancellationToken cancellationToken) => Helper.StartOfRound?.Debug_ToggleAllowDeathServerRpc();
 }

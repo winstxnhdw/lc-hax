@@ -1,9 +1,11 @@
+using System.Threading;
+using System.Threading.Tasks;
 using UnityEngine;
 using Hax;
 
 [Command("xyz")]
 class LocationCommand : ICommand {
-    public void Execute(StringArray _) {
+    public async Task Execute(string[] args, CancellationToken cancellationToken) {
         if (Helper.CurrentCamera is not Camera camera) return;
 
         Vector3 currentPostion = camera.transform.position;

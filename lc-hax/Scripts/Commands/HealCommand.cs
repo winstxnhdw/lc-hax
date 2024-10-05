@@ -1,3 +1,5 @@
+using System.Threading;
+using System.Threading.Tasks;
 using GameNetcodeStuff;
 using UnityEngine;
 using Hax;
@@ -109,7 +111,7 @@ class HealCommand : ICommand, IStun {
         return targetPlayer;
     }
 
-    public void Execute(StringArray args) {
+    public async Task Execute(string[] args, CancellationToken cancellationToken) {
         if (Helper.HUDManager is not HUDManager hudManager) return;
 
         PlayerControllerB? healedPlayer = args.Length switch {

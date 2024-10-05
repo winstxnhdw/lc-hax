@@ -4,6 +4,7 @@ using System.Reflection;
 using System.Collections.Generic;
 using UnityEngine.EventSystems;
 using Hax;
+using System.Threading;
 
 static class Chat {
     internal static event Action<string>? OnExecuteCommandAttempt;
@@ -54,10 +55,10 @@ static class Chat {
 
     internal static void Print(string? message, params string[] args) => Chat.Print($"{message}\n{string.Join('\n', args)}");
 
-    internal static void ExecuteCommand(string commandString) {
+    internal static async void ExecuteCommand(string commandString) {
         Chat.Print("USER", commandString);
         Chat.OnExecuteCommandAttempt?.Invoke(commandString);
-        StringArray args = commandString[1..].Split(' ');
+        string[] args = commandString[1..].Split(' ');
 
         ICommand? command =
             Chat.Commands.GetValue(args[0]) ??
@@ -69,6 +70,14 @@ static class Chat {
             return;
         }
 
-        command.Execute(args[1..]);
+        using CancellationTokenSource cancellationTokenSource = new();
+
+        try {
+            await command.Execute(args[1..], cancellationTokenSource.Token);
+        }
+
+        catch (Exception exception) {
+            Logger.Write(exception.ToString());
+        }
     }
 }

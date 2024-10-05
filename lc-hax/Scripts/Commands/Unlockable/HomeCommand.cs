@@ -1,3 +1,5 @@
+using System.Threading;
+using System.Threading.Tasks;
 using System;
 using GameNetcodeStuff;
 using Hax;
@@ -36,7 +38,7 @@ class HomeCommand : ICommand {
               .Init(action);
     }
 
-    public void Execute(StringArray args) {
+    public async Task Execute(string[] args, CancellationToken cancellationToken) {
         if (Helper.StartOfRound is not StartOfRound startOfRound) return;
         if (args.Length is 0) {
             startOfRound.ForcePlayerIntoShip();

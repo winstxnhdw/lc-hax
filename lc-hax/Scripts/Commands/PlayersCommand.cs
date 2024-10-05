@@ -1,9 +1,11 @@
+using System.Threading;
+using System.Threading.Tasks;
 using System.Linq;
 using Hax;
 
 [Command("players")]
 class PlayersCommand : ICommand {
-    public void Execute(StringArray args) => Chat.Print(
+    public async Task Execute(string[] args, CancellationToken cancellationToken) => Chat.Print(
         $"\n{string.Join('\n', Helper.Players.Select(player => $"{player.playerClientId}: {player.playerUsername}"))}"
     );
 }

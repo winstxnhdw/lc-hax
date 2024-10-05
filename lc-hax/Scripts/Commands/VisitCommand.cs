@@ -1,3 +1,5 @@
+using System.Threading;
+using System.Threading.Tasks;
 using System.Linq;
 using System.Collections.Generic;
 using Hax;
@@ -6,7 +8,7 @@ using Hax;
 class VisitCommand : ICommand {
     static Dictionary<string, int>? Levels { get; set; }
 
-    public void Execute(StringArray args) {
+    public async Task Execute(string[] args, CancellationToken cancellationToken) {
         if (Helper.Terminal is not Terminal terminal) return;
         if (Helper.StartOfRound is not StartOfRound startOfRound) return;
         if (args[0] is not string moon) {

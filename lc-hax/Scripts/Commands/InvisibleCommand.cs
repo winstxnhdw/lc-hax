@@ -1,3 +1,5 @@
+using System.Threading;
+using System.Threading.Tasks;
 using UnityEngine;
 using Hax;
 
@@ -8,7 +10,7 @@ class InvisibleCommand : ICommand {
               .Reflect()
               .InvokeInternalMethod("UpdatePlayerPositionServerRpc", Vector3.zero, true, true, false, true);
 
-    public void Execute(StringArray _) {
+    public async Task Execute(string[] args, CancellationToken cancellationToken) {
         Setting.EnableInvisible = !Setting.EnableInvisible;
         Chat.Print($"Invisible: {(Setting.EnableInvisible ? "enabled" : "disabled")}");
 

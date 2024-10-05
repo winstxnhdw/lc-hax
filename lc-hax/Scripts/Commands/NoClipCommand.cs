@@ -1,3 +1,5 @@
+using System.Threading;
+using System.Threading.Tasks;
 using GameNetcodeStuff;
 using Hax;
 using UnityEngine;
@@ -6,7 +8,7 @@ using UnityEngine;
 class NoClipCommand : ICommand {
     static bool EnabledGodMode { get; set; }
 
-    public void Execute(StringArray args) {
+    public async Task Execute(string[] args, CancellationToken cancellationToken) {
         if (Helper.LocalPlayer is not PlayerControllerB localPlayer) return;
         if (localPlayer.gameObject.TryGetComponent(out KeyboardMovement keyboard)) {
             Setting.EnableGodMode = EnabledGodMode;

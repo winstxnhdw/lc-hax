@@ -1,3 +1,5 @@
+using System.Threading;
+using System.Threading.Tasks;
 using System;
 using System.Linq;
 using System.Collections.Generic;
@@ -11,7 +13,7 @@ class SuitCommand : ICommand {
             .Where(u => u.ToString().EndsWith("_SUIT"))
             .ToDictionary(suit => suit.ToString().Replace("_SUIT", "").ToLower(), suit => suit);
 
-    public void Execute(StringArray args) {
+    public async Task Execute(string[] args, CancellationToken cancellationToken) {
         if (args[0] is not string suit) {
             Chat.Print("Usage: suit <suit>");
             return;

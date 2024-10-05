@@ -1,4 +1,4 @@
-readonly ref struct Result(bool success = false, string? message = null) {
-    internal bool Success { get; } = success;
-    internal string? Message { get; } = message;
+readonly record struct Result(bool Success = false, string? Message = null) {
+    internal bool Success { get; init; } = Success;
+    internal string? Message { get; init; } = Message;
 }

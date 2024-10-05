@@ -1,3 +1,6 @@
+using System.Threading;
+using System.Threading.Tasks;
+
 [Command("block")]
 class BlockCommand : ICommand {
     string BlockEnemy() {
@@ -16,7 +19,7 @@ class BlockCommand : ICommand {
             : "No longer blocking radar targets!")}";
     }
 
-    public void Execute(StringArray args) {
+    public async Task Execute(string[] args, CancellationToken cancellationToken) {
         if (args.Length is 0) {
             Chat.Print("Usage: block <property>");
             return;

@@ -1,3 +1,6 @@
+using System.Threading;
+using System.Threading.Tasks;
+
 interface ICommand {
-    void Execute(StringArray args);
+    Task Execute(string[] args, CancellationToken cancellationToken);
 }

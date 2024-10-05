@@ -1,10 +1,12 @@
+using System.Threading;
+using System.Threading.Tasks;
 using System.Collections.Generic;
 using GameNetcodeStuff;
 using Hax;
 
 [Command("hate")]
 class HateCommand : IEnemyPrompter, ICommand {
-    public void Execute(StringArray args) {
+    public async Task Execute(string[] args, CancellationToken cancellationToken) {
         if (args.Length is 0) {
             Chat.Print("Usage: hate <player> <funnyRevive>");
             return;

@@ -91,3 +91,4 @@ dotnet_diagnostic.IDE0051.severity = none   # Remove unused private member
 dotnet_diagnostic.IDE0072.severity = none   # Add missing cases to switch expression
 dotnet_diagnostic.IDE0130.severity = none   # Namespace does not match folder structure
 dotnet_diagnostic.CS8524.severity = none
+dotnet_diagnostic.CS1998.severity = suggestion

@@ -1,3 +1,5 @@
+using System.Threading;
+using System.Threading.Tasks;
 using UnityEngine;
 using Hax;
 
@@ -14,7 +16,7 @@ class UprightCommand : ICommand {
         Helper.PlaceObjectAtPosition(shipObject, shipObject.transform.position, uprightRotation);
     }
 
-    public void Execute(StringArray _) {
+    public async Task Execute(string[] args, CancellationToken cancellationToken) {
         Helper.FindObjects<PlaceableShipObject>()
               .ForEach(this.SetObjectUpright);
     }

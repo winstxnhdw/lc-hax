@@ -1,3 +1,5 @@
+using System.Threading;
+using System.Threading.Tasks;
 using GameNetcodeStuff;
 using Hax;
 
@@ -8,7 +10,7 @@ class MaskCommand : ICommand {
             mask.CreateMimicServerRpc(player.isInsideFactory, player.transform.position);
         }, amount * 0.1f, 0.1f);
 
-    public void Execute(StringArray args) {
+    public async Task Execute(string[] args, CancellationToken cancellationToken) {
         if (Helper.LocalPlayer is not PlayerControllerB localPlayer) return;
         if (Helper.Grabbables.First(grabbable => grabbable is HauntedMaskItem) is not HauntedMaskItem hauntedMaskItem) {
             Chat.Print("No mask found!");

@@ -1,9 +1,11 @@
+using System.Threading;
+using System.Threading.Tasks;
 using UnityEngine;
 using Hax;
 
 [Command("stun")]
 class StunCommand : ICommand, IStun {
-    public void Execute(StringArray args) {
+    public async Task Execute(string[] args, CancellationToken cancellationToken) {
         if (Helper.CurrentCamera is not Camera camera) return;
         if (args.Length is 0) {
             Chat.Print("Usage: stun <duration>");
