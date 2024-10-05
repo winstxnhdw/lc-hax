@@ -2,7 +2,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using System;
 using GameNetcodeStuff;
-using Hax;
 
 [Command("bomb")]
 class BombCommand : ICommand, IJetpack {

@@ -1,7 +1,6 @@
 using System.Text.RegularExpressions;
 using UnityEngine;
 using Steamworks;
-using Hax;
 
 sealed class DisconnectMod : MonoBehaviour {
     bool IsShiftHeld { get; set; } = false;

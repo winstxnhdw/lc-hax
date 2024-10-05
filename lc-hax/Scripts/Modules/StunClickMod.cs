@@ -1,5 +1,4 @@
 using UnityEngine;
-using Hax;
 
 sealed class StunClickMod : MonoBehaviour {
     Collider[] Colliders { get; set; } = new Collider[100];

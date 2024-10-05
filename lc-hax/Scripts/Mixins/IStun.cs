@@ -1,5 +1,4 @@
 using GameNetcodeStuff;
-using Hax;
 using UnityEngine;
 
 interface IStun { }

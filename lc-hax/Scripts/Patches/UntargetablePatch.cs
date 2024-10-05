@@ -2,7 +2,6 @@
 
 using GameNetcodeStuff;
 using HarmonyLib;
-using Hax;
 
 [HarmonyPatch(typeof(EnemyAI))]
 class UntargetableEnemyPatch {

@@ -1,5 +1,3 @@
-namespace Hax;
-
 static partial class Helper {
     internal static HUDManager? HUDManager => HUDManager.Instance.Unfake();
 

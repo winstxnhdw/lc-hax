@@ -4,7 +4,6 @@ using System.Collections;
 using UnityEngine;
 using HarmonyLib;
 using GameNetcodeStuff;
-using Hax;
 
 [HarmonyPatch(typeof(PlayerControllerB), "Jump_performed")]
 class UnlimitedJumpPatch {

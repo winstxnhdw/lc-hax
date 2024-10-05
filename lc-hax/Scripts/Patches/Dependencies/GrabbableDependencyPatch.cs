@@ -2,7 +2,6 @@
 
 using Unity.Netcode;
 using HarmonyLib;
-using Hax;
 
 [HarmonyPatch]
 class GrabbableDependencyPatch {

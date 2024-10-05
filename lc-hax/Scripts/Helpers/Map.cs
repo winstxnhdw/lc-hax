@@ -1,7 +1,5 @@
 using GameNetcodeStuff;
 
-namespace Hax;
-
 static partial class Helper {
     static ManualCameraRenderer? ManualCameraRenderer => Helper.StartOfRound?.mapScreen;
 

@@ -3,7 +3,6 @@ using System.Linq;
 using System.Reflection;
 using System.Collections.Generic;
 using UnityEngine.EventSystems;
-using Hax;
 using System.Threading;
 
 static class Chat {

@@ -1,4 +1,3 @@
-using Hax;
 using Unity.Netcode;
 using Vector3 = UnityEngine.Vector3;
 

@@ -1,4 +1,3 @@
-using Hax;
 using UnityEngine;
 
 class SandSpiderController : IEnemyController<SandSpiderAI> {

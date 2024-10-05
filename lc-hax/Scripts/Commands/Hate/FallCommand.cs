@@ -3,7 +3,6 @@ using System.Threading.Tasks;
 using System.Collections;
 using UnityEngine;
 using GameNetcodeStuff;
-using Hax;
 
 [Command("fall")]
 class FallCommand : ICommand {

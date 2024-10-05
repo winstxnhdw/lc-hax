@@ -2,7 +2,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Linq;
 using System.Collections.Generic;
-using Hax;
 
 [Command("visit")]
 class VisitCommand : ICommand {

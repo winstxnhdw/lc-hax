@@ -3,7 +3,6 @@ using System.Threading.Tasks;
 using System;
 using UnityEngine;
 using GameNetcodeStuff;
-using Hax;
 
 [Command("random")]
 class RandomCommand : ICommand {

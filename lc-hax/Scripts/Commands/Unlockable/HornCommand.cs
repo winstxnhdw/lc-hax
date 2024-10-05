@@ -1,7 +1,6 @@
 using System.Threading;
 using System.Threading.Tasks;
 using System;
-using Hax;
 
 [Command("horn")]
 class HornCommand : ICommand {

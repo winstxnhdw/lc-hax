@@ -1,8 +1,6 @@
 using System;
 using UnityEngine;
 
-namespace Hax;
-
 static partial class Helper {
     internal static int SphereCastForward(this RaycastHit[] array, Transform transform, float sphereRadius = 1.0f) {
         try {

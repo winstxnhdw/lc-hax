@@ -3,7 +3,6 @@ using System.Threading.Tasks;
 using System;
 using System.Linq;
 using GameNetcodeStuff;
-using Hax;
 
 [Command("sell")]
 class SellCommand : ICommand {

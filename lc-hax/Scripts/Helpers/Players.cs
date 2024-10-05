@@ -4,8 +4,6 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using Unity.Netcode;
 
-namespace Hax;
-
 static partial class Helper {
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     internal static int PlayerIndex(this PlayerControllerB player) => unchecked((int)player.playerClientId);

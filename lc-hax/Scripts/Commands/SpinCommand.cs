@@ -2,7 +2,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using System;
 using UnityEngine;
-using Hax;
 
 [Command("spin")]
 class SpinCommand : ICommand {

@@ -1,5 +1,3 @@
-using Hax;
-
 enum NutcrackerState {
     WALKING,
     SENTRY

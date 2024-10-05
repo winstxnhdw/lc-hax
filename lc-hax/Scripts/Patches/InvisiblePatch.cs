@@ -3,7 +3,6 @@
 using GameNetcodeStuff;
 using HarmonyLib;
 using UnityEngine;
-using Hax;
 
 [HarmonyPatch(typeof(PlayerControllerB))]
 class InvisiblePatch {

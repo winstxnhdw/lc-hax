@@ -3,7 +3,6 @@
 using System.Linq;
 using HarmonyLib;
 using GameNetcodeStuff;
-using Hax;
 
 [HarmonyPatch(typeof(HUDManager), "EnableChat_performed")]
 class EnableChatPatch {

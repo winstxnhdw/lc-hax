@@ -2,7 +2,6 @@ using System.Linq;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using GameNetcodeStuff;
-using Hax;
 
 class CharacterMovement : MonoBehaviour {
     // Movement constants

@@ -1,7 +1,6 @@
 using System.Threading;
 using System.Threading.Tasks;
 using System.Linq;
-using Hax;
 
 [Command("players")]
 class PlayersCommand : ICommand {

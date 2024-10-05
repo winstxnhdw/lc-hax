@@ -3,7 +3,6 @@ using System.Threading.Tasks;
 using System.Linq;
 using System.Collections.Generic;
 using UnityEngine;
-using Hax;
 
 [Command("build")]
 class BuildCommand : ICommand {

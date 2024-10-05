@@ -1,7 +1,6 @@
 using System.Threading;
 using System.Threading.Tasks;
 using UnityEngine;
-using Hax;
 
 [Command("stun")]
 class StunCommand : ICommand, IStun {

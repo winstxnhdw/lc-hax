@@ -1,6 +1,5 @@
 using GameNetcodeStuff;
 using HarmonyLib;
-using Hax;
 
 [HarmonyPatch(typeof(PlayerControllerB), "KillPlayerClientRpc")]
 class FakeDeathPatch {

@@ -2,7 +2,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using GameNetcodeStuff;
 using UnityEngine;
-using Hax;
 
 [Command("fakedeath")]
 class FakeDeathCommand : ICommand {

@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
-using Hax;
 
 sealed class ChatMod : MonoBehaviour {
     List<string> CommandHistory { get; } = [];

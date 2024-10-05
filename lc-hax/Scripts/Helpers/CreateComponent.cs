@@ -1,8 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Hax;
-
 static partial class Helper {
     static Dictionary<string, Queue<Component>> ComponentPools { get; } = [];
 

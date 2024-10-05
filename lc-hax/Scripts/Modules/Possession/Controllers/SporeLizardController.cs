@@ -1,6 +1,3 @@
-
-using Hax;
-
 public enum SporeLizardState {
     IDLE,
     ALERTED,

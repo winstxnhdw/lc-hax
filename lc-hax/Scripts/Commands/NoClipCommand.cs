@@ -1,7 +1,6 @@
 using System.Threading;
 using System.Threading.Tasks;
 using GameNetcodeStuff;
-using Hax;
 using UnityEngine;
 
 [Command("noclip")]

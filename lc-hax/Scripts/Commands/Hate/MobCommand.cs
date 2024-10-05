@@ -2,7 +2,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Collections.Generic;
 using GameNetcodeStuff;
-using Hax;
 
 [Command("mob")]
 class MobCommand : IEnemyPrompter, ICommand {

@@ -3,7 +3,6 @@ using System.Threading.Tasks;
 using System;
 using System.Linq;
 using System.Collections.Generic;
-using Hax;
 
 [Command("suit")]
 class SuitCommand : ICommand {

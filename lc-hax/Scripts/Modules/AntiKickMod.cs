@@ -1,5 +1,4 @@
 using UnityEngine;
-using Hax;
 using System.Collections;
 
 sealed class AntiKickMod : MonoBehaviour {

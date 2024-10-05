@@ -2,7 +2,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Collections.Generic;
 using GameNetcodeStuff;
-using Hax;
 using UnityEngine;
 
 [DebugCommand("mute")]

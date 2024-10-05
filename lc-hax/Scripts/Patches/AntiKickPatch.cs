@@ -3,7 +3,6 @@
 using HarmonyLib;
 using Steamworks;
 using GameNetcodeStuff;
-using Hax;
 
 [HarmonyPatch(typeof(PlayerControllerB))]
 class AntiKickPatch {

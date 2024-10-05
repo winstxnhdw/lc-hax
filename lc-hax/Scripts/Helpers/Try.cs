@@ -1,7 +1,5 @@
 using System;
 
-namespace Hax;
-
 static partial class Helper {
     internal static T? Try<T>(Func<T> function, Action<Exception>? onError = null) where T : class {
         try {

@@ -1,5 +1,3 @@
-using Hax;
-
 enum DogState {
     ROAMING,
     SUSPICIOUS,

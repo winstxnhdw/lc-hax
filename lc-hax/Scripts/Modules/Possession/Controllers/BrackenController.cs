@@ -1,5 +1,3 @@
-using Hax;
-
 enum BrackenState {
     SCOUTING,
     STAND,

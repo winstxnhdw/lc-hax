@@ -1,5 +1,3 @@
-using Hax;
-
 interface ISecureGate { }
 
 static class SecureGateMixin {

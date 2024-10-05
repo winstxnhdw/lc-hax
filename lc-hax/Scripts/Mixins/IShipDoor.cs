@@ -1,5 +1,3 @@
-using Hax;
-
 interface IShipDoor { }
 
 static class ShipDoorMixin {

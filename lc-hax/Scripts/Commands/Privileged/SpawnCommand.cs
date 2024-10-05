@@ -7,7 +7,6 @@ using Unity.Netcode;
 using UnityEngine;
 using UnityObject = UnityEngine.Object;
 using GameNetcodeStuff;
-using Hax;
 
 [PrivilegedCommand("spawn")]
 class SpawnCommand : ICommand {

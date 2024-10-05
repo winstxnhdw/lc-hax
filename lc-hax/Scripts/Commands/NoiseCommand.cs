@@ -3,7 +3,6 @@ using System.Threading.Tasks;
 using System;
 using GameNetcodeStuff;
 using UnityEngine;
-using Hax;
 
 [Command("noise")]
 class NoiseCommand : ICommand {

@@ -1,6 +1,5 @@
 using System.Threading;
 using System.Threading.Tasks;
-using Hax;
 
 [Command("garage")]
 class GarageCommand : ICommand {

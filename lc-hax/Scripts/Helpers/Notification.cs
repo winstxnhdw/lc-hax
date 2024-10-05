@@ -1,5 +1,3 @@
-namespace Hax;
-
 static partial class Helper {
     [RequireNamedArgs]
     internal static void SendNotification(string title, string body, bool isWarning = false) =>

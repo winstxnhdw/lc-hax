@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
 using GameNetcodeStuff;
-using Hax;
 
 enum BehaviourState {
     IDLE = 0,

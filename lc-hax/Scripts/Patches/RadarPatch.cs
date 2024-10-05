@@ -1,7 +1,6 @@
 #pragma warning disable IDE1006
 
 using HarmonyLib;
-using Hax;
 
 [HarmonyPatch(typeof(ManualCameraRenderer), nameof(ManualCameraRenderer.SwitchRadarTargetClientRpc))]
 class RadarPatch {

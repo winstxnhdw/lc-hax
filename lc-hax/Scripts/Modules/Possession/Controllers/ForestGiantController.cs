@@ -1,5 +1,3 @@
-using Hax;
-
 enum GiantState {
     DEFAULT = 0,
     CHASE = 1

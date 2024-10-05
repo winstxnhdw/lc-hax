@@ -1,7 +1,6 @@
 using System.Threading;
 using System.Threading.Tasks;
 using GameNetcodeStuff;
-using Hax;
 
 [Command("poison")]
 class PoisonCommand : ICommand {

@@ -2,7 +2,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using UnityEngine;
 using GameNetcodeStuff;
-using Hax;
 
 [Command("tp")]
 class TeleportCommand : ICommand {

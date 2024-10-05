@@ -1,6 +1,5 @@
 using UnityEngine;
 using GameNetcodeStuff;
-using Hax;
 
 sealed class KillClickMod : MonoBehaviour {
     RaycastHit[] RaycastHits { get; set; } = new RaycastHit[100];

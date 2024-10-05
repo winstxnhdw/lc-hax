@@ -3,7 +3,6 @@ using System.Threading.Tasks;
 using System;
 using System.Collections.Generic;
 using GameNetcodeStuff;
-using Hax;
 
 [Command("fatality")]
 class FatalityCommand : ICommand {

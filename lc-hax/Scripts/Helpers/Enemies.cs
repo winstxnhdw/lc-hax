@@ -5,8 +5,6 @@ using GameNetcodeStuff;
 using Unity.Netcode;
 using UnityEngine;
 
-namespace Hax;
-
 static partial class Helper {
     internal static HashSet<EnemyAI> Enemies { get; } = Helper.StartOfRound is not { inShipPhase: false } ? [] :
         Helper.FindObjects<EnemyAI>()

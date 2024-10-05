@@ -1,5 +1,3 @@
-using Hax;
-
 enum SnareFleaState {
     SEARCHING,
     HIDING,

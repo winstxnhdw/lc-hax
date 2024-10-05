@@ -1,8 +1,6 @@
 using Unity.Netcode;
 using UnityEngine;
 
-namespace Hax;
-
 static partial class Helper {
     internal static ShipBuildModeManager? ShipBuildModeManager => ShipBuildModeManager.Instance;
 
