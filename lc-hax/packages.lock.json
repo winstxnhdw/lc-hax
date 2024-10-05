@@ -68,6 +68,11 @@
         "resolved": "8.0.0",
         "contentHash": "3WA9q9yVqJp222P3x1wYIGDAkpjAku0TMUaaQV22g6L67AI0LdOIrVS7Ht2vJfLHGSPVuqN94vIr15qn+HEkHw=="
       },
+      "Microsoft.CodeAnalysis.Analyzers": {
+        "type": "Transitive",
+        "resolved": "3.3.4",
+        "contentHash": "AxkxcPR+rheX0SmvpLVIGLhOUXAKG56a64kV9VQZ4y9gR9ZmPXnqZvHJnmwLSwzrEP6junUF11vuc+aqo5r68g=="
+      },
       "Microsoft.CodeAnalysis.Common": {
         "type": "Transitive",
         "resolved": "4.11.0",
@@ -288,7 +293,8 @@
       "analysers": {
         "type": "Project",
         "dependencies": {
-          "Microsoft.CodeAnalysis.CSharp.Workspaces": "[4.11.0, )"
+          "Microsoft.CodeAnalysis.CSharp.Workspaces": "[4.11.0, )",
+          "Microsoft.CodeAnalysis.Common": "[4.11.0, )"
         }
       }
     },
