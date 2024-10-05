@@ -57,7 +57,18 @@ The complete feature set includes the following.
 - Anti-kick
 - Anti-flash
 - Auto-reconnect
+- Always sane
+- Always lightweight
+- Always show HUD
+- Always keep items on teleport
+- Build anywhere
 - Connection spoofing
+- Clear vision
+- Crosshair
+- ESP
+- Enemy possession with abilities
+- Grab through walls
+- Instant interact
 - Infinite stamina
 - Infinite scan range
 - Infinite ammo
@@ -65,25 +76,15 @@ The complete feature set includes the following.
 - Infinite grab distance
 - Infinite item usage
 - Infinite item deposit
-- Grab through walls
-- Pocket any item
-- Instant interact
 - No/fake reload
 - No item usage cooldown
 - No lobby refresh delay
 - No build constraints
 - No character limit
 - No pan limits
-- Always sane
-- Always lightweight
-- Always show HUD
-- Always keep items on teleport
-- Enemy possession with abilities
 - Notify teammate's death
+- Pocket any item
 - Stable Zap gun
-- Clear vision
-- Crosshair
-- ESP
 - [Commands](#commands)
 - [Binds](#binds)
 
@@ -97,7 +98,10 @@ The complete feature set includes the following.
 | Teleport outside entrance     | `/exit`                                          |
 | Teleport inside entrance      | `/enter`                                         |
 | Teleport to a player          | `/tp <player>`                                   |
+| Teleport player to player     | `/tp <player> <player>`                          |
 | Teleport to a location        | `/tp <x> <y> <z>`                                |
+| Teleport player to a location | `/tp <player> <x> <y> <z>`                       |
+| Teleports the player to hell  | `/void <player>`                                 |
 | Teleport back to ship         | `/home <player?>`                                |
 | Teleport enemies to player    | `/mob <player>`                                  |
 | Inverse teleport a player     | `/random <player>`                               |

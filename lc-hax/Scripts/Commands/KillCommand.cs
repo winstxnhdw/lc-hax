@@ -8,7 +8,7 @@ class KillCommand : ICommand {
 
     Result KillSelf() {
         Helper.LocalPlayer?.KillPlayer();
-        return new Result(true);
+        return new Result { Success = true };
     }
 
     Result KillTargetPlayer(string[] args) {
@@ -17,17 +17,17 @@ class KillCommand : ICommand {
         }
 
         targetPlayer.KillPlayer();
-        return new Result(true);
+        return new Result { Success = true };
     }
 
     Result KillAllPlayers() {
         Helper.Players?.ForEach(player => player.KillPlayer());
-        return new Result(true);
+        return new Result { Success = true };
     }
 
     Result KillAllEnemies() {
         Helper.Enemies.ForEach(Helper.Kill);
-        return new Result(true);
+        return new Result { Success = true };
     }
 
     void HandleResult(Result result) {

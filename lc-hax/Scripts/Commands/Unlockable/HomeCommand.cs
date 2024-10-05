@@ -4,7 +4,7 @@ using System;
 using GameNetcodeStuff;
 
 [Command("home")]
-class HomeCommand : ICommand {
+class HomeCommand : ITeleporter, ICommand {
     ShipTeleporter? Teleporter => Helper.ShipTeleporters.First(
         teleporter => teleporter is not null && !teleporter.isInverseTeleporter
     );
@@ -22,20 +22,6 @@ class HomeCommand : ICommand {
               .SetPredicate(() => Helper.IsRadarTarget(targetPlayer.playerClientId))
               .Init(teleporter.PressTeleportButtonServerRpc);
     };
-
-    bool TeleporterExists() {
-        HaxObjects.Instance?.ShipTeleporters?.Renew();
-        return this.Teleporter is not null;
-    }
-
-    void PrepareToTeleport(Action action) {
-        Helper.BuyUnlockable(Unlockable.TELEPORTER);
-        Helper.ReturnUnlockable(Unlockable.TELEPORTER);
-
-        Helper.CreateComponent<WaitForBehaviour>()
-              .SetPredicate(this.TeleporterExists)
-              .Init(action);
-    }
 
     public async Task Execute(string[] args, CancellationToken cancellationToken) {
         if (Helper.StartOfRound is not StartOfRound startOfRound) return;
