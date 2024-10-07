@@ -22,10 +22,10 @@ jobs:
 
     steps:
     - name: Checkout repository
-      uses: actions/checkout@v4.2.0
+      uses: actions/checkout@v4.2.1
 
     - name: Initialise CodeQL
-      uses: github/codeql-action/init@v3.26.11
+      uses: github/codeql-action/init@v3.26.12
       with:
         languages: csharp
 
@@ -40,6 +40,6 @@ jobs:
       run: dotnet build lc-hax -restoreProperty:RestoreLockedMode=true
 
     - name: Perform CodeQL Analysis
-      uses: github/codeql-action/analyze@v3.26.11
+      uses: github/codeql-action/analyze@v3.26.12
       with:
         category: /language:csharp
