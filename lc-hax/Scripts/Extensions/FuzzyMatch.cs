@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using CommunityToolkit.HighPerformance;
 using Quickenshtein;
 
 static partial class Extensions {
@@ -7,20 +8,22 @@ static partial class Extensions {
     /// Find the longest common substring between two strings.
     /// </summary>
     /// <returns>the length of the longest common substring</returns>
-    static int LongestCommonSubstring(ReadOnlySpan<char> query, ReadOnlySpan<char> original) {
+    static unsafe int LongestCommonSubstring(ReadOnlySpan<char> query, ReadOnlySpan<char> original) {
         int originalLength = original.Length;
         int queryLength = query.Length;
-
-        int[,] table = new int[2, originalLength + 1];
-        int result = 0;
+        int longestSubstringLength = 0;
+        int columns = originalLength + 1;
+        int* backingArray = stackalloc int[2 * columns];
+        Span2D<int> table = new(backingArray, 2, columns, 0);
 
         for (int i = 1; i <= queryLength; i++) {
             for (int j = 1; j <= originalLength; j++) {
                 if (query[i - 1] == original[j - 1]) {
-                    table[i % 2, j] = table[(i - 1) % 2, j - 1] + 1;
+                    int substringLength = table[(i - 1) % 2, j - 1] + 1;
+                    table[i % 2, j] = substringLength;
 
-                    if (table[i % 2, j] > result) {
-                        result = table[i % 2, j];
+                    if (substringLength > longestSubstringLength) {
+                        longestSubstringLength = substringLength;
                     }
                 }
 
@@ -30,7 +33,7 @@ static partial class Extensions {
             }
         }
 
-        return result;
+        return longestSubstringLength;
     }
 
     /// <summary>

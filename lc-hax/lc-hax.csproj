@@ -27,6 +27,8 @@
 
     <PackageReference Include="Quickenshtein" Version="1.5.1" />
 
+    <PackageReference Include="CommunityToolkit.HighPerformance" Version="8.3.2" />
+
     <PackageReference Include="Lib.Harmony" Version="2.3.3" />
 
     <EmbeddedResource Include="$(NuGetPackageRoot)/lib.harmony/2.3.3/lib/net48/0Harmony.dll" />
@@ -45,6 +47,9 @@
 
     <EmbeddedResource
       Include="$(NuGetPackageRoot)/system.runtime.compilerservices.unsafe/6.0.0/lib/netstandard2.0/System.Runtime.CompilerServices.Unsafe.dll" />
+
+    <EmbeddedResource
+      Include="$(NuGetPackageRoot)/communitytoolkit.highperformance\8.3.2\lib\netstandard2.1/CommunityToolkit.HighPerformance.dll" />
 
   </ItemGroup>
 
