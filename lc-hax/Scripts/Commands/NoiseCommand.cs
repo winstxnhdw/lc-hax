@@ -1,18 +1,20 @@
 using System.Threading;
 using System.Threading.Tasks;
-using System;
 using GameNetcodeStuff;
 using UnityEngine;
 
 [Command("noise")]
 class NoiseCommand : ICommand {
-    Action<float> PlayNoise(Vector3 position) => (_) =>
-        Helper.RoundManager?.PlayAudibleNoise(position, float.MaxValue, float.MaxValue, 10, false);
+    async Task PlayNoiseContinuously(PlayerControllerB player, float duration, CancellationToken cancellationToken) {
+        float startTime = Time.time;
 
-    void PlayNoiseContinuously(Vector3 position, float duration) =>
-        Helper.CreateComponent<TransientBehaviour>("Noise")
-              .Init(this.PlayNoise(position), duration)
-              .Unless(() => Helper.LocalPlayer?.playersManager is { inShipPhase: true });
+        while (Time.time - startTime < duration && !cancellationToken.IsCancellationRequested) {
+            if (player.playersManager.inShipPhase) break;
+
+            Helper.RoundManager?.PlayAudibleNoise(player.transform.position, float.MaxValue, float.MaxValue, 10, false);
+            await Task.Yield();
+        }
+    }
 
     public async Task Execute(string[] args, CancellationToken cancellationToken) {
         if (args.Length is 0) {
@@ -30,6 +32,6 @@ class NoiseCommand : ICommand {
             return;
         }
 
-        this.PlayNoiseContinuously(player.transform.position, duration);
+        await this.PlayNoiseContinuously(player, duration, cancellationToken);
     }
 }

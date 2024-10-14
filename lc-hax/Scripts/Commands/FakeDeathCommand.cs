@@ -19,8 +19,7 @@ class FakeDeathCommand : ICommand {
             0
         );
 
-        Helper.CreateComponent<WaitForBehaviour>("Respawn")
-              .SetPredicate(() => player.playersManager.shipIsLeaving)
-              .Init(player.KillPlayer);
+        await Helper.WaitUntil(() => player.playersManager.shipIsLeaving, cancellationToken);
+        player.KillPlayer();
     }
 }

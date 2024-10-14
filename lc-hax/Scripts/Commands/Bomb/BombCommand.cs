@@ -1,15 +1,9 @@
 using System.Threading;
 using System.Threading.Tasks;
-using System;
 using GameNetcodeStuff;
 
 [Command("bomb")]
 class BombCommand : ICommand, IJetpack {
-    Action BlowUpLocation(PlayerControllerB localPlayer, PlayerControllerB targetPlayer, JetpackItem jetpack) => () => {
-        localPlayer.DiscardHeldObject(placeObject: true, parentObjectTo: targetPlayer.NetworkObject);
-        Helper.ShortDelay(jetpack.ExplodeJetpackServerRpc);
-    };
-
     public async Task Execute(string[] args, CancellationToken cancellationToken) {
         if (Helper.LocalPlayer is not PlayerControllerB localPlayer) return;
         if (args.Length is 0) {
@@ -32,8 +26,10 @@ class BombCommand : ICommand, IJetpack {
             return;
         }
 
-        Helper.CreateComponent<WaitForBehaviour>("Throw Bomb")
-              .SetPredicate(() => localPlayer.ItemSlots[localPlayer.currentItemSlot] == jetpack)
-              .Init(this.BlowUpLocation(localPlayer, targetPlayer, jetpack));
+        GrabbableObject[] itemSlots = localPlayer.ItemSlots;
+        await Helper.WaitUntil(() => itemSlots[localPlayer.currentItemSlot] == jetpack, cancellationToken);
+        localPlayer.DiscardHeldObject(placeObject: true, parentObjectTo: targetPlayer.NetworkObject);
+        await Task.Delay(500, cancellationToken);
+        jetpack.ExplodeJetpackServerRpc();
     }
 }

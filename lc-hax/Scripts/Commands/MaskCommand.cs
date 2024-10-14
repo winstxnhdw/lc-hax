@@ -4,11 +4,6 @@ using GameNetcodeStuff;
 
 [Command("mask")]
 class MaskCommand : ICommand {
-    void SpawnMimicOnPlayer(PlayerControllerB player, HauntedMaskItem mask, ulong amount = 1) =>
-        Helper.CreateComponent<TransientBehaviour>("Mask").Init(_ => {
-            mask.CreateMimicServerRpc(player.isInsideFactory, player.transform.position);
-        }, amount * 0.1f, 0.1f);
-
     public async Task Execute(string[] args, CancellationToken cancellationToken) {
         if (Helper.LocalPlayer is not PlayerControllerB localPlayer) return;
         if (Helper.Grabbables.First(grabbable => grabbable is HauntedMaskItem) is not HauntedMaskItem hauntedMaskItem) {
@@ -35,8 +30,12 @@ class MaskCommand : ICommand {
             return;
         }
 
-        Helper.CreateComponent<WaitForBehaviour>()
-              .SetPredicate(() => localPlayer.ItemSlots[localPlayer.currentItemSlot] is HauntedMaskItem)
-              .Init(() => this.SpawnMimicOnPlayer(targetPlayer, hauntedMaskItem, amount));
+        GrabbableObject[] itemSlots = localPlayer.ItemSlots;
+        await Helper.WaitUntil(() => localPlayer.ItemSlots[localPlayer.currentItemSlot] is HauntedMaskItem, cancellationToken);
+
+        for (ulong i = 0; i < amount; i++) {
+            hauntedMaskItem.CreateMimicServerRpc(targetPlayer.isInsideFactory, targetPlayer.transform.position);
+            await Task.Delay(100, cancellationToken);
+        }
     }
 }
