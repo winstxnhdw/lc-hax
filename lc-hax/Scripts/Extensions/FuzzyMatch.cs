@@ -8,13 +8,13 @@ static partial class Extensions {
     /// Find the longest common substring between two strings.
     /// </summary>
     /// <returns>the length of the longest common substring</returns>
-    static unsafe int LongestCommonSubstring(ReadOnlySpan<char> query, ReadOnlySpan<char> original) {
+    static int LongestCommonSubstring(ReadOnlySpan<char> query, ReadOnlySpan<char> original) {
         int originalLength = original.Length;
         int queryLength = query.Length;
         int longestSubstringLength = 0;
         int columns = originalLength + 1;
-        int* backingArray = stackalloc int[2 * columns];
-        Span2D<int> table = new(backingArray, 2, columns, 0);
+        Span<int> backingArray = stackalloc int[2 * columns];
+        Span2D<int> table = Span2D<int>.DangerousCreate(ref backingArray[0], 2, columns, 0);
 
         for (int i = 1; i <= queryLength; i++) {
             for (int j = 1; j <= originalLength; j++) {
