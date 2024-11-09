@@ -15,7 +15,7 @@ internal sealed class PossessionMod : MonoBehaviour {
 
     Possession Possession { get; } = new();
     GameObject? CharacterMovementInstance { get; set; } = null;
-    CharacterMovement? CharacterMovement { get; set; } = null;
+    public CharacterMovement? CharacterMovement { get; set; } = null;
     MousePan? MousePan { get; set; } = null;
 
     bool FirstUpdate { get; set; } = true;
@@ -40,7 +40,8 @@ internal sealed class PossessionMod : MonoBehaviour {
         { typeof(LassoManAI), new LassoManController() },
         { typeof(CrawlerAI), new CrawlerController() },
         { typeof(SandSpiderAI), new SandSpiderController() },
-        { typeof(RedLocustBees), new CircuitBeesController() }
+        { typeof(RedLocustBees), new CircuitBeesController() },
+        { typeof(RadMechAI), new RadMechEnemyController() }
     };
 
     float DoorCooldownRemaining { get; set; } = 0.0f;
