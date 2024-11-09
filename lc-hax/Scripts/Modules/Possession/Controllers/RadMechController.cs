@@ -6,10 +6,10 @@ class RadMechEnemyController : IEnemyController<RadMechAI> {
 
     public void Update(RadMechAI enemy, bool isAIControlled) {
         if (enemy.inFlyingMode || enemy.attemptingGrab) {
-            IsFiring = false;
+            this.IsFiring = false;
         }
-        if (enemy.aimingGun != IsFiring) {
-            enemy.SetAimingGun(IsFiring);
+        if (enemy.aimingGun != this.IsFiring) {
+            enemy.SetAimingGun(this.IsFiring);
         }
     }
     public void OnSecondarySkillHold(RadMechAI enemy) {
@@ -17,18 +17,18 @@ class RadMechEnemyController : IEnemyController<RadMechAI> {
             return;
         }
         if (enemy.focusedThreatTransform == null) {
-            enemy.CheckSightForThreat();
+            _ = enemy.CheckSightForThreat();
         }
         if (enemy.focusedThreatTransform != null) {
             enemy.SetBehaviourState(OldBirdState.ATTACKING);
-            IsFiring = true;
+            this.IsFiring = true;
         }
     }
     public void ReleaseSecondarySkill(RadMechAI enemy) {
         if (enemy.inFlyingMode) {
             return;
         }
-        IsFiring = false;
+        this.IsFiring = false;
         enemy.shootTimer = 0f;
         enemy.SetBehaviourState(OldBirdState.IDLE);
     }
