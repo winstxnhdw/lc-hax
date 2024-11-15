@@ -4,9 +4,9 @@
     ".NETStandard,Version=v2.1": {
       "CommunityToolkit.HighPerformance": {
         "type": "Direct",
-        "requested": "[8.4.0-preview1, )",
-        "resolved": "8.4.0-preview1",
-        "contentHash": "sBPEYBR5caBf/is+mbIENFK268Ta9Sxwf86Hb3iRAicvYZcVbkF3Ub9VRMfSsVIPN4bEPYmHWDZIrz5gBWkCmg==",
+        "requested": "[8.4.0-preview2, )",
+        "resolved": "8.4.0-preview2",
+        "contentHash": "2Pch/XScLp3031X9qB81UGxnlEEmsgtlHzVe8DGi/B0BAa2jTldhhb9PHAt1aSRq9c0lckyaDFhGaA15bv5e3g==",
         "dependencies": {
           "System.Runtime.CompilerServices.Unsafe": "6.0.0"
         }
