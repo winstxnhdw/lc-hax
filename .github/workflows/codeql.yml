@@ -9,7 +9,7 @@ on:
     - cron: '24 23 * * 0'
 
 env:
-  NUGET_PACKAGES: ${{ github.workspace }}/lc-hax/References/NuGet
+  NUGET_PACKAGES: ${{ github.workspace }}/.nuget/packages
 
 permissions:
   security-events: write
