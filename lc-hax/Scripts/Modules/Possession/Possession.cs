@@ -1,5 +1,5 @@
 class Possession() {
-    internal EnemyAI? Enemy { get => field.Unfake(); private set; } = null;
+    internal EnemyAI? Enemy { get; private set; } = null;
 
     internal bool IsPossessed => this.Enemy is not null;
 
