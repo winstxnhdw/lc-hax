@@ -1,6 +1,5 @@
 bin/
 obj/
-NuGet/
 .vs/
 .vscode/
 .mono/

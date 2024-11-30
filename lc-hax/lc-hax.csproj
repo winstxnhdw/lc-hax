@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
 
@@ -33,20 +33,15 @@
 
     <EmbeddedResource Include="$(NuGetPackageRoot)/lib.harmony/2.3.3/lib/net48/0Harmony.dll" />
 
-    <EmbeddedResource
-      Include="$(NuGetPackageRoot)/quickenshtein/1.5.1/lib/netstandard2.0/Quickenshtein.dll" />
+    <EmbeddedResource Include="$(NuGetPackageRoot)/quickenshtein/1.5.1/lib/netstandard2.0/Quickenshtein.dll" />
 
-    <EmbeddedResource
-      Include="$(NuGetPackageRoot)/system.memory/4.5.5/lib/netstandard2.0/System.Memory.dll" />
+    <EmbeddedResource Include="$(NuGetPackageRoot)/system.memory/4.5.5/lib/netstandard2.0/System.Memory.dll" />
 
-    <EmbeddedResource
-      Include="$(NuGetPackageRoot)/system.buffers/4.5.1/lib/netstandard2.0/System.Buffers.dll" />
+    <EmbeddedResource Include="$(NuGetPackageRoot)/system.buffers/4.5.1/lib/netstandard2.0/System.Buffers.dll" />
 
-    <EmbeddedResource
-      Include="$(NuGetPackageRoot)/system.runtime.compilerservices.unsafe/6.0.0/lib/netstandard2.0/System.Runtime.CompilerServices.Unsafe.dll" />
+    <EmbeddedResource Include="$(NuGetPackageRoot)/system.runtime.compilerservices.unsafe/6.0.0/lib/netstandard2.0/System.Runtime.CompilerServices.Unsafe.dll" />
 
-    <EmbeddedResource
-      Include="$(NuGetPackageRoot)/communitytoolkit.highperformance\8.4.0-preview2\lib\netstandard2.1/CommunityToolkit.HighPerformance.dll" />
+    <EmbeddedResource Include="$(NuGetPackageRoot)/communitytoolkit.highperformance/8.4.0-preview2/lib/netstandard2.1/CommunityToolkit.HighPerformance.dll" />
 
   </ItemGroup>
 
