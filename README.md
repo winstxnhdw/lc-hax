@@ -104,7 +104,7 @@ The complete feature set includes the following.
 | Teleport back to ship         | `/home <player?>`                                |
 | Teleport enemies to player    | `/mob <player>`                                  |
 | Inverse teleport a player     | `/random <player>`                               |
-| Play noise on player          | `/noise <player> <duration=30>`                  |
+| Play virtual noise on player  | `/noise <player> <duration=30>`                  |
 | Bomb player                   | `/bomb <player>`                                 |
 | Bombard player                | `/bombard <player>`                              |
 | Lure enemies to player        | `/hate <player>`                                 |
