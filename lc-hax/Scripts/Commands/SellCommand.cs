@@ -1,7 +1,8 @@
-using System.Threading;
-using System.Threading.Tasks;
 using System;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
+using CommunityToolkit.HighPerformance;
 using GameNetcodeStuff;
 
 [Command("sell")]
@@ -26,21 +27,24 @@ class SellCommand : ICommand {
     /// The actual scrap value can be lower than the displayed value due to the company buying rate.
     /// </summary>
     /// <returns>the remaining amount left to reach the target value</returns>
-    ulong SellScrapValue(PlayerControllerB player, ulong targetValue, float currentWeight) {
+    int SellScrapValue(PlayerControllerB player, int targetValue, float currentWeight) {
         ReadOnlySpan<GrabbableObject> sellableScraps = Helper.Grabbables.WhereIsNotNull().Where(this.CanBeSold).ToArray();
 
         int sellableScrapsCount = sellableScraps.Length;
-        ulong actualTargetValue = unchecked((ulong)(targetValue * player.playersManager.companyBuyingRate));
-        ulong[,] table = new ulong[sellableScrapsCount + 1, targetValue + 1];
+        int actualTargetValue = unchecked((int)(targetValue * player.playersManager.companyBuyingRate));
+        int columns = actualTargetValue + 1;
+        int rows = sellableScrapsCount + 1;
+        Span<int> backingArray = stackalloc int[rows * columns];
+        Span2D<int> table = Span2D<int>.DangerousCreate(ref backingArray[0], rows, columns, 0);
 
         for (int i = 0; i <= sellableScrapsCount; i++) {
-            for (ulong w = 0; w <= actualTargetValue; w++) {
+            for (int w = 0; w <= actualTargetValue; w++) {
                 if (i is 0 || w is 0) {
                     table[i, w] = 0;
                     continue;
                 }
 
-                ulong scrapValue = unchecked((ulong)sellableScraps[i - 1].scrapValue);
+                int scrapValue = sellableScraps[i - 1].scrapValue;
 
                 table[i, w] = scrapValue <= w
                     ? Math.Max(scrapValue + table[i - 1, w - scrapValue], table[i - 1, w])
@@ -48,15 +52,15 @@ class SellCommand : ICommand {
             }
         }
 
-        ulong result = table[sellableScrapsCount, targetValue];
-        ulong remainingValue = actualTargetValue;
+        int result = table[sellableScrapsCount, targetValue];
+        int remainingValue = actualTargetValue;
 
         for (int i = sellableScrapsCount; i > 0 && result > 0; i--) {
             if (result == table[i - 1, remainingValue]) continue;
 
             GrabbableObject grabbable = sellableScraps[i - 1];
             this.SellObject(player, grabbable, currentWeight);
-            ulong scrapValue = unchecked((ulong)grabbable.scrapValue);
+            int scrapValue = grabbable.scrapValue;
             result -= scrapValue;
             remainingValue -= scrapValue;
         }
@@ -88,7 +92,7 @@ class SellCommand : ICommand {
             return;
         }
 
-        ulong result = this.SellScrapValue(player, targetValue, currentWeight);
+        int result = this.SellScrapValue(player, targetValue, currentWeight);
         Chat.Print($"Remaining scrap value to reach target is {result}!");
     }
 }
