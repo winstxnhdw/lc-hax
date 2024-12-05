@@ -28,7 +28,7 @@ jobs:
           token: ${{ secrets.PAT }}
 
       - name: Cache .NET tools
-        uses: actions/cache@v4.1.2
+        uses: actions/cache@v4.2.0
         with:
           path: ~/.nuget/packages
           key: dotnet-tools-${{ runner.os }}-${{ hashFiles('.config/dotnet-tools.json') }}
