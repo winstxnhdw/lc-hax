@@ -1,6 +1,9 @@
 {
 	"extends": ["github>winstxnhdw/renovate"],
 	"nuget": {
-		"registryUrls": ["https://nuget.bepinex.dev/v3/index.json"]
+		"registryUrls": [
+			"https://api.nuget.org/v3/index.json",
+			"https://nuget.bepinex.dev/v3/index.json"
+		]
 	}
 }
