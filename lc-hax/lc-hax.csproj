@@ -29,7 +29,7 @@
 
     <PackageReference Include="CommunityToolkit.HighPerformance" Version="8.4.0" />
 
-    <PackageReference Include="Lib.Harmony" Version="2.3.3" />
+    <PackageReference Include="Lib.Harmony" Version="2.3.5" />
 
     <EmbeddedResource Include="$(NuGetPackageRoot)/lib.harmony/2.3.3/lib/net48/0Harmony.dll" />
 
