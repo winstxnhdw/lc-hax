@@ -31,7 +31,7 @@
 
     <PackageReference Include="Lib.Harmony" Version="2.3.5" />
 
-    <EmbeddedResource Include="$(NuGetPackageRoot)/lib.harmony/2.3.3/lib/net48/0Harmony.dll" />
+    <EmbeddedResource Include="$(NuGetPackageRoot)/lib.harmony/2.3.5/lib/net48/0Harmony.dll" />
 
     <EmbeddedResource Include="$(NuGetPackageRoot)/quickenshtein/1.5.1/lib/netstandard2.0/Quickenshtein.dll" />
 
