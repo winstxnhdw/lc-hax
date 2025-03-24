@@ -20,7 +20,7 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        uses: actions/checkout@v4.2.2
         with:
           show-progress: false
           repository: ${{ github.event.pull_request.head.repo.full_name }}
@@ -28,14 +28,14 @@ jobs:
           token: ${{ secrets.PAT }}
 
       - name: Cache .NET tools
-        uses: actions/cache@d4323d4df104b026a6aa633fdb11d772146be0bf # v4.2.2
+        uses: actions/cache@v4.2.3
         with:
           path: ~/.nuget/packages
           key: dotnet-tools-${{ runner.os }}-${{ hashFiles('.config/dotnet-tools.json') }}
           restore-keys: dotnet-tools-${{ runner.os }}-
 
       - name: Setup .NET
-        uses: actions/setup-dotnet@3951f0dfe7a07e2313ec93c75700083e2005cbab # v4.3.0
+        uses: actions/setup-dotnet@v4.3.0
         with:
           dotnet-version: 8.0.x
 
