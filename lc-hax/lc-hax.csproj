@@ -19,7 +19,7 @@
 
     <ProjectReference Include="..\analysers\analysers.csproj" />
 
-    <PackageReference Include="LethalCompany.GameLibs.Steam" Version="67.0.0-ngd.0" />
+    <PackageReference Include="LethalCompany.GameLibs.Steam" Version="69.0.1-ngd.0" />
 
     <PackageReference Include="Nullable.Extended.Analyzer" Version="1.15.6495" />
 
