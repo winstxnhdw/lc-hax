@@ -57,12 +57,12 @@ sealed class FollowMod : MonoBehaviour {
         this.DeviateTimer -= Time.deltaTime;
         this.AnimationBroadcastTimer -= Time.deltaTime;
 
-        int[] animationStates =
-            targetPlayer.playerBodyAnimator
-                  .layerCount
-                  .Range()
-                  .Select(i => targetPlayer.playerBodyAnimator.GetCurrentAnimatorStateInfo(i).fullPathHash)
-                  .ToArray();
+        int[] animationStates = [
+            ..targetPlayer.playerBodyAnimator
+                          .layerCount
+                          .Range()
+                          .Select(i => targetPlayer.playerBodyAnimator.GetCurrentAnimatorStateInfo(i).fullPathHash)
+        ];
 
         this.PlayerStates.Enqueue(new CopiedStates {
             position = targetPlayer.thisPlayerBody.position.Copy(),

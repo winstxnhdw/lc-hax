@@ -1,8 +1,8 @@
-using UnityEngine;
-using GameNetcodeStuff;
 using System.Linq;
 using System.Runtime.CompilerServices;
+using GameNetcodeStuff;
 using Unity.Netcode;
+using UnityEngine;
 
 static partial class Helper {
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -27,7 +27,7 @@ static partial class Helper {
 
     internal static PlayerControllerB[] Players => Helper.StartOfRound?.allPlayerScripts ?? [];
 
-    internal static PlayerControllerB[] ActivePlayers => Helper.Players.Where(player => player.isPlayerControlled && !player.isPlayerDead).ToArray();
+    internal static PlayerControllerB[] ActivePlayers => [.. Helper.Players.Where(player => player.isPlayerControlled && !player.isPlayerDead)];
 
     internal static PlayerControllerB? GetPlayer(string? playerNameOrId) {
         if (string.IsNullOrEmpty(playerNameOrId)) return null;

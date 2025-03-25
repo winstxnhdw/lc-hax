@@ -23,6 +23,8 @@ jobs:
     steps:
     - name: Checkout repository
       uses: actions/checkout@v4.2.2
+      with:
+        show-progress: false
 
     - name: Initialise CodeQL
       uses: github/codeql-action/init@v3.28.11
@@ -32,7 +34,7 @@ jobs:
     - name: Setup .NET
       uses: actions/setup-dotnet@v4.3.0
       with:
-        dotnet-version: 8.0.x
+        dotnet-version: 9.x
         cache: true
         cache-dependency-path: lc-hax/packages.lock.json
 

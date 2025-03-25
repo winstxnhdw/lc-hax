@@ -28,7 +28,7 @@ class SellCommand : ICommand {
     /// </summary>
     /// <returns>the remaining amount left to reach the target value</returns>
     int SellScrapValue(PlayerControllerB player, int targetValue, float currentWeight) {
-        ReadOnlySpan<GrabbableObject> sellableScraps = Helper.Grabbables.WhereIsNotNull().Where(this.CanBeSold).ToArray();
+        ReadOnlySpan<GrabbableObject> sellableScraps = [.. Helper.Grabbables.WhereIsNotNull().Where(this.CanBeSold)];
 
         int sellableScrapsCount = sellableScraps.Length;
         int actualTargetValue = unchecked((int)(targetValue * player.playersManager.companyBuyingRate));

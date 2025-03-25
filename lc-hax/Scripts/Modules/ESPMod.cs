@@ -147,25 +147,22 @@ sealed class ESPMod : MonoBehaviour {
 
     void ToggleESP() => this.Enabled = !this.Enabled;
 
-    Renderer[] GetRenderers<T>() where T : Component =>
-        Helper.FindObjects<T>()
-              .Select(obj => obj.GetComponent<Renderer>())
-              .ToArray();
+    Renderer[] GetRenderers<T>() where T : Component => [
+        .. Helper.FindObjects<T>().Select(obj => obj.GetComponent<Renderer>())
+    ];
 
     void InitialiseRenderers() {
-        this.PlayerRenderers = Helper.Players.Select(player =>
-            new RendererPair<PlayerControllerB, SkinnedMeshRenderer>() {
-                GameObject = player,
-                Renderer = player.thisPlayerModel
-            }
-        ).ToArray();
+        this.PlayerRenderers = [..Helper.Players.Select(player => new RendererPair<PlayerControllerB, SkinnedMeshRenderer>() {
+            GameObject = player,
+            Renderer = player.thisPlayerModel
+        })];
 
         this.LandmineRenderers = this.GetRenderers<Landmine>();
         this.TurretRenderers = this.GetRenderers<Turret>();
         this.EntranceRenderers = this.GetRenderers<EntranceTeleport>();
     }
 
-    void InitialiseCoordinates() => this.StoryLogVectors = Helper.FindObjects<StoryLog>().Select(log => log.transform.position).ToArray();
+    void InitialiseCoordinates() => this.StoryLogVectors = [.. Helper.FindObjects<StoryLog>().Select(log => log.transform.position)];
 
     Size GetRendererSize(Bounds bounds, Camera camera) {
         ReadOnlySpan<Vector3> corners = [

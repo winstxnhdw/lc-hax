@@ -6,11 +6,9 @@ using Unity.Netcode;
 using UnityEngine;
 
 static partial class Helper {
-    internal static HashSet<EnemyAI> Enemies { get; } = Helper.StartOfRound is not { inShipPhase: false } ? [] :
-        Helper.FindObjects<EnemyAI>()
-              .WhereIsNotNull()
-              .Where(enemy => enemy.IsSpawned)
-              .ToHashSet();
+    internal static HashSet<EnemyAI> Enemies { get; } = Helper.StartOfRound is { inShipPhase: false }
+        ? [.. Helper.FindObjects<EnemyAI>().WhereIsNotNull().Where(enemy => enemy.IsSpawned)]
+        : [];
 
     internal static T? GetEnemy<T>() where T : EnemyAI => Helper.Enemies.First(enemy => enemy is T) as T;
 

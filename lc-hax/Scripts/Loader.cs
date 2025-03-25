@@ -1,9 +1,9 @@
 using System;
 using System.IO;
-using System.Reflection;
-using UnityEngine;
-using HarmonyLib;
 using System.Linq;
+using System.Reflection;
+using HarmonyLib;
+using UnityEngine;
 
 namespace Hax;
 
@@ -17,11 +17,7 @@ class Loader : MonoBehaviour {
 
     static void LoadLibraries() {
         Assembly assembly = Assembly.GetExecutingAssembly();
-
-        ReadOnlySpan<string> resourceNames =
-            assembly.GetManifestResourceNames()
-                    .Where(name => name.EndsWith(".dll"))
-                    .ToArray();
+        ReadOnlySpan<string> resourceNames = [.. assembly.GetManifestResourceNames().Where(name => name.EndsWith(".dll"))];
 
         foreach (string resourceName in resourceNames) {
             using Stream stream = assembly.GetManifestResourceStream(resourceName);

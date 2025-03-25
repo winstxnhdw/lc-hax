@@ -1,10 +1,10 @@
-using System.Threading;
-using System.Threading.Tasks;
-using System.Linq;
 using System.Collections;
 using System.Collections.Generic;
-using UnityEngine;
+using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 using GameNetcodeStuff;
+using UnityEngine;
 
 [Command("grab")]
 class GrabCommand : ICommand {
@@ -25,11 +25,9 @@ class GrabCommand : ICommand {
     }
 
     string GrabAllItems(PlayerControllerB player, Vector3 currentPlayerPosition) {
-        GrabbableObject[] grabbables =
-            Helper.Grabbables
-                .WhereIsNotNull()
-                .Where(grabbable => this.CanGrabItem(grabbable, currentPlayerPosition))
-                .ToArray();
+        GrabbableObject[] grabbables = [
+            .. Helper.Grabbables.WhereIsNotNull().Where(grabbable => this.CanGrabItem(grabbable, currentPlayerPosition))
+        ];
 
         Helper.CreateComponent<AsyncBehaviour>()
               .Init(() => this.GrabAllItemsAsync(player, grabbables));
