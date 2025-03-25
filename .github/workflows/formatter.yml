@@ -18,7 +18,7 @@ permissions:
 
 jobs:
   format:
-    runs-on: ubuntu-latest
+    runs-on: windows-latest
 
     steps:
       - name: Checkout repository
@@ -38,7 +38,7 @@ jobs:
       - name: Setup .NET
         uses: actions/setup-dotnet@v4.3.0
         with:
-          dotnet-version: 8.0.x
+          dotnet-version: 9.x
 
       - name: Restore tools
         run: dotnet tool restore
