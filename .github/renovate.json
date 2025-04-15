@@ -1,17 +1,3 @@
 {
-	"extends": ["github>winstxnhdw/renovate"],
-	"packageRules": [
-		{
-			"matchDatasources": ["nuget"],
-			"registryUrls": [
-				"https://api.nuget.org/v3/index.json",
-				"https://nuget.bepinex.dev/v3/index.json"
-			]
-		},
-		{
-			"matchDatasources": ["nuget"],
-			"matchPackageNames": ["LethalCompany.GameLibs.Steam"],
-			"ignoreUnstable": false
-		}
-	]
+	"extends": ["github>winstxnhdw/renovate"]
 }
