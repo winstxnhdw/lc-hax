@@ -1,9 +1,9 @@
-using System.Linq;
 using System.Collections.Immutable;
+using System.Linq;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
-using Microsoft.CodeAnalysis.Diagnostics;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
+using Microsoft.CodeAnalysis.Diagnostics;
 
 [DiagnosticAnalyzer(LanguageNames.CSharp)]
 class PatchAnalyser : DiagnosticAnalyzer {

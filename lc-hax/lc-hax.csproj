@@ -10,6 +10,7 @@
     <TargetFramework>netstandard2.1</TargetFramework>
     <RootNamespace>lc-hax</RootNamespace>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <EnableNETAnalyzers>true</EnableNETAnalyzers>
     <EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
     <RestorePackagesWithLockFile>true</RestorePackagesWithLockFile>
 
@@ -17,7 +18,7 @@
 
   <ItemGroup>
 
-    <ProjectReference Include="..\analysers\analysers.csproj" />
+    <ProjectReference Include="..\analysers\analysers.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="false" />
 
     <PackageReference Include="LethalCompany.GameLibs.Steam" Version="69.0.1-ngd.0" />
 

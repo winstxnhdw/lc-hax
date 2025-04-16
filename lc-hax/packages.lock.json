@@ -305,6 +305,12 @@
           "Microsoft.CodeAnalysis.CSharp.Workspaces": "[4.11.0, )",
           "Microsoft.CodeAnalysis.Common": "[4.11.0, )"
         }
+      },
+      "codefixers": {
+        "type": "Project",
+        "dependencies": {
+          "Microsoft.CodeAnalysis.CSharp.Workspaces": "[4.11.0, )"
+        }
       }
     },
     ".NETStandard,Version=v2.1/win-x64": {}
