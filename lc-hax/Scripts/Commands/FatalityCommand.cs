@@ -1,7 +1,7 @@
-using System.Threading;
-using System.Threading.Tasks;
 using System;
 using System.Collections.Generic;
+using System.Threading;
+using System.Threading.Tasks;
 using GameNetcodeStuff;
 
 [Command("fatality")]
@@ -11,7 +11,7 @@ class FatalityCommand : ICommand {
     /// Teleporting certain enemies outside of the factory can lag the user, so this burden is passed to the target player.
     /// </summary>
     /// <returns>true if the enemy was successfully teleported and the fatality was performed</returns>
-    bool HandleEnemy<T>(PlayerControllerB targetPlayer, Action<PlayerControllerB, T> enemyHandler) where T : EnemyAI {
+    static bool HandleEnemy<T>(PlayerControllerB targetPlayer, Action<PlayerControllerB, T> enemyHandler) where T : EnemyAI {
         if (Helper.LocalPlayer is not PlayerControllerB localPlayer || Helper.GetEnemy<T>() is not T enemy) {
             return false;
         }
@@ -57,14 +57,14 @@ class FatalityCommand : ICommand {
         }
 
         Dictionary<string, Func<bool>> enemyHandlers = new() {
-            { "Forest Giant", () => this.HandleEnemy<ForestGiantAI>(targetPlayer, this.GiantFatality) },
-            { "Jester",       () => this.HandleEnemy<JesterAI>(targetPlayer, this.JesterFatality) },
-            { "Masked",       () => this.HandleEnemy<MaskedPlayerEnemy>(targetPlayer, this.MaskedFatality) },
-            { "Baboon Hawk",  () => this.HandleEnemy<BaboonBirdAI>(targetPlayer, this.BaboonHawkFatality) },
-            { "Circuit Bees", () => this.HandleEnemy<RedLocustBees>(targetPlayer, this.BeesFatality) },
-            { "Eyeless Dog",  () => this.HandleEnemy<MouthDogAI>(targetPlayer, this.EyelessDogFatality) },
-            { "Bracken",      () => this.HandleEnemy<FlowermanAI>(targetPlayer, this.BrackenFatality) },
-            { "Nutcracker",   () => this.HandleEnemy<NutcrackerEnemyAI>(targetPlayer, this.NutcrackerFatality) }
+            { "Forest Giant", () => FatalityCommand.HandleEnemy<ForestGiantAI>(targetPlayer, this.GiantFatality) },
+            { "Jester",       () => FatalityCommand.HandleEnemy<JesterAI>(targetPlayer, this.JesterFatality) },
+            { "Masked",       () => FatalityCommand.HandleEnemy<MaskedPlayerEnemy>(targetPlayer, this.MaskedFatality) },
+            { "Baboon Hawk",  () => FatalityCommand.HandleEnemy<BaboonBirdAI>(targetPlayer, this.BaboonHawkFatality) },
+            { "Circuit Bees", () => FatalityCommand.HandleEnemy<RedLocustBees>(targetPlayer, this.BeesFatality) },
+            { "Eyeless Dog",  () => FatalityCommand.HandleEnemy<MouthDogAI>(targetPlayer, this.EyelessDogFatality) },
+            { "Bracken",      () => FatalityCommand.HandleEnemy<FlowermanAI>(targetPlayer, this.BrackenFatality) },
+            { "Nutcracker",   () => FatalityCommand.HandleEnemy<NutcrackerEnemyAI>(targetPlayer, this.NutcrackerFatality) }
         };
 
         if (!string.Join(" ", args[1..]).ToTitleCase().FuzzyMatch(enemyHandlers.Keys, out string key)) {

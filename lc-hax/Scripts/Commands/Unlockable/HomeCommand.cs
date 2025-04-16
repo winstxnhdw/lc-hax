@@ -1,18 +1,18 @@
+using System;
 using System.Threading;
 using System.Threading.Tasks;
-using System;
 using GameNetcodeStuff;
 
 [Command("home")]
 class HomeCommand : ITeleporter, ICommand {
-    ShipTeleporter? Teleporter => Helper.ShipTeleporters.First(
+    static ShipTeleporter? Teleporter => Helper.ShipTeleporters.First(
         teleporter => teleporter is not null && !teleporter.isInverseTeleporter
     );
 
-    Action TeleportPlayerToBaseLater(PlayerControllerB targetPlayer) => () => {
+    static Action TeleportPlayerToBaseLater(PlayerControllerB targetPlayer) => () => {
         HaxObjects.Instance?.ShipTeleporters?.Renew();
 
-        if (this.Teleporter is not ShipTeleporter teleporter) {
+        if (HomeCommand.Teleporter is not ShipTeleporter teleporter) {
             Chat.Print("ShipTeleporter not found!");
             return;
         }
@@ -36,6 +36,6 @@ class HomeCommand : ITeleporter, ICommand {
             return;
         }
 
-        this.PrepareToTeleport(this.TeleportPlayerToBaseLater(targetPlayer));
+        this.PrepareToTeleport(HomeCommand.TeleportPlayerToBaseLater(targetPlayer));
     }
 }

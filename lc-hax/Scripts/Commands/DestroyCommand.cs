@@ -7,7 +7,7 @@ using UnityEngine;
 
 [Command("destroy")]
 class DestroyCommand : ICommand {
-    IEnumerator DestroyAllItemsAsync(PlayerControllerB player) {
+    static IEnumerator DestroyAllItemsAsync(PlayerControllerB player) {
         float currentWeight = player.carryWeight;
 
         foreach (GrabbableObject grabbable in Helper.Grabbables.ToArray()) {
@@ -19,7 +19,7 @@ class DestroyCommand : ICommand {
         player.carryWeight = currentWeight;
     }
 
-    Result DestroyHeldItem(PlayerControllerB player) {
+    static Result DestroyHeldItem(PlayerControllerB player) {
         if (player.currentlyHeldObjectServer is null) {
             return new Result { Message = "You are not holding anything!" };
         }
@@ -28,9 +28,9 @@ class DestroyCommand : ICommand {
         return new Result { Success = true };
     }
 
-    Result DestroyAllItems(PlayerControllerB player) {
+    static Result DestroyAllItems(PlayerControllerB player) {
         Helper.CreateComponent<AsyncBehaviour>()
-              .Init(() => this.DestroyAllItemsAsync(player));
+              .Init(() => DestroyCommand.DestroyAllItemsAsync(player));
 
         return new Result { Success = true };
     }
@@ -44,8 +44,8 @@ class DestroyCommand : ICommand {
         }
 
         Result result = args[0] switch {
-            null => this.DestroyHeldItem(player),
-            "--all" => this.DestroyAllItems(player),
+            null => DestroyCommand.DestroyHeldItem(player),
+            "--all" => DestroyCommand.DestroyAllItems(player),
             _ => new Result { Message = "Invalid arguments!" }
         };
 

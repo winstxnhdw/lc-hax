@@ -1,7 +1,7 @@
 using UnityEngine;
 
 sealed class MinimalGUIMod : MonoBehaviour {
-    bool InGame { get; set; } = false;
+    bool InGame { get; set; }
 
     void OnEnable() {
         GameListener.OnGameStart += this.ToggleInGame;

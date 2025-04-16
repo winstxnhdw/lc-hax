@@ -6,12 +6,12 @@ using GameNetcodeStuff;
 class KillCommand : ICommand {
     bool EnableGodMode { get; set; }
 
-    Result KillSelf() {
+    static Result KillSelf() {
         Helper.LocalPlayer?.KillPlayer();
         return new Result { Success = true };
     }
 
-    Result KillTargetPlayer(string[] args) {
+    static Result KillTargetPlayer(string[] args) {
         if (Helper.GetActivePlayer(args[0]) is not PlayerControllerB targetPlayer) {
             return new Result { Message = "Target player is not alive or found!" };
         }
@@ -20,24 +20,24 @@ class KillCommand : ICommand {
         return new Result { Success = true };
     }
 
-    Result KillAllPlayers() {
+    static Result KillAllPlayers() {
         Helper.Players?.ForEach(player => player.KillPlayer());
         return new Result { Success = true };
     }
 
-    Result KillAllEnemies() {
+    static Result KillAllEnemies() {
         Helper.Enemies.ForEach(Helper.Kill);
         return new Result { Success = true };
     }
 
-    void HandleResult(Result result) {
+    static void HandleResult(Result result) {
         if (result.Success) return;
         Chat.Print(result.Message);
     }
 
     public async Task Execute(string[] args, CancellationToken cancellationToken) {
         if (args.Length is 0) {
-            this.HandleResult(this.KillSelf());
+            KillCommand.HandleResult(KillSelf());
             return;
         }
 
@@ -45,12 +45,12 @@ class KillCommand : ICommand {
         Setting.EnableGodMode = false;
 
         Result result = args[0] switch {
-            "--all" => this.KillAllPlayers(),
-            "--enemy" => this.KillAllEnemies(),
-            _ => this.KillTargetPlayer(args)
+            "--all" => KillCommand.KillAllPlayers(),
+            "--enemy" => KillCommand.KillAllEnemies(),
+            _ => KillCommand.KillTargetPlayer(args)
         };
 
         Helper.ShortDelay(() => Setting.EnableGodMode = this.EnableGodMode);
-        this.HandleResult(result);
+        KillCommand.HandleResult(result);
     }
 }

@@ -5,7 +5,7 @@ using UnityEngine;
 
 [Command("noise")]
 class NoiseCommand : ICommand {
-    async Task PlayNoiseContinuously(PlayerControllerB player, float duration, CancellationToken cancellationToken) {
+    static async Task PlayNoiseContinuously(PlayerControllerB player, float duration, CancellationToken cancellationToken) {
         float startTime = Time.time;
 
         while (Time.time - startTime < duration && !cancellationToken.IsCancellationRequested) {
@@ -32,6 +32,6 @@ class NoiseCommand : ICommand {
             return;
         }
 
-        await this.PlayNoiseContinuously(player, duration, cancellationToken);
+        await NoiseCommand.PlayNoiseContinuously(player, duration, cancellationToken);
     }
 }

@@ -1,6 +1,6 @@
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Collections.Generic;
 using GameNetcodeStuff;
 using UnityEngine;
 
@@ -8,7 +8,7 @@ using UnityEngine;
 class MuteCommand : ICommand {
     static Dictionary<string, TransientBehaviour> MutedPlayers { get; } = [];
 
-    bool MutedPlayerHasMessaged(string playerUsername) =>
+    static bool MutedPlayerHasMessaged(string playerUsername) =>
         Helper.HUDManager?.ChatMessageHistory.First(message =>
             message.StartsWith($"<color=#FF0000>{playerUsername}<color>: <color=#FFFF00>'"
         )) is not null;
@@ -32,7 +32,7 @@ class MuteCommand : ICommand {
         }
 
         TransientBehaviour playerMuterObject = Helper.CreateComponent<TransientBehaviour>().Init(_ => {
-            if (!this.MutedPlayerHasMessaged(player.playerUsername)) return;
+            if (!MuteCommand.MutedPlayerHasMessaged(player.playerUsername)) return;
             Chat.Clear();
         }, 10000.0f);
 

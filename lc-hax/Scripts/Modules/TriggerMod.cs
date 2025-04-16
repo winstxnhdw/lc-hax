@@ -1,11 +1,11 @@
-using UnityEngine;
 using GameNetcodeStuff;
+using UnityEngine;
 
 sealed class TriggerMod : MonoBehaviour, IEnemyPrompter {
     RaycastHit[] RaycastHits { get; set; } = new RaycastHit[100];
 
-    bool UsingInteractRay { get; set; } = false;
-    bool UsingFollowRay { get; set; } = false;
+    bool UsingInteractRay { get; set; }
+    bool UsingFollowRay { get; set; }
 
     void OnEnable() {
         InputListener.OnMiddleButtonPress += this.Fire;

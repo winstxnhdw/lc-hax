@@ -6,7 +6,7 @@ class KeyboardMovement : MonoBehaviour {
     float SprintMultiplier { get; set; } = 1;
 
     internal Vector3 LastPosition { get; set; }
-    internal bool IsPaused { get; set; } = false;
+    internal bool IsPaused { get; set; }
 
     void OnEnable() => this.LastPosition = this.transform.position;
 

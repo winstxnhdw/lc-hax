@@ -2,9 +2,9 @@ using GameNetcodeStuff;
 using UnityEngine;
 
 sealed class PhantomMod : MonoBehaviour {
-    bool IsShiftHeld { get; set; } = false;
-    bool EnabledPossession { get; set; } = false;
-    int CurrentSpectatorIndex { get; set; } = 0;
+    bool IsShiftHeld { get; set; }
+    bool EnabledPossession { get; set; }
+    int CurrentSpectatorIndex { get; set; }
 
     void OnEnable() {
         InputListener.OnShiftButtonHold += this.HoldShift;
@@ -76,7 +76,7 @@ sealed class PhantomMod : MonoBehaviour {
         keyboard.LastPosition = targetPlayer.playerEye.position;
     }
 
-    void PhantomEnabled(Camera camera) {
+    static void PhantomEnabled(Camera camera) {
         if (!camera.TryGetComponent(out KeyboardMovement keyboard)) {
             keyboard = camera.gameObject.AddComponent<KeyboardMovement>();
         }
@@ -136,7 +136,7 @@ sealed class PhantomMod : MonoBehaviour {
         player.isFreeCamera = Setting.EnablePhantom;
 
         if (Setting.EnablePhantom) {
-            this.PhantomEnabled(camera);
+            PhantomMod.PhantomEnabled(camera);
         }
 
         else {

@@ -5,7 +5,7 @@ using UnityEngine;
 
 [Command("heal")]
 class HealCommand : ICommand, IStun {
-    void RespawnLocalPlayer(PlayerControllerB localPlayer, StartOfRound startOfRound, HUDManager hudManager) {
+    static void RespawnLocalPlayer(PlayerControllerB localPlayer, StartOfRound startOfRound, HUDManager hudManager) {
         if (Helper.SoundManager is not SoundManager soundManager) return;
 
         startOfRound.allPlayersDead = false;
@@ -82,9 +82,9 @@ class HealCommand : ICommand, IStun {
         occludeAudio.overridingLowPass = false;
     }
 
-    PlayerControllerB HealLocalPlayer(HUDManager hudManager) {
+    static PlayerControllerB HealLocalPlayer(HUDManager hudManager) {
         if (!hudManager.localPlayer.isPlayerControlled) {
-            this.RespawnLocalPlayer(hudManager.localPlayer, hudManager.localPlayer.playersManager, hudManager);
+            HealCommand.RespawnLocalPlayer(hudManager.localPlayer, hudManager.localPlayer.playersManager, hudManager);
 
             Helper.CreateComponent<WaitForBehaviour>("Respawn")
                   .SetPredicate(() => hudManager.localPlayer.playersManager.shipIsLeaving)
@@ -103,7 +103,7 @@ class HealCommand : ICommand, IStun {
         return hudManager.localPlayer;
     }
 
-    PlayerControllerB? HealPlayer(string? playerNameOrId) {
+    static PlayerControllerB? HealPlayer(string? playerNameOrId) {
         PlayerControllerB? targetPlayer = Helper.GetActivePlayer(playerNameOrId);
         targetPlayer?.HealPlayer();
 
@@ -114,8 +114,8 @@ class HealCommand : ICommand, IStun {
         if (Helper.HUDManager is not HUDManager hudManager) return;
 
         PlayerControllerB? healedPlayer = args.Length switch {
-            0 => this.HealLocalPlayer(hudManager),
-            _ => this.HealPlayer(args[0])
+            0 => HealCommand.HealLocalPlayer(hudManager),
+            _ => HealCommand.HealPlayer(args[0])
         };
 
         if (healedPlayer is null) {

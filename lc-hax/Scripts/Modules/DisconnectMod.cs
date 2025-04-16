@@ -1,9 +1,9 @@
 using System.Text.RegularExpressions;
-using UnityEngine;
 using Steamworks;
+using UnityEngine;
 
 sealed class DisconnectMod : MonoBehaviour {
-    bool IsShiftHeld { get; set; } = false;
+    bool IsShiftHeld { get; set; }
 
     void OnEnable() {
         InputListener.OnShiftButtonHold += this.HoldShift;
@@ -19,7 +19,7 @@ sealed class DisconnectMod : MonoBehaviour {
 
     void HoldShift(bool isHeld) => this.IsShiftHeld = isHeld;
 
-    SteamId? GetSteamIdFromClipboard() {
+    static SteamId? GetSteamIdFromClipboard() {
         string clipboardText = GUIUtility.systemCopyBuffer;
 
         return !string.IsNullOrWhiteSpace(clipboardText) && Regex.IsMatch(clipboardText, @"^\d{17}$")
@@ -37,7 +37,7 @@ sealed class DisconnectMod : MonoBehaviour {
 
     void TryToConnect() {
         if (!this.IsShiftHeld) return;
-        if (this.GetSteamIdFromClipboard() is SteamId playerSteamId) {
+        if (DisconnectMod.GetSteamIdFromClipboard() is SteamId playerSteamId) {
             Helper.GameNetworkManager?.StartClient(playerSteamId);
         }
 

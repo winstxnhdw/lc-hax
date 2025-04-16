@@ -6,7 +6,7 @@ enum SnareFleaState {
 }
 
 class SnareFleaController : IEnemyController<CentipedeAI> {
-    bool IsClingingToSomething(CentipedeAI enemy) {
+    static bool IsClingingToSomething(CentipedeAI enemy) {
         Reflector<CentipedeAI> centipedeReflector = enemy.Reflect();
 
         return enemy.clingingToPlayer is not null || enemy.inSpecialAnimation ||
@@ -22,14 +22,14 @@ class SnareFleaController : IEnemyController<CentipedeAI> {
     }
 
     public void UseSecondarySkill(CentipedeAI enemy) {
-        if (this.IsClingingToSomething(enemy)) return;
+        if (SnareFleaController.IsClingingToSomething(enemy)) return;
         _ = enemy.Reflect().InvokeInternalMethod("RaycastToCeiling");
         enemy.SetBehaviourState(SnareFleaState.HIDING);
     }
 
-    public bool IsAbleToMove(CentipedeAI enemy) => !this.IsClingingToSomething(enemy);
+    public bool IsAbleToMove(CentipedeAI enemy) => !IsClingingToSomething(enemy);
 
-    public bool IsAbleToRotate(CentipedeAI enemy) => !this.IsClingingToSomething(enemy);
+    public bool IsAbleToRotate(CentipedeAI enemy) => !IsClingingToSomething(enemy);
 
     public string GetPrimarySkillName(CentipedeAI _) => "Drop";
 

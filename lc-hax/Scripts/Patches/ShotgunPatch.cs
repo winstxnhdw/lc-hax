@@ -5,7 +5,7 @@ using HarmonyLib;
 
 [HarmonyPatch(typeof(ShotgunItem))]
 class ShotgunPatch {
-    static bool InterruptDestroyItem { get; set; } = false;
+    static bool InterruptDestroyItem { get; set; }
 
     /// <summary>
     /// Prevents the shotgun from consuming ammo when firing

@@ -47,7 +47,7 @@ class Loader : MonoBehaviour {
 
         catch (Exception exception) {
             Logger.Write(exception.ToString());
-            throw exception;
+            throw;
         }
     }
 

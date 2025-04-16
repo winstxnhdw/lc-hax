@@ -1,7 +1,7 @@
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Linq;
-using System.Collections.Generic;
 using UnityEngine;
 
 enum BuyableItemType {
@@ -18,7 +18,7 @@ readonly record struct BuyableItem {
 class BuyCommand : ICommand {
     static Dictionary<string, BuyableItem>? BuyableItems { get; set; }
 
-    Dictionary<string, BuyableItem> PopulateBuyableItems(Terminal terminal) {
+    static Dictionary<string, BuyableItem> PopulateBuyableItems(Terminal terminal) {
         Dictionary<string, BuyableItem> buyableItems = [];
 
         for (int i = 0; i < terminal.buyableItemsList.Length; i++) {
@@ -51,7 +51,7 @@ class BuyCommand : ICommand {
         }
 
         int clampedQuantity = Mathf.Clamp(quantity, 1, 12);
-        BuyCommand.BuyableItems ??= this.PopulateBuyableItems(terminal);
+        BuyCommand.BuyableItems ??= BuyCommand.PopulateBuyableItems(terminal);
 
         if (!item.FuzzyMatch(BuyCommand.BuyableItems.Keys, out string key)) {
             Chat.Print("Failed to find purchase!");

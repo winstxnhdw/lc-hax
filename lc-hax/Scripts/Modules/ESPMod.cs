@@ -10,8 +10,8 @@ sealed class ESPMod : MonoBehaviour {
     Renderer[] EntranceRenderers { get; set; } = [];
     Vector3[] StoryLogVectors { get; set; } = [];
 
-    bool InGame { get; set; } = false;
-    bool IsMapLoaded { get; set; } = false;
+    bool InGame { get; set; }
+    bool IsMapLoaded { get; set; }
     bool Enabled { get; set; } = true;
 
     void OnEnable() {
@@ -46,10 +46,10 @@ sealed class ESPMod : MonoBehaviour {
 
             string label = $"#{player.playerClientId} {player.playerUsername}";
 
-            this.RenderBounds(
+            RenderBounds(
                 camera,
                 rendererPair.Renderer.bounds,
-                this.RenderLabel(label)
+                ESPMod.RenderLabel(label)
             );
         });
 
@@ -60,7 +60,7 @@ sealed class ESPMod : MonoBehaviour {
                 return;
             }
 
-            this.RenderLabel($"{grabbableObject.itemProperties.itemName} ${grabbableObject.scrapValue}").Invoke(
+            ESPMod.RenderLabel($"{grabbableObject.itemProperties.itemName} ${grabbableObject.scrapValue}").Invoke(
                 Color.gray,
                 rendererCentrePoint
             );
@@ -70,25 +70,25 @@ sealed class ESPMod : MonoBehaviour {
     void RenderWhenMapLoads(Camera camera) {
         if (!this.IsMapLoaded) return;
 
-        this.LandmineRenderers.ForEach(renderer => this.RenderBounds(
+        this.LandmineRenderers.ForEach(renderer => RenderBounds(
             camera,
             renderer.bounds,
             Color.yellow,
-            this.RenderLabel("Landmine")
+            ESPMod.RenderLabel("Landmine")
         ));
 
-        this.TurretRenderers.ForEach(renderer => this.RenderBounds(
+        this.TurretRenderers.ForEach(renderer => RenderBounds(
             camera,
             renderer.bounds,
             Color.yellow,
-            this.RenderLabel("Turret")
+            ESPMod.RenderLabel("Turret")
         ));
 
-        this.EntranceRenderers.ForEach(renderer => this.RenderBounds(
+        this.EntranceRenderers.ForEach(renderer => RenderBounds(
             camera,
             renderer.bounds,
             Color.yellow,
-            this.RenderLabel("Entrance")
+            ESPMod.RenderLabel("Entrance")
         ));
 
         this.StoryLogVectors.ForEach(vector => {
@@ -98,7 +98,7 @@ sealed class ESPMod : MonoBehaviour {
                 return;
             }
 
-            this.RenderLabel("Log").Invoke(Color.gray, rendererCentrePoint);
+            ESPMod.RenderLabel("Log").Invoke(Color.gray, rendererCentrePoint);
         });
 
         Helper.Enemies.WhereIsNotNull().ForEach(enemy => {
@@ -113,20 +113,20 @@ sealed class ESPMod : MonoBehaviour {
                 return;
             }
 
-            this.RenderBounds(
+            RenderBounds(
                 camera,
                 renderer.bounds,
                 Color.red,
-                this.RenderLabel(enemy.enemyType.enemyName)
+                ESPMod.RenderLabel(enemy.enemyType.enemyName)
             );
         });
 
         if (Helper.StartOfRound is { shipBounds: Collider shipBounds }) {
-            this.RenderBounds(
+            RenderBounds(
                 camera,
                 shipBounds.bounds,
                 Color.green,
-                this.RenderLabel("Ship"),
+                ESPMod.RenderLabel("Ship"),
                 10.0f
             );
         }
@@ -147,7 +147,7 @@ sealed class ESPMod : MonoBehaviour {
 
     void ToggleESP() => this.Enabled = !this.Enabled;
 
-    Renderer[] GetRenderers<T>() where T : Component => [
+    static Renderer[] GetRenderers<T>() where T : Component => [
         .. Helper.FindObjects<T>().Select(obj => obj.GetComponent<Renderer>())
     ];
 
@@ -157,14 +157,14 @@ sealed class ESPMod : MonoBehaviour {
             Renderer = player.thisPlayerModel
         })];
 
-        this.LandmineRenderers = this.GetRenderers<Landmine>();
-        this.TurretRenderers = this.GetRenderers<Turret>();
-        this.EntranceRenderers = this.GetRenderers<EntranceTeleport>();
+        this.LandmineRenderers = ESPMod.GetRenderers<Landmine>();
+        this.TurretRenderers = ESPMod.GetRenderers<Turret>();
+        this.EntranceRenderers = ESPMod.GetRenderers<EntranceTeleport>();
     }
 
     void InitialiseCoordinates() => this.StoryLogVectors = [.. Helper.FindObjects<StoryLog>().Select(log => log.transform.position)];
 
-    Size GetRendererSize(Bounds bounds, Camera camera) {
+    static Size GetRendererSize(Bounds bounds, Camera camera) {
         ReadOnlySpan<Vector3> corners = [
             new(bounds.min.x, bounds.min.y, bounds.min.z),
             new(bounds.max.x, bounds.min.y, bounds.min.z),
@@ -191,7 +191,7 @@ sealed class ESPMod : MonoBehaviour {
         };
     }
 
-    void RenderBounds(
+    static void RenderBounds(
         Camera camera,
         Bounds bounds,
         Color colour,
@@ -206,7 +206,7 @@ sealed class ESPMod : MonoBehaviour {
 
         Helper.DrawOutlineBox(
             rendererCentrePoint,
-            this.GetRendererSize(bounds, camera),
+            ESPMod.GetRendererSize(bounds, camera),
             1.0f,
             colour
         );
@@ -214,9 +214,9 @@ sealed class ESPMod : MonoBehaviour {
         action?.Invoke(colour, rendererCentrePoint);
     }
 
-    void RenderBounds(Camera camera, Bounds bounds, Action<Color, Vector3>? action) =>
-        this.RenderBounds(camera, bounds, Color.white, action);
+    static void RenderBounds(Camera camera, Bounds bounds, Action<Color, Vector3>? action) =>
+        ESPMod.RenderBounds(camera, bounds, Color.white, action);
 
-    Action<Color, Vector3> RenderLabel(string name) => (colour, rendererCentrePoint) =>
+    static Action<Color, Vector3> RenderLabel(string name) => (colour, rendererCentrePoint) =>
         Helper.DrawLabel(rendererCentrePoint, name, colour);
 }

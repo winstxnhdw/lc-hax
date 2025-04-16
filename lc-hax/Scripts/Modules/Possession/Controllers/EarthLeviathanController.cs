@@ -1,8 +1,8 @@
 class EarthLeviathanController : IEnemyController<SandWormAI> {
-    bool IsEmerged(SandWormAI enemy) => enemy.inEmergingState || enemy.emerged;
+    static bool IsEmerged(SandWormAI enemy) => enemy.inEmergingState || enemy.emerged;
 
     public void UseSecondarySkill(SandWormAI enemy) {
-        if (this.IsEmerged(enemy)) return;
+        if (EarthLeviathanController.IsEmerged(enemy)) return;
         enemy.StartEmergeAnimation();
     }
 

@@ -8,10 +8,10 @@ sealed class StunClickMod : MonoBehaviour {
 
     void OnDisable() => InputListener.OnLeftButtonPress -= this.Stun;
 
-    bool IsHoldingADefensiveWeapon() =>
+    static bool IsHoldingADefensiveWeapon() =>
         Helper.LocalPlayer?.currentlyHeldObjectServer.itemProperties is { isDefensiveWeapon: true };
 
-    void StunJam(Collider collider) {
+    static void StunJam(Collider collider) {
         if (collider.TryGetComponent(out EnemyAICollisionDetect enemy)) {
             enemy.mainScript.SetEnemyStunned(true, 5.0f);
         }
@@ -30,16 +30,16 @@ sealed class StunClickMod : MonoBehaviour {
     void Stun() {
         if (!Setting.EnableStunOnLeftClick) return;
         if (Helper.CurrentCamera is not Camera camera) return;
-        if (this.IsHoldingADefensiveWeapon()) return;
+        if (StunClickMod.IsHoldingADefensiveWeapon()) return;
 
         this.RaycastHits.SphereCastForward(camera.transform).Range().ForEach(i => {
             Collider collider = this.RaycastHits[i].collider;
-            this.StunJam(collider);
+            StunClickMod.StunJam(collider);
         });
 
         Physics.OverlapSphereNonAlloc(camera.transform.position, 5.0f, this.Colliders).Range().ForEach(i => {
             Collider collider = this.Colliders[i];
-            this.StunJam(collider);
+            StunClickMod.StunJam(collider);
         });
     }
 }

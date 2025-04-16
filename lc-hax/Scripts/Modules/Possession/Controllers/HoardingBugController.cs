@@ -1,5 +1,5 @@
-using Unity.Netcode;
 using GameNetcodeStuff;
+using Unity.Netcode;
 
 enum HoardingBugState {
     IDLE,
@@ -11,7 +11,7 @@ enum HoardingBugState {
 }
 
 class HoardingBugController : IEnemyController<HoarderBugAI> {
-    void UseHeldItem(HoarderBugAI enemy) {
+    static void UseHeldItem(HoarderBugAI enemy) {
         if (enemy.heldItem is not { itemGrabbableObject: GrabbableObject grabbable }) return;
 
         switch (grabbable) {
@@ -32,7 +32,7 @@ class HoardingBugController : IEnemyController<HoarderBugAI> {
         enemy.SetBehaviourState(HoardingBugState.IDLE);
     }
 
-    void GrabItem(HoarderBugAI enemy, GrabbableObject item) {
+    static void GrabItem(HoarderBugAI enemy, GrabbableObject item) {
         if (!item.TryGetComponent(out NetworkObject netItem)) return;
 
         _ = enemy.Reflect()
@@ -61,11 +61,11 @@ class HoardingBugController : IEnemyController<HoarderBugAI> {
         }
 
         if (enemy.heldItem is null && enemy.FindNearbyItem() is GrabbableObject grabbable) {
-            this.GrabItem(enemy, grabbable);
+            HoardingBugController.GrabItem(enemy, grabbable);
         }
 
         else {
-            this.UseHeldItem(enemy);
+            HoardingBugController.UseHeldItem(enemy);
         }
     }
 

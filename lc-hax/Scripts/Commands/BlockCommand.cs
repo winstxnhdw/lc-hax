@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 
 [Command("block")]
 class BlockCommand : ICommand {
-    string BlockEnemy() {
+    static string BlockEnemy() {
         Setting.EnableUntargetable = !Setting.EnableUntargetable;
 
         return $"{(Setting.EnableUntargetable
@@ -11,7 +11,7 @@ class BlockCommand : ICommand {
             : "Enemies can now target you!")}";
     }
 
-    string BlockRadar() {
+    static string BlockRadar() {
         Setting.EnableBlockRadar = !Setting.EnableBlockRadar;
 
         return $"{(Setting.EnableBlockRadar
@@ -26,8 +26,8 @@ class BlockCommand : ICommand {
         }
 
         string result = args[0] switch {
-            "enemy" => this.BlockEnemy(),
-            "radar" => this.BlockRadar(),
+            "enemy" => BlockCommand.BlockEnemy(),
+            "radar" => BlockCommand.BlockRadar(),
             _ => "Invalid property!"
         };
 

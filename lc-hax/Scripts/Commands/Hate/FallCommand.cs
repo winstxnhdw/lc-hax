@@ -1,12 +1,12 @@
+using System.Collections;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Collections;
-using UnityEngine;
 using GameNetcodeStuff;
+using UnityEngine;
 
 [Command("fall")]
 class FallCommand : ICommand {
-    IEnumerator WaitForEnemyOwnershipChange(PlayerControllerB player, EnemyAI enemy, Reflector<EnemyAI> enemyReflector) {
+    static IEnumerator WaitForEnemyOwnershipChange(PlayerControllerB player, EnemyAI enemy, Reflector<EnemyAI> enemyReflector) {
         WaitForEndOfFrame waitForEndOfFrame = new();
 
         while (enemyReflector.GetInternalField<int>("currentOwnershipOnThisClient") != player.PlayerIndex()) {
@@ -17,10 +17,10 @@ class FallCommand : ICommand {
         }
     }
 
-    IEnumerator MoveTargetPlayerFloor(PlayerControllerB localPlayer, PlayerControllerB targetPlayer, EnemyAI enemy) {
+    static IEnumerator MoveTargetPlayerFloor(PlayerControllerB localPlayer, PlayerControllerB targetPlayer, EnemyAI enemy) {
         Reflector<EnemyAI> enemyReflector = enemy.Reflect();
 
-        yield return this.WaitForEnemyOwnershipChange(localPlayer, enemy, enemyReflector);
+        yield return FallCommand.WaitForEnemyOwnershipChange(localPlayer, enemy, enemyReflector);
 
         _ = enemyReflector.InvokeInternalMethod(
             "UpdateEnemyPositionServerRpc",
@@ -29,7 +29,7 @@ class FallCommand : ICommand {
                 : Vector3.positiveInfinity
         );
 
-        yield return this.WaitForEnemyOwnershipChange(targetPlayer, enemy, enemyReflector);
+        yield return FallCommand.WaitForEnemyOwnershipChange(targetPlayer, enemy, enemyReflector);
     }
 
     public async Task Execute(string[] args, CancellationToken cancellationToken) {
@@ -50,6 +50,6 @@ class FallCommand : ICommand {
         }
 
         Helper.CreateComponent<AsyncBehaviour>()
-              .Init(() => this.MoveTargetPlayerFloor(localPlayer, targetPlayer, enemy));
+              .Init(() => FallCommand.MoveTargetPlayerFloor(localPlayer, targetPlayer, enemy));
     }
 }

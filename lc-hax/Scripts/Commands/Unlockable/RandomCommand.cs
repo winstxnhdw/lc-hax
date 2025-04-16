@@ -1,23 +1,23 @@
+using System;
 using System.Threading;
 using System.Threading.Tasks;
-using System;
-using UnityEngine;
 using GameNetcodeStuff;
+using UnityEngine;
 
 [Command("random")]
 class RandomCommand : ICommand {
-    internal ShipTeleporter? InverseTeleporter => Helper.ShipTeleporters.First(
+    internal static ShipTeleporter? InverseTeleporter => Helper.ShipTeleporters.First(
         teleporter => teleporter is not null && teleporter.isInverseTeleporter
     );
 
     bool InverseTeleporterExists() {
         HaxObjects.Instance?.ShipTeleporters?.Renew();
-        return this.InverseTeleporter is not null;
+        return RandomCommand.InverseTeleporter is not null;
     }
 
     ObjectPlacements<Transform, ShipTeleporter>? GetInverseTeleporterPlacements(Component target) {
         if (!this.InverseTeleporterExists()) return null;
-        if (this.InverseTeleporter is not ShipTeleporter inverseTeleporter) return null;
+        if (RandomCommand.InverseTeleporter is not ShipTeleporter inverseTeleporter) return null;
 
         Vector3 rotationOffset = new(-90.0f, 0.0f, 0.0f);
 
@@ -41,7 +41,7 @@ class RandomCommand : ICommand {
         };
     }
 
-    ObjectPlacements<Transform, PlaceableShipObject>? GetCupboardPlacements(Component target) {
+    static ObjectPlacements<Transform, PlaceableShipObject>? GetCupboardPlacements(Component target) {
         if (Helper.GetUnlockable(Unlockable.CUPBOARD) is not PlaceableShipObject cupboard) return null;
 
         ObjectPlacement<Transform, PlaceableShipObject> cupboardPlacement = new() {
@@ -74,7 +74,7 @@ class RandomCommand : ICommand {
               .Init(_ => Helper.PlaceObjectAtTransform(teleporterPlacements.Value.Placement), 6.0f)
               .Dispose(() => Helper.PlaceObjectAtTransform(teleporterPlacements.Value.PreviousPlacement));
 
-        ObjectPlacements<Transform, PlaceableShipObject>? cupboardPlacements = this.GetCupboardPlacements(targetPlayer);
+        ObjectPlacements<Transform, PlaceableShipObject>? cupboardPlacements = RandomCommand.GetCupboardPlacements(targetPlayer);
 
         if (cupboardPlacements is null) {
             Chat.Print("Cupboard not found!");

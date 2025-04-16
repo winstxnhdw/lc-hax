@@ -8,9 +8,9 @@ class GameListener : MonoBehaviour {
     internal static event Action? OnShipLeave;
     internal static event Action? OnLevelGenerated;
 
-    bool InGame { get; set; } = false;
-    bool HasShipBegunDescent { get; set; } = false;
-    bool HasShipLeft { get; set; } = false;
+    bool InGame { get; set; }
+    bool HasShipBegunDescent { get; set; }
+    bool HasShipLeft { get; set; }
 
     void OnEnable() => LevelDependencyPatch.OnFinishLevelGeneration += this.OnFinishLevelGeneration;
 

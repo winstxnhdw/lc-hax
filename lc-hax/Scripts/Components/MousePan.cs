@@ -3,8 +3,8 @@ using UnityEngine.InputSystem;
 
 class MousePan : MonoBehaviour {
     float Sensitivity { get; set; } = 0.2f;
-    float Yaw { get; set; } = 0.0f;
-    float Pitch { get; set; } = 0.0f;
+    float Yaw { get; set; }
+    float Pitch { get; set; }
 
     void OnEnable() {
         InputListener.OnLeftBracketPress += this.DecreaseMouseSensitivity;

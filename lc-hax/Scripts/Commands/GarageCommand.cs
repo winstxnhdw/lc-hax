@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 
 [Command("garage")]
 class GarageCommand : ICommand {
-    InteractTrigger? GarageTrigger => HaxObjects.Instance?.InteractTriggers?.WhereIsNotNull().First(
+    static InteractTrigger? GarageTrigger => HaxObjects.Instance?.InteractTriggers?.WhereIsNotNull().First(
         interactTrigger => interactTrigger.name is "Cube" && interactTrigger.transform.parent.name is "Cutscenes"
     );
 
@@ -14,7 +14,7 @@ class GarageCommand : ICommand {
             return;
         }
 
-        if (this.GarageTrigger is not InteractTrigger garageTrigger) {
+        if (GarageCommand.GarageTrigger is not InteractTrigger garageTrigger) {
             Chat.Print("Garage trigger is not found!");
             return;
         }

@@ -1,7 +1,7 @@
 using System.Linq;
+using GameNetcodeStuff;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using GameNetcodeStuff;
 
 class CharacterMovement : MonoBehaviour {
     // Movement constants
@@ -14,15 +14,15 @@ class CharacterMovement : MonoBehaviour {
     internal float CharacterSprintSpeed { get; set; } = 2.8f;
 
     // used to sync with the enemy to make sure it plays the correct animation when it is moving
-    internal bool IsMoving { get; private set; } = false;
-    internal bool IsSprinting { get; private set; } = false;
+    internal bool IsMoving { get; private set; }
+    internal bool IsSprinting { get; private set; }
 
     // Components and state variables
-    float VelocityY { get; set; } = 0.0f;
-    bool IsSprintHeld { get; set; } = false;
-    float SprintTimer { get; set; } = 0.0f;
+    float VelocityY { get; set; }
+    bool IsSprintHeld { get; set; }
+    float SprintTimer { get; set; }
     Keyboard Keyboard { get; set; } = Keyboard.current;
-    KeyboardMovement? NoClipKeyboard { get; set; } = null;
+    KeyboardMovement? NoClipKeyboard { get; set; }
     CharacterController? CharacterController { get; set; }
 
     internal void SetNoClipMode(bool enabled) {

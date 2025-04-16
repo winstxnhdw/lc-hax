@@ -1,9 +1,9 @@
 using System;
 using System.Collections.Generic;
+using GameNetcodeStuff;
+using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.AI;
-using Unity.Netcode;
-using GameNetcodeStuff;
 
 internal sealed class PossessionMod : MonoBehaviour {
     const float TeleportDoorCooldown = 2.5f;
@@ -14,13 +14,13 @@ internal sealed class PossessionMod : MonoBehaviour {
     internal EnemyAI? PossessedEnemy => this.Possession.Enemy;
 
     Possession Possession { get; } = new();
-    GameObject? CharacterMovementInstance { get; set; } = null;
-    CharacterMovement? CharacterMovement { get; set; } = null;
-    MousePan? MousePan { get; set; } = null;
+    GameObject? CharacterMovementInstance { get; set; }
+    CharacterMovement? CharacterMovement { get; set; }
+    MousePan? MousePan { get; set; }
 
     bool FirstUpdate { get; set; } = true;
-    bool NoClipEnabled { get; set; } = false;
-    bool IsAIControlled { get; set; } = false;
+    bool NoClipEnabled { get; set; }
+    bool IsAIControlled { get; set; }
 
     Dictionary<Type, IController> EnemyControllers { get; } = new() {
         { typeof(CentipedeAI), new SnareFleaController() },
@@ -43,8 +43,8 @@ internal sealed class PossessionMod : MonoBehaviour {
         { typeof(RedLocustBees), new CircuitBeesController() }
     };
 
-    float DoorCooldownRemaining { get; set; } = 0.0f;
-    float TeleportCooldownRemaining { get; set; } = 0.0f;
+    float DoorCooldownRemaining { get; set; }
+    float TeleportCooldownRemaining { get; set; }
     EntranceTeleport? MainEntrance { get; set; }
 
     void Awake() {
@@ -97,7 +97,7 @@ internal sealed class PossessionMod : MonoBehaviour {
         }
     }
 
-    void SendPossessionNotifcation(string message) {
+    static void SendPossessionNotifcation(string message) {
         Helper.SendNotification(
             title: "Possession",
             body: message
@@ -107,7 +107,7 @@ internal sealed class PossessionMod : MonoBehaviour {
     void ToggleNoClip() {
         this.NoClipEnabled = !this.NoClipEnabled;
         this.UpdateComponentsOnCurrentState(this.enabled);
-        this.SendPossessionNotifcation($"NoClip: {(this.NoClipEnabled ? "Enabled" : "Disabled")}");
+        PossessionMod.SendPossessionNotifcation($"NoClip: {(this.NoClipEnabled ? "Enabled" : "Disabled")}");
     }
 
     void UpdateComponentsOnCurrentState(bool thisGameObjectIsEnabled) {
@@ -138,7 +138,7 @@ internal sealed class PossessionMod : MonoBehaviour {
         );
 
         enemy.ChangeEnemyOwnerServerRpc(localPlayer.actualClientId);
-        this.UpdateCameraPosition(camera, enemy);
+        PossessionMod.UpdateCameraPosition(camera, enemy);
         this.UpdateCameraRotation(camera, enemy);
 
         if (this.FirstUpdate) {
@@ -191,7 +191,7 @@ internal sealed class PossessionMod : MonoBehaviour {
         controller.OnMovement(enemy, this.CharacterMovement.IsMoving, this.CharacterMovement.IsSprinting);
     }
 
-    void UpdateCameraPosition(Camera camera, EnemyAI enemy) =>
+    static void UpdateCameraPosition(Camera camera, EnemyAI enemy) =>
         camera.transform.position = enemy.transform.position + (3.0f * (Vector3.up - enemy.transform.forward));
 
     void UpdateCameraRotation(Camera camera, EnemyAI enemy) =>
@@ -278,7 +278,7 @@ internal sealed class PossessionMod : MonoBehaviour {
 
         this.IsAIControlled = !this.IsAIControlled;
         this.SetAIControl(this.IsAIControlled);
-        this.SendPossessionNotifcation($"AI Control: {(this.IsAIControlled ? "Enabled" : "Disabled")}");
+        PossessionMod.SendPossessionNotifcation($"AI Control: {(this.IsAIControlled ? "Enabled" : "Disabled")}");
     }
 
     void SetAIControl(bool enableAI) {
@@ -323,7 +323,7 @@ internal sealed class PossessionMod : MonoBehaviour {
     void InteractWithAmbient(EnemyAI enemy, IController controller) {
         if (!Physics.Raycast(enemy.transform.position, enemy.transform.forward, out RaycastHit hit, this.InteractRange(enemy))) return;
         if (hit.collider.gameObject.TryGetComponent(out DoorLock doorLock) && this.DoorCooldownRemaining <= 0.0f) {
-            this.OpenDoorAsEnemy(doorLock);
+            PossessionMod.OpenDoorAsEnemy(doorLock);
             this.DoorCooldownRemaining = PossessionMod.DoorInteractionCooldown;
             return;
         }
@@ -334,7 +334,7 @@ internal sealed class PossessionMod : MonoBehaviour {
         }
     }
 
-    void OpenDoorAsEnemy(DoorLock door) {
+    static void OpenDoorAsEnemy(DoorLock door) {
         if (door.Reflect().GetInternalField<bool>("isDoorOpened")) return;
         if (door.gameObject.TryGetComponent(out AnimatedObjectTrigger trigger)) {
             trigger.TriggerAnimationNonPlayer(false, true, false);
@@ -343,14 +343,14 @@ internal sealed class PossessionMod : MonoBehaviour {
         door.OpenDoorAsEnemyServerRpc();
     }
 
-    Transform? GetExitPointFromDoor(EntranceTeleport entrance) =>
+    static Transform? GetExitPointFromDoor(EntranceTeleport entrance) =>
         Helper.FindObjects<EntranceTeleport>().First(teleport =>
             teleport.entranceId == entrance.entranceId && teleport.isEntranceToBuilding != entrance.isEntranceToBuilding
         )?.entrancePoint;
 
     void InteractWithTeleport(EnemyAI enemy, EntranceTeleport teleport) {
         if (this.CharacterMovement is not CharacterMovement characterMovement) return;
-        if (this.GetExitPointFromDoor(teleport) is not Transform exitPoint) return;
+        if (PossessionMod.GetExitPointFromDoor(teleport) is not Transform exitPoint) return;
 
         characterMovement.SetPosition(exitPoint.position);
         enemy.EnableEnemyMesh(true, false);

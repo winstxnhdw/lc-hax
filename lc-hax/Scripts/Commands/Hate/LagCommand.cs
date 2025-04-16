@@ -1,12 +1,12 @@
+using System.Collections;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Collections;
-using UnityEngine;
 using GameNetcodeStuff;
+using UnityEngine;
 
 [Command("lag")]
 class LagCommand : ICommand {
-    IEnumerator WaitForEnemyOwnershipChange(
+    static IEnumerator WaitForEnemyOwnershipChange(
         PlayerControllerB player,
         EnemyAI enemy,
         Reflector<FlowermanAI> enemyReflector
@@ -21,14 +21,14 @@ class LagCommand : ICommand {
         }
     }
 
-    IEnumerator PassBrackenComputeToTargetPlayer(
+    static IEnumerator PassBrackenComputeToTargetPlayer(
         PlayerControllerB localPlayer,
         PlayerControllerB targetPlayer,
         FlowermanAI bracken
     ) {
         Reflector<FlowermanAI> enemyReflector = bracken.Reflect();
 
-        yield return this.WaitForEnemyOwnershipChange(localPlayer, bracken, enemyReflector);
+        yield return LagCommand.WaitForEnemyOwnershipChange(localPlayer, bracken, enemyReflector);
 
         bracken.SetMovingTowardsTargetPlayer(targetPlayer);
         bracken.SetBehaviourState(BehaviourState.AGGRAVATED);
@@ -39,7 +39,7 @@ class LagCommand : ICommand {
             targetPlayer.transform.position
         );
 
-        yield return this.WaitForEnemyOwnershipChange(targetPlayer, bracken, enemyReflector);
+        yield return LagCommand.WaitForEnemyOwnershipChange(targetPlayer, bracken, enemyReflector);
     }
 
     public async Task Execute(string[] args, CancellationToken cancellationToken) {
@@ -65,6 +65,6 @@ class LagCommand : ICommand {
         }
 
         Helper.CreateComponent<AsyncBehaviour>()
-              .Init(() => this.PassBrackenComputeToTargetPlayer(localPlayer, targetPlayer, bracken));
+              .Init(() => LagCommand.PassBrackenComputeToTargetPlayer(localPlayer, targetPlayer, bracken));
     }
 }

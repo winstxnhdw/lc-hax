@@ -7,7 +7,7 @@ using UnityEngine;
 
 [HarmonyPatch(typeof(GiftBoxItem))]
 class GiftBoxPatch {
-    static bool LocalPlayerActivated { get; set; } = false;
+    static bool LocalPlayerActivated { get; set; }
 
     [HarmonyPatch(nameof(GiftBoxItem.ItemActivate))]
     static bool Prefix(GiftBoxItem __instance) {

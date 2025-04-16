@@ -4,7 +4,7 @@ enum GiantState {
 }
 
 class ForestGiantController : IEnemyController<ForestGiantAI> {
-    bool IsUsingSecondarySkill { get; set; } = false;
+    bool IsUsingSecondarySkill { get; set; }
 
     public void OnMovement(ForestGiantAI enemy, bool isMoving, bool isSprinting) {
         if (!this.IsUsingSecondarySkill) {

@@ -4,7 +4,7 @@ enum NutcrackerState {
 }
 
 class NutcrackerController : IEnemyController<NutcrackerEnemyAI> {
-    bool InSentryMode { get; set; } = false;
+    bool InSentryMode { get; set; }
 
     public void Update(NutcrackerEnemyAI enemy, bool isAIControlled) {
         if (isAIControlled) return;

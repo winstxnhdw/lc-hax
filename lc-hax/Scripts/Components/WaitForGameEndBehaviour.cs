@@ -4,7 +4,7 @@ using UnityEngine;
 class WaitForGameEndBehaviour : MonoBehaviour {
     Action? ActionBefore { get; set; }
     Action? ActionAfter { get; set; }
-    bool HasGameEnded { get; set; } = false;
+    bool HasGameEnded { get; set; }
 
     void OnEnable() => GameListener.OnGameEnd += this.OnGameEnd;
 

@@ -29,14 +29,14 @@ class BaboonHawkController : IEnemyController<BaboonBirdAI> {
         BaboonBirdAI.baboonCampPosition = this.OriginalCamp;
     }
 
-    void GrabItemAndSync(BaboonBirdAI enemy, GrabbableObject item) {
+    static void GrabItemAndSync(BaboonBirdAI enemy, GrabbableObject item) {
         if (!item.TryGetComponent(out NetworkObject netItem)) return;
         _ = enemy.Reflect().InvokeInternalMethod("GrabItemAndSync", netItem);
     }
 
     public void UsePrimarySkill(BaboonBirdAI enemy) {
         if (enemy.heldScrap is null && enemy.FindNearbyItem() is GrabbableObject grabbable) {
-            this.GrabItemAndSync(enemy, grabbable);
+            BaboonHawkController.GrabItemAndSync(enemy, grabbable);
             return;
         }
 

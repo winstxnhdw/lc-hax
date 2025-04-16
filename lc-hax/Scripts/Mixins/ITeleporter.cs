@@ -1,6 +1,6 @@
 using System;
-using UnityEngine;
 using GameNetcodeStuff;
+using UnityEngine;
 
 public interface ITeleporter { }
 

@@ -1,12 +1,12 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using System;
-using System.Linq;
-using System.Collections.Generic;
 
 [Command("suit")]
 class SuitCommand : ICommand {
-    internal Dictionary<string, Unlockable> SuitUnlockables =>
+    internal static Dictionary<string, Unlockable> SuitUnlockables =>
         Enum.GetValues(typeof(Unlockable))
             .Cast<Unlockable>()
             .Where(u => u.ToString().EndsWith("_SUIT"))
@@ -18,12 +18,12 @@ class SuitCommand : ICommand {
             return;
         }
 
-        if (!suit.FuzzyMatch(this.SuitUnlockables.Keys, out string key)) {
+        if (!suit.FuzzyMatch(SuitCommand.SuitUnlockables.Keys, out string key)) {
             Chat.Print("Suit is not found!");
             return;
         }
 
-        Unlockable selectedSuit = this.SuitUnlockables[key];
+        Unlockable selectedSuit = SuitCommand.SuitUnlockables[key];
         Helper.BuyUnlockable(selectedSuit);
 
         Helper

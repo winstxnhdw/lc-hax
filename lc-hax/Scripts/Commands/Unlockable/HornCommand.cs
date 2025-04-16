@@ -27,8 +27,8 @@ class HornCommand : ICommand {
             await Task.Delay(hornDurationSeconds * 1000, cancellationToken);
         }
 
-        catch (Exception exception) {
-            throw exception;
+        catch (Exception) {
+            throw;
         }
 
         finally {

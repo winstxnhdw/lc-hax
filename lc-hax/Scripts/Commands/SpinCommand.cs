@@ -1,20 +1,20 @@
+using System;
 using System.Threading;
 using System.Threading.Tasks;
-using System;
 using UnityEngine;
 
 [Command("spin")]
 class SpinCommand : ICommand {
-    Action<float> PlaceObjectAtRotation(PlaceableShipObject shipObject) => (timeElapsed) =>
+    static Action<float> PlaceObjectAtRotation(PlaceableShipObject shipObject) => (timeElapsed) =>
         Helper.PlaceObjectAtPosition(
             shipObject,
             shipObject.transform.position,
             new Vector3(0.0f, timeElapsed * 810.0f, 0.0f)
         );
 
-    Action<PlaceableShipObject> SpinObject(ulong duration) => (shipObject) =>
+    static Action<PlaceableShipObject> SpinObject(ulong duration) => (shipObject) =>
         Helper.CreateComponent<TransientBehaviour>()
-              .Init(this.PlaceObjectAtRotation(shipObject), duration);
+              .Init(SpinCommand.PlaceObjectAtRotation(shipObject), duration);
 
     public async Task Execute(string[] args, CancellationToken cancellationToken) {
         if (args.Length is 0) {
@@ -26,6 +26,6 @@ class SpinCommand : ICommand {
         }
 
         Helper.FindObjects<PlaceableShipObject>()
-              .ForEach(this.SpinObject(duration));
+              .ForEach(SpinCommand.SpinObject(duration));
     }
 }

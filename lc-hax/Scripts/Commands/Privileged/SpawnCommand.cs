@@ -1,12 +1,12 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using System;
-using System.Linq;
-using System.Collections.Generic;
+using GameNetcodeStuff;
 using Unity.Netcode;
 using UnityEngine;
 using UnityObject = UnityEngine.Object;
-using GameNetcodeStuff;
 
 [PrivilegedCommand("spawn")]
 class SpawnCommand : ICommand {
@@ -21,7 +21,7 @@ class SpawnCommand : ICommand {
                  .ToDictionary(enemyGroup => enemyGroup.Key, enemy => Enumerable.First(enemy).enemyPrefab)
     );
 
-    void SpawnEnemyOnPlayer(PlayerControllerB player, GameObject prefab, ulong amount = 1) {
+    static void SpawnEnemyOnPlayer(PlayerControllerB player, GameObject prefab, ulong amount = 1) {
         for (ulong i = 0; i < amount; i++) {
             GameObject enemyObject = UnityObject.Instantiate(prefab, player.transform.position, Quaternion.identity);
 
@@ -66,7 +66,7 @@ class SpawnCommand : ICommand {
             return;
         }
 
-        this.SpawnEnemyOnPlayer(targetPlayer, SpawnCommand.HostileEnemies.Value[key], amount);
+        SpawnCommand.SpawnEnemyOnPlayer(targetPlayer, SpawnCommand.HostileEnemies.Value[key], amount);
         Chat.Print($"Spawning {amount}x {key} on {targetPlayer.playerUsername}.");
     }
 }

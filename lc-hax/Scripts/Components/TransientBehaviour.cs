@@ -5,7 +5,7 @@ using UnityEngine;
 class TransientBehaviour : MonoBehaviour {
     Action<float>? Action { get; set; }
     Action? DisposeAction { get; set; }
-    float ExpireTime { get; set; } = 0.0f;
+    float ExpireTime { get; set; }
 
     internal TransientBehaviour Init(Action<float> action, float expireTime, float delay = 0.0f) {
         this.Action = action;

@@ -10,7 +10,7 @@ sealed class CrosshairMod : MonoBehaviour {
     Vector2 LeftCrosshairPosition { get; set; }
     Vector2 RightCrosshairPosition { get; set; }
 
-    bool InGame { get; set; } = false;
+    bool InGame { get; set; }
 
     void OnEnable() {
         ScreenListener.OnScreenSizeChange += this.InitialiseCrosshairPositions;

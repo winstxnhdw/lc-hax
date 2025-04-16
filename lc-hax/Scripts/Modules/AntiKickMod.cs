@@ -1,5 +1,5 @@
-using UnityEngine;
 using System.Collections;
+using UnityEngine;
 
 sealed class AntiKickMod : MonoBehaviour {
     void OnEnable() {
@@ -14,7 +14,7 @@ sealed class AntiKickMod : MonoBehaviour {
         GameListener.OnGameEnd -= this.OnGameEnd;
     }
 
-    IEnumerator RejoinLobby() {
+    static IEnumerator RejoinLobby() {
         if (State.ConnectedLobby is not ConnectedLobby connectedLobby) yield break;
 
         WaitForEndOfFrame waitForEndOfFrame = new();
@@ -32,7 +32,7 @@ sealed class AntiKickMod : MonoBehaviour {
 
     void OnGameEnd() {
         if (State.DisconnectedVoluntarily || !Setting.EnableAntiKick) return;
-        _ = this.StartCoroutine(this.RejoinLobby());
+        _ = this.StartCoroutine(AntiKickMod.RejoinLobby());
     }
 
     void OnGameStart() {

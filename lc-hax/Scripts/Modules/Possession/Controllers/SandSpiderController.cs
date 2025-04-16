@@ -10,9 +10,9 @@ class SandSpiderController : IEnemyController<SandSpiderAI> {
         enemy.SyncMeshContainerPositionToClients();
     }
 
-    public void UsePrimarySkill(SandSpiderAI enemy) => this.PlaceWebTrap(enemy);
+    public void UsePrimarySkill(SandSpiderAI enemy) => SandSpiderController.PlaceWebTrap(enemy);
 
-    void PlaceWebTrap(SandSpiderAI enemy) {
+    static void PlaceWebTrap(SandSpiderAI enemy) {
         if (Helper.StartOfRound is not StartOfRound startOfRound) return;
 
         Vector3 randomDirection = Random.onUnitSphere;

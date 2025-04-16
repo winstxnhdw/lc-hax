@@ -19,9 +19,9 @@ sealed class FollowMod : MonoBehaviour {
     Queue<CopiedStates> PlayerStates { get; set; } = new();
     Quaternion DeviateRotation { get; set; } = Quaternion.identity;
 
-    float DeviateTimer { get; set; } = 0.0f;
-    float InstantTeleTimer { get; set; } = 0.0f;
-    float AnimationBroadcastTimer { get; set; } = 0.0f;
+    float DeviateTimer { get; set; }
+    float InstantTeleTimer { get; set; }
+    float AnimationBroadcastTimer { get; set; }
 
     void Update() {
         if (Helper.LocalPlayer is not PlayerControllerB localPlayer) return;

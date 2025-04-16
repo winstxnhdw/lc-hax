@@ -11,7 +11,7 @@ class SellCommand : ICommand {
         grabbableObject is not HauntedMaskItem and { isHeld: false } &&
         grabbableObject.itemProperties is { isScrap: true, isDefensiveWeapon: false };
 
-    void SellObject(PlayerControllerB player, GrabbableObject item, float currentWeight) {
+    static void SellObject(PlayerControllerB player, GrabbableObject item, float currentWeight) {
         player.currentlyHeldObjectServer = item;
         HaxObjects.Instance?.DepositItemsDesk?.Object?.PlaceItemOnCounter(player);
         player.carryWeight = currentWeight;
@@ -19,7 +19,7 @@ class SellCommand : ICommand {
 
     void SellEverything(PlayerControllerB player, float currentWeight) =>
         Helper.Grabbables.WhereIsNotNull().Where(this.CanBeSold).ForEach(grabbableObject => {
-            this.SellObject(player, grabbableObject, currentWeight);
+            SellCommand.SellObject(player, grabbableObject, currentWeight);
         });
 
     /// <summary>
@@ -59,7 +59,7 @@ class SellCommand : ICommand {
             if (result == table[i - 1, remainingValue]) continue;
 
             GrabbableObject grabbable = sellableScraps[i - 1];
-            this.SellObject(player, grabbable, currentWeight);
+            SellCommand.SellObject(player, grabbable, currentWeight);
             int scrapValue = grabbable.scrapValue;
             result -= scrapValue;
             remainingValue -= scrapValue;
