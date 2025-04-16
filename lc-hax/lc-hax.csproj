@@ -30,9 +30,9 @@
 
     <PackageReference Include="CommunityToolkit.HighPerformance" Version="8.4.0" />
 
-    <PackageReference Include="Lib.Harmony" Version="2.3.5" />
+    <PackageReference Include="Lib.Harmony" Version="2.3.6" />
 
-    <EmbeddedResource Include="$(NuGetPackageRoot)/lib.harmony/2.3.5/lib/net48/0Harmony.dll" />
+    <EmbeddedResource Include="$(NuGetPackageRoot)/lib.harmony/2.3.6/lib/net48/0Harmony.dll" />
 
     <EmbeddedResource Include="$(NuGetPackageRoot)/quickenshtein/1.5.1/lib/netstandard2.0/Quickenshtein.dll" />
 
