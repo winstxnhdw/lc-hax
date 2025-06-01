@@ -5,3 +5,4 @@ obj/
 .mono/
 .cr/
 *.sln
+node_modules/
