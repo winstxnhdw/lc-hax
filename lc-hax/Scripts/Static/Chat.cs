@@ -1,9 +1,9 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using System.Collections.Generic;
-using UnityEngine.EventSystems;
 using System.Threading;
+using UnityEngine.EventSystems;
 
 static class Chat {
     internal static event Action<string>? OnExecuteCommandAttempt;
@@ -39,7 +39,7 @@ static class Chat {
 
     internal static void Print(string name, string? message, bool isSystem = false) {
         if (string.IsNullOrWhiteSpace(message) || Helper.HUDManager is not HUDManager hudManager) return;
-        _ = hudManager.Reflect().InvokeInternalMethod("AddChatMessage", message, name);
+        _ = hudManager.Reflect().InvokeInternalMethod("AddChatMessage", message, name, -1, false);
 
         if (!isSystem && hudManager.localPlayer.isTypingChat) {
             hudManager.localPlayer.isTypingChat = false;
