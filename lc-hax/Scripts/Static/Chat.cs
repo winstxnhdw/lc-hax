@@ -55,23 +55,22 @@ static class Chat {
     internal static void Print(string? message, params string[] args) => Chat.Print($"{message}\n{string.Join('\n', args)}");
 
     internal static async void ExecuteCommand(string commandString) {
-        Chat.Print("USER", commandString);
-        Chat.OnExecuteCommandAttempt?.Invoke(commandString);
-        string[] args = commandString[1..].Split(' ');
-
-        ICommand? command =
-            Chat.Commands.GetValue(args[0]) ??
-            Chat.PrivilegeCommands.GetValue(args[0]) ??
-            Chat.DebugCommands.GetValue(args[0]);
-
-        if (command is null) {
-            Chat.Print("The command is not found!");
-            return;
-        }
-
-        using CancellationTokenSource cancellationTokenSource = new();
-
         try {
+            Chat.Print("USER", commandString);
+            Chat.OnExecuteCommandAttempt?.Invoke(commandString);
+            string[] args = commandString[1..].Split(' ');
+
+            ICommand? command =
+                Chat.Commands.GetValue(args[0]) ??
+                Chat.PrivilegeCommands.GetValue(args[0]) ??
+                Chat.DebugCommands.GetValue(args[0]);
+
+            if (command is null) {
+                Chat.Print("The command is not found!");
+                return;
+            }
+
+            using CancellationTokenSource cancellationTokenSource = new();
             await command.Execute(args[1..], cancellationTokenSource.Token);
         }
 
