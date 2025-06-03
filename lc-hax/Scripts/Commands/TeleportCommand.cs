@@ -56,6 +56,7 @@ class TeleportCommand : ITeleporter, ICommand {
     Result TeleportPlayerToPlayer(string[] args) {
         PlayerControllerB? sourcePlayer = Helper.GetPlayer(args[0]);
         PlayerControllerB? targetPlayer = Helper.GetPlayer(args[1]);
+
         return sourcePlayer is null || targetPlayer is null
             ? new Result { Message = "Player not found!" }
             : this.TeleportPlayerToPosition(sourcePlayer, targetPlayer.transform.position);
