@@ -8,7 +8,8 @@ class NoiseCommand : ICommand {
     static async Task PlayNoiseContinuously(PlayerControllerB player, float duration, CancellationToken cancellationToken) {
         float startTime = Time.time;
 
-        while (Time.time - startTime < duration && !cancellationToken.IsCancellationRequested) {
+        while (Time.time - startTime < duration) {
+            if (cancellationToken.IsCancellationRequested) break;
             if (player.playersManager.inShipPhase) break;
 
             Helper.RoundManager?.PlayAudibleNoise(player.transform.position, float.MaxValue, float.MaxValue, 10, false);
