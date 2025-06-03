@@ -1,13 +1,21 @@
+using System;
 using System.Threading;
 using System.Threading.Tasks;
 using GameNetcodeStuff;
+using UnityEngine;
 
 [Command("poison")]
 class PoisonCommand : ICommand {
-    static void PoisonPlayer(PlayerControllerB player, int damage, ulong delay, ulong duration) =>
-        Helper.CreateComponent<TransientBehaviour>()
-              .Init(_ => player.DamagePlayerRpc(damage), duration, delay)
-              .Unless(() => player.playersManager.inShipPhase);
+    static async Task PoisonPlayer(PlayerControllerB player, int damage, ulong delay, ulong duration, CancellationToken cancellationToken) {
+        float startTime = Time.time;
+
+        while (Time.time - startTime < duration) {
+            if (player.playersManager.inShipPhase) break;
+
+            player.DamagePlayerRpc(damage);
+            await Task.Delay(TimeSpan.FromSeconds(delay), cancellationToken);
+        }
+    }
 
     public async Task Execute(string[] args, CancellationToken cancellationToken) {
         if (args.Length < 4) {
@@ -35,11 +43,13 @@ class PoisonCommand : ICommand {
         }
 
         if (args[0] is "--all") {
-            Helper.ActivePlayers.ForEach(player => PoisonCommand.PoisonPlayer(player, damage, delay, duration));
+            Helper.ActivePlayers.ForEach(async player =>
+                await PoisonCommand.PoisonPlayer(player, damage, delay, duration, cancellationToken)
+            );
         }
 
         else if (Helper.GetActivePlayer(args[0]) is PlayerControllerB player) {
-            PoisonCommand.PoisonPlayer(player, damage, delay, duration);
+            await PoisonCommand.PoisonPlayer(player, damage, delay, duration, cancellationToken);
         }
 
         else {
