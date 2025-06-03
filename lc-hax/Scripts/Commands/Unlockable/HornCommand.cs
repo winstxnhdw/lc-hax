@@ -10,7 +10,7 @@ class HornCommand : ICommand {
             return;
         }
 
-        if (!int.TryParse(args[0], out int hornDurationSeconds)) {
+        if (!ulong.TryParse(args[0], out ulong hornDurationSeconds)) {
             Chat.Print("Invalid duration!");
             return;
         }
@@ -24,11 +24,7 @@ class HornCommand : ICommand {
 
         try {
             shipAlarmCord.PullCordServerRpc(-1);
-            await Task.Delay(hornDurationSeconds * 1000, cancellationToken);
-        }
-
-        catch (Exception) {
-            throw;
+            await Task.Delay(TimeSpan.FromSeconds(hornDurationSeconds), cancellationToken);
         }
 
         finally {
