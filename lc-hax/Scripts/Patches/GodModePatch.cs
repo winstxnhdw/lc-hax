@@ -6,7 +6,8 @@ using HarmonyLib;
 [HarmonyPatch(typeof(PlayerControllerB), nameof(PlayerControllerB.AllowPlayerDeath))]
 class GodModePatch {
     static bool Prefix(PlayerControllerB __instance, ref bool __result) {
-        if (!Setting.EnableGodMode || !__instance.IsSelf()) return true;
+        if (!Setting.EnableGodMode) return true;
+        if (!__instance.IsSelf()) return true;
 
         __result = false;
         __instance.inAnimationWithEnemy = null;

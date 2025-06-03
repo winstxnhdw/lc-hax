@@ -33,7 +33,9 @@ sealed class ESPMod : MonoBehaviour {
     }
 
     void OnGUI() {
-        if (!this.Enabled || !this.InGame || Helper.CurrentCamera is not Camera camera) return;
+        if (!this.Enabled) return;
+        if (!this.InGame) return;
+        if (Helper.CurrentCamera is not Camera camera) return;
 
         this.RenderAlways(camera);
         this.RenderWhenMapLoads(camera);
@@ -42,7 +44,8 @@ sealed class ESPMod : MonoBehaviour {
     void RenderAlways(Camera camera) {
         this.PlayerRenderers.ForEach(rendererPair => {
             if (rendererPair.GameObject is not PlayerControllerB player) return;
-            if (player.isPlayerDead || !player.isPlayerControlled) return;
+            if (player.isPlayerDead) return;
+            if (!player.isPlayerControlled) return;
 
             string label = $"#{player.playerClientId} {player.playerUsername}";
 

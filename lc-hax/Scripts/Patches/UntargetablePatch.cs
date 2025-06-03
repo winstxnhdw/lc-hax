@@ -7,7 +7,9 @@ using HarmonyLib;
 class UntargetableEnemyPatch {
     [HarmonyPatch(nameof(EnemyAI.PlayerIsTargetable))]
     static void Postfix(PlayerControllerB playerScript, ref bool __result) {
-        if (!Setting.EnableUntargetable || !playerScript.IsSelf()) return;
+        if (!Setting.EnableUntargetable) return;
+        if (!playerScript.IsSelf()) return;
+
         __result = false;
     }
 

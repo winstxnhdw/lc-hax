@@ -7,7 +7,8 @@ using UnityEngine;
 [HarmonyPatch(typeof(PlayerControllerB), "Jump_performed")]
 class UnlimitedJumpPatch {
     static bool Prefix(PlayerControllerB __instance) {
-        if (!Setting.EnableUnlimitedJump || !__instance.IsSelf()) return true;
+        if (!Setting.EnableUnlimitedJump) return true;
+        if (!__instance.IsSelf()) return true;
         if (!__instance.isPlayerControlled) return false;
         if (__instance.inSpecialInteractAnimation) return false;
         if (__instance.isTypingChat) return false;

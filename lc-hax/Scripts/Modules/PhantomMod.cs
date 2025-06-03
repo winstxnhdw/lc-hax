@@ -61,7 +61,8 @@ sealed class PhantomMod : MonoBehaviour {
     void LookAtPreviousPlayer() => this.LookAtPlayer(-1);
 
     void LookAtPlayer(int indexChange) {
-        if (!Setting.EnablePhantom || Helper.CurrentCamera is not Camera camera) return;
+        if (!Setting.EnablePhantom) return;
+        if (Helper.CurrentCamera is not Camera camera) return;
         if (!camera.gameObject.TryGetComponent(out KeyboardMovement keyboard)) return;
 
         int playerCount = Helper.Players?.Length ?? 0;

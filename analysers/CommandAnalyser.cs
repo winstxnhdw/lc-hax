@@ -29,7 +29,8 @@ class CommandAnalyzer : DiagnosticAnalyzer {
     static void AnalyseSyntaxNode(SyntaxNodeAnalysisContext context) {
         if (context.Node is not ClassDeclarationSyntax classDeclaration) return;
         if (context.SemanticModel.GetDeclaredSymbol(classDeclaration, context.CancellationToken) is not INamedTypeSymbol namedTypeSymbol) return;
-        if (!namedTypeSymbol.Name.EndsWith("Command") || ImplementsICommand(namedTypeSymbol)) return;
+        if (!namedTypeSymbol.Name.EndsWith("Command")) return;
+        if (ImplementsICommand(namedTypeSymbol)) return;
 
         context.ReportDiagnostic(
             Diagnostic.Create(CommandAnalyzer.Rule, classDeclaration.Identifier.GetLocation(), namedTypeSymbol.Name)

@@ -12,9 +12,8 @@ class FatalityCommand : ICommand {
     /// </summary>
     /// <returns>true if the enemy was successfully teleported and the fatality was performed</returns>
     static bool HandleEnemy<T>(PlayerControllerB targetPlayer, Action<PlayerControllerB, T> enemyHandler) where T : EnemyAI {
-        if (Helper.LocalPlayer is not PlayerControllerB localPlayer || Helper.GetEnemy<T>() is not T enemy) {
-            return false;
-        }
+        if (Helper.LocalPlayer is not PlayerControllerB localPlayer) return false;
+        if (Helper.GetEnemy<T>() is not T enemy) return false;
 
         enemy.ChangeEnemyOwnerServerRpc(localPlayer.actualClientId);
         enemy.transform.position = targetPlayer.transform.position;

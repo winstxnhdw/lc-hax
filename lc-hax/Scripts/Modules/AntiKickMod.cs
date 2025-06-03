@@ -31,12 +31,15 @@ sealed class AntiKickMod : MonoBehaviour {
     }
 
     void OnGameEnd() {
-        if (State.DisconnectedVoluntarily || !Setting.EnableAntiKick) return;
+        if (State.DisconnectedVoluntarily) return;
+        if (!Setting.EnableAntiKick) return;
+
         _ = this.StartCoroutine(AntiKickMod.RejoinLobby());
     }
 
     void OnGameStart() {
-        if (!Setting.EnableAntiKick || !Setting.EnableInvisible) return;
+        if (!Setting.EnableAntiKick) return;
+        if (!Setting.EnableInvisible) return;
 
         Chat.Clear();
         Helper.SendNotification(
