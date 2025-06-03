@@ -1,5 +1,5 @@
 class CoilHeadController : IEnemyController<SpringManAI> {
-    static bool GetStoppingMovement(SpringManAI enemy) => enemy.Reflect().GetInternalField<bool>("stoppingMovement");
+    static bool GetStoppingMovement(SpringManAI enemy) => enemy.stoppingMovement;
 
     public void OnSecondarySkillHold(SpringManAI enemy) => enemy.SetAnimationGoServerRpc();
 

@@ -53,7 +53,7 @@ static partial class Helper {
         if (player.ItemSlots.WhereIsNotNull().Count() >= 4) return false;
 
         NetworkObjectReference networkObject = grabbable.NetworkObject;
-        _ = player.Reflect().InvokeInternalMethod("GrabObjectServerRpc", networkObject);
+        player.GrabObjectServerRpc(networkObject);
 
         grabbable.parentObject = player.localItemHolder;
         grabbable.GrabItemOnClient();

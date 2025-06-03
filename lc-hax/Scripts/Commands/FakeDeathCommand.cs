@@ -10,13 +10,13 @@ class FakeDeathCommand : ICommand {
 
         Setting.EnableFakeDeath = true;
 
-        _ = player.Reflect().InvokeInternalMethod(
-            "KillPlayerServerRpc",
-            player.PlayerIndex(),
-            false,
-            Vector3.zero,
-            CauseOfDeath.Unknown,
-            0
+        player.KillPlayerServerRpc(
+            playerId: player.PlayerIndex(),
+            spawnBody: false,
+            bodyVelocity: Vector3.zero,
+            causeOfDeath: unchecked((int)CauseOfDeath.Unknown),
+            deathAnimation: 0,
+            positionOffset: Vector3.zero
         );
 
         await Helper.WaitUntil(() => player.playersManager.shipIsLeaving, cancellationToken);

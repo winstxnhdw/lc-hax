@@ -1,9 +1,8 @@
 #pragma warning disable IDE1006
 
-using System.Collections;
-using UnityEngine;
-using HarmonyLib;
 using GameNetcodeStuff;
+using HarmonyLib;
+using UnityEngine;
 
 [HarmonyPatch(typeof(PlayerControllerB), "Jump_performed")]
 class UnlimitedJumpPatch {
@@ -16,22 +15,16 @@ class UnlimitedJumpPatch {
 
         __instance.sprintMeter = Mathf.Clamp(__instance.sprintMeter - 0.08f, 0.0f, 1.0f);
         __instance.movementAudio.PlayOneShot(StartOfRound.Instance.playerJumpSFX);
+        __instance.playerSlidingTimer = 0.0f;
+        __instance.isJumping = true;
 
-        Reflector<PlayerControllerB> playerReflector = __instance.Reflect();
-
-        Coroutine? jumpCoroutine =
-            playerReflector.SetInternalField("playerSlidingTimer", 0.0f)?
-                           .SetInternalField("isJumping", true)?
-                           .GetInternalField<Coroutine>("jumpCoroutine");
+        Coroutine? jumpCoroutine = __instance.jumpCoroutine;
 
         if (jumpCoroutine is not null) {
             __instance.StopCoroutine(jumpCoroutine);
         }
 
-        _ = playerReflector.SetInternalField(
-            "jumpCoroutine",
-            __instance.StartCoroutine(playerReflector.InvokeInternalMethod<IEnumerator>("PlayerJump"))
-        );
+        __instance.jumpCoroutine = __instance.StartCoroutine(__instance.PlayerJump());
 
         return false;
     }

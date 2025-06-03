@@ -7,13 +7,11 @@ enum SnareFleaState {
 
 class SnareFleaController : IEnemyController<CentipedeAI> {
     static bool IsClingingToSomething(CentipedeAI enemy) {
-        Reflector<CentipedeAI> centipedeReflector = enemy.Reflect();
-
         return enemy.clingingToPlayer is not null || enemy.inSpecialAnimation ||
-               centipedeReflector.GetInternalField<bool>("clingingToDeadBody") ||
-               centipedeReflector.GetInternalField<bool>("clingingToCeiling") ||
-               centipedeReflector.GetInternalField<bool>("startedCeilingAnimationCoroutine") ||
-               centipedeReflector.GetInternalField<bool>("inDroppingOffPlayerAnim");
+               enemy.clingingToDeadBody ||
+               enemy.clingingToCeiling ||
+               enemy.startedCeilingAnimationCoroutine ||
+               enemy.inDroppingOffPlayerAnim;
     }
 
     public void UsePrimarySkill(CentipedeAI enemy) {
@@ -23,7 +21,8 @@ class SnareFleaController : IEnemyController<CentipedeAI> {
 
     public void UseSecondarySkill(CentipedeAI enemy) {
         if (SnareFleaController.IsClingingToSomething(enemy)) return;
-        _ = enemy.Reflect().InvokeInternalMethod("RaycastToCeiling");
+
+        enemy.RaycastToCeiling();
         enemy.SetBehaviourState(SnareFleaState.HIDING);
     }
 

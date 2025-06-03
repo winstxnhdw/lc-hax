@@ -52,7 +52,7 @@ class EnemyPromptHandler {
         };
 
         baboonHawk.SetAggressiveModeServerRpc(1);
-        _ = baboonHawk.Reflect().InvokeInternalMethod("ReactToThreat", threat);
+        baboonHawk.ReactToThreat(threat);
     }
 
     static void HandleForestGiant(ForestGiantAI forestGiant, PlayerControllerB targetPlayer, bool willTeleportEnemy) {
@@ -63,7 +63,7 @@ class EnemyPromptHandler {
         forestGiant.investigating = true;
 
         _ = forestGiant.SetDestinationToPosition(targetPlayer.transform.position);
-        _ = forestGiant.Reflect().SetInternalField("lostPlayerInChase", false);
+        forestGiant.lostPlayerInChase = false;
     }
 
     static void HandleSnareFlea(CentipedeAI snareFlea, PlayerControllerB targetPlayer) {
@@ -88,9 +88,8 @@ class EnemyPromptHandler {
             playerPosition + (targetPlayer.transform.forward * 5.0f)
         );
 
-        _ = bunkerSpider.Reflect()
-                        .SetInternalField("watchFromDistance", false)?
-                        .SetInternalField("chaseTimer", float.MaxValue);
+        bunkerSpider.watchFromDistance = false;
+        bunkerSpider.chaseTimer = float.MaxValue;
     }
 
     static void HandleBee(RedLocustBees bee, PlayerControllerB targetPlayer, bool willTeleportEnemy) {
@@ -103,10 +102,8 @@ class EnemyPromptHandler {
         hoardingBug.SetBehaviourState(BehaviourState.AGGRAVATED);
         hoardingBug.angryAtPlayer = targetPlayer;
         hoardingBug.angryTimer = float.MaxValue;
-
-        _ = hoardingBug.Reflect()
-                       .SetInternalField("lostPlayerInChase", false)?
-                       .InvokeInternalMethod("SyncNestPositionServerRpc", targetPlayer.transform.position);
+        hoardingBug.lostPlayerInChase = false;
+        hoardingBug.SyncNestPositionServerRpc(targetPlayer.transform.position);
     }
 
     static void HandleNutcracker(NutcrackerEnemyAI nutcracker, PlayerControllerB targetPlayer, bool willTeleportEnemy) {
@@ -115,10 +112,8 @@ class EnemyPromptHandler {
         nutcracker.StopInspection();
         nutcracker.SeeMovingThreatServerRpc(targetPlayer.PlayerIndex());
         nutcracker.AimGunServerRpc(targetPlayer.transform.position);
-
-        _ = nutcracker.Reflect()
-                      .SetInternalField("lastSeenPlayerPos", targetPlayer.transform.position)?
-                      .SetInternalField("timeSinceSeeingTarget", 0);
+        nutcracker.lastSeenPlayerPos = targetPlayer.transform.position;
+        nutcracker.timeSinceSeeingTarget = 0f;
     }
 
     static void HandleMaskedPlayer(MaskedPlayerEnemy maskedPlayer, PlayerControllerB targetPlayer, bool willTeleportEnemy) {

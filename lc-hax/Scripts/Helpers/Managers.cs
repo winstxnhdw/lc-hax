@@ -11,5 +11,5 @@ static partial class Helper {
 
     internal static TimeOfDay? TimeOfDay => TimeOfDay.Instance.Unfake();
 
-    internal static Terminal? Terminal => Helper.HUDManager?.Reflect().GetInternalField<Terminal>("terminalScript").Unfake();
+    internal static Terminal? Terminal => Helper.HUDManager?.terminalScript.Unfake();
 }

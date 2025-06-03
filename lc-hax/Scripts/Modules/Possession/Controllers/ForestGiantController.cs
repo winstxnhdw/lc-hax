@@ -22,7 +22,7 @@ class ForestGiantController : IEnemyController<ForestGiantAI> {
         enemy.SetBehaviourState(GiantState.DEFAULT);
     }
 
-    public bool IsAbleToMove(ForestGiantAI enemy) => !enemy.Reflect().GetInternalField<bool>("inEatingPlayerAnimation");
+    public bool IsAbleToMove(ForestGiantAI enemy) => !enemy.inEatingPlayerAnimation;
 
     public string GetSecondarySkillName(ForestGiantAI _) => "(HOLD) Chase";
 

@@ -19,10 +19,6 @@ class TranslateCommand : ICommand {
             return;
         }
 
-        _ = Helper.HUDManager?.Reflect().InvokeInternalMethod(
-            "AddPlayerChatMessageServerRpc",
-            translatedText,
-            player.PlayerIndex()
-        );
+        Helper.HUDManager?.AddPlayerChatMessageServerRpc(translatedText, player.PlayerIndex());
     }
 }

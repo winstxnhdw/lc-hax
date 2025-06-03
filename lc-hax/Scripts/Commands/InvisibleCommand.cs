@@ -5,9 +5,7 @@ using UnityEngine;
 [Command("invis")]
 class InvisibleCommand : ICommand {
     static void ImmediatelyUpdatePlayerPosition() =>
-        Helper.LocalPlayer?
-              .Reflect()
-              .InvokeInternalMethod("UpdatePlayerPositionServerRpc", Vector3.zero, true, true, false, true);
+        Helper.LocalPlayer?.UpdatePlayerPositionServerRpc(Vector3.zero, true, true, false, true);
 
     public async Task Execute(string[] args, CancellationToken cancellationToken) {
         Setting.EnableInvisible = !Setting.EnableInvisible;

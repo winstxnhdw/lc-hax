@@ -33,24 +33,18 @@ class HoardingBugController : IEnemyController<HoarderBugAI> {
     }
 
     static void GrabItem(HoarderBugAI enemy, GrabbableObject item) {
-        if (!item.TryGetComponent(out NetworkObject netItem)) return;
+        if (!item.TryGetComponent(out NetworkObject networkObject)) return;
 
-        _ = enemy.Reflect()
-                 .InvokeInternalMethod("GrabItem", netItem)?
-                 .SetInternalField("sendingGrabOrDropRPC", true);
-
+        enemy.sendingGrabOrDropRPC = true;
+        enemy.GrabItem(networkObject);
         enemy.SwitchToBehaviourServerRpc(1);
-        enemy.GrabItemServerRpc(netItem);
+        enemy.GrabItemServerRpc(networkObject);
     }
 
     public void OnDeath(HoarderBugAI enemy) {
         if (enemy.heldItem.itemGrabbableObject.TryGetComponent(out NetworkObject networkObject)) return;
 
-        _ = enemy.Reflect().InvokeInternalMethod(
-            "DropItemAndCallDropRPC",
-            networkObject,
-            false
-        );
+        enemy.DropItemAndCallDropRPC(networkObject, false);
     }
 
     public void UsePrimarySkill(HoarderBugAI enemy) {
@@ -80,7 +74,7 @@ class HoardingBugController : IEnemyController<HoarderBugAI> {
         }
 
         if (enemy.heldItem.itemGrabbableObject.TryGetComponent(out NetworkObject networkObject)) {
-            _ = enemy.Reflect().InvokeInternalMethod("DropItemAndCallDropRPC", networkObject, false);
+            enemy.DropItemAndCallDropRPC(networkObject, false);
         }
     }
 

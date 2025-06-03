@@ -13,7 +13,7 @@ class BaboonHawkController : IEnemyController<BaboonBirdAI> {
 
     public void OnDeath(BaboonBirdAI enemy) {
         if (enemy.heldScrap is not null) {
-            _ = enemy.Reflect().InvokeInternalMethod("DropHeldItemAndSync");
+            enemy.DropHeldItemAndSync();
         }
     }
 
@@ -30,8 +30,8 @@ class BaboonHawkController : IEnemyController<BaboonBirdAI> {
     }
 
     static void GrabItemAndSync(BaboonBirdAI enemy, GrabbableObject item) {
-        if (!item.TryGetComponent(out NetworkObject netItem)) return;
-        _ = enemy.Reflect().InvokeInternalMethod("GrabItemAndSync", netItem);
+        if (!item.TryGetComponent(out NetworkObject networkObject)) return;
+        enemy.GrabItemAndSync(networkObject);
     }
 
     public void UsePrimarySkill(BaboonBirdAI enemy) {
@@ -48,7 +48,7 @@ class BaboonHawkController : IEnemyController<BaboonBirdAI> {
 
     public void UseSecondarySkill(BaboonBirdAI enemy) {
         if (enemy.heldScrap is null) return;
-        _ = enemy.Reflect().InvokeInternalMethod("DropHeldItemAndSync");
+        enemy.DropHeldItemAndSync();
     }
 
     public string GetPrimarySkillName(BaboonBirdAI enemy) => enemy.heldScrap is not null ? "" : "Grab Item";

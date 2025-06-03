@@ -60,7 +60,7 @@ sealed class TriggerMod : MonoBehaviour, IEnemyPrompter {
             Collider collider = raycastHit.collider;
 
             if (collider.TryGetComponent(out TerminalAccessibleObject terminalObject)) {
-                terminalObject.SetDoorOpenServerRpc(!terminalObject.Reflect().GetInternalField<bool>("isDoorOpen"));
+                terminalObject.SetDoorOpenServerRpc(!terminalObject.isDoorOpen);
             }
 
             if (collider.TryGetComponent(out Turret turret)) {

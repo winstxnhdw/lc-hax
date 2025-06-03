@@ -335,7 +335,7 @@ internal sealed class PossessionMod : MonoBehaviour {
     }
 
     static void OpenDoorAsEnemy(DoorLock door) {
-        if (door.Reflect().GetInternalField<bool>("isDoorOpened")) return;
+        if (door.isDoorOpened) return;
         if (door.gameObject.TryGetComponent(out AnimatedObjectTrigger trigger)) {
             trigger.TriggerAnimationNonPlayer(false, true, false);
         }

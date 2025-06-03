@@ -80,15 +80,7 @@ sealed class FollowMod : MonoBehaviour {
         CopiedStates state = this.PlayerStates.Dequeue();
 
         localPlayer.transform.rotation = state.rotation * this.DeviateRotation;
-
-        //broadcast fake rotation
-        Reflector<PlayerControllerB> localPlayerReflector = localPlayer.Reflect();
-
-        _ = localPlayerReflector.InvokeInternalMethod(
-            "UpdatePlayerRotationServerRpc",
-            (short)localPlayerReflector.GetInternalField<float>("cameraUp"),
-            (short)localPlayer.thisPlayerBody.eulerAngles.y
-        );
+        localPlayer.UpdatePlayerRotationServerRpc((short)localPlayer.cameraUp, (short)localPlayer.thisPlayerBody.eulerAngles.y);
 
         if (this.DeviateTimer < 0) {
             this.DeviateRotation = Quaternion.Euler(0.0f, Random.Range(-360.0f, 360.0f), 0.0f);
@@ -97,17 +89,13 @@ sealed class FollowMod : MonoBehaviour {
 
         localPlayer.transform.rotation = previousRotation;
 
-        //broadcast copied animation
+        // Broadcast copied animation
         if (this.AnimationBroadcastTimer < 0.0f) {
-            state.animationStates.Length.Range().ForEach(i => {
-                _ = localPlayerReflector.InvokeInternalMethod(
-                    "UpdatePlayerAnimationServerRpc",
-                    state.animationStates[i],
-                    state.animationSpeed
-                );
-            });
+            state.animationStates.Length.Range().ForEach(i =>
+                localPlayer.UpdatePlayerAnimationServerRpc(state.animationStates[i], state.animationSpeed)
+            );
 
-            //too much broadcast will make your animation stuck at first animation frame in other players pov.
+            // Too much broadcasting will make your animation stuck on the first animation frame in other player's POV.
             this.AnimationBroadcastTimer = 0.14f;
         }
 
@@ -116,10 +104,7 @@ sealed class FollowMod : MonoBehaviour {
         }
 
         localPlayer.transform.position = state.position;
-
-        //broadcast copied position.
-        _ = localPlayerReflector.InvokeInternalMethod(
-            "UpdatePlayerPositionServerRpc",
+        localPlayer.UpdatePlayerPositionServerRpc(
             localPlayer.thisPlayerBody.localPosition,
             localPlayer.isInElevator,
             localPlayer.isInHangarShipRoom,

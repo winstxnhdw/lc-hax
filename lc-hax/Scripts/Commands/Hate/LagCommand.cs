@@ -6,14 +6,10 @@ using UnityEngine;
 
 [Command("lag")]
 class LagCommand : ICommand {
-    static IEnumerator WaitForEnemyOwnershipChange(
-        PlayerControllerB player,
-        EnemyAI enemy,
-        Reflector<FlowermanAI> enemyReflector
-    ) {
+    static IEnumerator WaitForEnemyOwnershipChange(PlayerControllerB player, EnemyAI enemy) {
         WaitForEndOfFrame waitForEndOfFrame = new();
 
-        while (enemyReflector.GetInternalField<int>("currentOwnershipOnThisClient") != player.PlayerIndex()) {
+        while (enemy.currentOwnershipOnThisClient != player.PlayerIndex()) {
             if (Helper.StartOfRound is { inShipPhase: true }) yield break;
 
             enemy.ChangeEnemyOwnerServerRpc(player.actualClientId);
@@ -26,20 +22,14 @@ class LagCommand : ICommand {
         PlayerControllerB targetPlayer,
         FlowermanAI bracken
     ) {
-        Reflector<FlowermanAI> enemyReflector = bracken.Reflect();
-
-        yield return LagCommand.WaitForEnemyOwnershipChange(localPlayer, bracken, enemyReflector);
+        yield return LagCommand.WaitForEnemyOwnershipChange(localPlayer, bracken);
 
         bracken.SetMovingTowardsTargetPlayer(targetPlayer);
         bracken.SetBehaviourState(BehaviourState.AGGRAVATED);
         bracken.EnterAngerModeServerRpc(float.MaxValue);
+        bracken.UpdateEnemyPositionServerRpc(targetPlayer.transform.position);
 
-        _ = enemyReflector.InvokeInternalMethod(
-            "UpdateEnemyPositionServerRpc",
-            targetPlayer.transform.position
-        );
-
-        yield return LagCommand.WaitForEnemyOwnershipChange(targetPlayer, bracken, enemyReflector);
+        yield return LagCommand.WaitForEnemyOwnershipChange(targetPlayer, bracken);
     }
 
     public async Task Execute(string[] args, CancellationToken cancellationToken) {
