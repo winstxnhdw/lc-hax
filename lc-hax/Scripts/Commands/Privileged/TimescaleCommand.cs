@@ -11,7 +11,7 @@ class TimescaleCommand : ICommand {
         }
 
         if (!float.TryParse(args[0], out float timescale)) {
-            Chat.Print("Invalid timescale!");
+            Chat.Print($"Invalid {nameof(timescale)}!");
             return;
         }
 

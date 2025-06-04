@@ -34,12 +34,12 @@ class PoisonCommand : ICommand {
         }
 
         if (!ulong.TryParse(args[2], out ulong duration)) {
-            Chat.Print($"Invalid {nameof(duration)}!");
+            Chat.Print($"Poison {nameof(duration)} must be a positive number!");
             return;
         }
 
         if (!args[3].TryParse(defaultValue: 1, result: out ulong delay)) {
-            Chat.Print($"Invalid {nameof(delay)}!");
+            Chat.Print($"Poison {nameof(delay)} must be a positive number!");
             return;
         }
 

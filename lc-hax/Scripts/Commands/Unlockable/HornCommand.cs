@@ -10,8 +10,8 @@ class HornCommand : ICommand {
             return;
         }
 
-        if (!ulong.TryParse(args[0], out ulong hornDurationSeconds)) {
-            Chat.Print("Invalid duration!");
+        if (!ulong.TryParse(args[0], out ulong duration)) {
+            Chat.Print($"Horn {nameof(duration)} must be a positive number!");
             return;
         }
 
@@ -24,7 +24,7 @@ class HornCommand : ICommand {
 
         try {
             shipAlarmCord.PullCordServerRpc(-1);
-            await Task.Delay(TimeSpan.FromSeconds(hornDurationSeconds), cancellationToken);
+            await Task.Delay(TimeSpan.FromSeconds(duration), cancellationToken);
         }
 
         finally {

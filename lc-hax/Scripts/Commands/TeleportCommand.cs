@@ -18,7 +18,7 @@ class TeleportCommand : ITeleporter, ICommand {
         PlayerControllerB? currentPlayer = Helper.LocalPlayer;
 
         if (targetPlayer is null || currentPlayer is null) {
-            return new Result { Message = "Player not found!" };
+            return new Result { Message = "Player is not found!" };
         }
 
         currentPlayer.TeleportPlayer(targetPlayer.transform.position);
@@ -43,7 +43,7 @@ class TeleportCommand : ITeleporter, ICommand {
 
     Result TeleportPlayerToPosition(string[] args) {
         if (Helper.GetPlayer(args[0]) is not PlayerControllerB player) {
-            return new Result { Message = "Player not found!" };
+            return new Result { Message = "Player is not found!" };
         }
 
         Vector3? coordinates = TeleportCommand.GetCoordinates(args[1..]);
@@ -58,7 +58,7 @@ class TeleportCommand : ITeleporter, ICommand {
         PlayerControllerB? targetPlayer = Helper.GetPlayer(args[1]);
 
         return sourcePlayer is null || targetPlayer is null
-            ? new Result { Message = "Player not found!" }
+            ? new Result { Message = "Player is not found!" }
             : this.TeleportPlayerToPosition(sourcePlayer, targetPlayer.transform.position);
     }
 

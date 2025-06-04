@@ -46,7 +46,7 @@ class BuyCommand : ICommand {
         }
 
         if (!args[1].TryParse(defaultValue: 1, result: out ushort quantity)) {
-            Chat.Print($"{nameof(quantity)} must be a positive number!");
+            Chat.Print($"Purchase {nameof(quantity)} must be a positive number!");
             return;
         }
 

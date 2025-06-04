@@ -66,7 +66,7 @@ class RandomCommand : ICommand {
         ObjectPlacements<Transform, ShipTeleporter>? teleporterPlacements = this.GetInverseTeleporterPlacements(targetPlayer);
 
         if (teleporterPlacements is null) {
-            Chat.Print("Inverse Teleporter not found!");
+            Chat.Print("Inverse Teleporter is not found!");
             return;
         }
 
@@ -77,7 +77,7 @@ class RandomCommand : ICommand {
         ObjectPlacements<Transform, PlaceableShipObject>? cupboardPlacements = RandomCommand.GetCupboardPlacements(targetPlayer);
 
         if (cupboardPlacements is null) {
-            Chat.Print("Cupboard not found!");
+            Chat.Print("Cupboard is not found!");
             return;
         }
 

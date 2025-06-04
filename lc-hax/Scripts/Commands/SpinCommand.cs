@@ -22,7 +22,7 @@ class SpinCommand : ICommand {
         }
 
         if (!ulong.TryParse(args[0], out ulong duration)) {
-            Chat.Print("Invalid duration!");
+            Chat.Print($"Spin {nameof(duration)} must be a positive number!");
         }
 
         Helper.FindObjects<PlaceableShipObject>()

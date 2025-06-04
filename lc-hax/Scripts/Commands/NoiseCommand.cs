@@ -29,7 +29,7 @@ class NoiseCommand : ICommand {
         }
 
         if (!args[1].TryParse(defaultValue: 30, result: out ulong duration)) {
-            Chat.Print($"Invalid {nameof(duration)}!");
+            Chat.Print($"Noise {nameof(duration)} must be a positive number!");
             return;
         }
 

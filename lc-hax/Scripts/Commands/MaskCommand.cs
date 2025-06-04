@@ -26,7 +26,7 @@ class MaskCommand : ICommand {
         }
 
         if (!args[1].TryParse(defaultValue: 1, result: out ulong amount)) {
-            Chat.Print($"Invalid {nameof(amount)}!");
+            Chat.Print($"Mask {nameof(amount)} must be a positive number!");
             return;
         }
 

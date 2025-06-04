@@ -13,7 +13,7 @@ class HomeCommand : ITeleporter, ICommand {
         HaxObjects.Instance?.ShipTeleporters?.Renew();
 
         if (HomeCommand.Teleporter is not ShipTeleporter teleporter) {
-            Chat.Print("ShipTeleporter not found!");
+            Chat.Print("Ship Teleporter is not found!");
             return;
         }
 
@@ -32,7 +32,7 @@ class HomeCommand : ITeleporter, ICommand {
         }
 
         if (Helper.GetPlayer(args[0]) is not PlayerControllerB targetPlayer) {
-            Chat.Print("Player not found!");
+            Chat.Print("Target player is not found!");
             return;
         }
 

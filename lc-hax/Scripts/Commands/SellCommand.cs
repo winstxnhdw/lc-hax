@@ -88,7 +88,7 @@ class SellCommand : ICommand {
         }
 
         if (!ushort.TryParse(args[0], out ushort targetValue)) {
-            Chat.Print("Invalid target amount!");
+            Chat.Print("Target amount must be a positive number!");
             return;
         }
 

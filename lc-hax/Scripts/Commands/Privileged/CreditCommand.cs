@@ -11,7 +11,7 @@ class CreditCommand : ICommand {
         }
 
         if (!int.TryParse(args[0], out int amount)) {
-            Chat.Print("Invalid amount!");
+            Chat.Print($"Invalid {nameof(amount)}!");
             return;
         }
 

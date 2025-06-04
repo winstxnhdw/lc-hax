@@ -46,8 +46,10 @@ class SpawnCommand : ICommand {
             return;
         }
 
-        if (args[0] is not string enemy) {
-            Chat.Print("Invalid enemy!");
+        string? enemy = args[0];
+
+        if (string.IsNullOrWhiteSpace(enemy)) {
+            Chat.Print($"Invalid {nameof(enemy)} name!");
             return;
         }
 
@@ -57,16 +59,16 @@ class SpawnCommand : ICommand {
         }
 
         if (!enemy.FuzzyMatch(SpawnCommand.HostileEnemies.Value.Keys, out string key)) {
-            Chat.Print("Invalid enemy!");
+            Chat.Print($"Invalid {nameof(enemy)} name!");
             return;
         }
 
-        if (!args[2].TryParse(defaultValue: 1, result: out ulong amount)) {
-            Chat.Print($"Invalid {nameof(amount)}!");
+        if (!args[2].TryParse(defaultValue: 1, result: out ulong count)) {
+            Chat.Print($"Enemy {nameof(count)} must be a positive number!");
             return;
         }
 
-        SpawnCommand.SpawnEnemyOnPlayer(targetPlayer, SpawnCommand.HostileEnemies.Value[key], amount);
-        Chat.Print($"Spawning {amount}x {key} on {targetPlayer.playerUsername}!");
+        SpawnCommand.SpawnEnemyOnPlayer(targetPlayer, SpawnCommand.HostileEnemies.Value[key], count);
+        Chat.Print($"Spawning {count}x {key} on {targetPlayer.playerUsername}!");
     }
 }

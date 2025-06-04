@@ -10,7 +10,7 @@ class ShovelCommand : ICommand {
         }
 
         if (!ushort.TryParse(args[0], out ushort shovelHitForce)) {
-            Chat.Print("Invalid value!");
+            Chat.Print("Shovel force must be a positive number!");
             return;
         }
 

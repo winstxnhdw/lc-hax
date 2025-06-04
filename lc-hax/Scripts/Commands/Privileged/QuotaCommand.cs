@@ -11,12 +11,12 @@ class QuotaCommand : ICommand {
         }
 
         if (!ushort.TryParse(args[0], out ushort amount)) {
-            Chat.Print($"Invalid {nameof(amount)}!");
+            Chat.Print($"Quota {nameof(amount)} must be a positive number!");
             return;
         }
 
         if (!args[1].TryParse(defaultValue: 0, result: out ushort fulfilled)) {
-            Chat.Print($"Invalid {nameof(fulfilled)} amount!");
+            Chat.Print($"The {nameof(fulfilled)} amount must be a positive number!");
             return;
         }
 
