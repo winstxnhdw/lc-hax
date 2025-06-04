@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using GameNetcodeStuff;
@@ -43,8 +44,8 @@ class PoisonCommand : ICommand {
         }
 
         if (args[0] is "--all") {
-            Helper.ActivePlayers.ForEach(async player =>
-                await PoisonCommand.PoisonPlayer(player, damage, delay, duration, cancellationToken)
+            await Task.WhenAll(
+                Helper.ActivePlayers.Select(player => PoisonCommand.PoisonPlayer(player, damage, delay, duration, cancellationToken))
             );
         }
 
