@@ -1,14 +1,14 @@
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Linq;
-using System.Collections.Generic;
 using UnityEngine;
 
 [Command("build")]
 class BuildCommand : ICommand {
     static Dictionary<string, int>? Unlockables { get; set; }
 
-    public async Task Execute(string[] args, CancellationToken cancellationToken) {
+    public async Task Execute(Arguments args, CancellationToken cancellationToken) {
         if (Helper.StartOfRound is not StartOfRound startOfRound) return;
         if (Helper.CurrentCamera is not Camera camera) return;
         if (args[0] is not string unlockableName) {

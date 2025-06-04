@@ -4,7 +4,7 @@ using GameNetcodeStuff;
 
 [Command("mask")]
 class MaskCommand : ICommand {
-    public async Task Execute(string[] args, CancellationToken cancellationToken) {
+    public async Task Execute(Arguments args, CancellationToken cancellationToken) {
         if (Helper.LocalPlayer is not PlayerControllerB localPlayer) return;
         if (Helper.Grabbables.First(grabbable => grabbable is HauntedMaskItem) is not HauntedMaskItem hauntedMaskItem) {
             Chat.Print("No mask found!");
@@ -26,7 +26,7 @@ class MaskCommand : ICommand {
         }
 
         if (!args[1].TryParse(defaultValue: 1, result: out ulong amount)) {
-            Chat.Print("Invalid amount!");
+            Chat.Print($"Invalid {nameof(amount)}!");
             return;
         }
 

@@ -4,7 +4,7 @@ using GameNetcodeStuff;
 
 [Command("bomb")]
 class BombCommand : ICommand, IJetpack {
-    public async Task Execute(string[] args, CancellationToken cancellationToken) {
+    public async Task Execute(Arguments args, CancellationToken cancellationToken) {
         if (Helper.LocalPlayer is not PlayerControllerB localPlayer) return;
         if (args.Length is 0) {
             Chat.Print("Usage: bomb <player>");

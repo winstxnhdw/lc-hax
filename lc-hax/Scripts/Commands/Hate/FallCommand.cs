@@ -29,7 +29,7 @@ class FallCommand : ICommand {
         yield return FallCommand.WaitForEnemyOwnershipChange(targetPlayer, enemy);
     }
 
-    public async Task Execute(string[] args, CancellationToken cancellationToken) {
+    public async Task Execute(Arguments args, CancellationToken cancellationToken) {
         if (Helper.LocalPlayer is not PlayerControllerB localPlayer) return;
         if (args.Length is 0) {
             Chat.Print("Usage: fall <player>");

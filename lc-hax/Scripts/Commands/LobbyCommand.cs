@@ -4,7 +4,7 @@ using UnityEngine;
 
 [Command("lobby")]
 class LobbyCommand : ICommand {
-    public async Task Execute(string[] args, CancellationToken cancellationToken) {
+    public async Task Execute(Arguments args, CancellationToken cancellationToken) {
         if (State.ConnectedLobby is not ConnectedLobby connectedLobby) return;
 
         GUIUtility.systemCopyBuffer = connectedLobby.Lobby.Owner.Id.ToString();

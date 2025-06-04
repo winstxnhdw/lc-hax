@@ -7,7 +7,7 @@ class GarageCommand : ICommand {
         interactTrigger => interactTrigger.name is "Cube" && interactTrigger.transform.parent.name is "Cutscenes"
     );
 
-    public async Task Execute(string[] args, CancellationToken cancellationToken) {
+    public async Task Execute(Arguments args, CancellationToken cancellationToken) {
         if (Helper.RoundManager is not RoundManager roundManager) return;
         if (roundManager.currentLevel.levelID is not 0) {
             Chat.Print("You must be in Experimentation to use this command!");

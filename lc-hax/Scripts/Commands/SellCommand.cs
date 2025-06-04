@@ -68,7 +68,7 @@ class SellCommand : ICommand {
         return result;
     }
 
-    public async Task Execute(string[] args, CancellationToken cancellationToken) {
+    public async Task Execute(Arguments args, CancellationToken cancellationToken) {
         if (Helper.LocalPlayer is not PlayerControllerB player) return;
         if (Helper.RoundManager?.currentLevel is not { levelID: 3 }) {
             Chat.Print("You must be at the company to use this command!");

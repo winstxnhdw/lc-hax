@@ -110,7 +110,7 @@ class HealCommand : ICommand, IStun {
         return targetPlayer;
     }
 
-    public async Task Execute(string[] args, CancellationToken cancellationToken) {
+    public async Task Execute(Arguments args, CancellationToken cancellationToken) {
         if (Helper.HUDManager is not HUDManager hudManager) return;
 
         PlayerControllerB? healedPlayer = args.Length switch {

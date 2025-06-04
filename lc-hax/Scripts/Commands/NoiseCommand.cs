@@ -17,7 +17,7 @@ class NoiseCommand : ICommand {
         }
     }
 
-    public async Task Execute(string[] args, CancellationToken cancellationToken) {
+    public async Task Execute(Arguments args, CancellationToken cancellationToken) {
         if (args.Length is 0) {
             Chat.Print("Usage: noise <player> <duration=30>");
             return;
@@ -29,7 +29,7 @@ class NoiseCommand : ICommand {
         }
 
         if (!args[1].TryParse(defaultValue: 30, result: out ulong duration)) {
-            Chat.Print("Invalid duration!");
+            Chat.Print($"Invalid {nameof(duration)}!");
             return;
         }
 

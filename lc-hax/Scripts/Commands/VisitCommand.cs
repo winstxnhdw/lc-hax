@@ -1,13 +1,13 @@
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Linq;
-using System.Collections.Generic;
 
 [Command("visit")]
 class VisitCommand : ICommand {
     static Dictionary<string, int>? Levels { get; set; }
 
-    public async Task Execute(string[] args, CancellationToken cancellationToken) {
+    public async Task Execute(Arguments args, CancellationToken cancellationToken) {
         if (Helper.Terminal is not Terminal terminal) return;
         if (Helper.StartOfRound is not StartOfRound startOfRound) return;
         if (args[0] is not string moon) {

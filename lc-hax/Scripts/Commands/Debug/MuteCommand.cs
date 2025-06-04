@@ -13,7 +13,7 @@ class MuteCommand : ICommand {
             message.StartsWith($"<color=#FF0000>{playerUsername}<color>: <color=#FFFF00>'"
         )) is not null;
 
-    public async Task Execute(string[] args, CancellationToken cancellationToken) {
+    public async Task Execute(Arguments args, CancellationToken cancellationToken) {
         if (args.Length is 0) {
             Chat.Print("Usage: mute <player>");
             return;

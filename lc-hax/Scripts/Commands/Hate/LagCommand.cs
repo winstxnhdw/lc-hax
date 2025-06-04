@@ -32,7 +32,7 @@ class LagCommand : ICommand {
         yield return LagCommand.WaitForEnemyOwnershipChange(targetPlayer, bracken);
     }
 
-    public async Task Execute(string[] args, CancellationToken cancellationToken) {
+    public async Task Execute(Arguments args, CancellationToken cancellationToken) {
         if (Helper.LocalPlayer is not PlayerControllerB localPlayer) return;
         if (args.Length is 0) {
             Chat.Print("Usage: lag <player>");

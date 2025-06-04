@@ -62,7 +62,7 @@ class TeleportCommand : ITeleporter, ICommand {
             : this.TeleportPlayerToPosition(sourcePlayer, targetPlayer.transform.position);
     }
 
-    public async Task Execute(string[] args, CancellationToken cancellationToken) {
+    public async Task Execute(Arguments args, CancellationToken cancellationToken) {
         if (args.Length is 0) {
             Chat.Print("Usages:",
                 "tp <player>",

@@ -5,7 +5,7 @@ using UnityEngine;
 
 [Command("fakedeath")]
 class FakeDeathCommand : ICommand {
-    public async Task Execute(string[] args, CancellationToken cancellationToken) {
+    public async Task Execute(Arguments args, CancellationToken cancellationToken) {
         if (Helper.LocalPlayer is not PlayerControllerB player) return;
 
         Setting.EnableFakeDeath = true;

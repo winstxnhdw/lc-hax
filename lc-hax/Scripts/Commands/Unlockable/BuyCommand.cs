@@ -38,7 +38,7 @@ class BuyCommand : ICommand {
         return buyableItems;
     }
 
-    public async Task Execute(string[] args, CancellationToken cancellationToken) {
+    public async Task Execute(Arguments args, CancellationToken cancellationToken) {
         if (Helper.Terminal is not Terminal terminal) return;
         if (args[0] is not string item) {
             Chat.Print("Usage: buy <item> <quantity?>");
@@ -46,7 +46,7 @@ class BuyCommand : ICommand {
         }
 
         if (!args[1].TryParse(defaultValue: 1, result: out ushort quantity)) {
-            Chat.Print("The quantity must be a positive number!");
+            Chat.Print($"{nameof(quantity)} must be a positive number!");
             return;
         }
 

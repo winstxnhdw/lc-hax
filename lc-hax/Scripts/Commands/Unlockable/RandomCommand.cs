@@ -88,7 +88,7 @@ class RandomCommand : ICommand {
         teleporterPlacements.Value.Placement.GameObject.PressTeleportButtonServerRpc();
     };
 
-    public async Task Execute(string[] args, CancellationToken cancellationToken) {
+    public async Task Execute(Arguments args, CancellationToken cancellationToken) {
         if (args.Length is 0) {
             Chat.Print("Usage: random <player>");
             return;

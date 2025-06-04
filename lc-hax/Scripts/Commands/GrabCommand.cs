@@ -63,7 +63,7 @@ class GrabCommand : ICommand {
         return $"Grabbed a {key.ToTitleCase()}!";
     }
 
-    public async Task Execute(string[] args, CancellationToken cancellationToken) {
+    public async Task Execute(Arguments args, CancellationToken cancellationToken) {
         if (Helper.LocalPlayer is not PlayerControllerB localPlayer) return;
         if (localPlayer.ItemSlots.WhereIsNotNull().Count() >= 4) {
             Chat.Print("You must have an empty inventory slot!");

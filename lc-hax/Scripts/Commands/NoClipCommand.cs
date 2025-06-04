@@ -7,7 +7,7 @@ using UnityEngine;
 class NoClipCommand : ICommand {
     static bool EnabledGodMode { get; set; }
 
-    public async Task Execute(string[] args, CancellationToken cancellationToken) {
+    public async Task Execute(Arguments args, CancellationToken cancellationToken) {
         if (Helper.LocalPlayer is not PlayerControllerB localPlayer) return;
         if (localPlayer.gameObject.TryGetComponent(out KeyboardMovement keyboard)) {
             Setting.EnableGodMode = EnabledGodMode;

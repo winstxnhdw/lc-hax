@@ -18,8 +18,8 @@ class PoisonCommand : ICommand {
         }
     }
 
-    public async Task Execute(string[] args, CancellationToken cancellationToken) {
-        if (args.Length < 4) {
+    public async Task Execute(Arguments args, CancellationToken cancellationToken) {
+        if (args.Length < 3) {
             Chat.Print("Usages:",
                 "poison <player> <damage> <duration> <delay=1>",
                 "poison --all <damage> <duration> <delay=1>"
@@ -29,17 +29,17 @@ class PoisonCommand : ICommand {
         }
 
         if (!int.TryParse(args[1], out int damage)) {
-            Chat.Print("Invalid damage!");
+            Chat.Print($"Invalid {nameof(damage)}!");
             return;
         }
 
         if (!ulong.TryParse(args[2], out ulong duration)) {
-            Chat.Print("Invalid duration!");
+            Chat.Print($"Invalid {nameof(duration)}!");
             return;
         }
 
         if (!args[3].TryParse(defaultValue: 1, result: out ulong delay)) {
-            Chat.Print("Invalid delay!");
+            Chat.Print($"Invalid {nameof(delay)}!");
             return;
         }
 

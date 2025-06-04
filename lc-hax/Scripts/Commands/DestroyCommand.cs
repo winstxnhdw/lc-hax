@@ -35,7 +35,7 @@ class DestroyCommand : ICommand {
         return new Result { Success = true };
     }
 
-    public async Task Execute(string[] args, CancellationToken cancellationToken) {
+    public async Task Execute(Arguments args, CancellationToken cancellationToken) {
         if (Helper.LocalPlayer is not PlayerControllerB player) return;
 
         if (player.ItemSlots.WhereIsNotNull().Count() >= 4) {

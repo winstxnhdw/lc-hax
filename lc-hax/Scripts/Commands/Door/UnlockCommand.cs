@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 
 [Command("unlock")]
 class UnlockCommand : ICommand, ISecureGate {
-    public async Task Execute(string[] args, CancellationToken cancellationToken) {
+    public async Task Execute(Arguments args, CancellationToken cancellationToken) {
         this.SetSecureDoorState(true);
         Helper.FindObjects<DoorLock>()
               .ForEach(door => door.UnlockDoorSyncWithServer());

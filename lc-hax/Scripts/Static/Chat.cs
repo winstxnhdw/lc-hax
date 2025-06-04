@@ -60,7 +60,7 @@ static class Chat {
         try {
             Chat.Print("USER", commandString);
             Chat.OnExecuteCommandAttempt?.Invoke(commandString);
-            string[] args = commandString[1..].Split(' ');
+            Arguments args = commandString[1..].Split(' ');
 
             ICommand? command =
                 Chat.Commands.GetValue(args[0]) ??

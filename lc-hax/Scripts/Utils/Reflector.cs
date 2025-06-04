@@ -1,6 +1,6 @@
 using System;
-using System.Reflection;
 using System.Collections.Generic;
+using System.Reflection;
 
 class Reflector<R> {
     const BindingFlags PrivateOrInternal = BindingFlags.NonPublic | BindingFlags.Instance;

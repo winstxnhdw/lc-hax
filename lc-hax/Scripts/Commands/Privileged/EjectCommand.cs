@@ -3,5 +3,5 @@ using System.Threading.Tasks;
 
 [PrivilegedCommand("eject")]
 class EjectCommand : ICommand {
-    public async Task Execute(string[] args, CancellationToken cancellationToken) => Helper.StartOfRound?.ManuallyEjectPlayersServerRpc();
+    public async Task Execute(Arguments args, CancellationToken cancellationToken) => Helper.StartOfRound?.ManuallyEjectPlayersServerRpc();
 }

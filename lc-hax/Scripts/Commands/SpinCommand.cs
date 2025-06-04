@@ -16,7 +16,7 @@ class SpinCommand : ICommand {
         Helper.CreateComponent<TransientBehaviour>()
               .Init(SpinCommand.PlaceObjectAtRotation(shipObject), duration);
 
-    public async Task Execute(string[] args, CancellationToken cancellationToken) {
+    public async Task Execute(Arguments args, CancellationToken cancellationToken) {
         if (args.Length is 0) {
             Chat.Print("Usage: spin <duration>");
         }

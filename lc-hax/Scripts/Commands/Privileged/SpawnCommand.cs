@@ -40,7 +40,7 @@ class SpawnCommand : ICommand {
         }
     }
 
-    public async Task Execute(string[] args, CancellationToken cancellationToken) {
+    public async Task Execute(Arguments args, CancellationToken cancellationToken) {
         if (args.Length < 2) {
             Chat.Print("Usage: spawn <enemy> <player> <amount?>");
             return;
@@ -62,11 +62,11 @@ class SpawnCommand : ICommand {
         }
 
         if (!args[2].TryParse(defaultValue: 1, result: out ulong amount)) {
-            Chat.Print("Invalid amount specified. Defaulting to 1.");
+            Chat.Print($"Invalid {nameof(amount)}!");
             return;
         }
 
         SpawnCommand.SpawnEnemyOnPlayer(targetPlayer, SpawnCommand.HostileEnemies.Value[key], amount);
-        Chat.Print($"Spawning {amount}x {key} on {targetPlayer.playerUsername}.");
+        Chat.Print($"Spawning {amount}x {key} on {targetPlayer.playerUsername}!");
     }
 }

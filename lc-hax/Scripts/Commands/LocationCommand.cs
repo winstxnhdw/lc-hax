@@ -4,7 +4,7 @@ using UnityEngine;
 
 [Command("xyz")]
 class LocationCommand : ICommand {
-    public async Task Execute(string[] args, CancellationToken cancellationToken) {
+    public async Task Execute(Arguments args, CancellationToken cancellationToken) {
         if (Helper.CurrentCamera is not Camera camera) return;
 
         Vector3 currentPostion = camera.transform.position;

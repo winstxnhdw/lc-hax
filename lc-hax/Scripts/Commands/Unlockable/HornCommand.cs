@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 
 [Command("horn")]
 class HornCommand : ICommand {
-    public async Task Execute(string[] args, CancellationToken cancellationToken) {
+    public async Task Execute(Arguments args, CancellationToken cancellationToken) {
         if (args.Length is 0) {
             Chat.Print("Usage: horn <duration>");
             return;

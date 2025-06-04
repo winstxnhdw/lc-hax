@@ -23,7 +23,7 @@ class HomeCommand : ITeleporter, ICommand {
               .Init(teleporter.PressTeleportButtonServerRpc);
     };
 
-    public async Task Execute(string[] args, CancellationToken cancellationToken) {
+    public async Task Execute(Arguments args, CancellationToken cancellationToken) {
         if (Helper.StartOfRound is not StartOfRound startOfRound) return;
         if (args.Length is 0) {
             startOfRound.ForcePlayerIntoShip();

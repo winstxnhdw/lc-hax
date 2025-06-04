@@ -4,14 +4,21 @@ using GameNetcodeStuff;
 
 [Command("translate")]
 class TranslateCommand : ICommand {
-    public async Task Execute(string[] args, CancellationToken cancellationToken) {
+    public async Task Execute(Arguments args, CancellationToken cancellationToken) {
         if (Helper.LocalPlayer is not PlayerControllerB player) return;
         if (args.Length < 2) {
             Chat.Print("Usages: translate <language> <text>");
             return;
         }
 
-        using Translator translator = new(args[0], cancellationToken);
+        string? language = args[0];
+
+        if (string.IsNullOrWhiteSpace(language)) {
+            Chat.Print($"Invalid {nameof(language)}!");
+            return;
+        }
+
+        using Translator translator = new(language, cancellationToken);
         string? translatedText = await translator.Translate(string.Join(' ', args[1..]));
 
         if (string.IsNullOrWhiteSpace(translatedText)) {

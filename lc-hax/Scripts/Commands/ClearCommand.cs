@@ -3,5 +3,5 @@ using System.Threading.Tasks;
 
 [Command("clear")]
 class ClearCommand : ICommand {
-    public async Task Execute(string[] args, CancellationToken cancellationToken) => Chat.Clear();
+    public async Task Execute(Arguments args, CancellationToken cancellationToken) => Chat.Clear();
 }

@@ -35,7 +35,7 @@ class KillCommand : ICommand {
         Chat.Print(result.Message);
     }
 
-    public async Task Execute(string[] args, CancellationToken cancellationToken) {
+    public async Task Execute(Arguments args, CancellationToken cancellationToken) {
         if (args.Length is 0) {
             KillCommand.HandleResult(KillSelf());
             return;
