@@ -1,5 +1,6 @@
 # lc-hax
 
+[![.NET](https://img.shields.io/badge/.NET%209.0-512BD4?logo=dotnet&logoColor=fff)](https://dotnet.microsoft.com/en-us/download/dotnet/thank-you/sdk-9.0.300-windows-x64-installer)
 ![NuGet Version](https://img.shields.io/nuget/v/LethalCompany.GameLibs.Steam?style=flat&label=lc-hax&color=red)
 [![main.yml](https://github.com/winstxnhdw/lc-hax/actions/workflows/main.yml/badge.svg)](https://github.com/winstxnhdw/lc-hax/actions/workflows/main.yml)
 [![formatter.yml](https://github.com/winstxnhdw/lc-hax/actions/workflows/formatter.yml/badge.svg)](https://github.com/winstxnhdw/lc-hax/actions/workflows/formatter.yml)
@@ -19,7 +20,7 @@ A powerful, feature-rich and highly performant portable Windows CLI-only interna
 ## Requirements
 
 - Windows 10 or later
-- [Microsoft .NET 9.0 SDK](https://dotnet.microsoft.com/download)
+- [Microsoft .NET 9.0 SDK](https://dotnet.microsoft.com/en-us/download/dotnet/thank-you/sdk-9.0.300-windows-x64-installer)
 - [Git](https://git-scm.com/download/win)
 
 ## Installation
