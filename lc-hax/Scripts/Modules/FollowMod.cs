@@ -1,7 +1,7 @@
 using System.Collections.Generic;
-using System.Linq;
 using GameNetcodeStuff;
 using UnityEngine;
+using ZLinq;
 
 struct CopiedStates {
     internal Vector3 position;
@@ -91,9 +91,9 @@ sealed class FollowMod : MonoBehaviour {
 
         // Broadcast copied animation
         if (this.AnimationBroadcastTimer < 0.0f) {
-            state.animationStates.Length.Range().ForEach(i =>
-                localPlayer.UpdatePlayerAnimationServerRpc(state.animationStates[i], state.animationSpeed)
-            );
+            foreach (int i in state.animationStates.Length.Range()) {
+                localPlayer.UpdatePlayerAnimationServerRpc(state.animationStates[i], state.animationSpeed);
+            }
 
             // Too much broadcasting will make your animation stuck on the first animation frame in other player's POV.
             this.AnimationBroadcastTimer = 0.14f;

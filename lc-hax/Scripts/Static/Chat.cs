@@ -1,16 +1,17 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
 using System.Threading;
 using UnityEngine.EventSystems;
+using ZLinq;
 
 static class Chat {
     internal static event Action<string>? OnExecuteCommandAttempt;
 
-    static IEnumerable<Type> CommandTypes { get; } =
+    static ValueEnumerable<ZLinq.Linq.ArrayWhere<Type>, Type> CommandTypes { get; } =
         Assembly.GetExecutingAssembly()
                 .GetTypes()
+                .AsValueEnumerable()
                 .Where(type => typeof(ICommand).IsAssignableFrom(type));
 
     static Dictionary<string, ICommand> Commands { get; } =

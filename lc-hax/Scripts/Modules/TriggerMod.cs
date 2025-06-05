@@ -1,5 +1,6 @@
 using GameNetcodeStuff;
 using UnityEngine;
+using ZLinq;
 
 sealed class TriggerMod : MonoBehaviour, IEnemyPrompter {
     RaycastHit[] RaycastHits { get; set; } = new RaycastHit[100];

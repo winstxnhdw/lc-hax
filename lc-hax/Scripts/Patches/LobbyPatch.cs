@@ -1,8 +1,8 @@
 #pragma warning disable IDE1006
 
-using System.Linq;
 using HarmonyLib;
 using Steamworks.Data;
+using ZLinq;
 
 [HarmonyPatch(typeof(SteamLobbyManager))]
 class LobbyPatch {
@@ -14,8 +14,10 @@ class LobbyPatch {
 
     [HarmonyPatch("loadLobbyListAndFilter")]
     static void Prefix(ref Lobby[] ___currentLobbyList) {
-        ___currentLobbyList.Where(lobby => lobby.GetData("name").Contains('\u200b')).ForEach(lobby =>
-            lobby.SetData("name", $"[CC] {lobby.GetData("name")}")
-        );
+        ___currentLobbyList
+            .AsValueEnumerable()
+            .Where(lobby => lobby.GetData("name")
+            .Contains('\u200b'))
+            .ForEach(lobby => lobby.SetData("name", $"[CC] {lobby.GetData("name")}"));
     }
 }

@@ -1,7 +1,7 @@
-using System.Linq;
 using GameNetcodeStuff;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using ZLinq;
 
 class CharacterMovement : MonoBehaviour {
     // Movement constants
@@ -55,6 +55,7 @@ class CharacterMovement : MonoBehaviour {
         this.CharacterController.stepOffset = Mathf.Min(this.CharacterController.stepOffset, maxStepOffset);
 
         enemy.GetComponentsInChildren<Collider>()
+             .AsValueEnumerable()
              .Where(collider => collider != this.CharacterController)
              .ForEach(collider => Physics.IgnoreCollision(this.CharacterController, collider));
     }

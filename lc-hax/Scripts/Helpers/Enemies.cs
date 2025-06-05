@@ -1,13 +1,13 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using GameNetcodeStuff;
 using Unity.Netcode;
 using UnityEngine;
+using ZLinq;
 
 static partial class Helper {
     internal static HashSet<EnemyAI> Enemies { get; } = Helper.StartOfRound is { inShipPhase: false }
-        ? [.. Helper.FindObjects<EnemyAI>().WhereIsNotNull().Where(enemy => enemy.IsSpawned)]
+        ? Helper.FindObjects<EnemyAI>().WhereIsNotNull().AsValueEnumerable().Where(enemy => enemy.IsSpawned).ToHashSet()
         : [];
 
     internal static T? GetEnemy<T>() where T : EnemyAI => Helper.Enemies.First(enemy => enemy is T) as T;

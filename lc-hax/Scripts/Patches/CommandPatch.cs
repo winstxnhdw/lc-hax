@@ -1,8 +1,8 @@
 #pragma warning disable IDE1006
 
-using System.Linq;
-using HarmonyLib;
 using GameNetcodeStuff;
+using HarmonyLib;
+using ZLinq;
 
 [HarmonyPatch(typeof(HUDManager), "EnableChat_performed")]
 class EnableChatPatch {
@@ -28,7 +28,7 @@ class SubmitChatPatch {
             return true;
         }
 
-        if (!new[] { '!', State.CommandPrefix }.Any(hudManager.chatTextField.text.StartsWith)) {
+        if (!new[] { '!', State.CommandPrefix }.AsValueEnumerable().Any(hudManager.chatTextField.text.StartsWith)) {
             return true;
         }
 

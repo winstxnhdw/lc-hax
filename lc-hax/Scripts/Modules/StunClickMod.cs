@@ -1,4 +1,5 @@
 using UnityEngine;
+using ZLinq;
 
 sealed class StunClickMod : MonoBehaviour {
     Collider[] Colliders { get; set; } = new Collider[100];
@@ -32,14 +33,15 @@ sealed class StunClickMod : MonoBehaviour {
         if (Helper.CurrentCamera is not Camera camera) return;
         if (StunClickMod.IsHoldingADefensiveWeapon()) return;
 
-        this.RaycastHits.SphereCastForward(camera.transform).Range().ForEach(i => {
+        foreach (int i in this.RaycastHits.SphereCastForward(camera.transform).Range()) {
             Collider collider = this.RaycastHits[i].collider;
             StunClickMod.StunJam(collider);
-        });
+        }
 
-        Physics.OverlapSphereNonAlloc(camera.transform.position, 5.0f, this.Colliders).Range().ForEach(i => {
+        foreach (int i in Physics.OverlapSphereNonAlloc(camera.transform.position, 5.0f, this.Colliders).Range()) {
             Collider collider = this.Colliders[i];
             StunClickMod.StunJam(collider);
-        });
+        }
+
     }
 }

@@ -1,8 +1,8 @@
-using System.Linq;
 using System.Runtime.CompilerServices;
 using GameNetcodeStuff;
 using Unity.Netcode;
 using UnityEngine;
+using ZLinq;
 
 static partial class Helper {
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -27,7 +27,7 @@ static partial class Helper {
 
     internal static PlayerControllerB[] Players => Helper.StartOfRound?.allPlayerScripts ?? [];
 
-    internal static PlayerControllerB[] ActivePlayers => [.. Helper.Players.Where(player => player.isPlayerControlled && !player.isPlayerDead)];
+    internal static PlayerControllerB[] ActivePlayers => Helper.Players.AsValueEnumerable().Where(player => player.isPlayerControlled && !player.isPlayerDead).ToArray();
 
     internal static PlayerControllerB? GetPlayer(string? playerNameOrId) {
         if (string.IsNullOrEmpty(playerNameOrId)) return null;
@@ -50,7 +50,7 @@ static partial class Helper {
     internal static PlayerControllerB? GetActivePlayer(int playerClientId) => Helper.GetActivePlayer(playerClientId.ToString());
 
     internal static bool GrabObject(this PlayerControllerB player, GrabbableObject grabbable) {
-        if (player.ItemSlots.WhereIsNotNull().Count() >= 4) return false;
+        if (player.ItemSlots.WhereIsNotNull().AsValueEnumerable().Count() >= 4) return false;
 
         NetworkObjectReference networkObject = grabbable.NetworkObject;
         player.GrabObjectServerRpc(networkObject);

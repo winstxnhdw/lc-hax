@@ -1,9 +1,9 @@
 using System;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using CommunityToolkit.HighPerformance;
 using GameNetcodeStuff;
+using ZLinq;
 
 [Command("sell")]
 class SellCommand : ICommand {
@@ -18,9 +18,11 @@ class SellCommand : ICommand {
     }
 
     void SellEverything(PlayerControllerB player, float currentWeight) =>
-        Helper.Grabbables.WhereIsNotNull().Where(this.CanBeSold).ForEach(grabbableObject => {
-            SellCommand.SellObject(player, grabbableObject, currentWeight);
-        });
+        Helper.Grabbables
+             .WhereIsNotNull()
+             .AsValueEnumerable()
+             .Where(this.CanBeSold)
+             .ForEach(grabbableObject => SellCommand.SellObject(player, grabbableObject, currentWeight));
 
     /// <summary>
     /// Uses a modified 0-1 knapsack algorithm to find the largest combination of scraps whose total value does not exceed the target value.
@@ -28,9 +30,10 @@ class SellCommand : ICommand {
     /// </summary>
     /// <returns>the remaining amount left to reach the target value</returns>
     int SellScrapValue(PlayerControllerB player, int targetValue, float currentWeight) {
-        ReadOnlySpan<GrabbableObject> sellableScraps = [.. Helper.Grabbables.WhereIsNotNull().Where(this.CanBeSold)];
+        using PooledArray<GrabbableObject> sellableScrapsPool = Helper.Grabbables.WhereIsNotNull().AsValueEnumerable().Where(this.CanBeSold).ToArrayPool();
+        ReadOnlySpan<GrabbableObject> sellableScraps = sellableScrapsPool.Span;
 
-        int sellableScrapsCount = sellableScraps.Length;
+        int sellableScrapsCount = sellableScrapsPool.Size;
         int actualTargetValue = unchecked((int)(targetValue * player.playersManager.companyBuyingRate));
         int columns = actualTargetValue + 1;
         int rows = sellableScrapsCount + 1;

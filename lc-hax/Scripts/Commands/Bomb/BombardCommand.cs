@@ -1,9 +1,9 @@
 using System.Collections;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using GameNetcodeStuff;
 using UnityEngine;
+using ZLinq;
 
 [Command("bombard")]
 class BombardCommand : ICommand, IJetpack {
@@ -39,7 +39,7 @@ class BombardCommand : ICommand, IJetpack {
             return;
         }
 
-        if (localPlayer.ItemSlots.WhereIsNotNull().Count() >= 4) {
+        if (localPlayer.ItemSlots.WhereIsNotNull().AsValueEnumerable().Count() >= 4) {
             Chat.Print("You must have an empty inventory slot!");
             return;
         }

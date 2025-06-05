@@ -1,8 +1,8 @@
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using UnityEngine;
+using ZLinq;
 
 [Command("build")]
 class BuildCommand : ICommand {
@@ -17,10 +17,15 @@ class BuildCommand : ICommand {
         }
 
         BuildCommand.Unlockables ??=
-            startOfRound.unlockablesList.unlockables.Select((unlockable, i) => (unlockable, i)).ToDictionary(
-                pair => pair.unlockable.unlockableName.ToLower(),
-                pair => pair.i
-            );
+            startOfRound
+                .unlockablesList
+                .unlockables
+                .AsValueEnumerable()
+                .Select((unlockable, i) => (unlockable, i))
+                .ToDictionary(
+                    pair => pair.unlockable.unlockableName.ToLower(),
+                    pair => pair.i
+                );
 
         if (!unlockableName.FuzzyMatch(BuildCommand.Unlockables.Keys, out string key)) {
             Chat.Print("Failed to find unlockable!");

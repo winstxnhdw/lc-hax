@@ -1,6 +1,5 @@
-using System.Collections.Generic;
-using System.Linq;
+using ZLinq;
 
 static partial class Extensions {
-    internal static IEnumerable<int> Range(this int end) => Enumerable.Range(0, end);
+    internal static ValueEnumerable<ZLinq.Linq.FromRange, int> Range(this int end) => ValueEnumerable.Range(0, end);
 }

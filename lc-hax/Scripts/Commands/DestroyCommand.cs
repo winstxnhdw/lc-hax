@@ -1,16 +1,16 @@
 using System.Collections;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using GameNetcodeStuff;
 using UnityEngine;
+using ZLinq;
 
 [Command("destroy")]
 class DestroyCommand : ICommand {
     static IEnumerator DestroyAllItemsAsync(PlayerControllerB player) {
         float currentWeight = player.carryWeight;
 
-        foreach (GrabbableObject grabbable in Helper.Grabbables.ToArray()) {
+        foreach (GrabbableObject grabbable in Helper.Grabbables) {
             if (!player.GrabObject(grabbable)) continue;
             yield return new WaitUntil(() => player.ItemSlots[player.currentItemSlot] == grabbable);
             player.DespawnHeldObject();
@@ -38,7 +38,7 @@ class DestroyCommand : ICommand {
     public async Task Execute(Arguments args, CancellationToken cancellationToken) {
         if (Helper.LocalPlayer is not PlayerControllerB player) return;
 
-        if (player.ItemSlots.WhereIsNotNull().Count() >= 4) {
+        if (player.ItemSlots.WhereIsNotNull().AsValueEnumerable().Count() >= 4) {
             Chat.Print("You must have an empty inventory slot!");
             return;
         }

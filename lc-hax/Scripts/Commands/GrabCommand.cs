@@ -5,6 +5,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using GameNetcodeStuff;
 using UnityEngine;
+using ZLinq;
 
 [Command("grab")]
 class GrabCommand : ICommand {
@@ -26,7 +27,10 @@ class GrabCommand : ICommand {
 
     static string GrabAllItems(PlayerControllerB player, Vector3 currentPlayerPosition) {
         GrabbableObject[] grabbables = [
-            .. Helper.Grabbables.WhereIsNotNull().Where(grabbable => GrabCommand.CanGrabItem(grabbable, currentPlayerPosition))
+            .. Helper.Grabbables
+                     .WhereIsNotNull()
+                     .AsValueEnumerable()
+                     .Where(grabbable => GrabCommand.CanGrabItem(grabbable, currentPlayerPosition))
         ];
 
         Helper.CreateComponent<AsyncBehaviour>()
@@ -39,11 +43,12 @@ class GrabCommand : ICommand {
         Dictionary<string, GrabbableObject> grabbableObjects =
             Helper.Grabbables?
                 .WhereIsNotNull()
+                .AsValueEnumerable()
                 .Where(grabbable => GrabCommand.CanGrabItem(grabbable, currentPlayerPosition))
                 .GroupBy(grabbable => grabbable.itemProperties.name.ToLower())
                 .ToDictionary(
                     group => group.Key,
-                    group => Enumerable.First(group)
+                    group => group.Single()
                 ) ?? [];
 
         if (!itemName.ToLower().FuzzyMatch(grabbableObjects.Keys, out string key)) {
@@ -65,7 +70,7 @@ class GrabCommand : ICommand {
 
     public async Task Execute(Arguments args, CancellationToken cancellationToken) {
         if (Helper.LocalPlayer is not PlayerControllerB localPlayer) return;
-        if (localPlayer.ItemSlots.WhereIsNotNull().Count() >= 4) {
+        if (localPlayer.ItemSlots.WhereIsNotNull().AsValueEnumerable().Count() >= 4) {
             Chat.Print("You must have an empty inventory slot!");
             return;
         }

@@ -1,8 +1,8 @@
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using UnityEngine;
+using ZLinq;
 
 enum BuyableItemType {
     DEFAULT,
@@ -68,7 +68,7 @@ class BuyCommand : ICommand {
         else if (buyableItem.Type is BuyableItemType.DEFAULT) {
             terminal.orderedItemsFromTerminal.Clear();
             terminal.BuyItemsServerRpc(
-                [.. Enumerable.Repeat(buyableItem.Id, clampedQuantity)],
+                [.. ValueEnumerable.Repeat(buyableItem.Id, clampedQuantity)],
                 terminal.groupCredits - 1,
                 terminal.numberOfItemsInDropship
             );

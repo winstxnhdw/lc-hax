@@ -1,13 +1,14 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using ZLinq;
 
 [Command("suit")]
 class SuitCommand : ICommand {
     internal static Dictionary<string, Unlockable> SuitUnlockables =>
         Enum.GetValues(typeof(Unlockable))
+            .AsValueEnumerable()
             .Cast<Unlockable>()
             .Where(u => u.ToString().EndsWith("_SUIT"))
             .ToDictionary(suit => suit.ToString().Replace("_SUIT", "").ToLower(), suit => suit);
@@ -31,6 +32,15 @@ class SuitCommand : ICommand {
             .First(suit => selectedSuit.Is(suit.suitID))?
             .SwitchSuitToThis(Helper.LocalPlayer);
 
-        Chat.Print($"Wearing {string.Join(" ", selectedSuit.ToString().Split('_').Select(s => s.ToLower())).ToTitleCase()}!");
+        string suitTitle =
+            selectedSuit
+                .ToString()
+                .Split('_')
+                .AsValueEnumerable()
+                .Select(s => s.ToLower())
+                .JoinToString(" ")
+                .ToTitleCase();
+
+        Chat.Print($"Wearing {suitTitle}!");
     }
 }

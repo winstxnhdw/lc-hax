@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using ZLinq;
 using UnityObject = UnityEngine.Object;
 
 static partial class Extensions {
@@ -10,6 +11,34 @@ static partial class Extensions {
     }
 
     internal static void ForEach<T>(this IEnumerable<T> array, Action<int, T> action) {
+        int i = 0;
+
+        foreach (T item in array) {
+            action(i++, item);
+        }
+    }
+
+    internal static void ForEach<T>(this ValueEnumerable<ZLinq.Linq.ArrayWhere<T>, T> array, Action<T> action) {
+        foreach (T item in array) {
+            action(item);
+        }
+    }
+
+    internal static void ForEach<T>(this ValueEnumerable<ZLinq.Linq.Where<ZLinq.Linq.FromEnumerable<T>, T>, T> array, Action<T> action) {
+        foreach (T item in array) {
+            action(item);
+        }
+    }
+
+    internal static void ForEach<T>(this ValueEnumerable<ZLinq.Linq.ArrayWhere<T>, T> array, Action<int, T> action) {
+        int i = 0;
+
+        foreach (T item in array) {
+            action(i++, item);
+        }
+    }
+
+    internal static void ForEach<T>(this ValueEnumerable<ZLinq.Linq.Where<ZLinq.Linq.FromEnumerable<T>, T>, T> array, Action<int, T> action) {
         int i = 0;
 
         foreach (T item in array) {

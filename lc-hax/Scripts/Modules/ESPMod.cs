@@ -1,7 +1,7 @@
 using System;
-using System.Linq;
 using GameNetcodeStuff;
 using UnityEngine;
+using ZLinq;
 
 sealed class ESPMod : MonoBehaviour {
     RendererPair<PlayerControllerB, SkinnedMeshRenderer>[] PlayerRenderers { get; set; } = [];
@@ -150,22 +150,29 @@ sealed class ESPMod : MonoBehaviour {
 
     void ToggleESP() => this.Enabled = !this.Enabled;
 
-    static Renderer[] GetRenderers<T>() where T : Component => [
-        .. Helper.FindObjects<T>().Select(obj => obj.GetComponent<Renderer>())
-    ];
+    static Renderer[] GetRenderers<T>() where T : Component =>
+        Helper.FindObjects<T>()
+              .AsValueEnumerable()
+              .Select(obj => obj.GetComponent<Renderer>())
+              .ToArray();
 
     void InitialiseRenderers() {
-        this.PlayerRenderers = [..Helper.Players.Select(player => new RendererPair<PlayerControllerB, SkinnedMeshRenderer>() {
+        this.PlayerRenderers = Helper.Players.AsValueEnumerable().Select(player => new RendererPair<PlayerControllerB, SkinnedMeshRenderer>() {
             GameObject = player,
             Renderer = player.thisPlayerModel
-        })];
+        }).ToArray();
 
         this.LandmineRenderers = ESPMod.GetRenderers<Landmine>();
         this.TurretRenderers = ESPMod.GetRenderers<Turret>();
         this.EntranceRenderers = ESPMod.GetRenderers<EntranceTeleport>();
     }
 
-    void InitialiseCoordinates() => this.StoryLogVectors = [.. Helper.FindObjects<StoryLog>().Select(log => log.transform.position)];
+    void InitialiseCoordinates() =>
+        this.StoryLogVectors =
+            Helper.FindObjects<StoryLog>()
+                  .AsValueEnumerable()
+                  .Select(log => log.transform.position)
+                  .ToArray();
 
     static Size GetRendererSize(Bounds bounds, Camera camera) {
         ReadOnlySpan<Vector3> corners = [

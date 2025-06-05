@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using GameNetcodeStuff;
 using Unity.Netcode;
 using UnityEngine;
+using ZLinq;
 using UnityObject = UnityEngine.Object;
 
 [PrivilegedCommand("spawn")]
@@ -16,9 +17,13 @@ class SpawnCommand : ICommand {
 
     static Lazy<Dictionary<string, GameObject>> HostileEnemies { get; } = new(() =>
         Resources.FindObjectsOfTypeAll<EnemyType>()
+                 .AsValueEnumerable()
                  .Where(SpawnCommand.IsHostileEnemy)
                  .GroupBy(enemy => enemy.enemyName)
-                 .ToDictionary(enemyGroup => enemyGroup.Key, enemy => Enumerable.First(enemy).enemyPrefab)
+                 .ToDictionary(
+                     enemyGroup => enemyGroup.Key,
+                     enemy => enemy.Single().enemyPrefab
+                 )
     );
 
     static void SpawnEnemyOnPlayer(PlayerControllerB player, GameObject prefab, ulong amount = 1) {

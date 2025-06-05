@@ -17,9 +17,8 @@ class Loader : MonoBehaviour {
 
     static void LoadLibraries() {
         Assembly assembly = Assembly.GetExecutingAssembly();
-        ReadOnlySpan<string> resourceNames = [.. assembly.GetManifestResourceNames().Where(name => name.EndsWith(".dll"))];
 
-        foreach (string resourceName in resourceNames) {
+        foreach (string resourceName in assembly.GetManifestResourceNames().Where(name => name.EndsWith(".dll"))) {
             using Stream stream = assembly.GetManifestResourceStream(resourceName);
             using MemoryStream memoryStream = new();
             stream.CopyTo(memoryStream);

@@ -1,7 +1,7 @@
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using ZLinq;
 
 [Command("visit")]
 class VisitCommand : ICommand {
@@ -25,7 +25,7 @@ class VisitCommand : ICommand {
             return;
         }
 
-        VisitCommand.Levels ??= startOfRound.levels.ToDictionary(
+        VisitCommand.Levels ??= startOfRound.levels.AsValueEnumerable().ToDictionary(
             level => level.name[..(level.name.Length - "Level".Length)].ToLower(),
             level => level.levelID
         );
