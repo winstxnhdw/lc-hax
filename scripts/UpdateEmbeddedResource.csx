@@ -32,7 +32,7 @@ void Main()
             throw new Exception("EmbeddedResource element does not have an Include attribute.");
         }
 
-        string[] path = includeAttribute.Value.Split('/');
+        string[] path = includeAttribute.Value.Split(Path.DirectorySeparatorChar, StringSplitOptions.RemoveEmptyEntries);
 
         if (!packageReferences.TryGetValue(path[1].ToLower(), out string? version))
         {
@@ -40,7 +40,7 @@ void Main()
         }
 
         path[2] = version;
-        includeAttribute.SetValue(string.Join('/', path));
+        includeAttribute.SetValue(string.Join(Path.DirectorySeparatorChar, path));
     }
 
     using XmlWriter xmlWriter = XmlWriter.Create(csprojPath, new XmlWriterSettings() { OmitXmlDeclaration = true });
