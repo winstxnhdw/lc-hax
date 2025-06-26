@@ -173,6 +173,7 @@ These commands are only available when the user is host.
 | Set the quota                 | `/quota <amount> <fulfilled=0>`                  |
 | Spawn enem(ies) on player     | `/spawn <enemy> <player> <amount=1>`             |
 | Give or take credit(s)        | `/credit <amount>`                               |
+| Land ship quickly             | `/land`                                          |
 | Eject all players             | `/eject`                                         |
 | Revive all players            | `/revive`                                        |
 | Toggle God mode for all       | `/gods`                                          |
