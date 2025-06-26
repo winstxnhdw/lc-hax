@@ -2,7 +2,7 @@ using System;
 using GameNetcodeStuff;
 using UnityEngine;
 
-public interface ITeleporter { }
+public interface ITeleporter;
 
 public static class ITeleporterMixin {
     public static ShipTeleporter? GetTeleporter(this ITeleporter _) =>

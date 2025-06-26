@@ -1,6 +1,6 @@
 using ZLinq;
 
-interface IJetpack { }
+interface IJetpack;
 
 static class JetpackMixin {
     internal static JetpackItem[] GetAvailableJetpacks(this IJetpack _) =>

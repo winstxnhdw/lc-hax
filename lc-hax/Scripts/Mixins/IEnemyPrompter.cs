@@ -215,7 +215,7 @@ class EnemyPromptHandler {
     }
 }
 
-interface IEnemyPrompter { }
+interface IEnemyPrompter;
 
 static class EnemyPromptMixin {
     [RequireNamedArgs]
