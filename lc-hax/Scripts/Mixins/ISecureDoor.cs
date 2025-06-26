@@ -1,11 +1,11 @@
-interface ISecureGate;
+interface ISecureDoor;
 
-static class SecureGateMixin {
+static class SecureDoorMixin {
     static TerminalAccessibleObject[]? TerminalAccessibleObjects { get; set; }
 
-    internal static void SetSecureDoorState(this ISecureGate _, bool isUnlocked) {
-        SecureGateMixin.TerminalAccessibleObjects ??= Helper.FindObjects<TerminalAccessibleObject>();
-        SecureGateMixin.TerminalAccessibleObjects.ForEach(
+    internal static void SetSecureDoorState(this ISecureDoor _, bool isUnlocked) {
+        SecureDoorMixin.TerminalAccessibleObjects ??= Helper.FindObjects<TerminalAccessibleObject>();
+        SecureDoorMixin.TerminalAccessibleObjects.ForEach(
             terminalObject => terminalObject.SetDoorOpenServerRpc(isUnlocked)
         );
     }
