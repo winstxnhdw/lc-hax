@@ -1,4 +1,4 @@
-interface ISecureGate { }
+interface ISecureGate;
 
 static class SecureGateMixin {
     static TerminalAccessibleObject[]? TerminalAccessibleObjects { get; set; }
