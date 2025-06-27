@@ -7,6 +7,7 @@ class StartGameCommand : ICommand {
         if (Helper.StartOfRound is not StartOfRound startOfRound) return;
         if (startOfRound.travellingToNewLevel) {
             Chat.Print("You cannot start the game while travelling to a new level!");
+            return;
         }
 
         startOfRound.StartGameServerRpc();
