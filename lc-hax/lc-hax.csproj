@@ -28,7 +28,7 @@
 
     <PackageReference Include="Quickenshtein" Version="1.5.1" />
 
-    <PackageReference Include="Zlinq" Version="1.4.12" />
+    <PackageReference Include="Zlinq" Version="1.5.0" />
 
     <PackageReference Include="CommunityToolkit.HighPerformance" Version="8.4.0" />
 
