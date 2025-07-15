@@ -56,9 +56,9 @@
       },
       "ZLinq": {
         "type": "Direct",
-        "requested": "[1.5.0, )",
-        "resolved": "1.5.0",
-        "contentHash": "oNtsuQW+Pt0Ra531J8i2UkvaVIAX3V/RGsQ8xTLU47YXPJks/P5niCelSwB3WXFUsbAg9xH2JeucnKqL5NRv+w==",
+        "requested": "[1.5.1, )",
+        "resolved": "1.5.1",
+        "contentHash": "zZ03dYCYIW6StkQE31MA8OzaM2l9JZCCGDFYVbpVfhn8XNPu0U3/5jzLVJRQX1VDRg55ytiBrmlIgGoccQhOmw==",
         "dependencies": {
           "System.Runtime.CompilerServices.Unsafe": "6.1.2"
         }
