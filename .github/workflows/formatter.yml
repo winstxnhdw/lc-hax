@@ -1,13 +1,8 @@
 name: Format
 
 on:
+  pull_request:
   push:
-    branches: [main]
-    paths:
-      - .github/workflows/formatter.yml
-      - .editorconfig
-      - lc-hax/Scripts/**/*.cs
-  pull_request_target:
     paths:
       - .github/workflows/formatter.yml
       - .editorconfig
@@ -55,6 +50,5 @@ jobs:
 
       - name: Commit changes
         run: |
-          git add .
-          git commit -m "style: format scripts" || true
+          git commit -am "style: format scripts" || true
           git push
