@@ -1,12 +1,8 @@
 name: Update Resource(s)
 
 on:
+  pull_request:
   push:
-    branches: [main]
-    paths:
-      - .github/workflows/update-resource.yml
-      - lc-hax/*.csproj
-  pull_request_target:
     paths:
       - .github/workflows/update-resource.yml
       - lc-hax/*.csproj
@@ -55,5 +51,5 @@ jobs:
       - name: Commit changes
         run: |
           git add .
-          git commit -m "build: update resource path(s)" || true
+          git commit -am "build: update resource path(s)" || true
           git push
