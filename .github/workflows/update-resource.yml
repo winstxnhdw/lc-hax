@@ -50,6 +50,5 @@ jobs:
 
       - name: Commit changes
         run: |
-          git add .
           git commit -am "build: update resource path(s)" || true
           git push

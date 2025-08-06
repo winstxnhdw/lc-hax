@@ -1,0 +1,15 @@
+name: Format JSON
+
+on:
+  pull_request:
+  push:
+    paths:
+      - .github/workflows/format-json.yml
+      - '**/*.json'
+
+permissions:
+  contents: write
+
+jobs:
+  format-json:
+    uses: winstxnhdw/actions/.github/workflows/format-biome.yml@main
