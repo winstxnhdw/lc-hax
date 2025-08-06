@@ -9,7 +9,7 @@ on:
     - cron: '24 23 * * 0'
 
 env:
-  NUGET_PACKAGES: ${{ github.workspace }}/.nuget/packages
+  NUGET_PACKAGES: ${{ github.workspace }}\.nuget\packages
 
 permissions:
   security-events: write
@@ -36,7 +36,7 @@ jobs:
       with:
         dotnet-version: 9.x
         cache: true
-        cache-dependency-path: lc-hax/packages.lock.json
+        cache-dependency-path: lc-hax\packages.lock.json
 
     - name: Build
       run: dotnet build lc-hax -restoreProperty:RestoreLockedMode=true
