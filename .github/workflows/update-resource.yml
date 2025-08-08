@@ -7,6 +7,7 @@ on:
       - .github/workflows/update-resource.yml
       - lc-hax/*.csproj
 
+concurrency: Format-${{ github.ref }}
 permissions:
   contents: write
 

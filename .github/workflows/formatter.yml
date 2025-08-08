@@ -8,6 +8,7 @@ on:
       - .editorconfig
       - lc-hax/Scripts/**/*.cs
 
+concurrency: ${{ github.workflow }}-${{ github.ref }}
 permissions:
   contents: write
 
