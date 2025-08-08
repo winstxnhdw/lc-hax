@@ -3,6 +3,7 @@
   <PropertyGroup>
 
     <OutDir>../bin</OutDir>
+    <DebugType>None</DebugType>
     <Optimize>true</Optimize>
     <Nullable>enable</Nullable>
     <LangVersion>preview</LangVersion>
