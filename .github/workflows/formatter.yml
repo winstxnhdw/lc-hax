@@ -42,4 +42,5 @@ jobs:
       - name: Commit changes
         run: |
           git commit -am "style: format scripts" || true
+          git pull --autostash --rebase origin ${{ github.head_ref || github.ref_name }}
           git push

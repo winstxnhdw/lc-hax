@@ -52,4 +52,5 @@ jobs:
       - name: Commit changes
         run: |
           git commit -am "build: update resource path(s)" || true
+          git pull --autostash --rebase origin ${{ github.head_ref || github.ref_name }}
           git push
