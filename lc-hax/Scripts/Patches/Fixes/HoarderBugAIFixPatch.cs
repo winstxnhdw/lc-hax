@@ -4,7 +4,7 @@ using HarmonyLib;
 using Unity.Netcode;
 
 [HarmonyPatch(typeof(HoarderBugAI))]
-class HoarderBugAIFixPatch {
+sealed class HoarderBugAIFixPatch {
     [HarmonyPatch(nameof(HoarderBugAI.HitEnemy))]
     static void Prefix(HoarderBugAI __instance) {
         if (!__instance.isEnemyDead) return;

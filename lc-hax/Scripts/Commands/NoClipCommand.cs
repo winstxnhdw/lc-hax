@@ -4,7 +4,7 @@ using GameNetcodeStuff;
 using UnityEngine;
 
 [Command("noclip")]
-class NoClipCommand : ICommand {
+sealed class NoClipCommand : ICommand {
     static bool EnabledGodMode { get; set; }
 
     public async Task Execute(Arguments args, CancellationToken cancellationToken) {

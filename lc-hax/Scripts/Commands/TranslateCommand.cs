@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 using GameNetcodeStuff;
 
 [Command("translate")]
-class TranslateCommand : ICommand {
+sealed class TranslateCommand : ICommand {
     public async Task Execute(Arguments args, CancellationToken cancellationToken) {
         if (Helper.LocalPlayer is not PlayerControllerB player) return;
         if (args.Length < 2) {

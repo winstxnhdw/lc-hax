@@ -1,4 +1,4 @@
-class HygrodereController : IEnemyController<BlobAI> {
+sealed class HygrodereController : IEnemyController<BlobAI> {
     static void SetTamedTimer(BlobAI enemy, float time) => enemy.tamedTimer = time;
 
     static void SetAngeredTimer(BlobAI enemy, float time) => enemy.angeredTimer = time;

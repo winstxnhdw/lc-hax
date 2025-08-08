@@ -6,7 +6,7 @@ using GameNetcodeStuff;
 using ZLinq;
 
 [Command("sell")]
-class SellCommand : ICommand {
+sealed class SellCommand : ICommand {
     bool CanBeSold(GrabbableObject grabbableObject) =>
         grabbableObject is not HauntedMaskItem and { isHeld: false } &&
         grabbableObject.itemProperties is { isScrap: true, isDefensiveWeapon: false };

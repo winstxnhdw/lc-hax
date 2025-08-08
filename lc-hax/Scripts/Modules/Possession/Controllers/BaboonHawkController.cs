@@ -7,7 +7,7 @@ enum BaboonState {
     AGGRESSIVE = 2,
 }
 
-class BaboonHawkController : IEnemyController<BaboonBirdAI> {
+sealed class BaboonHawkController : IEnemyController<BaboonBirdAI> {
     Vector3 CustomCamp { get; } = new Vector3(1000.0f, 0.0f, 0.0f);
     Vector3 OriginalCamp { get; set; } = Vector3.zero;
 

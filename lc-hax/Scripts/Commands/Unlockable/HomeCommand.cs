@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 using GameNetcodeStuff;
 
 [Command("home")]
-class HomeCommand : ITeleporter, ICommand {
+sealed class HomeCommand : ITeleporter, ICommand {
     static ShipTeleporter? Teleporter => Helper.ShipTeleporters.First(
         teleporter => teleporter is not null && !teleporter.isInverseTeleporter
     );

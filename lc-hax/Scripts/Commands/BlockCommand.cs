@@ -2,7 +2,7 @@ using System.Threading;
 using System.Threading.Tasks;
 
 [Command("block")]
-class BlockCommand : ICommand {
+sealed class BlockCommand : ICommand {
     static string BlockEnemy() {
         Setting.EnableUntargetable = !Setting.EnableUntargetable;
 

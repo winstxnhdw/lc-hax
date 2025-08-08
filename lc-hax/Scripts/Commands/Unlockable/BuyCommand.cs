@@ -15,7 +15,7 @@ readonly record struct BuyableItem {
 }
 
 [Command("buy")]
-class BuyCommand : ICommand {
+sealed class BuyCommand : ICommand {
     static Dictionary<string, BuyableItem>? BuyableItems { get; set; }
 
     static Dictionary<string, BuyableItem> PopulateBuyableItems(Terminal terminal) {

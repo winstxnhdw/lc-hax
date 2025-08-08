@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 using GameNetcodeStuff;
 
 [Command("mask")]
-class MaskCommand : ICommand {
+sealed class MaskCommand : ICommand {
     public async Task Execute(Arguments args, CancellationToken cancellationToken) {
         if (Helper.LocalPlayer is not PlayerControllerB localPlayer) return;
         if (Helper.Grabbables.First(grabbable => grabbable is HauntedMaskItem) is not HauntedMaskItem hauntedMaskItem) {

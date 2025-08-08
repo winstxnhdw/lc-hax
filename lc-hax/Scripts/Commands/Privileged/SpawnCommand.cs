@@ -10,7 +10,7 @@ using ZLinq;
 using UnityObject = UnityEngine.Object;
 
 [PrivilegedCommand("spawn")]
-class SpawnCommand : ICommand {
+sealed class SpawnCommand : ICommand {
     static bool IsHostileEnemy(EnemyType enemy) =>
         !enemy.enemyName.Contains("Docile Locust Bees", StringComparison.OrdinalIgnoreCase) ||
         !enemy.enemyName.Contains("Manticoil", StringComparison.OrdinalIgnoreCase);

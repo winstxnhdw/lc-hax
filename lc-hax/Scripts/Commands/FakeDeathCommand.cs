@@ -4,7 +4,7 @@ using GameNetcodeStuff;
 using UnityEngine;
 
 [Command("fakedeath")]
-class FakeDeathCommand : ICommand {
+sealed class FakeDeathCommand : ICommand {
     public async Task Execute(Arguments args, CancellationToken cancellationToken) {
         if (Helper.LocalPlayer is not PlayerControllerB player) return;
 

@@ -4,7 +4,7 @@ using GameNetcodeStuff;
 using HarmonyLib;
 
 [HarmonyPatch(typeof(PlayerControllerB), nameof(PlayerControllerB.AllowPlayerDeath))]
-class GodModePatch {
+sealed class GodModePatch {
     static bool Prefix(PlayerControllerB __instance, ref bool __result) {
         if (!Setting.EnableGodMode) return true;
         if (!__instance.IsSelf()) return true;

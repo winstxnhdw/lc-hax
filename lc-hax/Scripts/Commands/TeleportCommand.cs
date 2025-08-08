@@ -4,7 +4,7 @@ using GameNetcodeStuff;
 using UnityEngine;
 
 [Command("tp")]
-class TeleportCommand : ITeleporter, ICommand {
+sealed class TeleportCommand : ITeleporter, ICommand {
     static Vector3? GetCoordinates(string[] args) {
         bool isValidX = float.TryParse(args[0], out float x);
         bool isValidY = float.TryParse(args[1], out float y);

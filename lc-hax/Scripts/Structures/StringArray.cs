@@ -1,7 +1,7 @@
 using System;
 using System.Runtime.CompilerServices;
 
-class Arguments {
+sealed class Arguments {
     internal required string[] Span { private get; init; }
 
     internal int Length => this.Span.Length;

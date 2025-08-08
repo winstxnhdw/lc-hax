@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 using GameNetcodeStuff;
 
 [Command("kill")]
-class KillCommand : ICommand {
+sealed class KillCommand : ICommand {
     bool EnableGodMode { get; set; }
 
     static Result KillSelf() {

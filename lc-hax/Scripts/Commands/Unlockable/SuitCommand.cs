@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using ZLinq;
 
 [Command("suit")]
-class SuitCommand : ICommand {
+sealed class SuitCommand : ICommand {
     internal static Dictionary<string, Unlockable> SuitUnlockables =>
         Enum.GetValues(typeof(Unlockable))
             .AsValueEnumerable()

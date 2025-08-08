@@ -5,7 +5,7 @@ using Steamworks.Data;
 using ZLinq;
 
 [HarmonyPatch(typeof(SteamLobbyManager))]
-class LobbyPatch {
+sealed class LobbyPatch {
     [HarmonyPatch(nameof(SteamLobbyManager.RefreshServerListButton))]
     static void Prefix(SteamLobbyManager __instance, ref float ___refreshServerListTimer) {
         ___refreshServerListTimer = 1.0f;

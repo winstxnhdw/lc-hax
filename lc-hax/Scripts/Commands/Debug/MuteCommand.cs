@@ -5,7 +5,7 @@ using GameNetcodeStuff;
 using UnityEngine;
 
 [DebugCommand("mute")]
-class MuteCommand : ICommand {
+sealed class MuteCommand : ICommand {
     static Dictionary<string, TransientBehaviour> MutedPlayers { get; } = [];
 
     static bool MutedPlayerHasMessaged(string playerUsername) =>

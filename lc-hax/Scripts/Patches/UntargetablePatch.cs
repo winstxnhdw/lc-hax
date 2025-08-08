@@ -4,7 +4,7 @@ using GameNetcodeStuff;
 using HarmonyLib;
 
 [HarmonyPatch(typeof(EnemyAI))]
-class UntargetableEnemyPatch {
+sealed class UntargetableEnemyPatch {
     [HarmonyPatch(nameof(EnemyAI.PlayerIsTargetable))]
     static void Postfix(PlayerControllerB playerScript, ref bool __result) {
         if (!Setting.EnableUntargetable) return;
@@ -25,6 +25,6 @@ class UntargetableEnemyPatch {
 }
 
 [HarmonyPatch(typeof(NutcrackerEnemyAI), nameof(NutcrackerEnemyAI.CheckLineOfSightForLocalPlayer))]
-class UntargetableNutcrackerPatch {
+sealed class UntargetableNutcrackerPatch {
     static bool Prefix() => !Setting.EnableUntargetable;
 }

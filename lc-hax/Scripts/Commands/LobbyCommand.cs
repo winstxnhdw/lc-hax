@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 using UnityEngine;
 
 [Command("lobby")]
-class LobbyCommand : ICommand {
+sealed class LobbyCommand : ICommand {
     public async Task Execute(Arguments args, CancellationToken cancellationToken) {
         if (State.ConnectedLobby is not ConnectedLobby connectedLobby) return;
 

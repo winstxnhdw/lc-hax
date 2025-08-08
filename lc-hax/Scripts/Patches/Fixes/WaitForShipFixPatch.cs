@@ -7,7 +7,7 @@ using HarmonyLib;
 // the playersRevived property, satisfying the server's "playersRevived >= GameNetworkManager.Instance.connectedPlayers" WaitUntil condition.
 
 [HarmonyPatch(typeof(StartOfRound), "EndOfGame")]
-class WaitForShipFixPatch {
+sealed class WaitForShipFixPatch {
     static IEnumerator Postfix(IEnumerator endOfGame) {
         if (Helper.StartOfRound is not StartOfRound startOfRound) yield break;
         if (Helper.FindObject<StartMatchLever>() is not StartMatchLever startMatchLever) yield break;

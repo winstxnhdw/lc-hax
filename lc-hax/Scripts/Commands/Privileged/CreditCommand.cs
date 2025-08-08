@@ -2,7 +2,7 @@ using System.Threading;
 using System.Threading.Tasks;
 
 [PrivilegedCommand("credit")]
-class CreditCommand : ICommand {
+sealed class CreditCommand : ICommand {
     public async Task Execute(Arguments args, CancellationToken cancellationToken) {
         if (Helper.Terminal is not Terminal terminal) return;
         if (args.Length is 0) {

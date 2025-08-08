@@ -4,7 +4,7 @@ using GameNetcodeStuff;
 using UnityEngine;
 
 [Command("heal")]
-class HealCommand : ICommand, IStun {
+sealed class HealCommand : ICommand, IStun {
     static void RespawnLocalPlayer(PlayerControllerB localPlayer, StartOfRound startOfRound, HUDManager hudManager) {
         if (Helper.SoundManager is not SoundManager soundManager) return;
 

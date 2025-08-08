@@ -5,7 +5,7 @@ using GameNetcodeStuff;
 using UnityEngine;
 
 [Command("fall")]
-class FallCommand : ICommand {
+sealed class FallCommand : ICommand {
     static IEnumerator WaitForEnemyOwnershipChange(PlayerControllerB player, EnemyAI enemy) {
         WaitForEndOfFrame waitForEndOfFrame = new();
 

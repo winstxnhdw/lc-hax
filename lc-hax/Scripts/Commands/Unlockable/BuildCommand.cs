@@ -5,7 +5,7 @@ using UnityEngine;
 using ZLinq;
 
 [Command("build")]
-class BuildCommand : ICommand {
+sealed class BuildCommand : ICommand {
     static Dictionary<string, int>? Unlockables { get; set; }
 
     public async Task Execute(Arguments args, CancellationToken cancellationToken) {

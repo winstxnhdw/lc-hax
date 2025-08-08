@@ -1,6 +1,6 @@
 using HarmonyLib;
 
 [HarmonyPatch(typeof(QuickMenuManager), nameof(QuickMenuManager.LeaveGameConfirm))]
-class MenuDependencyPatch {
+sealed class MenuDependencyPatch {
     static void Postfix() => State.DisconnectedVoluntarily = true;
 }

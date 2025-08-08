@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 using ZLinq;
 
 [Command("visit")]
-class VisitCommand : ICommand {
+sealed class VisitCommand : ICommand {
     static Dictionary<string, int>? Levels { get; set; }
 
     public async Task Execute(Arguments args, CancellationToken cancellationToken) {

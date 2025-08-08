@@ -5,7 +5,7 @@ using HarmonyLib;
 using UnityEngine;
 
 [HarmonyPatch(typeof(PlayerControllerB))]
-class InvisiblePatch {
+sealed class InvisiblePatch {
     static Vector3 LastNewPos { get; set; }
     static bool LastInElevator { get; set; }
     static bool LastInShipRoom { get; set; }

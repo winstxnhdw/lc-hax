@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-class KeyboardMovement : MonoBehaviour {
+sealed class KeyboardMovement : MonoBehaviour {
     const float BaseSpeed = 20;
     float SprintMultiplier { get; set; } = 1;
 

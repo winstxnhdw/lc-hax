@@ -2,7 +2,7 @@ using System.Threading;
 using System.Threading.Tasks;
 
 [Command("garage")]
-class GarageCommand : ICommand {
+sealed class GarageCommand : ICommand {
     static InteractTrigger? GarageTrigger => HaxObjects.Instance?.InteractTriggers?.WhereIsNotNull().First(
         interactTrigger => interactTrigger.name is "Cube" && interactTrigger.transform.parent.name is "Cutscenes"
     );

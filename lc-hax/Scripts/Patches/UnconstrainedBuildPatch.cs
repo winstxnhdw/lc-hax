@@ -3,7 +3,7 @@
 using HarmonyLib;
 
 [HarmonyPatch(typeof(ShipBuildModeManager), "PlayerMeetsConditionsToBuild")]
-class UnconstrainedBuildPatch {
+sealed class UnconstrainedBuildPatch {
     static bool Prefix(ref bool __result, ref bool ___CanConfirmPosition, ref PlaceableShipObject? ___placingObject) {
         if (___placingObject is null) return true;
 

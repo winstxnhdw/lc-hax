@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 using UnityEngine;
 
 [Command("upright")]
-class UprightCommand : ICommand {
+sealed class UprightCommand : ICommand {
     void SetObjectUpright(PlaceableShipObject shipObject) {
         Vector3 uprightRotation = shipObject.transform.eulerAngles;
 

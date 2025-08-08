@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 using GameNetcodeStuff;
 
 [DebugCommand("fixcamera")]
-class FixCameraCommand : ICommand {
+sealed class FixCameraCommand : ICommand {
     public async Task Execute(Arguments args, CancellationToken cancellationToken) {
         if (Helper.LocalPlayer is not PlayerControllerB localPlayer) return;
 

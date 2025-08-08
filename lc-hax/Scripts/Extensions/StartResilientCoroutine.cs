@@ -8,7 +8,7 @@ enum CoroutineState {
     ERROR
 }
 
-class InvalidCoroutineState(CoroutineState state) : Exception($"Invalid CoroutineState: {state}") { }
+sealed class InvalidCoroutineState(CoroutineState state) : Exception($"Invalid CoroutineState: {state}") { }
 
 static partial class Extensions {
     static CoroutineState ExecuteCoroutineStep(IEnumerator coroutine) {

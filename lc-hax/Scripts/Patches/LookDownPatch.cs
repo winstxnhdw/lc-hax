@@ -4,7 +4,7 @@ using GameNetcodeStuff;
 using HarmonyLib;
 
 [HarmonyPatch(typeof(PlayerControllerB))]
-class LookDownPatch {
+sealed class LookDownPatch {
     static IEnumerable<CodeInstruction> CalculateLookingInputTranspiler(IEnumerable<CodeInstruction> instructions) {
         foreach (CodeInstruction instruction in instructions) {
             if (instruction.opcode == OpCodes.Ldc_R4 && instruction.operand.Equals(60.0f)) {

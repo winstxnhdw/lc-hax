@@ -3,7 +3,7 @@ enum GiantState {
     CHASE = 1
 }
 
-class ForestGiantController : IEnemyController<ForestGiantAI> {
+sealed class ForestGiantController : IEnemyController<ForestGiantAI> {
     bool IsUsingSecondarySkill { get; set; }
 
     public void OnMovement(ForestGiantAI enemy, bool isMoving, bool isSprinting) {

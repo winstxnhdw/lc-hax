@@ -4,7 +4,7 @@ using HarmonyLib;
 using UnityEngine.Rendering.HighDefinition;
 
 [HarmonyPatch(typeof(DepthOfField), nameof(DepthOfField.IsActive))]
-class DepthOfFieldPatch {
+sealed class DepthOfFieldPatch {
     static bool Prefix(ref bool __result) {
         __result = false;
         return false;

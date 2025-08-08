@@ -5,7 +5,7 @@ using GameNetcodeStuff;
 using UnityEngine;
 
 [Command("random")]
-class RandomCommand : ICommand {
+sealed class RandomCommand : ICommand {
     internal static ShipTeleporter? InverseTeleporter => Helper.ShipTeleporters.First(
         teleporter => teleporter is not null && teleporter.isInverseTeleporter
     );

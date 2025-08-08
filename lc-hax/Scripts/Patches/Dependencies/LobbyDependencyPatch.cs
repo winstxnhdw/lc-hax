@@ -5,7 +5,7 @@ using Steamworks.Data;
 using HarmonyLib;
 
 [HarmonyPatch(typeof(GameNetworkManager), nameof(GameNetworkManager.JoinLobby))]
-class LobbyDependencyPatch {
+sealed class LobbyDependencyPatch {
     static void Postfix(Lobby lobby, SteamId id) {
         if (State.DisconnectedVoluntarily && Regex.IsMatch(GUIUtility.systemCopyBuffer, @"^\d{17}$")) {
             GUIUtility.systemCopyBuffer = "";

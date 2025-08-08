@@ -5,7 +5,7 @@ using UnityEngine;
 using HarmonyLib;
 
 [HarmonyPatch]
-class NoCooldownPatch {
+sealed class NoCooldownPatch {
     [HarmonyPatch(typeof(GrabbableObject), nameof(GrabbableObject.RequireCooldown))]
     static void Postfix(ref bool __result) {
         if (!Setting.EnableNoCooldown) return;

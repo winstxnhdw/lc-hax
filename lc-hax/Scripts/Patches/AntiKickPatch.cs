@@ -5,7 +5,7 @@ using Steamworks;
 using GameNetcodeStuff;
 
 [HarmonyPatch(typeof(PlayerControllerB))]
-class AntiKickPatch {
+sealed class AntiKickPatch {
     [HarmonyPatch("SendNewPlayerValuesServerRpc")]
     static bool Prefix(PlayerControllerB __instance) {
         if (!Setting.EnableAntiKick) return true;

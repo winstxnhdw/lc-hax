@@ -4,7 +4,7 @@ enum JesterState {
     OPEN
 }
 
-class JesterController : IEnemyController<JesterAI> {
+sealed class JesterController : IEnemyController<JesterAI> {
     static void SetNoPlayerChasetimer(JesterAI enemy, float value) => enemy.noPlayersToChaseTimer = value;
 
     public void UsePrimarySkill(JesterAI enemy) {

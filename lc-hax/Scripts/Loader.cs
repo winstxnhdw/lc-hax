@@ -7,7 +7,7 @@ using UnityEngine;
 
 namespace Hax;
 
-class Loader : MonoBehaviour {
+sealed class Loader : MonoBehaviour {
     const string HarmonyID = "winstxnhdw.lc-hax";
     static GameObject HaxGameObjects { get; } = new("Hax GameObjects");
     static GameObject HaxModules { get; } = new("Hax Modules");

@@ -10,7 +10,7 @@ enum Rank {
 }
 
 [Command("xp")]
-class ExperienceCommand : ICommand {
+sealed class ExperienceCommand : ICommand {
     public async Task Execute(Arguments args, CancellationToken cancellationToken) {
         if (Helper.HUDManager is not HUDManager hudManager) return;
         if (args.Length is 0) {

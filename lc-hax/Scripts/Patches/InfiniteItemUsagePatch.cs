@@ -1,6 +1,6 @@
 using HarmonyLib;
 
 [HarmonyPatch(typeof(GrabbableObject), nameof(GrabbableObject.DestroyObjectInHand))]
-class InfiniteItemUsagePatch {
+sealed class InfiniteItemUsagePatch {
     static bool Prefix() => false;
 }

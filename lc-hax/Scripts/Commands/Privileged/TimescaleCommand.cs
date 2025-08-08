@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 using UnityEngine;
 
 [PrivilegedCommand("timescale")]
-class TimescaleCommand : ICommand {
+sealed class TimescaleCommand : ICommand {
     public async Task Execute(Arguments args, CancellationToken cancellationToken) {
         if (args.Length is 0) {
             Chat.Print("Usage: timescale <scale>");

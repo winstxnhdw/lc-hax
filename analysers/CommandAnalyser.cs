@@ -6,7 +6,7 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
 
 [DiagnosticAnalyzer(LanguageNames.CSharp)]
-class CommandAnalyzer : DiagnosticAnalyzer {
+sealed class CommandAnalyzer : DiagnosticAnalyzer {
     internal const string DiagnosticID = "HAX001";
 
     static DiagnosticDescriptor Rule { get; } = new(

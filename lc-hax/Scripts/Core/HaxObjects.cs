@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.Rendering.HighDefinition;
 
-class HaxObjects : MonoBehaviour {
+sealed class HaxObjects : MonoBehaviour {
     internal static HaxObjects? Instance { get; private set; }
 
     internal SingleObjectPool<DepositItemsDesk>? DepositItemsDesk { get; private set; }

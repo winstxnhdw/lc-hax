@@ -3,7 +3,7 @@ enum NutcrackerState {
     SENTRY
 }
 
-class NutcrackerController : IEnemyController<NutcrackerEnemyAI> {
+sealed class NutcrackerController : IEnemyController<NutcrackerEnemyAI> {
     bool InSentryMode { get; set; }
 
     public void Update(NutcrackerEnemyAI enemy, bool isAIControlled) {

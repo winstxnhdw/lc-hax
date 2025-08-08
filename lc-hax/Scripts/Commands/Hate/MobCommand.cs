@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 using GameNetcodeStuff;
 
 [Command("mob")]
-class MobCommand : IEnemyPrompter, ICommand {
+sealed class MobCommand : IEnemyPrompter, ICommand {
     public async Task Execute(Arguments args, CancellationToken cancellationToken) {
         if (args.Length is 0) {
             Chat.Print("Usage: mob <player>");

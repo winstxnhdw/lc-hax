@@ -9,7 +9,7 @@ enum BehaviourState {
     UNKNOWN = 3
 }
 
-class EnemyPromptHandler {
+sealed class EnemyPromptHandler {
     static void TeleportEnemyToPlayer(
         EnemyAI enemy,
         PlayerControllerB targetPlayer,

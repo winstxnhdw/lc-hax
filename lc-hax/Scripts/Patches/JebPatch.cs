@@ -3,7 +3,7 @@
 using HarmonyLib;
 
 [HarmonyPatch(typeof(DepositItemsDesk), nameof(DepositItemsDesk.AttackPlayersServerRpc))]
-class JebPatch {
+sealed class JebPatch {
     static void Prefix(DepositItemsDesk __instance, ref bool __state) {
         __state = __instance.inGrabbingObjectsAnimation;
         __instance.attacking = false;

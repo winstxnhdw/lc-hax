@@ -4,7 +4,7 @@ using Unity.Netcode;
 using HarmonyLib;
 
 [HarmonyPatch]
-class GrabbableDependencyPatch {
+sealed class GrabbableDependencyPatch {
     [HarmonyPatch(typeof(GrabbableObject), nameof(GrabbableObject.Update))]
     static void Postfix(GrabbableObject __instance) => Helper.Grabbables.Add(__instance);
 

@@ -6,7 +6,7 @@ using GameNetcodeStuff;
 using UnityEngine;
 
 [Command("poison")]
-class PoisonCommand : ICommand {
+sealed class PoisonCommand : ICommand {
     static async Task PoisonPlayer(PlayerControllerB player, int damage, ulong delay, ulong duration, CancellationToken cancellationToken) {
         float startTime = Time.time;
 

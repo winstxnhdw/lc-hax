@@ -2,7 +2,7 @@
 
 using HarmonyLib;
 
-class AntiFlashPatch {
+sealed class AntiFlashPatch {
     [HarmonyPatch(typeof(HUDManager), "Update")]
     static void Prefix(HUDManager __instance) => __instance.flashFilter = 0.0f;
 

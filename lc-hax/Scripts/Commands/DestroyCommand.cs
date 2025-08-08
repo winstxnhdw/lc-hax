@@ -6,7 +6,7 @@ using UnityEngine;
 using ZLinq;
 
 [Command("destroy")]
-class DestroyCommand : ICommand {
+sealed class DestroyCommand : ICommand {
     static IEnumerator DestroyAllItemsAsync(PlayerControllerB player) {
         float currentWeight = player.carryWeight;
 

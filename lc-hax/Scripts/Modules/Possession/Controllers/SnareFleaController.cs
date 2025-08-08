@@ -5,7 +5,7 @@ enum SnareFleaState {
     CLINGING
 }
 
-class SnareFleaController : IEnemyController<CentipedeAI> {
+sealed class SnareFleaController : IEnemyController<CentipedeAI> {
     static bool IsClingingToSomething(CentipedeAI enemy) {
         return enemy.clingingToPlayer is not null || enemy.inSpecialAnimation ||
                enemy.clingingToDeadBody ||

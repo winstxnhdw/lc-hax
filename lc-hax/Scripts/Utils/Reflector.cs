@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Reflection;
 
-class Reflector<R> {
+sealed class Reflector<R> {
     const BindingFlags PrivateOrInternal = BindingFlags.NonPublic | BindingFlags.Instance;
     const BindingFlags InternalStatic = BindingFlags.NonPublic | BindingFlags.Static;
     const BindingFlags InternalField = Reflector<R>.PrivateOrInternal | BindingFlags.GetField;

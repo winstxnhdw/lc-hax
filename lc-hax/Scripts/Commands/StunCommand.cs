@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 using UnityEngine;
 
 [Command("stun")]
-class StunCommand : ICommand, IStun {
+sealed class StunCommand : ICommand, IStun {
     public async Task Execute(Arguments args, CancellationToken cancellationToken) {
         if (Helper.CurrentCamera is not Camera camera) return;
         if (args.Length is 0) {

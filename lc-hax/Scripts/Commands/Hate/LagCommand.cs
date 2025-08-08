@@ -5,7 +5,7 @@ using GameNetcodeStuff;
 using UnityEngine;
 
 [Command("lag")]
-class LagCommand : ICommand {
+sealed class LagCommand : ICommand {
     static IEnumerator WaitForEnemyOwnershipChange(PlayerControllerB player, EnemyAI enemy) {
         WaitForEndOfFrame waitForEndOfFrame = new();
 

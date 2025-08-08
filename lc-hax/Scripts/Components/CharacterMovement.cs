@@ -3,7 +3,7 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using ZLinq;
 
-class CharacterMovement : MonoBehaviour {
+sealed class CharacterMovement : MonoBehaviour {
     // Movement constants
     const float WalkingSpeed = 0.5f; // Walking speed when left control is held
     const float SprintDuration = 0.0f; // Duration sprint key must be held for sprinting (adjust as needed)

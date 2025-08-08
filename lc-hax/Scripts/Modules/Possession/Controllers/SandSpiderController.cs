@@ -1,6 +1,6 @@
 using UnityEngine;
 
-class SandSpiderController : IEnemyController<SandSpiderAI> {
+sealed class SandSpiderController : IEnemyController<SandSpiderAI> {
     public void OnMovement(SandSpiderAI enemy, bool isMoving, bool isSprinting) {
         enemy.creatureAnimator.SetBool("moving", true);
         // spider is too slow, make it like 6f default, 8f sprinting

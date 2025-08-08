@@ -6,7 +6,7 @@ using Unity.Netcode;
 using UnityEngine;
 
 [HarmonyPatch(typeof(GiftBoxItem))]
-class GiftBoxPatch {
+sealed class GiftBoxPatch {
     static bool LocalPlayerActivated { get; set; }
 
     [HarmonyPatch(nameof(GiftBoxItem.ItemActivate))]

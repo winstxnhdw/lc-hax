@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 
-class ScreenListener : MonoBehaviour {
+sealed class ScreenListener : MonoBehaviour {
     internal static event Action? OnScreenSizeChange;
 
     int LastScreenWidth { get; set; } = Screen.width;

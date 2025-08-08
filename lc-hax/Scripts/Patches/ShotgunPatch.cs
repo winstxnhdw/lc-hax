@@ -4,7 +4,7 @@ using GameNetcodeStuff;
 using HarmonyLib;
 
 [HarmonyPatch(typeof(ShotgunItem))]
-class ShotgunPatch {
+sealed class ShotgunPatch {
     static bool InterruptDestroyItem { get; set; }
 
     /// <summary>

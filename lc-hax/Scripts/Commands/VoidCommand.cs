@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 using GameNetcodeStuff;
 
 [Command("void")]
-class VoidCommand : ITeleporter, ICommand {
+sealed class VoidCommand : ITeleporter, ICommand {
     public async Task Execute(Arguments args, CancellationToken cancellationToken) {
         if (args.Length is 0) {
             Chat.Print("Usage: /void <player>");

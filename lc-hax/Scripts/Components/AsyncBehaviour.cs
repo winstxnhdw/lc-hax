@@ -2,7 +2,7 @@ using System;
 using System.Collections;
 using UnityEngine;
 
-class AsyncBehaviour : MonoBehaviour {
+sealed class AsyncBehaviour : MonoBehaviour {
     Func<IEnumerator>? Func { get; set; }
 
     internal void Init(Func<IEnumerator> func) {

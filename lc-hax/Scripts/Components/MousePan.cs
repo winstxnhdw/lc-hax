@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-class MousePan : MonoBehaviour {
+sealed class MousePan : MonoBehaviour {
     float Sensitivity { get; set; } = 0.2f;
     float Yaw { get; set; }
     float Pitch { get; set; }

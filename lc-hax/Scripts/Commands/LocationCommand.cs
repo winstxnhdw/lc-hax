@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 using UnityEngine;
 
 [Command("xyz")]
-class LocationCommand : ICommand {
+sealed class LocationCommand : ICommand {
     public async Task Execute(Arguments args, CancellationToken cancellationToken) {
         if (Helper.CurrentCamera is not Camera camera) return;
 

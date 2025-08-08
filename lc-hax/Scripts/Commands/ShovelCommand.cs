@@ -2,7 +2,7 @@ using System.Threading;
 using System.Threading.Tasks;
 
 [Command("shovel")]
-class ShovelCommand : ICommand {
+sealed class ShovelCommand : ICommand {
     public async Task Execute(Arguments args, CancellationToken cancellationToken) {
         if (args.Length is 0) {
             Chat.Print("Usage: shovel <force=1>");

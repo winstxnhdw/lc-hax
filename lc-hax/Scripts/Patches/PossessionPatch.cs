@@ -3,7 +3,7 @@
 using HarmonyLib;
 
 [HarmonyPatch]
-class PossessionPatch {
+sealed class PossessionPatch {
     [HarmonyPatch(typeof(HUDManager), "CanPlayerScan")]
     static bool Prefix(ref bool __result) {
         if (PossessionMod.Instance is null or { IsPossessed: false }) return true;

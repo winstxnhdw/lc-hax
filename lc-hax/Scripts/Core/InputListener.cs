@@ -2,7 +2,7 @@ using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-class InputListener : MonoBehaviour {
+sealed class InputListener : MonoBehaviour {
     internal static event Action<bool>? OnShiftButtonHold;
     internal static event Action<bool>? OnFButtonHold;
     internal static event Action<bool>? OnEButtonHold;

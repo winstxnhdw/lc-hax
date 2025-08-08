@@ -1,7 +1,7 @@
 using System.Threading;
 using System.Threading.Tasks;
 
-class PrivilegedCommand(ICommand command) : ICommand {
+sealed class PrivilegedCommand(ICommand command) : ICommand {
     ICommand Command { get; } = command;
 
     public async Task Execute(Arguments args, CancellationToken cancellationToken) {

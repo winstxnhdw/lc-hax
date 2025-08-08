@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 using GameNetcodeStuff;
 
 [Command("end")]
-class EndCommand : ICommand {
+sealed class EndCommand : ICommand {
     public async Task Execute(Arguments args, CancellationToken cancellationToken) {
         if (args.Length is 0) {
             Helper.StartOfRound?.EndGameServerRpc(-1);

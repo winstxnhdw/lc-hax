@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 using UnityEngine;
 
 [Command("invis")]
-class InvisibleCommand : ICommand {
+sealed class InvisibleCommand : ICommand {
     static void ImmediatelyUpdatePlayerPosition() =>
         Helper.LocalPlayer?.UpdatePlayerPositionServerRpc(Vector3.zero, true, true, false, true);
 

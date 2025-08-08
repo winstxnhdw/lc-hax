@@ -3,6 +3,6 @@
 using HarmonyLib;
 
 [HarmonyPatch(typeof(PatcherTool), nameof(PatcherTool.ShiftBendRandomizer))]
-class ZapGunPatch {
+sealed class ZapGunPatch {
     static void Postfix(PatcherTool __instance) => __instance.bendMultiplier = 0.0f;
 }

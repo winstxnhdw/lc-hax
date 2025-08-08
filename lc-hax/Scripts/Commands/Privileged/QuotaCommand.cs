@@ -2,7 +2,7 @@ using System.Threading;
 using System.Threading.Tasks;
 
 [PrivilegedCommand("quota")]
-class QuotaCommand : ICommand {
+sealed class QuotaCommand : ICommand {
     public async Task Execute(Arguments args, CancellationToken cancellationToken) {
         if (Helper.TimeOfDay is not TimeOfDay timeOfDay) return;
         if (args.Length is 0) {

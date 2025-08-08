@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 using UnityEngine;
 
 [Command("spin")]
-class SpinCommand : ICommand {
+sealed class SpinCommand : ICommand {
     static Action<float> PlaceObjectAtRotation(PlaceableShipObject shipObject) => (timeElapsed) =>
         Helper.PlaceObjectAtPosition(
             shipObject,

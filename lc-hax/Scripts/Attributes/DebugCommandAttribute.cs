@@ -1,6 +1,6 @@
 using System;
 
 [AttributeUsage(AttributeTargets.Class)]
-class DebugCommandAttribute(string syntax) : Attribute {
+sealed class DebugCommandAttribute(string syntax) : Attribute {
     internal string Syntax { get; } = syntax;
 }

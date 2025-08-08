@@ -3,7 +3,7 @@
 using HarmonyLib;
 
 [HarmonyPatch(typeof(EnemyAI))]
-class EnemyDependencyPatch {
+sealed class EnemyDependencyPatch {
     [HarmonyPatch(nameof(EnemyAI.OnDestroy))]
     static void Prefix(EnemyAI __instance) => Helper.Enemies.Remove(__instance);
 
@@ -12,7 +12,7 @@ class EnemyDependencyPatch {
 }
 
 [HarmonyPatch(typeof(MaskedPlayerEnemy))]
-class MaskedDependencyPatch {
+sealed class MaskedDependencyPatch {
     [HarmonyPatch(nameof(MaskedPlayerEnemy.OnDestroy))]
     static void Prefix(MaskedPlayerEnemy __instance) => Helper.Enemies.Remove(__instance);
 

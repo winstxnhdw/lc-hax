@@ -4,7 +4,7 @@ using GameNetcodeStuff;
 using UnityEngine;
 
 [Command("noise")]
-class NoiseCommand : ICommand {
+sealed class NoiseCommand : ICommand {
     static async Task PlayNoiseContinuously(PlayerControllerB player, float duration, CancellationToken cancellationToken) {
         float startTime = Time.time;
 

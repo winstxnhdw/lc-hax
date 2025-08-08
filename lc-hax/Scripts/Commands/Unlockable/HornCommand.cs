@@ -3,7 +3,7 @@ using System.Threading;
 using System.Threading.Tasks;
 
 [Command("horn")]
-class HornCommand : ICommand {
+sealed class HornCommand : ICommand {
     public async Task Execute(Arguments args, CancellationToken cancellationToken) {
         if (args.Length is 0) {
             Chat.Print("Usage: horn <duration>");

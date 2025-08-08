@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using GameNetcodeStuff;
 
 [Command("fatality")]
-class FatalityCommand : ICommand {
+sealed class FatalityCommand : ICommand {
     /// <summary>
     /// Teleports the enemy to the target player and perform the fatality.
     /// Teleporting certain enemies outside of the factory can lag the user, so this burden is passed to the target player.

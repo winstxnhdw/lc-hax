@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 
-class GameListener : MonoBehaviour {
+sealed class GameListener : MonoBehaviour {
     internal static event Action? OnGameStart;
     internal static event Action? OnGameEnd;
     internal static event Action? OnShipDescent;

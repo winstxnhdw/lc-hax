@@ -3,7 +3,7 @@
 using HarmonyLib;
 
 [HarmonyPatch(typeof(GrabbableObject), nameof(GrabbableObject.LateUpdate))]
-class InfiniteBatteryPatch {
+sealed class InfiniteBatteryPatch {
     static void Postfix(GrabbableObject __instance) {
         if (__instance.insertedBattery is not Battery battery) return;
 

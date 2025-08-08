@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 using UnityEngine;
 
 [PrivilegedCommand("land")]
-class LandCommand : ICommand {
+sealed class LandCommand : ICommand {
     public async Task Execute(Arguments args, CancellationToken cancellationToken) {
         if (Helper.StartOfRound is not StartOfRound startOfRound) return;
         if (startOfRound.travellingToNewLevel) {

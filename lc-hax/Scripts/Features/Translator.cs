@@ -18,7 +18,7 @@ readonly struct LanguageResponse {
     internal double Confidence { get; init; }
 }
 
-class Translator : IDisposable {
+sealed class Translator : IDisposable {
     HttpClient HttpClient { get; } = new();
     CancellationToken CancellationToken { get; }
     string? TargetLanguage { get; }

@@ -1,4 +1,4 @@
-class EarthLeviathanController : IEnemyController<SandWormAI> {
+sealed class EarthLeviathanController : IEnemyController<SandWormAI> {
     static bool IsEmerged(SandWormAI enemy) => enemy.inEmergingState || enemy.emerged;
 
     public void UseSecondarySkill(SandWormAI enemy) {
