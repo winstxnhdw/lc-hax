@@ -25,14 +25,14 @@ jobs:
           token: ${{ secrets.PAT }}
 
       - name: Cache .NET tools
-        uses: actions/cache@v4.2.4
+        uses: actions/cache@v4.3.0
         with:
           path: ~/.nuget/packages
           key: dotnet-tools-${{ runner.os }}-${{ hashFiles('.config/dotnet-tools.json') }}
           restore-keys: dotnet-tools-${{ runner.os }}-
 
       - name: Setup .NET
-        uses: actions/setup-dotnet@v4.3.1
+        uses: actions/setup-dotnet@v5.0.0
         with:
           dotnet-version: 9.x
 
