@@ -29,7 +29,7 @@
 
     <PackageReference Include="Quickenshtein" Version="1.5.1" />
 
-    <PackageReference Include="Zlinq" Version="1.5.2" />
+    <PackageReference Include="Zlinq" Version="1.5.3" />
 
     <PackageReference Include="CommunityToolkit.HighPerformance" Version="8.4.0" />
 
@@ -37,7 +37,7 @@
 
     <EmbeddedResource Include="$(NuGetPackageRoot)/lib.harmony/2.4.1/lib/net48/0Harmony.dll" />
 
-    <EmbeddedResource Include="$(NuGetPackageRoot)/zlinq/1.5.2/lib/netstandard2.1/Zlinq.dll" />
+    <EmbeddedResource Include="$(NuGetPackageRoot)/zlinq/1.5.3/lib/netstandard2.1/Zlinq.dll" />
 
     <EmbeddedResource Include="$(NuGetPackageRoot)/quickenshtein/1.5.1/lib/netstandard2.0/Quickenshtein.dll" />
 
