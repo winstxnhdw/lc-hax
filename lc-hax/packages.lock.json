@@ -13,9 +13,9 @@
       },
       "LethalCompany.GameLibs.Steam": {
         "type": "Direct",
-        "requested": "[70.0.0-ngd.0, )",
-        "resolved": "70.0.0-ngd.0",
-        "contentHash": "i2Iqz1Q8fbF5J5tM39r7hHsTtuiPS0SvFFz7qFL7NVSPj/kJJ1R5eI6xaApLFTWvIOzq1ZbVny6CUcU5wgLfxA==",
+        "requested": "[73.0.0-ngd.0, )",
+        "resolved": "73.0.0-ngd.0",
+        "contentHash": "iaHCHoJTFiTnAyAYIrEbjCJOOuhcJ42+KJnEbmCmf4UdkhjSwwio2bcdPCbchodB9kEp+3v3ATgkBwYn56/Gdw==",
         "dependencies": {
           "Newtonsoft.JSON": "13.0.3",
           "UnityEngine.Modules": "2022.3.9"
