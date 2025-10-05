@@ -21,7 +21,7 @@
 
     <ProjectReference Include="..\analysers\analysers.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="false" />
 
-    <PackageReference Include="LethalCompany.GameLibs.Steam" Version="70.0.0-ngd.0" />
+    <PackageReference Include="LethalCompany.GameLibs.Steam" Version="73.0.0-ngd.0" />
 
     <PackageReference Include="Nullable.Extended.Analyzer" Version="1.15.6581" />
 
