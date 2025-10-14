@@ -52,6 +52,14 @@ Execute `launch.bat` when you have launched the game to inject the assembly into
 
 `lc-hax` has an extensive list of features. Features are split into two distinct categories: **mods** and **commands**. Mods are features that are always active, while commands are features that are only active for a limited period of time when invoked.
 
+<div align="center">
+    <img alt="User in Phantom mode"
+         src="https://raw.githubusercontent.com/wiki/winstxnhdw/lc-hax/resources/inverse.gif"
+    />
+</div>
+
+<br>
+
 The complete feature set includes the following.
 
 - Anti-kick
