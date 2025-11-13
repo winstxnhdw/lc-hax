@@ -23,11 +23,11 @@
       },
       "Lib.Harmony": {
         "type": "Direct",
-        "requested": "[2.4.1, )",
-        "resolved": "2.4.1",
-        "contentHash": "iLTZi/kKKB18jYEIwReZSx2xXyVUh4J1swReMgvYBBBn4tzA1Nd0PJlVyntY5BDdSiXSxzmvjc/3OYfFs0YwFg==",
+        "requested": "[2.4.2, )",
+        "resolved": "2.4.2",
+        "contentHash": "D2X9ojVjqbqdqWVK3VQETrEb56yVoXxtEp6tP5UvW0PP+bA4uJiswqOxF8GhH02ECwyevUa9vwhwdLzyXfksbw==",
         "dependencies": {
-          "Lib.Harmony.Ref": "2.4.1"
+          "Lib.Harmony.Ref": "2.4.2"
         }
       },
       "Nullable.Extended.Analyzer": {
@@ -70,8 +70,8 @@
       },
       "Lib.Harmony.Ref": {
         "type": "Transitive",
-        "resolved": "2.4.1",
-        "contentHash": "+u1y2Qd6OlSUQ8JtrsrSo3adnAsrXMJ2YPYtbW+FAmdPI5yw34M9VX4bKl8ZwRuUzaGzZIz+oGMbn/yS4fWtZw==",
+        "resolved": "2.4.2",
+        "contentHash": "pK6Z6WlR6OyynJqj50SspAV3qSU4pAiFluoryxE6ad63r2BD8LHKmH40aZz+0Ve+gyyQxSXTkxBnaXs9JvTkIw==",
         "dependencies": {
           "System.Reflection.Emit": "4.7.0"
         }

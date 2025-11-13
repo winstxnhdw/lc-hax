@@ -33,9 +33,9 @@
 
     <PackageReference Include="CommunityToolkit.HighPerformance" Version="8.4.0" />
 
-    <PackageReference Include="Lib.Harmony" Version="2.4.1" />
+    <PackageReference Include="Lib.Harmony" Version="2.4.2" />
 
-    <EmbeddedResource Include="$(NuGetPackageRoot)/lib.harmony/2.4.1/lib/net48/0Harmony.dll" />
+    <EmbeddedResource Include="$(NuGetPackageRoot)/lib.harmony/2.4.2/lib/net48/0Harmony.dll" />
 
     <EmbeddedResource Include="$(NuGetPackageRoot)/zlinq/1.5.3/lib/netstandard2.1/Zlinq.dll" />
 
