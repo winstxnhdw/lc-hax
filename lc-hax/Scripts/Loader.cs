@@ -11,7 +11,6 @@ sealed class Loader : MonoBehaviour {
     const string HarmonyID = "winstxnhdw.lc-hax";
     static GameObject HaxGameObjects { get; } = new("Hax GameObjects");
     static GameObject HaxModules { get; } = new("Hax Modules");
-    static bool HasLoaded => Harmony.HasAnyPatches(Loader.HarmonyID);
     static void AddHaxModules<T>() where T : Component => Loader.HaxModules.AddComponent<T>();
     static void AddHaxGameObject<T>() where T : Component => Loader.HaxGameObjects.AddComponent<T>();
 
@@ -29,7 +28,7 @@ sealed class Loader : MonoBehaviour {
     internal static void Load() {
         Loader.LoadLibraries();
 
-        if (Loader.HasLoaded) {
+        if (Harmony.HasAnyPatches(Loader.HarmonyID)) {
             Logger.Write("lc-hax has already loaded!");
             return;
         }
