@@ -58,7 +58,7 @@ sealed class FollowMod : MonoBehaviour {
         this.AnimationBroadcastTimer -= Time.deltaTime;
 
         int[] animationStates = [
-            ..targetPlayer.playerBodyAnimator
+            .. targetPlayer.playerBodyAnimator
                           .layerCount
                           .Range()
                           .Select(i => targetPlayer.playerBodyAnimator.GetCurrentAnimatorStateInfo(i).fullPathHash)
