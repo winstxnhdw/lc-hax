@@ -80,10 +80,4 @@ sealed class Loader : MonoBehaviour {
         Loader.AddHaxModules<ClearVisionMod>();
         Loader.AddHaxModules<InstantInteractMod>();
     }
-
-    internal static void Unload() {
-        Destroy(Loader.HaxModules);
-        Destroy(Loader.HaxGameObjects);
-        new Harmony(Loader.HarmonyID).UnpatchAll();
-    }
 }
