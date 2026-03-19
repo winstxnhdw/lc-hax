@@ -6,42 +6,40 @@ on:
   pull_request:
     branches: [main]
   schedule:
-    - cron: '24 23 * * 0'
+    - cron: "24 23 * * 0"
 
 env:
   NUGET_PACKAGES: ${{ github.workspace }}\.nuget\packages
 
 permissions:
   security-events: write
-  actions: read
-  contents: read
 
 jobs:
   analyze:
     runs-on: windows-latest
 
     steps:
-    - name: Checkout repository
-      uses: actions/checkout@v6.0.2
-      with:
-        show-progress: false
+      - name: Checkout repository
+        uses: actions/checkout@v6.0.2
+        with:
+          show-progress: false
 
-    - name: Initialise CodeQL
-      uses: github/codeql-action/init@v4.32.6
-      with:
-        languages: csharp
+      - name: Initialise CodeQL
+        uses: github/codeql-action/init@v4.32.6
+        with:
+          languages: csharp
 
-    - name: Setup .NET
-      uses: actions/setup-dotnet@v5.2.0
-      with:
-        dotnet-version: 9.x
-        cache: true
-        cache-dependency-path: lc-hax\packages.lock.json
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v5.2.0
+        with:
+          dotnet-version: 10.x
+          cache-dependency-path: lc-hax\packages.lock.json
+          cache: true
 
-    - name: Build
-      run: dotnet build lc-hax -restoreProperty:RestoreLockedMode=true
+      - name: Build
+        run: dotnet build lc-hax -restoreProperty:RestoreLockedMode=true
 
-    - name: Perform CodeQL Analysis
-      uses: github/codeql-action/analyze@v4.32.6
-      with:
-        category: /language:csharp
+      - name: Perform CodeQL Analysis
+        uses: github/codeql-action/analyze@v4.32.6
+        with:
+          category: /language:csharp

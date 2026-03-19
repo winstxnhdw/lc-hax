@@ -8,20 +8,25 @@ on:
       - lc-hax/*.csproj
 
 concurrency: Format-Resource-${{ github.ref }}
-permissions:
-  contents: write
+permissions: {}
+env:
+  BRANCH: ${{ github.head_ref || github.ref_name }}
+  PATCH_NAME: format.patch
+  ARTIFACT_NAME: format-patch
 
 jobs:
-  update-resource:
-    runs-on: ubuntu-latest
+  update:
+    runs-on: ubuntu-slim
+    outputs:
+      patched: ${{ steps.patch.outputs.patched }}
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v6.0.2
         with:
           show-progress: false
+          persist-credentials: false
           ref: ${{ github.head_ref }}
-          token: ${{ secrets.PAT }}
 
       - name: Cache .NET tools
         uses: actions/cache@v5.0.3
@@ -33,7 +38,7 @@ jobs:
       - name: Setup .NET
         uses: actions/setup-dotnet@v5.2.0
         with:
-          dotnet-version: 9.x
+          dotnet-version: 10.x
 
       - name: Restore tools
         run: dotnet tool restore
@@ -43,13 +48,13 @@ jobs:
         env:
           CSPROJ_PATH: lc-hax/lc-hax.csproj
 
-      - name: Set Git config
-        run: |
-          git config user.email github-actions[bot]@users.noreply.github.com
-          git config user.name github-actions[bot]
+      - name: Upload format patch
+        id: patch
+        uses: winstxnhdw/actions/upload-patch@main
 
-      - name: Commit changes
-        run: |
-          git commit -am "build: update resource path(s)" || true
-          git pull --rebase origin ${{ github.head_ref || github.ref_name }}
-          git push
+  push:
+    if: needs.update.outputs.patched
+    needs: update
+    uses: winstxnhdw/actions/.github/workflows/format-push.yml@main
+    permissions:
+      contents: write

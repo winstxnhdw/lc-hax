@@ -25,8 +25,8 @@ jobs:
         uses: actions/setup-dotnet@v5.2.0
         with:
           dotnet-version: 10.x
-          cache: true
           cache-dependency-path: lc-hax\packages.lock.json
+          cache: true
 
       - name: Build
         run: dotnet build lc-hax -restoreProperty:RestoreLockedMode=true /warnaserror

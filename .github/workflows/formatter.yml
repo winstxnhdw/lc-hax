@@ -9,38 +9,40 @@ on:
       - lc-hax/Scripts/**/*.cs
 
 concurrency: ${{ github.workflow }}-${{ github.ref }}
-permissions:
-  contents: write
+permissions: {}
 
 jobs:
   format:
     runs-on: ubuntu-slim
+    outputs:
+      patched: ${{ steps.patch.outputs.patched }}
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v6.0.2
         with:
           show-progress: false
+          persist-credentials: false
           repository: ${{ github.event.pull_request.head.repo.full_name }}
           ref: ${{ github.head_ref }}
 
       - name: Setup .NET
         uses: actions/setup-dotnet@v5.2.0
         with:
-          dotnet-version: 9.x
+          dotnet-version: 10.x
 
       - name: Format scripts
         run: |
           dotnet format lc-hax
           dotnet format analysers
 
-      - name: Set Git config
-        run: |
-          git config user.email github-actions[bot]@users.noreply.github.com
-          git config user.name github-actions[bot]
+      - name: Upload format patch
+        id: patch
+        uses: winstxnhdw/actions/upload-patch@main
 
-      - name: Commit changes
-        run: |
-          git commit -am "style: format scripts" || true
-          git pull --rebase origin ${{ github.head_ref || github.ref_name }}
-          git push origin HEAD:$BRANCH
+  push:
+    if: needs.format.outputs.patched
+    needs: format
+    uses: winstxnhdw/actions/.github/workflows/format-push.yml@main
+    permissions:
+      contents: write
