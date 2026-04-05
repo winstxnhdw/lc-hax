@@ -27,7 +27,7 @@ sealed class LagCommand : ICommand {
         bracken.SetMovingTowardsTargetPlayer(targetPlayer);
         bracken.SetBehaviourState(BehaviourState.AGGRAVATED);
         bracken.EnterAngerModeServerRpc(float.MaxValue);
-        bracken.UpdateEnemyPositionServerRpc(targetPlayer.transform.position);
+        bracken.UpdateEnemyPositionRpc(targetPlayer.transform.position);
 
         yield return LagCommand.WaitForEnemyOwnershipChange(targetPlayer, bracken);
     }

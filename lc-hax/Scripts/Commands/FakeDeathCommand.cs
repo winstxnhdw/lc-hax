@@ -16,7 +16,8 @@ sealed class FakeDeathCommand : ICommand {
             bodyVelocity: Vector3.zero,
             causeOfDeath: unchecked((int)CauseOfDeath.Unknown),
             deathAnimation: 0,
-            positionOffset: Vector3.zero
+            positionOffset: Vector3.zero,
+            setOverrideDropItems: false
         );
 
         await Helper.WaitUntil(() => player.playersManager.shipIsLeaving, cancellationToken);
