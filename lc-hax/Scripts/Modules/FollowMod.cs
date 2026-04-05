@@ -104,7 +104,7 @@ sealed class FollowMod : MonoBehaviour {
         }
 
         localPlayer.transform.position = state.position;
-        localPlayer.UpdatePlayerPositionServerRpc(
+        localPlayer.UpdatePlayerPositionRpc(
             localPlayer.thisPlayerBody.localPosition,
             localPlayer.isInElevator,
             localPlayer.isInHangarShipRoom,

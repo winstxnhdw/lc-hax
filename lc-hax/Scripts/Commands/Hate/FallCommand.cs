@@ -20,7 +20,7 @@ sealed class FallCommand : ICommand {
     static IEnumerator MoveTargetPlayerFloor(PlayerControllerB localPlayer, PlayerControllerB targetPlayer, EnemyAI enemy) {
         yield return FallCommand.WaitForEnemyOwnershipChange(localPlayer, enemy);
 
-        enemy.UpdateEnemyPositionServerRpc(
+        enemy.UpdateEnemyPositionRpc(
             enemy.serverPosition == Vector3.positiveInfinity
                 ? targetPlayer.transform.position
                 : Vector3.positiveInfinity
