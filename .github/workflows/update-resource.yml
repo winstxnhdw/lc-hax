@@ -56,5 +56,7 @@ jobs:
     if: needs.update.outputs.patched
     needs: update
     uses: winstxnhdw/actions/.github/workflows/format-push.yml@main
+    secrets:
+      token: ${{ secrets.PAT }}
     permissions:
       contents: write
