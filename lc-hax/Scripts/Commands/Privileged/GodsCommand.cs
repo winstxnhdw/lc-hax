@@ -3,5 +3,8 @@ using System.Threading.Tasks;
 
 [PrivilegedCommand("gods")]
 sealed class GodsCommand : ICommand {
-    public async Task Execute(Arguments args, CancellationToken cancellationToken) => Helper.StartOfRound?.Debug_ToggleAllowDeathServerRpc();
+    public Task Execute(Arguments args, CancellationToken cancellationToken) {
+        Helper.StartOfRound?.Debug_ToggleAllowDeathServerRpc();
+        return Task.CompletedTask;
+    }
 }

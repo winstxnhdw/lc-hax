@@ -35,12 +35,12 @@ sealed class DestroyCommand : ICommand {
         return new Result { Success = true };
     }
 
-    public async Task Execute(Arguments args, CancellationToken cancellationToken) {
-        if (Helper.LocalPlayer is not PlayerControllerB player) return;
-
+    public Task Execute(Arguments args, CancellationToken cancellationToken) {
+        if (Helper.LocalPlayer is not PlayerControllerB player)
+            return Task.CompletedTask;
         if (player.ItemSlots.WhereIsNotNull().AsValueEnumerable().Count() >= 4) {
             Chat.Print("You must have an empty inventory slot!");
-            return;
+            return Task.CompletedTask;
         }
 
         Result result = args[0] switch {
@@ -52,5 +52,7 @@ sealed class DestroyCommand : ICommand {
         if (!result.Success) {
             Chat.Print(result.Message);
         }
+
+        return Task.CompletedTask;
     }
 }

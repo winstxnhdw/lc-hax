@@ -7,12 +7,14 @@ sealed class InvisibleCommand : ICommand {
     static void ImmediatelyUpdatePlayerPosition() =>
         Helper.LocalPlayer?.UpdatePlayerPositionRpc(Vector3.zero, true, true, false, true);
 
-    public async Task Execute(Arguments args, CancellationToken cancellationToken) {
+    public Task Execute(Arguments args, CancellationToken cancellationToken) {
         Setting.EnableInvisible = !Setting.EnableInvisible;
         Chat.Print($"Invisible: {(Setting.EnableInvisible ? "enabled" : "disabled")}");
 
         if (Setting.EnableInvisible) {
             InvisibleCommand.ImmediatelyUpdatePlayerPosition();
         }
+
+        return Task.CompletedTask;
     }
 }
