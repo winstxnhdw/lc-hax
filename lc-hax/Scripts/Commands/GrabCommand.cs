@@ -68,11 +68,12 @@ sealed class GrabCommand : ICommand {
         return $"Grabbed a {key.ToTitleCase()}!";
     }
 
-    public async Task Execute(Arguments args, CancellationToken cancellationToken) {
-        if (Helper.LocalPlayer is not PlayerControllerB localPlayer) return;
+    public Task Execute(Arguments args, CancellationToken cancellationToken) {
+        if (Helper.LocalPlayer is not PlayerControllerB localPlayer)
+            return Task.CompletedTask;
         if (localPlayer.ItemSlots.WhereIsNotNull().AsValueEnumerable().Count() >= 4) {
             Chat.Print("You must have an empty inventory slot!");
-            return;
+            return Task.CompletedTask;
         }
 
         Vector3 currentPlayerPosition = localPlayer.transform.position;
@@ -83,5 +84,6 @@ sealed class GrabCommand : ICommand {
         };
 
         Chat.Print(message);
+        return Task.CompletedTask;
     }
 }

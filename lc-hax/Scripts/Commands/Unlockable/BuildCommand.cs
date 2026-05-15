@@ -8,12 +8,14 @@ using ZLinq;
 sealed class BuildCommand : ICommand {
     static Dictionary<string, int>? Unlockables { get; set; }
 
-    public async Task Execute(Arguments args, CancellationToken cancellationToken) {
-        if (Helper.StartOfRound is not StartOfRound startOfRound) return;
-        if (Helper.CurrentCamera is not Camera camera) return;
+    public Task Execute(Arguments args, CancellationToken cancellationToken) {
+        if (Helper.StartOfRound is not StartOfRound startOfRound)
+            return Task.CompletedTask;
+        if (Helper.CurrentCamera is not Camera camera)
+            return Task.CompletedTask;
         if (args[0] is not string unlockableName) {
             Chat.Print("Usage: build <unlockable>");
-            return;
+            return Task.CompletedTask;
         }
 
         BuildCommand.Unlockables ??=
@@ -29,7 +31,7 @@ sealed class BuildCommand : ICommand {
 
         if (!unlockableName.FuzzyMatch(BuildCommand.Unlockables.Keys, out string key)) {
             Chat.Print("Failed to find unlockable!");
-            return;
+            return Task.CompletedTask;
         }
 
         Unlockable unlockable = (Unlockable)BuildCommand.Unlockables[key];
@@ -40,7 +42,7 @@ sealed class BuildCommand : ICommand {
 
         if (Helper.GetUnlockable(unlockable) is not PlaceableShipObject shipObject) {
             Chat.Print("Unlockable is not found or placeable!");
-            return;
+            return Task.CompletedTask;
         }
 
         Vector3 newPosition = camera.transform.position + (camera.transform.forward * 3.0f);
@@ -52,5 +54,6 @@ sealed class BuildCommand : ICommand {
             newPosition,
             newRotation
         );
+        return Task.CompletedTask;
     }
 }

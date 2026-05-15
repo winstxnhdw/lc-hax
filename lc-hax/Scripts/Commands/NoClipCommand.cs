@@ -7,8 +7,9 @@ using UnityEngine;
 sealed class NoClipCommand : ICommand {
     static bool EnabledGodMode { get; set; }
 
-    public async Task Execute(Arguments args, CancellationToken cancellationToken) {
-        if (Helper.LocalPlayer is not PlayerControllerB localPlayer) return;
+    public Task Execute(Arguments args, CancellationToken cancellationToken) {
+        if (Helper.LocalPlayer is not PlayerControllerB localPlayer)
+            return Task.CompletedTask;
         if (localPlayer.gameObject.TryGetComponent(out KeyboardMovement keyboard)) {
             Setting.EnableGodMode = EnabledGodMode;
             GameObject.Destroy(keyboard);
@@ -21,5 +22,7 @@ sealed class NoClipCommand : ICommand {
             Setting.EnableGodMode = true;
             Chat.Print("NoClip has been enabled!");
         }
+
+        return Task.CompletedTask;
     }
 }

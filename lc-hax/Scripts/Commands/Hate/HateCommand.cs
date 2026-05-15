@@ -5,25 +5,26 @@ using GameNetcodeStuff;
 
 [Command("hate")]
 sealed class HateCommand : IEnemyPrompter, ICommand {
-    public async Task Execute(Arguments args, CancellationToken cancellationToken) {
+    public Task Execute(Arguments args, CancellationToken cancellationToken) {
         if (args.Length is 0) {
             Chat.Print("Usage: hate <player> <funnyRevive>");
-            return;
+            return Task.CompletedTask;
         }
 
         if (Helper.GetActivePlayer(args[0]) is not PlayerControllerB targetPlayer) {
             Chat.Print("Target player is not alive or found!");
-            return;
+            return Task.CompletedTask;
         }
 
         List<string> promptedEnemies = this.PromptEnemiesToTarget(targetPlayer: targetPlayer);
 
         if (promptedEnemies.Count is 0) {
             Chat.Print("No enemies found!");
-            return;
+            return Task.CompletedTask;
         }
 
         promptedEnemies.ForEach(enemy => Chat.Print($"{enemy} prompted!"));
         Chat.Print($"Enemies prompted: {promptedEnemies.Count}");
+        return Task.CompletedTask;
     }
 }

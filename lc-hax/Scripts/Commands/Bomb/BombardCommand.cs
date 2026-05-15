@@ -32,31 +32,33 @@ sealed class BombardCommand : ICommand, IJetpack {
         player.carryWeight = currentWeight;
     }
 
-    public async Task Execute(Arguments args, CancellationToken cancellationToken) {
-        if (Helper.LocalPlayer is not PlayerControllerB localPlayer) return;
+    public Task Execute(Arguments args, CancellationToken cancellationToken) {
+        if (Helper.LocalPlayer is not PlayerControllerB localPlayer)
+            return Task.CompletedTask;
         if (args.Length is 0) {
             Chat.Print("Usage: bombard <player>");
-            return;
+            return Task.CompletedTask;
         }
 
         if (localPlayer.ItemSlots.WhereIsNotNull().AsValueEnumerable().Count() >= 4) {
             Chat.Print("You must have an empty inventory slot!");
-            return;
+            return Task.CompletedTask;
         }
 
         if (Helper.GetActivePlayer(args[0]) is not PlayerControllerB targetPlayer) {
             Chat.Print("Target player is not alive or found!");
-            return;
+            return Task.CompletedTask;
         }
 
         JetpackItem[] jetpacks = this.GetAvailableJetpacks();
 
         if (jetpacks.Length is 0) {
             Chat.Print("A usable jetpack is required to use this command!");
-            return;
+            return Task.CompletedTask;
         }
 
         Helper.CreateComponent<AsyncBehaviour>()
               .Init(() => BombardCommand.BombardAsync(localPlayer, targetPlayer.transform, jetpacks));
+        return Task.CompletedTask;
     }
 }
