@@ -23,19 +23,21 @@ sealed class HomeCommand : ITeleporter, ICommand {
               .Init(teleporter.PressTeleportButtonServerRpc);
     };
 
-    public async Task Execute(Arguments args, CancellationToken cancellationToken) {
-        if (Helper.StartOfRound is not StartOfRound startOfRound) return;
+    public Task Execute(Arguments args, CancellationToken cancellationToken) {
+        if (Helper.StartOfRound is not StartOfRound startOfRound)
+            return Task.CompletedTask;
         if (args.Length is 0) {
             startOfRound.ForcePlayerIntoShip();
             startOfRound.localPlayerController.isInsideFactory = false;
-            return;
+            return Task.CompletedTask;
         }
 
         if (Helper.GetPlayer(args[0]) is not PlayerControllerB targetPlayer) {
             Chat.Print("Target player is not found!");
-            return;
+            return Task.CompletedTask;
         }
 
         this.PrepareToTeleport(HomeCommand.TeleportPlayerToBaseLater(targetPlayer));
+        return Task.CompletedTask;
     }
 }

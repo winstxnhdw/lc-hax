@@ -7,22 +7,24 @@ using ZLinq;
 sealed class VisitCommand : ICommand {
     static Dictionary<string, int>? Levels { get; set; }
 
-    public async Task Execute(Arguments args, CancellationToken cancellationToken) {
-        if (Helper.Terminal is not Terminal terminal) return;
-        if (Helper.StartOfRound is not StartOfRound startOfRound) return;
+    public Task Execute(Arguments args, CancellationToken cancellationToken) {
+        if (Helper.Terminal is not Terminal terminal)
+            return Task.CompletedTask;
+        if (Helper.StartOfRound is not StartOfRound startOfRound)
+            return Task.CompletedTask;
         if (args[0] is not string moon) {
             Chat.Print("Usage: visit <moon>");
-            return;
+            return Task.CompletedTask;
         }
 
         if (!startOfRound.inShipPhase) {
             Chat.Print("You cannot use this command outside of the ship phase!");
-            return;
+            return Task.CompletedTask;
         }
 
         if (startOfRound.travellingToNewLevel) {
             Chat.Print("You cannot use this command while travelling to a new level!");
-            return;
+            return Task.CompletedTask;
         }
 
         VisitCommand.Levels ??= startOfRound.levels.AsValueEnumerable().ToDictionary(
@@ -32,10 +34,11 @@ sealed class VisitCommand : ICommand {
 
         if (!moon.FuzzyMatch(VisitCommand.Levels.Keys, out string key)) {
             Chat.Print("Failed to find moon!");
-            return;
+            return Task.CompletedTask;
         }
 
         startOfRound.ChangeLevelServerRpc(VisitCommand.Levels[key], terminal.groupCredits);
         Chat.Print($"Visiting {key.ToTitleCase()}!");
+        return Task.CompletedTask;
     }
 }

@@ -16,7 +16,7 @@ sealed class SpinCommand : ICommand {
         Helper.CreateComponent<TransientBehaviour>()
               .Init(SpinCommand.PlaceObjectAtRotation(shipObject), duration);
 
-    public async Task Execute(Arguments args, CancellationToken cancellationToken) {
+    public Task Execute(Arguments args, CancellationToken cancellationToken) {
         if (args.Length is 0) {
             Chat.Print("Usage: spin <duration>");
         }
@@ -27,5 +27,6 @@ sealed class SpinCommand : ICommand {
 
         Helper.FindObjects<PlaceableShipObject>()
               .ForEach(SpinCommand.SpinObject(duration));
+        return Task.CompletedTask;
     }
 }
