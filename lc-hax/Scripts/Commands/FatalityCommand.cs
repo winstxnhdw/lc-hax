@@ -44,15 +44,15 @@ sealed class FatalityCommand : ICommand {
         nutcracker.LegKickPlayerServerRpc(targetPlayer.PlayerIndex());
     }
 
-    public async Task Execute(Arguments args, CancellationToken cancellationToken) {
+    public Task Execute(Arguments args, CancellationToken cancellationToken) {
         if (args.Length < 2) {
             Chat.Print("Usage: fatality <player> <enemy>");
-            return;
+            return Task.CompletedTask;
         }
 
         if (Helper.GetActivePlayer(args[0]) is not PlayerControllerB targetPlayer) {
             Chat.Print("Target player is not alive or found!");
-            return;
+            return Task.CompletedTask;
         }
 
         Dictionary<string, Func<bool>> enemyHandlers = new() {
@@ -68,7 +68,7 @@ sealed class FatalityCommand : ICommand {
 
         if (!string.Join(" ", args[1..]).ToTitleCase().FuzzyMatch(enemyHandlers.Keys, out string key)) {
             Chat.Print("Failed to find enemy!");
-            return;
+            return Task.CompletedTask;
         }
 
         Chat.Print($"Performing {key} fatality on {targetPlayer.playerUsername}..");
@@ -76,5 +76,7 @@ sealed class FatalityCommand : ICommand {
         if (!enemyHandlers[key]()) {
             Chat.Print("Enemy has not yet spawned!");
         }
+
+        return Task.CompletedTask;
     }
 }

@@ -7,19 +7,21 @@ sealed class GarageCommand : ICommand {
         interactTrigger => interactTrigger.name is "Cube" && interactTrigger.transform.parent.name is "Cutscenes"
     );
 
-    public async Task Execute(Arguments args, CancellationToken cancellationToken) {
-        if (Helper.RoundManager is not RoundManager roundManager) return;
+    public Task Execute(Arguments args, CancellationToken cancellationToken) {
+        if (Helper.RoundManager is not RoundManager roundManager)
+            return Task.CompletedTask;
         if (roundManager.currentLevel.levelID is not 0) {
             Chat.Print("You must be in Experimentation to use this command!");
-            return;
+            return Task.CompletedTask;
         }
 
         if (GarageCommand.GarageTrigger is not InteractTrigger garageTrigger) {
             Chat.Print("Garage trigger is not found!");
-            return;
+            return Task.CompletedTask;
         }
 
         garageTrigger.randomChancePercentage = 100;
         garageTrigger.Interact(Helper.LocalPlayer?.transform);
+        return Task.CompletedTask;
     }
 }
