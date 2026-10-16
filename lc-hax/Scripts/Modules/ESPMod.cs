@@ -9,6 +9,15 @@ sealed class ESPMod : MonoBehaviour {
     Renderer[] TurretRenderers { get; set; } = [];
     Renderer[] EntranceRenderers { get; set; } = [];
     Vector3[] StoryLogVectors { get; set; } = [];
+    Plane[] FrustumPlanes { get; } = new Plane[6];
+    Plane[] SidePlanes { get; } = new Plane[4];
+    CachedLabel DynamicLabel { get; } = new();
+    CachedLabel LandmineLabel { get; } = new() { Text = "Landmine" };
+    CachedLabel TurretLabel { get; } = new() { Text = "Turret" };
+    CachedLabel EntranceLabel { get; } = new() { Text = "Entrance" };
+    CachedLabel StoryLogLabel { get; } = new() { Text = "Log" };
+    CachedLabel ShipLabel { get; } = new() { Text = "Ship" };
+    Rect ScreenBounds { get; set; }
 
     bool InGame { get; set; }
     bool IsMapLoaded { get; set; }
@@ -35,101 +44,101 @@ sealed class ESPMod : MonoBehaviour {
     void OnGUI() {
         if (!this.Enabled) return;
         if (!this.InGame) return;
+        if (Event.current.type != EventType.Repaint) return;
         if (Helper.CurrentCamera is not Camera camera) return;
 
+        this.ScreenBounds = new Rect(0, 0, Screen.width, Screen.height);
+        _ = Helper.BeginLabelRepaint();
+        GeometryUtility.CalculateFrustumPlanes(camera, this.FrustumPlanes);
+        Array.Copy(this.FrustumPlanes, this.SidePlanes, this.SidePlanes.Length);
         this.RenderAlways(camera);
         this.RenderWhenMapLoads(camera);
     }
 
     void RenderAlways(Camera camera) {
-        this.PlayerRenderers.ForEach(rendererPair => {
-            if (rendererPair.GameObject is not PlayerControllerB player) return;
-            if (player.isPlayerDead) return;
-            if (!player.isPlayerControlled) return;
+        foreach (RendererPair<PlayerControllerB, SkinnedMeshRenderer> rendererPair in this.PlayerRenderers) {
+            if (rendererPair.GameObject is not PlayerControllerB player) continue;
+            if (player.isPlayerDead) continue;
+            if (!player.isPlayerControlled) continue;
 
-            string label = $"#{player.playerClientId} {player.playerUsername}";
-
-            RenderBounds(
+            this.DynamicLabel.Text = $"#{player.playerClientId} {player.playerUsername}";
+            this.RenderBounds(
                 camera,
                 rendererPair.Renderer.bounds,
-                ESPMod.RenderLabel(label)
+                this.DynamicLabel
             );
-        });
+        }
 
-        Helper.Grabbables.WhereIsNotNull().ForEach(grabbableObject => {
-            Vector3 rendererCentrePoint = camera.WorldToEyesPoint(grabbableObject.transform.position);
+        foreach (GrabbableObject grabbableObject in Helper.Grabbables) {
+            Vector3 rendererCentrePoint = camera.WorldToEyesPoint(grabbableObject.transform.position, this.ScreenBounds);
 
             if (rendererCentrePoint.z <= 2.0f) {
-                return;
+                continue;
             }
 
-            ESPMod.RenderLabel($"{grabbableObject.itemProperties.itemName} ${grabbableObject.scrapValue}").Invoke(
+            this.DynamicLabel.Text = $"{grabbableObject.itemProperties.itemName} ${grabbableObject.scrapValue}";
+            Helper.DrawLabel(
+                rendererCentrePoint,
+                this.DynamicLabel,
                 Color.gray,
-                rendererCentrePoint
+                this.ScreenBounds
             );
-        });
+        }
     }
 
     void RenderWhenMapLoads(Camera camera) {
         if (!this.IsMapLoaded) return;
 
-        this.LandmineRenderers.ForEach(renderer => RenderBounds(
-            camera,
-            renderer.bounds,
-            Color.yellow,
-            ESPMod.RenderLabel("Landmine")
-        ));
+        foreach (Renderer renderer in this.LandmineRenderers) {
+            this.RenderBounds(camera, renderer.bounds, Color.yellow, this.LandmineLabel);
+        }
 
-        this.TurretRenderers.ForEach(renderer => RenderBounds(
-            camera,
-            renderer.bounds,
-            Color.yellow,
-            ESPMod.RenderLabel("Turret")
-        ));
+        foreach (Renderer renderer in this.TurretRenderers) {
+            this.RenderBounds(camera, renderer.bounds, Color.yellow, this.TurretLabel);
+        }
 
-        this.EntranceRenderers.ForEach(renderer => RenderBounds(
-            camera,
-            renderer.bounds,
-            Color.yellow,
-            ESPMod.RenderLabel("Entrance")
-        ));
+        foreach (Renderer renderer in this.EntranceRenderers) {
+            this.RenderBounds(camera, renderer.bounds, Color.yellow, this.EntranceLabel);
+        }
 
-        this.StoryLogVectors.ForEach(vector => {
-            Vector3 rendererCentrePoint = camera.WorldToEyesPoint(vector);
+        foreach (Vector3 vector in this.StoryLogVectors) {
+            Vector3 rendererCentrePoint = camera.WorldToEyesPoint(vector, this.ScreenBounds);
 
             if (rendererCentrePoint.z <= 2.0f) {
-                return;
+                continue;
             }
 
-            ESPMod.RenderLabel("Log").Invoke(Color.gray, rendererCentrePoint);
-        });
+            Helper.DrawLabel(rendererCentrePoint, this.StoryLogLabel, Color.gray, this.ScreenBounds);
+        }
 
-        Helper.Enemies.WhereIsNotNull().ForEach(enemy => {
-            if (enemy.isEnemyDead) return;
-            if (enemy is DocileLocustBeesAI or DoublewingAI) return;
+        foreach (EnemyAI enemy in Helper.Enemies) {
+            if (enemy is null) continue;
+            if (enemy.isEnemyDead) continue;
+            if (enemy is DocileLocustBeesAI or DoublewingAI) continue;
 
             Renderer? nullableRenderer = enemy is RedLocustBees
                 ? enemy.meshRenderers.First()
                 : enemy.skinnedMeshRenderers.First();
 
             if (nullableRenderer.Unfake() is not Renderer renderer) {
-                return;
+                continue;
             }
 
-            RenderBounds(
+            this.DynamicLabel.Text = enemy.enemyType.enemyName;
+            this.RenderBounds(
                 camera,
                 renderer.bounds,
                 Color.red,
-                ESPMod.RenderLabel(enemy.enemyType.enemyName)
+                this.DynamicLabel
             );
-        });
+        }
 
         if (Helper.StartOfRound is { shipBounds: Collider shipBounds }) {
-            RenderBounds(
+            this.RenderBounds(
                 camera,
                 shipBounds.bounds,
                 Color.green,
-                ESPMod.RenderLabel("Ship"),
+                this.ShipLabel,
                 10.0f
             );
         }
@@ -174,7 +183,7 @@ sealed class ESPMod : MonoBehaviour {
                   .Select(log => log.transform.position)
                   .ToArray();
 
-    static Size GetRendererSize(Bounds bounds, Camera camera) {
+    static Size GetRendererSize(Bounds bounds, Camera camera, Rect screenBounds) {
         ReadOnlySpan<Vector3> corners = [
             new(bounds.min.x, bounds.min.y, bounds.min.z),
             new(bounds.max.x, bounds.min.y, bounds.min.z),
@@ -186,11 +195,11 @@ sealed class ESPMod : MonoBehaviour {
             new(bounds.max.x, bounds.max.y, bounds.max.z)
         ];
 
-        Vector2 minScreenVector = camera.WorldToEyesPoint(corners[0]);
+        Vector2 minScreenVector = camera.WorldToEyesPoint(corners[0], screenBounds);
         Vector2 maxScreenVector = minScreenVector;
 
         for (int i = 1; i < corners.Length; i++) {
-            Vector2 cornerScreen = camera.WorldToEyesPoint(corners[i]);
+            Vector2 cornerScreen = camera.WorldToEyesPoint(corners[i], screenBounds);
             minScreenVector = Vector2.Min(minScreenVector, cornerScreen);
             maxScreenVector = Vector2.Max(maxScreenVector, cornerScreen);
         }
@@ -201,32 +210,33 @@ sealed class ESPMod : MonoBehaviour {
         };
     }
 
-    static void RenderBounds(
+    void RenderBounds(
         Camera camera,
         Bounds bounds,
         Color colour,
-        Action<Color, Vector3>? action,
+        CachedLabel label,
         float cutOffDistance = 4.0f
     ) {
-        Vector3 rendererCentrePoint = camera.WorldToEyesPoint(bounds.center);
+        Vector3 rendererCentrePoint = camera.WorldToEyesPoint(bounds.center, this.ScreenBounds);
 
         if (rendererCentrePoint.z <= cutOffDistance) {
             return;
         }
 
+        if (!GeometryUtility.TestPlanesAABB(this.SidePlanes, bounds)) {
+            return;
+        }
+
         Helper.DrawOutlineBox(
             rendererCentrePoint,
-            ESPMod.GetRendererSize(bounds, camera),
+            ESPMod.GetRendererSize(bounds, camera, this.ScreenBounds),
             1.0f,
             colour
         );
 
-        action?.Invoke(colour, rendererCentrePoint);
+        Helper.DrawLabel(rendererCentrePoint, label, colour, this.ScreenBounds);
     }
 
-    static void RenderBounds(Camera camera, Bounds bounds, Action<Color, Vector3>? action) =>
-        ESPMod.RenderBounds(camera, bounds, Color.white, action);
-
-    static Action<Color, Vector3> RenderLabel(string name) => (colour, rendererCentrePoint) =>
-        Helper.DrawLabel(rendererCentrePoint, name, colour);
+    void RenderBounds(Camera camera, Bounds bounds, CachedLabel label) =>
+        this.RenderBounds(camera, bounds, Color.white, label);
 }
