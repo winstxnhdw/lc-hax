@@ -62,19 +62,11 @@ sealed class PhantomMod : MonoBehaviour {
 
     void LookAtPlayer(int indexChange) {
         if (!Setting.EnablePhantom) return;
-        if (Helper.CurrentCamera is not Camera camera) return;
-        if (!camera.gameObject.TryGetComponent(out KeyboardMovement keyboard)) return;
+        if (Helper.CurrentCamera?.gameObject.TryGetComponent(out KeyboardMovement keyboard) is not true) return;
+        if (Helper.ActivePlayers is not { Length: > 0 and var playerCount } players) return;
 
-        int playerCount = Helper.Players?.Length ?? 0;
-        this.CurrentSpectatorIndex = (this.CurrentSpectatorIndex + indexChange) % playerCount;
-
-
-        if (Helper.GetActivePlayer(this.CurrentSpectatorIndex) is not PlayerControllerB targetPlayer) {
-            this.LookAtNextPlayer();
-            return;
-        }
-
-        keyboard.LastPosition = targetPlayer.playerEye.position;
+        this.CurrentSpectatorIndex = (((this.CurrentSpectatorIndex + indexChange) % playerCount) + playerCount) % playerCount;
+        keyboard.LastPosition = players[this.CurrentSpectatorIndex].playerEye.position;
     }
 
     static void PhantomEnabled(Camera camera) {
