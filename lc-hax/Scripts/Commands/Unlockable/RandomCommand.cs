@@ -7,16 +7,16 @@ using UnityEngine;
 [Command("random")]
 sealed class RandomCommand : ICommand {
     internal static ShipTeleporter? InverseTeleporter => Helper.ShipTeleporters.First(
-        teleporter => teleporter is not null && teleporter.isInverseTeleporter
+        teleporter => teleporter.Unfake() is { isInverseTeleporter: true }
     );
 
-    bool InverseTeleporterExists() {
+    static bool InverseTeleporterExists() {
         HaxObjects.Instance?.ShipTeleporters?.Renew();
         return RandomCommand.InverseTeleporter is not null;
     }
 
-    ObjectPlacements<Transform, ShipTeleporter>? GetInverseTeleporterPlacements(Component target) {
-        if (!this.InverseTeleporterExists()) return null;
+    static ObjectPlacements<Transform, ShipTeleporter>? GetInverseTeleporterPlacements(Component target) {
+        if (!RandomCommand.InverseTeleporterExists()) return null;
         if (RandomCommand.InverseTeleporter is not ShipTeleporter inverseTeleporter) return null;
 
         Vector3 rotationOffset = new(-90.0f, 0.0f, 0.0f);
@@ -62,8 +62,10 @@ sealed class RandomCommand : ICommand {
         };
     }
 
-    Action TeleportPlayerToRandomLater(PlayerControllerB targetPlayer) => () => {
-        ObjectPlacements<Transform, ShipTeleporter>? teleporterPlacements = this.GetInverseTeleporterPlacements(targetPlayer);
+    static Action TeleportPlayerToRandomLater(PlayerControllerB targetPlayer) => () => {
+        if (targetPlayer.Unfake() is null) return;
+
+        ObjectPlacements<Transform, ShipTeleporter>? teleporterPlacements = RandomCommand.GetInverseTeleporterPlacements(targetPlayer);
 
         if (teleporterPlacements is null) {
             Chat.Print("Inverse Teleporter is not found!");
@@ -104,8 +106,8 @@ sealed class RandomCommand : ICommand {
         Helper.ReturnUnlockable(Unlockable.CUPBOARD);
 
         Helper.CreateComponent<WaitForBehaviour>()
-              .SetPredicate(this.InverseTeleporterExists)
-              .Init(this.TeleportPlayerToRandomLater(targetPlayer));
+              .SetPredicate(() => targetPlayer.Unfake() is null || RandomCommand.InverseTeleporterExists())
+              .Init(RandomCommand.TeleportPlayerToRandomLater(targetPlayer));
         return Task.CompletedTask;
     }
 }

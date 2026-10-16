@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 [Command("garage")]
 sealed class GarageCommand : ICommand {
     static InteractTrigger? GarageTrigger => HaxObjects.Instance?.InteractTriggers?.WhereIsNotNull().First(
-        interactTrigger => interactTrigger.name is "Cube" && interactTrigger.transform.parent.name is "Cutscenes"
+        interactTrigger => interactTrigger != null && interactTrigger.name is "Cube" && interactTrigger.transform.parent.name is "Cutscenes"
     );
 
     public Task Execute(Arguments args, CancellationToken cancellationToken) {

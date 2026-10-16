@@ -5,7 +5,7 @@ static class ShipDoorMixin {
 
     internal static void SetShipDoorState(this IShipDoor _, bool closed) {
         string targetAnimation = closed ? "CloseDoor" : "OpenDoor";
-        ShipDoorMixin.HangarShipDoor ??= Helper.FindObject<HangarShipDoor>();
+        ShipDoorMixin.HangarShipDoor = ShipDoorMixin.HangarShipDoor.Unfake() ?? Helper.FindObject<HangarShipDoor>();
 
         ShipDoorMixin
             .HangarShipDoor?

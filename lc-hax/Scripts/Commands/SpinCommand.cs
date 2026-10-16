@@ -5,16 +5,20 @@ using UnityEngine;
 
 [Command("spin")]
 sealed class SpinCommand : ICommand {
-    static Action<float> PlaceObjectAtRotation(PlaceableShipObject shipObject) => (timeElapsed) =>
+    static Action<float> PlaceObjectAtRotation(PlaceableShipObject shipObject) => (timeElapsed) => {
+        if (shipObject == null) return;
+
         Helper.PlaceObjectAtPosition(
             shipObject,
             shipObject.transform.position,
             new Vector3(0.0f, timeElapsed * 810.0f, 0.0f)
         );
+    };
 
     static Action<PlaceableShipObject> SpinObject(ulong duration) => (shipObject) =>
         Helper.CreateComponent<TransientBehaviour>()
-              .Init(SpinCommand.PlaceObjectAtRotation(shipObject), duration);
+              .Init(SpinCommand.PlaceObjectAtRotation(shipObject), duration)
+              .Unless(() => shipObject == null);
 
     public Task Execute(Arguments args, CancellationToken cancellationToken) {
         if (args.Length is 0) {
@@ -27,6 +31,7 @@ sealed class SpinCommand : ICommand {
 
         Helper.FindObjects<PlaceableShipObject>()
               .ForEach(SpinCommand.SpinObject(duration));
+
         return Task.CompletedTask;
     }
 }

@@ -7,7 +7,6 @@ using GameNetcodeStuff;
 using Unity.Netcode;
 using UnityEngine;
 using ZLinq;
-using UnityObject = UnityEngine.Object;
 
 [PrivilegedCommand("spawn")]
 sealed class SpawnCommand : ICommand {
@@ -15,33 +14,43 @@ sealed class SpawnCommand : ICommand {
         !enemy.enemyName.Contains("Docile Locust Bees", StringComparison.OrdinalIgnoreCase) ||
         !enemy.enemyName.Contains("Manticoil", StringComparison.OrdinalIgnoreCase);
 
-    static Lazy<Dictionary<string, GameObject>> HostileEnemies { get; } = new(() =>
+    static Lazy<Dictionary<string, EnemyType>> HostileEnemies { get; } = new(() =>
         Resources.FindObjectsOfTypeAll<EnemyType>()
                  .AsValueEnumerable()
                  .Where(SpawnCommand.IsHostileEnemy)
                  .GroupBy(enemy => enemy.enemyName)
                  .ToDictionary(
                      enemyGroup => enemyGroup.Key,
-                     enemy => enemy.Single().enemyPrefab
+                     enemy => enemy.Single()
                  )
     );
 
-    static void SpawnEnemyOnPlayer(PlayerControllerB player, GameObject prefab, ulong amount = 1) {
-        for (ulong i = 0; i < amount; i++) {
-            GameObject enemyObject = UnityObject.Instantiate(prefab, player.transform.position, Quaternion.identity);
+    static void SpawnEnemyOnPlayer(PlayerControllerB player, EnemyType enemyType, ulong amount = 1) {
+        if (Helper.RoundManager is not RoundManager { IsServer: true } roundManager) return;
+        if (!enemyType.enemyPrefab.TryGetComponent(out NetworkObject _)) return;
+        if (!enemyType.enemyPrefab.TryGetComponent(out EnemyAI _)) return;
 
-            if (!enemyObject.TryGetComponent(out NetworkObject networkObject)) {
-                UnityObject.Destroy(enemyObject);
+        for (ulong i = 0; i < amount; i++) {
+            NetworkObjectReference enemyReference = roundManager.SpawnEnemyGameObject(
+                player.transform.position,
+                0.0f,
+                enemyNumber: -1,
+                enemyType: enemyType
+            );
+
+            if (!enemyReference.TryGet(out NetworkObject networkObject)) {
                 continue;
             }
 
             if (!networkObject.TryGetComponent(out EnemyAI enemy)) {
-                UnityObject.Destroy(enemyObject);
                 continue;
             }
 
+            if (networkObject.OwnerClientId != player.actualClientId) {
+                networkObject.ChangeOwnership(player.actualClientId);
+            }
+
             enemy.ChangeEnemyOwnerServerRpc(player.actualClientId);
-            networkObject.Spawn(true);
         }
     }
 

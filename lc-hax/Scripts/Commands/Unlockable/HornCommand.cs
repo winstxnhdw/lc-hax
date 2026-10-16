@@ -18,7 +18,7 @@ sealed class HornCommand : ICommand {
         Helper.BuyUnlockable(Unlockable.LOUD_HORN);
         Helper.ReturnUnlockable(Unlockable.LOUD_HORN);
 
-        if (await Helper.FindObject<ShipAlarmCord>(cancellationToken) is not ShipAlarmCord shipAlarmCord) {
+        if ((await Helper.FindObject<ShipAlarmCord>(cancellationToken)).Unfake() is not ShipAlarmCord shipAlarmCord) {
             return;
         }
 
@@ -28,7 +28,7 @@ sealed class HornCommand : ICommand {
         }
 
         finally {
-            shipAlarmCord.StopPullingCordServerRpc(-1);
+            shipAlarmCord.Unfake()?.StopPullingCordServerRpc(-1);
         }
     }
 }

@@ -345,9 +345,9 @@ internal sealed class PossessionMod : MonoBehaviour {
     }
 
     static Transform? GetExitPointFromDoor(EntranceTeleport entrance) =>
-        Helper.FindObjects<EntranceTeleport>().First(teleport =>
-            teleport.entranceId == entrance.entranceId && teleport.isEntranceToBuilding != entrance.isEntranceToBuilding
-        )?.entrancePoint;
+        entrance.exitScript != null || entrance.FindExitPoint()
+            ? entrance.exitScript?.entrancePoint
+            : null;
 
     void InteractWithTeleport(EnemyAI enemy, EntranceTeleport teleport) {
         if (this.CharacterMovement is not CharacterMovement characterMovement) return;

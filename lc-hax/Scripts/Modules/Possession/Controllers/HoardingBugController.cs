@@ -41,11 +41,7 @@ sealed class HoardingBugController : IEnemyController<HoarderBugAI> {
         enemy.GrabItemServerRpc(networkObject);
     }
 
-    public void OnDeath(HoarderBugAI enemy) {
-        if (enemy.heldItem.itemGrabbableObject.TryGetComponent(out NetworkObject networkObject)) return;
-
-        enemy.DropItemAndCallDropRPC(networkObject, false);
-    }
+    public void OnDeath(HoarderBugAI _) { }
 
     public void UsePrimarySkill(HoarderBugAI enemy) {
         if (enemy.angryTimer > 0.0f) {

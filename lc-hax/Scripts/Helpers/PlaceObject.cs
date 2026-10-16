@@ -2,7 +2,7 @@ using Unity.Netcode;
 using UnityEngine;
 
 static partial class Helper {
-    internal static ShipBuildModeManager? ShipBuildModeManager => ShipBuildModeManager.Instance;
+    internal static ShipBuildModeManager? ShipBuildModeManager => ShipBuildModeManager.Instance.Unfake();
 
     static NetworkObject GetNetworkObject<M>(M gameObject) where M : MonoBehaviour =>
         gameObject.GetComponentInChildren<PlaceableShipObject>()
@@ -15,6 +15,8 @@ static partial class Helper {
         Vector3 positionOffset = new(),
         Vector3 rotationOffset = new()
     ) where T : Transform where M : MonoBehaviour {
+        if (targetObject.Unfake() is null || gameObject.Unfake() is null) return;
+
         NetworkObject networkObject = Helper.GetNetworkObject(gameObject);
         Helper.ShipBuildModeManager?.PlaceShipObjectServerRpc(
             targetObject.position + positionOffset,
@@ -39,6 +41,8 @@ static partial class Helper {
         Vector3 positionOffset = new(),
         Vector3 rotationOffset = new()
     ) where T : Transform where M : MonoBehaviour {
+        if (targetObject.Unfake() is null || gameObject.Unfake() is null) return;
+
         NetworkObject networkObject = Helper.GetNetworkObject(gameObject);
         Helper.ShipBuildModeManager?.PlaceShipObjectServerRpc(
             targetObject.position + positionOffset,
@@ -53,6 +57,8 @@ static partial class Helper {
         Vector3 position,
         Vector3 rotation = new()
     ) where M : MonoBehaviour {
+        if (gameObject.Unfake() is null) return;
+
         NetworkObject networkObject = Helper.GetNetworkObject(gameObject);
         Helper.ShipBuildModeManager?.PlaceShipObjectServerRpc(
             position,

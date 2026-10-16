@@ -41,7 +41,7 @@ static partial class Helper {
 
     internal static void SetBehaviourState(this EnemyAI enemy, Enum state) {
         if (enemy.IsBehaviourState(state)) return;
-        enemy.SwitchToBehaviourServerRpc(Convert.ToInt32(state));
+        enemy.SwitchToBehaviourState(Convert.ToInt32(state));
     }
 
     internal static GrabbableObject? FindNearbyItem(this EnemyAI enemy, float grabRange = 1.0f) {

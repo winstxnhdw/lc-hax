@@ -25,7 +25,7 @@ sealed class HealCommand : ICommand, IStun {
         localPlayer.TeleportPlayer(startOfRound.playerSpawnPositions[0].position, false, 0.0f, false, true);
         localPlayer.DisablePlayerModel(startOfRound.allPlayerObjects[localPlayer.playerClientId], true, true);
 
-        if (localPlayer.TryGetComponent(out Light helmetLight)) {
+        if (localPlayer.helmetLight.Unfake() is Light helmetLight) {
             helmetLight.enabled = false;
         }
 
@@ -41,21 +41,21 @@ sealed class HealCommand : ICommand, IStun {
         localPlayer.isUnderwater = false;
         localPlayer.sinkingValue = 0.0f;
 
-        if (localPlayer.TryGetComponent(out AudioSource statusEffectAudio)) {
+        if (localPlayer.statusEffectAudio.Unfake() is AudioSource statusEffectAudio) {
             statusEffectAudio.Stop();
         }
 
         localPlayer.DisableJetpackControlsLocally();
         localPlayer.mapRadarDotAnimator?.SetBool("dead", false);
 
-        if (hudManager.TryGetComponent(out Animator gasHelmetAnimator)) {
+        if (hudManager.gasHelmetAnimator.Unfake() is Animator gasHelmetAnimator) {
             gasHelmetAnimator.SetBool("gasEmitting", false);
         }
 
         localPlayer.hasBegunSpectating = false;
         hudManager.RemoveSpectateUI();
 
-        if (hudManager.TryGetComponent(out Animator gameOverAnimator)) {
+        if (hudManager.gameOverAnimator.Unfake() is Animator gameOverAnimator) {
             gameOverAnimator.SetTrigger("revive");
         }
 
@@ -92,10 +92,8 @@ sealed class HealCommand : ICommand, IStun {
         }
 
         hudManager.localPlayer.health = 100;
-        hudManager.localPlayer.bleedingHeavily = false;
-        hudManager.localPlayer.criticallyInjured = false;
+        hudManager.localPlayer.MakeCriticallyInjured(false);
         hudManager.localPlayer.hasBeenCriticallyInjured = false;
-        hudManager.localPlayer.playerBodyAnimator.SetBool("Limp", false);
         hudManager.HUDAnimator.SetBool("biohazardDamage", false);
         hudManager.HUDAnimator.SetTrigger("HealFromCritical");
         hudManager.UpdateHealthUI(hudManager.localPlayer.health, false);
