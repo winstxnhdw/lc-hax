@@ -23,7 +23,7 @@
 
     <PackageReference Include="LethalCompany.GameLibs.Steam" Version="81.0.5-ngd.0" />
 
-    <PackageReference Include="Nullable.Extended.Analyzer" Version="1.15.6581" />
+    <PackageReference Include="Nullable.Extended.Analyzer" Version="1.16.6891" />
 
     <PackageReference Include="RequireNamedArgs" Version="0.0.7" />
 
@@ -33,7 +33,7 @@
 
     <PackageReference Include="CommunityToolkit.HighPerformance" Version="8.4.2" GeneratePathProperty="true" />
 
-    <PackageReference Include="Lib.Harmony" Version="2.4.2" GeneratePathProperty="true" />
+    <PackageReference Include="Lib.Harmony" Version="2.4.3" GeneratePathProperty="true" />
 
     <EmbeddedResource Include="$(PkgLib_Harmony)/lib/net48/0Harmony.dll" />
 
