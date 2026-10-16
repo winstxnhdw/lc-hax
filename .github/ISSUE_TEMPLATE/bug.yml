@@ -21,23 +21,6 @@ body:
     validations:
       required: true
 
-  - type: checkboxes
-    id: injector-check
-    attributes:
-      label: Injector
-      description: Please specify the injector you are using.
-      options:
-        - label: SharpMonoInjectorCore
-        - label: Others
-
-  - type: input
-    id: other-injector
-    attributes:
-      label: If you selected "Others" above, please specify the injector you are using.
-      placeholder: BepinEx, etc
-    validations:
-      required: false
-
   - type: textarea
     id: logs
     attributes:

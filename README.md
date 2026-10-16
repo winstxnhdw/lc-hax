@@ -25,26 +25,17 @@ A powerful, feature-rich and highly performant portable Windows CLI-only interna
 
 ## Installation
 
-> [!TIP]\
-> If you are uncomfortable with the command line, you can watch the installation [video](https://github.com/winstxnhdw/lc-hax/discussions/389) or follow the opinionated [guide](https://github.com/winstxnhdw/lc-hax/discussions/294).
-
 Clone the repository.
 
 ```bash
-git clone --recursive --depth 50 https://github.com/winstxnhdw/lc-hax.git
-```
-
-You can now build and install the dependencies by executing `requirements.bat`.
-
-```bash
-.\requirements.bat
+git clone --depth 50 https://github.com/winstxnhdw/lc-hax.git
 ```
 
 ## Usage
 
-Execute `launch.bat` when you have launched the game to inject the assembly into the game process. Avoid doing this more than once per instance.
+Run or double-click `launch.bat` before or after starting Lethal Company.
 
-```bash
+```powershell
 .\launch.bat
 ```
 
@@ -327,10 +318,6 @@ There is usually little reason for you to disable patches as they are carefully 
 ## Uninstalling
 
 Unlike other cheats, `lc-hax` is portable and will never litter your computer with garbage. Deleting the `lc-hax` folder would be the equivalent to uninstalling.
-
-## Whitelisting SharpMonoInjectorCore
-
-Despite being compiled from source locally, SharpMonoInjector is occasionally falsely identified as a virus by Windows Defender. If you believe you know what you are doing, you can run the following command in PowerShell with administrator privileges to whitelist the injector.
 
 > [!IMPORTANT]\
 > Do ensure that you are currently in the `lc-hax` directory before executing the command.

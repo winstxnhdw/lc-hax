@@ -1,8 +1,11 @@
 bin/
 obj/
+dist/
+.tools/
 .vs/
 .vscode/
 .mono/
 .cr/
-*.sln
 node_modules/
+*.sln
+launcher.exe

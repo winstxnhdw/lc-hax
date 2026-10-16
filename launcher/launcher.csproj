@@ -1,0 +1,44 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net10.0-windows</TargetFramework>
+    <Optimize>true</Optimize>
+    <Nullable>enable</Nullable>
+    <LangVersion>preview</LangVersion>
+    <RestorePackagesWithLockFile>true</RestorePackagesWithLockFile>
+    <ImplicitUsings>disable</ImplicitUsings>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <PublishDocumentationFile>false</PublishDocumentationFile>
+    <PlatformTarget>x64</PlatformTarget>
+    <RuntimeIdentifier>win-x64</RuntimeIdentifier>
+    <SelfContained>false</SelfContained>
+    <PublishSingleFile>true</PublishSingleFile>
+    <DebugType>None</DebugType>
+    <PublishDir>$(MSBuildThisFileDirectory)..</PublishDir>
+
+  </PropertyGroup>
+
+  <ItemGroup>
+
+    <PackageReference Include="Iced" Version="1.21.0" />
+    <PackageReference Include="PeNet" Version="6.1.2" />
+    <PackageReference Include="System.Security.Cryptography.Pkcs" Version="10.0.13" />
+
+    <ProjectReference Include="..\lc-hax\lc-hax.csproj"
+      ReferenceOutputAssembly="false"
+      Private="false"
+      PrivateAssets="all"
+      ExcludeAssets="all"
+      GlobalPropertiesToRemove="SelfContained;PublishSingleFile;PublishDir" />
+
+    <EmbeddedResource Include="..\bin\lc-hax.dll"
+      LogicalName="Launcher.Payload.lc-hax.dll"
+      WithCulture="false" />
+
+  </ItemGroup>
+
+</Project>
