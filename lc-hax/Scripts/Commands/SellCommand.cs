@@ -1,19 +1,20 @@
 using System;
 using System.Threading;
 using System.Threading.Tasks;
-using CommunityToolkit.HighPerformance;
 using GameNetcodeStuff;
 using ZLinq;
 
 [Command("sell")]
 sealed class SellCommand : ICommand {
     bool CanBeSold(GrabbableObject grabbableObject) =>
-        grabbableObject is not HauntedMaskItem and { isHeld: false } &&
+        grabbableObject.Unfake() is not HauntedMaskItem and { isHeld: false } &&
         grabbableObject.itemProperties is { isScrap: true, isDefensiveWeapon: false };
 
     static void SellObject(PlayerControllerB player, GrabbableObject item, float currentWeight) {
+        if (HaxObjects.Instance?.DepositItemsDesk?.Object.Unfake() is not DepositItemsDesk depositItemsDesk) return;
+
         player.currentlyHeldObjectServer = item;
-        HaxObjects.Instance?.DepositItemsDesk?.Object?.PlaceItemOnCounter(player);
+        depositItemsDesk.PlaceItemOnCounter(player);
         player.carryWeight = currentWeight;
     }
 
@@ -24,70 +25,76 @@ sealed class SellCommand : ICommand {
              .Where(this.CanBeSold)
              .ForEach(grabbableObject => SellCommand.SellObject(player, grabbableObject, currentWeight));
 
+    static long GetScrapCapacity(ushort targetValue, float buyingRate) {
+        double scrapLimit = (targetValue + Math.Pow(2, Math.Floor(Math.Log(targetValue + 0.5, 2)) - 24)) / buyingRate;
+        double floatStep = Math.Pow(2, Math.Floor(Math.Log(scrapLimit, 2)) - 23);
+        double scrapUnits = Math.Floor(scrapLimit / floatStep);
+        double capacityLimit = (scrapUnits + 0.5) * floatStep;
+
+        return scrapUnits % 2 == 0 ? unchecked((long)Math.Floor(capacityLimit)) : unchecked((long)Math.Ceiling(capacityLimit)) - 1;
+    }
+
     /// <summary>
     /// Uses a modified 0-1 knapsack algorithm to find the largest combination of scraps whose total value does not exceed the target value.
     /// The actual scrap value can be lower than the displayed value due to the company buying rate.
     /// </summary>
     /// <returns>the remaining amount left to reach the target value</returns>
-    int SellScrapValue(PlayerControllerB player, int targetValue, float currentWeight) {
-        using PooledArray<GrabbableObject> sellableScrapsPool = Helper.Grabbables.WhereIsNotNull().AsValueEnumerable().Where(this.CanBeSold).ToArrayPool();
+    int SellScrapValue(PlayerControllerB player, ushort targetValue, float currentWeight) {
+        float buyingRate = player.playersManager.companyBuyingRate;
+
+        if (targetValue <= 0 || buyingRate is not (> 0 and < float.PositiveInfinity)) {
+            return targetValue;
+        }
+
+        using PooledArray<GrabbableObject> sellableScrapsPool = Helper.Grabbables
+            .WhereIsNotNull()
+            .AsValueEnumerable()
+            .Where(this.CanBeSold)
+            .Where(scrap => scrap.scrapValue > 0)
+            .ToArrayPool();
+
         ReadOnlySpan<GrabbableObject> sellableScraps = sellableScrapsPool.Span;
+        long totalValue = sellableScrapsPool.AsValueEnumerable().Sum(scrap => unchecked((long)scrap.scrapValue));
+        int scrapCount = sellableScraps.Length;
+        long capacity = totalValue * buyingRate <= targetValue ? totalValue : SellCommand.GetScrapCapacity(targetValue, buyingRate);
+        long remainingCapacity = capacity;
+        int[,] table = new int[scrapCount + 1, capacity + 1];
 
-        int sellableScrapsCount = sellableScrapsPool.Size;
-        int actualTargetValue = unchecked((int)(targetValue * player.playersManager.companyBuyingRate));
-        int columns = actualTargetValue + 1;
-        int rows = sellableScrapsCount + 1;
-        Span<int> backingArray = stackalloc int[rows * columns];
-        Span2D<int> table = Span2D<int>.DangerousCreate(ref backingArray[0], rows, columns, 0);
+        for (int row = 1; row <= scrapCount; row++) {
+            int scrapValue = sellableScraps[row - 1].scrapValue;
 
-        for (int i = 0; i <= sellableScrapsCount; i++) {
-            for (int w = 0; w <= actualTargetValue; w++) {
-                if (i is 0 || w is 0) {
-                    table[i, w] = 0;
-                    continue;
-                }
-
-                int scrapValue = sellableScraps[i - 1].scrapValue;
-
-                table[i, w] = scrapValue <= w
-                    ? Math.Max(scrapValue + table[i - 1, w - scrapValue], table[i - 1, w])
-                    : table[i - 1, w];
+            for (long value = 1; value <= capacity; value++) {
+                table[row, value] = scrapValue <= value
+                    ? Math.Max(scrapValue + table[row - 1, value - scrapValue], table[row - 1, value])
+                    : table[row - 1, value];
             }
         }
 
-        int result = table[sellableScrapsCount, targetValue];
-        int remainingValue = actualTargetValue;
+        for (int row = scrapCount; row > 0 && remainingCapacity > 0; row--) {
+            if (table[row, remainingCapacity] == table[row - 1, remainingCapacity]) continue;
 
-        for (int i = sellableScrapsCount; i > 0 && result > 0; i--) {
-            if (result == table[i - 1, remainingValue]) continue;
-
-            GrabbableObject grabbable = sellableScraps[i - 1];
-            SellCommand.SellObject(player, grabbable, currentWeight);
-            int scrapValue = grabbable.scrapValue;
-            result -= scrapValue;
-            remainingValue -= scrapValue;
+            GrabbableObject scrap = sellableScraps[row - 1];
+            SellCommand.SellObject(player, scrap, currentWeight);
+            remainingCapacity -= scrap.scrapValue;
         }
 
-        return result;
+        return targetValue - unchecked((int)(table[scrapCount, capacity] * buyingRate));
     }
 
     public Task Execute(Arguments args, CancellationToken cancellationToken) {
-        if (Helper.LocalPlayer is not PlayerControllerB player)
-            return Task.CompletedTask;
+        if (Helper.LocalPlayer is not PlayerControllerB player) return Task.CompletedTask;
         if (Helper.RoundManager?.currentLevel is not { levelID: 3 }) {
             Chat.Print("You must be at the company to use this command!");
             return Task.CompletedTask;
         }
 
-        if (player.currentlyHeldObjectServer is not null) {
+        if (player.currentlyHeldObjectServer.Unfake() is not null) {
             Chat.Print("You must not be holding anything to use this command!");
             return Task.CompletedTask;
         }
 
-        float currentWeight = player.carryWeight;
-
         if (args.Length is 0) {
-            this.SellEverything(player, currentWeight);
+            this.SellEverything(player, player.carryWeight);
             return Task.CompletedTask;
         }
 
@@ -96,8 +103,9 @@ sealed class SellCommand : ICommand {
             return Task.CompletedTask;
         }
 
-        int result = this.SellScrapValue(player, targetValue, currentWeight);
+        int result = this.SellScrapValue(player, targetValue, player.carryWeight);
         Chat.Print($"Remaining scrap value to reach target is {result}!");
+
         return Task.CompletedTask;
     }
 }
