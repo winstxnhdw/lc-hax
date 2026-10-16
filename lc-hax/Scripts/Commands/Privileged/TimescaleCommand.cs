@@ -4,17 +4,18 @@ using UnityEngine;
 
 [PrivilegedCommand("timescale")]
 sealed class TimescaleCommand : ICommand {
-    public async Task Execute(Arguments args, CancellationToken cancellationToken) {
+    public Task Execute(Arguments args, CancellationToken cancellationToken) {
         if (args.Length is 0) {
             Chat.Print("Usage: timescale <scale>");
-            return;
+            return Task.CompletedTask;
         }
 
         if (!float.TryParse(args[0], out float timescale)) {
             Chat.Print($"Invalid {nameof(timescale)}!");
-            return;
+            return Task.CompletedTask;
         }
 
         Time.timeScale = timescale;
+        return Task.CompletedTask;
     }
 }

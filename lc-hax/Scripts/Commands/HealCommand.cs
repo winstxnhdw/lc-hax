@@ -110,9 +110,9 @@ sealed class HealCommand : ICommand, IStun {
         return targetPlayer;
     }
 
-    public async Task Execute(Arguments args, CancellationToken cancellationToken) {
-        if (Helper.HUDManager is not HUDManager hudManager) return;
-
+    public Task Execute(Arguments args, CancellationToken cancellationToken) {
+        if (Helper.HUDManager is not HUDManager hudManager)
+            return Task.CompletedTask;
         PlayerControllerB? healedPlayer = args.Length switch {
             0 => HealCommand.HealLocalPlayer(hudManager),
             _ => HealCommand.HealPlayer(args[0])
@@ -120,9 +120,10 @@ sealed class HealCommand : ICommand, IStun {
 
         if (healedPlayer is null) {
             Chat.Print("Target player is not alive or found!");
-            return;
+            return Task.CompletedTask;
         }
 
         this.Stun(healedPlayer.transform.position, 5.0f, 1.0f);
+        return Task.CompletedTask;
     }
 }

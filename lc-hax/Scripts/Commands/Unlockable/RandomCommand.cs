@@ -88,15 +88,15 @@ sealed class RandomCommand : ICommand {
         teleporterPlacements.Value.Placement.GameObject.PressTeleportButtonServerRpc();
     };
 
-    public async Task Execute(Arguments args, CancellationToken cancellationToken) {
+    public Task Execute(Arguments args, CancellationToken cancellationToken) {
         if (args.Length is 0) {
             Chat.Print("Usage: random <player>");
-            return;
+            return Task.CompletedTask;
         }
 
         if (Helper.GetActivePlayer(args[0]) is not PlayerControllerB targetPlayer) {
             Chat.Print("Target player is not alive or found!");
-            return;
+            return Task.CompletedTask;
         }
 
         Helper.BuyUnlockable(Unlockable.INVERSE_TELEPORTER);
@@ -106,5 +106,6 @@ sealed class RandomCommand : ICommand {
         Helper.CreateComponent<WaitForBehaviour>()
               .SetPredicate(this.InverseTeleporterExists)
               .Init(this.TeleportPlayerToRandomLater(targetPlayer));
+        return Task.CompletedTask;
     }
 }

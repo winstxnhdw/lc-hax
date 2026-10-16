@@ -29,24 +29,26 @@ sealed class FallCommand : ICommand {
         yield return FallCommand.WaitForEnemyOwnershipChange(targetPlayer, enemy);
     }
 
-    public async Task Execute(Arguments args, CancellationToken cancellationToken) {
-        if (Helper.LocalPlayer is not PlayerControllerB localPlayer) return;
+    public Task Execute(Arguments args, CancellationToken cancellationToken) {
+        if (Helper.LocalPlayer is not PlayerControllerB localPlayer)
+            return Task.CompletedTask;
         if (args.Length is 0) {
             Chat.Print("Usage: fall <player>");
-            return;
+            return Task.CompletedTask;
         }
 
         if (Helper.Enemies.First() is not EnemyAI enemy) {
             Chat.Print("An enemy must have spawned to use this command!");
-            return;
+            return Task.CompletedTask;
         }
 
         if (Helper.GetPlayer(args[0]) is not PlayerControllerB targetPlayer) {
             Chat.Print("Target player is not found!");
-            return;
+            return Task.CompletedTask;
         }
 
         Helper.CreateComponent<AsyncBehaviour>()
               .Init(() => FallCommand.MoveTargetPlayerFloor(localPlayer, targetPlayer, enemy));
+        return Task.CompletedTask;
     }
 }

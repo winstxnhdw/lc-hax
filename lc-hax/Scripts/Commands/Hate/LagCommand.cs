@@ -32,29 +32,31 @@ sealed class LagCommand : ICommand {
         yield return LagCommand.WaitForEnemyOwnershipChange(targetPlayer, bracken);
     }
 
-    public async Task Execute(Arguments args, CancellationToken cancellationToken) {
-        if (Helper.LocalPlayer is not PlayerControllerB localPlayer) return;
+    public Task Execute(Arguments args, CancellationToken cancellationToken) {
+        if (Helper.LocalPlayer is not PlayerControllerB localPlayer)
+            return Task.CompletedTask;
         if (args.Length is 0) {
             Chat.Print("Usage: lag <player>");
-            return;
+            return Task.CompletedTask;
         }
 
         if (Helper.GetEnemy<FlowermanAI>() is not FlowermanAI bracken) {
             Chat.Print("A Bracken must have spawned to use this command!");
-            return;
+            return Task.CompletedTask;
         }
 
         if (Helper.GetPlayer(args[0]) is not PlayerControllerB targetPlayer) {
             Chat.Print("Target player is not found!");
-            return;
+            return Task.CompletedTask;
         }
 
         if (targetPlayer.isInsideFactory) {
             Chat.Print("Target player must be outside of the factory!");
-            return;
+            return Task.CompletedTask;
         }
 
         Helper.CreateComponent<AsyncBehaviour>()
               .Init(() => LagCommand.PassBrackenComputeToTargetPlayer(localPlayer, targetPlayer, bracken));
+        return Task.CompletedTask;
     }
 }

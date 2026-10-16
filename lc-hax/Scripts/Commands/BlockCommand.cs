@@ -19,10 +19,10 @@ sealed class BlockCommand : ICommand {
             : "No longer blocking radar targets!")}";
     }
 
-    public async Task Execute(Arguments args, CancellationToken cancellationToken) {
+    public Task Execute(Arguments args, CancellationToken cancellationToken) {
         if (args.Length is 0) {
             Chat.Print("Usage: block <property>");
-            return;
+            return Task.CompletedTask;
         }
 
         string result = args[0] switch {
@@ -32,5 +32,6 @@ sealed class BlockCommand : ICommand {
         };
 
         Chat.Print(result);
+        return Task.CompletedTask;
     }
 }

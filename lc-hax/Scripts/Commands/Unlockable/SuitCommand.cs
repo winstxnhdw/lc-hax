@@ -13,15 +13,15 @@ sealed class SuitCommand : ICommand {
             .Where(u => u.ToString().EndsWith("_SUIT"))
             .ToDictionary(suit => suit.ToString().Replace("_SUIT", "").ToLower(), suit => suit);
 
-    public async Task Execute(Arguments args, CancellationToken cancellationToken) {
+    public Task Execute(Arguments args, CancellationToken cancellationToken) {
         if (args[0] is not string suit) {
             Chat.Print("Usage: suit <suit>");
-            return;
+            return Task.CompletedTask;
         }
 
         if (!suit.FuzzyMatch(SuitCommand.SuitUnlockables.Keys, out string key)) {
             Chat.Print("Suit is not found!");
-            return;
+            return Task.CompletedTask;
         }
 
         Unlockable selectedSuit = SuitCommand.SuitUnlockables[key];
@@ -42,5 +42,6 @@ sealed class SuitCommand : ICommand {
                 .ToTitleCase();
 
         Chat.Print($"Wearing {suitTitle}!");
+        return Task.CompletedTask;
     }
 }

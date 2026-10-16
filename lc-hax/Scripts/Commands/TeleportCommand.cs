@@ -62,7 +62,7 @@ sealed class TeleportCommand : ITeleporter, ICommand {
             : this.TeleportPlayerToPosition(sourcePlayer, targetPlayer.transform.position);
     }
 
-    public async Task Execute(Arguments args, CancellationToken cancellationToken) {
+    public Task Execute(Arguments args, CancellationToken cancellationToken) {
         if (args.Length is 0) {
             Chat.Print("Usages:",
                 "tp <player>",
@@ -70,8 +70,7 @@ sealed class TeleportCommand : ITeleporter, ICommand {
                 "tp <x> <y> <z>",
                 "tp <player> <x> <y> <z>"
             );
-
-            return;
+            return Task.CompletedTask;
         }
 
         Result result = args.Length switch {
@@ -85,5 +84,7 @@ sealed class TeleportCommand : ITeleporter, ICommand {
         if (!result.Success) {
             Chat.Print(result.Message);
         }
+
+        return Task.CompletedTask;
     }
 }

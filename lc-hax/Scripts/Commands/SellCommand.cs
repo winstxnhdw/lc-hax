@@ -71,31 +71,33 @@ sealed class SellCommand : ICommand {
         return result;
     }
 
-    public async Task Execute(Arguments args, CancellationToken cancellationToken) {
-        if (Helper.LocalPlayer is not PlayerControllerB player) return;
+    public Task Execute(Arguments args, CancellationToken cancellationToken) {
+        if (Helper.LocalPlayer is not PlayerControllerB player)
+            return Task.CompletedTask;
         if (Helper.RoundManager?.currentLevel is not { levelID: 3 }) {
             Chat.Print("You must be at the company to use this command!");
-            return;
+            return Task.CompletedTask;
         }
 
         if (player.currentlyHeldObjectServer is not null) {
             Chat.Print("You must not be holding anything to use this command!");
-            return;
+            return Task.CompletedTask;
         }
 
         float currentWeight = player.carryWeight;
 
         if (args.Length is 0) {
             this.SellEverything(player, currentWeight);
-            return;
+            return Task.CompletedTask;
         }
 
         if (!ushort.TryParse(args[0], out ushort targetValue)) {
             Chat.Print("Target amount must be a positive number!");
-            return;
+            return Task.CompletedTask;
         }
 
         int result = this.SellScrapValue(player, targetValue, currentWeight);
         Chat.Print($"Remaining scrap value to reach target is {result}!");
+        return Task.CompletedTask;
     }
 }

@@ -45,35 +45,36 @@ sealed class SpawnCommand : ICommand {
         }
     }
 
-    public async Task Execute(Arguments args, CancellationToken cancellationToken) {
+    public Task Execute(Arguments args, CancellationToken cancellationToken) {
         if (args.Length < 2) {
             Chat.Print("Usage: spawn <enemy> <player> <amount?>");
-            return;
+            return Task.CompletedTask;
         }
 
         string? enemy = args[0];
 
         if (string.IsNullOrWhiteSpace(enemy)) {
             Chat.Print($"Invalid {nameof(enemy)} name!");
-            return;
+            return Task.CompletedTask;
         }
 
         if (Helper.GetActivePlayer(args[1]) is not PlayerControllerB targetPlayer) {
             Chat.Print("Player is not alive or found!");
-            return;
+            return Task.CompletedTask;
         }
 
         if (!enemy.FuzzyMatch(SpawnCommand.HostileEnemies.Value.Keys, out string key)) {
             Chat.Print($"Invalid {nameof(enemy)} name!");
-            return;
+            return Task.CompletedTask;
         }
 
         if (!args[2].TryParse(defaultValue: 1, result: out ulong count)) {
             Chat.Print($"Enemy {nameof(count)} must be a positive number!");
-            return;
+            return Task.CompletedTask;
         }
 
         SpawnCommand.SpawnEnemyOnPlayer(targetPlayer, SpawnCommand.HostileEnemies.Value[key], count);
         Chat.Print($"Spawning {count}x {key} on {targetPlayer.playerUsername}!");
+        return Task.CompletedTask;
     }
 }

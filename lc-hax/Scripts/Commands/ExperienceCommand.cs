@@ -11,16 +11,17 @@ enum Rank {
 
 [Command("xp")]
 sealed class ExperienceCommand : ICommand {
-    public async Task Execute(Arguments args, CancellationToken cancellationToken) {
-        if (Helper.HUDManager is not HUDManager hudManager) return;
+    public Task Execute(Arguments args, CancellationToken cancellationToken) {
+        if (Helper.HUDManager is not HUDManager hudManager)
+            return Task.CompletedTask;
         if (args.Length is 0) {
             Chat.Print("Usage: xp <amount>");
-            return;
+            return Task.CompletedTask;
         }
 
         if (!int.TryParse(args[0], out int amount)) {
             Chat.Print($"Invalid {nameof(amount)}!");
-            return;
+            return Task.CompletedTask;
         }
 
         Rank rank = (hudManager.localPlayerXP += amount) switch {
@@ -43,5 +44,6 @@ sealed class ExperienceCommand : ICommand {
         );
 
         Chat.Print($"You are a {rank} with {hudManager.localPlayerXP} XP!");
+        return Task.CompletedTask;
     }
 }

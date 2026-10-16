@@ -38,16 +38,17 @@ sealed class BuyCommand : ICommand {
         return buyableItems;
     }
 
-    public async Task Execute(Arguments args, CancellationToken cancellationToken) {
-        if (Helper.Terminal is not Terminal terminal) return;
+    public Task Execute(Arguments args, CancellationToken cancellationToken) {
+        if (Helper.Terminal is not Terminal terminal)
+            return Task.CompletedTask;
         if (args[0] is not string item) {
             Chat.Print("Usage: buy <item> <quantity?>");
-            return;
+            return Task.CompletedTask;
         }
 
         if (!args[1].TryParse(defaultValue: 1, result: out ushort quantity)) {
             Chat.Print($"Purchase {nameof(quantity)} must be a positive number!");
-            return;
+            return Task.CompletedTask;
         }
 
         int clampedQuantity = Mathf.Clamp(quantity, 1, 12);
@@ -55,7 +56,7 @@ sealed class BuyCommand : ICommand {
 
         if (!item.FuzzyMatch(BuyCommand.BuyableItems.Keys, out string key)) {
             Chat.Print("Failed to find purchase!");
-            return;
+            return Task.CompletedTask;
         }
 
         BuyableItem buyableItem = BuyCommand.BuyableItems[key];
@@ -75,5 +76,6 @@ sealed class BuyCommand : ICommand {
         }
 
         Chat.Print($"Buying {clampedQuantity}x {key.ToTitleCase()}(s)!");
+        return Task.CompletedTask;
     }
 }

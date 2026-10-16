@@ -35,10 +35,10 @@ sealed class KillCommand : ICommand {
         Chat.Print(result.Message);
     }
 
-    public async Task Execute(Arguments args, CancellationToken cancellationToken) {
+    public Task Execute(Arguments args, CancellationToken cancellationToken) {
         if (args.Length is 0) {
             KillCommand.HandleResult(KillSelf());
-            return;
+            return Task.CompletedTask;
         }
 
         this.EnableGodMode = Setting.EnableGodMode;
@@ -52,5 +52,6 @@ sealed class KillCommand : ICommand {
 
         Helper.ShortDelay(() => Setting.EnableGodMode = this.EnableGodMode);
         KillCommand.HandleResult(result);
+        return Task.CompletedTask;
     }
 }
