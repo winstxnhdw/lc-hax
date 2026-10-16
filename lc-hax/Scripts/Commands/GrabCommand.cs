@@ -33,6 +33,14 @@ sealed class GrabCommand : ICommand {
                      .Where(grabbable => GrabCommand.CanGrabItem(grabbable, currentPlayerPosition))
         ];
 
+        if (grabbables.Length is 0) {
+            return "Failed to find item!";
+        }
+
+        if (!grabbables.AsValueEnumerable().Any(grabbable => player.FirstEmptyItemSlot(grabbable) != -1)) {
+            return "You must have an empty inventory slot!";
+        }
+
         Helper.CreateComponent<AsyncBehaviour>()
               .Init(() => GrabCommand.GrabAllItemsAsync(player, grabbables));
 
@@ -69,12 +77,8 @@ sealed class GrabCommand : ICommand {
     }
 
     public Task Execute(Arguments args, CancellationToken cancellationToken) {
-        if (Helper.LocalPlayer is not PlayerControllerB localPlayer)
-            return Task.CompletedTask;
-        if (localPlayer.ItemSlots.WhereIsNotNull().AsValueEnumerable().Count() >= 4) {
-            Chat.Print("You must have an empty inventory slot!");
-            return Task.CompletedTask;
-        }
+        if (Helper.LocalPlayer is not PlayerControllerB localPlayer) return Task.CompletedTask;
+
 
         Vector3 currentPlayerPosition = localPlayer.transform.position;
 

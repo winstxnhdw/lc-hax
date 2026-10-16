@@ -50,7 +50,7 @@ static partial class Helper {
     internal static PlayerControllerB? GetActivePlayer(int playerClientId) => Helper.GetActivePlayer(playerClientId.ToString());
 
     internal static bool GrabObject(this PlayerControllerB player, GrabbableObject grabbable) {
-        if (player.ItemSlots.WhereIsNotNull().AsValueEnumerable().Count() >= 4) return false;
+        if (player.FirstEmptyItemSlot(grabbable) == -1) return false;
 
         NetworkObjectReference networkObject = grabbable.NetworkObject;
         player.GrabObjectServerRpc(networkObject);

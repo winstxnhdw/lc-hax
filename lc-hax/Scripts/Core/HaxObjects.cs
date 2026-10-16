@@ -7,7 +7,6 @@ sealed class HaxObjects : MonoBehaviour {
     internal SingleObjectPool<DepositItemsDesk>? DepositItemsDesk { get; private set; }
     internal MultiObjectPool<ShipTeleporter>? ShipTeleporters { get; private set; }
     internal MultiObjectPool<LocalVolumetricFog>? LocalVolumetricFogs { get; private set; }
-    internal MultiObjectPool<SteamValveHazard>? SteamValves { get; private set; }
     internal MultiObjectPool<InteractTrigger>? InteractTriggers { get; private set; }
 
     void Awake() {
@@ -15,7 +14,6 @@ sealed class HaxObjects : MonoBehaviour {
         this.ShipTeleporters = new(this);
         this.LocalVolumetricFogs = new(this);
         this.InteractTriggers = new(this);
-        this.SteamValves = new(this, 5.0f);
         HaxObjects.Instance = this;
     }
 }

@@ -33,15 +33,9 @@ sealed class BombardCommand : ICommand, IJetpack {
     }
 
     public Task Execute(Arguments args, CancellationToken cancellationToken) {
-        if (Helper.LocalPlayer is not PlayerControllerB localPlayer)
-            return Task.CompletedTask;
+        if (Helper.LocalPlayer is not PlayerControllerB localPlayer) return Task.CompletedTask;
         if (args.Length is 0) {
             Chat.Print("Usage: bombard <player>");
-            return Task.CompletedTask;
-        }
-
-        if (localPlayer.ItemSlots.WhereIsNotNull().AsValueEnumerable().Count() >= 4) {
-            Chat.Print("You must have an empty inventory slot!");
             return Task.CompletedTask;
         }
 
@@ -54,6 +48,11 @@ sealed class BombardCommand : ICommand, IJetpack {
 
         if (jetpacks.Length is 0) {
             Chat.Print("A usable jetpack is required to use this command!");
+            return Task.CompletedTask;
+        }
+
+        if (!jetpacks.AsValueEnumerable().Any(jetpack => localPlayer.FirstEmptyItemSlot(jetpack) != -1)) {
+            Chat.Print("You must have an empty inventory slot!");
             return Task.CompletedTask;
         }
 
