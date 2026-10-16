@@ -11,8 +11,7 @@ sealed class ShotgunPatch {
     /// Prevents the shotgun from consuming ammo when firing
     /// </summary>
     [HarmonyPatch(typeof(ShotgunItem), nameof(ShotgunItem.FindAmmoInInventory))]
-    static bool Prefix(ref int __result, ref int ___ammoSlotToUse) {
-        ___ammoSlotToUse = -2;
+    static bool Prefix(ref int __result) {
         __result = -2;
         return false;
     }
