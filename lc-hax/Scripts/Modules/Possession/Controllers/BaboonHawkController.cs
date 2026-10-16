@@ -18,7 +18,7 @@ sealed class BaboonHawkController : IEnemyController<BaboonBirdAI> {
     }
 
     public void OnPossess(BaboonBirdAI _) {
-        if (BaboonBirdAI.baboonCampPosition != this.CustomCamp) return;
+        if (BaboonBirdAI.baboonCampPosition == this.CustomCamp) return;
 
         this.OriginalCamp = BaboonBirdAI.baboonCampPosition;
         BaboonBirdAI.baboonCampPosition = this.CustomCamp;
