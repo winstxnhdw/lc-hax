@@ -30,8 +30,7 @@ sealed class MaskCommand : ICommand {
             return;
         }
 
-        GrabbableObject[] itemSlots = localPlayer.ItemSlots;
-        await Helper.WaitUntil(() => localPlayer.ItemSlots[localPlayer.currentItemSlot] is HauntedMaskItem, cancellationToken);
+        await Helper.WaitUntil(() => localPlayer.currentlyHeldObjectServer == hauntedMaskItem, cancellationToken);
 
         for (ulong i = 0; i < amount; i++) {
             hauntedMaskItem.CreateMimicServerRpc(targetPlayer.isInsideFactory, targetPlayer.transform.position);

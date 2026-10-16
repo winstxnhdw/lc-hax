@@ -26,8 +26,7 @@ sealed class BombCommand : ICommand, IJetpack {
             return;
         }
 
-        GrabbableObject[] itemSlots = localPlayer.ItemSlots;
-        await Helper.WaitUntil(() => itemSlots[localPlayer.currentItemSlot] == jetpack, cancellationToken);
+        await Helper.WaitUntil(() => localPlayer.currentlyHeldObjectServer == jetpack, cancellationToken);
         localPlayer.DiscardHeldObject(placeObject: true, parentObjectTo: targetPlayer.NetworkObject);
         await Task.Delay(500, cancellationToken);
         jetpack.ExplodeJetpackServerRpc();

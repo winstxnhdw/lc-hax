@@ -12,7 +12,7 @@ sealed class DestroyCommand : ICommand {
 
         foreach (GrabbableObject grabbable in Helper.Grabbables) {
             if (!player.GrabObject(grabbable)) continue;
-            yield return new WaitUntil(() => player.ItemSlots[player.currentItemSlot] == grabbable);
+            yield return new WaitUntil(() => player.currentlyHeldObjectServer == grabbable);
             player.DespawnHeldObject();
         }
 

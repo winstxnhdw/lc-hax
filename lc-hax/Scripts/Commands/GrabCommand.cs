@@ -18,7 +18,7 @@ sealed class GrabCommand : ICommand {
 
         foreach (GrabbableObject grabbable in grabbables) {
             if (!player.GrabObject(grabbable)) continue;
-            yield return new WaitUntil(() => player.ItemSlots[player.currentItemSlot] == grabbable);
+            yield return new WaitUntil(() => player.currentlyHeldObjectServer == grabbable);
             player.DiscardHeldObject();
         }
 
@@ -62,7 +62,7 @@ sealed class GrabCommand : ICommand {
         }
 
         Helper.CreateComponent<WaitForBehaviour>()
-              .SetPredicate(() => player.ItemSlots[player.currentItemSlot] == grabbable)
+              .SetPredicate(() => player.currentlyHeldObjectServer == grabbable)
               .Init(() => player.DiscardHeldObject());
 
         return $"Grabbed a {key.ToTitleCase()}!";

@@ -17,7 +17,7 @@ sealed class BombardCommand : ICommand, IJetpack {
 
         foreach (JetpackItem jetpack in jetpacks) {
             if (!player.GrabObject(jetpack)) continue;
-            yield return new WaitUntil(() => player.ItemSlots[player.currentItemSlot] == jetpack);
+            yield return new WaitUntil(() => player.currentlyHeldObjectServer == jetpack);
 
             const float bombardRadius = 10.0f;
             Vector2 randomDirection = Random.insideUnitCircle * bombardRadius;
