@@ -13,9 +13,6 @@ sealed class EnemyDependencyPatch {
 
 [HarmonyPatch(typeof(MaskedPlayerEnemy))]
 sealed class MaskedDependencyPatch {
-    [HarmonyPatch(nameof(MaskedPlayerEnemy.OnDestroy))]
-    static void Prefix(MaskedPlayerEnemy __instance) => Helper.Enemies.Remove(__instance);
-
     [HarmonyPatch(nameof(MaskedPlayerEnemy.Start))]
     static void Postfix(MaskedPlayerEnemy __instance) => Helper.Enemies.Add(__instance);
 }
