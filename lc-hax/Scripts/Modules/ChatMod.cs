@@ -24,6 +24,7 @@ sealed class ChatMod : MonoBehaviour {
     }
 
     void CycleBackInHistory() {
+        if (this.CommandHistory.Count == 0) return;
         if (Helper.LocalPlayer is not { isTypingChat: true }) return;
         if (Helper.HUDManager is not HUDManager hudManager) return;
 
