@@ -48,7 +48,7 @@ sealed class GrabCommand : ICommand {
                 .GroupBy(grabbable => grabbable.itemProperties.name.ToLower())
                 .ToDictionary(
                     group => group.Key,
-                    group => group.Single()
+                    group => Enumerable.First(group)
                 ) ?? [];
 
         if (!itemName.ToLower().FuzzyMatch(grabbableObjects.Keys, out string key)) {
