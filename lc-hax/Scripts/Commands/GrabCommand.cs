@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
@@ -10,22 +9,10 @@ using ZLinq;
 [Command("grab")]
 sealed class GrabCommand : ICommand {
     static bool CanGrabItem(GrabbableObject grabbableObject, Vector3 currentPlayerPosition) =>
-        grabbableObject is { isHeld: false } and { isHeldByEnemy: false } &&
+        grabbableObject.Unfake() is { isHeld: false } and { isHeldByEnemy: false } &&
         (grabbableObject.transform.position - currentPlayerPosition).sqrMagnitude >= 20.0f * 20.0f;
 
-    static IEnumerator GrabAllItemsAsync(PlayerControllerB player, GrabbableObject[] grabbables) {
-        float currentWeight = player.carryWeight;
-
-        foreach (GrabbableObject grabbable in grabbables) {
-            if (!player.GrabObject(grabbable)) continue;
-            yield return new WaitUntil(() => player.currentlyHeldObjectServer == grabbable);
-            player.DiscardHeldObject();
-        }
-
-        player.carryWeight = currentWeight;
-    }
-
-    static string GrabAllItems(PlayerControllerB player, Vector3 currentPlayerPosition) {
+    static async Task<string> GrabAllItems(PlayerControllerB player, Vector3 currentPlayerPosition, CancellationToken cancellationToken) {
         GrabbableObject[] grabbables = [
             .. Helper.Grabbables
                      .WhereIsNotNull()
@@ -41,13 +28,32 @@ sealed class GrabCommand : ICommand {
             return "You must have an empty inventory slot!";
         }
 
-        Helper.CreateComponent<AsyncBehaviour>()
-              .Init(() => GrabCommand.GrabAllItemsAsync(player, grabbables));
+        float currentWeight = player.carryWeight;
+
+        foreach (GrabbableObject grabbable in grabbables) {
+            if (grabbable == null || !player.GrabObject(grabbable)) continue;
+
+            int grabFrame = Time.frameCount;
+
+            await Helper.WaitUntil(() =>
+                Time.frameCount != grabFrame && (grabbable == null || player.currentlyHeldObjectServer == grabbable),
+                cancellationToken
+            );
+
+            if (grabbable == null) {
+                continue;
+            }
+
+            cancellationToken.ThrowIfCancellationRequested();
+            player.DiscardHeldObject();
+        }
+
+        player.carryWeight = currentWeight;
 
         return "Successfully grabbed all items!";
     }
 
-    static string GrabItem(PlayerControllerB player, Vector3 currentPlayerPosition, string itemName) {
+    static async Task<string> GrabItem(PlayerControllerB player, Vector3 currentPlayerPosition, string itemName, CancellationToken cancellationToken) {
         Dictionary<string, GrabbableObject> grabbableObjects =
             Helper.Grabbables?
                 .WhereIsNotNull()
@@ -69,25 +75,33 @@ sealed class GrabCommand : ICommand {
             return "You must have an empty inventory slot!";
         }
 
-        Helper.CreateComponent<WaitForBehaviour>()
-              .SetPredicate(() => player.currentlyHeldObjectServer == grabbable)
-              .Init(() => player.DiscardHeldObject());
+        int grabFrame = Time.frameCount;
+
+        await Helper.WaitUntil(() =>
+            Time.frameCount != grabFrame && (grabbable == null || player.currentlyHeldObjectServer == grabbable),
+            cancellationToken
+        );
+
+        if (grabbable == null) {
+            return "Failed to find item!";
+        }
+
+        cancellationToken.ThrowIfCancellationRequested();
+        player.DiscardHeldObject();
 
         return $"Grabbed a {key.ToTitleCase()}!";
     }
 
-    public Task Execute(Arguments args, CancellationToken cancellationToken) {
-        if (Helper.LocalPlayer is not PlayerControllerB localPlayer) return Task.CompletedTask;
-
+    public async Task Execute(Arguments args, CancellationToken cancellationToken) {
+        if (Helper.LocalPlayer is not PlayerControllerB localPlayer) return;
 
         Vector3 currentPlayerPosition = localPlayer.transform.position;
 
         string message = args.Length switch {
-            0 => GrabCommand.GrabAllItems(localPlayer, currentPlayerPosition),
-            _ => GrabCommand.GrabItem(localPlayer, currentPlayerPosition, string.Join(' ', args))
+            0 => await GrabCommand.GrabAllItems(localPlayer, currentPlayerPosition, cancellationToken),
+            _ => await GrabCommand.GrabItem(localPlayer, currentPlayerPosition, string.Join(' ', args), cancellationToken)
         };
 
         Chat.Print(message);
-        return Task.CompletedTask;
     }
 }
