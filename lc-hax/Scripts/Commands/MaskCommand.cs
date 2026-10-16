@@ -30,14 +30,10 @@ sealed class MaskCommand : ICommand {
             return;
         }
 
-        await Helper.WaitUntil(() =>
-            localPlayer == null || targetPlayer == null || hauntedMaskItem == null ||
-            localPlayer.currentlyHeldObjectServer == hauntedMaskItem,
-            cancellationToken
-        );
+        await Helper.WaitUntil(() => hauntedMaskItem == null || localPlayer.currentlyHeldObjectServer == hauntedMaskItem, cancellationToken);
 
         for (ulong i = 0; i < amount; i++) {
-            if (localPlayer == null || targetPlayer == null || hauntedMaskItem == null) return;
+            if (hauntedMaskItem == null) return;
 
             hauntedMaskItem.CreateMimicServerRpc(targetPlayer.isInsideFactory, targetPlayer.transform.position);
             await Task.Delay(100, cancellationToken);

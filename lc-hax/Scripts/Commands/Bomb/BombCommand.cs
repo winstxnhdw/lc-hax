@@ -26,9 +26,14 @@ sealed class BombCommand : ICommand, IJetpack {
             return;
         }
 
-        await Helper.WaitUntil(() => localPlayer.currentlyHeldObjectServer == jetpack, cancellationToken);
+        await Helper.WaitUntil(() => jetpack == null || localPlayer.currentlyHeldObjectServer == jetpack, cancellationToken);
+
+        if (jetpack == null) {
+            return;
+        }
+
         localPlayer.DiscardHeldObject(placeObject: true, parentObjectTo: targetPlayer.NetworkObject);
         await Task.Delay(500, cancellationToken);
-        jetpack.ExplodeJetpackServerRpc();
+        jetpack.Unfake()?.ExplodeJetpackServerRpc();
     }
 }

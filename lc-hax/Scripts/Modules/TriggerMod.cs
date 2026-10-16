@@ -28,7 +28,7 @@ sealed class TriggerMod : MonoBehaviour, IEnemyPrompter {
         if (Helper.CurrentCamera is not Camera camera) return;
 
         if (this.UsingFollowRay) {
-            if (FollowMod.PlayerToFollow is not null) {
+            if (FollowMod.PlayerToFollow != null) {
                 FollowMod.PlayerToFollow = null;
                 Chat.Print("Stopped following!");
                 return;

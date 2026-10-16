@@ -7,7 +7,7 @@ sealed class InstantInteractMod : MonoBehaviour {
 
         while (true) {
             HaxObjects.Instance?.InteractTriggers?.WhereIsNotNull().ForEach(interactTrigger => {
-                if (interactTrigger.Unfake() is null) return;
+                if (interactTrigger == null) return;
 
                 interactTrigger.interactable = true;
                 interactTrigger.timeToHold = interactTrigger.name is "EntranceTeleportB(Clone)" ? 0.3f : 0.0f;

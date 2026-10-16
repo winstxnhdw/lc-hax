@@ -24,9 +24,8 @@ sealed class MuteCommand : ICommand {
             return Task.CompletedTask;
         }
 
-        if (MuteCommand.MutedPlayers.TryGetValue(player.playerUsername, out TransientBehaviour existingMuterObject)) {
+        if (MuteCommand.MutedPlayers.Remove(player.playerUsername, out TransientBehaviour existingMuterObject) && existingMuterObject != null) {
             Object.Destroy(existingMuterObject);
-            _ = MuteCommand.MutedPlayers.Remove(player.playerUsername);
             Chat.Print($"Unmuted {player.playerUsername}!");
             return Task.CompletedTask;
         }

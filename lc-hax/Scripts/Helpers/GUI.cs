@@ -1,31 +1,81 @@
 using UnityEngine;
 
+readonly record struct LabelStyleSettings(
+    Font? Font,
+    Font? DefaultFont,
+    int FontSize,
+    bool RichText,
+    ImagePosition ImagePosition,
+    float FixedWidth,
+    float FixedHeight,
+    Vector4 Padding
+);
+
 static partial class Helper {
     static GUIStyle? CachedLabelStyle { get; set; }
-    static GUIContent LabelContent { get; } = new();
+    static GUIStyle? SourceLabelStyle { get; set; }
+    static LabelStyleSettings CachedLabelStyleSettings { get; set; }
+    static int LabelStyleGeneration { get; set; }
+    static bool IsLabelFontListenerRegistered { get; set; }
 
-    internal static void DrawLabel(Vector2 position, string label, Color colour) {
-        GUIStyle labelStyle = Helper.CachedLabelStyle ??= new GUIStyle(GUI.skin.label) {
+    internal static GUIStyle BeginLabelRepaint() {
+        if (!Helper.IsLabelFontListenerRegistered) {
+            Font.textureRebuilt += Helper.OnLabelFontTextureRebuilt;
+            Helper.IsLabelFontListenerRegistered = true;
+        }
+
+        GUISkin skin = GUI.skin;
+        GUIStyle sourceStyle = skin.label;
+        RectOffset padding = sourceStyle.padding;
+        LabelStyleSettings settings = new(
+            sourceStyle.font,
+            skin.font,
+            sourceStyle.fontSize,
+            sourceStyle.richText,
+            sourceStyle.imagePosition,
+            sourceStyle.fixedWidth,
+            sourceStyle.fixedHeight,
+            new Vector4(padding.left, padding.right, padding.top, padding.bottom)
+        );
+
+        if (Helper.CachedLabelStyle is GUIStyle labelStyle &&
+            object.ReferenceEquals(Helper.SourceLabelStyle, sourceStyle) &&
+            Helper.CachedLabelStyleSettings == settings) {
+            return labelStyle;
+        }
+
+        Helper.CachedLabelStyle = new GUIStyle(sourceStyle) {
             fontStyle = FontStyle.Bold
         };
 
-        Helper.LabelContent.text = label;
-        Vector2 size = labelStyle.CalcSize(Helper.LabelContent);
+        Helper.SourceLabelStyle = sourceStyle;
+        Helper.CachedLabelStyleSettings = settings;
+        Helper.LabelStyleGeneration++;
+
+        return Helper.CachedLabelStyle;
+    }
+
+    static void OnLabelFontTextureRebuilt(Font _) => Helper.LabelStyleGeneration++;
+
+    internal static void DrawLabel(Vector2 position, CachedLabel label, Color colour, Rect screenBounds) {
+        GUIStyle labelStyle = Helper.CachedLabelStyle ?? Helper.BeginLabelRepaint();
+        Vector2 size = label.GetSize(labelStyle, Helper.LabelStyleGeneration);
         Vector2 newPosition = position - (size * 0.5f);
         Rect labelBounds = new(newPosition.x, newPosition.y, size.x + 1, size.y + 1);
 
-        if (!labelBounds.Overlaps(new Rect(0, 0, Screen.width, Screen.height))) {
+        if (!labelBounds.Overlaps(screenBounds)) {
             return;
         }
 
         labelStyle.normal.textColor = Color.black;
-        GUI.Label(new Rect(newPosition.x, newPosition.y, size.x, size.y), Helper.LabelContent, labelStyle);
+        GUI.Label(new Rect(newPosition.x, newPosition.y, size.x, size.y), label.Content, labelStyle);
 
         labelStyle.normal.textColor = colour;
-        GUI.Label(new Rect(newPosition.x + 1, newPosition.y + 1, size.x, size.y), Helper.LabelContent, labelStyle);
+        GUI.Label(new Rect(newPosition.x + 1, newPosition.y + 1, size.x, size.y), label.Content, labelStyle);
     }
 
-    internal static void DrawLabel(Vector2 position, string label) => Helper.DrawLabel(position, label, Color.white);
+    internal static void DrawLabel(Vector2 position, CachedLabel label, Rect screenBounds) =>
+        Helper.DrawLabel(position, label, Color.white, screenBounds);
 
     internal static void DrawOutlineBox(Vector2 centrePosition, Size size, float lineWidth, Color colour) {
         float halfWidth = 0.5f * size.Width;

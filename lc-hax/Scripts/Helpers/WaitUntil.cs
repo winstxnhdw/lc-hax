@@ -4,8 +4,9 @@ using System.Threading.Tasks;
 
 static partial class Helper {
     internal static async Task WaitUntil(Func<bool> predicate, CancellationToken cancellationToken) {
-        while (!predicate()) {
-            if (cancellationToken.IsCancellationRequested) break;
+        while (true) {
+            if (predicate()) return;
+            cancellationToken.ThrowIfCancellationRequested();
             await Task.Yield();
         }
     }

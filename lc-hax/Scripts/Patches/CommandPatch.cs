@@ -18,8 +18,9 @@ sealed class EnableChatPatch {
 [HarmonyBefore]
 [HarmonyPatch(typeof(HUDManager), nameof(HUDManager.SubmitChat_performed))]
 sealed class SubmitChatPatch {
-    static bool Prefix(HUDManager __instance, ref bool __state) {
-        __state = __instance.localPlayer.isPlayerDead;
+    static bool Prefix(HUDManager __instance, ref bool? __state) {
+        bool wasDead = __instance.localPlayer.isPlayerDead;
+        __state = wasDead;
         __instance.localPlayer.isPlayerDead = false;
 
         if (Helper.HUDManager is not HUDManager hudManager) {
@@ -30,10 +31,15 @@ sealed class SubmitChatPatch {
             return true;
         }
 
+        __instance.localPlayer.isPlayerDead = wasDead;
+        __state = null;
         Chat.ExecuteCommand(hudManager.chatTextField.text.TrimEnd());
 
         return false;
     }
 
-    static void Postfix(HUDManager __instance, bool __state) => __instance.localPlayer.isPlayerDead = __state;
+    static void Postfix(HUDManager __instance, bool? __state) {
+        if (__state is not bool wasDead) return;
+        __instance.localPlayer.isPlayerDead = wasDead;
+    }
 }

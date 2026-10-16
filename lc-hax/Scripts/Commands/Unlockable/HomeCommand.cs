@@ -6,7 +6,7 @@ using GameNetcodeStuff;
 [Command("home")]
 sealed class HomeCommand : ITeleporter, ICommand {
     static ShipTeleporter? Teleporter => Helper.ShipTeleporters.First(
-        teleporter => teleporter is not null && !teleporter.isInverseTeleporter
+        teleporter => teleporter != null && !teleporter.isInverseTeleporter
     );
 
     static Action TeleportPlayerToBaseLater(PlayerControllerB targetPlayer) => () => {
@@ -19,8 +19,8 @@ sealed class HomeCommand : ITeleporter, ICommand {
 
         Helper.SwitchRadarTarget(targetPlayer);
         Helper.CreateComponent<WaitForBehaviour>()
-              .SetPredicate(() => Helper.IsRadarTarget(targetPlayer.playerClientId))
-              .Init(teleporter.PressTeleportButtonServerRpc);
+              .SetPredicate(() => teleporter == null || Helper.IsRadarTarget(targetPlayer.playerClientId))
+              .Init(() => teleporter.Unfake()?.PressTeleportButtonServerRpc());
     };
 
     public Task Execute(Arguments args, CancellationToken cancellationToken) {

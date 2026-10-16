@@ -63,8 +63,6 @@ sealed class RandomCommand : ICommand {
     }
 
     static Action TeleportPlayerToRandomLater(PlayerControllerB targetPlayer) => () => {
-        if (targetPlayer.Unfake() is null) return;
-
         ObjectPlacements<Transform, ShipTeleporter>? teleporterPlacements = RandomCommand.GetInverseTeleporterPlacements(targetPlayer);
 
         if (teleporterPlacements is null) {
@@ -106,7 +104,7 @@ sealed class RandomCommand : ICommand {
         Helper.ReturnUnlockable(Unlockable.CUPBOARD);
 
         Helper.CreateComponent<WaitForBehaviour>()
-              .SetPredicate(() => targetPlayer.Unfake() is null || RandomCommand.InverseTeleporterExists())
+              .SetPredicate(RandomCommand.InverseTeleporterExists)
               .Init(RandomCommand.TeleportPlayerToRandomLater(targetPlayer));
         return Task.CompletedTask;
     }

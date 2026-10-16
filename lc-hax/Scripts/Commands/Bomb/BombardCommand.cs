@@ -16,8 +16,12 @@ sealed class BombardCommand : ICommand, IJetpack {
         float currentWeight = player.carryWeight;
 
         foreach (JetpackItem jetpack in jetpacks) {
-            if (!player.GrabObject(jetpack)) continue;
-            yield return new WaitUntil(() => player.currentlyHeldObjectServer == jetpack);
+            if (jetpack == null || !player.GrabObject(jetpack)) continue;
+            yield return new WaitUntil(() => jetpack == null || player.currentlyHeldObjectServer == jetpack);
+
+            if (jetpack == null) {
+                continue;
+            }
 
             const float bombardRadius = 10.0f;
             Vector2 randomDirection = Random.insideUnitCircle * bombardRadius;
@@ -25,8 +29,8 @@ sealed class BombardCommand : ICommand, IJetpack {
             player.DiscardHeldObject(placeObject: true, placePosition: targetTransform.position + randomDirectionXZ);
 
             Helper.CreateComponent<WaitForBehaviour>()
-                  .SetPredicate(() => Vector3.Distance(jetpack.transform.position, targetTransform.position) < 5.0f)
-                  .Init(() => Helper.ShortDelay(jetpack.ExplodeJetpackServerRpc));
+                  .SetPredicate(() => jetpack == null || Vector3.Distance(jetpack.transform.position, targetTransform.position) < 5.0f)
+                  .Init(() => Helper.ShortDelay(() => jetpack.Unfake()?.ExplodeJetpackServerRpc()));
         }
 
         player.carryWeight = currentWeight;
@@ -58,6 +62,7 @@ sealed class BombardCommand : ICommand, IJetpack {
 
         Helper.CreateComponent<AsyncBehaviour>()
               .Init(() => BombardCommand.BombardAsync(localPlayer, targetPlayer.transform, jetpacks));
+
         return Task.CompletedTask;
     }
 }

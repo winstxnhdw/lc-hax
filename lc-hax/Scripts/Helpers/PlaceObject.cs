@@ -15,7 +15,7 @@ static partial class Helper {
         Vector3 positionOffset = new(),
         Vector3 rotationOffset = new()
     ) where T : Transform where M : MonoBehaviour {
-        if (targetObject.Unfake() is null || gameObject.Unfake() is null) return;
+        if (gameObject == null) return;
 
         NetworkObject networkObject = Helper.GetNetworkObject(gameObject);
         Helper.ShipBuildModeManager?.PlaceShipObjectServerRpc(
@@ -41,7 +41,7 @@ static partial class Helper {
         Vector3 positionOffset = new(),
         Vector3 rotationOffset = new()
     ) where T : Transform where M : MonoBehaviour {
-        if (targetObject.Unfake() is null || gameObject.Unfake() is null) return;
+        if (gameObject == null) return;
 
         NetworkObject networkObject = Helper.GetNetworkObject(gameObject);
         Helper.ShipBuildModeManager?.PlaceShipObjectServerRpc(
@@ -57,7 +57,7 @@ static partial class Helper {
         Vector3 position,
         Vector3 rotation = new()
     ) where M : MonoBehaviour {
-        if (gameObject.Unfake() is null) return;
+        if (gameObject == null) return;
 
         NetworkObject networkObject = Helper.GetNetworkObject(gameObject);
         Helper.ShipBuildModeManager?.PlaceShipObjectServerRpc(

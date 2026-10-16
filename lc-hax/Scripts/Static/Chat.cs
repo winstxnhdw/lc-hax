@@ -8,6 +8,8 @@ using ZLinq;
 static class Chat {
     internal static event Action<string>? OnExecuteCommandAttempt;
 
+    static CancellationTokenSource CommandCancellation { get; set; } = new();
+
     static ValueEnumerable<ZLinq.Linq.ArrayWhere<Type>, Type> CommandTypes { get; } =
         Assembly.GetExecutingAssembly()
                 .GetTypes()
@@ -31,6 +33,11 @@ static class Chat {
             type => type.GetCustomAttribute<PrivilegedCommandAttribute>().Syntax,
             type => (ICommand)new PrivilegedCommand((ICommand)Activator.CreateInstance(type))
         );
+
+    static Chat() {
+        GameListener.OnShipLeave += Chat.CancelCommands;
+        GameListener.OnGameEnd += Chat.CancelCommands;
+    }
 
     internal static void Clear() {
         Helper.HUDManager?.AddTextToChatOnServer(
@@ -57,7 +64,15 @@ static class Chat {
 
     internal static void Print(string? message, params string[] args) => Chat.Print($"{message}\n{string.Join('\n', args)}");
 
+    static void CancelCommands() {
+        using CancellationTokenSource previousCancellation = Chat.CommandCancellation;
+        Chat.CommandCancellation = new();
+        previousCancellation.Cancel();
+    }
+
     internal static async void ExecuteCommand(string commandString) {
+        CancellationToken cancellationToken = Chat.CommandCancellation.Token;
+
         try {
             Chat.Print("USER", commandString);
             Chat.OnExecuteCommandAttempt?.Invoke(commandString);
@@ -73,10 +88,10 @@ static class Chat {
                 return;
             }
 
-            using CancellationTokenSource cancellationTokenSource = new();
-            await command.Execute(args[1..], cancellationTokenSource.Token);
+            await command.Execute(args[1..], cancellationToken);
         }
 
+        catch (OperationCanceledException) when (cancellationToken.IsCancellationRequested) { }
         catch (Exception exception) {
             Logger.Write(exception.ToString());
         }

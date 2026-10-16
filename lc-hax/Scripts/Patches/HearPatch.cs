@@ -5,11 +5,11 @@ using UnityEngine;
 sealed class HearPatch {
     static void Postfix(StartOfRound __instance) {
         if (!Setting.EnableEavesdrop) return;
-        if (Helper.StartOfRound is { shipIsLeaving: true }) return;
+        if (__instance.shipIsLeaving) return;
         if (Helper.SoundManager is not SoundManager soundManager) return;
 
         __instance.allPlayerScripts.ForEach(player => {
-            if (player == null || player.IsSelf()) return;
+            if (player.IsSelf()) return;
             if (!player.isPlayerControlled && !player.isPlayerDead) return;
             if (player.currentVoiceChatAudioSource.Unfake() is not AudioSource currentVoiceChatAudioSource) return;
             if (player.currentVoiceChatIngameSettings.Unfake() is not PlayerVoiceIngameSettings voiceSettings) return;

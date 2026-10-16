@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using GameNetcodeStuff;
 using UnityEngine;
 using UnityEngine.Rendering;
 using UnityEngine.Rendering.HighDefinition;
@@ -21,53 +22,39 @@ sealed class ClearVisionMod : MonoBehaviour {
 
     void DecreaseLightIntensity() => this.LightIntensity = Math.Clamp(this.LightIntensity - 1.0f, 0.0f, 10.0f);
 
-    IEnumerator SetNightVision(object[] args) {
-        WaitForEndOfFrame waitForEndOfFrame = new();
+    void Update() {
+        if (Helper.LocalPlayer is not PlayerControllerB localPlayer) return;
 
-        while (true) {
-            if (Helper.StartOfRound is not StartOfRound startOfRound) {
-                yield return waitForEndOfFrame;
-                continue;
-            }
+        PlayerControllerB viewedPlayer = localPlayer.isPlayerDead
+            ? localPlayer.spectatedPlayerScript ?? localPlayer
+            : localPlayer;
 
-            if (Helper.CurrentCamera is not Camera camera) {
-                yield return waitForEndOfFrame;
-                continue;
-            }
+        viewedPlayer.nightVision.intensity = this.LightIntensity;
+    }
 
-            if (Helper.TimeOfDay is not TimeOfDay timeOfDay) {
-                yield return waitForEndOfFrame;
-                continue;
-            }
-
-            if (timeOfDay.sunAnimator is not Animator sunAnimator) {
-                yield return waitForEndOfFrame;
-                continue;
-            }
-
-            if (!timeOfDay.sunIndirect.TryGetComponent(out HDAdditionalLightData lightData)) {
-                yield return waitForEndOfFrame;
-                continue;
-            }
-
-            if (startOfRound.blackSkyVolume is Volume blackSkyVolume) {
-                Destroy(blackSkyVolume);
-            }
-
-            sunAnimator.enabled = false;
-            timeOfDay.sunIndirect.transform.eulerAngles = new Vector3(90, 0, 0);
-            timeOfDay.sunIndirect.transform.position = camera.transform.position;
-            timeOfDay.sunIndirect.color = Color.white;
-            timeOfDay.sunIndirect.intensity = this.LightIntensity;
-            timeOfDay.sunIndirect.enabled = true;
-            timeOfDay.sunDirect.transform.eulerAngles = new Vector3(90, 0, 0);
-            timeOfDay.sunDirect.enabled = true;
-            lightData.lightDimmer = float.MaxValue;
-            lightData.distance = float.MaxValue;
-            timeOfDay.insideLighting = false;
-
-            yield return waitForEndOfFrame;
+    void LateUpdate() {
+        if (Helper.StartOfRound is not StartOfRound startOfRound) return;
+        if (Helper.CurrentCamera is not Camera camera) return;
+        if (Helper.TimeOfDay is not TimeOfDay timeOfDay) return;
+        if (timeOfDay.sunAnimator.Unfake() is not Animator sunAnimator) return;
+        if (timeOfDay.sunIndirect.Unfake() is not Light sunIndirect) return;
+        if (timeOfDay.sunDirect.Unfake() is not Light sunDirect) return;
+        if (!sunIndirect.TryGetComponent(out HDAdditionalLightData lightData)) return;
+        if (startOfRound.blackSkyVolume is Volume blackSkyVolume) {
+            Destroy(blackSkyVolume);
         }
+
+        sunAnimator.enabled = false;
+        sunIndirect.transform.eulerAngles = new Vector3(90, 0, 0);
+        sunIndirect.transform.position = camera.transform.position;
+        sunIndirect.color = Color.white;
+        sunIndirect.intensity = this.LightIntensity;
+        sunIndirect.enabled = true;
+        sunDirect.transform.eulerAngles = new Vector3(90, 0, 0);
+        sunDirect.enabled = true;
+        lightData.lightDimmer = float.MaxValue;
+        lightData.distance = float.MaxValue;
+        timeOfDay.insideLighting = false;
     }
 
     IEnumerator DisableVisor(object[] args) {
@@ -86,9 +73,7 @@ sealed class ClearVisionMod : MonoBehaviour {
             HaxObjects
                 .Instance?
                 .LocalVolumetricFogs?
-                .ForEach(localVolumetricFog =>
-                    localVolumetricFog?.gameObject.SetActive(false)
-                );
+                .ForEach(localVolumetricFog => localVolumetricFog.Unfake()?.gameObject.SetActive(false));
 
             yield return waitForFiveSeconds;
         }
@@ -98,12 +83,10 @@ sealed class ClearVisionMod : MonoBehaviour {
         WaitForSeconds waitForFiveSeconds = new(5.0f);
 
         while (true) {
-            HaxObjects
-                .Instance?
-                .SteamValves?
-                .ForEach(valve =>
-                    valve?.valveSteamParticle.Stop(true, ParticleSystemStopBehavior.StopEmittingAndClear)
-                );
+            Helper
+                .RoundManager?
+                .steamValves?
+                .ForEach(valve => valve.Unfake()?.valveSteamParticle.Stop(true, ParticleSystemStopBehavior.StopEmittingAndClear));
 
             yield return waitForFiveSeconds;
         }
@@ -113,6 +96,5 @@ sealed class ClearVisionMod : MonoBehaviour {
         _ = this.StartResilientCoroutine(this.DisableFog);
         _ = this.StartResilientCoroutine(this.DisableSteamValves);
         _ = this.StartResilientCoroutine(this.DisableVisor);
-        _ = this.StartResilientCoroutine(this.SetNightVision);
     }
 }

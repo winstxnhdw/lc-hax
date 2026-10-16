@@ -6,7 +6,7 @@ public interface ITeleporter;
 
 public static class ITeleporterMixin {
     public static ShipTeleporter? GetTeleporter(this ITeleporter _) =>
-        Helper.ShipTeleporters.First(teleporter => teleporter is not null && !teleporter.isInverseTeleporter);
+        Helper.ShipTeleporters.First(teleporter => teleporter != null && !teleporter.isInverseTeleporter);
 
     public static bool TeleporterExists(this ITeleporter self) {
         HaxObjects.Instance?.ShipTeleporters?.Renew();

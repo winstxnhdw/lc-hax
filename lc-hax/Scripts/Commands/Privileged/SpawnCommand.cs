@@ -27,8 +27,6 @@ sealed class SpawnCommand : ICommand {
 
     static void SpawnEnemyOnPlayer(PlayerControllerB player, EnemyType enemyType, ulong amount = 1) {
         if (Helper.RoundManager is not RoundManager { IsServer: true } roundManager) return;
-        if (!enemyType.enemyPrefab.TryGetComponent(out NetworkObject _)) return;
-        if (!enemyType.enemyPrefab.TryGetComponent(out EnemyAI _)) return;
 
         for (ulong i = 0; i < amount; i++) {
             NetworkObjectReference enemyReference = roundManager.SpawnEnemyGameObject(

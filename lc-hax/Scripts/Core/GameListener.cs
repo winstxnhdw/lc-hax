@@ -24,8 +24,14 @@ sealed class GameListener : MonoBehaviour {
     void OnFinishLevelGeneration() => GameListener.OnLevelGenerated?.Invoke();
 
     void ShipListener() {
-        if (Helper.StartOfRound is not StartOfRound startOfRound) return;
-        if (!startOfRound.inShipPhase && !this.HasShipBegunDescent) {
+        if (!this.InGame || Helper.StartOfRound is not StartOfRound startOfRound) return;
+        if (startOfRound.inShipPhase) {
+            this.HasShipBegunDescent = false;
+            this.HasShipLeft = false;
+            return;
+        }
+
+        if (!startOfRound.shipIsLeaving && !this.HasShipBegunDescent) {
             this.HasShipBegunDescent = true;
             this.HasShipLeft = false;
             GameListener.OnShipDescent?.Invoke();
@@ -33,7 +39,7 @@ sealed class GameListener : MonoBehaviour {
 
         else if (startOfRound.shipIsLeaving && !this.HasShipLeft) {
             this.HasShipLeft = true;
-            this.HasShipBegunDescent = false;
+            this.HasShipBegunDescent = true;
             GameListener.OnShipLeave?.Invoke();
         }
     }
@@ -52,6 +58,8 @@ sealed class GameListener : MonoBehaviour {
         }
 
         else {
+            this.HasShipBegunDescent = false;
+            this.HasShipLeft = false;
             GameListener.OnGameEnd?.Invoke();
         }
     }

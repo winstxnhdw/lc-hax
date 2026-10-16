@@ -23,21 +23,27 @@ sealed class FollowMod : MonoBehaviour {
     float InstantTeleTimer { get; set; }
     float AnimationBroadcastTimer { get; set; }
 
+    void OnDisable() => this.ResetFollowing();
+
+    void ResetFollowing() {
+        FollowMod.PlayerToFollow = null;
+        this.PlayerStates.Clear();
+    }
+
     void Update() {
-        if (Helper.LocalPlayer is not PlayerControllerB localPlayer) return;
-        if (FollowMod.PlayerToFollow is not PlayerControllerB targetPlayer) return;
+        if (Helper.LocalPlayer is not PlayerControllerB localPlayer ||
+            FollowMod.PlayerToFollow is not PlayerControllerB targetPlayer) {
+            this.ResetFollowing();
+            return;
+        }
 
         if (localPlayer.isPlayerDead || targetPlayer.isPlayerDead) {
-            if (FollowMod.PlayerToFollow is not null) {
-                FollowMod.PlayerToFollow = null;
-                Helper.SendNotification(
-                    title: "FollowMod",
-                    body: "Following has been disrupted!",
-                    isWarning: true
-                );
-            }
-
-            this.PlayerStates.Clear();
+            this.ResetFollowing();
+            Helper.SendNotification(
+                title: "FollowMod",
+                body: "Following has been disrupted!",
+                isWarning: true
+            );
             return;
         }
 

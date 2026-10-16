@@ -16,7 +16,7 @@ sealed class LandCommand : ICommand {
 
         try {
             startOfRound.StartGameServerRpc();
-            await Helper.WaitUntil(() => startOfRound.shipHasLanded, cancellationToken);
+            await Helper.WaitUntil(() => startOfRound == null || startOfRound.shipHasLanded, cancellationToken);
         }
 
         finally {

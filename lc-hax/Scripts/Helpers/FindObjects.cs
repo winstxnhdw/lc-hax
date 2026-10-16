@@ -9,13 +9,14 @@ static partial class Helper {
         Object.FindObjectsByType<T>(sortMode);
 
     internal static async Task<T?> FindObject<T>(CancellationToken cancellationToken) where T : Component {
-        T? obj = Helper.FindObject<T>();
+        while (true) {
+            cancellationToken.ThrowIfCancellationRequested();
 
-        while (obj is null && !cancellationToken.IsCancellationRequested) {
+            if (Helper.FindObject<T>() is T obj) {
+                return obj;
+            }
+
             await Task.Yield();
-            obj = Helper.FindObject<T>();
         }
-
-        return obj;
     }
 }
