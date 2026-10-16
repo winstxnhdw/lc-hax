@@ -12,6 +12,9 @@ on:
 concurrency: ${{ github.workflow }}-${{ github.ref }}
 permissions: {}
 
+env:
+  NUGET_PACKAGES: ${{ github.workspace }}/.nuget/packages
+
 jobs:
   format:
     runs-on: ubuntu-slim
@@ -31,11 +34,18 @@ jobs:
         uses: actions/setup-dotnet@v5.2.0
         with:
           dotnet-version: 10.x
+          cache: true
+          cache-dependency-path: |
+            lc-hax/packages.lock.json
+            analysers/packages.lock.json
+
+      - name: Restore dependencies
+        run: dotnet restore lc-hax --locked-mode
 
       - name: Format scripts
         run: |
-          dotnet format lc-hax
-          dotnet format analysers
+          dotnet format lc-hax --no-restore
+          dotnet format analysers --no-restore
 
       - name: Upload format patch
         id: patch

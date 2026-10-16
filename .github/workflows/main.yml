@@ -9,6 +9,10 @@ on:
       - .editorconfig
       - lc-hax/**
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 env:
   NUGET_PACKAGES: ${{ github.workspace }}\.nuget\packages
 
@@ -26,8 +30,10 @@ jobs:
         uses: actions/setup-dotnet@v5.2.0
         with:
           dotnet-version: 10.x
-          cache-dependency-path: lc-hax\packages.lock.json
           cache: true
+          cache-dependency-path: |
+            lc-hax/packages.lock.json
+            analysers/packages.lock.json
 
       - name: Build
         run: dotnet build lc-hax -restoreProperty:RestoreLockedMode=true /warnaserror
