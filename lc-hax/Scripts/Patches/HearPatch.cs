@@ -11,20 +11,25 @@ sealed class HearPatch {
         if (Helper.SoundManager is not SoundManager soundManager) return;
 
         __instance.allPlayerScripts.ForEach(player => {
-            AudioSource currentVoiceChatAudioSource = player.currentVoiceChatAudioSource;
+            if (player == null || player.IsSelf()) return;
+            if (!player.isPlayerControlled && !player.isPlayerDead) return;
+            if (player.currentVoiceChatAudioSource.Unfake() is not AudioSource currentVoiceChatAudioSource) return;
+            if (player.currentVoiceChatIngameSettings.Unfake() is not PlayerVoiceIngameSettings voiceSettings) return;
+            if (player.voicePlayerState is not { } voiceState) return;
+
             currentVoiceChatAudioSource.panStereo = 0.0f;
             soundManager.playerVoicePitchTargets[player.playerClientId] = 1.0f;
             soundManager.SetPlayerPitch(1.0f, unchecked((int)player.playerClientId));
 
             currentVoiceChatAudioSource.spatialBlend = 0.0f;
-            player.currentVoiceChatIngameSettings.set2D = true;
-            player.voicePlayerState.Volume = 1.0f;
+            voiceSettings.set2D = true;
+            voiceState.Volume = 1.0f;
 
-            if (!currentVoiceChatAudioSource.TryGetComponent(out AudioLowPassFilter audioLowPassFilter)) {
+            if (currentVoiceChatAudioSource.TryGetComponent(out AudioLowPassFilter audioLowPassFilter)) {
                 audioLowPassFilter.enabled = false;
             }
 
-            if (!currentVoiceChatAudioSource.TryGetComponent(out AudioHighPassFilter audioHighPassFilter)) {
+            if (currentVoiceChatAudioSource.TryGetComponent(out AudioHighPassFilter audioHighPassFilter)) {
                 audioHighPassFilter.enabled = false;
             }
         });
