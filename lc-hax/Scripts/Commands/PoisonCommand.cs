@@ -12,9 +12,10 @@ sealed class PoisonCommand : ICommand {
 
         while (Time.time - startTime < duration) {
             if (player.playersManager.inShipPhase) break;
+            cancellationToken.ThrowIfCancellationRequested();
 
             player.DamagePlayerRpc(damage);
-            await Task.Delay(TimeSpan.FromSeconds(delay), cancellationToken);
+            await Helper.DelaySafely(TimeSpan.FromSeconds(delay), cancellationToken);
         }
     }
 
