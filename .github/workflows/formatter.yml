@@ -44,5 +44,7 @@ jobs:
     if: needs.format.outputs.patched
     needs: format
     uses: winstxnhdw/actions/.github/workflows/format-push.yml@main
+    secrets:
+      token: ${{ secrets.PAT }}
     permissions:
       contents: write
