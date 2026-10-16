@@ -10,7 +10,7 @@ sealed class StunClickMod : MonoBehaviour {
     void OnDisable() => InputListener.OnLeftButtonPress -= this.Stun;
 
     static bool IsHoldingADefensiveWeapon() =>
-        Helper.LocalPlayer?.currentlyHeldObjectServer.itemProperties is { isDefensiveWeapon: true };
+        Helper.LocalPlayer?.currentlyHeldObjectServer?.itemProperties is { isDefensiveWeapon: true };
 
     static void StunJam(Collider collider) {
         if (collider.TryGetComponent(out EnemyAICollisionDetect enemy)) {
