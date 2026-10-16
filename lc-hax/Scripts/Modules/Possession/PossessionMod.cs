@@ -165,6 +165,7 @@ internal sealed class PossessionMod : MonoBehaviour {
         if (enemy.isEnemyDead) {
             controller.OnDeath(enemy);
             this.Unpossess();
+            return;
         }
 
         controller.Update(enemy, this.IsAIControlled);
@@ -249,7 +250,7 @@ internal sealed class PossessionMod : MonoBehaviour {
     // Releases possession of the current enemy
     internal void Unpossess() {
         if (this.Possession.Enemy is not EnemyAI enemy) return;
-        if (enemy.agent is NavMeshAgent agent) {
+        if (!enemy.isEnemyDead && enemy.agent is NavMeshAgent agent) {
             agent.updatePosition = true;
             agent.updateRotation = true;
             agent.isStopped = false;

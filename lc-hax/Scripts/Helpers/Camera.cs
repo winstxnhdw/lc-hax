@@ -1,10 +1,7 @@
 using UnityEngine;
 
 static partial class Helper {
-    internal static Camera? CurrentCamera =>
-        Helper.LocalPlayer?.gameplayCamera is Camera { enabled: true } gameplayCamera
-            ? gameplayCamera
-            : Helper.StartOfRound?.spectateCamera;
+    internal static Camera? CurrentCamera => Helper.StartOfRound?.activeCamera;
 
     internal static Vector3 WorldToEyesPoint(this Camera camera, Vector3 worldPosition) {
         Vector3 screen = camera.WorldToViewportPoint(worldPosition);
