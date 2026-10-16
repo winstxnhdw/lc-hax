@@ -1,19 +1,28 @@
 using UnityEngine;
 
 static partial class Helper {
+    static GUIStyle? CachedLabelStyle { get; set; }
+    static GUIContent LabelContent { get; } = new();
+
     internal static void DrawLabel(Vector2 position, string label, Color colour) {
-        GUIStyle labelStyle = new(GUI.skin.label) {
+        GUIStyle labelStyle = Helper.CachedLabelStyle ??= new GUIStyle(GUI.skin.label) {
             fontStyle = FontStyle.Bold
         };
 
-        Vector2 size = labelStyle.CalcSize(new GUIContent(label));
+        Helper.LabelContent.text = label;
+        Vector2 size = labelStyle.CalcSize(Helper.LabelContent);
         Vector2 newPosition = position - (size * 0.5f);
+        Rect labelBounds = new(newPosition.x, newPosition.y, size.x + 1, size.y + 1);
+
+        if (!labelBounds.Overlaps(new Rect(0, 0, Screen.width, Screen.height))) {
+            return;
+        }
 
         labelStyle.normal.textColor = Color.black;
-        GUI.Label(new Rect(newPosition.x, newPosition.y, size.x, size.y), label, labelStyle);
+        GUI.Label(new Rect(newPosition.x, newPosition.y, size.x, size.y), Helper.LabelContent, labelStyle);
 
         labelStyle.normal.textColor = colour;
-        GUI.Label(new Rect(newPosition.x + 1, newPosition.y + 1, size.x, size.y), label, labelStyle);
+        GUI.Label(new Rect(newPosition.x + 1, newPosition.y + 1, size.x, size.y), Helper.LabelContent, labelStyle);
     }
 
     internal static void DrawLabel(Vector2 position, string label) => Helper.DrawLabel(position, label, Color.white);

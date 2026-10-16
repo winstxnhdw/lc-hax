@@ -6,7 +6,7 @@ using GameNetcodeStuff;
 sealed class MaskCommand : ICommand {
     public async Task Execute(Arguments args, CancellationToken cancellationToken) {
         if (Helper.LocalPlayer is not PlayerControllerB localPlayer) return;
-        if (Helper.Grabbables.First(grabbable => grabbable is HauntedMaskItem) is not HauntedMaskItem hauntedMaskItem) {
+        if (Helper.Grabbables.First(grabbable => grabbable.Unfake() is HauntedMaskItem) is not HauntedMaskItem hauntedMaskItem) {
             Chat.Print("No mask found!");
             return;
         }
@@ -20,7 +20,7 @@ sealed class MaskCommand : ICommand {
             ? localPlayer
             : Helper.GetActivePlayer(args[0]);
 
-        if (targetPlayer is null) {
+        if (targetPlayer == null) {
             Chat.Print("Target player is not alive or found!");
             return;
         }
@@ -30,9 +30,15 @@ sealed class MaskCommand : ICommand {
             return;
         }
 
-        await Helper.WaitUntil(() => localPlayer.currentlyHeldObjectServer == hauntedMaskItem, cancellationToken);
+        await Helper.WaitUntil(() =>
+            localPlayer == null || targetPlayer == null || hauntedMaskItem == null ||
+            localPlayer.currentlyHeldObjectServer == hauntedMaskItem,
+            cancellationToken
+        );
 
         for (ulong i = 0; i < amount; i++) {
+            if (localPlayer == null || targetPlayer == null || hauntedMaskItem == null) return;
+
             hauntedMaskItem.CreateMimicServerRpc(targetPlayer.isInsideFactory, targetPlayer.transform.position);
             await Task.Delay(100, cancellationToken);
         }

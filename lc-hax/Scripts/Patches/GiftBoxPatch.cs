@@ -1,6 +1,3 @@
-#pragma warning disable IDE1006
-#pragma warning disable IDE0060
-
 using HarmonyLib;
 using Unity.Netcode;
 using UnityEngine;

@@ -1,5 +1,3 @@
-#pragma warning disable IDE1006
-
 using Unity.Netcode;
 using HarmonyLib;
 
