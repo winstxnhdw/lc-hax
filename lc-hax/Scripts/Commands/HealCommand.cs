@@ -1,15 +1,19 @@
 using System.Threading;
 using System.Threading.Tasks;
 using GameNetcodeStuff;
-using UnityEngine;
 
 [Command("heal")]
 sealed class HealCommand : ICommand, IStun {
     static void RespawnLocalPlayer(PlayerControllerB localPlayer, StartOfRound startOfRound, HUDManager hudManager) {
         if (Helper.SoundManager is not SoundManager soundManager) return;
 
+        soundManager.earsRingingTimer = 0.0f;
+        soundManager.playerVoicePitchTargets[localPlayer.playerClientId] = 1.0f;
+        soundManager.SetPlayerPitch(1.0f, localPlayer.PlayerIndex());
+
         startOfRound.allPlayersDead = false;
         startOfRound.SetPlayerObjectExtrapolate(false);
+
         localPlayer.ResetPlayerBloodObjects();
         localPlayer.ResetZAndXRotation();
         localPlayer.isClimbingLadder = false;
@@ -22,13 +26,9 @@ sealed class HealCommand : ICommand, IStun {
         localPlayer.isInsideFactory = false;
         localPlayer.parentedToElevatorLastFrame = false;
         localPlayer.setPositionOfDeadPlayer = false;
-        localPlayer.TeleportPlayer(startOfRound.playerSpawnPositions[0].position, false, 0.0f, false, true);
+        localPlayer.TeleportPlayer(startOfRound.playerSpawnPositions[0].position);
         localPlayer.DisablePlayerModel(startOfRound.allPlayerObjects[localPlayer.playerClientId], true, true);
-
-        if (localPlayer.helmetLight.Unfake() is Light helmetLight) {
-            helmetLight.enabled = false;
-        }
-
+        localPlayer.helmetLight.enabled = false;
         localPlayer.Crouch(false);
         localPlayer.activatingItem = false;
         localPlayer.twoHanded = false;
@@ -40,46 +40,27 @@ sealed class HealCommand : ICommand, IStun {
         localPlayer.isSinking = false;
         localPlayer.isUnderwater = false;
         localPlayer.sinkingValue = 0.0f;
-
-        if (localPlayer.statusEffectAudio.Unfake() is AudioSource statusEffectAudio) {
-            statusEffectAudio.Stop();
-        }
-
+        localPlayer.statusEffectAudio.Stop();
         localPlayer.DisableJetpackControlsLocally();
         localPlayer.mapRadarDotAnimator?.SetBool("dead", false);
-
-        if (hudManager.gasHelmetAnimator.Unfake() is Animator gasHelmetAnimator) {
-            gasHelmetAnimator.SetBool("gasEmitting", false);
-        }
-
         localPlayer.hasBegunSpectating = false;
-        hudManager.RemoveSpectateUI();
-
-        if (hudManager.gameOverAnimator.Unfake() is Animator gameOverAnimator) {
-            gameOverAnimator.SetTrigger("revive");
-        }
-
         localPlayer.hinderedMultiplier = 1.0f;
         localPlayer.isMovementHindered = 0;
         localPlayer.sourcesCausingSinking = 0;
         localPlayer.reverbPreset = startOfRound.shipReverb;
         localPlayer.voiceMuffledByEnemy = false;
 
-        soundManager.earsRingingTimer = 0.0f;
-        soundManager.playerVoicePitchTargets[localPlayer.playerClientId] = 1.0f;
-        soundManager.SetPlayerPitch(1.0f, localPlayer.PlayerIndex());
+        hudManager.RemoveSpectateUI();
+        hudManager.gasHelmetAnimator.SetBool("gasEmitting", false);
+        hudManager.gameOverAnimator.SetTrigger("revive");
 
         if (localPlayer.currentVoiceChatIngameSettings == null) {
             startOfRound.RefreshPlayerVoicePlaybackObjects();
         }
 
-        localPlayer.currentVoiceChatIngameSettings?.InitializeComponents();
-
-        if (localPlayer.currentVoiceChatIngameSettings?.voiceAudio?.TryGetComponent(out OccludeAudio occludeAudio) is not true) {
-            return;
-        }
-
-        occludeAudio.overridingLowPass = false;
+        PlayerVoiceIngameSettings? voiceSettings = localPlayer.currentVoiceChatIngameSettings.Unfake();
+        voiceSettings?.InitializeComponents();
+        _ = voiceSettings?.voiceAudio?.GetComponent<OccludeAudio>()?.overridingLowPass = false;
     }
 
     static PlayerControllerB HealLocalPlayer(HUDManager hudManager) {
@@ -109,8 +90,8 @@ sealed class HealCommand : ICommand, IStun {
     }
 
     public Task Execute(Arguments args, CancellationToken cancellationToken) {
-        if (Helper.HUDManager is not HUDManager hudManager)
-            return Task.CompletedTask;
+        if (Helper.HUDManager is not HUDManager hudManager) return Task.CompletedTask;
+
         PlayerControllerB? healedPlayer = args.Length switch {
             0 => HealCommand.HealLocalPlayer(hudManager),
             _ => HealCommand.HealPlayer(args[0])
