@@ -67,11 +67,10 @@ sealed class BuyCommand : ICommand {
         }
 
         else if (buyableItem.Type is BuyableItemType.DEFAULT) {
-            terminal.orderedItemsFromTerminal.Clear();
             terminal.BuyItemsServerRpc(
                 [.. ValueEnumerable.Repeat(buyableItem.Id, clampedQuantity)],
                 terminal.groupCredits - 1,
-                terminal.numberOfItemsInDropship
+                terminal.numberOfItemsInDropship + clampedQuantity
             );
         }
 
