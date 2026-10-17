@@ -1,21 +1,31 @@
 using System.Text.RegularExpressions;
-using UnityEngine;
-using Steamworks;
-using Steamworks.Data;
+using GameNetcodeStuff;
 using HarmonyLib;
+using Steamworks.Data;
+using UnityEngine;
 
-[HarmonyPatch(typeof(GameNetworkManager), nameof(GameNetworkManager.JoinLobby))]
+[HarmonyPatch]
 sealed class LobbyDependencyPatch {
-    static void Postfix(Lobby lobby, SteamId id) {
+    [HarmonyPostfix]
+    [HarmonyPatch(typeof(GameNetworkManager), nameof(GameNetworkManager.JoinLobby))]
+    static void JoinLobbyPostfix() {
         if (State.DisconnectedVoluntarily && Regex.IsMatch(GUIUtility.systemCopyBuffer, @"^\d{17}$")) {
             GUIUtility.systemCopyBuffer = "";
         }
 
-        State.ConnectedLobby = new ConnectedLobby() {
-            Lobby = lobby,
-            SteamId = id
-        };
-
         State.DisconnectedVoluntarily = false;
+    }
+
+    [HarmonyPostfix]
+    [HarmonyPatch(typeof(PlayerControllerB), nameof(PlayerControllerB.ConnectClientToPlayerObject))]
+    static void PlayerConnectPostfix(PlayerControllerB __instance) {
+        if (ReferenceEquals(__instance, Helper.LocalPlayer)) LobbyDependencyPatch.RecordConnectedLobby();
+    }
+
+    internal static void RecordConnectedLobby() {
+        State.DisconnectedVoluntarily = false;
+        State.ConnectedLobby = Helper.GameNetworkManager is { disableSteam: false, isHostingGame: false, currentLobby: Lobby lobby }
+            ? new ConnectedLobby { Lobby = lobby, SteamId = lobby.Id }
+            : null;
     }
 }

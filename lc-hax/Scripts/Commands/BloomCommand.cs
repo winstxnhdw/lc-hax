@@ -35,12 +35,12 @@ sealed class BloomCommand : ICommand {
         growth.InfectPlayerRpc(targetId, severe: false);
 
         await Helper.WaitUntil(() =>
-            growth == null || !growth.IsSpawned || targetPlayer == null || !targetPlayer.isPlayerControlled || targetPlayer.isPlayerDead ||
+            growth == null || !growth.IsSpawned || targetPlayer == null || !targetPlayer.isPlayerControlled ||
             Array.Exists(growth.bloomEnemies, bloom => bloom != null && bloom.IsSpawned && !bloom.hasBurst),
             cancellationToken
         );
 
-        if (growth == null || !growth.IsSpawned || targetPlayer == null || !targetPlayer.isPlayerControlled || targetPlayer.isPlayerDead) {
+        if (growth == null || !growth.IsSpawned || targetPlayer == null || !targetPlayer.isPlayerControlled) {
             return;
         }
 

@@ -58,7 +58,6 @@ sealed class ESPMod : MonoBehaviour {
     void RenderAlways(Camera camera) {
         foreach (RendererPair<PlayerControllerB, SkinnedMeshRenderer> rendererPair in this.PlayerRenderers) {
             if (rendererPair.GameObject is not PlayerControllerB player) continue;
-            if (player.isPlayerDead) continue;
             if (!player.isPlayerControlled) continue;
 
             this.DynamicLabel.Text = $"#{player.playerClientId} {player.playerUsername}";

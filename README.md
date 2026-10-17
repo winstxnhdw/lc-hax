@@ -237,11 +237,7 @@ These commands are only available when the user is host.
 
 ### Anti-Kick
 
-`Anti-Kick` attempts to prevent the host from identifying and kicking you off the game by:
-
-- Hiding your presence from the host if you are the last to join
-- Automatically reconnecting you back to the game if you are kicked
-- Automatically running `invis` when you join the game
+If another player joins after you, Anti-Kick immediately leaves and makes one reconnect attempt. This only runs while the initial lobby exists, before game start, with the start lever unpulled and the ship not routing to another moon. Player identities use the server's slot assignments. Before a roster update arrives, only your own identity and the host's identity can be restored reliably.
 
 ### Fatality
 

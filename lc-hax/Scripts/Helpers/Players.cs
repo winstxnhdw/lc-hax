@@ -27,7 +27,7 @@ static partial class Helper {
 
     internal static PlayerControllerB[] Players => Helper.StartOfRound?.allPlayerScripts ?? [];
 
-    internal static PlayerControllerB[] ActivePlayers => Helper.Players.AsValueEnumerable().Where(player => player.isPlayerControlled && !player.isPlayerDead).ToArray();
+    internal static PlayerControllerB[] ActivePlayers => Helper.Players.AsValueEnumerable().Where(player => player.isPlayerControlled).ToArray();
 
     internal static PlayerControllerB? GetPlayer(string? playerNameOrId) {
         if (string.IsNullOrEmpty(playerNameOrId)) return null;
@@ -43,7 +43,7 @@ static partial class Helper {
     internal static PlayerControllerB? GetPlayer(int playerClientId) => Helper.GetPlayer(unchecked((ulong)playerClientId));
 
     internal static PlayerControllerB? GetActivePlayer(string? playerNameOrId) =>
-        Helper.GetPlayer(playerNameOrId) is not PlayerControllerB player || !player.isPlayerControlled || player.isPlayerDead
+        Helper.GetPlayer(playerNameOrId) is not PlayerControllerB player || !player.isPlayerControlled
             ? null
             : player;
 

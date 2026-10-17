@@ -20,7 +20,6 @@ sealed class SellCommand : ICommand {
 
     void SellEverything(PlayerControllerB player, float currentWeight) =>
         Helper.Grabbables
-             .WhereIsNotNull()
              .AsValueEnumerable()
              .Where(this.CanBeSold)
              .ForEach(grabbableObject => SellCommand.SellObject(player, grabbableObject, currentWeight));
@@ -47,7 +46,6 @@ sealed class SellCommand : ICommand {
         }
 
         using PooledArray<GrabbableObject> sellableScrapsPool = Helper.Grabbables
-            .WhereIsNotNull()
             .AsValueEnumerable()
             .Where(this.CanBeSold)
             .Where(scrap => scrap.scrapValue > 0)

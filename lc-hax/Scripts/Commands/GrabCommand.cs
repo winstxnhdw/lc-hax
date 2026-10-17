@@ -15,7 +15,6 @@ sealed class GrabCommand : ICommand {
     static async Task<string> GrabAllItems(PlayerControllerB player, Vector3 currentPlayerPosition, CancellationToken cancellationToken) {
         GrabbableObject[] grabbables = [
             .. Helper.Grabbables
-                     .WhereIsNotNull()
                      .AsValueEnumerable()
                      .Where(grabbable => GrabCommand.CanGrabItem(grabbable, currentPlayerPosition))
         ];
@@ -56,7 +55,6 @@ sealed class GrabCommand : ICommand {
     static async Task<string> GrabItem(PlayerControllerB player, Vector3 currentPlayerPosition, string itemName, CancellationToken cancellationToken) {
         Dictionary<string, GrabbableObject> grabbableObjects =
             Helper.Grabbables?
-                .WhereIsNotNull()
                 .AsValueEnumerable()
                 .Where(grabbable => GrabCommand.CanGrabItem(grabbable, currentPlayerPosition))
                 .GroupBy(grabbable => grabbable.itemProperties.name.ToLower())

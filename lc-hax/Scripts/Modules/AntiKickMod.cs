@@ -1,52 +1,76 @@
-using System.Collections;
+using System.Threading.Tasks;
+using Steamworks;
+using Steamworks.Data;
 using UnityEngine;
 
 sealed class AntiKickMod : MonoBehaviour {
+    static Task? PendingRejoin { get; set; }
+
+    bool WatchingLobby { get; set; }
+    bool Rejoining { get; set; }
+    bool IsRejoining => this.Rejoining && Setting.EnableAntiKick && !State.DisconnectedVoluntarily;
+
     void OnEnable() {
         InputListener.OnBackslashPress += this.ToggleAntiKick;
         GameListener.OnGameStart += this.OnGameStart;
-        GameListener.OnGameEnd += this.OnGameEnd;
+        ConnectionDependencyPatch.OnConnectionAttempt += this.CancelRejoin;
     }
 
     void OnDisable() {
         InputListener.OnBackslashPress -= this.ToggleAntiKick;
         GameListener.OnGameStart -= this.OnGameStart;
-        GameListener.OnGameEnd -= this.OnGameEnd;
+        ConnectionDependencyPatch.OnConnectionAttempt -= this.CancelRejoin;
+        this.CancelRejoin();
     }
 
-    static IEnumerator RejoinLobby() {
-        if (State.ConnectedLobby is not ConnectedLobby connectedLobby) yield break;
-
-        WaitForEndOfFrame waitForEndOfFrame = new();
-
-        while (Helper.FindObject<MenuManager>() is null) {
-            yield return waitForEndOfFrame;
-        }
-
-        while (Helper.GameNetworkManager?.currentLobby.HasValue is not false) {
-            yield return waitForEndOfFrame;
-        }
-
-        Helper.GameNetworkManager?.JoinLobby(connectedLobby.Lobby, connectedLobby.SteamId);
-    }
-
-    void OnGameEnd() {
-        if (State.DisconnectedVoluntarily) return;
+    async void LateUpdate() {
         if (!Setting.EnableAntiKick) return;
+        if (!this.WatchingLobby) return;
+        if (AntiKickMod.PendingRejoin is { IsCompleted: false }) return;
+        if (Helper.GameNetworkManager is not { isHostingGame: false, gameHasStarted: false, currentLobby: Lobby lobby } manager) return;
+        if (Helper.StartOfRound is not { mostRecentlyJoinedClient: false, travellingToNewLevel: false }) return;
+        if (Helper.FindObject<StartMatchLever>() is not { leverHasBeenPulled: false }) return;
 
-        _ = this.StartCoroutine(AntiKickMod.RejoinLobby());
+        this.WatchingLobby = false;
+        this.Rejoining = true;
+        AntiKickMod.PendingRejoin = this.RejoinLobby(lobby, manager);
+        await AntiKickMod.PendingRejoin;
+    }
+
+    async Task RejoinLobby(Lobby lobby, GameNetworkManager manager) {
+        manager.Disconnect();
+        RoomEnter result = await lobby.Join();
+
+        if (result != RoomEnter.Success) {
+            this.Rejoining = false;
+            return;
+        }
+
+        await Helper.WaitUntil(
+            () => !this.IsRejoining || (Helper.FindObject<MenuManager>() is not null && !manager.currentLobby.HasValue)
+        );
+
+        if (!this.IsRejoining) {
+            this.Rejoining = false;
+            return;
+        }
+
+        this.Rejoining = false;
+        string lobbyName = lobby.GetData("name");
+        SteamId host = lobby.Owner.Id;
+        manager.currentLobby = lobby;
+        manager.steamLobbyName = lobbyName;
+        manager.StartClient(host);
+    }
+
+    void CancelRejoin() {
+        this.WatchingLobby = false;
+        this.Rejoining = false;
     }
 
     void OnGameStart() {
-        if (!Setting.EnableAntiKick) return;
-        if (!Setting.EnableInvisible) return;
-
-        Chat.Clear();
-        Helper.SendNotification(
-            title: "Anti-kick",
-            body: "You are invisible to other players! Do /invis to disable!",
-            isWarning: true
-        );
+        this.Rejoining = false;
+        this.WatchingLobby = true;
     }
 
     void ToggleAntiKick() {
@@ -56,6 +80,9 @@ sealed class AntiKickMod : MonoBehaviour {
         }
 
         Setting.EnableAntiKick = !Setting.EnableAntiKick;
-        Setting.EnableInvisible = Setting.EnableAntiKick;
+
+        if (!Setting.EnableAntiKick) {
+            this.CancelRejoin();
+        }
     }
 }

@@ -13,13 +13,13 @@ sealed class FatalityCommand : ICommand {
     /// <returns>The result of starting the enemy's fatality.</returns>
     static async Task<Result> HandleEnemy<T>(PlayerControllerB targetPlayer, Action<PlayerControllerB, T> enemyHandler, CancellationToken cancellationToken) where T : EnemyAI {
         if (Helper.LocalPlayer is not PlayerControllerB localPlayer) return new Result { Message = "Local player is not available!" };
-        if (targetPlayer == null || !targetPlayer.isPlayerControlled || targetPlayer.isPlayerDead) return new Result { Message = "Target player is not alive or found!" };
+        if (targetPlayer == null || !targetPlayer.isPlayerControlled) return new Result { Message = "Target player is not alive or found!" };
         if (Helper.GetEnemy<T>() is not T enemy) return new Result { Message = "Enemy has not yet spawned!" };
 
         enemy.ChangeEnemyOwnerServerRpc(localPlayer.actualClientId);
 
         await Helper.WaitUntil(() =>
-            enemy == null || !enemy.IsSpawned || targetPlayer == null || !targetPlayer.isPlayerControlled || targetPlayer.isPlayerDead ||
+            enemy == null || !enemy.IsSpawned || targetPlayer == null || !targetPlayer.isPlayerControlled ||
             enemy.IsOwner,
             cancellationToken
         );
@@ -28,7 +28,7 @@ sealed class FatalityCommand : ICommand {
             return new Result { Message = "Enemy is no longer available!" };
         }
 
-        if (targetPlayer == null || !targetPlayer.isPlayerControlled || targetPlayer.isPlayerDead) {
+        if (targetPlayer == null || !targetPlayer.isPlayerControlled) {
             return new Result { Message = "Target player is not alive or found!" };
         }
 
