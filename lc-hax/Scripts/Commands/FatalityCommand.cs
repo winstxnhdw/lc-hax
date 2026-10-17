@@ -3,25 +3,38 @@ using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using GameNetcodeStuff;
+using UnityEngine;
 
 [Command("fatality")]
 sealed class FatalityCommand : ICommand {
     /// <summary>
-    /// Teleports the enemy to the target player and perform the fatality.
-    /// Teleporting certain enemies outside of the factory can lag the user, so this burden is passed to the target player.
+    /// Performs the enemy's fatality on the target player.
     /// </summary>
-    /// <returns>true if the enemy was successfully teleported and the fatality was performed</returns>
-    static bool HandleEnemy<T>(PlayerControllerB targetPlayer, Action<PlayerControllerB, T> enemyHandler) where T : EnemyAI {
-        if (Helper.LocalPlayer is not PlayerControllerB localPlayer) return false;
-        if (Helper.GetEnemy<T>() is not T enemy) return false;
+    /// <returns>The result of starting the enemy's fatality.</returns>
+    static async Task<Result> HandleEnemy<T>(PlayerControllerB targetPlayer, Action<PlayerControllerB, T> enemyHandler, CancellationToken cancellationToken) where T : EnemyAI {
+        if (Helper.LocalPlayer is not PlayerControllerB localPlayer) return new Result { Message = "Local player is not available!" };
+        if (targetPlayer == null || !targetPlayer.isPlayerControlled || targetPlayer.isPlayerDead) return new Result { Message = "Target player is not alive or found!" };
+        if (Helper.GetEnemy<T>() is not T enemy) return new Result { Message = "Enemy has not yet spawned!" };
 
         enemy.ChangeEnemyOwnerServerRpc(localPlayer.actualClientId);
-        enemy.transform.position = targetPlayer.transform.position;
-        enemy.SyncPositionToClients();
-        enemyHandler(targetPlayer, enemy);
-        enemy.ChangeEnemyOwnerServerRpc(targetPlayer.actualClientId);
 
-        return true;
+        await Helper.WaitUntil(() =>
+            enemy == null || !enemy.IsSpawned || targetPlayer == null || !targetPlayer.isPlayerControlled || targetPlayer.isPlayerDead ||
+            enemy.IsOwner,
+            cancellationToken
+        );
+
+        if (enemy == null || !enemy.IsSpawned) {
+            return new Result { Message = "Enemy is no longer available!" };
+        }
+
+        if (targetPlayer == null || !targetPlayer.isPlayerControlled || targetPlayer.isPlayerDead) {
+            return new Result { Message = "Target player is not alive or found!" };
+        }
+
+        cancellationToken.ThrowIfCancellationRequested();
+        enemyHandler(targetPlayer, enemy);
+        return new Result { Success = true };
     }
 
     void GiantFatality(PlayerControllerB targetPlayer, ForestGiantAI forestGiant) => forestGiant.GrabPlayerServerRpc(targetPlayer.PlayerIndex());
@@ -30,53 +43,55 @@ sealed class FatalityCommand : ICommand {
 
     void MaskedFatality(PlayerControllerB targetPlayer, MaskedPlayerEnemy masked) => masked.KillPlayerAnimationServerRpc(targetPlayer.PlayerIndex());
 
-    void BaboonHawkFatality(PlayerControllerB targetPlayer, BaboonBirdAI baboonHawk) => baboonHawk.StabPlayerDeathAnimServerRpc(targetPlayer.PlayerIndex());
-
     void BeesFatality(PlayerControllerB targetPlayer, RedLocustBees bees) => bees.BeeKillPlayerServerRpc(targetPlayer.PlayerIndex());
 
     void EyelessDogFatality(PlayerControllerB targetPlayer, MouthDogAI eyelessDog) => eyelessDog.KillPlayerServerRpc(targetPlayer.PlayerIndex());
 
     void BrackenFatality(PlayerControllerB targetPlayer, FlowermanAI bracken) => bracken.KillPlayerAnimationServerRpc(targetPlayer.PlayerIndex());
 
+    void ManeaterFatality(PlayerControllerB targetPlayer, CaveDwellerAI maneater) => maneater.KillPlayerAnimationServerRpc(targetPlayer.PlayerIndex());
+
     void NutcrackerFatality(PlayerControllerB targetPlayer, NutcrackerEnemyAI nutcracker) {
-        nutcracker.AimGunServerRpc(targetPlayer.transform.position);
-        nutcracker.FireGunServerRpc();
+        nutcracker.SwitchTargetServerRpc(targetPlayer.PlayerIndex());
+
+        if (nutcracker.gun is ShotgunItem gun) {
+            Vector3 position = gun.shotgunRayPoint.position;
+            Vector3 direction = (targetPlayer.playerCollider.bounds.center - position).normalized;
+            gun.ShootGunServerRpc(position, direction);
+        }
+
         nutcracker.LegKickPlayerServerRpc(targetPlayer.PlayerIndex());
     }
 
-    public Task Execute(Arguments args, CancellationToken cancellationToken) {
+    public async Task Execute(Arguments args, CancellationToken cancellationToken) {
         if (args.Length < 2) {
             Chat.Print("Usage: fatality <player> <enemy>");
-            return Task.CompletedTask;
+            return;
         }
 
         if (Helper.GetActivePlayer(args[0]) is not PlayerControllerB targetPlayer) {
             Chat.Print("Target player is not alive or found!");
-            return Task.CompletedTask;
+            return;
         }
 
-        Dictionary<string, Func<bool>> enemyHandlers = new() {
-            { "Forest Giant", () => FatalityCommand.HandleEnemy<ForestGiantAI>(targetPlayer, this.GiantFatality) },
-            { "Jester",       () => FatalityCommand.HandleEnemy<JesterAI>(targetPlayer, this.JesterFatality) },
-            { "Masked",       () => FatalityCommand.HandleEnemy<MaskedPlayerEnemy>(targetPlayer, this.MaskedFatality) },
-            { "Baboon Hawk",  () => FatalityCommand.HandleEnemy<BaboonBirdAI>(targetPlayer, this.BaboonHawkFatality) },
-            { "Circuit Bees", () => FatalityCommand.HandleEnemy<RedLocustBees>(targetPlayer, this.BeesFatality) },
-            { "Eyeless Dog",  () => FatalityCommand.HandleEnemy<MouthDogAI>(targetPlayer, this.EyelessDogFatality) },
-            { "Bracken",      () => FatalityCommand.HandleEnemy<FlowermanAI>(targetPlayer, this.BrackenFatality) },
-            { "Nutcracker",   () => FatalityCommand.HandleEnemy<NutcrackerEnemyAI>(targetPlayer, this.NutcrackerFatality) }
+        Dictionary<string, Func<Task<Result>>> enemyHandlers = new() {
+            { "Forest Giant", () => FatalityCommand.HandleEnemy<ForestGiantAI>(targetPlayer, this.GiantFatality, cancellationToken) },
+            { "Jester",       () => FatalityCommand.HandleEnemy<JesterAI>(targetPlayer, this.JesterFatality, cancellationToken) },
+            { "Masked",       () => FatalityCommand.HandleEnemy<MaskedPlayerEnemy>(targetPlayer, this.MaskedFatality, cancellationToken) },
+            { "Circuit Bees", () => FatalityCommand.HandleEnemy<RedLocustBees>(targetPlayer, this.BeesFatality, cancellationToken) },
+            { "Eyeless Dog",  () => FatalityCommand.HandleEnemy<MouthDogAI>(targetPlayer, this.EyelessDogFatality, cancellationToken) },
+            { "Bracken",      () => FatalityCommand.HandleEnemy<FlowermanAI>(targetPlayer, this.BrackenFatality, cancellationToken) },
+            { "Maneater",     () => FatalityCommand.HandleEnemy<CaveDwellerAI>(targetPlayer, this.ManeaterFatality, cancellationToken) },
+            { "Nutcracker",   () => FatalityCommand.HandleEnemy<NutcrackerEnemyAI>(targetPlayer, this.NutcrackerFatality, cancellationToken) }
         };
 
         if (!string.Join(" ", args[1..]).ToTitleCase().FuzzyMatch(enemyHandlers.Keys, out string key)) {
             Chat.Print("Failed to find enemy!");
-            return Task.CompletedTask;
+            return;
         }
 
+        Result result = await enemyHandlers[key]();
         Chat.Print($"Performing {key} fatality on {targetPlayer.playerUsername}..");
-
-        if (!enemyHandlers[key]()) {
-            Chat.Print("Enemy has not yet spawned!");
-        }
-
-        return Task.CompletedTask;
+        Chat.Print(result.Message);
     }
 }
