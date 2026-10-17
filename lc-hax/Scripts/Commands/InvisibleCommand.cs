@@ -1,19 +1,22 @@
 using System.Threading;
 using System.Threading.Tasks;
-using UnityEngine;
+using GameNetcodeStuff;
 
 [Command("invis")]
 sealed class InvisibleCommand : ICommand {
-    static void ImmediatelyUpdatePlayerPosition() =>
-        Helper.LocalPlayer?.UpdatePlayerPositionRpc(Vector3.zero, true, true, false, true);
-
     public Task Execute(Arguments args, CancellationToken cancellationToken) {
+        if (Helper.LocalPlayer is not PlayerControllerB player) return Task.CompletedTask;
+
         Setting.EnableInvisible = !Setting.EnableInvisible;
         Chat.Print($"Invisible: {(Setting.EnableInvisible ? "enabled" : "disabled")}");
 
-        if (Setting.EnableInvisible) {
-            InvisibleCommand.ImmediatelyUpdatePlayerPosition();
-        }
+        player.UpdatePlayerPositionRpc(
+            player.thisPlayerBody.localPosition,
+            player.isInElevator,
+            player.isInHangarShipRoom,
+            player.isExhausted,
+            player.thisController.isGrounded
+        );
 
         return Task.CompletedTask;
     }

@@ -115,6 +115,7 @@ The complete feature set includes the following.
 | Kill all players               | `/kill --all`                                    |
 | Kill all enemies               | `/kill --enemy`                                  |
 | Kill player with animation     | `/fatality <player> <enemy>`                     |
+| Burst a cadaver bloom from a player | `/bloom <target>`                            |
 | Poison a player                | `/poison <player> <damage> <duration> <delay=1>` |
 | Poison all players             | `/poison --all <damage> <duration> <delay=1>`    |
 | Spoof a server message         | `/say <player> <message>`                        |
@@ -249,11 +250,11 @@ The `fatality` command allows you to kill a player with a custom animation. The 
 - Forest Giant
 - Jester
 - Masked
-- Baboon Hawk
-- Circuit Bee
+- Circuit Bees
 - Eyeless Dog
 - Bracken
 - Nutcracker
+- Maneater
 
 ### Build
 
