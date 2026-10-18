@@ -25,7 +25,7 @@ sealed class GameListener : MonoBehaviour {
 
     void ShipListener() {
         if (!this.InGame) return;
-        if (Helper.StartOfRound is not StartOfRound startOfRound) return;
+        if (Helper.StartOfRound is not { } startOfRound) return;
         if (startOfRound.inShipPhase) {
             this.HasShipBegunDescent = false;
             this.HasShipLeft = false;

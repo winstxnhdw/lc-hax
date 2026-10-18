@@ -45,7 +45,7 @@ sealed class ESPMod : MonoBehaviour {
         if (!this.Enabled) return;
         if (!this.InGame) return;
         if (Event.current.type != EventType.Repaint) return;
-        if (Helper.CurrentCamera is not Camera camera) return;
+        if (Helper.CurrentCamera is not { } camera) return;
 
         this.ScreenBounds = new Rect(0, 0, Screen.width, Screen.height);
         _ = Helper.BeginLabelRepaint();
@@ -57,7 +57,7 @@ sealed class ESPMod : MonoBehaviour {
 
     void RenderAlways(Camera camera) {
         foreach (RendererPair<PlayerControllerB, SkinnedMeshRenderer> rendererPair in this.PlayerRenderers) {
-            if (rendererPair.GameObject is not PlayerControllerB player) continue;
+            if (rendererPair.GameObject is not { } player) continue;
             if (!player.isPlayerControlled) continue;
 
             this.DynamicLabel.Text = $"#{player.playerClientId} {player.playerUsername}";
@@ -119,7 +119,7 @@ sealed class ESPMod : MonoBehaviour {
                 ? enemy.meshRenderers.First()
                 : enemy.skinnedMeshRenderers.First();
 
-            if (nullableRenderer.Unfake() is not Renderer renderer) {
+            if (nullableRenderer.Unfake() is not { } renderer) {
                 continue;
             }
 

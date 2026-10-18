@@ -65,7 +65,7 @@ sealed class SpawnCommand : ICommand {
             return Task.CompletedTask;
         }
 
-        if (Helper.GetActivePlayer(args[1]) is not PlayerControllerB targetPlayer) {
+        if (Helper.GetActivePlayer(args[1]) is not { } targetPlayer) {
             Chat.Print("Player is not alive or found!");
             return Task.CompletedTask;
         }

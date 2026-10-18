@@ -53,7 +53,7 @@ sealed class HoardingBugController(HoarderBugAI enemy) : IEnemyController {
     void IEnemyController.OnSecondaryPressed() {
         if (this.Enemy.sendingGrabOrDropRPC) return;
         if (this.Enemy.heldItem is null) {
-            if ((Helper.GetClosestPlayer(this.Enemy) ?? Helper.LocalPlayer) is not PlayerControllerB target) return;
+            if ((Helper.GetClosestPlayer(this.Enemy) ?? Helper.LocalPlayer) is not { } target) return;
 
             this.Enemy.watchingPlayer = target;
             this.Enemy.angryAtPlayer = target;

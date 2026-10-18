@@ -63,7 +63,7 @@ sealed class KidnapperFoxController(BushWolfEnemy enemy) : IEnemyController {
             return;
         }
 
-        if (Helper.GetClosestPlayer(this.Enemy, maxDistance: this.Enemy.attackDistance) is not PlayerControllerB target) {
+        if (Helper.GetClosestPlayer(this.Enemy, maxDistance: this.Enemy.attackDistance) is not { } target) {
             return;
         }
 

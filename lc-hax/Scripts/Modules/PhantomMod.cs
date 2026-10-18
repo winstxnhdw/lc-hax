@@ -60,7 +60,7 @@ sealed class PhantomMod : MonoBehaviour {
 
     void LookAtPlayer(int indexChange) {
         if (!Setting.EnablePhantom) return;
-        if (this.Player.Unfake() is not PlayerControllerB player) return;
+        if (this.Player.Unfake() is not { } player) return;
         if (player.IsInputPaused()) return;
         if (this.Extension is { ControlsCamera: true }) return;
         if (this.PhantomCamera is null) return;
@@ -71,7 +71,7 @@ sealed class PhantomMod : MonoBehaviour {
     }
 
     void TogglePhantom(bool teleportOnExit) {
-        if (Helper.LocalPlayer is not PlayerControllerB player) return;
+        if (Helper.LocalPlayer is not { } player) return;
         if (player.IsInputPaused()) return;
         if (!Setting.EnablePhantom) {
             this.EnablePhantom(player);
@@ -87,8 +87,8 @@ sealed class PhantomMod : MonoBehaviour {
     }
 
     void EnablePhantom(PlayerControllerB player) {
-        if (Helper.StartOfRound is not StartOfRound round) return;
-        if (round.activeCamera is not Camera source) return;
+        if (Helper.StartOfRound is not { } round) return;
+        if (round.activeCamera is not { } source) return;
         if (this.PhantomCamera is null) return;
 
         this.Player = player;
@@ -111,7 +111,7 @@ sealed class PhantomMod : MonoBehaviour {
     internal void DisablePhantom() {
         if (!Setting.EnablePhantom) return;
         if (this.PhantomCamera is null) return;
-        if (Helper.StartOfRound is not StartOfRound round) return;
+        if (Helper.StartOfRound is not { } round) return;
 
         PlayerControllerB? player = this.Player.Unfake();
         Setting.EnablePhantom = false;

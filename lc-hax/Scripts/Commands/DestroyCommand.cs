@@ -56,7 +56,7 @@ sealed class DestroyCommand : ICommand {
     }
 
     async Task ICommand.Execute(Arguments args, CancellationToken cancellationToken) {
-        if (Helper.LocalPlayer is not PlayerControllerB player) return;
+        if (Helper.LocalPlayer is not { } player) return;
         if (args[0] is "--all") {
             await this.DestroyAllItems(player, cancellationToken);
             player.carryWeight = 1.0f;

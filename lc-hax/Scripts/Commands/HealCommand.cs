@@ -5,7 +5,7 @@ using GameNetcodeStuff;
 [Command("heal")]
 sealed class HealCommand : ICommand, IStun {
     void RespawnLocalPlayer(PlayerControllerB localPlayer, StartOfRound startOfRound, HUDManager hudManager) {
-        if (Helper.SoundManager is not SoundManager soundManager) return;
+        if (Helper.SoundManager is not { } soundManager) return;
 
         soundManager.earsRingingTimer = 0.0f;
         soundManager.playerVoicePitchTargets[localPlayer.playerClientId] = 1.0f;
@@ -90,7 +90,7 @@ sealed class HealCommand : ICommand, IStun {
     }
 
     Task ICommand.Execute(Arguments args, CancellationToken cancellationToken) {
-        if (Helper.HUDManager is not HUDManager hudManager) return Task.CompletedTask;
+        if (Helper.HUDManager is not { } hudManager) return Task.CompletedTask;
 
         PlayerControllerB? healedPlayer = args.Length switch {
             0 => this.HealLocalPlayer(hudManager),

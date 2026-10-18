@@ -36,8 +36,8 @@ sealed class InputListener : MonoBehaviour {
     internal static event Action<bool>? OnRightButtonHold;
 
     void Update() {
-        if (Keyboard.current is not Keyboard keyboard) return;
-        if (Mouse.current is not Mouse mouse) return;
+        if (Keyboard.current is not { } keyboard) return;
+        if (Mouse.current is not { } mouse) return;
 
         InputListener.OnShiftButtonHold?.Invoke(keyboard[Key.LeftShift].isPressed);
         InputListener.OnFButtonHold?.Invoke(keyboard[Key.F].isPressed);

@@ -70,13 +70,13 @@ sealed class BombardCommand : ICommand, IJetpack {
     }
 
     async Task ICommand.Execute(Arguments args, CancellationToken cancellationToken) {
-        if (Helper.LocalPlayer is not PlayerControllerB localPlayer) return;
+        if (Helper.LocalPlayer is not { } localPlayer) return;
         if (args.Length is 0) {
             Chat.Print("Usage: bombard <player>");
             return;
         }
 
-        if (Helper.GetActivePlayer(args[0]) is not PlayerControllerB targetPlayer) {
+        if (Helper.GetActivePlayer(args[0]) is not { } targetPlayer) {
             Chat.Print("Target player is not alive or found!");
             return;
         }

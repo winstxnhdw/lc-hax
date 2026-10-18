@@ -228,7 +228,7 @@ static class EnemyPromptMixin {
         PlayerControllerB targetPlayer,
         bool willTeleportEnemies = false
     ) {
-        if (Helper.LocalPlayer is not PlayerControllerB localPlayer) return [];
+        if (Helper.LocalPlayer is not { } localPlayer) return [];
 
         List<string> enemyNames = [];
 

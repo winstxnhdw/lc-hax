@@ -11,7 +11,7 @@ sealed class HateCommand : IEnemyPrompter, ICommand {
             return Task.CompletedTask;
         }
 
-        if (Helper.GetActivePlayer(args[0]) is not PlayerControllerB targetPlayer) {
+        if (Helper.GetActivePlayer(args[0]) is not { } targetPlayer) {
             Chat.Print("Target player is not alive or found!");
             return Task.CompletedTask;
         }

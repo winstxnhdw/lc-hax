@@ -55,7 +55,7 @@ sealed class ButlerController(ButlerEnemyAI enemy) : IEnemyController {
         this.KnifeDrawn = true;
         this.ApplyManualState();
 
-        if (Helper.GetClosestPlayer(this.Enemy, maxDistance: ButlerController.StabRange) is not PlayerControllerB target) {
+        if (Helper.GetClosestPlayer(this.Enemy, maxDistance: ButlerController.StabRange) is not { } target) {
             return;
         }
 

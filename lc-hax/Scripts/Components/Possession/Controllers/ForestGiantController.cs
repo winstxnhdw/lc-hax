@@ -30,7 +30,7 @@ sealed class ForestGiantController(ForestGiantAI enemy) : IEnemyController {
     void IEnemyController.OnSecondaryHeld() {
         if (this.IsUsingSecondarySkill) return;
         if (this.Enemy.inEatingPlayerAnimation) return;
-        if ((Helper.GetClosestPlayer(this.Enemy) ?? Helper.LocalPlayer) is not PlayerControllerB target) return;
+        if ((Helper.GetClosestPlayer(this.Enemy) ?? Helper.LocalPlayer) is not { } target) return;
 
         this.IsUsingSecondarySkill = true;
         this.Enemy.FindAndTargetNewPlayerOnLocalClient(target);

@@ -42,7 +42,7 @@ sealed class TeleportCommand : ITeleporter, ICommand {
     }
 
     Result TeleportPlayerToPosition(string[] args) {
-        if (Helper.GetPlayer(args[0]) is not PlayerControllerB player) {
+        if (Helper.GetPlayer(args[0]) is not { } player) {
             return new Result { Message = "Player is not found!" };
         }
 

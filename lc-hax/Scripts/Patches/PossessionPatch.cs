@@ -34,7 +34,7 @@ sealed class PossessionPatch {
 
     [HarmonyPatch(typeof(EnemyAI), nameof(EnemyAI.OnCollideWithPlayer))]
     static void Postfix(EnemyAI __instance, Collider other) {
-        if (PossessionPatch.GetPossession(__instance) is not Possession possession) return;
+        if (PossessionPatch.GetPossession(__instance) is not { } possession) return;
         possession.OnPlayerCollision(other);
     }
 }

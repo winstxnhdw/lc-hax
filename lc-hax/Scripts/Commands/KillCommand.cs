@@ -12,7 +12,7 @@ sealed class KillCommand : ICommand {
     }
 
     Result KillTargetPlayer(string[] args) {
-        if (Helper.GetActivePlayer(args[0]) is not PlayerControllerB targetPlayer) {
+        if (Helper.GetActivePlayer(args[0]) is not { } targetPlayer) {
             return new Result { Message = "Target player is not alive or found!" };
         }
 

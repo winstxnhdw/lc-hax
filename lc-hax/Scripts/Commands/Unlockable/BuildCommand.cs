@@ -9,9 +9,9 @@ sealed class BuildCommand : ICommand {
     static Dictionary<string, int>? Unlockables { get; set; }
 
     Task ICommand.Execute(Arguments args, CancellationToken cancellationToken) {
-        if (Helper.StartOfRound is not StartOfRound startOfRound) return Task.CompletedTask;
-        if (Helper.CurrentCamera is not Camera camera) return Task.CompletedTask;
-        if (args[0] is not string unlockableName) {
+        if (Helper.StartOfRound is not { } startOfRound) return Task.CompletedTask;
+        if (Helper.CurrentCamera is not { } camera) return Task.CompletedTask;
+        if (args[0] is not { } unlockableName) {
             Chat.Print("Usage: build <unlockable>");
             return Task.CompletedTask;
         }
@@ -38,7 +38,7 @@ sealed class BuildCommand : ICommand {
 
         Chat.Print($"Attempting to build a {string.Join(' ', unlockable.ToString().Split('_')).ToTitleCase()}!");
 
-        if (Helper.GetUnlockable(unlockable) is not PlaceableShipObject shipObject) {
+        if (Helper.GetUnlockable(unlockable) is not { } shipObject) {
             Chat.Print("Unlockable is not found or placeable!");
             return Task.CompletedTask;
         }

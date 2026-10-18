@@ -47,7 +47,7 @@ static class Chat {
 
     internal static void Print(string name, string? message, bool isSystem = false) {
         if (string.IsNullOrWhiteSpace(message)) return;
-        if (Helper.HUDManager is not HUDManager hudManager) return;
+        if (Helper.HUDManager is not { } hudManager) return;
 
         hudManager.AddChatMessage(message, name);
 

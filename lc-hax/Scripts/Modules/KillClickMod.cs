@@ -8,8 +8,8 @@ sealed class KillClickMod : MonoBehaviour {
 
     void Kill() {
         if (!Setting.EnableKillOnLeftClick) return;
-        if (Helper.CurrentCamera is not Camera camera) return;
-        if (Helper.LocalPlayer is not PlayerControllerB localPlayer) return;
+        if (Helper.CurrentCamera is not { } camera) return;
+        if (Helper.LocalPlayer is not { } localPlayer) return;
 
         foreach (RaycastHit hit in camera.transform.SphereCastForward()) {
             if (!hit.collider.TryGetComponent(out EnemyAICollisionDetect enemy)) continue;

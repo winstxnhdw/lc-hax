@@ -102,7 +102,7 @@ sealed class GrabCommand : ICommand {
     }
 
     async Task ICommand.Execute(Arguments args, CancellationToken cancellationToken) {
-        if (Helper.LocalPlayer is not PlayerControllerB localPlayer) return;
+        if (Helper.LocalPlayer is not { } localPlayer) return;
 
         Vector3 currentPlayerPosition = localPlayer.transform.position;
 

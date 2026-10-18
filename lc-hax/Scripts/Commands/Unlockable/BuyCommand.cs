@@ -39,8 +39,8 @@ sealed class BuyCommand : ICommand {
     }
 
     Task ICommand.Execute(Arguments args, CancellationToken cancellationToken) {
-        if (Helper.Terminal is not Terminal terminal) return Task.CompletedTask;
-        if (args[0] is not string item) {
+        if (Helper.Terminal is not { } terminal) return Task.CompletedTask;
+        if (args[0] is not { } item) {
             Chat.Print("Usage: buy <item> <quantity?>");
             return Task.CompletedTask;
         }

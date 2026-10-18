@@ -63,7 +63,7 @@ sealed class ManeaterController(CaveDwellerAI enemy) : IEnemyController {
         if (this.Enemy.inSpecialAnimation) return;
         if (this.Enemy.inKillAnimation) return;
         if (this.AttackRequested) return;
-        if (Helper.GetClosestPlayer(this.Enemy) is not PlayerControllerB target) return;
+        if (Helper.GetClosestPlayer(this.Enemy) is not { } target) return;
 
         this.AttackRequested = true;
         this.Enemy.SwitchToBehaviourState(3);

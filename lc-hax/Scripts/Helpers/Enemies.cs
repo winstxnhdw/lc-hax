@@ -57,7 +57,7 @@ static partial class Helper {
     }
 
     internal static void Kill(EnemyAI enemy) {
-        if (Helper.LocalPlayer is not PlayerControllerB localPlayer) return;
+        if (Helper.LocalPlayer is not { } localPlayer) return;
         enemy.Kill(localPlayer.actualClientId);
     }
 

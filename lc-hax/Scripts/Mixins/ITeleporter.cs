@@ -28,7 +28,7 @@ internal static class ITeleporterMixin {
     ) => () => {
         HaxObjects.Instance?.ShipTeleporters?.Renew();
 
-        if (self.GetTeleporter() is not ShipTeleporter teleporter) {
+        if (self.GetTeleporter() is not { } teleporter) {
             Chat.Print("ShipTeleporter not found!");
             return;
         }

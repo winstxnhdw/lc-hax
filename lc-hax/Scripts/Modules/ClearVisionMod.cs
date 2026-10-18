@@ -23,7 +23,7 @@ sealed class ClearVisionMod : MonoBehaviour {
     void DecreaseLightIntensity() => this.LightIntensity = Math.Clamp(this.LightIntensity - 1.0f, 0.0f, 10.0f);
 
     void Update() {
-        if (Helper.LocalPlayer is not PlayerControllerB localPlayer) return;
+        if (Helper.LocalPlayer is not { } localPlayer) return;
 
         PlayerControllerB viewedPlayer = localPlayer.isPlayerDead
             ? localPlayer.spectatedPlayerScript ?? localPlayer
@@ -33,12 +33,12 @@ sealed class ClearVisionMod : MonoBehaviour {
     }
 
     void LateUpdate() {
-        if (Helper.StartOfRound is not StartOfRound startOfRound) return;
-        if (Helper.CurrentCamera is not Camera camera) return;
-        if (Helper.TimeOfDay is not TimeOfDay timeOfDay) return;
-        if (timeOfDay.sunAnimator.Unfake() is not Animator sunAnimator) return;
-        if (timeOfDay.sunIndirect.Unfake() is not Light sunIndirect) return;
-        if (timeOfDay.sunDirect.Unfake() is not Light sunDirect) return;
+        if (Helper.StartOfRound is not { } startOfRound) return;
+        if (Helper.CurrentCamera is not { } camera) return;
+        if (Helper.TimeOfDay is not { } timeOfDay) return;
+        if (timeOfDay.sunAnimator.Unfake() is not { } sunAnimator) return;
+        if (timeOfDay.sunIndirect.Unfake() is not { } sunIndirect) return;
+        if (timeOfDay.sunDirect.Unfake() is not { } sunDirect) return;
         if (!sunIndirect.TryGetComponent(out HDAdditionalLightData lightData)) return;
         if (startOfRound.blackSkyVolume is Volume blackSkyVolume) {
             Destroy(blackSkyVolume);

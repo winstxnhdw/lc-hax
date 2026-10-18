@@ -29,7 +29,7 @@ sealed class StunClickMod : MonoBehaviour {
 
     void Stun() {
         if (!Setting.EnableStunOnLeftClick) return;
-        if (Helper.CurrentCamera is not Camera camera) return;
+        if (Helper.CurrentCamera is not { } camera) return;
         if (this.IsHoldingADefensiveWeapon()) return;
 
         int colliderCount = Physics.OverlapSphereNonAlloc(camera.transform.position, 5.0f, this.Colliders);

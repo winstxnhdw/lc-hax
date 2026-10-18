@@ -18,7 +18,7 @@ sealed class HornCommand : ICommand {
         Helper.BuyUnlockable(Unlockable.LOUD_HORN);
         Helper.ReturnUnlockable(Unlockable.LOUD_HORN);
 
-        if (await Helper.FindObject<ShipAlarmCord>(cancellationToken) is not ShipAlarmCord shipAlarmCord) {
+        if (await Helper.FindObject<ShipAlarmCord>(cancellationToken) is not { } shipAlarmCord) {
             return;
         }
 

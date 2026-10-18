@@ -27,7 +27,7 @@ sealed class NoiseCommand : ICommand {
             return;
         }
 
-        if (Helper.GetActivePlayer(args[0]) is not PlayerControllerB player) {
+        if (Helper.GetActivePlayer(args[0]) is not { } player) {
             Chat.Print("Target player is not alive or found!");
             return;
         }

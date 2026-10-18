@@ -5,7 +5,7 @@ using UnityEngine;
 [PrivilegedCommand("land")]
 sealed class LandCommand : ICommand {
     async Task ICommand.Execute(Arguments args, CancellationToken cancellationToken) {
-        if (Helper.StartOfRound is not StartOfRound startOfRound) return;
+        if (Helper.StartOfRound is not { } startOfRound) return;
         if (startOfRound.travellingToNewLevel) {
             Chat.Print("You cannot land while travelling to a new level!");
             return;

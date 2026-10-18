@@ -60,7 +60,7 @@ sealed class PossessionSession : IDisposable {
             return;
         }
 
-        if (Helper.LocalPlayer is not PlayerControllerB player) {
+        if (Helper.LocalPlayer is not { } player) {
             this.End(PossessionEndReason.Disconnected);
             return;
         }

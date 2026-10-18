@@ -11,7 +11,7 @@ sealed class SellCommand : ICommand {
         grabbableObject.itemProperties is { isScrap: true, isDefensiveWeapon: false };
 
     void SellObject(PlayerControllerB player, GrabbableObject item, float currentWeight) {
-        if (HaxObjects.Instance?.DepositItemsDesk?.Object.Unfake() is not DepositItemsDesk depositItemsDesk) return;
+        if (HaxObjects.Instance?.DepositItemsDesk?.Object.Unfake() is not { } depositItemsDesk) return;
 
         player.currentlyHeldObjectServer = item;
         depositItemsDesk.PlaceItemOnCounter(player);
@@ -80,7 +80,7 @@ sealed class SellCommand : ICommand {
     }
 
     Task ICommand.Execute(Arguments args, CancellationToken cancellationToken) {
-        if (Helper.LocalPlayer is not PlayerControllerB player) return Task.CompletedTask;
+        if (Helper.LocalPlayer is not { } player) return Task.CompletedTask;
         if (Helper.RoundManager?.currentLevel is not { levelID: 3 }) {
             Chat.Print("You must be at the company to use this command!");
             return Task.CompletedTask;

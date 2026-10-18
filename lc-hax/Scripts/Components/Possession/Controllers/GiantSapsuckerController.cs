@@ -87,8 +87,8 @@ sealed class GiantSapsuckerController(GiantKiwiAI enemy) : IEnemyController {
     void IEnemyController.OnSecondaryPressed() {
         if (!this.CanAct) return;
         if (this.Enemy.carryingEgg) return;
-        if (Helper.LocalPlayer is not PlayerControllerB sender) return;
-        if (Helper.GetClosestPlayer(this.Enemy) is not PlayerControllerB target) {
+        if (Helper.LocalPlayer is not { } sender) return;
+        if (Helper.GetClosestPlayer(this.Enemy) is not { } target) {
             this.StopPecking();
             return;
         }

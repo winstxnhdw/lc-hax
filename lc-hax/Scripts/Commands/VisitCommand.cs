@@ -8,9 +8,9 @@ sealed class VisitCommand : ICommand {
     static Dictionary<string, int>? Levels { get; set; }
 
     Task ICommand.Execute(Arguments args, CancellationToken cancellationToken) {
-        if (Helper.Terminal is not Terminal terminal) return Task.CompletedTask;
-        if (Helper.StartOfRound is not StartOfRound startOfRound) return Task.CompletedTask;
-        if (args[0] is not string moon) {
+        if (Helper.Terminal is not { } terminal) return Task.CompletedTask;
+        if (Helper.StartOfRound is not { } startOfRound) return Task.CompletedTask;
+        if (args[0] is not { } moon) {
             Chat.Print("Usage: visit <moon>");
             return Task.CompletedTask;
         }

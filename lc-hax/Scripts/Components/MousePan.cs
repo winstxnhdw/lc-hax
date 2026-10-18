@@ -35,7 +35,7 @@ sealed class MousePan : MonoBehaviour {
         if (this.IsPaused) return;
         if (Helper.LocalPlayer is { isTypingChat: true }) return;
         if (Helper.LocalPlayer?.quickMenuManager is { isMenuOpen: true }) return;
-        if (Mouse.current is not Mouse mouse) return;
+        if (Mouse.current is not { } mouse) return;
 
         this.Yaw = Mathf.Repeat(this.Yaw + (mouse.delta.x.ReadValue() * this.Sensitivity), 360.0f);
         this.Pitch -= mouse.delta.y.ReadValue() * this.Sensitivity * (Setting.InvertYAxis ? -1 : 1);

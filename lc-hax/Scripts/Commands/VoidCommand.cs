@@ -10,7 +10,7 @@ sealed class VoidCommand : ITeleporter, ICommand {
             return Task.CompletedTask;
         }
 
-        if (Helper.GetActivePlayer(args[0]) is not PlayerControllerB player) {
+        if (Helper.GetActivePlayer(args[0]) is not { } player) {
             Chat.Print("Target player is not found!");
             return Task.CompletedTask;
         }

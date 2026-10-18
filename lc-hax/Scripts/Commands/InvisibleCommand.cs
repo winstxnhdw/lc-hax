@@ -5,7 +5,7 @@ using GameNetcodeStuff;
 [Command("invis")]
 sealed class InvisibleCommand : ICommand {
     Task ICommand.Execute(Arguments args, CancellationToken cancellationToken) {
-        if (Helper.LocalPlayer is not PlayerControllerB player) return Task.CompletedTask;
+        if (Helper.LocalPlayer is not { } player) return Task.CompletedTask;
 
         Setting.EnableInvisible = !Setting.EnableInvisible;
         Chat.Print($"Invisible: {(Setting.EnableInvisible ? "enabled" : "disabled")}");

@@ -8,13 +8,13 @@ sealed class GarageCommand : ICommand {
     );
 
     Task ICommand.Execute(Arguments args, CancellationToken cancellationToken) {
-        if (Helper.RoundManager is not RoundManager roundManager) return Task.CompletedTask;
+        if (Helper.RoundManager is not { } roundManager) return Task.CompletedTask;
         if (roundManager.currentLevel.levelID is not 0) {
             Chat.Print("You must be in Experimentation to use this command!");
             return Task.CompletedTask;
         }
 
-        if (GarageCommand.GarageTrigger is not InteractTrigger garageTrigger) {
+        if (GarageCommand.GarageTrigger is not { } garageTrigger) {
             Chat.Print("Garage trigger is not found!");
             return Task.CompletedTask;
         }

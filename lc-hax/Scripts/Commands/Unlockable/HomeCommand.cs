@@ -12,7 +12,7 @@ sealed class HomeCommand : ITeleporter, ICommand {
     Action TeleportPlayerToBaseLater(PlayerControllerB targetPlayer) => () => {
         HaxObjects.Instance?.ShipTeleporters?.Renew();
 
-        if (HomeCommand.Teleporter is not ShipTeleporter teleporter) {
+        if (HomeCommand.Teleporter is not { } teleporter) {
             Chat.Print("Ship Teleporter is not found!");
             return;
         }
@@ -24,14 +24,14 @@ sealed class HomeCommand : ITeleporter, ICommand {
     };
 
     Task ICommand.Execute(Arguments args, CancellationToken cancellationToken) {
-        if (Helper.StartOfRound is not StartOfRound startOfRound) return Task.CompletedTask;
+        if (Helper.StartOfRound is not { } startOfRound) return Task.CompletedTask;
         if (args.Length is 0) {
             startOfRound.ForcePlayerIntoShip();
             startOfRound.localPlayerController.isInsideFactory = false;
             return Task.CompletedTask;
         }
 
-        if (Helper.GetPlayer(args[0]) is not PlayerControllerB targetPlayer) {
+        if (Helper.GetPlayer(args[0]) is not { } targetPlayer) {
             Chat.Print("Target player is not found!");
             return Task.CompletedTask;
         }

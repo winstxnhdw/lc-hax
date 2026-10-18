@@ -38,7 +38,7 @@ internal class CommandCodeFix : CodeFixProvider {
     ) {
         SyntaxNode? root = await document.GetSyntaxRootAsync(cancellationToken).ConfigureAwait(false);
 
-        if (root?.FindToken(diagnosticSpan.Start).Parent?.AncestorsAndSelf().OfType<ClassDeclarationSyntax>().First() is not ClassDeclarationSyntax classDeclaration) {
+        if (root?.FindToken(diagnosticSpan.Start).Parent?.AncestorsAndSelf().OfType<ClassDeclarationSyntax>().First() is not { } classDeclaration) {
             return document;
         }
 

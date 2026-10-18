@@ -49,7 +49,7 @@ sealed class TulipSnakeController(FlowerSnakeEnemy enemy) : IEnemyController {
 
     void ReleasePlayer() {
         if (this.Enemy.clingingToPlayer is null) return;
-        if (Helper.LocalPlayer is not PlayerControllerB sender) return;
+        if (Helper.LocalPlayer is not { } sender) return;
 
         this.Enemy.StopClingingOnLocalClient(true);
         this.Enemy.StopClingingServerRpc(sender.PlayerIndex());

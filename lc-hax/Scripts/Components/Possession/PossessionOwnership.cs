@@ -36,7 +36,7 @@ sealed class PossessionOwnership {
     }
 
     internal void Restore() {
-        if (Helper.StartOfRound is not StartOfRound round) return;
+        if (Helper.StartOfRound is not { } round) return;
         if (this.EnemyReference.Unfake() is not { IsSpawned: true } enemy) return;
         if (!enemy.IsOwner) return;
 

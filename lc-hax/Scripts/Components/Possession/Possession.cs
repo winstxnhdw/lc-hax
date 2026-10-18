@@ -34,7 +34,7 @@ sealed class Possession : IPhantomExtension {
     internal void Possess(EnemyAI enemy) {
         if (!enemy.IsSpawned) return;
         if (enemy.isEnemyDead) return;
-        if (Helper.LocalPlayer is not PlayerControllerB player) return;
+        if (Helper.LocalPlayer is not { } player) return;
         if (enemy is CadaverGrowthAI or DressGirlAI) return;
         if (enemy is CadaverBloomAI { hasBurst: false }) return;
 

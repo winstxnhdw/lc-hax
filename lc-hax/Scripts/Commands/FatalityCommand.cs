@@ -17,7 +17,7 @@ sealed class FatalityCommand : ICommand {
         Action<PlayerControllerB, T> enemyHandler,
         CancellationToken cancellationToken
     ) where T : EnemyAI {
-        if (Helper.GetEnemy<T>() is not T enemy) return new Result { Message = "Enemy has not yet spawned!" };
+        if (Helper.GetEnemy<T>() is not { } enemy) return new Result { Message = "Enemy has not yet spawned!" };
 
         enemy.ChangeEnemyOwnerServerRpc(localPlayer.actualClientId);
 
@@ -72,12 +72,12 @@ sealed class FatalityCommand : ICommand {
             return;
         }
 
-        if (Helper.GetActivePlayer(args[0]) is not PlayerControllerB targetPlayer) {
+        if (Helper.GetActivePlayer(args[0]) is not { } targetPlayer) {
             Chat.Print("Target player is not alive or found!");
             return;
         }
 
-        if (Helper.LocalPlayer is not PlayerControllerB localPlayer) {
+        if (Helper.LocalPlayer is not { } localPlayer) {
             Chat.Print("Local player is not available!");
             return;
         }

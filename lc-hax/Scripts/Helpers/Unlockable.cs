@@ -2,7 +2,7 @@ static partial class Helper {
     internal static bool Is(this Unlockable unlockable, int unlockableId) => unlockableId == unchecked((int)unlockable);
 
     internal static void BuyUnlockable(Unlockable unlockable) {
-        if (Helper.Terminal is not Terminal terminal) return;
+        if (Helper.Terminal is not { } terminal) return;
 
         Helper.StartOfRound?.BuyShipUnlockableServerRpc(
             unchecked((int)unlockable),

@@ -7,7 +7,7 @@ sealed class SaneMod : MonoBehaviour {
         WaitForEndOfFrame waitForEndOfFrame = new();
 
         while (true) {
-            if (Helper.LocalPlayer is not PlayerControllerB localPlayer) {
+            if (Helper.LocalPlayer is not { } localPlayer) {
                 yield return waitForEndOfFrame;
                 continue;
             }

@@ -72,7 +72,7 @@ sealed class ButlerBeesController(ButlerBeesEnemyAI enemy) : IEnemyController {
     void IEnemyController.ReleaseSecondarySkill() { }
 
     void IEnemyController.OnMovement(bool isMoving, bool isSprinting) {
-        if (this.Enemy.buzzing.Unfake() is not AudioSource buzzing) return;
+        if (this.Enemy.buzzing.Unfake() is not { } buzzing) return;
 
         buzzing.pitch = Mathf.Lerp(buzzing.pitch, isSprinting ? 1.3f : 1.0f, Time.deltaTime * 5.0f);
     }

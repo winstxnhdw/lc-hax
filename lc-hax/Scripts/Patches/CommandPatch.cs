@@ -17,7 +17,7 @@ sealed class EnableChatPatch {
 [HarmonyPatch(typeof(HUDManager), nameof(HUDManager.SubmitChat_performed))]
 sealed class SubmitChatPatch {
     static bool Prefix() {
-        if (Helper.HUDManager is not HUDManager hudManager) return true;
+        if (Helper.HUDManager is not { } hudManager) return true;
         if (!new[] { '!', State.CommandPrefix }.AsValueEnumerable().Any(hudManager.chatTextField.text.StartsWith)) return true;
 
         Chat.ExecuteCommand(hudManager.chatTextField.text.TrimEnd());

@@ -80,7 +80,7 @@ sealed class SandSpiderController(SandSpiderAI enemy) : IEnemyController {
     void IEnemyController.OnPrimaryPressed() => this.PlaceWebTrap(this.Enemy);
 
     void PlaceWebTrap(SandSpiderAI enemy) {
-        if (Helper.StartOfRound is not StartOfRound startOfRound) return;
+        if (Helper.StartOfRound is not { } startOfRound) return;
 
         Vector3 randomDirection = Random.onUnitSphere;
         randomDirection.y = Mathf.Min(0.0f, randomDirection.y * Random.Range(0.5f, 1.0f));

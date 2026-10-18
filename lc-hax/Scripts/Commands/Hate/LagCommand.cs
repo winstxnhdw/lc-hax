@@ -33,18 +33,18 @@ sealed class LagCommand : ICommand {
     }
 
     Task ICommand.Execute(Arguments args, CancellationToken cancellationToken) {
-        if (Helper.LocalPlayer is not PlayerControllerB localPlayer) return Task.CompletedTask;
+        if (Helper.LocalPlayer is not { } localPlayer) return Task.CompletedTask;
         if (args.Length is 0) {
             Chat.Print("Usage: lag <player>");
             return Task.CompletedTask;
         }
 
-        if (Helper.GetEnemy<FlowermanAI>() is not FlowermanAI bracken) {
+        if (Helper.GetEnemy<FlowermanAI>() is not { } bracken) {
             Chat.Print("A Bracken must have spawned to use this command!");
             return Task.CompletedTask;
         }
 
-        if (Helper.GetPlayer(args[0]) is not PlayerControllerB targetPlayer) {
+        if (Helper.GetPlayer(args[0]) is not { } targetPlayer) {
             Chat.Print("Target player is not found!");
             return Task.CompletedTask;
         }

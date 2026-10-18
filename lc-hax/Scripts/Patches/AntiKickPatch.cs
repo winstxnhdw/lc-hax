@@ -8,7 +8,7 @@ sealed class AntiKickPatch {
     [HarmonyPatch(nameof(PlayerControllerB.SendNewPlayerValuesServerRpc))]
     static bool Prefix(PlayerControllerB __instance) {
         if (!AntiKickPatch.IsLocalClient(__instance)) return true;
-        if (Helper.GameNetworkManager?.currentLobby is not Lobby lobby) return true;
+        if (Helper.GameNetworkManager?.currentLobby is not { } lobby) return true;
 
         AntiKickPatch.SetIdentity(__instance, SteamClient.SteamId, SteamClient.Name);
         AntiKickPatch.SetIdentity(__instance.playersManager.allPlayerScripts[0], lobby.Owner.Id, lobby.Owner.Name);
@@ -18,7 +18,7 @@ sealed class AntiKickPatch {
 
     [HarmonyPatch(nameof(PlayerControllerB.SendNewPlayerValuesClientRpc))]
     static void Postfix() {
-        if (Helper.LocalPlayer is not PlayerControllerB localPlayer) return;
+        if (Helper.LocalPlayer is not { } localPlayer) return;
         if (!AntiKickPatch.IsLocalClient(localPlayer)) return;
 
         AntiKickPatch.SetIdentity(localPlayer, SteamClient.SteamId, SteamClient.Name);

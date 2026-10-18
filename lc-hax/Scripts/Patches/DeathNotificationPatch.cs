@@ -4,7 +4,7 @@ using HarmonyLib;
 [HarmonyPatch(typeof(PlayerControllerB), nameof(PlayerControllerB.KillPlayerClientRpc))]
 sealed class DeathNotificationPatch {
     static void Postfix(int playerId, int causeOfDeath) {
-        if (Helper.GetPlayer(playerId) is not PlayerControllerB player) return;
+        if (Helper.GetPlayer(playerId) is not { } player) return;
         if (player.IsSelf()) return;
 
         Helper.SendNotification(

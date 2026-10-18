@@ -24,7 +24,7 @@ sealed class TriggerMod : MonoBehaviour, IEnemyPrompter {
     void Fire() {
         if (Helper.LocalPlayer is { isTypingChat: true } or { inTerminalMenu: true }) return;
         if (Helper.LocalPlayer?.quickMenuManager is { isMenuOpen: true }) return;
-        if (Helper.CurrentCamera is not Camera camera) return;
+        if (Helper.CurrentCamera is not { } camera) return;
 
         if (this.UsingFollowRay) {
             if (FollowMod.PlayerToFollow != null) {

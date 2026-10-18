@@ -28,7 +28,7 @@ sealed class PatchAnalyser : DiagnosticAnalyzer {
 
     void AnalyseSyntaxNode(SyntaxNodeAnalysisContext context) {
         if (context.Node is not MethodDeclarationSyntax methodDeclaration) return;
-        if (context.SemanticModel.GetDeclaredSymbol(methodDeclaration, context.CancellationToken) is not IMethodSymbol methodSymbol) return;
+        if (context.SemanticModel.GetDeclaredSymbol(methodDeclaration, context.CancellationToken) is not { } methodSymbol) return;
         if (!methodSymbol.ContainingType.Name.EndsWith("Patch")) return;
         if (!methodSymbol.Parameters.Any(parameter => parameter.Name is "instance")) return;
 

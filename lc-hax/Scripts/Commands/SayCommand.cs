@@ -11,7 +11,7 @@ sealed class SayCommand : ICommand {
             Chat.Print("Usage: say <player> <message>");
         }
 
-        if (Helper.GetPlayer(args[0]) is not PlayerControllerB player) {
+        if (Helper.GetPlayer(args[0]) is not { } player) {
             Chat.Print("Target player is not found!");
             return Task.CompletedTask;
         }

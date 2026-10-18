@@ -17,7 +17,7 @@ sealed class RandomCommand : ICommand {
 
     ObjectPlacements<Transform, ShipTeleporter>? GetInverseTeleporterPlacements(Component target) {
         if (!this.InverseTeleporterExists()) return null;
-        if (RandomCommand.InverseTeleporter is not ShipTeleporter inverseTeleporter) return null;
+        if (RandomCommand.InverseTeleporter is not { } inverseTeleporter) return null;
 
         Vector3 rotationOffset = new(-90.0f, 0.0f, 0.0f);
 
@@ -42,7 +42,7 @@ sealed class RandomCommand : ICommand {
     }
 
     ObjectPlacements<Transform, PlaceableShipObject>? GetCupboardPlacements(Component target) {
-        if (Helper.GetUnlockable(Unlockable.CUPBOARD) is not PlaceableShipObject cupboard) return null;
+        if (Helper.GetUnlockable(Unlockable.CUPBOARD) is not { } cupboard) return null;
 
         ObjectPlacement<Transform, PlaceableShipObject> cupboardPlacement = new() {
             TargetObject = target.transform,
@@ -94,7 +94,7 @@ sealed class RandomCommand : ICommand {
             return Task.CompletedTask;
         }
 
-        if (Helper.GetActivePlayer(args[0]) is not PlayerControllerB targetPlayer) {
+        if (Helper.GetActivePlayer(args[0]) is not { } targetPlayer) {
             Chat.Print("Target player is not alive or found!");
             return Task.CompletedTask;
         }

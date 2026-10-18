@@ -28,7 +28,7 @@ sealed class CommandAnalyzer : DiagnosticAnalyzer {
 
     void AnalyseSyntaxNode(SyntaxNodeAnalysisContext context) {
         if (context.Node is not ClassDeclarationSyntax classDeclaration) return;
-        if (context.SemanticModel.GetDeclaredSymbol(classDeclaration, context.CancellationToken) is not INamedTypeSymbol namedTypeSymbol) return;
+        if (context.SemanticModel.GetDeclaredSymbol(classDeclaration, context.CancellationToken) is not { } namedTypeSymbol) return;
         if (!namedTypeSymbol.Name.EndsWith("Command")) return;
         if (this.ImplementsICommand(namedTypeSymbol)) return;
 

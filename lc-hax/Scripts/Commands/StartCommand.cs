@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 [Command("start")]
 sealed class StartGameCommand : ICommand {
     Task ICommand.Execute(Arguments args, CancellationToken cancellationToken) {
-        if (Helper.StartOfRound is not StartOfRound startOfRound) return Task.CompletedTask;
+        if (Helper.StartOfRound is not { } startOfRound) return Task.CompletedTask;
 
         if (startOfRound.travellingToNewLevel) {
             Chat.Print("You cannot start the game while travelling to a new level!");
