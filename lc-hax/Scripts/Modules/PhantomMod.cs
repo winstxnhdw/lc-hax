@@ -8,10 +8,6 @@ sealed class PhantomMod : MonoBehaviour {
     IPhantomExtension? Extension { get; set; }
     PlayerControllerB? Player { get; set; }
 
-    bool PlayerEnabled { get; set; }
-    bool AnimatorEnabled { get; set; }
-    bool ControllerEnabled { get; set; }
-    bool WasFreeCamera { get; set; }
     int CurrentSpectatorIndex { get; set; }
 
     void Awake() => this.PhantomCamera = new PhantomCamera();
@@ -92,19 +88,15 @@ sealed class PhantomMod : MonoBehaviour {
         if (this.PhantomCamera is null) return;
 
         this.Player = player;
-        this.PlayerEnabled = player.enabled;
-        this.AnimatorEnabled = player.playerBodyAnimator.enabled;
-        this.ControllerEnabled = player.thisController.enabled;
-        this.WasFreeCamera = player.isFreeCamera;
 
         this.PhantomCamera.Activate(round, source, player);
         Setting.EnablePhantom = true;
         this.Extension = new Possession(this.PhantomCamera.Camera);
 
-        player.enabled = true;
-        player.playerBodyAnimator.enabled = false;
-        player.thisController.enabled = false;
-        player.isFreeCamera = true;
+        if (AutoPlayMod.GetInput(player) is null) {
+            player.StopHoldInteractionOnTrigger();
+        }
+
         this.UpdateCameraMovement();
     }
 
@@ -113,13 +105,8 @@ sealed class PhantomMod : MonoBehaviour {
         if (this.PhantomCamera is null) return;
         if (Helper.StartOfRound is not { } round) return;
 
-        PlayerControllerB? player = this.Player.Unfake();
         Setting.EnablePhantom = false;
         this.Extension?.Dispose();
         this.PhantomCamera.Deactivate(round);
-        player?.enabled = this.PlayerEnabled;
-        player?.playerBodyAnimator.enabled = this.AnimatorEnabled;
-        player?.thisController.enabled = this.ControllerEnabled;
-        player?.isFreeCamera = this.WasFreeCamera;
     }
 }

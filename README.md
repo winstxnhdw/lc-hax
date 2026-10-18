@@ -66,6 +66,7 @@ The complete feature set includes the following.
 - Crosshair
 - ESP
 - Enemy possession with abilities
+- Automatic scrap collection
 - Grab through walls
 - Instant interact
 - Infinite stamina
@@ -190,10 +191,10 @@ These commands are only available when the user is host.
 | Action                        | Input                                |
 | ----------------------------- | ------------------------------------ |
 | Trigger various objects       | <kbd> M3 </kbd>                      |
-| Follow player                 | <kbd> M3 </kbd> + <kbd> F </kbd>     |
 | Interact at a distance        | <kbd> M3 </kbd> + <kbd> E </kbd>     |
 | Toggle ESP                    | <kbd> Pause </kbd>                   |
 | Toggle Phantom                | <kbd> = </kbd>                       |
+| Toggle AutoPlay                | <kbd> F6 </kbd>                      |
 | Teleport to Phantom           | <kbd> Shift </kbd> + <kbd> = </kbd>  |
 | Change spectator index        | <kbd> ⇽ </kbd>                      |
 | Change spectator index        | <kbd> ⇾ </kbd>                      |
@@ -204,6 +205,10 @@ These commands are only available when the user is host.
 | Toggle Anti-Kick              | <kbd> \ </kbd>                       |
 | Disconnect from server        | <kbd> Shift </kbd> + <kbd> F4 </kbd> |
 | Connect to last joined server | <kbd> Shift </kbd> + <kbd> F5 </kbd> |
+
+### AutoPlayMod
+
+Press <kbd> F6 </kbd> to toggle AutoPlay. It collects reachable scrap until the inventory is full, returns to the ship, unloads, and repeats. When it runs out of eligible targets, it returns home and checks for more. With five in-game minutes remaining before automatic departure, including early departure votes, it heads home and stays aboard. It follows walking routes, opens unlocked doors, and uses facility entrances. Routes requiring ladders, jumps, or elevators are unsupported, as are locked doors and enemy avoidance. Ship access can also require those routes on some moons. It skips unreachable scrap and reports a blocked route if it cannot get home. Route coverage and multiplayer behaviour need in-game testing.
 
 ### Possession
 
@@ -228,7 +233,6 @@ Possession has its own set of keybinds. Enable Phantom with <kbd> = </kbd>, poin
 - Unlock doors
 - Trigger Jeb's attack
 - Lure enemies to player
-- Follow a player's movements
 - Interact with objects from far
 - Possess enemies (only in `Phantom`)
 
@@ -301,7 +305,6 @@ static void LoadHaxModules() {
     Loader.AddHaxModules<ClearVisionMod>();
     Loader.AddHaxModules<NameInWeightMod>();
     Loader.AddHaxModules<BuildAnywhereMod>();
-    Loader.AddHaxModules<FollowAnotherPlayerMod>();
 }
 ```
 

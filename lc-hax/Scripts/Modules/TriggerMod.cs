@@ -3,47 +3,23 @@ using UnityEngine;
 
 sealed class TriggerMod : MonoBehaviour, IEnemyPrompter {
     bool UsingInteractRay { get; set; }
-    bool UsingFollowRay { get; set; }
 
     void OnEnable() {
         InputListener.OnMiddleButtonPress += this.Fire;
         InputListener.OnEButtonHold += this.SetUsingInteractRay;
-        InputListener.OnFButtonHold += this.SetUsingFollowRay;
     }
 
     void OnDisable() {
         InputListener.OnMiddleButtonPress -= this.Fire;
         InputListener.OnEButtonHold -= this.SetUsingInteractRay;
-        InputListener.OnFButtonHold -= this.SetUsingFollowRay;
     }
 
     void SetUsingInteractRay(bool isHeld) => this.UsingInteractRay = isHeld;
-
-    void SetUsingFollowRay(bool isHeld) => this.UsingFollowRay = isHeld;
 
     void Fire() {
         if (Helper.LocalPlayer is { isTypingChat: true } or { inTerminalMenu: true }) return;
         if (Helper.LocalPlayer?.quickMenuManager is { isMenuOpen: true }) return;
         if (Helper.CurrentCamera is not { } camera) return;
-
-        if (this.UsingFollowRay) {
-            if (FollowMod.PlayerToFollow != null) {
-                FollowMod.PlayerToFollow = null;
-                Chat.Print("Stopped following!");
-                return;
-            }
-
-            foreach (RaycastHit hit in camera.transform.SphereCastForward()) {
-                if (!hit.collider.TryGetComponent(out PlayerControllerB player)) continue;
-                if (player.IsSelf()) continue;
-
-                Chat.Print($"Following {player.playerUsername}!");
-                FollowMod.PlayerToFollow = player;
-                break;
-            }
-
-            return;
-        }
 
         if (this.UsingInteractRay) {
             foreach (RaycastHit hit in camera.transform.SphereCastForward(sphereRadius: 0.25f)) {
@@ -74,7 +50,7 @@ sealed class TriggerMod : MonoBehaviour, IEnemyPrompter {
                 break;
             }
 
-            if (collider.TryGetComponent(out DoorLock doorLock)) {
+            if (collider.GetDoor() is { } doorLock) {
                 doorLock.UnlockDoorSyncWithServer();
                 break;
             }

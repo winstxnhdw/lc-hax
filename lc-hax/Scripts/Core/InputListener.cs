@@ -4,7 +4,6 @@ using UnityEngine.InputSystem;
 
 sealed class InputListener : MonoBehaviour {
     internal static event Action<bool>? OnShiftButtonHold;
-    internal static event Action<bool>? OnFButtonHold;
     internal static event Action<bool>? OnEButtonHold;
     internal static event Action<bool>? OnWButtonHold;
     internal static event Action<bool>? OnAButtonHold;
@@ -33,6 +32,7 @@ sealed class InputListener : MonoBehaviour {
     internal static event Action? OnDownArrowPress;
     internal static event Action? OnF4Press;
     internal static event Action? OnF5Press;
+    internal static event Action? OnF6Press;
     internal static event Action<bool>? OnRightButtonHold;
 
     void Update() {
@@ -40,7 +40,6 @@ sealed class InputListener : MonoBehaviour {
         if (Mouse.current is not { } mouse) return;
 
         InputListener.OnShiftButtonHold?.Invoke(keyboard[Key.LeftShift].isPressed);
-        InputListener.OnFButtonHold?.Invoke(keyboard[Key.F].isPressed);
         InputListener.OnEButtonHold?.Invoke(keyboard[Key.E].isPressed);
         InputListener.OnWButtonHold?.Invoke(keyboard[Key.W].isPressed);
         InputListener.OnAButtonHold?.Invoke(keyboard[Key.A].isPressed);
@@ -129,6 +128,10 @@ sealed class InputListener : MonoBehaviour {
 
         if (keyboard[Key.F5].wasPressedThisFrame) {
             InputListener.OnF5Press?.Invoke();
+        }
+
+        if (keyboard[Key.F6].wasPressedThisFrame) {
+            InputListener.OnF6Press?.Invoke();
         }
     }
 }

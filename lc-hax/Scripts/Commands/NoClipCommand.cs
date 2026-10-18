@@ -8,7 +8,6 @@ sealed class NoClipCommand : ICommand {
 
     Task ICommand.Execute(Arguments args, CancellationToken cancellationToken) {
         if (Helper.LocalPlayer is not { } localPlayer) return Task.CompletedTask;
-
         if (localPlayer.gameObject.TryGetComponent(out KeyboardMovement keyboard)) {
             Setting.EnableGodMode = EnabledGodMode;
             GameObject.Destroy(keyboard);
