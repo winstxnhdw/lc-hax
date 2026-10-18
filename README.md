@@ -175,8 +175,6 @@ These commands are only available when the user is host.
 | Give or take credit(s)        | `/credit <amount>`                               |
 | Land ship quickly             | `/land`                                          |
 | Eject all players             | `/eject`                                         |
-| Revive all players            | `/revive`                                        |
-| Toggle God mode for all       | `/gods`                                          |
 
 ## Special Commands
 
