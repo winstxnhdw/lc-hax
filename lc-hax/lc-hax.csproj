@@ -23,7 +23,7 @@
 
     <PackageReference Include="LethalCompany.GameLibs.Steam" Version="81.0.5-ngd.0" />
 
-    <PackageReference Include="Nullable.Extended.Analyzer" Version="1.16.6891" />
+    <PackageReference Include="Nullable.Extended.Analyzer" Version="1.17.0" />
 
     <PackageReference Include="RequireNamedArgs" Version="0.0.7" />
 
