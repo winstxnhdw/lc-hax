@@ -46,3 +46,12 @@ sealed class SandWormPossessionPatch {
     static void AllowManualEmerge([HarmonyOuter] SandWormAI __instance, ref bool __result) =>
         __result = __result || PossessionPatch.GetPossession(__instance)?.IsManuallyControlled(__instance) is true;
 }
+
+[HarmonyPatch(typeof(StingrayAI), nameof(StingrayAI.Update))]
+sealed class StingrayPossessionPatch {
+    // Later owner checks must still run for slime creation and aiming.
+    [HarmonyPostfix]
+    [HarmonyInfix(typeof(NetworkBehaviour), nameof(NetworkBehaviour.IsOwner), InnerTargetKind.Getter, Positions = new[] { 1 })]
+    static void KeepManualOwnership([HarmonyOuter] StingrayAI __instance, ref bool __result) =>
+        __result = __result && PossessionPatch.GetPossession(__instance)?.IsManuallyControlled(__instance) is not true;
+}

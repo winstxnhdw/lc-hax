@@ -34,6 +34,7 @@ static class EnemyControllerFactory {
         FlowerSnakeEnemy tulipSnake => new TulipSnakeController(tulipSnake),
         GiantKiwiAI giantSapsucker => new GiantSapsuckerController(giantSapsucker),
         PumaAI puma => new PumaController(puma),
+        StingrayAI stingray => new StingrayController(stingray),
         _ => new DefaultEnemyController(enemy)
     };
 
