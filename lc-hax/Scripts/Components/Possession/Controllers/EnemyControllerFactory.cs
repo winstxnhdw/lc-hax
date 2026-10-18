@@ -29,6 +29,7 @@ static class EnemyControllerFactory {
         ButlerBeesEnemyAI butlerBees => new ButlerBeesController(butlerBees),
         BushWolfEnemy kidnapperFox => new KidnapperFoxController(kidnapperFox),
         CadaverBloomAI cadaverBloom => new CadaverBloomController(cadaverBloom),
+        CaveDwellerAI maneater => new ManeaterController(maneater),
         _ => new DefaultEnemyController(enemy)
     };
 
