@@ -19,7 +19,7 @@ sealed class DisconnectMod : MonoBehaviour {
 
     void HoldShift(bool isHeld) => this.IsShiftHeld = isHeld;
 
-    static SteamId? GetSteamIdFromClipboard() {
+    SteamId? GetSteamIdFromClipboard() {
         string clipboardText = GUIUtility.systemCopyBuffer;
 
         return !string.IsNullOrWhiteSpace(clipboardText) && Regex.IsMatch(clipboardText, @"^\d{17}$")
@@ -37,7 +37,7 @@ sealed class DisconnectMod : MonoBehaviour {
 
     void TryToConnect() {
         if (!this.IsShiftHeld) return;
-        if (DisconnectMod.GetSteamIdFromClipboard() is SteamId playerSteamId) {
+        if (this.GetSteamIdFromClipboard() is SteamId playerSteamId) {
             Helper.GameNetworkManager?.StartClient(playerSteamId);
         }
 
