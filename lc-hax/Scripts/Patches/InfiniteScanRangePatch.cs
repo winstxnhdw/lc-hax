@@ -1,28 +1,18 @@
-using System.Collections.Generic;
-using System.Reflection.Emit;
 using HarmonyLib;
 
-[HarmonyPatch(typeof(HUDManager))]
+[HarmonyPatch(typeof(HUDManager), nameof(HUDManager.AssignNewNodes))]
 sealed class InfiniteScanRangePatch {
-    [HarmonyPatch(nameof(HUDManager.AssignNewNodes))]
-    static IEnumerable<CodeInstruction> Transpiler(IEnumerable<CodeInstruction> instructions) {
-        bool foundMaxDistance = false;
+    [HarmonyPostfix]
+    [HarmonyInfix(20.0f)]
+    static void IncreaseRadius(ref float __result) => __result = 50.0f;
 
-        foreach (CodeInstruction instruction in instructions) {
-            if (instruction.opcode == OpCodes.Ldc_R4 && instruction.operand.Equals(20.0f)) {
-                instruction.operand = 50.0f;
-            }
+    [HarmonyPostfix]
+    [HarmonyInfix(80.0f, Positions = new[] { 1 })]
+    static void IncreaseDistance(ref float __result) => __result = float.MaxValue;
+}
 
-            else if (!foundMaxDistance && instruction.opcode == OpCodes.Ldc_R4 && instruction.operand.Equals(80.0f)) {
-                foundMaxDistance = true;
-                instruction.operand = float.MaxValue;
-            }
-
-            yield return instruction;
-        }
-    }
-
-    [HarmonyPatch(nameof(HUDManager.MeetsScanNodeRequirements))]
+[HarmonyPatch(typeof(HUDManager), nameof(HUDManager.MeetsScanNodeRequirements))]
+sealed class ScanNodeRequirementsPatch {
     static bool Prefix(ScanNodeProperties? node, ref bool __result) {
         if (node is null) return true;
 
