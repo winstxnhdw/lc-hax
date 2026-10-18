@@ -11,6 +11,8 @@ static partial class Helper {
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     internal static bool IsSelf(this PlayerControllerB? player) => Helper.LocalPlayer is PlayerControllerB localPlayer && player?.actualClientId == localPlayer.actualClientId;
 
+    internal static bool IsInputPaused(this PlayerControllerB player) => player.isTypingChat || player.inTerminalMenu || player.quickMenuManager is { isMenuOpen: true };
+
     internal static void DamagePlayerRpc(this PlayerControllerB player, int damage) =>
         player.DamagePlayerFromOtherClientServerRpc(damage, Vector3.zero, -1);
 
@@ -38,7 +40,9 @@ static partial class Helper {
                players.First(player => player.playerClientId.ToString() == playerNameOrId);
     }
 
-    internal static PlayerControllerB? GetPlayer(ulong playerClientId) => Helper.Players.First(player => player.playerClientId == playerClientId);
+    internal static PlayerControllerB? GetPlayer(ulong playerClientId) => Helper.Players.First(
+        player => player.playerClientId == playerClientId
+    );
 
     internal static PlayerControllerB? GetPlayer(int playerClientId) => Helper.GetPlayer(unchecked((ulong)playerClientId));
 
