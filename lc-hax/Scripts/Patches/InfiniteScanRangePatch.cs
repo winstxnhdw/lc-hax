@@ -12,11 +12,12 @@ sealed class InfiniteScanRangePatch {
 }
 
 [HarmonyPatch(typeof(HUDManager), nameof(HUDManager.MeetsScanNodeRequirements))]
-sealed class ScanNodeRequirementsPatch {
-    static bool Prefix(ScanNodeProperties? node, ref bool __result) {
-        if (node is null) return true;
+sealed class ScanNodeRangePatch {
+    [HarmonyPostfix]
+    [HarmonyInfix(typeof(ScanNodeProperties), nameof(ScanNodeProperties.maxRange), InnerTargetKind.FieldRead)]
+    static void IncreaseMaximumRange(ref int __result) => __result = int.MaxValue;
 
-        __result = true;
-        return false;
-    }
+    [HarmonyPostfix]
+    [HarmonyInfix(typeof(ScanNodeProperties), nameof(ScanNodeProperties.minRange), InnerTargetKind.FieldRead)]
+    static void RemoveMinimumRange(ref int __result) => __result = -1;
 }

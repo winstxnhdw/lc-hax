@@ -2,9 +2,9 @@ using GameNetcodeStuff;
 using HarmonyLib;
 
 [HarmonyPatch(typeof(ShotgunItem))]
-sealed class ShotgunPatch {
+sealed class ShotgunFreeReloadPatch {
     /// <summary>
-    /// Prevents the shotgun from consuming ammo when firing
+    /// Allows reloading without an inventory shell. Keep paired with KeepAmmo below.
     /// </summary>
     [HarmonyPatch(typeof(ShotgunItem), nameof(ShotgunItem.FindAmmoInInventory))]
     static bool Prefix(ref int __result) {
@@ -17,15 +17,6 @@ sealed class ShotgunPatch {
     /// </summary>
     [HarmonyPatch(typeof(ShotgunItem), nameof(ShotgunItem.ItemInteractLeftRight))]
     static void Prefix(ShotgunItem __instance) => __instance.shellsLoaded = 1;
-
-    /// <summary>
-    /// Prevents the shotgun from misfiring
-    /// </summary>
-    [HarmonyPatch(nameof(ShotgunItem.Update))]
-    static void Postfix(ref float ___misfireTimer, ref bool ___hasHitGroundWithSafetyOff) {
-        ___misfireTimer = 30.0f;
-        ___hasHitGroundWithSafetyOff = true;
-    }
 }
 
 [HarmonyPatch(typeof(ShotgunItem), "reloadGunAnimation")]

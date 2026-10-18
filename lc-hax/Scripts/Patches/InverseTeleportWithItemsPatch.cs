@@ -7,10 +7,3 @@ sealed class InverseTeleportWithItemsPatch {
     [HarmonyInfix(typeof(PlayerControllerB), nameof(PlayerControllerB.DropAllHeldItems))]
     static bool KeepItems() => false;
 }
-
-[HarmonyPatch(typeof(ShipTeleporter), "beamUpPlayer")]
-sealed class ShipTeleportWithItemsPatch {
-    [HarmonyPrefix]
-    [HarmonyInfix(typeof(PlayerControllerB), nameof(PlayerControllerB.DropAllHeldItemsAndSync), OuterBody = InfixOuterBody.Auto)]
-    static bool KeepItems() => false;
-}

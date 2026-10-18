@@ -7,7 +7,7 @@ using UnityEngine.UI;
 sealed class ScreenOverlayPatch {
     static HashSet<Graphic> HiddenGraphics { get; } = [];
 
-    static void Postfix(HUDManager __instance) => ScreenOverlayPatch.Apply(__instance);
+    static void Prefix() => ScreenOverlayPatch.HiddenGraphics.Clear();
 
     [HarmonyPatch(typeof(Graphic), nameof(Graphic.Rebuild))]
     [HarmonyPrefix]
@@ -18,16 +18,7 @@ sealed class ScreenOverlayPatch {
         return false;
     }
 
-    internal static void Apply(HUDManager? __instance) {
-        if (__instance.Unfake() is not { } hudManager) return;
-
-        ScreenOverlayPatch.HiddenGraphics.Clear();
-        ScreenOverlayPatch.Hide(hudManager.gasImageAlpha);
-        ScreenOverlayPatch.Hide(hudManager.sinkingUnderAnimator);
-        ScreenOverlayPatch.Hide(hudManager.HUDContainer.Unfake()?.transform.Find("SpecialHUDGraphics/BloodTex"));
-    }
-
-    static void Hide(Component? root) {
+    internal static void Hide(Component? root) {
         if (root.Unfake() is not { } component) return;
 
         foreach (Graphic graphic in component.GetComponentsInChildren<Graphic>(includeInactive: true)) {
