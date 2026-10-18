@@ -1,42 +1,43 @@
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
-using GameNetcodeStuff;
-using UnityEngine;
 
 [DebugCommand("mute")]
 sealed class MuteCommand : ICommand {
-    static Dictionary<string, TransientBehaviour> MutedPlayers { get; } = [];
+    static Dictionary<ulong, CancellationTokenSource> MutedPlayers { get; } = [];
 
-    bool MutedPlayerHasMessaged(string playerUsername) =>
-        Helper.HUDManager?.ChatMessageHistory.First(message =>
-            message.StartsWith($"<color=#FF0000>{playerUsername}<color>: <color=#FFFF00>'"
-        )) is not null;
-
-    Task ICommand.Execute(Arguments args, CancellationToken cancellationToken) {
+    async Task ICommand.Execute(Arguments args, CancellationToken cancellationToken) {
+        if (Helper.StartOfRound is not { } round) return;
+        if (Helper.HUDManager is not { ChatMessageHistory: { } chatHistory }) return;
         if (args.Length is 0) {
             Chat.Print("Usage: mute <player>");
-            return Task.CompletedTask;
+            return;
         }
 
-        if (Helper.GetPlayer(args[0]) is not PlayerControllerB player) {
-            Chat.Print("Player is not alive or found!");
-            return Task.CompletedTask;
+        if (Helper.GetPlayer(args[0]) is not { actualClientId: ulong clientId } player) {
+            Chat.Print("Player not found!");
+            return;
         }
 
-        if (MuteCommand.MutedPlayers.Remove(player.playerUsername, out TransientBehaviour existingMuterObject) && existingMuterObject != null) {
-            Object.Destroy(existingMuterObject);
+        if (MuteCommand.MutedPlayers.TryGetValue(clientId, out CancellationTokenSource existingCancellation)) {
+            existingCancellation.Cancel();
+            _ = MuteCommand.MutedPlayers.Remove(clientId);
             Chat.Print($"Unmuted {player.playerUsername}!");
-            return Task.CompletedTask;
+            return;
         }
 
-        TransientBehaviour playerMuterObject = Helper.CreateComponent<TransientBehaviour>().Init(_ => {
-            if (!this.MutedPlayerHasMessaged(player.playerUsername)) return;
-            Chat.Clear();
-        }, 10000.0f);
-
-        MuteCommand.MutedPlayers.Add(player.playerUsername, playerMuterObject);
+        cancellationToken.ThrowIfCancellationRequested();
+        using CancellationTokenSource muteToken = new();
+        MuteCommand.MutedPlayers.Add(clientId, muteToken);
         Chat.Print($"Muted {player.playerUsername}!");
-        return Task.CompletedTask;
+        string muteMessagePrefix = $"<color=#FF0000>{player.playerUsername}<color>: <color=#FFFF00>'";
+
+        while (round.ClientPlayerList.ContainsKey(clientId)) {
+            if (chatHistory.First(message => message.StartsWith(muteMessagePrefix)) is not null) {
+                Chat.Clear();
+            }
+
+            await Task.Delay(100, muteToken.Token);
+        }
     }
 }
