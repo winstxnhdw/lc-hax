@@ -20,12 +20,13 @@ sealed class AutoPlaySession : IDisposable {
     AutoPlayNavigation Navigation { get; }
     AutoPlayInventory Inventory { get; }
     HashSet<int> SkippedScrap { get; } = [];
-    HashSet<int> BlockedEntrances { get; } = [];
     AutoPlayState State { get; set; }
     GrabbableObject? Scrap { get; set; }
     EntranceTeleport? Entrance { get; set; }
+    Vector3? Detour { get; set; }
     bool StayHome { get; set; }
     float PickupWaitTime { get; set; }
+    float NextEntranceAttemptTime { get; set; }
     bool WaitingForShipDoor { get; set; }
 
     internal AutoPlaySession(PlayerControllerB player) {
@@ -74,8 +75,10 @@ sealed class AutoPlaySession : IDisposable {
     void ChangeState(AutoPlayState state) {
         this.State = state;
         this.PickupWaitTime = 0.0f;
+        this.NextEntranceAttemptTime = 0.0f;
         this.Scrap = null;
         this.Entrance = null;
+        this.Detour = null;
         this.WaitingForShipDoor = false;
         this.Navigation.Reset();
     }
@@ -139,40 +142,40 @@ sealed class AutoPlaySession : IDisposable {
     }
 
     void UseEntrance() {
+        if (Time.time < this.NextEntranceAttemptTime) return;
+
         if (this.Entrance == null) {
             this.Entrance = Helper.FindObjects<EntranceTeleport>().AsValueEnumerable()
                 .Where(entrance => entrance.Unfake() is not null)
                 .Where(entrance => entrance.isEntranceToBuilding != this.Player.isInsideFactory)
-                .Where(entrance => !this.BlockedEntrances.Contains(entrance.GetInstanceID()))
                 .Where(entrance => entrance.FindExitPoint())
-                .OrderBy(entrance => (entrance.entrancePoint.position - this.Player.transform.position).sqrMagnitude)
                 .FirstOrDefault();
 
             this.Navigation.Reset();
         }
 
-        if (this.Entrance == null && this.State is AutoPlayState.Collecting) {
-            this.StayHome = true;
-            this.ChangeState(AutoPlayState.Returning);
-            return;
-        }
-
         if (this.Entrance == null) {
-            this.Wait("No usable exit route. Stop AutoPlay to take over.");
+            this.NextEntranceAttemptTime = Time.time + 1.0f;
             return;
         }
 
         EntranceTeleport selected = this.Entrance;
-        AutoPlayMoveResult result = this.WalkTo(selected.entrancePoint.position, 1.0f);
+        AutoPlayMoveResult result = this.WalkTo(this.Detour ?? selected.entrancePoint.position, 1.0f);
 
         if (result is AutoPlayMoveResult.Blocked) {
-            _ = this.BlockedEntrances.Add(selected.GetInstanceID());
-            this.Entrance = null;
+            this.Detour = this.Navigation.FindDetour();
+            this.NextEntranceAttemptTime = this.Detour is null ? Time.time + 1.0f : 0.0f;
             this.Navigation.Reset();
             return;
         }
 
         if (result is not AutoPlayMoveResult.Arrived) {
+            return;
+        }
+
+        if (this.Detour is not null) {
+            this.Detour = null;
+            this.Navigation.Reset();
             return;
         }
 

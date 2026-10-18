@@ -32,16 +32,36 @@ sealed class AutoPlayNavigation(PlayerControllerB player) {
     Vector3[] FindPath(Vector3 target) {
         if (!AutoPlayNavigation.TrySample(this.Player.transform.position, 0.8f, 0.6f, out Vector3 source)) return [];
         if (!AutoPlayNavigation.TrySample(target, 1.7f, 1.5f, out Vector3 destination)) return [];
-        if (!NavMesh.CalculatePath(source, destination, AutoPlayNavigation.WalkingAreas, this.Path)) return [];
-        if (this.Path.status != NavMeshPathStatus.PathComplete) return [];
 
-        Vector3[] corners = this.Path.corners;
+        bool hasPath = NavMesh.CalculatePath(source, destination, AutoPlayNavigation.WalkingAreas, this.Path);
+        return hasPath && this.Path.status == NavMeshPathStatus.PathComplete ? this.Path.corners : [];
+    }
 
-        for (int index = 1; index < corners.Length; index++) {
-            if (NavMesh.Raycast(corners[index - 1], corners[index], out _, AutoPlayNavigation.WalkingAreas)) return [];
+    internal Vector3? FindDetour() {
+        Vector3 position = this.Player.transform.position;
+
+        for (int attempt = 0; attempt < 8; attempt++) {
+            Vector2 offset = Random.insideUnitCircle * 6.0f;
+            Vector3[] corners = this.FindPath(position + new Vector3(offset.x, 0.0f, offset.y));
+
+            if (corners.Length == 0) {
+                continue;
+            }
+
+            Vector3 destination = corners[^1];
+
+            if (Vector3.Distance(position, destination) < 2.0f) {
+                continue;
+            }
+
+            if (NavMesh.Raycast(corners[0], destination, out _, AutoPlayNavigation.WalkingAreas)) {
+                continue;
+            }
+
+            return destination;
         }
 
-        return corners;
+        return null;
     }
 
     internal AutoPlayMoveResult MoveTo(Vector3 destination, float stoppingDistance, out Vector3 direction) {
