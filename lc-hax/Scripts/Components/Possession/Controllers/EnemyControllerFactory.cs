@@ -22,6 +22,7 @@ static class EnemyControllerFactory {
         CrawlerAI crawler => new CrawlerController(crawler),
         SandSpiderAI sandSpider => new SandSpiderController(sandSpider),
         RedLocustBees circuitBees => new CircuitBeesController(circuitBees),
+        DoublewingAI doublewingBird => new ManticoilController(doublewingBird),
         _ => new DefaultEnemyController(enemy)
     };
 
