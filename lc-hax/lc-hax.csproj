@@ -47,7 +47,6 @@
     <Compile Remove="Scripts/Patches/GasOverlayPatch.cs" Condition="!$(HideGasOverlay)" />
     <Compile Remove="Scripts/Patches/SinkingOverlayPatch.cs" Condition="!$(HideSinkingOverlay)" />
     <Compile Remove="Scripts/Patches/BloodOverlayPatch.cs" Condition="!$(HideBloodOverlay)" />
-    <Compile Remove="Scripts/Patches/ScreenOverlayPatch.cs" Condition="!$(HideGasOverlay) And !$(HideSinkingOverlay) And !$(HideBloodOverlay)" />
     <Compile Remove="Scripts/Patches/FogPatch.cs" Condition="!$(DisableFog)" />
     <Compile Remove="Scripts/Patches/SteamValvePatch.cs" Condition="!$(DisableSteam)" />
     <Compile Remove="Scripts/Patches/PostProcessingPatch.cs" Condition="!$(DisablePostProcessing)" />
