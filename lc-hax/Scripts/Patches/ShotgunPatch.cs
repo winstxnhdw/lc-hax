@@ -3,8 +3,6 @@ using HarmonyLib;
 
 [HarmonyPatch(typeof(ShotgunItem))]
 sealed class ShotgunPatch {
-    static bool InterruptDestroyItem { get; set; }
-
     /// <summary>
     /// Prevents the shotgun from consuming ammo when firing
     /// </summary>
@@ -18,22 +16,7 @@ sealed class ShotgunPatch {
     /// Always allow the Shotgun to reload
     /// </summary>
     [HarmonyPatch(typeof(ShotgunItem), nameof(ShotgunItem.ItemInteractLeftRight))]
-    static void Prefix(ShotgunItem __instance) {
-        __instance.shellsLoaded = 1;
-        ShotgunPatch.InterruptDestroyItem = true;
-    }
-
-    /// <summary>
-    /// Resets the interrupt flag
-    /// </summary>
-    [HarmonyPatch(typeof(ShotgunItem), nameof(ShotgunItem.StopUsingGun))]
-    static void Postfix() => ShotgunPatch.InterruptDestroyItem = false;
-
-    /// <summary>
-    /// Prevents the shotgun shell from being destroyed
-    /// </summary>
-    [HarmonyPatch(typeof(PlayerControllerB), nameof(PlayerControllerB.DestroyItemInSlotAndSync))]
-    static bool Prefix() => !ShotgunPatch.InterruptDestroyItem;
+    static void Prefix(ShotgunItem __instance) => __instance.shellsLoaded = 1;
 
     /// <summary>
     /// Prevents the shotgun from misfiring
@@ -43,4 +26,11 @@ sealed class ShotgunPatch {
         ___misfireTimer = 30.0f;
         ___hasHitGroundWithSafetyOff = true;
     }
+}
+
+[HarmonyPatch(typeof(ShotgunItem), "reloadGunAnimation")]
+sealed class ShotgunReloadPatch {
+    [HarmonyPrefix]
+    [HarmonyInfix(typeof(PlayerControllerB), nameof(PlayerControllerB.DestroyItemInSlotAndSync), OuterBody = InfixOuterBody.Auto)]
+    static bool KeepAmmo() => false;
 }
