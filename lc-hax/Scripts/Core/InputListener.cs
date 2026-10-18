@@ -33,7 +33,6 @@ sealed class InputListener : MonoBehaviour {
     internal static event Action? OnDownArrowPress;
     internal static event Action? OnF4Press;
     internal static event Action? OnF5Press;
-    internal static event Action? OnF9Press;
     internal static event Action<bool>? OnRightButtonHold;
 
     void Update() {
@@ -130,10 +129,6 @@ sealed class InputListener : MonoBehaviour {
 
         if (keyboard[Key.F5].wasPressedThisFrame) {
             InputListener.OnF5Press?.Invoke();
-        }
-
-        if (keyboard[Key.F9].wasPressedThisFrame) {
-            InputListener.OnF9Press?.Invoke();
         }
     }
 }

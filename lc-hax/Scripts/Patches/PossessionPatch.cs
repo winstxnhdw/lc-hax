@@ -19,7 +19,7 @@ sealed class PossessionPatch {
 
     [HarmonyPatch(typeof(EnemyAI), nameof(EnemyAI.ChangeOwnershipOfEnemy))]
     static bool Prefix(EnemyAI __instance, ulong newOwnerClientId) =>
-        PossessionPatch.GetPossession(__instance) is not Possession possession || possession.PossessedEnemy != __instance || possession.IsAIControlled || Helper.LocalPlayer?.actualClientId == newOwnerClientId;
+        PossessionPatch.GetPossession(__instance) is not Possession possession || possession.PossessedEnemy != __instance || Helper.LocalPlayer?.actualClientId == newOwnerClientId;
 
     [HarmonyPatch(typeof(SandSpiderAI), nameof(SandSpiderAI.SyncMeshContainerPositionToClients))]
     static bool Prefix(SandSpiderAI __instance) => PossessionPatch.GetPossession(__instance)?.IsManuallyControlled(__instance) is not true;

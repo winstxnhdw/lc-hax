@@ -21,8 +21,6 @@ sealed class SporeLizardController(PufferAI enemy) : IEnemyController {
 
     float? IEnemyController.MovementSpeed => this.Enemy.agent.Unfake() is { speed: > 0.0f } agent ? agent.speed : null;
 
-    bool IEnemyController.AllowAIToChangeOwner => false;
-
     void IEnemyController.OnPrimaryPressed() {
         if (this.Enemy.inPuffingAnimation) return;
 
@@ -65,9 +63,7 @@ sealed class SporeLizardController(PufferAI enemy) : IEnemyController {
 
     void IEnemyController.UpdateManual() { }
 
-    void IEnemyController.OnAIControlChanged(bool isAIControlled) { }
-
-    bool IEnemyController.RequiresServerAI(bool isAIControlled) => false;
+    bool IEnemyController.RequiresServerAI() => false;
 
     void IEnemyController.OnSecondaryHeld() { }
 

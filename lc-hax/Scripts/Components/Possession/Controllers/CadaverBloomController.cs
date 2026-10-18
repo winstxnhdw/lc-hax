@@ -30,8 +30,6 @@ sealed class CadaverBloomController(CadaverBloomAI enemy) : IEnemyController {
     string? IEnemyController.SecondarySkillName =>
         this.Enemy.hasBurst && this.ManualBehaviour == CadaverBloomController.ManualState ? "(HOLD) Chomp" : null;
 
-    bool IEnemyController.AllowAIToChangeOwner => true;
-
     void IEnemyController.OnPossess() { }
 
     void IEnemyController.UpdateManual() {
@@ -104,14 +102,7 @@ sealed class CadaverBloomController(CadaverBloomAI enemy) : IEnemyController {
         this.Enemy.SyncBitePlayerRpc();
     }
 
-    void IEnemyController.OnAIControlChanged(bool isAIControlled) {
-        if (!isAIControlled) return;
-        this.RestoreManualState();
-    }
-
-    void IEnemyController.OnUnpossess(PossessionEndReason reason) => this.RestoreManualState();
-
-    void RestoreManualState() {
+    void IEnemyController.OnUnpossess(PossessionEndReason reason) {
         if (!this.HasManualState) return;
         if (this.Enemy.isEnemyDead) return;
 
@@ -126,7 +117,7 @@ sealed class CadaverBloomController(CadaverBloomAI enemy) : IEnemyController {
 
     void IEnemyController.OnOutsideStatusChange() => this.Enemy.StopSearch(this.Enemy.searchForPlayers, true);
     void IEnemyController.Tick(bool inputPaused) { }
-    bool IEnemyController.RequiresServerAI(bool isAIControlled) => false;
+    bool IEnemyController.RequiresServerAI() => false;
     void IEnemyController.OnSecondaryPressed() { }
     void IEnemyController.OnMovement(bool isMoving, bool isSprinting) { }
 

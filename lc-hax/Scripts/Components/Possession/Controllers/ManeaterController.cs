@@ -14,14 +14,13 @@ sealed class ManeaterController(CaveDwellerAI enemy) : IEnemyController {
     Vector3 IEnemyController.PositionOffset => Vector3.zero;
     float IEnemyController.EntranceRange => this.IsBaby ? 0.0f : 1.5f;
     float IEnemyController.SprintMultiplier => 1.0f;
-    bool IEnemyController.AllowAIToChangeOwner => true;
     bool IEnemyController.CanMove => !this.IsBaby && !this.Enemy.inSpecialAnimation && !this.Enemy.inKillAnimation;
     bool IEnemyController.CanRotate => !this.IsBaby && !this.Enemy.inSpecialAnimation && !this.Enemy.inKillAnimation;
     float? IEnemyController.MovementSpeed => this.Enemy.agent.Unfake() is { speed: > 0.0f } agent ? agent.speed : null;
     string? IEnemyController.PrimarySkillName => this.IsBaby ? null : "Scream and leap";
     string? IEnemyController.SecondarySkillName => this.IsBaby ? null : "Fake cry";
 
-    bool IEnemyController.RequiresServerAI(bool isAIControlled) => this.IsBaby;
+    bool IEnemyController.RequiresServerAI() => this.IsBaby;
 
     void IEnemyController.OnPossess() => this.BeginManualControl();
 
@@ -124,16 +123,8 @@ sealed class ManeaterController(CaveDwellerAI enemy) : IEnemyController {
 
     void IEnemyController.OnOutsideStatusChange() => this.StopSearch();
 
-    void IEnemyController.OnAIControlChanged(bool isAIControlled) {
-        if (!isAIControlled) {
-            this.BeginManualControl();
-            return;
-        }
-
-        this.RestoreNativeState();
-    }
-
-    void RestoreNativeState() {
+    void IEnemyController.OnUnpossess(PossessionEndReason reason) {
+        if (reason is PossessionEndReason.EnemyDied) return;
         if (!this.StateSaved) return;
         if (this.Enemy.IsOwner && !this.IsBaby && !this.Enemy.inSpecialAnimation && !this.Enemy.inKillAnimation) {
             this.StopAttack();
@@ -143,11 +134,6 @@ sealed class ManeaterController(CaveDwellerAI enemy) : IEnemyController {
         this.Enemy.updateDestinationInterval = 0.0f;
         this.StateSaved = false;
         this.AttackRequested = false;
-    }
-
-    void IEnemyController.OnUnpossess(PossessionEndReason reason) {
-        if (reason is PossessionEndReason.EnemyDied) return;
-        this.RestoreNativeState();
     }
 
     void IDisposable.Dispose() {

@@ -10,7 +10,6 @@ sealed class TulipSnakeController(FlowerSnakeEnemy enemy) : IEnemyController {
     float IEnemyController.EntranceRange => 1.5f;
     float IEnemyController.SprintMultiplier => 1.5f;
     float? IEnemyController.MovementSpeed => this.Enemy.agent.Unfake() is { speed: > 0.0f } agent ? agent.speed : null;
-    bool IEnemyController.AllowAIToChangeOwner => false;
 
     bool CanWalk => this.Enemy.clingingToPlayer is null && !this.Enemy.leaping &&
         !this.Enemy.fallingFromLeap && !this.Enemy.daytimeEnemyLeaving && this.Enemy.stunNormalizedTimer <= 0.0f;
@@ -58,14 +57,7 @@ sealed class TulipSnakeController(FlowerSnakeEnemy enemy) : IEnemyController {
 
     void IEnemyController.OnOutsideStatusChange() => this.Enemy.StopSearch(this.Enemy.snakeRoam, true);
 
-    void IEnemyController.OnAIControlChanged(bool isAIControlled) {
-        if (isAIControlled) return;
-        if (!this.Enemy.IsOwner) return;
-
-        this.Enemy.StopSearch(this.Enemy.snakeRoam, true);
-    }
-
-    bool IEnemyController.RequiresServerAI(bool isAIControlled) => isAIControlled;
+    bool IEnemyController.RequiresServerAI() => false;
     void IEnemyController.Tick(bool inputPaused) { }
     void IEnemyController.UpdateManual() { }
     void IEnemyController.OnSecondaryHeld() { }

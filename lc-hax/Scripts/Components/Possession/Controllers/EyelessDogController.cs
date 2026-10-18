@@ -22,8 +22,6 @@ sealed class EyelessDogController(MouthDogAI enemy) : IEnemyController {
 
     float? IEnemyController.MovementSpeed => this.Enemy.agent.Unfake()?.speed;
 
-    bool IEnemyController.AllowAIToChangeOwner => false;
-
     Vector3 IEnemyController.CameraOffset => new(0.0f, 3.2f, -4.0f);
 
     void IEnemyController.OnPrimaryPressed() {
@@ -108,9 +106,7 @@ sealed class EyelessDogController(MouthDogAI enemy) : IEnemyController {
         this.Enemy.AITimer = EyelessDogController.ChaseInterval;
     }
 
-    void IEnemyController.OnAIControlChanged(bool isAIControlled) { }
-
-    bool IEnemyController.RequiresServerAI(bool isAIControlled) => false;
+    bool IEnemyController.RequiresServerAI() => false;
 
     void IEnemyController.OnSecondaryHeld() { }
 

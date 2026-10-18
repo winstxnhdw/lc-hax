@@ -17,8 +17,7 @@ sealed class BarberController(ClaySurgeonAI enemy) : IEnemyController {
     float? IEnemyController.MovementSpeed => this.Enemy.jumpSpeed;
     string IEnemyController.PrimarySkillName => "Snip";
     string? IEnemyController.SecondarySkillName => this.Enemy.isMaster ? "Dance beat" : null;
-    bool IEnemyController.AllowAIToChangeOwner => false;
-    bool IEnemyController.RequiresServerAI(bool isAIControlled) => false;
+    bool IEnemyController.RequiresServerAI() => false;
 
     void IEnemyController.OnPossess() => this.BeginManualControl();
 
@@ -70,27 +69,13 @@ sealed class BarberController(ClaySurgeonAI enemy) : IEnemyController {
 
     void IEnemyController.OnOutsideStatusChange() => this.StopSearch();
 
-    void IEnemyController.OnAIControlChanged(bool isAIControlled) {
-        if (!isAIControlled) {
-            this.BeginManualControl();
-            return;
-        }
-
-        this.RestoreNativeState();
-    }
-
-    void RestoreNativeState() {
+    void IEnemyController.OnUnpossess(PossessionEndReason reason) {
+        if (reason is PossessionEndReason.EnemyDied) return;
         if (!this.StateSaved) return;
 
         this.Enemy.beatTimer = this.SavedBeatTimer;
         this.Enemy.updateDestinationInterval = 0.0f;
         this.StateSaved = false;
-    }
-
-    void IEnemyController.OnUnpossess(PossessionEndReason reason) {
-        if (reason is PossessionEndReason.EnemyDied) return;
-
-        this.RestoreNativeState();
     }
 
     void IDisposable.Dispose() => this.StateSaved = false;

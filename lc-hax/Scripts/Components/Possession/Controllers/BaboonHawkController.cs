@@ -23,8 +23,6 @@ sealed class BaboonHawkController(BaboonBirdAI enemy) : IEnemyController {
 
     float? IEnemyController.MovementSpeed => this.Enemy.agent.Unfake() is { speed: > 0.0f } agent ? agent.speed : null;
 
-    bool IEnemyController.AllowAIToChangeOwner => false;
-
     void IEnemyController.OnUnpossess(PossessionEndReason reason) { }
 
     void IEnemyController.OnPossess() { }
@@ -73,9 +71,7 @@ sealed class BaboonHawkController(BaboonBirdAI enemy) : IEnemyController {
 
     void IEnemyController.Tick(bool inputPaused) { }
 
-    void IEnemyController.OnAIControlChanged(bool isAIControlled) { }
-
-    bool IEnemyController.RequiresServerAI(bool isAIControlled) => false;
+    bool IEnemyController.RequiresServerAI() => false;
 
     void IEnemyController.OnSecondaryHeld() { }
 

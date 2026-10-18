@@ -16,8 +16,6 @@ sealed class CoilHeadController(SpringManAI enemy) : IEnemyController {
 
     float? IEnemyController.MovementSpeed => this.Enemy.agent.Unfake() is { speed: > 0.0f } agent ? agent.speed : null;
 
-    bool IEnemyController.AllowAIToChangeOwner => false;
-
     bool IsUsingSecondarySkill { get; set; }
 
     Vector3 IEnemyController.CameraOffset => new(0.0f, 2.8f, -3.5f);
@@ -92,12 +90,7 @@ sealed class CoilHeadController(SpringManAI enemy) : IEnemyController {
 
     void IEnemyController.Tick(bool inputPaused) { }
 
-    void IEnemyController.OnAIControlChanged(bool isAIControlled) {
-        if (!isAIControlled) return;
-        this.Enemy.stopAndGoMinimumInterval = 0.0f;
-    }
-
-    bool IEnemyController.RequiresServerAI(bool isAIControlled) => false;
+    bool IEnemyController.RequiresServerAI() => false;
 
     void IEnemyController.OnSecondaryPressed() { }
 

@@ -17,7 +17,6 @@ sealed class StingrayController(StingrayAI enemy) : IEnemyController {
     float? IEnemyController.MovementSpeed => this.Enemy.agent.Unfake() is { speed: > 0.0f } agent ? agent.speed : null;
     string IEnemyController.PrimarySkillName => "Ambush";
     string IEnemyController.SecondarySkillName => "Cloak";
-    bool IEnemyController.AllowAIToChangeOwner => true;
 
     void IEnemyController.OnPrimaryPressed() {
         if (this.Enemy.currentBehaviourStateIndex != StingrayController.CloakedState) return;
@@ -61,16 +60,11 @@ sealed class StingrayController(StingrayAI enemy) : IEnemyController {
         }
     }
 
-    void IEnemyController.OnAIControlChanged(bool isAIControlled) {
-        if (!isAIControlled) return;
-        this.RestoreAI();
-    }
-
     void IEnemyController.OnUnpossess(PossessionEndReason reason) => this.RestoreAI();
 
     void IEnemyController.OnOutsideStatusChange() => this.RestoreAI();
 
-    bool IEnemyController.RequiresServerAI(bool isAIControlled) => isAIControlled;
+    bool IEnemyController.RequiresServerAI() => false;
 
     void IEnemyController.OnPossess() { }
 

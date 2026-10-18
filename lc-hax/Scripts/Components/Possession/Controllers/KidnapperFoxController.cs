@@ -16,7 +16,6 @@ sealed class KidnapperFoxController(BushWolfEnemy enemy) : IEnemyController {
     float IEnemyController.EntranceRange => 0.0f;
     float IEnemyController.SprintMultiplier => 1.5f;
     float? IEnemyController.MovementSpeed => this.Enemy.agent.Unfake() is { speed: > 0.0f } agent ? agent.speed : null;
-    bool IEnemyController.AllowAIToChangeOwner => false;
 
     bool CanAct =>
         this.Enemy.foundSpawningPoint && !this.Enemy.inKillAnimation &&
@@ -43,18 +42,6 @@ sealed class KidnapperFoxController(BushWolfEnemy enemy) : IEnemyController {
 
         this.CancelTongue();
         this.Enemy.SetBehaviourState(KidnapperFoxState.HIDING);
-    }
-
-    void IEnemyController.OnAIControlChanged(bool isAIControlled) {
-        if (!this.Enemy.IsOwner) return;
-
-        if (isAIControlled) {
-            this.CancelTongue();
-            this.Enemy.SetBehaviourState(KidnapperFoxState.HIDING);
-            return;
-        }
-
-        this.CancelTongue();
     }
 
     void IEnemyController.UpdateManual() {
@@ -115,7 +102,7 @@ sealed class KidnapperFoxController(BushWolfEnemy enemy) : IEnemyController {
 
     void IEnemyController.OnOutsideStatusChange() { }
     void IEnemyController.Tick(bool inputPaused) { }
-    bool IEnemyController.RequiresServerAI(bool isAIControlled) => false;
+    bool IEnemyController.RequiresServerAI() => false;
     void IEnemyController.OnSecondaryHeld() { }
     void IEnemyController.CancelSecondarySkill() { }
     void IEnemyController.ReleaseSecondarySkill() { }

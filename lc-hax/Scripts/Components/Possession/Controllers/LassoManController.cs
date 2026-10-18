@@ -19,8 +19,6 @@ sealed class LassoManController(LassoManAI enemy) : IEnemyController {
 
     string? IEnemyController.SecondarySkillName => null;
 
-    bool IEnemyController.AllowAIToChangeOwner => false;
-
     Vector3 IEnemyController.CameraOffset => new(0.0f, 2.8f, -3.5f);
 
     void IEnemyController.OnPrimaryPressed() => this.Enemy.MakeScreechNoiseServerRpc();
@@ -41,9 +39,7 @@ sealed class LassoManController(LassoManAI enemy) : IEnemyController {
 
     void IEnemyController.UpdateManual() { }
 
-    void IEnemyController.OnAIControlChanged(bool isAIControlled) { }
-
-    bool IEnemyController.RequiresServerAI(bool isAIControlled) => false;
+    bool IEnemyController.RequiresServerAI() => false;
 
     void IEnemyController.OnSecondaryPressed() { }
 

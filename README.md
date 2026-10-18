@@ -213,7 +213,6 @@ Possession has its own set of keybinds. Enable Phantom with <kbd> = </kbd>, poin
 | ----------------------------- | ------------------------------------ |
 | Use primary ability           | <kbd> M1 </kbd>                      |
 | Use secondary ability         | <kbd> M2 </kbd>                      |
-| Toggle AI control             | <kbd> F9 </kbd>                      |
 | Toggle possession NoClip      | <kbd> N </kbd>                       |
 | Unpossess enemy               | <kbd> Z </kbd>                       |
 | Kill and unpossess enemy      | <kbd> Del </kbd>                     |

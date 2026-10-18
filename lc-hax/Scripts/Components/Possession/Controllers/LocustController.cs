@@ -20,8 +20,6 @@ sealed class LocustController(DocileLocustBeesAI enemy) : IEnemyController {
 
     string? IEnemyController.PrimarySkillName => null;
 
-    bool IEnemyController.AllowAIToChangeOwner => false;
-
     bool IsHiding { get; set; }
 
     Vector3 IEnemyController.CameraOffset => new(0.0f, 2.0f, -4.5f);
@@ -52,9 +50,7 @@ sealed class LocustController(DocileLocustBeesAI enemy) : IEnemyController {
 
     void IEnemyController.Tick(bool inputPaused) { }
 
-    void IEnemyController.OnAIControlChanged(bool isAIControlled) { }
-
-    bool IEnemyController.RequiresServerAI(bool isAIControlled) => false;
+    bool IEnemyController.RequiresServerAI() => false;
 
     void IEnemyController.OnPrimaryPressed() { }
 

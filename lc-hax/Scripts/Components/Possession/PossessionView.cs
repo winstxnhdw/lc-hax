@@ -32,14 +32,21 @@ sealed class PossessionView : IDisposable {
 
     internal void Prepare(bool inputPaused) => this.MousePan.IsPaused = inputPaused;
 
-    internal void Update(Quaternion rotation) {
+    internal void Update() {
+        Quaternion rotation = this.Rotation;
         Vector3 offset = this.Controller.CameraOffset;
         Vector3 pivot = this.Enemy.transform.position + (Vector3.up * offset.y);
         Vector3 displacement = rotation * new Vector3(offset.x, 0.0f, offset.z);
         this.Camera.transform.SetPositionAndRotation(pivot + displacement, rotation);
+
+        string? primary = this.Controller.PrimarySkillName;
+        string? secondary = this.Controller.SecondarySkillName;
+        string separator = string.IsNullOrEmpty(primary) || string.IsNullOrEmpty(secondary) ? "" : "\n";
+        Helper.LocalPlayer?.cursorTip.text = string.Concat(primary, separator, secondary);
     }
 
     public void Dispose() {
+        Helper.LocalPlayer?.cursorTip.text = "";
         this.Root.SetActive(false);
         Object.Destroy(this.Root);
     }

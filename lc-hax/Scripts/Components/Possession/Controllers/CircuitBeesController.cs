@@ -27,8 +27,6 @@ sealed class CircuitBeesController(RedLocustBees enemy) : IEnemyController {
 
     string? IEnemyController.SecondarySkillName => null;
 
-    bool IEnemyController.AllowAIToChangeOwner => false;
-
     Vector3 IEnemyController.CameraOffset => new(0.0f, 2.0f, -3.0f);
 
     void IEnemyController.OnOutsideStatusChange() => this.Enemy.StopSearch(this.Enemy.searchForHive, true);
@@ -67,9 +65,7 @@ sealed class CircuitBeesController(RedLocustBees enemy) : IEnemyController {
 
     void IEnemyController.UpdateManual() { }
 
-    void IEnemyController.OnAIControlChanged(bool isAIControlled) { }
-
-    bool IEnemyController.RequiresServerAI(bool isAIControlled) => false;
+    bool IEnemyController.RequiresServerAI() => false;
 
     void IEnemyController.OnSecondaryHeld() { }
 

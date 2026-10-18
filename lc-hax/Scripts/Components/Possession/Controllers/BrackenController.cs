@@ -17,8 +17,6 @@ sealed class BrackenController(FlowermanAI enemy) : IEnemyController {
 
     float IEnemyController.SprintMultiplier => 2.8f;
 
-    bool IEnemyController.AllowAIToChangeOwner => false;
-
     Vector3 IEnemyController.CameraOffset => this.Enemy.IsBehaviourState(BrackenState.SCOUTING)
         ? new(0.0f, 2.0f, -3.0f)
         : new(0.0f, 2.6f, -3.2f);
@@ -71,9 +69,7 @@ sealed class BrackenController(FlowermanAI enemy) : IEnemyController {
 
     void IEnemyController.UpdateManual() { }
 
-    void IEnemyController.OnAIControlChanged(bool isAIControlled) { }
-
-    bool IEnemyController.RequiresServerAI(bool isAIControlled) => false;
+    bool IEnemyController.RequiresServerAI() => false;
 
     void IEnemyController.OnSecondaryHeld() { }
 

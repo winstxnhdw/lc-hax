@@ -19,7 +19,6 @@ interface IEnemyController : IDisposable {
 
     string? PrimarySkillName { get; }
     string? SecondarySkillName { get; }
-    bool AllowAIToChangeOwner { get; }
 
     // Called once after acquiring a live, spawned enemy owned by this client.
     void OnPossess();
@@ -33,17 +32,15 @@ interface IEnemyController : IDisposable {
     // The session has already validated the player and collision conditions.
     void OnPlayerCollision(PlayerControllerB player);
 
-    // Runs each session tick, including acquisition, AI mode, and ownership transfers.
+    // Runs each session tick, including acquisition and ownership transfers.
     // The enemy is live and spawned; ownership is not guaranteed.
     void Tick(bool inputPaused);
 
     // Runs only during manual control of a live, spawned enemy owned by this client.
     void UpdateManual();
 
-    // Called once per requested AI/manual mode change, without assuming ownership.
-    void OnAIControlChanged(bool isAIControlled);
-
-    bool RequiresServerAI(bool isAIControlled);
+    // Temporarily hands control to native server logic needed by the enemy's current state or ability.
+    bool RequiresServerAI();
 
     // Input callbacks run during unpaused manual control with a live, spawned enemy
     // owned by this client. Enemy-specific animation and cooldown checks stay here.

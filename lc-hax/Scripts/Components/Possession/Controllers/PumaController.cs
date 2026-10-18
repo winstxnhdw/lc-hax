@@ -8,7 +8,6 @@ sealed class PumaController(PumaAI enemy) : IEnemyController {
 
     PumaAI Enemy { get; } = enemy;
     float PreviousStoppingDistance { get; } = enemy.agent.stoppingDistance;
-    bool IsAIControlled { get; set; }
     bool IsFrozen { get; set; }
 
     bool IsInTree => this.Enemy.clingingToTree || this.Enemy.clingingToTreeAnim;
@@ -23,7 +22,6 @@ sealed class PumaController(PumaAI enemy) : IEnemyController {
     float? IEnemyController.MovementSpeed => this.Enemy.agent.Unfake() is { speed: > 0.0f } agent ? agent.speed : null;
     string? IEnemyController.PrimarySkillName => null;
     string IEnemyController.SecondarySkillName => "(HOLD) Ambush freeze";
-    bool IEnemyController.AllowAIToChangeOwner => true;
 
     void IEnemyController.OnPossess() {
         if (!this.IsInTree && this.Enemy.stalkingFrozen) {
@@ -90,7 +88,6 @@ sealed class PumaController(PumaAI enemy) : IEnemyController {
     void IEnemyController.CancelSecondarySkill() => this.IsFrozen = false;
 
     void IEnemyController.ReleaseSecondarySkill() {
-        if (this.IsAIControlled) return;
         if (this.IsInTree) return;
 
         this.ReleaseFreeze();
@@ -111,17 +108,7 @@ sealed class PumaController(PumaAI enemy) : IEnemyController {
         this.Enemy.SwitchToBehaviourState(state);
     }
 
-    void IEnemyController.OnAIControlChanged(bool isAIControlled) {
-        this.IsAIControlled = isAIControlled;
-
-        if (isAIControlled) {
-            this.RestoreManualState();
-        }
-    }
-
-    void IEnemyController.OnUnpossess(PossessionEndReason reason) => this.RestoreManualState();
-
-    void RestoreManualState() {
+    void IEnemyController.OnUnpossess(PossessionEndReason reason) {
         if (this.Enemy.isEnemyDead) return;
 
         this.Enemy.updateDestinationIntervalB = 0.0f;
@@ -149,7 +136,7 @@ sealed class PumaController(PumaAI enemy) : IEnemyController {
         this.Enemy.StopSearch(search, true);
     }
 
-    bool IEnemyController.RequiresServerAI(bool isAIControlled) => !isAIControlled && this.IsInTree && this.Enemy.TargetTree == null;
+    bool IEnemyController.RequiresServerAI() => this.IsInTree && this.Enemy.TargetTree == null;
     void IEnemyController.Tick(bool inputPaused) { }
     void IEnemyController.OnSecondaryPressed() { }
 

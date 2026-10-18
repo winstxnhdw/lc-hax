@@ -18,7 +18,6 @@ sealed class GiantSapsuckerController(GiantKiwiAI enemy) : IEnemyController {
     Vector3 IEnemyController.PositionOffset => Vector3.zero;
     float IEnemyController.EntranceRange => 0.0f;
     float IEnemyController.SprintMultiplier => 1.5f;
-    bool IEnemyController.AllowAIToChangeOwner => true;
 
     bool CanAct => this.Enemy.birdNest != null && !this.Enemy.inKillAnimation && !this.Enemy.pryingOpenDoor &&
         !this.Enemy.inSpecialAnimation && this.Enemy.stunNormalizedTimer <= 0.0f;
@@ -32,8 +31,6 @@ sealed class GiantSapsuckerController(GiantKiwiAI enemy) : IEnemyController {
     string IEnemyController.PrimarySkillName => this.Enemy.carryingEgg ? "Drop egg" : "Pick up egg";
     string IEnemyController.SecondarySkillName => "(HOLD) Peck";
 
-    void IEnemyController.OnPossess() => this.EnterManual();
-
     void IEnemyController.OnUnpossess(PossessionEndReason reason) {
         if (!this.Enemy.IsOwner) return;
         if (this.Enemy.isEnemyDead) return;
@@ -41,19 +38,7 @@ sealed class GiantSapsuckerController(GiantKiwiAI enemy) : IEnemyController {
         this.StopPecking();
     }
 
-    void IEnemyController.OnAIControlChanged(bool isAIControlled) {
-        if (!this.Enemy.IsOwner) return;
-
-        if (isAIControlled) {
-            this.StopPecking();
-            return;
-        }
-
-        this.EnterManual();
-    }
-
-    bool IEnemyController.RequiresServerAI(bool isAIControlled) =>
-        isAIControlled && !this.Enemy.IsBehaviourState(GiantSapsuckerState.ATTACKING);
+    bool IEnemyController.RequiresServerAI() => false;
 
     void IEnemyController.Tick(bool inputPaused) => this.ObservePeck();
 
@@ -140,7 +125,7 @@ sealed class GiantSapsuckerController(GiantKiwiAI enemy) : IEnemyController {
         }
     }
 
-    void EnterManual() {
+    void IEnemyController.OnPossess() {
         this.StopPecking();
         this.Enemy.StopSearch(this.Enemy.searchForLostEgg, true);
     }

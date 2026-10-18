@@ -16,8 +16,6 @@ sealed class ForestGiantController(ForestGiantAI enemy) : IEnemyController {
 
     string? IEnemyController.PrimarySkillName => null;
 
-    bool IEnemyController.AllowAIToChangeOwner => false;
-
     bool IsUsingSecondarySkill { get; set; }
 
     Vector3 IEnemyController.CameraOffset => new(0.0f, 8.0f, -8.0f);
@@ -82,9 +80,7 @@ sealed class ForestGiantController(ForestGiantAI enemy) : IEnemyController {
 
     void IEnemyController.Tick(bool inputPaused) { }
 
-    void IEnemyController.OnAIControlChanged(bool isAIControlled) => this.IsUsingSecondarySkill = false;
-
-    bool IEnemyController.RequiresServerAI(bool isAIControlled) => false;
+    bool IEnemyController.RequiresServerAI() => false;
 
     void IEnemyController.OnPrimaryPressed() { }
 

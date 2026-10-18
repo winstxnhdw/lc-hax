@@ -17,7 +17,6 @@ sealed class ButlerBeesController(ButlerBeesEnemyAI enemy) : IEnemyController {
     float? IEnemyController.MovementSpeed => this.Enemy.agent.Unfake() is { speed: > 0.0f } agent ? agent.speed : null;
     string? IEnemyController.PrimarySkillName => null;
     string? IEnemyController.SecondarySkillName => null;
-    bool IEnemyController.AllowAIToChangeOwner => true;
 
     void IEnemyController.UpdateManual() {
         this.StopSearch();
@@ -37,7 +36,7 @@ sealed class ButlerBeesController(ButlerBeesEnemyAI enemy) : IEnemyController {
         this.Enemy.StopSearch(search, true);
     }
 
-    void RestoreAI() {
+    void IEnemyController.OnUnpossess(PossessionEndReason reason) {
         if (this.Enemy.Unfake() is not { IsSpawned: true, isEnemyDead: false } enemy) return;
 
         if (this.OriginalBuzzPitch is float pitch && enemy.buzzing.Unfake() is AudioSource buzzing) {
@@ -52,13 +51,6 @@ sealed class ButlerBeesController(ButlerBeesEnemyAI enemy) : IEnemyController {
         enemy.chasePlayerTimer = 0.0f;
     }
 
-    void IEnemyController.OnAIControlChanged(bool isAIControlled) {
-        if (!isAIControlled) return;
-        this.RestoreAI();
-    }
-
-    void IEnemyController.OnUnpossess(PossessionEndReason reason) => this.RestoreAI();
-
     void IEnemyController.OnOutsideStatusChange() => this.StopSearch();
 
     void IDisposable.Dispose() { }
@@ -67,7 +59,7 @@ sealed class ButlerBeesController(ButlerBeesEnemyAI enemy) : IEnemyController {
 
     void IEnemyController.Tick(bool inputPaused) { }
 
-    bool IEnemyController.RequiresServerAI(bool isAIControlled) => false;
+    bool IEnemyController.RequiresServerAI() => false;
 
     void IEnemyController.OnPrimaryPressed() { }
 

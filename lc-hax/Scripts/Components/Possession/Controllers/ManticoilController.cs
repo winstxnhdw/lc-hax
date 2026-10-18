@@ -18,8 +18,6 @@ sealed class ManticoilController(DoublewingAI enemy) : IEnemyController {
 
     float? IEnemyController.MovementSpeed => this.Enemy.agent.Unfake()?.speed;
 
-    bool IEnemyController.AllowAIToChangeOwner => false;
-
     Vector3 IEnemyController.CameraOffset => new(
         0.0f,
         Mathf.Max(2.3f, this.Enemy.Body.position.y - this.Enemy.transform.position.y + 2.3f),
@@ -56,9 +54,7 @@ sealed class ManticoilController(DoublewingAI enemy) : IEnemyController {
 
     void IEnemyController.Tick(bool inputPaused) { }
 
-    void IEnemyController.OnAIControlChanged(bool isAIControlled) { }
-
-    bool IEnemyController.RequiresServerAI(bool isAIControlled) => false;
+    bool IEnemyController.RequiresServerAI() => false;
 
     void IEnemyController.OnSecondaryHeld() { }
 

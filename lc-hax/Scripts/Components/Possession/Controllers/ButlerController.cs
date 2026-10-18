@@ -20,34 +20,19 @@ sealed class ButlerController(ButlerEnemyAI enemy) : IEnemyController {
     bool SweepAnimationActive { get; set; }
     bool HasSwept { get; set; }
     bool KnifeDrawn { get; set; } = true;
-    bool ManualControlActive { get; set; }
     bool? WasRunning { get; set; }
 
     Vector3 IEnemyController.CameraOffset => new(0.0f, 2.5f, -3.0f);
 
     float? IEnemyController.MovementSpeed => this.Enemy.agent.Unfake() is { speed: > 0.0f } agent ? agent.speed : null;
 
-    bool IEnemyController.AllowAIToChangeOwner => true;
-
     bool IEnemyController.CanMove => !this.Enemy.inSpecialAnimation;
 
     bool IEnemyController.CanRotate => !this.Enemy.inSpecialAnimation;
 
-    void IEnemyController.OnPossess() {
-        this.ManualControlActive = true;
-        this.ApplyManualState();
-    }
+    void IEnemyController.OnPossess() => this.ApplyManualState();
 
     void IEnemyController.Tick(bool inputPaused) { }
-
-    void IEnemyController.OnAIControlChanged(bool isAIControlled) {
-        if (!isAIControlled) {
-            this.ManualControlActive = true;
-            return;
-        }
-
-        this.RestoreAIState();
-    }
 
     void IEnemyController.UpdateManual() => this.ApplyManualState();
 
@@ -93,9 +78,6 @@ sealed class ButlerController(ButlerEnemyAI enemy) : IEnemyController {
 
     void IEnemyController.ReleaseSecondarySkill() {
         this.StopSweeping();
-        if (!this.ManualControlActive) {
-            return;
-        }
         this.ApplyManualState();
     }
 
@@ -151,8 +133,9 @@ sealed class ButlerController(ButlerEnemyAI enemy) : IEnemyController {
 
     void IEnemyController.OnOutsideStatusChange() => this.StopSearches();
 
-    void RestoreAIState() {
-        this.ManualControlActive = false;
+    void IEnemyController.OnUnpossess(PossessionEndReason reason) {
+        if (reason is PossessionEndReason.EnemyDied or PossessionEndReason.EnemyKilled) return;
+
         this.StopSweeping();
         if (this.Enemy is not { IsSpawned: true, isEnemyDead: false, inSpecialAnimation: false }) {
             return;
@@ -174,15 +157,9 @@ sealed class ButlerController(ButlerEnemyAI enemy) : IEnemyController {
         this.WasRunning = null;
     }
 
-    void IEnemyController.OnUnpossess(PossessionEndReason reason) {
-        if (reason is PossessionEndReason.EnemyDied or PossessionEndReason.EnemyKilled) return;
-        this.RestoreAIState();
-    }
-
     void IDisposable.Dispose() {
         this.StopSweeping();
         this.SweepAnimationActive = false;
-        this.ManualControlActive = false;
         this.WasRunning = null;
     }
 
@@ -192,5 +169,5 @@ sealed class ButlerController(ButlerEnemyAI enemy) : IEnemyController {
 
     void IEnemyController.OnPlayerCollision(PlayerControllerB player) { }
 
-    bool IEnemyController.RequiresServerAI(bool isAIControlled) => false;
+    bool IEnemyController.RequiresServerAI() => false;
 }

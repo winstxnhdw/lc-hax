@@ -24,8 +24,6 @@ sealed class HoardingBugController(HoarderBugAI enemy) : IEnemyController {
 
     float? IEnemyController.MovementSpeed => this.Enemy.agent.Unfake() is { speed: > 0.0f } agent ? agent.speed : null;
 
-    bool IEnemyController.AllowAIToChangeOwner => false;
-
     void UseHeldItem(HoarderBugAI enemy) =>
         (enemy.heldItem?.itemGrabbableObject as ShotgunItem).Unfake()?.ShootShotgun(enemy.transform);
 
@@ -94,9 +92,7 @@ sealed class HoardingBugController(HoarderBugAI enemy) : IEnemyController {
 
     void IEnemyController.Tick(bool inputPaused) { }
 
-    void IEnemyController.OnAIControlChanged(bool isAIControlled) { }
-
-    bool IEnemyController.RequiresServerAI(bool isAIControlled) => false;
+    bool IEnemyController.RequiresServerAI() => false;
 
     void IEnemyController.OnSecondaryHeld() { }
 

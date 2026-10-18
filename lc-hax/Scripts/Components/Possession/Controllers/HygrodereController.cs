@@ -17,8 +17,6 @@ sealed class HygrodereController(BlobAI enemy) : IEnemyController {
 
     string? IEnemyController.SecondarySkillName => null;
 
-    bool IEnemyController.AllowAIToChangeOwner => false;
-
     Vector3 IEnemyController.CameraOffset => new(0.0f, 2.0f, -3.0f);
 
     void IEnemyController.OnPrimaryPressed() => this.Enemy.HitEnemyOnLocalClient(force: 0);
@@ -51,9 +49,7 @@ sealed class HygrodereController(BlobAI enemy) : IEnemyController {
 
     void IEnemyController.UpdateManual() { }
 
-    void IEnemyController.OnAIControlChanged(bool isAIControlled) { }
-
-    bool IEnemyController.RequiresServerAI(bool isAIControlled) => false;
+    bool IEnemyController.RequiresServerAI() => false;
 
     void IEnemyController.OnSecondaryPressed() { }
 

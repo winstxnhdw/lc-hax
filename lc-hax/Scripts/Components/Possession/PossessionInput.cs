@@ -7,17 +7,17 @@ sealed class PossessionInput : IDisposable {
 
     EnemyAI Enemy { get; }
     IEnemyController Controller { get; }
-    PossessionControl Control { get; }
+    Func<bool> HasManualAuthority { get; }
     bool SecondaryHeld { get; set; }
     bool SecondaryReleasePending { get; set; }
 
     internal static bool IsPaused => Helper.LocalPlayer is not PlayerControllerB player || player.IsInputPaused();
-    internal bool CanUseActions => !PossessionInput.IsPaused && this.Control.HasManualAuthority && !this.SecondaryReleasePending;
+    internal bool CanUseActions => !PossessionInput.IsPaused && this.HasManualAuthority() && !this.SecondaryReleasePending;
 
-    internal PossessionInput(EnemyAI enemy, IEnemyController controller, PossessionControl control) {
+    internal PossessionInput(EnemyAI enemy, IEnemyController controller, Func<bool> hasManualAuthority) {
         this.Enemy = enemy;
         this.Controller = controller;
-        this.Control = control;
+        this.HasManualAuthority = hasManualAuthority;
 
         InputListener.OnNPress += this.RequestNoClip;
         InputListener.OnLeftButtonPress += this.UsePrimarySkill;
@@ -86,7 +86,6 @@ sealed class PossessionInput : IDisposable {
 
     internal void ReleasePendingSecondarySkill() {
         if (!this.SecondaryReleasePending) return;
-
         if (this.Enemy.Unfake() is not { IsSpawned: true, isEnemyDead: false } enemy) {
             this.SecondaryReleasePending = false;
             return;

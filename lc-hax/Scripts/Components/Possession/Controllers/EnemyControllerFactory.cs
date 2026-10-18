@@ -50,7 +50,6 @@ static class EnemyControllerFactory {
         float? IEnemyController.MovementSpeed => this.Enemy.agent.Unfake()?.speed;
         string? IEnemyController.PrimarySkillName => null;
         string? IEnemyController.SecondarySkillName => null;
-        bool IEnemyController.AllowAIToChangeOwner => false;
 
         void IEnemyController.OnPossess() { }
 
@@ -66,9 +65,7 @@ static class EnemyControllerFactory {
 
         void IEnemyController.UpdateManual() { }
 
-        void IEnemyController.OnAIControlChanged(bool isAIControlled) { }
-
-        bool IEnemyController.RequiresServerAI(bool isAIControlled) => false;
+        bool IEnemyController.RequiresServerAI() => false;
 
         void IEnemyController.OnPrimaryPressed() { }
 

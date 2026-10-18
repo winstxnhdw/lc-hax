@@ -20,8 +20,6 @@ sealed class SandSpiderController(SandSpiderAI enemy) : IEnemyController {
 
     string? IEnemyController.SecondarySkillName => null;
 
-    bool IEnemyController.AllowAIToChangeOwner => false;
-
     float MeshSyncCooldownRemaining { get; set; }
 
     Vector3 IEnemyController.CameraOffset => new(0.0f, 2.0f, -3.0f);
@@ -109,9 +107,7 @@ sealed class SandSpiderController(SandSpiderAI enemy) : IEnemyController {
 
     void IEnemyController.Tick(bool inputPaused) { }
 
-    void IEnemyController.OnAIControlChanged(bool isAIControlled) { }
-
-    bool IEnemyController.RequiresServerAI(bool isAIControlled) => false;
+    bool IEnemyController.RequiresServerAI() => false;
 
     void IEnemyController.OnSecondaryPressed() { }
 

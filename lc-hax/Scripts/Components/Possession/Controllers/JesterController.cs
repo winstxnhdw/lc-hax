@@ -17,8 +17,6 @@ sealed class JesterController(JesterAI enemy) : IEnemyController {
 
     float? IEnemyController.MovementSpeed => this.Enemy.agent.Unfake() is { speed: > 0.0f } agent ? agent.speed : null;
 
-    bool IEnemyController.AllowAIToChangeOwner => false;
-
     Vector3 IEnemyController.CameraOffset => this.Enemy.IsBehaviourState(JesterState.OPEN)
         ? new(0.0f, 2.3f, -3.5f)
         : new(0.0f, 2.0f, -3.0f);
@@ -75,9 +73,7 @@ sealed class JesterController(JesterAI enemy) : IEnemyController {
 
     void IEnemyController.Tick(bool inputPaused) { }
 
-    void IEnemyController.OnAIControlChanged(bool isAIControlled) { }
-
-    bool IEnemyController.RequiresServerAI(bool isAIControlled) => false;
+    bool IEnemyController.RequiresServerAI() => false;
 
     void IEnemyController.OnSecondaryPressed() { }
 

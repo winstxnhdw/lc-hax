@@ -19,8 +19,6 @@ sealed class CrawlerController(CrawlerAI enemy) : IEnemyController {
 
     string? IEnemyController.SecondarySkillName => null;
 
-    bool IEnemyController.AllowAIToChangeOwner => false;
-
     float IEnemyController.EntranceRange => 1.5f;
 
     float? IEnemyController.MovementSpeed => null;
@@ -50,9 +48,7 @@ sealed class CrawlerController(CrawlerAI enemy) : IEnemyController {
 
     void IEnemyController.UpdateManual() { }
 
-    void IEnemyController.OnAIControlChanged(bool isAIControlled) { }
-
-    bool IEnemyController.RequiresServerAI(bool isAIControlled) => false;
+    bool IEnemyController.RequiresServerAI() => false;
 
     void IEnemyController.OnSecondaryHeld() { }
 

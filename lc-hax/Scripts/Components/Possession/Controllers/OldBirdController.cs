@@ -12,8 +12,6 @@ sealed class OldBirdController(RadMechAI enemy) : IEnemyController {
 
     Vector3 IEnemyController.PositionOffset => Vector3.zero;
 
-    bool IEnemyController.AllowAIToChangeOwner => false;
-
     float RocketRequestExpiresAt { get; set; }
     float NextRocketTime { get; set; }
     float NextFlightTime { get; set; }
@@ -34,7 +32,7 @@ sealed class OldBirdController(RadMechAI enemy) : IEnemyController {
 
     bool IEnemyController.CanRotate => !this.IsInNativeAnimation && !this.Enemy.attemptingGrab;
 
-    bool IEnemyController.RequiresServerAI(bool isAIControlled) => isAIControlled || this.RocketRequested;
+    bool IEnemyController.RequiresServerAI() => this.RocketRequested;
 
     void IEnemyController.Tick(bool inputPaused) {
         if (!this.RocketRequested) return;
@@ -107,8 +105,6 @@ sealed class OldBirdController(RadMechAI enemy) : IEnemyController {
     void IEnemyController.OnUnpossess(PossessionEndReason reason) { }
 
     void IEnemyController.OnOutsideStatusChange() { }
-
-    void IEnemyController.OnAIControlChanged(bool isAIControlled) { }
 
     void IEnemyController.OnSecondaryHeld() { }
 

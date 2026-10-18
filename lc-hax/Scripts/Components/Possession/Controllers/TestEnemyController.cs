@@ -17,8 +17,6 @@ sealed class TestEnemyController(TestEnemy enemy) : IEnemyController {
 
     string? IEnemyController.SecondarySkillName => null;
 
-    bool IEnemyController.AllowAIToChangeOwner => false;
-
     Vector3 IEnemyController.CameraOffset => new(0.0f, 2.0f, -4.5f);
 
     Vector3 IEnemyController.PositionOffset => new(0.0f, 1.5f, 0.0f);
@@ -39,9 +37,7 @@ sealed class TestEnemyController(TestEnemy enemy) : IEnemyController {
 
     void IEnemyController.UpdateManual() { }
 
-    void IEnemyController.OnAIControlChanged(bool isAIControlled) { }
-
-    bool IEnemyController.RequiresServerAI(bool isAIControlled) => false;
+    bool IEnemyController.RequiresServerAI() => false;
 
     void IEnemyController.OnPrimaryPressed() { }
 

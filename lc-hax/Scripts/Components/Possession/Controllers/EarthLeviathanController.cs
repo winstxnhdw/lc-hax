@@ -21,8 +21,6 @@ sealed class EarthLeviathanController(SandWormAI enemy) : IEnemyController {
 
     float? IEnemyController.MovementSpeed => null;
 
-    bool IEnemyController.AllowAIToChangeOwner => false;
-
     Vector3 IEnemyController.CameraOffset => new(0.0f, 8.0f, -13.0f);
 
     void IEnemyController.OnSecondaryPressed() {
@@ -46,9 +44,7 @@ sealed class EarthLeviathanController(SandWormAI enemy) : IEnemyController {
 
     void IEnemyController.UpdateManual() { }
 
-    void IEnemyController.OnAIControlChanged(bool isAIControlled) { }
-
-    bool IEnemyController.RequiresServerAI(bool isAIControlled) => false;
+    bool IEnemyController.RequiresServerAI() => false;
 
     void IEnemyController.OnPrimaryPressed() { }
 

@@ -7,7 +7,6 @@ sealed class PossessionOwnership {
     EnemyAI EnemyReference { get; }
     ulong OriginalOwner { get; }
     ulong? TargetOwner { get; set; }
-    bool HasRequested { get; set; }
     float NextRequestTime { get; set; }
 
     internal PossessionOwnership(EnemyAI enemy) {
@@ -30,21 +29,21 @@ sealed class PossessionOwnership {
             return false;
         }
 
-        this.HasRequested = true;
         this.NextRequestTime = Time.unscaledTime + PossessionOwnership.RetryInterval;
         enemy.ChangeEnemyOwnerServerRpc(owner);
 
         return false;
     }
 
-    internal void Restore(bool allowAIToChangeOwner) {
+    internal void Restore() {
         if (Helper.StartOfRound is not StartOfRound round) return;
         if (this.EnemyReference.Unfake() is not { IsSpawned: true } enemy) return;
-        if (!this.HasRequested && !allowAIToChangeOwner) return;
         if (!enemy.IsOwner) return;
 
-        enemy.ChangeEnemyOwnerServerRpc(
-            round.ClientPlayerList.ContainsKey(this.OriginalOwner) ? this.OriginalOwner : NetworkManager.ServerClientId
-        );
+        ulong owner = round.ClientPlayerList.ContainsKey(this.OriginalOwner) ? this.OriginalOwner : NetworkManager.ServerClientId;
+
+        if (enemy.OwnerClientId != owner) {
+            enemy.ChangeEnemyOwnerServerRpc(owner);
+        }
     }
 }

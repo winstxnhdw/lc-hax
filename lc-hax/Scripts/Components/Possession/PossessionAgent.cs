@@ -26,12 +26,6 @@ sealed class PossessionAgent {
         this.ConfigureAgent(enemy, updatePosition: false, updateRotation: false, isStopped: true);
     }
 
-    internal void ResumeAI(EnemyAI enemy, IEnemyController controller) {
-        this.RestorePosition(enemy, controller);
-        this.ConfigureAgent(enemy, this.UpdatePosition, this.UpdateRotation, isStopped: false);
-        enemy.updateDestinationInterval = 0.0f;
-    }
-
     internal void Restore(EnemyAI enemy, IEnemyController controller) {
         enemy.updateDestinationInterval = 0.0f;
         if (enemy.IsOwner) {
