@@ -64,7 +64,6 @@ sealed class Loader : MonoBehaviour {
         DontDestroyOnLoad(Loader.HaxModules);
 
         Loader.AddHaxModules<ESPMod>();
-        Loader.AddHaxModules<SaneMod>();
         Loader.AddHaxModules<ChatMod>();
         Loader.AddHaxModules<AutoPlayMod>();
         Loader.AddHaxModules<WeightMod>();
