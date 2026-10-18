@@ -28,8 +28,6 @@ sealed class PossessionView : IDisposable {
         this.MousePan.SetRotation(this.Camera.transform.rotation);
     }
 
-    internal void Suspend() => this.MousePan.enabled = false;
-
     internal void Prepare(bool inputPaused) => this.MousePan.IsPaused = inputPaused;
 
     internal void Update() {

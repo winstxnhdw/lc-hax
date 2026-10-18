@@ -27,7 +27,6 @@ sealed class PossessionSession : IDisposable {
     PossessionMotor Motor { get; }
     PossessionView View { get; }
     PossessionOwnership Ownership { get; }
-    PossessionAgent Agent { get; }
     PossessionInput Input { get; }
     PossessionEntrances Entrances { get; }
     PossessionSync Sync { get; }
@@ -38,7 +37,6 @@ sealed class PossessionSession : IDisposable {
     internal PossessionSession(EnemyAI enemy, Camera camera) {
         this.EnemyReference = enemy;
         this.Ownership = new PossessionOwnership(enemy);
-        this.Agent = new PossessionAgent(enemy);
         this.Controller = EnemyControllerFactory.Create(enemy);
         this.Motor = new PossessionMotor(enemy, this.Controller);
         this.View = new PossessionView(enemy, this.Controller, camera);
@@ -73,14 +71,14 @@ sealed class PossessionSession : IDisposable {
         this.Controller.Tick(PossessionInput.IsPaused);
 
         if (this.IsActive && this.Controller.RequiresServerAI()) {
-            this.ApplyExecution(PossessionExecution.Server, enemy);
+            this.ApplyExecution(PossessionExecution.Server);
             _ = this.Ownership.Request(NetworkManager.ServerClientId);
             this.Input.ReleasePendingSecondarySkill();
             return;
         }
 
         if (!enemy.IsOwner) {
-            this.ApplyExecution(PossessionExecution.Suspended, enemy);
+            this.ApplyExecution(PossessionExecution.Suspended);
         }
 
         if (!this.Ownership.Request(player.actualClientId)) {
@@ -93,19 +91,17 @@ sealed class PossessionSession : IDisposable {
             enemy.EnableEnemyMesh(true, false);
         }
 
-        this.ApplyExecution(PossessionExecution.Manual, enemy);
+        this.ApplyExecution(PossessionExecution.Manual);
         this.Input.ReleasePendingSecondarySkill();
         this.Controller.UpdateManual();
         this.View.Prepare(PossessionInput.IsPaused);
         this.Motor.Prepare(this.View.Rotation, PossessionInput.IsPaused);
-        this.Agent.Stop(enemy);
     }
 
     internal void LateTick() {
-        if (this.Enemy is not EnemyAI enemy) return;
+        if (this.Enemy is null) return;
         if (this.IsManuallyControlled) {
             this.Motor.Apply(this.View.Rotation);
-            this.Agent.Stop(enemy);
             this.Entrances.UpdateOutsideStatus();
             this.Sync.Synchronize(force: this.Input.CanUseActions && this.Entrances.TryUseEntrance());
         }
@@ -125,33 +121,14 @@ sealed class PossessionSession : IDisposable {
         this.Controller.OnPlayerCollision(player);
     }
 
-    void ApplyExecution(PossessionExecution execution, EnemyAI enemy) {
+    void ApplyExecution(PossessionExecution execution) {
         if (this.Execution == execution) return;
 
         this.Execution = execution;
 
-        if (execution is PossessionExecution.Manual && enemy.currentSearch is { inProgress: true } search) {
-            enemy.StopSearch(search, true);
-        }
-
-        if (execution is PossessionExecution.Manual) {
-            this.Motor.SetManualControl(true);
-            this.View.SetManualControl(true);
-            this.Agent.Stop(enemy);
-        }
-
-        else if (execution is PossessionExecution.Server) {
-            this.Agent.Restore(enemy, this.Controller);
-            this.Motor.SetManualControl(false);
-            this.View.SetManualControl(false);
-        }
-
-        else {
-            this.Motor.Suspend();
-            this.View.Suspend();
-            this.Agent.Restore(enemy, this.Controller);
-        }
-
+        bool isManual = execution is PossessionExecution.Manual;
+        this.Motor.SetManualControl(isManual);
+        this.View.SetManualControl(isManual);
         this.Sync.Synchronize(force: true);
         this.Input.ReleaseSecondarySkill();
     }
@@ -174,7 +151,7 @@ sealed class PossessionSession : IDisposable {
         }
 
         if (wasActive && this.Enemy is { IsSpawned: true }) {
-            this.Agent.Restore(this.EnemyReference, this.Controller);
+            this.Motor.SetManualControl(false);
             this.Sync.Synchronize(force: true);
         }
 
