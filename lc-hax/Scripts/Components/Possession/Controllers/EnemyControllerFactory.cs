@@ -26,6 +26,7 @@ static class EnemyControllerFactory {
         DocileLocustBeesAI locust => new LocustController(locust),
         RadMechAI oldBird => new OldBirdController(oldBird),
         ButlerEnemyAI butler => new ButlerController(butler),
+        ButlerBeesEnemyAI butlerBees => new ButlerBeesController(butlerBees),
         _ => new DefaultEnemyController(enemy)
     };
 
