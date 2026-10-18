@@ -19,6 +19,7 @@ sealed class PossessionInput : IDisposable {
         this.Controller = controller;
         this.HasManualAuthority = hasManualAuthority;
 
+        InputListener.OnZPress += this.RequestRelease;
         InputListener.OnNPress += this.RequestNoClip;
         InputListener.OnLeftButtonPress += this.UsePrimarySkill;
         InputListener.OnRightButtonPress += this.UseSecondarySkill;
@@ -33,6 +34,7 @@ sealed class PossessionInput : IDisposable {
     }
 
     public void Dispose() {
+        InputListener.OnZPress -= this.RequestRelease;
         InputListener.OnNPress -= this.RequestNoClip;
         InputListener.OnLeftButtonPress -= this.UsePrimarySkill;
         InputListener.OnRightButtonPress -= this.UseSecondarySkill;
@@ -41,6 +43,11 @@ sealed class PossessionInput : IDisposable {
         InputListener.OnDelPress -= this.RequestKillEnemy;
 
         this.ReleaseSecondarySkill();
+    }
+
+    void RequestRelease() {
+        if (PossessionInput.IsPaused) return;
+        this.OnEndRequested?.Invoke(PossessionEndReason.Released);
     }
 
     void RequestNoClip() {

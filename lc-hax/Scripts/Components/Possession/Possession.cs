@@ -18,12 +18,10 @@ sealed class Possession : IPhantomExtension {
         this.Camera = camera;
         this.CameraBinding = this.GetBinding(camera);
         this.CameraBinding.Possession = this;
-        InputListener.OnZPress += this.ReleasePossession;
         GameListener.OnShipLeave += this.OnShipLeave;
     }
 
     void IDisposable.Dispose() {
-        InputListener.OnZPress -= this.ReleasePossession;
         GameListener.OnShipLeave -= this.OnShipLeave;
         this.Session?.Dispose();
         this.CameraBinding.Possession = null;
@@ -52,11 +50,6 @@ sealed class Possession : IPhantomExtension {
     PossessionBinding GetBinding(Component component) => component.TryGetComponent(out PossessionBinding binding)
         ? binding
         : component.gameObject.AddComponent<PossessionBinding>();
-
-    void ReleasePossession() {
-        if (PossessionInput.IsPaused) return;
-        this.Session?.End(PossessionEndReason.Released);
-    }
 
     void OnSessionEnded() {
         this.Session?.OnEnded -= this.OnSessionEnded;
