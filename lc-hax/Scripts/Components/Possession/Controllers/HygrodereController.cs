@@ -38,7 +38,7 @@ sealed class HygrodereController(BlobAI enemy) : IEnemyController {
         this.Enemy.timeSinceHittingLocalPlayer = 0.0f;
         player.DamagePlayerRpc(35);
 
-        if (player.health <= 35) {
+        if (player.health <= 35 && player.criticallyInjured) {
             this.Enemy.SlimeKillPlayerEffectServerRpc(player.PlayerIndex());
         }
     }
