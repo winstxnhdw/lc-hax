@@ -11,10 +11,10 @@ struct CopiedStates {
 }
 
 sealed class FollowMod : MonoBehaviour {
-    internal static PlayerControllerB? PlayerToFollow { get; set; }
-
     const float SecondsBeforeRealtime = 1.0f;
     const float MaxDistanceFromTarget = 1.0f;
+
+    internal static PlayerControllerB? PlayerToFollow { get; set; }
 
     Queue<CopiedStates> PlayerStates { get; set; } = new();
     Quaternion DeviateRotation { get; set; } = Quaternion.identity;
@@ -31,8 +31,12 @@ sealed class FollowMod : MonoBehaviour {
     }
 
     void Update() {
-        if (Helper.LocalPlayer is not PlayerControllerB localPlayer ||
-            FollowMod.PlayerToFollow is not PlayerControllerB targetPlayer) {
+        if (Helper.LocalPlayer is not PlayerControllerB localPlayer) {
+            this.ResetFollowing();
+            return;
+        }
+
+        if (FollowMod.PlayerToFollow is not PlayerControllerB targetPlayer) {
             this.ResetFollowing();
             return;
         }
@@ -44,6 +48,7 @@ sealed class FollowMod : MonoBehaviour {
                 body: "Following has been disrupted!",
                 isWarning: true
             );
+
             return;
         }
 
@@ -86,7 +91,10 @@ sealed class FollowMod : MonoBehaviour {
         CopiedStates state = this.PlayerStates.Dequeue();
 
         localPlayer.transform.rotation = state.rotation * this.DeviateRotation;
-        localPlayer.UpdatePlayerRotationServerRpc((short)localPlayer.cameraUp, (short)localPlayer.thisPlayerBody.eulerAngles.y);
+        localPlayer.UpdatePlayerRotationServerRpc(
+            (short)localPlayer.cameraUp,
+            (short)localPlayer.thisPlayerBody.eulerAngles.y
+        );
 
         if (this.DeviateTimer < 0) {
             this.DeviateRotation = Quaternion.Euler(0.0f, Random.Range(-360.0f, 360.0f), 0.0f);

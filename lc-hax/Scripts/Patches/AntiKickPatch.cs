@@ -18,7 +18,9 @@ sealed class AntiKickPatch {
 
     [HarmonyPatch(nameof(PlayerControllerB.SendNewPlayerValuesClientRpc))]
     static void Postfix() {
-        if (Helper.LocalPlayer is not PlayerControllerB localPlayer || !AntiKickPatch.IsLocalClient(localPlayer)) return;
+        if (Helper.LocalPlayer is not PlayerControllerB localPlayer) return;
+        if (!AntiKickPatch.IsLocalClient(localPlayer)) return;
+
         AntiKickPatch.SetIdentity(localPlayer, SteamClient.SteamId, SteamClient.Name);
     }
 

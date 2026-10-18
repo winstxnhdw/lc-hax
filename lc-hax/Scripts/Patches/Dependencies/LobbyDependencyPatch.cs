@@ -19,7 +19,8 @@ sealed class LobbyDependencyPatch {
     [HarmonyPostfix]
     [HarmonyPatch(typeof(PlayerControllerB), nameof(PlayerControllerB.ConnectClientToPlayerObject))]
     static void PlayerConnectPostfix(PlayerControllerB __instance) {
-        if (ReferenceEquals(__instance, Helper.LocalPlayer)) LobbyDependencyPatch.RecordConnectedLobby();
+        if (!ReferenceEquals(__instance, Helper.LocalPlayer)) return;
+        LobbyDependencyPatch.RecordConnectedLobby();
     }
 
     internal static void RecordConnectedLobby() {

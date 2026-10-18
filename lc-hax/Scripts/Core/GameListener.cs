@@ -24,7 +24,8 @@ sealed class GameListener : MonoBehaviour {
     void OnFinishLevelGeneration() => GameListener.OnLevelGenerated?.Invoke();
 
     void ShipListener() {
-        if (!this.InGame || Helper.StartOfRound is not StartOfRound startOfRound) return;
+        if (!this.InGame) return;
+        if (Helper.StartOfRound is not StartOfRound startOfRound) return;
         if (startOfRound.inShipPhase) {
             this.HasShipBegunDescent = false;
             this.HasShipLeft = false;
