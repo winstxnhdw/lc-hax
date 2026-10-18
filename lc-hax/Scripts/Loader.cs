@@ -9,6 +9,7 @@ namespace Hax;
 
 sealed class Loader : MonoBehaviour {
     const string HarmonyID = "winstxnhdw.lc-hax";
+
     static GameObject HaxGameObjects { get; } = new("Hax GameObjects");
     static GameObject HaxModules { get; } = new("Hax Modules");
     static bool HasLoaded => Harmony.HasAnyPatches(Loader.HarmonyID);
@@ -75,7 +76,6 @@ sealed class Loader : MonoBehaviour {
         Loader.AddHaxModules<KillClickMod>();
         Loader.AddHaxModules<CrosshairMod>();
         Loader.AddHaxModules<MinimalGUIMod>();
-        Loader.AddHaxModules<PossessionMod>();
         Loader.AddHaxModules<DisconnectMod>();
         Loader.AddHaxModules<ClearVisionMod>();
         Loader.AddHaxModules<InstantInteractMod>();

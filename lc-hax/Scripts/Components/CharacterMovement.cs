@@ -1,144 +1,161 @@
 using GameNetcodeStuff;
 using UnityEngine;
-using UnityEngine.InputSystem;
-using ZLinq;
 
+[DefaultExecutionOrder(100)]
 sealed class CharacterMovement : MonoBehaviour {
-    // Movement constants
-    const float WalkingSpeed = 0.5f; // Walking speed when left control is held
-    const float SprintDuration = 0.0f; // Duration sprint key must be held for sprinting (adjust as needed)
+    const float WalkMultiplier = 0.5f;
     const float JumpForce = 9.2f;
     const float Gravity = 18.0f;
 
-    internal float CharacterSpeed { get; set; } = 5.0f;
-    internal float CharacterSprintSpeed { get; set; } = 2.8f;
-
-    // used to sync with the enemy to make sure it plays the correct animation when it is moving
+    internal float Speed { get; set; } = 5.0f;
+    internal float SprintMultiplier { get; set; } = 2.8f;
+    internal bool CanMove { get; set; }
     internal bool IsMoving { get; private set; }
     internal bool IsSprinting { get; private set; }
 
-    // Components and state variables
+    bool IsWHeld { get; set; }
+    bool IsAHeld { get; set; }
+    bool IsSHeld { get; set; }
+    bool IsDHeld { get; set; }
+    bool IsShiftHeld { get; set; }
+    bool IsCtrlHeld { get; set; }
+    bool JumpRequested { get; set; }
     float VelocityY { get; set; }
-    bool IsSprintHeld { get; set; }
-    float SprintTimer { get; set; }
-    Keyboard Keyboard { get; set; } = Keyboard.current;
-    KeyboardMovement? NoClipKeyboard { get; set; }
-    CharacterController? CharacterController { get; set; }
+    CharacterController CharacterController => this.GetComponent<CharacterController>();
 
-    internal void SetNoClipMode(bool enabled) {
-        if (this.NoClipKeyboard is null) return;
-        this.NoClipKeyboard.enabled = enabled;
+    unsafe Vector3 Direction {
+        get {
+            bool right = this.IsDHeld;
+            bool left = this.IsAHeld;
+            bool forward = this.IsWHeld;
+            bool backward = this.IsSHeld;
+
+            Vector3 direction = new(
+                *(byte*)&right - *(byte*)&left,
+                0.0f,
+                *(byte*)&forward - *(byte*)&backward
+            );
+
+            return direction.normalized;
+        }
     }
 
-    internal void Init() {
-        if (Helper.LocalPlayer is not PlayerControllerB localPlayer) return;
-        this.gameObject.layer = localPlayer.gameObject.layer;
+    void Awake() {
+        _ = this.gameObject.AddComponent<CharacterController>();
+
+        if (Helper.LocalPlayer is PlayerControllerB localPlayer) {
+            this.gameObject.layer = localPlayer.gameObject.layer;
+        }
+    }
+
+    void OnEnable() {
+        this.CharacterController.enabled = true;
+        InputListener.OnWButtonHold += this.HoldW;
+        InputListener.OnAButtonHold += this.HoldA;
+        InputListener.OnSButtonHold += this.HoldS;
+        InputListener.OnDButtonHold += this.HoldD;
+        InputListener.OnShiftButtonHold += this.HoldShift;
+        InputListener.OnCtrlButtonHold += this.HoldCtrl;
+        InputListener.OnSpacePress += this.RequestJump;
+    }
+
+    void OnDisable() {
+        InputListener.OnWButtonHold -= this.HoldW;
+        InputListener.OnAButtonHold -= this.HoldA;
+        InputListener.OnSButtonHold -= this.HoldS;
+        InputListener.OnDButtonHold -= this.HoldD;
+        InputListener.OnShiftButtonHold -= this.HoldShift;
+        InputListener.OnCtrlButtonHold -= this.HoldCtrl;
+        InputListener.OnSpacePress -= this.RequestJump;
+        this.IsWHeld = false;
+        this.IsAHeld = false;
+        this.IsSHeld = false;
+        this.IsDHeld = false;
+        this.IsShiftHeld = false;
+        this.IsCtrlHeld = false;
+        this.JumpRequested = false;
+        this.CharacterController.enabled = false;
+        this.ResetMovement();
+    }
+
+    void HoldW(bool isHeld) => this.IsWHeld = isHeld;
+
+    void HoldA(bool isHeld) => this.IsAHeld = isHeld;
+
+    void HoldS(bool isHeld) => this.IsSHeld = isHeld;
+
+    void HoldD(bool isHeld) => this.IsDHeld = isHeld;
+
+    void HoldShift(bool isHeld) => this.IsShiftHeld = isHeld;
+
+    void HoldCtrl(bool isHeld) => this.IsCtrlHeld = isHeld;
+
+    void RequestJump() => this.JumpRequested = true;
+
+    void ResetMovement() {
+        this.IsMoving = false;
+        this.IsSprinting = false;
+        this.VelocityY = 0.0f;
     }
 
     internal void SetPosition(Vector3 newPosition) {
-        if (this.CharacterController is null) return;
-
-        this.CharacterController.enabled = false;
+        CharacterController controller = this.CharacterController;
+        bool wasEnabled = controller.enabled;
         this.transform.position = newPosition;
-        this.CharacterController.enabled = true;
+        controller.enabled = false;
+        controller.enabled = wasEnabled;
+        this.ResetMovement();
     }
-
 
     internal void CalibrateCollision(EnemyAI enemy) {
-        if (this.CharacterController is null) return;
-
-        this.CharacterController.height = 1.0f;
-        this.CharacterController.radius = 0.5f;
-        this.CharacterController.center = new Vector3(0.0f, 0.5f, 0.0f);
-
-        float maxStepOffset = 0.25f;
-        this.CharacterController.stepOffset = Mathf.Min(this.CharacterController.stepOffset, maxStepOffset);
+        CharacterController controller = this.CharacterController;
+        controller.height = 1.0f;
+        controller.radius = 0.5f;
+        controller.center = new Vector3(0.0f, 0.5f, 0.0f);
+        controller.stepOffset = Mathf.Min(controller.stepOffset, 0.25f);
 
         enemy.GetComponentsInChildren<Collider>()
-             .AsValueEnumerable()
-             .Where(collider => collider != this.CharacterController)
-             .ForEach(collider => Physics.IgnoreCollision(this.CharacterController, collider));
+             .ForEach(collider => Physics.IgnoreCollision(controller, collider));
     }
 
-
-    void Awake() {
-        this.Keyboard = Keyboard.current;
-        this.NoClipKeyboard = this.gameObject.AddComponent<KeyboardMovement>();
-        this.CharacterController = this.gameObject.AddComponent<CharacterController>();
-    }
-
-    // Update is called once per frame
     void Update() {
-        if (this.NoClipKeyboard is { enabled: true }) return;
-        if (this.CharacterController is { enabled: false }) return;
+        CharacterController controller = this.CharacterController;
+        Vector3 direction = this.Direction;
 
-        Vector2 moveInput = new Vector2(
-            this.Keyboard.dKey.ReadValue() - this.Keyboard.aKey.ReadValue(),
-            this.Keyboard.wKey.ReadValue() - this.Keyboard.sKey.ReadValue()
-        ).normalized;
-
-        this.IsMoving = moveInput.magnitude > 0.0f;
-
-        float speedModifier = this.Keyboard.leftCtrlKey.isPressed
-            ? CharacterMovement.WalkingSpeed
-            : 1.0f;
-
-        // Calculate movement direction relative to character's forward direction
-        Vector3 forward = Vector3.ProjectOnPlane(this.transform.forward, Vector3.up);
-        Vector3 right = Vector3.ProjectOnPlane(this.transform.right, Vector3.up);
-        Vector3 moveDirection = (forward * moveInput.y) + (right * moveInput.x);
-
-        // Apply speed and sprint modifiers
-        moveDirection *= speedModifier * (
-            this.IsSprinting
-                ? this.CharacterSpeed * this.CharacterSprintSpeed
-                : this.CharacterSpeed
-            );
-
-        // Apply gravity
-        this.ApplyGravity();
-
-        // Attempt to move
-        _ = this.CharacterController?.Move(moveDirection * Time.deltaTime);
-
-        // Jump if jump key is pressed
-        if (this.Keyboard.spaceKey.wasPressedThisFrame) {
-            this.Jump();
+        if (!this.CanMove) {
+            direction = Vector3.zero;
         }
 
-        // Sprinting mechanic: Hold to sprint
-        if (this.Keyboard.leftShiftKey.isPressed) {
-            if (!this.IsSprintHeld) {
-                this.SprintTimer = 0f;
-                this.IsSprintHeld = true;
-            }
+        this.IsMoving = direction.sqrMagnitude > 0.0f;
+        this.IsSprinting = this.IsMoving && this.IsShiftHeld;
+        float speed = this.Speed;
 
-            if (!this.IsSprinting && this.SprintTimer >= CharacterMovement.SprintDuration) {
-                this.IsSprinting = true;
-            }
-
-            this.SprintTimer += Time.deltaTime;
+        if (this.IsCtrlHeld) {
+            speed *= CharacterMovement.WalkMultiplier;
         }
 
-        else {
-            this.IsSprintHeld = false;
+        if (this.IsSprinting) {
+            speed *= this.SprintMultiplier;
+        }
 
-            if (this.IsSprinting) {
-                this.IsSprinting = false;
-            }
+        Quaternion rotation = Quaternion.Euler(0.0f, this.transform.eulerAngles.y, 0.0f);
+        Vector3 motion = rotation * direction * speed;
+
+        if (controller.isGrounded && this.VelocityY < 0.0f) {
+            this.VelocityY = -2.0f;
+        }
+
+        if (this.CanMove && controller.isGrounded && this.JumpRequested) {
+            this.VelocityY = CharacterMovement.JumpForce;
+        }
+
+        this.JumpRequested = false;
+        this.VelocityY -= CharacterMovement.Gravity * Time.deltaTime;
+        motion.y = this.VelocityY;
+        CollisionFlags collision = controller.Move(motion * Time.deltaTime);
+
+        if ((collision & CollisionFlags.Above) != 0 && this.VelocityY > 0.0f) {
+            this.VelocityY = 0.0f;
         }
     }
-
-    // Apply gravity to the character controller
-    void ApplyGravity() {
-        this.VelocityY = this.CharacterController is { isGrounded: false }
-            ? this.VelocityY - (CharacterMovement.Gravity * Time.deltaTime)
-            : 0.0f;
-
-        Vector3 motion = new(0.0f, this.VelocityY, 0.0f);
-        _ = this.CharacterController?.Move(motion * Time.deltaTime);
-    }
-
-    // Jumping action
-    void Jump() => this.VelocityY = CharacterMovement.JumpForce;
 }

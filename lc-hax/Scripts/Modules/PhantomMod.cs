@@ -1,60 +1,58 @@
 using GameNetcodeStuff;
 using UnityEngine;
 
+// Process input before camera control, and prepare movement before CharacterMovement.
+[DefaultExecutionOrder(50)]
 sealed class PhantomMod : MonoBehaviour {
-    bool IsShiftHeld { get; set; }
-    bool EnabledPossession { get; set; }
+    PhantomCamera? PhantomCamera { get; set; }
+    IPhantomExtension? Extension { get; set; }
+    PlayerControllerB? Player { get; set; }
+
+    bool PlayerEnabled { get; set; }
+    bool AnimatorEnabled { get; set; }
+    bool ControllerEnabled { get; set; }
+    bool WasFreeCamera { get; set; }
     int CurrentSpectatorIndex { get; set; }
 
+    void Awake() => this.PhantomCamera = new PhantomCamera();
+
     void OnEnable() {
-        InputListener.OnShiftButtonHold += this.HoldShift;
         InputListener.OnEqualsPress += this.TogglePhantom;
         InputListener.OnRightArrowKeyPress += this.LookAtNextPlayer;
         InputListener.OnLeftArrowKeyPress += this.LookAtPreviousPlayer;
+        GameListener.OnGameEnd += this.DisablePhantom;
     }
 
     void OnDisable() {
-        InputListener.OnShiftButtonHold -= this.HoldShift;
         InputListener.OnEqualsPress -= this.TogglePhantom;
         InputListener.OnRightArrowKeyPress -= this.LookAtNextPlayer;
         InputListener.OnLeftArrowKeyPress -= this.LookAtPreviousPlayer;
+        GameListener.OnGameEnd -= this.DisablePhantom;
+        this.DisablePhantom();
     }
+
+    void OnDestroy() => this.PhantomCamera?.Dispose();
 
     void Update() {
-        if (PossessionMod.Instance is not PossessionMod possessionMod) return;
-        if (Helper.CurrentCamera is not Camera { enabled: true } camera) return;
-        if (!camera.gameObject.TryGetComponent(out KeyboardMovement keyboard)) return;
-        if (!camera.gameObject.TryGetComponent(out MousePan mouse)) return;
-        if (!Setting.EnablePhantom) {
-            if (!this.EnabledPossession) return;
+        if (!Setting.EnablePhantom) return;
 
-            possessionMod.Unpossess();
-            this.EnabledPossession = false;
-            possessionMod.enabled = false;
-        }
-
-        else if (!possessionMod.IsPossessed) {
-            this.EnabledPossession = false;
-            possessionMod.enabled = false;
-
-            keyboard.enabled = true;
-            mouse.enabled = true;
-        }
-
-        // possessing monster for the first frame
-        else if (!this.EnabledPossession) {
-            this.EnabledPossession = true;
-            possessionMod.enabled = true;
-            keyboard.enabled = false;
-            mouse.enabled = false;
-        }
-
-        if (!possessionMod.IsPossessed && Setting.EnablePhantom) {
-            keyboard.IsPaused = Helper.LocalPlayer is { isTypingChat: true };
-        }
+        this.Extension?.Update();
+        this.UpdateCameraMovement();
     }
 
-    void HoldShift(bool isHeld) => this.IsShiftHeld = isHeld;
+    void LateUpdate() {
+        if (!Setting.EnablePhantom) return;
+        if (Helper.StartOfRound is StartOfRound round) {
+            this.PhantomCamera?.TakeControl(round);
+        }
+
+        this.Extension?.LateUpdate();
+        this.UpdateCameraMovement();
+    }
+
+    void UpdateCameraMovement() => this.PhantomCamera?.SetMovementEnabled(
+        this.Player.Unfake() is PlayerControllerB player && this.Extension is not { ControlsCamera: true } && !player.IsInputPaused()
+    );
 
     void LookAtNextPlayer() => this.LookAtPlayer(1);
 
@@ -62,78 +60,66 @@ sealed class PhantomMod : MonoBehaviour {
 
     void LookAtPlayer(int indexChange) {
         if (!Setting.EnablePhantom) return;
-        if (Helper.CurrentCamera?.gameObject.TryGetComponent(out KeyboardMovement keyboard) is not true) return;
+        if (this.Player.Unfake() is not PlayerControllerB player) return;
+        if (player.IsInputPaused()) return;
+        if (this.Extension is { ControlsCamera: true }) return;
+        if (this.PhantomCamera is null) return;
         if (Helper.ActivePlayers is not { Length: > 0 and var playerCount } players) return;
 
-        this.CurrentSpectatorIndex = (((this.CurrentSpectatorIndex + indexChange) % playerCount) + playerCount) % playerCount;
-        keyboard.LastPosition = players[this.CurrentSpectatorIndex].playerEye.position;
+        this.CurrentSpectatorIndex = (this.CurrentSpectatorIndex + indexChange + playerCount) % playerCount;
+        this.PhantomCamera.SetPosition(players[this.CurrentSpectatorIndex].playerEye.position);
     }
 
-    static void PhantomEnabled(Camera camera) {
-        if (!camera.TryGetComponent(out KeyboardMovement keyboard)) {
-            keyboard = camera.gameObject.AddComponent<KeyboardMovement>();
-        }
-
-        if (!camera.TryGetComponent(out MousePan mouse)) {
-            mouse = camera.gameObject.AddComponent<MousePan>();
-        }
-
-        keyboard.enabled = true;
-        mouse.enabled = true;
-        camera.transform.SetParent(null, true);
-    }
-
-    void PhantomDisabled(PlayerControllerB player, Camera camera) {
-        if (player.cameraContainerTransform is not Transform cameraParent) return;
-        if (this.IsShiftHeld) {
-            player.TeleportPlayer(camera.transform.position);
-        }
-
-        if (PossessionMod.Instance is PossessionMod { IsPossessed: true } possession) {
-            possession.Unpossess();
-        }
-
-        camera.transform.SetParent(cameraParent, false);
-        camera.transform.localPosition = Vector3.zero;
-        camera.transform.localRotation = Quaternion.identity;
-
-        if (camera.gameObject.TryGetComponent(out KeyboardMovement keyboard)) {
-            keyboard.enabled = false;
-        }
-
-        if (camera.gameObject.TryGetComponent(out MousePan mouse)) {
-            mouse.enabled = false;
-        }
-
-        if (player.gameplayCamera is not Camera gameplayCamera) {
+    void TogglePhantom(bool teleportOnExit) {
+        if (Helper.LocalPlayer is not PlayerControllerB player) return;
+        if (player.IsInputPaused()) return;
+        if (!Setting.EnablePhantom) {
+            this.EnablePhantom(player);
             return;
         }
 
-        if (gameplayCamera.TryGetComponent(out KeyboardMovement gameplayKeyboard)) {
-            gameplayKeyboard.enabled = false;
-        }
+        Vector3? returnPosition = teleportOnExit && !player.isPlayerDead ? this.PhantomCamera?.Camera?.transform.position : null;
+        this.DisablePhantom();
 
-        if (gameplayCamera.TryGetComponent(out MousePan gameplayMouse)) {
-            gameplayMouse.enabled = false;
+        if (returnPosition is Vector3 position) {
+            player.TeleportPlayer(position);
         }
     }
 
-    void TogglePhantom() {
-        if (Helper.LocalPlayer is not PlayerControllerB player) return;
-        if (Helper.CurrentCamera is not Camera camera || !camera.enabled) return;
+    void EnablePhantom(PlayerControllerB player) {
+        if (Helper.StartOfRound is not StartOfRound round) return;
+        if (round.activeCamera is not Camera source) return;
+        if (this.PhantomCamera is null) return;
 
-        Setting.EnablePhantom = !Setting.EnablePhantom;
-        player.enabled = !player.isPlayerDead || !Setting.EnablePhantom;
-        player.playerBodyAnimator.enabled = !Setting.EnablePhantom;
-        player.thisController.enabled = !Setting.EnablePhantom;
-        player.isFreeCamera = Setting.EnablePhantom;
+        this.Player = player;
+        this.PlayerEnabled = player.enabled;
+        this.AnimatorEnabled = player.playerBodyAnimator.enabled;
+        this.ControllerEnabled = player.thisController.enabled;
+        this.WasFreeCamera = player.isFreeCamera;
 
-        if (Setting.EnablePhantom) {
-            PhantomMod.PhantomEnabled(camera);
-        }
+        this.PhantomCamera.Activate(round, source, player);
+        Setting.EnablePhantom = true;
+        this.Extension = new Possession(this.PhantomCamera.Camera);
 
-        else {
-            this.PhantomDisabled(player, camera);
-        }
+        player.enabled = true;
+        player.playerBodyAnimator.enabled = false;
+        player.thisController.enabled = false;
+        player.isFreeCamera = true;
+        this.UpdateCameraMovement();
+    }
+
+    internal void DisablePhantom() {
+        if (!Setting.EnablePhantom) return;
+        if (this.PhantomCamera is null) return;
+        if (Helper.StartOfRound is not StartOfRound round) return;
+
+        PlayerControllerB? player = this.Player.Unfake();
+        Setting.EnablePhantom = false;
+        this.Extension?.Dispose();
+        this.PhantomCamera.Deactivate(round);
+        player?.enabled = this.PlayerEnabled;
+        player?.playerBodyAnimator.enabled = this.AnimatorEnabled;
+        player?.thisController.enabled = this.ControllerEnabled;
+        player?.isFreeCamera = this.WasFreeCamera;
     }
 }

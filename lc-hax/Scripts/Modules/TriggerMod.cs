@@ -1,10 +1,7 @@
 using GameNetcodeStuff;
 using UnityEngine;
-using ZLinq;
 
 sealed class TriggerMod : MonoBehaviour, IEnemyPrompter {
-    RaycastHit[] RaycastHits { get; set; } = new RaycastHit[100];
-
     bool UsingInteractRay { get; set; }
     bool UsingFollowRay { get; set; }
 
@@ -25,6 +22,8 @@ sealed class TriggerMod : MonoBehaviour, IEnemyPrompter {
     void SetUsingFollowRay(bool isHeld) => this.UsingFollowRay = isHeld;
 
     void Fire() {
+        if (Helper.LocalPlayer is { isTypingChat: true } or { inTerminalMenu: true }) return;
+        if (Helper.LocalPlayer?.quickMenuManager is { isMenuOpen: true }) return;
         if (Helper.CurrentCamera is not Camera camera) return;
 
         if (this.UsingFollowRay) {
@@ -34,8 +33,8 @@ sealed class TriggerMod : MonoBehaviour, IEnemyPrompter {
                 return;
             }
 
-            foreach (int i in this.RaycastHits.SphereCastForward(camera.transform).Range()) {
-                if (!this.RaycastHits[i].collider.TryGetComponent(out PlayerControllerB player)) continue;
+            foreach (RaycastHit hit in camera.transform.SphereCastForward()) {
+                if (!hit.collider.TryGetComponent(out PlayerControllerB player)) continue;
                 if (player.IsSelf()) continue;
 
                 Chat.Print($"Following {player.playerUsername}!");
@@ -47,8 +46,8 @@ sealed class TriggerMod : MonoBehaviour, IEnemyPrompter {
         }
 
         if (this.UsingInteractRay) {
-            foreach (int i in this.RaycastHits.SphereCastForward(camera.transform, 0.25f).Range()) {
-                if (!this.RaycastHits[i].collider.TryGetComponent(out InteractTrigger interactTrigger)) continue;
+            foreach (RaycastHit hit in camera.transform.SphereCastForward(sphereRadius: 0.25f)) {
+                if (!hit.collider.TryGetComponent(out InteractTrigger interactTrigger)) continue;
 
                 interactTrigger.Interact(Helper.LocalPlayer?.transform);
                 break;
@@ -57,15 +56,12 @@ sealed class TriggerMod : MonoBehaviour, IEnemyPrompter {
             return;
         }
 
-        foreach (RaycastHit raycastHit in camera.transform.SphereCastForward()) {
-            Collider collider = raycastHit.collider;
-
-            if (collider.TryGetComponent(out TerminalAccessibleObject terminalObject)) {
-                terminalObject.SetDoorOpenServerRpc(!terminalObject.isDoorOpen);
-            }
+        foreach (RaycastHit hit in camera.transform.SphereCastForward()) {
+            Collider collider = hit.collider;
 
             if (collider.TryGetComponent(out Turret turret)) {
                 turret.EnterBerserkModeServerRpc(-1);
+                break;
             }
 
             if (collider.TryGetComponent(out Landmine landmine)) {
@@ -83,8 +79,11 @@ sealed class TriggerMod : MonoBehaviour, IEnemyPrompter {
                 break;
             }
 
-            if (collider.GetComponentInParent<EnemyAI>().Unfake() is EnemyAI enemy && Setting.EnablePhantom) {
-                PossessionMod.Instance?.Possess(enemy);
+            if (collider.GetComponentInParent<EnemyAI>().Unfake() is EnemyAI enemy &&
+                camera.TryGetComponent(out PossessionBinding binding) &&
+                binding.Possession is Possession possession
+            ) {
+                possession.Possess(enemy);
                 break;
             }
 
@@ -97,6 +96,11 @@ sealed class TriggerMod : MonoBehaviour, IEnemyPrompter {
 
             if (collider.TryGetComponent(out DepositItemsDesk depositItemDesk)) {
                 depositItemDesk.AttackPlayersServerRpc();
+                break;
+            }
+
+            if (collider.TryGetComponent(out TerminalAccessibleObject terminalObject)) {
+                terminalObject.SetDoorOpenServerRpc(!terminalObject.isDoorOpen);
                 break;
             }
         }
