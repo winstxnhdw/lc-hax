@@ -6,7 +6,6 @@ using HarmonyLib;
 [HarmonyPatch]
 sealed class WeightPatch {
     static IEnumerable<MethodBase> TargetMethods() => [
-        AccessTools.Method(typeof(PlayerControllerB), nameof(PlayerControllerB.GetPlayerVelocity)),
         AccessTools.Method(typeof(PlayerControllerB), nameof(PlayerControllerB.Update)),
         AccessTools.Method(typeof(PlayerControllerB), nameof(PlayerControllerB.LateUpdate)),
         AccessTools.Method(typeof(HUDManager), nameof(HUDManager.UpdateWeightCounter))
