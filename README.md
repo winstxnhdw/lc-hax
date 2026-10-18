@@ -93,75 +93,75 @@ The complete feature set includes the following.
 > [!NOTE]\
 > **No one** can see the commands you send.
 
-| Action                         | Command                                          |
-| -----------------------------  | ------------------------------------------------ |
-| Teleport outside entrance      | `/exit`                                          |
-| Teleport inside entrance       | `/enter`                                         |
-| Teleport to a player           | `/tp <player>`                                   |
-| Teleport player to player      | `/tp <player> <player>`                          |
-| Teleport to a location         | `/tp <x> <y> <z>`                                |
-| Teleport player to a location  | `/tp <player> <x> <y> <z>`                       |
-| Teleports the player to hell   | `/void <player>`                                 |
-| Teleport back to ship          | `/home <player?>`                                |
-| Teleport enemies to player     | `/mob <player>`                                  |
-| Inverse teleport a player      | `/random <player>`                               |
-| Play virtual noise on a player | `/noise <player> <duration=30>`                  |
-| Bomb player                    | `/bomb <player>`                                 |
-| Bombard player                 | `/bombard <player>`                              |
-| Lure enemies to player         | `/hate <player>`                                 |
-| Spawn masked enemy on a player | `/mask <player?> <amount=1>`                     |
-| Heal or revive the player      | `/heal <player?>`                                |
-| Kill player                    | `/kill <player?>`                                |
-| Kill all players               | `/kill --all`                                    |
-| Kill all enemies               | `/kill --enemy`                                  |
-| Kill player with animation     | `/fatality <player> <enemy>`                     |
-| Burst a cadaver bloom from a player | `/bloom <target>`                            |
-| Poison a player                | `/poison <player> <damage> <duration> <delay=1>` |
-| Poison all players             | `/poison --all <damage> <duration> <delay=1>`    |
-| Spoof a server message         | `/say <player> <message>`                        |
-| Send a translated message      | `/translate <language> <message>`                |
-| Transmit a signal              | `/signal <message>`                              |
-| Modify shovel damage           | `/shovel <force=1>`                              |
-| Add or remove experience       | `/xp <amount>`                                   |
-| Buy an item                    | `/buy <item> <quantity=1>`                       |
-| Deposit valuable item(s)       | `/sell <quota?>`                                 |
-| Grab scrap(s)                  | `/grab <item?>`                                  |
-| Destroy held item              | `/destroy`                                       |
-| Destroy all items              | `/destroy --all`                                 |
-| Block any radar targets        | `/block radar`                                   |
-| Become untargetable            | `/block enemy`                                   |
-| Place an unlockable            | `/build <unlockable>`                            |
-| Wear a suit                    | `/suit <suit>`                                   |
-| Change moons                   | `/visit <moon>`                                  |
-| Spin all placeable objects     | `/spin <duration>`                               |
-| Stun enemies                   | `/stun <duration>`                               |
-| Pull the ship's horn           | `/horn <duration>`                               |
-| Toggle stun on click           | `/stunclick`                                     |
-| Toggle kill enemy on click     | `/killclick`                                     |
-| End the game                   | `/end <player=-1>`                               |
-| Start the game                 | `/start`                                         |
-| List all players               | `/players`                                       |
-| Toggle the Beta badge          | `/beta`                                          |
-| Get coordinates                | `/xyz`                                           |
-| Toggle God mode                | `/god`                                           |
-| Toggle NoClip                  | `/noclip`                                        |
-| Toggle unlimited jump          | `/jump`                                          |
-| Toggle rapid item usage        | `/rapid`                                         |
-| Set all objects upright        | `/upright`                                       |
-| Eavesdrop on all players       | `/hear`                                          |
-| Fake player death              | `/fakedeath`                                     |
-| Unlock all doors               | `/unlock`                                        |
-| Lock all gates                 | `/lock`                                          |
-| Open ship door                 | `/open`                                          |
-| Close ship door                | `/close`                                         |
-| Trigger the garage doors       | `/garage`                                        |
-| Explode all jetpacks           | `/explode`                                       |
-| Explode all landmines          | `/explode mine`                                  |
-| Upset all turrets              | `/berserk`                                       |
-| Turn invisible to players      | `/invis`                                         |
-| Clear the chat for everyone    | `/clear`                                         |
-| Toggle ship lights             | `/light`                                         |
-| Copy lobby ID to clipboard     | `/lobby`                                         |
+| Action                              | Command                                          |
+| ----------------------------------- | ------------------------------------------------ |
+| Teleport outside entrance           | `/exit`                                          |
+| Teleport inside entrance            | `/enter`                                         |
+| Teleport to a player                | `/tp <player>`                                   |
+| Teleport player to player           | `/tp <player> <player>`                          |
+| Teleport to a location              | `/tp <x> <y> <z>`                                |
+| Teleport player to a location       | `/tp <player> <x> <y> <z>`                       |
+| Teleports the player to hell        | `/void <player>`                                 |
+| Teleport back to ship               | `/home <player?>`                                |
+| Teleport enemies to player          | `/mob <player>`                                  |
+| Inverse teleport a player           | `/random <player>`                               |
+| Play virtual noise on a player      | `/noise <player> <duration=30>`                  |
+| Bomb player                         | `/bomb <player>`                                 |
+| Bombard player                      | `/bombard <player>`                              |
+| Lure enemies to player              | `/hate <player>`                                 |
+| Spawn masked enemy on a player      | `/mask <player?> <amount=1>`                     |
+| Heal or revive the player           | `/heal <player?>`                                |
+| Kill player                         | `/kill <player?>`                                |
+| Kill all players                    | `/kill --all`                                    |
+| Kill all enemies                    | `/kill --enemy`                                  |
+| Kill player with animation          | `/fatality <player> <enemy>`                     |
+| Burst a cadaver bloom from a player | `/bloom <target>`                                |
+| Poison a player                     | `/poison <player> <damage> <duration> <delay=1>` |
+| Poison all players                  | `/poison --all <damage> <duration> <delay=1>`    |
+| Spoof a server message              | `/say <player> <message>`                        |
+| Send a translated message           | `/translate <language> <message>`                |
+| Transmit a signal                   | `/signal <message>`                              |
+| Modify shovel damage                | `/shovel <force=1>`                              |
+| Add or remove experience            | `/xp <amount>`                                   |
+| Buy an item                         | `/buy <item> <quantity=1>`                       |
+| Deposit valuable item(s)            | `/sell <quota?>`                                 |
+| Grab scrap(s)                       | `/grab <item?>`                                  |
+| Destroy held item                   | `/destroy`                                       |
+| Destroy all items                   | `/destroy --all`                                 |
+| Block any radar targets             | `/block radar`                                   |
+| Become untargetable                 | `/block enemy`                                   |
+| Place an unlockable                 | `/build <unlockable>`                            |
+| Wear a suit                         | `/suit <suit>`                                   |
+| Change moons                        | `/visit <moon>`                                  |
+| Spin all placeable objects          | `/spin <duration>`                               |
+| Stun enemies                        | `/stun <duration>`                               |
+| Pull the ship's horn                | `/horn <duration>`                               |
+| Toggle stun on click                | `/stunclick`                                     |
+| Toggle kill enemy on click          | `/killclick`                                     |
+| End the game                        | `/end <player=-1>`                               |
+| Start the game                      | `/start`                                         |
+| List all players                    | `/players`                                       |
+| Toggle the Beta badge               | `/beta`                                          |
+| Get coordinates                     | `/xyz`                                           |
+| Toggle God mode                     | `/god`                                           |
+| Toggle NoClip                       | `/noclip`                                        |
+| Toggle unlimited jump               | `/jump`                                          |
+| Toggle rapid item usage             | `/rapid`                                         |
+| Set all objects upright             | `/upright`                                       |
+| Eavesdrop on all players            | `/hear`                                          |
+| Fake player death                   | `/fakedeath`                                     |
+| Unlock all doors                    | `/unlock`                                        |
+| Lock all gates                      | `/lock`                                          |
+| Open ship door                      | `/open`                                          |
+| Close ship door                     | `/close`                                         |
+| Trigger the garage doors            | `/garage`                                        |
+| Explode all jetpacks                | `/explode`                                       |
+| Explode all landmines               | `/explode mine`                                  |
+| Upset all turrets                   | `/berserk`                                       |
+| Turn invisible to players           | `/invis`                                         |
+| Clear the chat for everyone         | `/clear`                                         |
+| Toggle ship lights                  | `/light`                                         |
+| Copy lobby ID to clipboard          | `/lobby`                                         |
 
 ## Privileged Commands
 
@@ -194,7 +194,7 @@ These commands are only available when the user is host.
 | Interact at a distance        | <kbd> M3 </kbd> + <kbd> E </kbd>     |
 | Toggle ESP                    | <kbd> Pause </kbd>                   |
 | Toggle Phantom                | <kbd> = </kbd>                       |
-| Teleport to Phantom           | <kbd> + </kbd>                       |
+| Teleport to Phantom           | <kbd> Shift </kbd> + <kbd> = </kbd>  |
 | Change spectator index        | <kbd> ⇽ </kbd>                      |
 | Change spectator index        | <kbd> ⇾ </kbd>                      |
 | Increase mouse sensitivity    | <kbd> ] </kbd>                       |
@@ -205,9 +205,9 @@ These commands are only available when the user is host.
 | Disconnect from server        | <kbd> Shift </kbd> + <kbd> F4 </kbd> |
 | Connect to last joined server | <kbd> Shift </kbd> + <kbd> F5 </kbd> |
 
-### PossessionMod
+### Possession
 
-`PossessionMod` has its own set of keybinds.
+Possession has its own set of keybinds. Enable Phantom with <kbd> = </kbd>, point at an enemy and press <kbd> M3 </kbd> to possess it. Enemies that can use entrances pass through automatically when close and facing the door.
 
 | Action                        | Input                                |
 | ----------------------------- | ------------------------------------ |
@@ -216,7 +216,7 @@ These commands are only available when the user is host.
 | Toggle AI control             | <kbd> F9 </kbd>                      |
 | Toggle possession NoClip      | <kbd> N </kbd>                       |
 | Unpossess enemy               | <kbd> Z </kbd>                       |
-| Despawn and unpossess enemy   | <kbd> Del </kbd>                     |
+| Kill and unpossess enemy      | <kbd> Del </kbd>                     |
 
 ### TriggerMod
 
