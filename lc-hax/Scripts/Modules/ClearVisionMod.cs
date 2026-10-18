@@ -1,5 +1,4 @@
 using System;
-using System.Collections;
 using GameNetcodeStuff;
 using UnityEngine;
 using UnityEngine.Rendering;
@@ -55,48 +54,5 @@ sealed class ClearVisionMod : MonoBehaviour {
         lightData.lightDimmer = float.MaxValue;
         lightData.distance = float.MaxValue;
         timeOfDay.insideLighting = false;
-    }
-
-    IEnumerator DisableVisor(object[] args) {
-        WaitForSeconds waitForTenSeconds = new(10.0f);
-
-        while (true) {
-            Helper.LocalPlayer?.localVisor.gameObject.SetActive(false);
-            yield return waitForTenSeconds;
-        }
-    }
-
-    IEnumerator DisableFog(object[] args) {
-        WaitForSeconds waitForFiveSeconds = new(5.0f);
-
-        while (true) {
-            HaxObjects
-                .Instance?
-                .LocalVolumetricFogs?
-                .ForEach(localVolumetricFog => localVolumetricFog.Unfake()?.gameObject.SetActive(false));
-
-            yield return waitForFiveSeconds;
-        }
-    }
-
-    IEnumerator DisableSteamValves(object[] args) {
-        WaitForSeconds waitForFiveSeconds = new(5.0f);
-
-        while (true) {
-            Helper
-                .RoundManager?
-                .steamValves?
-                .ForEach(
-                    valve => valve.Unfake()?.valveSteamParticle.Stop(true, ParticleSystemStopBehavior.StopEmittingAndClear)
-                );
-
-            yield return waitForFiveSeconds;
-        }
-    }
-
-    void Start() {
-        _ = this.StartResilientCoroutine(this.DisableFog);
-        _ = this.StartResilientCoroutine(this.DisableSteamValves);
-        _ = this.StartResilientCoroutine(this.DisableVisor);
     }
 }
