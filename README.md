@@ -286,42 +286,13 @@ The arguments for the `build` command can be executed with either the unlockable
 - Plushie Pajama Man
 - Purple Suit
 
-### Disabling Mods
+## Settings
 
-You may permanently disable mods by removing the corresponding `Mod` class under the `LoadHaxModules` function from the following [file](lc-hax/Scripts/Loader.cs). In the following example, we disable `StaminaMod` and you will return to the game's default stamina mechanic in your next injection.
-
-```cs
-static void LoadHaxModules() {
-    DontDestroyOnLoad(Loader.HaxModules);
-
-    Loader.AddHaxModules<SaneMod>();
-    Loader.AddHaxModules<ChatMod>();
-    Loader.AddHaxModules<StunMod>();
-    Loader.AddHaxModules<ShovelMod>();
-    Loader.AddHaxModules<WeightMod>();
-    // Loader.AddHaxModules<StaminaMod>();
-    Loader.AddHaxModules<PhantomMod>();
-    Loader.AddHaxModules<TriggerMod>();
-    Loader.AddHaxModules<ClearVisionMod>();
-    Loader.AddHaxModules<NameInWeightMod>();
-    Loader.AddHaxModules<BuildAnywhereMod>();
-}
-```
-
-### Disabling Patches
-
-There is usually little reason for you to disable patches as they are carefully chosen and come with sane defaults. However, if for whatever reason you wish to disable a patch, you may freely delete any of the corresponding files based on their names [here](lc-hax/Scripts/Patches).
+Settings in `lc-hax` are configurable at compile-time. Edit [Settings.xml](Settings.xml) to choose which mods and patches are included and adjust values such as crosshair size, brightness, and flight speed. Any modifications to the settings file will only take effect after relaunching `lc-hax`.
 
 ## Uninstalling
 
 Unlike other cheats, `lc-hax` is portable and will never litter your computer with garbage. Deleting the `lc-hax` folder would be the equivalent to uninstalling.
-
-> [!IMPORTANT]\
-> Do ensure that you are currently in the `lc-hax` directory before executing the command.
-
-```ps1
-Add-MpPreference -ExclusionPath $pwd, "$env:TEMP\.net\SharpMonoInjector"
-```
 
 ## Alternatives
 
