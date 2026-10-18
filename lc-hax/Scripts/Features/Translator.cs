@@ -239,7 +239,9 @@ sealed class Translator : IDisposable {
         }
 
         string sourceLanguageResponse = await sourceLanguageRequest.Content.ReadAsStringAsync();
-        string sourceLanguage = Uri.EscapeDataString(JsonConvert.DeserializeObject<LanguageResponse>(sourceLanguageResponse).Language);
+        string sourceLanguage = Uri.EscapeDataString(
+            JsonConvert.DeserializeObject<LanguageResponse>(sourceLanguageResponse).Language
+        );
 
         HttpResponseMessage translatedTextRequest = await this.HttpClient.GetAsync(
             $"https://winstxnhdw-nllb-api.hf.space/api/v4/translator?text={textEscaped}&source={sourceLanguage}&target={targetLanguage}",
@@ -252,5 +254,5 @@ sealed class Translator : IDisposable {
             : null;
     }
 
-    public void Dispose() => this.HttpClient.Dispose();
+    void IDisposable.Dispose() => this.HttpClient.Dispose();
 }
