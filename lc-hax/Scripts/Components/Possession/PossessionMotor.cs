@@ -1,5 +1,6 @@
 using System;
 using UnityEngine;
+using UnityEngine.AI;
 using Object = UnityEngine.Object;
 
 sealed class PossessionMotor : IDisposable {
@@ -20,9 +21,18 @@ sealed class PossessionMotor : IDisposable {
         this.Movement.enabled = false;
         this.Movement.CalibrateCollision(this.Enemy);
         this.Movement.SprintMultiplier = this.Controller.SprintMultiplier;
+        this.Movement.Speed = this.GetInitialSpeed();
         this.NoClipMovement = this.Root.AddComponent<KeyboardMovement>();
         this.NoClipMovement.enabled = false;
         Object.DontDestroyOnLoad(this.Root);
+    }
+
+    float GetInitialSpeed() {
+        if (this.Enemy.agent.Unfake() is { speed: > 0.0f } agent) return agent.speed;
+
+        NavMeshAgent? prefabAgent = this.Enemy.enemyType.enemyPrefab.Unfake()?.GetComponentInChildren<NavMeshAgent>(includeInactive: true);
+
+        return prefabAgent is { speed: > 0.0f } ? prefabAgent.speed : this.Movement.Speed;
     }
 
     internal void SetPosition(Vector3 position) {
