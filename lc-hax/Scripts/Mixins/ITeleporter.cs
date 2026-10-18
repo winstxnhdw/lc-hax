@@ -2,18 +2,18 @@ using System;
 using GameNetcodeStuff;
 using UnityEngine;
 
-public interface ITeleporter;
+internal interface ITeleporter;
 
-public static class ITeleporterMixin {
-    public static ShipTeleporter? GetTeleporter(this ITeleporter _) =>
+internal static class ITeleporterMixin {
+    internal static ShipTeleporter? GetTeleporter(this ITeleporter _) =>
         Helper.ShipTeleporters.First(teleporter => teleporter != null && !teleporter.isInverseTeleporter);
 
-    public static bool TeleporterExists(this ITeleporter self) {
+    internal static bool TeleporterExists(this ITeleporter self) {
         HaxObjects.Instance?.ShipTeleporters?.Renew();
         return self.GetTeleporter();
     }
 
-    public static void PrepareToTeleport(this ITeleporter self, Action action) {
+    internal static void PrepareToTeleport(this ITeleporter self, Action action) {
         Helper.BuyUnlockable(Unlockable.TELEPORTER);
         Helper.ReturnUnlockable(Unlockable.TELEPORTER);
         Helper.CreateComponent<WaitForBehaviour>()
@@ -21,7 +21,7 @@ public static class ITeleporterMixin {
               .Init(action);
     }
 
-    public static Action PlaceAndTeleport(
+    internal static Action PlaceAndTeleport(
         this ITeleporter self,
         PlayerControllerB player,
         Vector3 position
@@ -59,7 +59,7 @@ public static class ITeleporterMixin {
         teleporter.PressTeleportButtonServerRpc();
     };
 
-    public static Action TeleportPlayerToPositionLater(
+    internal static Action TeleportPlayerToPositionLater(
         this ITeleporter self,
         PlayerControllerB player,
         Vector3 position
