@@ -31,6 +31,7 @@ static class EnemyControllerFactory {
         CadaverBloomAI cadaverBloom => new CadaverBloomController(cadaverBloom),
         CaveDwellerAI maneater => new ManeaterController(maneater),
         ClaySurgeonAI barber => new BarberController(barber),
+        FlowerSnakeEnemy tulipSnake => new TulipSnakeController(tulipSnake),
         _ => new DefaultEnemyController(enemy)
     };
 
