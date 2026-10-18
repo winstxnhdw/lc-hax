@@ -27,6 +27,7 @@ static class EnemyControllerFactory {
         RadMechAI oldBird => new OldBirdController(oldBird),
         ButlerEnemyAI butler => new ButlerController(butler),
         ButlerBeesEnemyAI butlerBees => new ButlerBeesController(butlerBees),
+        BushWolfEnemy kidnapperFox => new KidnapperFoxController(kidnapperFox),
         _ => new DefaultEnemyController(enemy)
     };
 
