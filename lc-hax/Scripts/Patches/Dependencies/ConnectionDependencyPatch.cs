@@ -1,38 +1,29 @@
 using System;
+using System.Collections.Generic;
+using System.Reflection;
 using HarmonyLib;
 
 [HarmonyPatch]
 sealed class ConnectionDependencyPatch {
     internal static event Action? OnConnectionAttempt;
 
+    static IEnumerable<MethodBase> TargetMethods() => [
+        AccessTools.Method(typeof(GameNetworkManager), nameof(GameNetworkManager.JoinLobby)),
+        AccessTools.Method(typeof(LobbySlot), nameof(LobbySlot.JoinLobbyAfterVerifying)),
+        AccessTools.Method(typeof(GameNetworkManager), nameof(GameNetworkManager.StartClient)),
+        AccessTools.Method(typeof(GameNetworkManager), nameof(GameNetworkManager.StartHost)),
+        AccessTools.Method(typeof(MenuManager), nameof(MenuManager.StartAClient)),
+        AccessTools.Method(typeof(MenuManager), nameof(MenuManager.StartHosting))
+    ];
+
     [HarmonyPrefix]
-    [HarmonyPatch(typeof(GameNetworkManager), nameof(GameNetworkManager.SteamFriends_OnGameLobbyJoinRequested))]
-    static void InvitePrefix() {
+    internal static void NotifyConnectionAttempt() => ConnectionDependencyPatch.OnConnectionAttempt?.Invoke();
+}
+
+[HarmonyPatch(typeof(GameNetworkManager), nameof(GameNetworkManager.SteamFriends_OnGameLobbyJoinRequested))]
+sealed class ConnectionInvitePatch {
+    static void Prefix() {
         if (Helper.FindObject<MenuManager>() is null) return;
-        ConnectionDependencyPatch.OnConnectionAttempt?.Invoke();
+        ConnectionDependencyPatch.NotifyConnectionAttempt();
     }
-
-    [HarmonyPrefix]
-    [HarmonyPatch(typeof(GameNetworkManager), nameof(GameNetworkManager.JoinLobby))]
-    static void JoinLobbyPrefix() => ConnectionDependencyPatch.OnConnectionAttempt?.Invoke();
-
-    [HarmonyPrefix]
-    [HarmonyPatch(typeof(LobbySlot), nameof(LobbySlot.JoinLobbyAfterVerifying))]
-    static void VerifyLobbyPrefix() => ConnectionDependencyPatch.OnConnectionAttempt?.Invoke();
-
-    [HarmonyPrefix]
-    [HarmonyPatch(typeof(GameNetworkManager), nameof(GameNetworkManager.StartClient))]
-    static void StartClientPrefix() => ConnectionDependencyPatch.OnConnectionAttempt?.Invoke();
-
-    [HarmonyPrefix]
-    [HarmonyPatch(typeof(GameNetworkManager), nameof(GameNetworkManager.StartHost))]
-    static void StartHostPrefix() => ConnectionDependencyPatch.OnConnectionAttempt?.Invoke();
-
-    [HarmonyPrefix]
-    [HarmonyPatch(typeof(MenuManager), nameof(MenuManager.StartAClient))]
-    static void MenuClientPrefix() => ConnectionDependencyPatch.OnConnectionAttempt?.Invoke();
-
-    [HarmonyPrefix]
-    [HarmonyPatch(typeof(MenuManager), nameof(MenuManager.StartHosting))]
-    static void MenuHostPrefix() => ConnectionDependencyPatch.OnConnectionAttempt?.Invoke();
 }
