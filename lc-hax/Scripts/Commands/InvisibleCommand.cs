@@ -1,6 +1,5 @@
 using System.Threading;
 using System.Threading.Tasks;
-using GameNetcodeStuff;
 
 [Command("invis")]
 sealed class InvisibleCommand : ICommand {

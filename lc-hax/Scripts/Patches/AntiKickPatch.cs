@@ -1,7 +1,6 @@
 using GameNetcodeStuff;
 using HarmonyLib;
 using Steamworks;
-using Steamworks.Data;
 
 [HarmonyPatch(typeof(PlayerControllerB))]
 sealed class AntiKickPatch {

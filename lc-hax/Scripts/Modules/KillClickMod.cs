@@ -1,5 +1,4 @@
 using UnityEngine;
-using GameNetcodeStuff;
 
 sealed class KillClickMod : MonoBehaviour {
     void OnEnable() => InputListener.OnLeftButtonPress += this.Kill;

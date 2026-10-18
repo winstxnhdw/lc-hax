@@ -1,5 +1,4 @@
 using System.Collections;
-using GameNetcodeStuff;
 using UnityEngine;
 
 sealed class WeightMod : MonoBehaviour {

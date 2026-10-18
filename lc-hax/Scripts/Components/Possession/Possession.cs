@@ -1,5 +1,4 @@
 using System;
-using GameNetcodeStuff;
 using UnityEngine;
 
 sealed class Possession : IPhantomExtension {

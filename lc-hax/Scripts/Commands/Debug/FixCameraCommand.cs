@@ -1,6 +1,5 @@
 using System.Threading;
 using System.Threading.Tasks;
-using GameNetcodeStuff;
 
 [DebugCommand("fixcamera")]
 sealed class FixCameraCommand : ICommand {
