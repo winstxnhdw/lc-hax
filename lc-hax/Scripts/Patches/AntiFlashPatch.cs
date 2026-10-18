@@ -1,5 +1,6 @@
 using HarmonyLib;
 
+[HarmonyPatch]
 sealed class AntiFlashPatch {
     [HarmonyPatch(typeof(HUDManager), nameof(HUDManager.Update))]
     static void Prefix(HUDManager __instance) => __instance.flashFilter = 0.0f;
