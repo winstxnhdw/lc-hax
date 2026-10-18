@@ -12,6 +12,31 @@ static partial class Helper {
 
     internal static T? GetEnemy<T>() where T : EnemyAI => Helper.Enemies.First(enemy => enemy is T) as T;
 
+    internal static PlayerControllerB? GetClosestPlayer(EnemyAI enemy, float maxDistance = float.PositiveInfinity) {
+        if (maxDistance < 0.0f) return null;
+
+        PlayerControllerB? target = null;
+        float closestDistance = float.PositiveInfinity;
+        float maxDistanceSqr = maxDistance * maxDistance;
+        Vector3 origin = enemy.transform.position;
+
+        foreach (PlayerControllerB player in Helper.Players) {
+            if (player is not { isPlayerControlled: true, isPlayerDead: false }) continue;
+            if (player.IsSelf()) continue;
+
+            float distance = (player.transform.position - origin).sqrMagnitude;
+
+            if (distance > maxDistanceSqr || distance >= closestDistance) {
+                continue;
+            }
+
+            closestDistance = distance;
+            target = player;
+        }
+
+        return target;
+    }
+
     internal static void Kill(this EnemyAI enemy, ulong actualClientId) {
         enemy.ChangeEnemyOwnerServerRpc(actualClientId);
 
