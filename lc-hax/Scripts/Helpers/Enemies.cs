@@ -72,6 +72,10 @@ static partial class Helper {
     internal static GrabbableObject? FindNearbyItem(this EnemyAI enemy, float grabRange = 1.0f) {
         foreach (Collider collider in Physics.OverlapSphere(enemy.transform.position, grabRange)) {
             if (!collider.TryGetComponent(out GrabbableObject item)) continue;
+            if (item.isHeld) continue;
+            if (item.isHeldByEnemy) continue;
+            if (item.deactivated) continue;
+            if (!item.grabbableToEnemies) continue;
             if (!item.TryGetComponent(out NetworkObject _)) continue;
 
             return item;
