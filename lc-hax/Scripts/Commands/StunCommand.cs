@@ -4,9 +4,8 @@ using UnityEngine;
 
 [Command("stun")]
 sealed class StunCommand : ICommand, IStun {
-    public Task Execute(Arguments args, CancellationToken cancellationToken) {
-        if (Helper.CurrentCamera is not Camera camera)
-            return Task.CompletedTask;
+    Task ICommand.Execute(Arguments args, CancellationToken cancellationToken) {
+        if (Helper.CurrentCamera is not Camera camera) return Task.CompletedTask;
         if (args.Length is 0) {
             Chat.Print("Usage: stun <duration>");
             return Task.CompletedTask;

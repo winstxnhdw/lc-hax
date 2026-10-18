@@ -4,7 +4,7 @@ using GameNetcodeStuff;
 
 [Command("void")]
 sealed class VoidCommand : ITeleporter, ICommand {
-    public Task Execute(Arguments args, CancellationToken cancellationToken) {
+    Task ICommand.Execute(Arguments args, CancellationToken cancellationToken) {
         if (args.Length is 0) {
             Chat.Print("Usage: /void <player>");
             return Task.CompletedTask;

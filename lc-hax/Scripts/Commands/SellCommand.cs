@@ -10,7 +10,7 @@ sealed class SellCommand : ICommand {
         grabbableObject.Unfake() is not HauntedMaskItem and { isHeld: false } &&
         grabbableObject.itemProperties is { isScrap: true, isDefensiveWeapon: false };
 
-    static void SellObject(PlayerControllerB player, GrabbableObject item, float currentWeight) {
+    void SellObject(PlayerControllerB player, GrabbableObject item, float currentWeight) {
         if (HaxObjects.Instance?.DepositItemsDesk?.Object.Unfake() is not DepositItemsDesk depositItemsDesk) return;
 
         player.currentlyHeldObjectServer = item;
@@ -22,9 +22,9 @@ sealed class SellCommand : ICommand {
         Helper.Grabbables
              .AsValueEnumerable()
              .Where(this.CanBeSold)
-             .ForEach(grabbableObject => SellCommand.SellObject(player, grabbableObject, currentWeight));
+             .ForEach(grabbableObject => this.SellObject(player, grabbableObject, currentWeight));
 
-    static long GetScrapCapacity(ushort targetValue, float buyingRate) {
+    long GetScrapCapacity(ushort targetValue, float buyingRate) {
         double scrapLimit = (targetValue + Math.Pow(2, Math.Floor(Math.Log(targetValue + 0.5, 2)) - 24)) / buyingRate;
         double floatStep = Math.Pow(2, Math.Floor(Math.Log(scrapLimit, 2)) - 23);
         double scrapUnits = Math.Floor(scrapLimit / floatStep);
@@ -54,7 +54,7 @@ sealed class SellCommand : ICommand {
         ReadOnlySpan<GrabbableObject> sellableScraps = sellableScrapsPool.Span;
         long totalValue = sellableScrapsPool.AsValueEnumerable().Sum(scrap => unchecked((long)scrap.scrapValue));
         int scrapCount = sellableScraps.Length;
-        long capacity = totalValue * buyingRate <= targetValue ? totalValue : SellCommand.GetScrapCapacity(targetValue, buyingRate);
+        long capacity = totalValue * buyingRate <= targetValue ? totalValue : this.GetScrapCapacity(targetValue, buyingRate);
         long remainingCapacity = capacity;
         int[,] table = new int[scrapCount + 1, capacity + 1];
 
@@ -72,14 +72,14 @@ sealed class SellCommand : ICommand {
             if (table[row, remainingCapacity] == table[row - 1, remainingCapacity]) continue;
 
             GrabbableObject scrap = sellableScraps[row - 1];
-            SellCommand.SellObject(player, scrap, currentWeight);
+            this.SellObject(player, scrap, currentWeight);
             remainingCapacity -= scrap.scrapValue;
         }
 
         return targetValue - unchecked((int)(table[scrapCount, capacity] * buyingRate));
     }
 
-    public Task Execute(Arguments args, CancellationToken cancellationToken) {
+    Task ICommand.Execute(Arguments args, CancellationToken cancellationToken) {
         if (Helper.LocalPlayer is not PlayerControllerB player) return Task.CompletedTask;
         if (Helper.RoundManager?.currentLevel is not { levelID: 3 }) {
             Chat.Print("You must be at the company to use this command!");

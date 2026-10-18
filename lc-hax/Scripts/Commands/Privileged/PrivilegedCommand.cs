@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 sealed class PrivilegedCommand(ICommand command) : ICommand {
     ICommand Command { get; } = command;
 
-    public async Task Execute(Arguments args, CancellationToken cancellationToken) {
+    async Task ICommand.Execute(Arguments args, CancellationToken cancellationToken) {
         if (Helper.LocalPlayer is not { IsHost: true }) {
             Chat.Print("You must be the host to use this command!");
             return;

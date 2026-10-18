@@ -5,7 +5,7 @@ using GameNetcodeStuff;
 
 [Command("mob")]
 sealed class MobCommand : IEnemyPrompter, ICommand {
-    public Task Execute(Arguments args, CancellationToken cancellationToken) {
+    Task ICommand.Execute(Arguments args, CancellationToken cancellationToken) {
         if (args.Length is 0) {
             Chat.Print("Usage: mob <player>");
             return Task.CompletedTask;

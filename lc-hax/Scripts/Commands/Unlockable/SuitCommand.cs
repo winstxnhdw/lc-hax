@@ -13,7 +13,7 @@ sealed class SuitCommand : ICommand {
             .Where(u => u.ToString().EndsWith("_SUIT"))
             .ToDictionary(suit => suit.ToString().Replace("_SUIT", "").ToLower(), suit => suit);
 
-    public Task Execute(Arguments args, CancellationToken cancellationToken) {
+    Task ICommand.Execute(Arguments args, CancellationToken cancellationToken) {
         if (args[0] is not string suit) {
             Chat.Print("Usage: suit <suit>");
             return Task.CompletedTask;

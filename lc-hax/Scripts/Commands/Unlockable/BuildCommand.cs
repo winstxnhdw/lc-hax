@@ -8,11 +8,9 @@ using ZLinq;
 sealed class BuildCommand : ICommand {
     static Dictionary<string, int>? Unlockables { get; set; }
 
-    public Task Execute(Arguments args, CancellationToken cancellationToken) {
-        if (Helper.StartOfRound is not StartOfRound startOfRound)
-            return Task.CompletedTask;
-        if (Helper.CurrentCamera is not Camera camera)
-            return Task.CompletedTask;
+    Task ICommand.Execute(Arguments args, CancellationToken cancellationToken) {
+        if (Helper.StartOfRound is not StartOfRound startOfRound) return Task.CompletedTask;
+        if (Helper.CurrentCamera is not Camera camera) return Task.CompletedTask;
         if (args[0] is not string unlockableName) {
             Chat.Print("Usage: build <unlockable>");
             return Task.CompletedTask;

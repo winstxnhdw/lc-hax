@@ -7,11 +7,9 @@ using ZLinq;
 sealed class VisitCommand : ICommand {
     static Dictionary<string, int>? Levels { get; set; }
 
-    public Task Execute(Arguments args, CancellationToken cancellationToken) {
-        if (Helper.Terminal is not Terminal terminal)
-            return Task.CompletedTask;
-        if (Helper.StartOfRound is not StartOfRound startOfRound)
-            return Task.CompletedTask;
+    Task ICommand.Execute(Arguments args, CancellationToken cancellationToken) {
+        if (Helper.Terminal is not Terminal terminal) return Task.CompletedTask;
+        if (Helper.StartOfRound is not StartOfRound startOfRound) return Task.CompletedTask;
         if (args[0] is not string moon) {
             Chat.Print("Usage: visit <moon>");
             return Task.CompletedTask;

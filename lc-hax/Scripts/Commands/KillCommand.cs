@@ -6,12 +6,12 @@ using GameNetcodeStuff;
 sealed class KillCommand : ICommand {
     bool EnableGodMode { get; set; }
 
-    static Result KillSelf() {
+    Result KillSelf() {
         Helper.LocalPlayer?.KillPlayer();
         return new Result { Success = true };
     }
 
-    static Result KillTargetPlayer(string[] args) {
+    Result KillTargetPlayer(string[] args) {
         if (Helper.GetActivePlayer(args[0]) is not PlayerControllerB targetPlayer) {
             return new Result { Message = "Target player is not alive or found!" };
         }
@@ -20,24 +20,24 @@ sealed class KillCommand : ICommand {
         return new Result { Success = true };
     }
 
-    static Result KillAllPlayers() {
+    Result KillAllPlayers() {
         Helper.Players?.ForEach(player => player.KillPlayer());
         return new Result { Success = true };
     }
 
-    static Result KillAllEnemies() {
+    Result KillAllEnemies() {
         Helper.Enemies.ForEach(Helper.Kill);
         return new Result { Success = true };
     }
 
-    static void HandleResult(Result result) {
+    void HandleResult(Result result) {
         if (result.Success) return;
         Chat.Print(result.Message);
     }
 
-    public Task Execute(Arguments args, CancellationToken cancellationToken) {
+    Task ICommand.Execute(Arguments args, CancellationToken cancellationToken) {
         if (args.Length is 0) {
-            KillCommand.HandleResult(KillSelf());
+            this.HandleResult(this.KillSelf());
             return Task.CompletedTask;
         }
 
@@ -45,13 +45,13 @@ sealed class KillCommand : ICommand {
         Setting.EnableGodMode = false;
 
         Result result = args[0] switch {
-            "--all" => KillCommand.KillAllPlayers(),
-            "--enemy" => KillCommand.KillAllEnemies(),
-            _ => KillCommand.KillTargetPlayer(args)
+            "--all" => this.KillAllPlayers(),
+            "--enemy" => this.KillAllEnemies(),
+            _ => this.KillTargetPlayer(args)
         };
 
         Helper.ShortDelay(() => Setting.EnableGodMode = this.EnableGodMode);
-        KillCommand.HandleResult(result);
+        this.HandleResult(result);
         return Task.CompletedTask;
     }
 }

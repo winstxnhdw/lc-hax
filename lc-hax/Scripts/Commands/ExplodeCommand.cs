@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 
 [Command("explode")]
 sealed class ExplodeCommand : ICommand {
-    public Task Execute(Arguments args, CancellationToken cancellationToken) {
+    Task ICommand.Execute(Arguments args, CancellationToken cancellationToken) {
         if (args.Length is 0) {
             Helper.FindObjects<JetpackItem>()
                   .ForEach(jetpack => jetpack.ExplodeJetpackServerRpc());

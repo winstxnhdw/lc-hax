@@ -4,7 +4,7 @@ using GameNetcodeStuff;
 
 [Command("heal")]
 sealed class HealCommand : ICommand, IStun {
-    static void RespawnLocalPlayer(PlayerControllerB localPlayer, StartOfRound startOfRound, HUDManager hudManager) {
+    void RespawnLocalPlayer(PlayerControllerB localPlayer, StartOfRound startOfRound, HUDManager hudManager) {
         if (Helper.SoundManager is not SoundManager soundManager) return;
 
         soundManager.earsRingingTimer = 0.0f;
@@ -63,9 +63,9 @@ sealed class HealCommand : ICommand, IStun {
         _ = voiceSettings?.voiceAudio?.GetComponent<OccludeAudio>()?.overridingLowPass = false;
     }
 
-    static PlayerControllerB HealLocalPlayer(HUDManager hudManager) {
+    PlayerControllerB HealLocalPlayer(HUDManager hudManager) {
         if (!hudManager.localPlayer.isPlayerControlled) {
-            HealCommand.RespawnLocalPlayer(hudManager.localPlayer, hudManager.localPlayer.playersManager, hudManager);
+            this.RespawnLocalPlayer(hudManager.localPlayer, hudManager.localPlayer.playersManager, hudManager);
 
             Helper.CreateComponent<WaitForBehaviour>("Respawn")
                   .SetPredicate(() => hudManager.localPlayer.playersManager.shipIsLeaving)
@@ -82,19 +82,19 @@ sealed class HealCommand : ICommand, IStun {
         return hudManager.localPlayer;
     }
 
-    static PlayerControllerB? HealPlayer(string? playerNameOrId) {
+    PlayerControllerB? HealPlayer(string? playerNameOrId) {
         PlayerControllerB? targetPlayer = Helper.GetActivePlayer(playerNameOrId);
         targetPlayer?.HealPlayer();
 
         return targetPlayer;
     }
 
-    public Task Execute(Arguments args, CancellationToken cancellationToken) {
+    Task ICommand.Execute(Arguments args, CancellationToken cancellationToken) {
         if (Helper.HUDManager is not HUDManager hudManager) return Task.CompletedTask;
 
         PlayerControllerB? healedPlayer = args.Length switch {
-            0 => HealCommand.HealLocalPlayer(hudManager),
-            _ => HealCommand.HealPlayer(args[0])
+            0 => this.HealLocalPlayer(hudManager),
+            _ => this.HealPlayer(args[0])
         };
 
         if (healedPlayer is null) {

@@ -6,7 +6,7 @@ using UnityEngine;
 
 [Command("fall")]
 sealed class FallCommand : ICommand {
-    static IEnumerator WaitForEnemyOwnershipChange(PlayerControllerB player, EnemyAI enemy) {
+    IEnumerator WaitForEnemyOwnershipChange(PlayerControllerB player, EnemyAI enemy) {
         WaitForEndOfFrame waitForEndOfFrame = new();
 
         while (enemy.currentOwnershipOnThisClient != player.PlayerIndex()) {
@@ -17,8 +17,8 @@ sealed class FallCommand : ICommand {
         }
     }
 
-    static IEnumerator MoveTargetPlayerFloor(PlayerControllerB localPlayer, PlayerControllerB targetPlayer, EnemyAI enemy) {
-        yield return FallCommand.WaitForEnemyOwnershipChange(localPlayer, enemy);
+    IEnumerator MoveTargetPlayerFloor(PlayerControllerB localPlayer, PlayerControllerB targetPlayer, EnemyAI enemy) {
+        yield return this.WaitForEnemyOwnershipChange(localPlayer, enemy);
 
         enemy.UpdateEnemyPositionRpc(
             enemy.serverPosition == Vector3.positiveInfinity
@@ -26,12 +26,11 @@ sealed class FallCommand : ICommand {
                 : Vector3.positiveInfinity
         );
 
-        yield return FallCommand.WaitForEnemyOwnershipChange(targetPlayer, enemy);
+        yield return this.WaitForEnemyOwnershipChange(targetPlayer, enemy);
     }
 
-    public Task Execute(Arguments args, CancellationToken cancellationToken) {
-        if (Helper.LocalPlayer is not PlayerControllerB localPlayer)
-            return Task.CompletedTask;
+    Task ICommand.Execute(Arguments args, CancellationToken cancellationToken) {
+        if (Helper.LocalPlayer is not PlayerControllerB localPlayer) return Task.CompletedTask;
         if (args.Length is 0) {
             Chat.Print("Usage: fall <player>");
             return Task.CompletedTask;
@@ -48,7 +47,7 @@ sealed class FallCommand : ICommand {
         }
 
         Helper.CreateComponent<AsyncBehaviour>()
-              .Init(() => FallCommand.MoveTargetPlayerFloor(localPlayer, targetPlayer, enemy));
+              .Init(() => this.MoveTargetPlayerFloor(localPlayer, targetPlayer, enemy));
         return Task.CompletedTask;
     }
 }

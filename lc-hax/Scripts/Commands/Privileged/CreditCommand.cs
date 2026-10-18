@@ -3,9 +3,8 @@ using System.Threading.Tasks;
 
 [PrivilegedCommand("credit")]
 sealed class CreditCommand : ICommand {
-    public Task Execute(Arguments args, CancellationToken cancellationToken) {
-        if (Helper.Terminal is not Terminal terminal)
-            return Task.CompletedTask;
+    Task ICommand.Execute(Arguments args, CancellationToken cancellationToken) {
+        if (Helper.Terminal is not Terminal terminal) return Task.CompletedTask;
         if (args.Length is 0) {
             Chat.Print("Usage: credit <amount>");
             return Task.CompletedTask;

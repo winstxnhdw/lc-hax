@@ -7,9 +7,8 @@ sealed class GarageCommand : ICommand {
         interactTrigger => interactTrigger != null && interactTrigger.name is "Cube" && interactTrigger.transform.parent.name is "Cutscenes"
     );
 
-    public Task Execute(Arguments args, CancellationToken cancellationToken) {
-        if (Helper.RoundManager is not RoundManager roundManager)
-            return Task.CompletedTask;
+    Task ICommand.Execute(Arguments args, CancellationToken cancellationToken) {
+        if (Helper.RoundManager is not RoundManager roundManager) return Task.CompletedTask;
         if (roundManager.currentLevel.levelID is not 0) {
             Chat.Print("You must be in Experimentation to use this command!");
             return Task.CompletedTask;

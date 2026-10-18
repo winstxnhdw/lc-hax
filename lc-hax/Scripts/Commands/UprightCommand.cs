@@ -15,7 +15,7 @@ sealed class UprightCommand : ICommand {
         Helper.PlaceObjectAtPosition(shipObject, shipObject.transform.position, uprightRotation);
     }
 
-    public Task Execute(Arguments args, CancellationToken cancellationToken) {
+    Task ICommand.Execute(Arguments args, CancellationToken cancellationToken) {
         Helper.FindObjects<PlaceableShipObject>()
               .ForEach(this.SetObjectUpright);
         return Task.CompletedTask;

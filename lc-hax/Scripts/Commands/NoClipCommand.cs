@@ -7,9 +7,9 @@ using UnityEngine;
 sealed class NoClipCommand : ICommand {
     static bool EnabledGodMode { get; set; }
 
-    public Task Execute(Arguments args, CancellationToken cancellationToken) {
-        if (Helper.LocalPlayer is not PlayerControllerB localPlayer)
-            return Task.CompletedTask;
+    Task ICommand.Execute(Arguments args, CancellationToken cancellationToken) {
+        if (Helper.LocalPlayer is not PlayerControllerB localPlayer) return Task.CompletedTask;
+
         if (localPlayer.gameObject.TryGetComponent(out KeyboardMovement keyboard)) {
             Setting.EnableGodMode = EnabledGodMode;
             GameObject.Destroy(keyboard);

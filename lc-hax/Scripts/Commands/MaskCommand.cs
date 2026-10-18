@@ -4,7 +4,7 @@ using GameNetcodeStuff;
 
 [Command("mask")]
 sealed class MaskCommand : ICommand {
-    public async Task Execute(Arguments args, CancellationToken cancellationToken) {
+    async Task ICommand.Execute(Arguments args, CancellationToken cancellationToken) {
         if (Helper.LocalPlayer is not PlayerControllerB localPlayer) return;
         if (Helper.Grabbables.First(grabbable => grabbable.Unfake() is HauntedMaskItem) is not HauntedMaskItem hauntedMaskItem) {
             Chat.Print("No mask found!");

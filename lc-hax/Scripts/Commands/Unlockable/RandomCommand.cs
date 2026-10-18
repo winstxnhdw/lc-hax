@@ -10,13 +10,13 @@ sealed class RandomCommand : ICommand {
         teleporter => teleporter.Unfake() is { isInverseTeleporter: true }
     );
 
-    static bool InverseTeleporterExists() {
+    bool InverseTeleporterExists() {
         HaxObjects.Instance?.ShipTeleporters?.Renew();
         return RandomCommand.InverseTeleporter is not null;
     }
 
-    static ObjectPlacements<Transform, ShipTeleporter>? GetInverseTeleporterPlacements(Component target) {
-        if (!RandomCommand.InverseTeleporterExists()) return null;
+    ObjectPlacements<Transform, ShipTeleporter>? GetInverseTeleporterPlacements(Component target) {
+        if (!this.InverseTeleporterExists()) return null;
         if (RandomCommand.InverseTeleporter is not ShipTeleporter inverseTeleporter) return null;
 
         Vector3 rotationOffset = new(-90.0f, 0.0f, 0.0f);
@@ -41,7 +41,7 @@ sealed class RandomCommand : ICommand {
         };
     }
 
-    static ObjectPlacements<Transform, PlaceableShipObject>? GetCupboardPlacements(Component target) {
+    ObjectPlacements<Transform, PlaceableShipObject>? GetCupboardPlacements(Component target) {
         if (Helper.GetUnlockable(Unlockable.CUPBOARD) is not PlaceableShipObject cupboard) return null;
 
         ObjectPlacement<Transform, PlaceableShipObject> cupboardPlacement = new() {
@@ -62,8 +62,8 @@ sealed class RandomCommand : ICommand {
         };
     }
 
-    static Action TeleportPlayerToRandomLater(PlayerControllerB targetPlayer) => () => {
-        ObjectPlacements<Transform, ShipTeleporter>? teleporterPlacements = RandomCommand.GetInverseTeleporterPlacements(targetPlayer);
+    Action TeleportPlayerToRandomLater(PlayerControllerB targetPlayer) => () => {
+        ObjectPlacements<Transform, ShipTeleporter>? teleporterPlacements = this.GetInverseTeleporterPlacements(targetPlayer);
 
         if (teleporterPlacements is null) {
             Chat.Print("Inverse Teleporter is not found!");
@@ -74,7 +74,7 @@ sealed class RandomCommand : ICommand {
               .Init(_ => Helper.PlaceObjectAtTransform(teleporterPlacements.Value.Placement), 6.0f)
               .Dispose(() => Helper.PlaceObjectAtTransform(teleporterPlacements.Value.PreviousPlacement));
 
-        ObjectPlacements<Transform, PlaceableShipObject>? cupboardPlacements = RandomCommand.GetCupboardPlacements(targetPlayer);
+        ObjectPlacements<Transform, PlaceableShipObject>? cupboardPlacements = this.GetCupboardPlacements(targetPlayer);
 
         if (cupboardPlacements is null) {
             Chat.Print("Cupboard is not found!");
@@ -88,7 +88,7 @@ sealed class RandomCommand : ICommand {
         teleporterPlacements.Value.Placement.GameObject.PressTeleportButtonServerRpc();
     };
 
-    public Task Execute(Arguments args, CancellationToken cancellationToken) {
+    Task ICommand.Execute(Arguments args, CancellationToken cancellationToken) {
         if (args.Length is 0) {
             Chat.Print("Usage: random <player>");
             return Task.CompletedTask;
@@ -104,8 +104,8 @@ sealed class RandomCommand : ICommand {
         Helper.ReturnUnlockable(Unlockable.CUPBOARD);
 
         Helper.CreateComponent<WaitForBehaviour>()
-              .SetPredicate(RandomCommand.InverseTeleporterExists)
-              .Init(RandomCommand.TeleportPlayerToRandomLater(targetPlayer));
+              .SetPredicate(this.InverseTeleporterExists)
+              .Init(this.TeleportPlayerToRandomLater(targetPlayer));
         return Task.CompletedTask;
     }
 }

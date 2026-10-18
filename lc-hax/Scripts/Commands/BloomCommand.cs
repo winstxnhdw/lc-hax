@@ -6,7 +6,7 @@ using UnityEngine;
 
 [Command("bloom")]
 sealed class BloomCommand : ICommand {
-    public async Task Execute(Arguments args, CancellationToken cancellationToken) {
+    async Task ICommand.Execute(Arguments args, CancellationToken cancellationToken) {
         if (args.Length is 0) {
             Chat.Print("Usage: bloom <target>");
             return;

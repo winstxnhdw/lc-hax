@@ -4,7 +4,7 @@ using GameNetcodeStuff;
 
 [Command("bomb")]
 sealed class BombCommand : ICommand, IJetpack {
-    public async Task Execute(Arguments args, CancellationToken cancellationToken) {
+    async Task ICommand.Execute(Arguments args, CancellationToken cancellationToken) {
         if (Helper.LocalPlayer is not PlayerControllerB localPlayer) return;
         if (args.Length is 0) {
             Chat.Print("Usage: bomb <player>");
@@ -26,7 +26,10 @@ sealed class BombCommand : ICommand, IJetpack {
             return;
         }
 
-        await Helper.WaitUntil(() => jetpack == null || localPlayer.currentlyHeldObjectServer == jetpack, cancellationToken);
+        await Helper.WaitUntil(
+            () => jetpack == null || localPlayer.currentlyHeldObjectServer == jetpack,
+            cancellationToken
+        );
 
         if (jetpack == null) {
             return;

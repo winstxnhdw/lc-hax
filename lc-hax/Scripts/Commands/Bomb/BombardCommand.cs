@@ -7,9 +7,16 @@ using ZLinq;
 
 [Command("bombard")]
 sealed class BombardCommand : ICommand, IJetpack {
-    static async Task ExplodeJetpackAsync(JetpackItem jetpack, Transform targetTransform, CancellationToken cancellationToken) {
-        await Helper.WaitUntil(() =>
-            jetpack == null || Vector3.Distance(jetpack.transform.position, targetTransform.position) < 5.0f,
+    const float BombardRadius = 10.0f;
+
+    async Task ExplodeJetpackAsync(
+        JetpackItem jetpack,
+        Transform targetTransform,
+        CancellationToken cancellationToken
+    ) {
+        await Helper.WaitUntil(
+            () =>
+                jetpack == null || Vector3.Distance(jetpack.transform.position, targetTransform.position) < 5.0f,
             cancellationToken
         );
 
@@ -25,12 +32,18 @@ sealed class BombardCommand : ICommand, IJetpack {
     /// If the target player is far away, it may take a while for the jetpacks to reach the player.
     /// The jetpacks will only explode if they within 5 units of the target player.
     /// </summary>
-    static async Task BombardAsync(PlayerControllerB player, Transform targetTransform, JetpackItem[] jetpacks, CancellationToken cancellationToken) {
+    async Task BombardAsync(
+        PlayerControllerB player,
+        Transform targetTransform,
+        JetpackItem[] jetpacks,
+        CancellationToken cancellationToken
+    ) {
         List<Task> explosions = [];
         float currentWeight = player.carryWeight;
 
         foreach (JetpackItem jetpack in jetpacks) {
-            if (jetpack == null || !player.GrabObject(jetpack)) continue;
+            if (jetpack == null) continue;
+            if (!player.GrabObject(jetpack)) continue;
 
             int grabFrame = Time.frameCount;
 
@@ -43,13 +56,12 @@ sealed class BombardCommand : ICommand, IJetpack {
                 continue;
             }
 
-            const float bombardRadius = 10.0f;
-            Vector2 randomDirection = Random.insideUnitCircle * bombardRadius;
+            Vector2 randomDirection = Random.insideUnitCircle * BombardCommand.BombardRadius;
             Vector3 randomDirectionXZ = new(randomDirection.x, 0.0f, randomDirection.y);
 
             cancellationToken.ThrowIfCancellationRequested();
             player.DiscardHeldObject(placeObject: true, placePosition: targetTransform.position + randomDirectionXZ);
-            explosions.Add(BombardCommand.ExplodeJetpackAsync(jetpack, targetTransform, cancellationToken));
+            explosions.Add(this.ExplodeJetpackAsync(jetpack, targetTransform, cancellationToken));
             await Task.Delay(100, cancellationToken);
         }
 
@@ -57,7 +69,7 @@ sealed class BombardCommand : ICommand, IJetpack {
         await Task.WhenAll(explosions);
     }
 
-    public async Task Execute(Arguments args, CancellationToken cancellationToken) {
+    async Task ICommand.Execute(Arguments args, CancellationToken cancellationToken) {
         if (Helper.LocalPlayer is not PlayerControllerB localPlayer) return;
         if (args.Length is 0) {
             Chat.Print("Usage: bombard <player>");
@@ -81,6 +93,6 @@ sealed class BombardCommand : ICommand, IJetpack {
             return;
         }
 
-        await BombardCommand.BombardAsync(localPlayer, targetPlayer.transform, jetpacks, cancellationToken);
+        await this.BombardAsync(localPlayer, targetPlayer.transform, jetpacks, cancellationToken);
     }
 }

@@ -25,7 +25,7 @@ sealed class SpawnCommand : ICommand {
                  )
     );
 
-    static void SpawnEnemyOnPlayer(PlayerControllerB player, EnemyType enemyType, ulong amount = 1) {
+    void SpawnEnemyOnPlayer(PlayerControllerB player, EnemyType enemyType, ulong amount = 1) {
         if (Helper.RoundManager is not RoundManager { IsServer: true } roundManager) return;
 
         for (ulong i = 0; i < amount; i++) {
@@ -52,7 +52,7 @@ sealed class SpawnCommand : ICommand {
         }
     }
 
-    public Task Execute(Arguments args, CancellationToken cancellationToken) {
+    Task ICommand.Execute(Arguments args, CancellationToken cancellationToken) {
         if (args.Length < 2) {
             Chat.Print("Usage: spawn <enemy> <player> <amount?>");
             return Task.CompletedTask;
@@ -80,7 +80,7 @@ sealed class SpawnCommand : ICommand {
             return Task.CompletedTask;
         }
 
-        SpawnCommand.SpawnEnemyOnPlayer(targetPlayer, SpawnCommand.HostileEnemies.Value[key], count);
+        this.SpawnEnemyOnPlayer(targetPlayer, SpawnCommand.HostileEnemies.Value[key], count);
         Chat.Print($"Spawning {count}x {key} on {targetPlayer.playerUsername}!");
         return Task.CompletedTask;
     }

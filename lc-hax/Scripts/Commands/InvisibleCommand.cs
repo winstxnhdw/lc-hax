@@ -4,7 +4,7 @@ using GameNetcodeStuff;
 
 [Command("invis")]
 sealed class InvisibleCommand : ICommand {
-    public Task Execute(Arguments args, CancellationToken cancellationToken) {
+    Task ICommand.Execute(Arguments args, CancellationToken cancellationToken) {
         if (Helper.LocalPlayer is not PlayerControllerB player) return Task.CompletedTask;
 
         Setting.EnableInvisible = !Setting.EnableInvisible;

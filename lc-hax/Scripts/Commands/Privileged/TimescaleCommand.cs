@@ -4,7 +4,7 @@ using UnityEngine;
 
 [PrivilegedCommand("timescale")]
 sealed class TimescaleCommand : ICommand {
-    public Task Execute(Arguments args, CancellationToken cancellationToken) {
+    Task ICommand.Execute(Arguments args, CancellationToken cancellationToken) {
         if (args.Length is 0) {
             Chat.Print("Usage: timescale <scale>");
             return Task.CompletedTask;

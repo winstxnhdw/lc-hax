@@ -5,7 +5,7 @@ using GameNetcodeStuff;
 
 [Command("hate")]
 sealed class HateCommand : IEnemyPrompter, ICommand {
-    public Task Execute(Arguments args, CancellationToken cancellationToken) {
+    Task ICommand.Execute(Arguments args, CancellationToken cancellationToken) {
         if (args.Length is 0) {
             Chat.Print("Usage: hate <player> <funnyRevive>");
             return Task.CompletedTask;

@@ -18,7 +18,7 @@ readonly record struct BuyableItem {
 sealed class BuyCommand : ICommand {
     static Dictionary<string, BuyableItem>? BuyableItems { get; set; }
 
-    static Dictionary<string, BuyableItem> PopulateBuyableItems(Terminal terminal) {
+    Dictionary<string, BuyableItem> PopulateBuyableItems(Terminal terminal) {
         Dictionary<string, BuyableItem> buyableItems = [];
 
         for (int i = 0; i < terminal.buyableItemsList.Length; i++) {
@@ -38,9 +38,8 @@ sealed class BuyCommand : ICommand {
         return buyableItems;
     }
 
-    public Task Execute(Arguments args, CancellationToken cancellationToken) {
-        if (Helper.Terminal is not Terminal terminal)
-            return Task.CompletedTask;
+    Task ICommand.Execute(Arguments args, CancellationToken cancellationToken) {
+        if (Helper.Terminal is not Terminal terminal) return Task.CompletedTask;
         if (args[0] is not string item) {
             Chat.Print("Usage: buy <item> <quantity?>");
             return Task.CompletedTask;
@@ -52,7 +51,7 @@ sealed class BuyCommand : ICommand {
         }
 
         int clampedQuantity = Mathf.Clamp(quantity, 1, 12);
-        BuyCommand.BuyableItems ??= BuyCommand.PopulateBuyableItems(terminal);
+        BuyCommand.BuyableItems ??= this.PopulateBuyableItems(terminal);
 
         if (!item.FuzzyMatch(BuyCommand.BuyableItems.Keys, out string key)) {
             Chat.Print("Failed to find purchase!");

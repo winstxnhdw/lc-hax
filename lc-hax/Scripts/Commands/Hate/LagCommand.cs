@@ -6,7 +6,7 @@ using UnityEngine;
 
 [Command("lag")]
 sealed class LagCommand : ICommand {
-    static IEnumerator WaitForEnemyOwnershipChange(PlayerControllerB player, EnemyAI enemy) {
+    IEnumerator WaitForEnemyOwnershipChange(PlayerControllerB player, EnemyAI enemy) {
         WaitForEndOfFrame waitForEndOfFrame = new();
 
         while (enemy.currentOwnershipOnThisClient != player.PlayerIndex()) {
@@ -17,24 +17,23 @@ sealed class LagCommand : ICommand {
         }
     }
 
-    static IEnumerator PassBrackenComputeToTargetPlayer(
+    IEnumerator PassBrackenComputeToTargetPlayer(
         PlayerControllerB localPlayer,
         PlayerControllerB targetPlayer,
         FlowermanAI bracken
     ) {
-        yield return LagCommand.WaitForEnemyOwnershipChange(localPlayer, bracken);
+        yield return this.WaitForEnemyOwnershipChange(localPlayer, bracken);
 
         bracken.SetMovingTowardsTargetPlayer(targetPlayer);
         bracken.SetBehaviourState(BehaviourState.AGGRAVATED);
         bracken.EnterAngerModeServerRpc(float.MaxValue);
         bracken.UpdateEnemyPositionRpc(targetPlayer.transform.position);
 
-        yield return LagCommand.WaitForEnemyOwnershipChange(targetPlayer, bracken);
+        yield return this.WaitForEnemyOwnershipChange(targetPlayer, bracken);
     }
 
-    public Task Execute(Arguments args, CancellationToken cancellationToken) {
-        if (Helper.LocalPlayer is not PlayerControllerB localPlayer)
-            return Task.CompletedTask;
+    Task ICommand.Execute(Arguments args, CancellationToken cancellationToken) {
+        if (Helper.LocalPlayer is not PlayerControllerB localPlayer) return Task.CompletedTask;
         if (args.Length is 0) {
             Chat.Print("Usage: lag <player>");
             return Task.CompletedTask;
@@ -56,7 +55,7 @@ sealed class LagCommand : ICommand {
         }
 
         Helper.CreateComponent<AsyncBehaviour>()
-              .Init(() => LagCommand.PassBrackenComputeToTargetPlayer(localPlayer, targetPlayer, bracken));
+              .Init(() => this.PassBrackenComputeToTargetPlayer(localPlayer, targetPlayer, bracken));
         return Task.CompletedTask;
     }
 }

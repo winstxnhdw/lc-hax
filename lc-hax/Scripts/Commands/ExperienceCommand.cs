@@ -11,9 +11,8 @@ enum Rank {
 
 [Command("xp")]
 sealed class ExperienceCommand : ICommand {
-    public Task Execute(Arguments args, CancellationToken cancellationToken) {
-        if (Helper.HUDManager is not HUDManager hudManager)
-            return Task.CompletedTask;
+    Task ICommand.Execute(Arguments args, CancellationToken cancellationToken) {
+        if (Helper.HUDManager is not HUDManager hudManager) return Task.CompletedTask;
         if (args.Length is 0) {
             Chat.Print("Usage: xp <amount>");
             return Task.CompletedTask;

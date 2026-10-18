@@ -8,12 +8,12 @@ using UnityEngine;
 sealed class MuteCommand : ICommand {
     static Dictionary<string, TransientBehaviour> MutedPlayers { get; } = [];
 
-    static bool MutedPlayerHasMessaged(string playerUsername) =>
+    bool MutedPlayerHasMessaged(string playerUsername) =>
         Helper.HUDManager?.ChatMessageHistory.First(message =>
             message.StartsWith($"<color=#FF0000>{playerUsername}<color>: <color=#FFFF00>'"
         )) is not null;
 
-    public Task Execute(Arguments args, CancellationToken cancellationToken) {
+    Task ICommand.Execute(Arguments args, CancellationToken cancellationToken) {
         if (args.Length is 0) {
             Chat.Print("Usage: mute <player>");
             return Task.CompletedTask;
@@ -31,7 +31,7 @@ sealed class MuteCommand : ICommand {
         }
 
         TransientBehaviour playerMuterObject = Helper.CreateComponent<TransientBehaviour>().Init(_ => {
-            if (!MuteCommand.MutedPlayerHasMessaged(player.playerUsername)) return;
+            if (!this.MutedPlayerHasMessaged(player.playerUsername)) return;
             Chat.Clear();
         }, 10000.0f);
 

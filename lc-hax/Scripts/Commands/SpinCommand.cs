@@ -5,22 +5,24 @@ using UnityEngine;
 
 [Command("spin")]
 sealed class SpinCommand : ICommand {
-    static Action<float> PlaceObjectAtRotation(PlaceableShipObject shipObject) => (timeElapsed) => {
+    const float RotationDegreesPerSecond = 810.0f;
+
+    Action<float> PlaceObjectAtRotation(PlaceableShipObject shipObject) => (timeElapsed) => {
         if (shipObject == null) return;
 
         Helper.PlaceObjectAtPosition(
             shipObject,
             shipObject.transform.position,
-            new Vector3(0.0f, timeElapsed * 810.0f, 0.0f)
+            new Vector3(0.0f, timeElapsed * SpinCommand.RotationDegreesPerSecond, 0.0f)
         );
     };
 
-    static Action<PlaceableShipObject> SpinObject(ulong duration) => (shipObject) =>
+    Action<PlaceableShipObject> SpinObject(ulong duration) => (shipObject) =>
         Helper.CreateComponent<TransientBehaviour>()
-              .Init(SpinCommand.PlaceObjectAtRotation(shipObject), duration)
+              .Init(this.PlaceObjectAtRotation(shipObject), duration)
               .Unless(() => shipObject == null);
 
-    public Task Execute(Arguments args, CancellationToken cancellationToken) {
+    Task ICommand.Execute(Arguments args, CancellationToken cancellationToken) {
         if (args.Length is 0) {
             Chat.Print("Usage: spin <duration>");
         }
@@ -30,7 +32,7 @@ sealed class SpinCommand : ICommand {
         }
 
         Helper.FindObjects<PlaceableShipObject>()
-              .ForEach(SpinCommand.SpinObject(duration));
+              .ForEach(this.SpinObject(duration));
 
         return Task.CompletedTask;
     }

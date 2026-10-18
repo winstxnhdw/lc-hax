@@ -4,9 +4,9 @@ using UnityEngine;
 
 [Command("xyz")]
 sealed class LocationCommand : ICommand {
-    public Task Execute(Arguments args, CancellationToken cancellationToken) {
-        if (Helper.CurrentCamera is not Camera camera)
-            return Task.CompletedTask;
+    Task ICommand.Execute(Arguments args, CancellationToken cancellationToken) {
+        if (Helper.CurrentCamera is not Camera camera) return Task.CompletedTask;
+
         Vector3 currentPostion = camera.transform.position;
         Chat.Print($"{currentPostion.x:0} {currentPostion.y:0} {currentPostion.z:0}");
         return Task.CompletedTask;

@@ -5,7 +5,7 @@ using UnityEngine;
 
 [Command("tp")]
 sealed class TeleportCommand : ITeleporter, ICommand {
-    static Vector3? GetCoordinates(string[] args) {
+    Vector3? GetCoordinates(string[] args) {
         bool isValidX = float.TryParse(args[0], out float x);
         bool isValidY = float.TryParse(args[1], out float y);
         bool isValidZ = float.TryParse(args[2], out float z);
@@ -13,7 +13,7 @@ sealed class TeleportCommand : ITeleporter, ICommand {
         return !isValidX || !isValidY || !isValidZ ? null : new Vector3(x, y, z);
     }
 
-    static Result TeleportToPlayer(string[] args) {
+    Result TeleportToPlayer(string[] args) {
         PlayerControllerB? targetPlayer = Helper.GetPlayer(args[0]);
         PlayerControllerB? currentPlayer = Helper.LocalPlayer;
 
@@ -25,8 +25,8 @@ sealed class TeleportCommand : ITeleporter, ICommand {
         return new Result { Success = true };
     }
 
-    static Result TeleportToPosition(string[] args) {
-        Vector3? coordinates = TeleportCommand.GetCoordinates(args);
+    Result TeleportToPosition(string[] args) {
+        Vector3? coordinates = this.GetCoordinates(args);
 
         if (coordinates is null) {
             return new Result { Message = "Invalid coordinates!" };
@@ -46,7 +46,7 @@ sealed class TeleportCommand : ITeleporter, ICommand {
             return new Result { Message = "Player is not found!" };
         }
 
-        Vector3? coordinates = TeleportCommand.GetCoordinates(args[1..]);
+        Vector3? coordinates = this.GetCoordinates(args[1..]);
 
         return coordinates is null
             ? new Result { Message = "Invalid coordinates!" }
@@ -62,21 +62,23 @@ sealed class TeleportCommand : ITeleporter, ICommand {
             : this.TeleportPlayerToPosition(sourcePlayer, targetPlayer.transform.position);
     }
 
-    public Task Execute(Arguments args, CancellationToken cancellationToken) {
+    Task ICommand.Execute(Arguments args, CancellationToken cancellationToken) {
         if (args.Length is 0) {
-            Chat.Print("Usages:",
+            Chat.Print(
+                "Usages:",
                 "tp <player>",
                 "tp <player> <player>",
                 "tp <x> <y> <z>",
                 "tp <player> <x> <y> <z>"
             );
+
             return Task.CompletedTask;
         }
 
         Result result = args.Length switch {
-            1 => TeleportCommand.TeleportToPlayer(args),
+            1 => this.TeleportToPlayer(args),
             2 => this.TeleportPlayerToPlayer(args),
-            3 => TeleportCommand.TeleportToPosition(args),
+            3 => this.TeleportToPosition(args),
             4 => this.TeleportPlayerToPosition(args),
             _ => new Result { Message = "Invalid arguments!" }
         };

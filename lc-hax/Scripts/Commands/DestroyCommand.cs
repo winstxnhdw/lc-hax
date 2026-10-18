@@ -5,8 +5,14 @@ using ZLinq;
 
 [Command("destroy")]
 sealed class DestroyCommand : ICommand {
-    static async Task DestroyInventoryItem(PlayerControllerB player, GrabbableObject? item, int slot, CancellationToken cancellationToken) {
-        if (item == null || !item.IsSpawned) return;
+    async Task DestroyInventoryItem(
+        PlayerControllerB player,
+        GrabbableObject? item,
+        int slot,
+        CancellationToken cancellationToken
+    ) {
+        if (item == null) return;
+        if (!item.IsSpawned) return;
 
         cancellationToken.ThrowIfCancellationRequested();
         player.SwitchToItemSlot(slot);
@@ -15,11 +21,11 @@ sealed class DestroyCommand : ICommand {
         await Helper.WaitUntil(() => item == null && !player.throwingObject, cancellationToken);
     }
 
-    static async Task DestroyAllItems(PlayerControllerB player, CancellationToken cancellationToken) {
-        await DestroyCommand.DestroyInventoryItem(player, player.ItemOnlySlot, 50, cancellationToken);
+    async Task DestroyAllItems(PlayerControllerB player, CancellationToken cancellationToken) {
+        await this.DestroyInventoryItem(player, player.ItemOnlySlot, 50, cancellationToken);
 
         for (int slot = 0; slot < player.ItemSlots.Length; slot++) {
-            await DestroyCommand.DestroyInventoryItem(player, player.ItemSlots[slot], slot, cancellationToken);
+            await this.DestroyInventoryItem(player, player.ItemSlots[slot], slot, cancellationToken);
         }
 
         foreach (GrabbableObject grabbable in Helper.Grabbables.AsValueEnumerable().ToArray()) {
@@ -49,10 +55,10 @@ sealed class DestroyCommand : ICommand {
         }
     }
 
-    public async Task Execute(Arguments args, CancellationToken cancellationToken) {
+    async Task ICommand.Execute(Arguments args, CancellationToken cancellationToken) {
         if (Helper.LocalPlayer is not PlayerControllerB player) return;
         if (args[0] is "--all") {
-            await DestroyCommand.DestroyAllItems(player, cancellationToken);
+            await this.DestroyAllItems(player, cancellationToken);
             player.carryWeight = 1.0f;
         }
 

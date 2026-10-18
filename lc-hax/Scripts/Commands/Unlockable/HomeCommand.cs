@@ -9,7 +9,7 @@ sealed class HomeCommand : ITeleporter, ICommand {
         teleporter => teleporter != null && !teleporter.isInverseTeleporter
     );
 
-    static Action TeleportPlayerToBaseLater(PlayerControllerB targetPlayer) => () => {
+    Action TeleportPlayerToBaseLater(PlayerControllerB targetPlayer) => () => {
         HaxObjects.Instance?.ShipTeleporters?.Renew();
 
         if (HomeCommand.Teleporter is not ShipTeleporter teleporter) {
@@ -23,9 +23,8 @@ sealed class HomeCommand : ITeleporter, ICommand {
               .Init(() => teleporter.Unfake()?.PressTeleportButtonServerRpc());
     };
 
-    public Task Execute(Arguments args, CancellationToken cancellationToken) {
-        if (Helper.StartOfRound is not StartOfRound startOfRound)
-            return Task.CompletedTask;
+    Task ICommand.Execute(Arguments args, CancellationToken cancellationToken) {
+        if (Helper.StartOfRound is not StartOfRound startOfRound) return Task.CompletedTask;
         if (args.Length is 0) {
             startOfRound.ForcePlayerIntoShip();
             startOfRound.localPlayerController.isInsideFactory = false;
@@ -37,7 +36,7 @@ sealed class HomeCommand : ITeleporter, ICommand {
             return Task.CompletedTask;
         }
 
-        this.PrepareToTeleport(HomeCommand.TeleportPlayerToBaseLater(targetPlayer));
+        this.PrepareToTeleport(this.TeleportPlayerToBaseLater(targetPlayer));
         return Task.CompletedTask;
     }
 }

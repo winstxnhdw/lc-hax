@@ -4,7 +4,7 @@ using ZLinq;
 
 [Command("players")]
 sealed class PlayersCommand : ICommand {
-    public Task Execute(Arguments args, CancellationToken cancellationToken) {
+    Task ICommand.Execute(Arguments args, CancellationToken cancellationToken) {
         Chat.Print(
         $"\n{Helper.Players.AsValueEnumerable().Select(player => $"{player.playerClientId}: {player.playerUsername}").JoinToString("\n")}"
     );

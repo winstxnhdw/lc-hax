@@ -7,7 +7,13 @@ using UnityEngine;
 
 [Command("poison")]
 sealed class PoisonCommand : ICommand {
-    static async Task PoisonPlayer(PlayerControllerB player, int damage, ulong delay, ulong duration, CancellationToken cancellationToken) {
+    async Task PoisonPlayer(
+        PlayerControllerB player,
+        int damage,
+        ulong delay,
+        ulong duration,
+        CancellationToken cancellationToken
+    ) {
         float startTime = Time.time;
 
         while (Time.time - startTime < duration) {
@@ -19,9 +25,10 @@ sealed class PoisonCommand : ICommand {
         }
     }
 
-    public async Task Execute(Arguments args, CancellationToken cancellationToken) {
+    async Task ICommand.Execute(Arguments args, CancellationToken cancellationToken) {
         if (args.Length < 3) {
-            Chat.Print("Usages:",
+            Chat.Print(
+                "Usages:",
                 "poison <player> <damage> <duration> <delay=1>",
                 "poison --all <damage> <duration> <delay=1>"
             );
@@ -46,12 +53,20 @@ sealed class PoisonCommand : ICommand {
 
         if (args[0] is "--all") {
             await Task.WhenAll(
-                Helper.ActivePlayers.Select(player => PoisonCommand.PoisonPlayer(player, damage, delay, duration, cancellationToken))
+                Helper.ActivePlayers.Select(
+                    player => this.PoisonPlayer(
+                        player,
+                        damage,
+                        delay,
+                        duration,
+                        cancellationToken
+                    )
+                )
             );
         }
 
         else if (Helper.GetActivePlayer(args[0]) is PlayerControllerB player) {
-            await PoisonCommand.PoisonPlayer(player, damage, delay, duration, cancellationToken);
+            await this.PoisonPlayer(player, damage, delay, duration, cancellationToken);
         }
 
         else {

@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 
 [Command("prefix")]
 sealed class PrefixCommand : ICommand {
-    public Task Execute(Arguments args, CancellationToken cancellationToken) {
+    Task ICommand.Execute(Arguments args, CancellationToken cancellationToken) {
         if (args.Length is 0) {
             Chat.Print("Usage: prefix <prefix>");
             return Task.CompletedTask;

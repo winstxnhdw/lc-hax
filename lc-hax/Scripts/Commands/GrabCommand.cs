@@ -8,15 +8,19 @@ using ZLinq;
 
 [Command("grab")]
 sealed class GrabCommand : ICommand {
-    static bool CanGrabItem(GrabbableObject grabbableObject, Vector3 currentPlayerPosition) =>
+    bool CanGrabItem(GrabbableObject grabbableObject, Vector3 currentPlayerPosition) =>
         grabbableObject.Unfake() is { isHeld: false } and { isHeldByEnemy: false } &&
         (grabbableObject.transform.position - currentPlayerPosition).sqrMagnitude >= 20.0f * 20.0f;
 
-    static async Task<string> GrabAllItems(PlayerControllerB player, Vector3 currentPlayerPosition, CancellationToken cancellationToken) {
+    async Task<string> GrabAllItems(
+        PlayerControllerB player,
+        Vector3 currentPlayerPosition,
+        CancellationToken cancellationToken
+    ) {
         GrabbableObject[] grabbables = [
             .. Helper.Grabbables
                      .AsValueEnumerable()
-                     .Where(grabbable => GrabCommand.CanGrabItem(grabbable, currentPlayerPosition))
+                     .Where(grabbable => this.CanGrabItem(grabbable, currentPlayerPosition))
         ];
 
         if (grabbables.Length is 0) {
@@ -30,7 +34,8 @@ sealed class GrabCommand : ICommand {
         float currentWeight = player.carryWeight;
 
         foreach (GrabbableObject grabbable in grabbables) {
-            if (grabbable == null || !player.GrabObject(grabbable)) continue;
+            if (grabbable == null) continue;
+            if (!player.GrabObject(grabbable)) continue;
 
             int grabFrame = Time.frameCount;
 
@@ -52,11 +57,16 @@ sealed class GrabCommand : ICommand {
         return "Successfully grabbed all items!";
     }
 
-    static async Task<string> GrabItem(PlayerControllerB player, Vector3 currentPlayerPosition, string itemName, CancellationToken cancellationToken) {
+    async Task<string> GrabItem(
+        PlayerControllerB player,
+        Vector3 currentPlayerPosition,
+        string itemName,
+        CancellationToken cancellationToken
+    ) {
         Dictionary<string, GrabbableObject> grabbableObjects =
             Helper.Grabbables?
                 .AsValueEnumerable()
-                .Where(grabbable => GrabCommand.CanGrabItem(grabbable, currentPlayerPosition))
+                .Where(grabbable => this.CanGrabItem(grabbable, currentPlayerPosition))
                 .GroupBy(grabbable => grabbable.itemProperties.name.ToLower())
                 .ToDictionary(
                     group => group.Key,
@@ -75,8 +85,9 @@ sealed class GrabCommand : ICommand {
 
         int grabFrame = Time.frameCount;
 
-        await Helper.WaitUntil(() =>
-            Time.frameCount != grabFrame && (grabbable == null || player.currentlyHeldObjectServer == grabbable),
+        await Helper.WaitUntil(
+            () =>
+                Time.frameCount != grabFrame && (grabbable == null || player.currentlyHeldObjectServer == grabbable),
             cancellationToken
         );
 
@@ -90,14 +101,19 @@ sealed class GrabCommand : ICommand {
         return $"Grabbed a {key.ToTitleCase()}!";
     }
 
-    public async Task Execute(Arguments args, CancellationToken cancellationToken) {
+    async Task ICommand.Execute(Arguments args, CancellationToken cancellationToken) {
         if (Helper.LocalPlayer is not PlayerControllerB localPlayer) return;
 
         Vector3 currentPlayerPosition = localPlayer.transform.position;
 
         string message = args.Length switch {
-            0 => await GrabCommand.GrabAllItems(localPlayer, currentPlayerPosition, cancellationToken),
-            _ => await GrabCommand.GrabItem(localPlayer, currentPlayerPosition, string.Join(' ', args), cancellationToken)
+            0 => await this.GrabAllItems(localPlayer, currentPlayerPosition, cancellationToken),
+            _ => await this.GrabItem(
+                localPlayer,
+                currentPlayerPosition,
+                string.Join(' ', args),
+                cancellationToken
+            )
         };
 
         Chat.Print(message);

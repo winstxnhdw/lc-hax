@@ -4,7 +4,7 @@ using GameNetcodeStuff;
 
 [Command("translate")]
 sealed class TranslateCommand : ICommand {
-    public async Task Execute(Arguments args, CancellationToken cancellationToken) {
+    async Task ICommand.Execute(Arguments args, CancellationToken cancellationToken) {
         if (Helper.LocalPlayer is not PlayerControllerB player) return;
         if (args.Length < 2) {
             Chat.Print("Usages: translate <language> <text>");
