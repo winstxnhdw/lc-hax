@@ -6,8 +6,8 @@ sealed class InvisibleCommand : ICommand {
     Task ICommand.Execute(Arguments args, CancellationToken cancellationToken) {
         if (Helper.LocalPlayer is not { } player) return Task.CompletedTask;
 
-        Setting.EnableInvisible = !Setting.EnableInvisible;
-        Chat.Print($"Invisible: {(Setting.EnableInvisible ? "enabled" : "disabled")}");
+        Globals.EnableInvisible = !Globals.EnableInvisible;
+        Chat.Print($"Invisible: {(Globals.EnableInvisible ? "enabled" : "disabled")}");
 
         player.UpdatePlayerPositionRpc(
             player.thisPlayerBody.localPosition,

@@ -40,8 +40,8 @@ sealed class KillCommand : ICommand {
             return Task.CompletedTask;
         }
 
-        this.EnableGodMode = Setting.EnableGodMode;
-        Setting.EnableGodMode = false;
+        this.EnableGodMode = Globals.EnableGodMode;
+        Globals.EnableGodMode = false;
 
         Result result = args[0] switch {
             "--all" => this.KillAllPlayers(),
@@ -49,7 +49,7 @@ sealed class KillCommand : ICommand {
             _ => this.KillTargetPlayer(args)
         };
 
-        Helper.ShortDelay(() => Setting.EnableGodMode = this.EnableGodMode);
+        Helper.ShortDelay(() => Globals.EnableGodMode = this.EnableGodMode);
         this.HandleResult(result);
         return Task.CompletedTask;
     }

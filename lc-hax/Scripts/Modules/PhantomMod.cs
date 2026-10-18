@@ -3,6 +3,7 @@ using UnityEngine;
 
 // Process input before camera control, and prepare movement before CharacterMovement.
 [DefaultExecutionOrder(50)]
+[Mod]
 sealed class PhantomMod : MonoBehaviour {
     PhantomCamera? PhantomCamera { get; set; }
     IPhantomExtension? Extension { get; set; }
@@ -30,14 +31,14 @@ sealed class PhantomMod : MonoBehaviour {
     void OnDestroy() => this.PhantomCamera?.Dispose();
 
     void Update() {
-        if (!Setting.EnablePhantom) return;
+        if (!Globals.EnablePhantom) return;
 
         this.Extension?.Update();
         this.UpdateCameraMovement();
     }
 
     void LateUpdate() {
-        if (!Setting.EnablePhantom) return;
+        if (!Globals.EnablePhantom) return;
         if (Helper.StartOfRound is StartOfRound round) {
             this.PhantomCamera?.TakeControl(round);
         }
@@ -55,7 +56,7 @@ sealed class PhantomMod : MonoBehaviour {
     void LookAtPreviousPlayer() => this.LookAtPlayer(-1);
 
     void LookAtPlayer(int indexChange) {
-        if (!Setting.EnablePhantom) return;
+        if (!Globals.EnablePhantom) return;
         if (this.Player.Unfake() is not { } player) return;
         if (player.IsInputPaused()) return;
         if (this.Extension is { ControlsCamera: true }) return;
@@ -69,7 +70,7 @@ sealed class PhantomMod : MonoBehaviour {
     void TogglePhantom(bool teleportOnExit) {
         if (Helper.LocalPlayer is not { } player) return;
         if (player.IsInputPaused()) return;
-        if (!Setting.EnablePhantom) {
+        if (!Globals.EnablePhantom) {
             this.EnablePhantom(player);
             return;
         }
@@ -90,10 +91,10 @@ sealed class PhantomMod : MonoBehaviour {
         this.Player = player;
 
         this.PhantomCamera.Activate(round, source, player);
-        Setting.EnablePhantom = true;
+        Globals.EnablePhantom = true;
         this.Extension = new Possession(this.PhantomCamera.Camera);
 
-        if (AutoPlayMod.GetInput(player) is null) {
+        if (AutoPlayInput.GetInput(player) is null) {
             player.StopHoldInteractionOnTrigger();
         }
 
@@ -101,11 +102,11 @@ sealed class PhantomMod : MonoBehaviour {
     }
 
     internal void DisablePhantom() {
-        if (!Setting.EnablePhantom) return;
+        if (!Globals.EnablePhantom) return;
         if (this.PhantomCamera is null) return;
         if (Helper.StartOfRound is not { } round) return;
 
-        Setting.EnablePhantom = false;
+        Globals.EnablePhantom = false;
         this.Extension?.Dispose();
         this.PhantomCamera.Deactivate(round);
     }

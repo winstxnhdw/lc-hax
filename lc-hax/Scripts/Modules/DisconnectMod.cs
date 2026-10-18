@@ -2,6 +2,7 @@ using System.Text.RegularExpressions;
 using Steamworks;
 using UnityEngine;
 
+[Mod]
 sealed class DisconnectMod : MonoBehaviour {
     bool IsShiftHeld { get; set; }
 

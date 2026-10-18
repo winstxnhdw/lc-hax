@@ -1,5 +1,6 @@
 using UnityEngine;
 
+[Mod]
 sealed class MinimalGUIMod : MonoBehaviour {
     bool InGame { get; set; }
 
@@ -16,7 +17,7 @@ sealed class MinimalGUIMod : MonoBehaviour {
     void OnGUI() {
         if (this.InGame) return;
 
-        string labelText = $"Anti-Kick: {(Setting.EnableAntiKick ? "On" : "Off")}";
+        string labelText = $"Anti-Kick: {(Globals.EnableAntiKick ? "On" : "Off")}";
         GUIStyle labelStyle = GUI.skin.label;
         Vector2 labelSize = labelStyle.CalcSize(new GUIContent(labelText));
         float xPosition = Screen.width - labelSize.x - 10;

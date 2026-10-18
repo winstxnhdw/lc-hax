@@ -13,7 +13,7 @@ sealed class InvisiblePatch {
         ref bool exhausted,
         ref bool isPlayerGrounded
     ) {
-        if (!Setting.EnableInvisible) return;
+        if (!Globals.EnableInvisible) return;
         if (Helper.LocalPlayer?.actualClientId != ___actualClientId) return;
 
         newPos = new Vector3(0.0f, -100.0f, 0.0f);

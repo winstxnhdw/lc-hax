@@ -5,15 +5,13 @@ using UnityEngine;
 
 [Command("spin")]
 sealed class SpinCommand : ICommand {
-    const float RotationDegreesPerSecond = 810.0f;
-
     Action<float> PlaceObjectAtRotation(PlaceableShipObject shipObject) => (timeElapsed) => {
         if (shipObject == null) return;
 
         Helper.PlaceObjectAtPosition(
             shipObject,
             shipObject.transform.position,
-            new Vector3(0.0f, timeElapsed * SpinCommand.RotationDegreesPerSecond, 0.0f)
+            new Vector3(0.0f, timeElapsed * Setting.SpinSpeed, 0.0f)
         );
     };
 

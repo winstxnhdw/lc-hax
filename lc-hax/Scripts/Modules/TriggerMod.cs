@@ -1,6 +1,7 @@
 using GameNetcodeStuff;
 using UnityEngine;
 
+[Mod]
 sealed class TriggerMod : MonoBehaviour, IEnemyPrompter {
     bool UsingInteractRay { get; set; }
 

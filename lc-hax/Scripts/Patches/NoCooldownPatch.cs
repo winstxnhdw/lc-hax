@@ -6,14 +6,14 @@ using HarmonyLib;
 sealed class NoCooldownPatch {
     [HarmonyPatch(typeof(GrabbableObject), nameof(GrabbableObject.RequireCooldown))]
     static void Postfix(ref bool __result) {
-        if (!Setting.EnableNoCooldown) return;
+        if (!Globals.EnableNoCooldown) return;
         __result = false;
     }
 
     [HarmonyPatch(typeof(Shovel), "reelUpShovel")]
     static IEnumerator Postfix(IEnumerator reelUpShovel) {
         while (reelUpShovel.MoveNext()) {
-            if (Setting.EnableNoCooldown && reelUpShovel.Current is WaitForSeconds) continue;
+            if (Globals.EnableNoCooldown && reelUpShovel.Current is WaitForSeconds) continue;
             yield return reelUpShovel.Current;
         }
     }

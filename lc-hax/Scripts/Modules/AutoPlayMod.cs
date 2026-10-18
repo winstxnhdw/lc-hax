@@ -2,14 +2,12 @@ using GameNetcodeStuff;
 using UnityEngine;
 
 [DefaultExecutionOrder(-55)]
+[Mod]
 sealed class AutoPlayMod : MonoBehaviour {
-    static AutoPlayMod? Instance { get; set; }
-
     bool IsActive { get; set; }
     AutoPlaySession? Session { get; set; }
 
     void OnEnable() {
-        AutoPlayMod.Instance = this;
         InputListener.OnF6Press += this.Toggle;
         GameListener.OnGameEnd += this.Stop;
     }
@@ -18,17 +16,7 @@ sealed class AutoPlayMod : MonoBehaviour {
         InputListener.OnF6Press -= this.Toggle;
         GameListener.OnGameEnd -= this.Stop;
         this.Stop();
-
-        if (AutoPlayMod.Instance == this) {
-            AutoPlayMod.Instance = null;
-        }
     }
-
-    internal static AutoPlayInput? GetInput(PlayerControllerB player) =>
-        AutoPlayMod.Instance.Unfake()?.Session is AutoPlaySession session &&
-        session.Player == player && player is { isPlayerDead: false, isPlayerControlled: true }
-            ? session.Input
-            : null;
 
     void Stop() {
         this.IsActive = false;
@@ -77,6 +65,7 @@ sealed class AutoPlayMod : MonoBehaviour {
 
             player.StopHoldInteractionOnTrigger();
             this.Session = new AutoPlaySession(player);
+            this.Session.Input.Activate();
         }
 
         this.Session.Tick();

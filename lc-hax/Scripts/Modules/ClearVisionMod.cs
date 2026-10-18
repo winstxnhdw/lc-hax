@@ -4,8 +4,9 @@ using UnityEngine;
 using UnityEngine.Rendering;
 using UnityEngine.Rendering.HighDefinition;
 
+[Mod]
 sealed class ClearVisionMod : MonoBehaviour {
-    float LightIntensity { get; set; } = 2.0f;
+    float LightIntensity { get; set; } = Setting.DefaultLightIntensity;
 
     void OnEnable() {
         InputListener.OnF4Press += this.DecreaseLightIntensity;

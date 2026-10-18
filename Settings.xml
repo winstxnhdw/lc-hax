@@ -1,0 +1,90 @@
+<Project>
+
+  <PropertyGroup>
+
+    <!-- Mods -->
+    <AntiKick>true</AntiKick>
+    <AutoPlay>true</AutoPlay>
+    <ChatHistory>true</ChatHistory>
+    <ClearVision>true</ClearVision>
+    <Crosshair>true</Crosshair>
+    <Disconnect>true</Disconnect>
+    <ESP>true</ESP>
+    <InstantInteract>true</InstantInteract>
+    <KillClick>true</KillClick>
+    <MinimalGUI>true</MinimalGUI>
+    <Phantom>true</Phantom>
+    <StunClick>true</StunClick>
+    <Trigger>true</Trigger>
+
+    <!-- Player -->
+    <InfiniteStamina>true</InfiniteStamina>
+    <IgnoreWeight>true</IgnoreWeight>
+    <IgnoreWeightInterest>true</IgnoreWeightInterest>
+    <PreventInsanity>true</PreventInsanity>
+    <PreventFear>true</PreventFear>
+    <ClearTurnStats>true</ClearTurnStats>
+    <LookDown>true</LookDown>
+
+    <!-- Vision -->
+    <HideVisor>true</HideVisor>
+    <HideGasOverlay>true</HideGasOverlay>
+    <HideSinkingOverlay>true</HideSinkingOverlay>
+    <HideBloodOverlay>true</HideBloodOverlay>
+    <DisableFog>true</DisableFog>
+    <DisableSteam>true</DisableSteam>
+    <DisablePostProcessing>true</DisablePostProcessing>
+    <DisableDepthOfField>true</DisableDepthOfField>
+    <DisableCustomPasses>true</DisableCustomPasses>
+    <DisableDistortion>true</DisableDistortion>
+    <AntiFlash>true</AntiFlash>
+    <DisableEarRinging>true</DisableEarRinging>
+
+    <!-- Items -->
+    <InfiniteBattery>true</InfiniteBattery>
+    <InfiniteItemUsage>true</InfiniteItemUsage>
+    <InfiniteGifts>true</InfiniteGifts>
+    <InfiniteShotgunAmmo>true</InfiniteShotgunAmmo>
+    <FreeShotgunReload>true</FreeShotgunReload>
+    <PreventShotgunMisfire>true</PreventShotgunMisfire>
+    <EasyZapGun>true</EasyZapGun>
+    <OneHandedItems>true</OneHandedItems>
+    <InfiniteGrab>true</InfiniteGrab>
+    <GrabInLobby>true</GrabInLobby>
+    <ShipTeleportWithItems>true</ShipTeleportWithItems>
+    <InverseTeleportWithItems>true</InverseTeleportWithItems>
+
+    <!-- Lobby -->
+    <RemoveLobbyRefreshCooldown>true</RemoveLobbyRefreshCooldown>
+    <DisableLobbyCensorship>true</DisableLobbyCensorship>
+    <LabelCheatLobbies>true</LabelCheatLobbies>
+
+    <!-- World and HUD -->
+    <InfiniteScanRange>true</InfiniteScanRange>
+    <ScanThroughWalls>true</ScanThroughWalls>
+    <InfiniteDeposit>true</InfiniteDeposit>
+    <UnconstrainedBuild>true</UnconstrainedBuild>
+    <PreventCompanyAttack>true</PreventCompanyAttack>
+    <DeathNotifications>true</DeathNotifications>
+
+    <!-- Crosshair dimensions in pixels -->
+    <CrosshairGap>7</CrosshairGap>
+    <CrosshairThickness>3</CrosshairThickness>
+    <CrosshairLength>10</CrosshairLength>
+
+    <!-- Initial brightness, from 0 to 10; F4/F5 still adjust it -->
+    <DefaultLightIntensity>2</DefaultLightIntensity>
+
+    <!-- Flight speed in units per second and maximum sprint multiplier -->
+    <FlySpeed>20</FlySpeed>
+    <FlySprintMultiplier>5</FlySprintMultiplier>
+
+    <!-- In-game minutes before departure to start returning -->
+    <AutoPlayReturnMinutes>5</AutoPlayReturnMinutes>
+
+    <!-- Degrees per second; negative values reverse rotation -->
+    <SpinSpeed>810</SpinSpeed>
+
+  </PropertyGroup>
+
+</Project>

@@ -2,8 +2,6 @@ using UnityEngine;
 
 [DefaultExecutionOrder(-100)]
 sealed class KeyboardMovement : MonoBehaviour {
-    const float BaseSpeed = 20;
-
     float SprintMultiplier { get; set; } = 1;
     bool IsWHeld { get; set; }
     bool IsAHeld { get; set; }
@@ -119,12 +117,12 @@ sealed class KeyboardMovement : MonoBehaviour {
 
     void UpdateSprintMultiplier(bool isSprintHeld) =>
         this.SprintMultiplier = isSprintHeld
-            ? Mathf.Min(this.SprintMultiplier + (5.0f * Time.deltaTime), 5.0f)
+            ? Mathf.Min(this.SprintMultiplier + (5.0f * Time.deltaTime), Setting.FlySprintMultiplier)
             : 1.0f;
 
     void Move(Vector3 direction) {
         Vector3 translatedDirection = this.transform.TransformDirection(direction);
-        this.LastPosition += translatedDirection * Time.deltaTime * KeyboardMovement.BaseSpeed * this.SprintMultiplier;
+        this.LastPosition += translatedDirection * Time.deltaTime * Setting.FlySpeed * this.SprintMultiplier;
         this.transform.position = this.LastPosition;
     }
 }

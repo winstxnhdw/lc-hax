@@ -1,5 +1,6 @@
 using UnityEngine;
 
+[Mod]
 sealed class StunClickMod : MonoBehaviour {
     Collider[] Colliders { get; } = new Collider[100];
     RaycastHit[] RaycastHits { get; } = new RaycastHit[100];
@@ -28,7 +29,7 @@ sealed class StunClickMod : MonoBehaviour {
     }
 
     void Stun() {
-        if (!Setting.EnableStunOnLeftClick) return;
+        if (!Globals.EnableStunOnLeftClick) return;
         if (Helper.CurrentCamera is not { } camera) return;
         if (this.IsHoldingADefensiveWeapon()) return;
 

@@ -1,12 +1,13 @@
 using UnityEngine;
 
+[Mod]
 sealed class KillClickMod : MonoBehaviour {
     void OnEnable() => InputListener.OnLeftButtonPress += this.Kill;
 
     void OnDisable() => InputListener.OnLeftButtonPress -= this.Kill;
 
     void Kill() {
-        if (!Setting.EnableKillOnLeftClick) return;
+        if (!Globals.EnableKillOnLeftClick) return;
         if (Helper.CurrentCamera is not { } camera) return;
         if (Helper.LocalPlayer is not { } localPlayer) return;
 

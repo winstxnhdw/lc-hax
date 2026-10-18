@@ -11,7 +11,6 @@ enum AutoPlayState {
 }
 
 sealed class AutoPlaySession : IDisposable {
-    const float ReturnMinutes = 5.0f;
     const float PickupTimeout = 10.0f;
 
     internal PlayerControllerB Player { get; }
@@ -44,7 +43,7 @@ sealed class AutoPlaySession : IDisposable {
         float remaining = (time.shipLeaveAutomaticallyTime * time.totalTime) - time.currentDayTime;
         float remainingMinutes = remaining * 60.0f * time.numberOfHours / time.totalTime;
 
-        return remainingMinutes <= AutoPlaySession.ReturnMinutes;
+        return remainingMinutes <= Setting.AutoPlayReturnMinutes;
     }
 
     internal void Tick() {
@@ -258,9 +257,5 @@ sealed class AutoPlaySession : IDisposable {
         Helper.SendNotification(title: "AutoPlay", body: reason);
     }
 
-    public void Dispose() {
-        if (this.Player.Unfake() is null) return;
-
-        this.Input.Release();
-    }
+    public void Dispose() => this.Input.Release();
 }

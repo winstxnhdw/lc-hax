@@ -1,10 +1,7 @@
 using UnityEngine;
 
+[Mod]
 sealed class CrosshairMod : MonoBehaviour {
-    const float GapSize = 7.0f;
-    const float Thickness = 3.0f;
-    const float Length = 10.0f;
-
     Vector2 TopCrosshairPosition { get; set; }
     Vector2 BottomCrosshairPosition { get; set; }
     Vector2 LeftCrosshairPosition { get; set; }
@@ -37,26 +34,26 @@ sealed class CrosshairMod : MonoBehaviour {
 
     void InitialiseCrosshairPositions() {
         Vector2 screenCentre = Helper.GetScreenCentre();
-        float halfWidth = 0.5f * CrosshairMod.Thickness;
-        float lengthToCentre = CrosshairMod.GapSize + CrosshairMod.Length;
+        float halfWidth = 0.5f * Setting.CrosshairThickness;
+        float lengthToCentre = Setting.CrosshairGap + Setting.CrosshairLength;
         float topLeftX = screenCentre.x - halfWidth;
         float topLeftY = screenCentre.y - halfWidth;
 
         this.TopCrosshairPosition = new Vector2(topLeftX, screenCentre.y - lengthToCentre);
-        this.BottomCrosshairPosition = new Vector2(topLeftX, screenCentre.y + CrosshairMod.GapSize);
-        this.RightCrosshairPosition = new Vector2(screenCentre.x + CrosshairMod.GapSize, topLeftY);
+        this.BottomCrosshairPosition = new Vector2(topLeftX, screenCentre.y + Setting.CrosshairGap);
+        this.RightCrosshairPosition = new Vector2(screenCentre.x + Setting.CrosshairGap, topLeftY);
         this.LeftCrosshairPosition = new Vector2(screenCentre.x - lengthToCentre, topLeftY);
     }
 
     void RenderCrosshair() {
         Size verticalSize = new() {
-            Width = CrosshairMod.Thickness,
-            Height = CrosshairMod.Length
+            Width = Setting.CrosshairThickness,
+            Height = Setting.CrosshairLength
         };
 
         Size horizontalSize = new() {
-            Width = CrosshairMod.Length,
-            Height = CrosshairMod.Thickness
+            Width = Setting.CrosshairLength,
+            Height = Setting.CrosshairThickness
         };
 
         Helper.DrawBox(this.TopCrosshairPosition, verticalSize);

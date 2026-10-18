@@ -5,7 +5,7 @@ using HarmonyLib;
 sealed class UntargetableEnemyPatch {
     [HarmonyPatch(nameof(EnemyAI.PlayerIsTargetable))]
     static void Postfix(PlayerControllerB playerScript, ref bool __result) {
-        if (!Setting.EnableUntargetable) return;
+        if (!Globals.EnableUntargetable) return;
         if (!playerScript.IsSelf()) return;
 
         __result = false;
@@ -13,7 +13,7 @@ sealed class UntargetableEnemyPatch {
 
     [HarmonyPatch(nameof(EnemyAI.Update))]
     static bool Prefix(EnemyAI __instance) {
-        if (!Setting.EnableUntargetable) return true;
+        if (!Globals.EnableUntargetable) return true;
         if (!__instance.targetPlayer.IsSelf()) return true;
 
         __instance.targetPlayer = null;
@@ -24,5 +24,5 @@ sealed class UntargetableEnemyPatch {
 
 [HarmonyPatch(typeof(NutcrackerEnemyAI), nameof(NutcrackerEnemyAI.CheckLineOfSightForLocalPlayer))]
 sealed class UntargetableNutcrackerPatch {
-    static bool Prefix() => !Setting.EnableUntargetable;
+    static bool Prefix() => !Globals.EnableUntargetable;
 }

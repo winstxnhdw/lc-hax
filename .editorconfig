@@ -7,7 +7,7 @@ indent_size = 4
 trim_trailing_whitespace = true
 insert_final_newline = true
 
-[{*.yml,*.csproj,*.json}]
+[{*.yml,*.csproj,*.xml,*.json}]
 indent_size = 2
 
 [*.cs]

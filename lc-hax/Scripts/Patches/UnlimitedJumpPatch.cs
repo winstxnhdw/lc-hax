@@ -6,7 +6,7 @@ using UnityEngine;
 sealed class UnlimitedJumpPatch {
     static bool Prefix(PlayerControllerB __instance) {
         if (PlayerInputPatch.BlocksHumanInput(__instance)) return false;
-        if (!Setting.EnableUnlimitedJump) return true;
+        if (!Globals.EnableUnlimitedJump) return true;
         if (!__instance.IsSelf()) return true;
         if (!__instance.isPlayerControlled) return false;
         if (__instance.inSpecialInteractAnimation) return false;

@@ -1,6 +1,7 @@
 using System.Collections;
 using UnityEngine;
 
+[Mod]
 sealed class InstantInteractMod : MonoBehaviour {
     IEnumerator SetTimeToHold(object[] args) {
         WaitForSeconds waitForFiveSeconds = new(5.0f);

@@ -1,4 +1,4 @@
-static class Setting {
+static class Globals {
     internal static bool EnableGodMode { get; set; }
     internal static bool EnableBlockCredits { get; set; }
     internal static bool EnableBlockRadar { get; set; }

@@ -24,7 +24,7 @@ sealed class AntiKickPatch {
     }
 
     static bool IsLocalClient(PlayerControllerB player) =>
-        Setting.EnableAntiKick &&
+        Globals.EnableAntiKick &&
         player is { IsServer: false, IsOwner: true } &&
         player == Helper.LocalPlayer &&
         Helper.GameNetworkManager is { disableSteam: false } &&

@@ -38,7 +38,7 @@ sealed class MousePan : MonoBehaviour {
         if (Mouse.current is not { } mouse) return;
 
         this.Yaw = Mathf.Repeat(this.Yaw + (mouse.delta.x.ReadValue() * this.Sensitivity), 360.0f);
-        this.Pitch -= mouse.delta.y.ReadValue() * this.Sensitivity * (Setting.InvertYAxis ? -1 : 1);
+        this.Pitch -= mouse.delta.y.ReadValue() * this.Sensitivity * (Globals.InvertYAxis ? -1 : 1);
         this.Pitch = Mathf.Clamp(this.Pitch, -90, 90);
 
         this.transform.localEulerAngles = new Vector3(this.Pitch, this.Yaw, 0.0f);

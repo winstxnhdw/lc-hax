@@ -4,17 +4,17 @@ using System.Threading.Tasks;
 [Command("block")]
 sealed class BlockCommand : ICommand {
     string BlockEnemy() {
-        Setting.EnableUntargetable = !Setting.EnableUntargetable;
+        Globals.EnableUntargetable = !Globals.EnableUntargetable;
 
-        return $"{(Setting.EnableUntargetable
+        return $"{(Globals.EnableUntargetable
             ? "Enemies will no longer target you!"
             : "Enemies can now target you!")}";
     }
 
     string BlockRadar() {
-        Setting.EnableBlockRadar = !Setting.EnableBlockRadar;
+        Globals.EnableBlockRadar = !Globals.EnableBlockRadar;
 
-        return $"{(Setting.EnableBlockRadar
+        return $"{(Globals.EnableBlockRadar
             ? "Blocking radar targets!"
             : "No longer blocking radar targets!")}";
     }

@@ -7,15 +7,15 @@ using UnityEngine.InputSystem;
 
 [HarmonyPatch(typeof(PlayerControllerB), nameof(PlayerControllerB.Update))]
 sealed class PlayerInputPatch {
-    static bool IsPhantomInput(PlayerControllerB player) => Setting.EnablePhantom && player.IsSelf();
+    static bool IsPhantomInput(PlayerControllerB player) => Globals.EnablePhantom && player.IsSelf();
 
     internal static bool BlocksHumanInput(PlayerControllerB player) =>
-        AutoPlayMod.GetInput(player) is not null || PlayerInputPatch.IsPhantomInput(player);
+        AutoPlayInput.GetInput(player) is not null || PlayerInputPatch.IsPhantomInput(player);
 
     [HarmonyPostfix]
     [HarmonyInfix(typeof(InputAction), nameof(InputAction.ReadValue), Positions = [1])]
     static void ReadMove([HarmonyOuter] PlayerControllerB __instance, ref Vector2 __result) {
-        if (AutoPlayMod.GetInput(__instance) is AutoPlayInput input) {
+        if (AutoPlayInput.GetInput(__instance) is AutoPlayInput input) {
             __result = input.ReadMove();
         }
 
@@ -27,7 +27,7 @@ sealed class PlayerInputPatch {
     [HarmonyPostfix]
     [HarmonyInfix(typeof(InputAction), nameof(InputAction.ReadValue), Positions = [2])]
     static void ReadSprint([HarmonyOuter] PlayerControllerB __instance, ref float __result) {
-        if (AutoPlayMod.GetInput(__instance) is AutoPlayInput input) {
+        if (AutoPlayInput.GetInput(__instance) is AutoPlayInput input) {
             __result = input.ReadSprint();
         }
 
@@ -40,7 +40,7 @@ sealed class PlayerInputPatch {
 
     [HarmonyPatch(typeof(PlayerControllerB), nameof(PlayerControllerB.CalculateSmoothLookingInput))]
     [HarmonyPrefix]
-    static bool KeepAutoPlayDirection(PlayerControllerB __instance) => AutoPlayMod.GetInput(__instance) is null;
+    static bool KeepAutoPlayDirection(PlayerControllerB __instance) => AutoPlayInput.GetInput(__instance) is null;
 
     [HarmonyPatch(typeof(PlayerControllerB), nameof(PlayerControllerB.ClickHoldInteraction))]
     [HarmonyPrefix]

@@ -4,7 +4,7 @@ using UnityEngine;
 [HarmonyPatch(typeof(StartOfRound), nameof(StartOfRound.UpdatePlayerVoiceEffects))]
 sealed class HearPatch {
     static void Postfix(StartOfRound __instance) {
-        if (!Setting.EnableEavesdrop) return;
+        if (!Globals.EnableEavesdrop) return;
         if (__instance.shipIsLeaving) return;
         if (Helper.SoundManager is not { } soundManager) return;
 

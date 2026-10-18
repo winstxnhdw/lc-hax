@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
 
@@ -16,6 +16,72 @@
     <RestorePackagesWithLockFile>true</RestorePackagesWithLockFile>
 
   </PropertyGroup>
+
+  <Import Project="../Settings.xml" />
+
+  <ItemGroup>
+
+    <Compile Remove="Scripts/Modules/AntiKickMod.cs;Scripts/Patches/AntiKickPatch.cs" Condition="!$(AntiKick)" />
+    <Compile Remove="Scripts/Modules/AutoPlayMod.cs" Condition="!$(AutoPlay)" />
+    <Compile Remove="Scripts/Modules/ChatMod.cs" Condition="!$(ChatHistory)" />
+    <Compile Remove="Scripts/Modules/ClearVisionMod.cs" Condition="!$(ClearVision)" />
+    <Compile Remove="Scripts/Modules/CrosshairMod.cs" Condition="!$(Crosshair)" />
+    <Compile Remove="Scripts/Modules/DisconnectMod.cs" Condition="!$(Disconnect)" />
+    <Compile Remove="Scripts/Modules/ESPMod.cs" Condition="!$(ESP)" />
+    <Compile Remove="Scripts/Modules/InstantInteractMod.cs" Condition="!$(InstantInteract)" />
+    <Compile Remove="Scripts/Modules/KillClickMod.cs;Scripts/Commands/KillClickCommand.cs" Condition="!$(KillClick)" />
+    <Compile Remove="Scripts/Modules/MinimalGUIMod.cs" Condition="!$(MinimalGUI)" />
+    <Compile Remove="Scripts/Modules/PhantomMod.cs;Scripts/Patches/PhantomPatch.cs" Condition="!$(Phantom)" />
+    <Compile Remove="Scripts/Modules/StunClickMod.cs;Scripts/Commands/StunOnClickCommand.cs" Condition="!$(StunClick)" />
+    <Compile Remove="Scripts/Modules/TriggerMod.cs" Condition="!$(Trigger)" />
+
+    <Compile Remove="Scripts/Patches/StaminaPatch.cs" Condition="!$(InfiniteStamina)" />
+    <Compile Remove="Scripts/Patches/WeightPatch.cs" Condition="!$(IgnoreWeight)" />
+    <Compile Remove="Scripts/Patches/WeightInterestPatch.cs" Condition="!$(IgnoreWeightInterest)" />
+    <Compile Remove="Scripts/Patches/SanePatch.cs" Condition="!$(PreventInsanity)" />
+    <Compile Remove="Scripts/Patches/FearPatch.cs" Condition="!$(PreventFear)" />
+    <Compile Remove="Scripts/Patches/TurnStatsPatch.cs" Condition="!$(ClearTurnStats)" />
+    <Compile Remove="Scripts/Patches/LookDownPatch.cs" Condition="!$(LookDown)" />
+
+    <Compile Remove="Scripts/Patches/VisorPatch.cs" Condition="!$(HideVisor)" />
+    <Compile Remove="Scripts/Patches/GasOverlayPatch.cs" Condition="!$(HideGasOverlay)" />
+    <Compile Remove="Scripts/Patches/SinkingOverlayPatch.cs" Condition="!$(HideSinkingOverlay)" />
+    <Compile Remove="Scripts/Patches/BloodOverlayPatch.cs" Condition="!$(HideBloodOverlay)" />
+    <Compile Remove="Scripts/Patches/ScreenOverlayPatch.cs" Condition="!$(HideGasOverlay) And !$(HideSinkingOverlay) And !$(HideBloodOverlay)" />
+    <Compile Remove="Scripts/Patches/FogPatch.cs" Condition="!$(DisableFog)" />
+    <Compile Remove="Scripts/Patches/SteamValvePatch.cs" Condition="!$(DisableSteam)" />
+    <Compile Remove="Scripts/Patches/PostProcessingPatch.cs" Condition="!$(DisablePostProcessing)" />
+    <Compile Remove="Scripts/Patches/DepthOfFieldPatch.cs" Condition="!$(DisableDepthOfField)" />
+    <Compile Remove="Scripts/Patches/CustomPassPatch.cs" Condition="!$(DisableCustomPasses)" />
+    <Compile Remove="Scripts/Patches/DistortionPatch.cs" Condition="!$(DisableDistortion)" />
+    <Compile Remove="Scripts/Patches/AntiFlashPatch.cs" Condition="!$(AntiFlash)" />
+    <Compile Remove="Scripts/Patches/EarRingingPatch.cs" Condition="!$(DisableEarRinging)" />
+
+    <Compile Remove="Scripts/Patches/InfiniteBatteryPatch.cs" Condition="!$(InfiniteBattery)" />
+    <Compile Remove="Scripts/Patches/InfiniteItemUsagePatch.cs" Condition="!$(InfiniteItemUsage)" />
+    <Compile Remove="Scripts/Patches/GiftBoxPatch.cs" Condition="!$(InfiniteGifts)" />
+    <Compile Remove="Scripts/Patches/InfiniteAmmoPatch.cs" Condition="!$(InfiniteShotgunAmmo)" />
+    <Compile Remove="Scripts/Patches/ShotgunReloadPatch.cs" Condition="!$(FreeShotgunReload)" />
+    <Compile Remove="Scripts/Patches/ShotgunMisfirePatch.cs" Condition="!$(PreventShotgunMisfire)" />
+    <Compile Remove="Scripts/Patches/ZapGunPatch.cs" Condition="!$(EasyZapGun)" />
+    <Compile Remove="Scripts/Patches/OneHandedItemPatch.cs" Condition="!$(OneHandedItems)" />
+    <Compile Remove="Scripts/Patches/InfiniteGrabPatch.cs" Condition="!$(InfiniteGrab)" />
+    <Compile Remove="Scripts/Patches/GrabInLobbyPatch.cs" Condition="!$(GrabInLobby)" />
+    <Compile Remove="Scripts/Patches/ShipTeleportWithItemsPatch.cs" Condition="!$(ShipTeleportWithItems)" />
+    <Compile Remove="Scripts/Patches/InverseTeleportWithItemsPatch.cs" Condition="!$(InverseTeleportWithItems)" />
+
+    <Compile Remove="Scripts/Patches/LobbyRefreshPatch.cs" Condition="!$(RemoveLobbyRefreshCooldown)" />
+    <Compile Remove="Scripts/Patches/LobbyCensorshipPatch.cs" Condition="!$(DisableLobbyCensorship)" />
+    <Compile Remove="Scripts/Patches/LobbyLabelPatch.cs" Condition="!$(LabelCheatLobbies)" />
+
+    <Compile Remove="Scripts/Patches/InfiniteScanRangePatch.cs" Condition="!$(InfiniteScanRange)" />
+    <Compile Remove="Scripts/Patches/ScanThroughWallsPatch.cs" Condition="!$(ScanThroughWalls)" />
+    <Compile Remove="Scripts/Patches/InfiniteDepositPatch.cs" Condition="!$(InfiniteDeposit)" />
+    <Compile Remove="Scripts/Patches/UnconstrainedBuildPatch.cs" Condition="!$(UnconstrainedBuild)" />
+    <Compile Remove="Scripts/Patches/JebPatch.cs" Condition="!$(PreventCompanyAttack)" />
+    <Compile Remove="Scripts/Patches/DeathNotificationPatch.cs" Condition="!$(DeathNotifications)" />
+
+  </ItemGroup>
 
   <ItemGroup>
 
@@ -50,6 +116,29 @@
     <EmbeddedResource Include="$(PkgCommunityToolkit_HighPerformance)/lib/netstandard2.1/CommunityToolkit.HighPerformance.dll" />
 
   </ItemGroup>
+
+  <Target Name="GenerateSettings" BeforeTargets="CoreCompile">
+    <ItemGroup>
+      <BuildConstant Include="CrosshairGap" Value="$(CrosshairGap)" />
+      <BuildConstant Include="CrosshairThickness" Value="$(CrosshairThickness)" />
+      <BuildConstant Include="CrosshairLength" Value="$(CrosshairLength)" />
+      <BuildConstant Include="DefaultLightIntensity" Value="$(DefaultLightIntensity)" />
+      <BuildConstant Include="FlySpeed" Value="$(FlySpeed)" />
+      <BuildConstant Include="FlySprintMultiplier" Value="$(FlySprintMultiplier)" />
+      <BuildConstant Include="AutoPlayReturnMinutes" Value="$(AutoPlayReturnMinutes)" />
+      <BuildConstant Include="SpinSpeed" Value="$(SpinSpeed)" />
+    </ItemGroup>
+
+    <WriteLinesToFile
+      File="$(IntermediateOutputPath)Setting.g.cs"
+      Lines="// &lt;auto-generated /&gt;&#xA;static class Setting {;@(BuildConstant->'    internal const float %(Identity) = %(Value)f%3B');}"
+      Overwrite="true"
+      WriteOnlyWhenDifferent="true" />
+
+    <ItemGroup>
+      <Compile Include="$(IntermediateOutputPath)Setting.g.cs" />
+    </ItemGroup>
+  </Target>
 
   <Target Name="CleanBeforeRestore" BeforeTargets="Restore">
     <RemoveDir Directories="$(BaseIntermediateOutputPath)" />

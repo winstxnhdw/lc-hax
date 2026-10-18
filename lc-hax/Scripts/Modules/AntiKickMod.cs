@@ -3,12 +3,13 @@ using Steamworks;
 using Steamworks.Data;
 using UnityEngine;
 
+[Mod]
 sealed class AntiKickMod : MonoBehaviour {
     static Task? PendingRejoin { get; set; }
 
     bool WatchingLobby { get; set; }
     bool Rejoining { get; set; }
-    bool IsRejoining => this.Rejoining && Setting.EnableAntiKick && !State.DisconnectedVoluntarily;
+    bool IsRejoining => this.Rejoining && Globals.EnableAntiKick && !State.DisconnectedVoluntarily;
 
     void OnEnable() {
         InputListener.OnBackslashPress += this.ToggleAntiKick;
@@ -24,7 +25,7 @@ sealed class AntiKickMod : MonoBehaviour {
     }
 
     async void LateUpdate() {
-        if (!Setting.EnableAntiKick) return;
+        if (!Globals.EnableAntiKick) return;
         if (!this.WatchingLobby) return;
         if (AntiKickMod.PendingRejoin is { IsCompleted: false }) return;
         if (Helper.GameNetworkManager is not { isHostingGame: false, gameHasStarted: false, currentLobby: Lobby lobby } manager) return;
@@ -79,9 +80,9 @@ sealed class AntiKickMod : MonoBehaviour {
             return;
         }
 
-        Setting.EnableAntiKick = !Setting.EnableAntiKick;
+        Globals.EnableAntiKick = !Globals.EnableAntiKick;
 
-        if (!Setting.EnableAntiKick) {
+        if (!Globals.EnableAntiKick) {
             this.CancelRejoin();
         }
     }

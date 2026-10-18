@@ -2,10 +2,20 @@ using GameNetcodeStuff;
 using UnityEngine;
 
 sealed class AutoPlayInput(PlayerControllerB player) {
+    static AutoPlayInput? Current { get; set; }
+
     PlayerControllerB Player { get; } = player;
     Vector3 WorldDirection { get; set; }
     bool Sprint { get; set; }
     bool IsPaused => this.Player.IsInputPaused() || this.Player.inSpecialMenu;
+
+    internal static AutoPlayInput? GetInput(PlayerControllerB player) =>
+        AutoPlayInput.Current is { } input &&
+        input.Player == player && player is { isPlayerDead: false, isPlayerControlled: true }
+            ? input
+            : null;
+
+    internal void Activate() => AutoPlayInput.Current = this;
 
     internal void Move(Vector3 worldDirection, bool sprint) {
         this.WorldDirection = worldDirection;
@@ -18,6 +28,14 @@ sealed class AutoPlayInput(PlayerControllerB player) {
     }
 
     internal void Release() {
+        if (AutoPlayInput.Current == this) {
+            AutoPlayInput.Current = null;
+        }
+
+        if (this.Player.Unfake() is null) {
+            return;
+        }
+
         this.Stop();
         this.Player.inputHoldingSprint = false;
         this.Player.inputLetGoOfSprint = true;
