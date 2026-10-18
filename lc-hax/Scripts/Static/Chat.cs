@@ -62,7 +62,8 @@ static class Chat {
 
     internal static void Print(string? message) => Chat.Print("SYSTEM", message, true);
 
-    internal static void Print(string? message, params string[] args) => Chat.Print($"{message}\n{string.Join('\n', args)}");
+    internal static void Print(string? message, params string[] args) =>
+        Chat.Print($"{message}\n{string.Join('\n', args)}");
 
     static void CancelCommands() {
         using CancellationTokenSource previousCancellation = Chat.CommandCancellation;

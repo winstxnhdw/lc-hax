@@ -24,13 +24,19 @@ static partial class Extensions {
         }
     }
 
-    internal static void ForEach<T>(this ValueEnumerable<ZLinq.Linq.Where<ZLinq.Linq.FromEnumerable<T>, T>, T> array, Action<T> action) {
+    internal static void ForEach<T>(
+        this ValueEnumerable<ZLinq.Linq.Where<ZLinq.Linq.FromEnumerable<T>, T>, T> array,
+        Action<T> action
+    ) {
         foreach (T item in array) {
             action(item);
         }
     }
 
-    internal static void ForEach<T>(this ValueEnumerable<ZLinq.Linq.Where<ZLinq.Linq.FromHashSet<T>, T>, T> array, Action<T> action) {
+    internal static void ForEach<T>(
+        this ValueEnumerable<ZLinq.Linq.Where<ZLinq.Linq.FromHashSet<T>, T>, T> array,
+        Action<T> action
+    ) {
         foreach (T item in array) {
             action(item);
         }
@@ -44,7 +50,10 @@ static partial class Extensions {
         }
     }
 
-    internal static void ForEach<T>(this ValueEnumerable<ZLinq.Linq.Where<ZLinq.Linq.FromEnumerable<T>, T>, T> array, Action<int, T> action) {
+    internal static void ForEach<T>(
+        this ValueEnumerable<ZLinq.Linq.Where<ZLinq.Linq.FromEnumerable<T>, T>, T> array,
+        Action<int, T> action
+    ) {
         int i = 0;
 
         foreach (T item in array) {

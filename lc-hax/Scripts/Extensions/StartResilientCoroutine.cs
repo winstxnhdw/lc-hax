@@ -47,9 +47,16 @@ static partial class Extensions {
         }
     }
 
-    internal static Coroutine StartResilientCoroutine(this MonoBehaviour self, Func<object[], IEnumerator> coroutineFactory, params object[] args) =>
+    internal static Coroutine StartResilientCoroutine(
+        this MonoBehaviour self,
+        Func<object[], IEnumerator> coroutineFactory,
+        params object[] args
+    ) =>
         self.StartCoroutine(Extensions.ResilientCoroutine(coroutineFactory, args));
 
-    internal static Coroutine StartResilientCoroutine(this MonoBehaviour self, Func<object[], IEnumerator> coroutineFactory) =>
+    internal static Coroutine StartResilientCoroutine(
+        this MonoBehaviour self,
+        Func<object[], IEnumerator> coroutineFactory
+    ) =>
         self.StartResilientCoroutine(coroutineFactory, []);
 }

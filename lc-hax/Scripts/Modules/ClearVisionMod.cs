@@ -86,7 +86,9 @@ sealed class ClearVisionMod : MonoBehaviour {
             Helper
                 .RoundManager?
                 .steamValves?
-                .ForEach(valve => valve.Unfake()?.valveSteamParticle.Stop(true, ParticleSystemStopBehavior.StopEmittingAndClear));
+                .ForEach(
+                    valve => valve.Unfake()?.valveSteamParticle.Stop(true, ParticleSystemStopBehavior.StopEmittingAndClear)
+                );
 
             yield return waitForFiveSeconds;
         }

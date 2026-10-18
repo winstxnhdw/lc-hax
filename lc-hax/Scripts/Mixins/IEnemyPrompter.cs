@@ -116,7 +116,11 @@ sealed class EnemyPromptHandler {
         nutcracker.timeSinceSeeingTarget = 0f;
     }
 
-    static void HandleMaskedPlayer(MaskedPlayerEnemy maskedPlayer, PlayerControllerB targetPlayer, bool willTeleportEnemy) {
+    static void HandleMaskedPlayer(
+        MaskedPlayerEnemy maskedPlayer,
+        PlayerControllerB targetPlayer,
+        bool willTeleportEnemy
+    ) {
         TeleportEnemyToPlayer(maskedPlayer, targetPlayer, willTeleportEnemy, true, true);
         maskedPlayer.SetBehaviourState(BehaviourState.CHASE);
         maskedPlayer.SetEnemyOutside(!targetPlayer.isInsideFactory);

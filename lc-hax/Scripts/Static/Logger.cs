@@ -3,6 +3,7 @@ using System.IO;
 
 static class Logger {
     const string LogFileName = "lc-hax.log";
+
     static object LockObject { get; } = new();
 
     internal static void Write(string message) {
