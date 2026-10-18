@@ -65,6 +65,7 @@
     <Compile Remove="Scripts/Patches/ZapGunPatch.cs" Condition="!$(EasyZapGun)" />
     <Compile Remove="Scripts/Patches/OneHandedItemPatch.cs" Condition="!$(OneHandedItems)" />
     <Compile Remove="Scripts/Patches/InfiniteGrabPatch.cs" Condition="!$(InfiniteGrab)" />
+    <Compile Remove="Scripts/Patches/InteractThroughWallsPatch.cs" Condition="!$(InteractThroughWalls)" />
     <Compile Remove="Scripts/Patches/GrabInLobbyPatch.cs" Condition="!$(GrabInLobby)" />
     <Compile Remove="Scripts/Patches/ShipTeleportWithItemsPatch.cs" Condition="!$(ShipTeleportWithItems)" />
     <Compile Remove="Scripts/Patches/InverseTeleportWithItemsPatch.cs" Condition="!$(InverseTeleportWithItems)" />

@@ -50,6 +50,7 @@
     <EasyZapGun>true</EasyZapGun>
     <OneHandedItems>true</OneHandedItems>
     <InfiniteGrab>true</InfiniteGrab>
+    <InteractThroughWalls>true</InteractThroughWalls>
     <GrabInLobby>true</GrabInLobby>
     <ShipTeleportWithItems>true</ShipTeleportWithItems>
     <InverseTeleportWithItems>true</InverseTeleportWithItems>
