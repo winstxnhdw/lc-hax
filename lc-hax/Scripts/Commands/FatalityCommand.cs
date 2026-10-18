@@ -11,9 +11,12 @@ sealed class FatalityCommand : ICommand {
     /// Performs the enemy's fatality on the target player.
     /// </summary>
     /// <returns>The result of starting the enemy's fatality.</returns>
-    static async Task<Result> HandleEnemy<T>(PlayerControllerB targetPlayer, Action<PlayerControllerB, T> enemyHandler, CancellationToken cancellationToken) where T : EnemyAI {
-        if (Helper.LocalPlayer is not PlayerControllerB localPlayer) return new Result { Message = "Local player is not available!" };
-        if (targetPlayer == null || !targetPlayer.isPlayerControlled) return new Result { Message = "Target player is not alive or found!" };
+    async Task<Result> HandleEnemy<T>(
+        PlayerControllerB localPlayer,
+        PlayerControllerB targetPlayer,
+        Action<PlayerControllerB, T> enemyHandler,
+        CancellationToken cancellationToken
+    ) where T : EnemyAI {
         if (Helper.GetEnemy<T>() is not T enemy) return new Result { Message = "Enemy has not yet spawned!" };
 
         enemy.ChangeEnemyOwnerServerRpc(localPlayer.actualClientId);
@@ -63,7 +66,7 @@ sealed class FatalityCommand : ICommand {
         nutcracker.LegKickPlayerServerRpc(targetPlayer.PlayerIndex());
     }
 
-    public async Task Execute(Arguments args, CancellationToken cancellationToken) {
+    async Task ICommand.Execute(Arguments args, CancellationToken cancellationToken) {
         if (args.Length < 2) {
             Chat.Print("Usage: fatality <player> <enemy>");
             return;
@@ -74,15 +77,20 @@ sealed class FatalityCommand : ICommand {
             return;
         }
 
+        if (Helper.LocalPlayer is not PlayerControllerB localPlayer) {
+            Chat.Print("Local player is not available!");
+            return;
+        }
+
         Dictionary<string, Func<Task<Result>>> enemyHandlers = new() {
-            { "Forest Giant", () => FatalityCommand.HandleEnemy<ForestGiantAI>(targetPlayer, this.GiantFatality, cancellationToken) },
-            { "Jester",       () => FatalityCommand.HandleEnemy<JesterAI>(targetPlayer, this.JesterFatality, cancellationToken) },
-            { "Masked",       () => FatalityCommand.HandleEnemy<MaskedPlayerEnemy>(targetPlayer, this.MaskedFatality, cancellationToken) },
-            { "Circuit Bees", () => FatalityCommand.HandleEnemy<RedLocustBees>(targetPlayer, this.BeesFatality, cancellationToken) },
-            { "Eyeless Dog",  () => FatalityCommand.HandleEnemy<MouthDogAI>(targetPlayer, this.EyelessDogFatality, cancellationToken) },
-            { "Bracken",      () => FatalityCommand.HandleEnemy<FlowermanAI>(targetPlayer, this.BrackenFatality, cancellationToken) },
-            { "Maneater",     () => FatalityCommand.HandleEnemy<CaveDwellerAI>(targetPlayer, this.ManeaterFatality, cancellationToken) },
-            { "Nutcracker",   () => FatalityCommand.HandleEnemy<NutcrackerEnemyAI>(targetPlayer, this.NutcrackerFatality, cancellationToken) }
+            { "Forest Giant", () => this.HandleEnemy<ForestGiantAI>(localPlayer, targetPlayer, this.GiantFatality, cancellationToken) },
+            { "Jester",       () => this.HandleEnemy<JesterAI>(localPlayer, targetPlayer, this.JesterFatality, cancellationToken) },
+            { "Masked",       () => this.HandleEnemy<MaskedPlayerEnemy>(localPlayer, targetPlayer, this.MaskedFatality, cancellationToken) },
+            { "Circuit Bees", () => this.HandleEnemy<RedLocustBees>(localPlayer, targetPlayer, this.BeesFatality, cancellationToken) },
+            { "Eyeless Dog",  () => this.HandleEnemy<MouthDogAI>(localPlayer, targetPlayer, this.EyelessDogFatality, cancellationToken) },
+            { "Bracken",      () => this.HandleEnemy<FlowermanAI>(localPlayer, targetPlayer, this.BrackenFatality, cancellationToken) },
+            { "Maneater",     () => this.HandleEnemy<CaveDwellerAI>(localPlayer, targetPlayer, this.ManeaterFatality, cancellationToken) },
+            { "Nutcracker",   () => this.HandleEnemy<NutcrackerEnemyAI>(localPlayer, targetPlayer, this.NutcrackerFatality, cancellationToken) }
         };
 
         if (!string.Join(" ", args[1..]).ToTitleCase().FuzzyMatch(enemyHandlers.Keys, out string key)) {
