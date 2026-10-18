@@ -158,21 +158,22 @@ sealed class ESPMod : MonoBehaviour {
 
     void ToggleESP() => this.Enabled = !this.Enabled;
 
-    static Renderer[] GetRenderers<T>() where T : Component =>
+    Renderer[] GetRenderers<T>() where T : Component =>
         Helper.FindObjects<T>()
               .AsValueEnumerable()
               .Select(obj => obj.GetComponent<Renderer>())
               .ToArray();
 
     void InitialiseRenderers() {
-        this.PlayerRenderers = Helper.Players.AsValueEnumerable().Select(player => new RendererPair<PlayerControllerB, SkinnedMeshRenderer>() {
-            GameObject = player,
-            Renderer = player.thisPlayerModel
-        }).ToArray();
+        this.PlayerRenderers =
+            Helper.Players
+                  .AsValueEnumerable()
+                  .Select(player => new RendererPair<PlayerControllerB, SkinnedMeshRenderer>() { GameObject = player, Renderer = player.thisPlayerModel })
+                  .ToArray();
 
-        this.LandmineRenderers = ESPMod.GetRenderers<Landmine>();
-        this.TurretRenderers = ESPMod.GetRenderers<Turret>();
-        this.EntranceRenderers = ESPMod.GetRenderers<EntranceTeleport>();
+        this.LandmineRenderers = this.GetRenderers<Landmine>();
+        this.TurretRenderers = this.GetRenderers<Turret>();
+        this.EntranceRenderers = this.GetRenderers<EntranceTeleport>();
     }
 
     void InitialiseCoordinates() =>
@@ -182,7 +183,7 @@ sealed class ESPMod : MonoBehaviour {
                   .Select(log => log.transform.position)
                   .ToArray();
 
-    static Size GetRendererSize(Bounds bounds, Camera camera, Rect screenBounds) {
+    Size GetRendererSize(Bounds bounds, Camera camera, Rect screenBounds) {
         ReadOnlySpan<Vector3> corners = [
             new(bounds.min.x, bounds.min.y, bounds.min.z),
             new(bounds.max.x, bounds.min.y, bounds.min.z),
@@ -228,7 +229,7 @@ sealed class ESPMod : MonoBehaviour {
 
         Helper.DrawOutlineBox(
             rendererCentrePoint,
-            ESPMod.GetRendererSize(bounds, camera, this.ScreenBounds),
+            this.GetRendererSize(bounds, camera, this.ScreenBounds),
             1.0f,
             colour
         );
