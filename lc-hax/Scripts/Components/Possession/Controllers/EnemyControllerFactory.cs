@@ -33,6 +33,7 @@ static class EnemyControllerFactory {
         ClaySurgeonAI barber => new BarberController(barber),
         FlowerSnakeEnemy tulipSnake => new TulipSnakeController(tulipSnake),
         GiantKiwiAI giantSapsucker => new GiantSapsuckerController(giantSapsucker),
+        PumaAI puma => new PumaController(puma),
         _ => new DefaultEnemyController(enemy)
     };
 
