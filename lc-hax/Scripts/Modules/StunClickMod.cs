@@ -1,18 +1,17 @@
 using UnityEngine;
-using ZLinq;
 
 sealed class StunClickMod : MonoBehaviour {
-    Collider[] Colliders { get; set; } = new Collider[100];
-    RaycastHit[] RaycastHits { get; set; } = new RaycastHit[100];
+    Collider[] Colliders { get; } = new Collider[100];
+    RaycastHit[] RaycastHits { get; } = new RaycastHit[100];
 
     void OnEnable() => InputListener.OnLeftButtonPress += this.Stun;
 
     void OnDisable() => InputListener.OnLeftButtonPress -= this.Stun;
 
-    static bool IsHoldingADefensiveWeapon() =>
+    bool IsHoldingADefensiveWeapon() =>
         Helper.LocalPlayer?.currentlyHeldObjectServer.Unfake()?.itemProperties is { isDefensiveWeapon: true };
 
-    static void StunJam(Collider collider) {
+    void StunJam(Collider collider) {
         if (collider.TryGetComponent(out EnemyAICollisionDetect enemy)) {
             enemy.mainScript.SetEnemyStunned(true, 5.0f);
         }
@@ -31,17 +30,17 @@ sealed class StunClickMod : MonoBehaviour {
     void Stun() {
         if (!Setting.EnableStunOnLeftClick) return;
         if (Helper.CurrentCamera is not Camera camera) return;
-        if (StunClickMod.IsHoldingADefensiveWeapon()) return;
+        if (this.IsHoldingADefensiveWeapon()) return;
 
-        foreach (int i in this.RaycastHits.SphereCastForward(camera.transform).Range()) {
-            Collider collider = this.RaycastHits[i].collider;
-            StunClickMod.StunJam(collider);
+        int colliderCount = Physics.OverlapSphereNonAlloc(camera.transform.position, 5.0f, this.Colliders);
+        int hitCount = this.RaycastHits.SphereCastForward(camera.transform);
+
+        for (int i = 0; i < hitCount; i++) {
+            this.StunJam(this.RaycastHits[i].collider);
         }
 
-        foreach (int i in Physics.OverlapSphereNonAlloc(camera.transform.position, 5.0f, this.Colliders).Range()) {
-            Collider collider = this.Colliders[i];
-            StunClickMod.StunJam(collider);
+        for (int i = 0; i < colliderCount; i++) {
+            this.StunJam(this.Colliders[i]);
         }
-
     }
 }
