@@ -23,19 +23,19 @@ sealed class CommandAnalyzer : DiagnosticAnalyzer {
     public override void Initialize(AnalysisContext context) {
         context.ConfigureGeneratedCodeAnalysis(GeneratedCodeAnalysisFlags.None);
         context.EnableConcurrentExecution();
-        context.RegisterSyntaxNodeAction(AnalyseSyntaxNode, SyntaxKind.ClassDeclaration);
+        context.RegisterSyntaxNodeAction(this.AnalyseSyntaxNode, SyntaxKind.ClassDeclaration);
     }
 
-    static void AnalyseSyntaxNode(SyntaxNodeAnalysisContext context) {
+    void AnalyseSyntaxNode(SyntaxNodeAnalysisContext context) {
         if (context.Node is not ClassDeclarationSyntax classDeclaration) return;
         if (context.SemanticModel.GetDeclaredSymbol(classDeclaration, context.CancellationToken) is not INamedTypeSymbol namedTypeSymbol) return;
         if (!namedTypeSymbol.Name.EndsWith("Command")) return;
-        if (ImplementsICommand(namedTypeSymbol)) return;
+        if (this.ImplementsICommand(namedTypeSymbol)) return;
 
         context.ReportDiagnostic(
             Diagnostic.Create(CommandAnalyzer.Rule, classDeclaration.Identifier.GetLocation(), namedTypeSymbol.Name)
         );
     }
 
-    static bool ImplementsICommand(INamedTypeSymbol classSymbol) => classSymbol.AllInterfaces.Any(i => i.Name is "ICommand");
+    bool ImplementsICommand(INamedTypeSymbol classSymbol) => classSymbol.AllInterfaces.Any(i => i.Name is "ICommand");
 }

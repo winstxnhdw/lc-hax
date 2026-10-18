@@ -11,7 +11,7 @@ using Microsoft.CodeAnalysis.CodeActions;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 [ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(CommandCodeFix)), Shared]
-public class CommandCodeFix : CodeFixProvider {
+internal class CommandCodeFix : CodeFixProvider {
     public override ImmutableArray<string> FixableDiagnosticIds => [CommandAnalyzer.DiagnosticID];
 
     public override FixAllProvider GetFixAllProvider() => WellKnownFixAllProviders.BatchFixer;
@@ -31,7 +31,11 @@ public class CommandCodeFix : CodeFixProvider {
         await Task.CompletedTask;
     }
 
-    async Task<Document> ImplementICommandAsync(Document document, TextSpan diagnosticSpan, CancellationToken cancellationToken) {
+    async Task<Document> ImplementICommandAsync(
+        Document document,
+        TextSpan diagnosticSpan,
+        CancellationToken cancellationToken
+    ) {
         SyntaxNode? root = await document.GetSyntaxRootAsync(cancellationToken).ConfigureAwait(false);
 
         if (root?.FindToken(diagnosticSpan.Start).Parent?.AncestorsAndSelf().OfType<ClassDeclarationSyntax>().First() is not ClassDeclarationSyntax classDeclaration) {
@@ -39,7 +43,11 @@ public class CommandCodeFix : CodeFixProvider {
         }
 
         BaseListSyntax baseList = classDeclaration?.BaseList ?? SyntaxFactory.BaseList();
-        BaseListSyntax newBaseList = baseList.AddTypes(SyntaxFactory.SimpleBaseType(SyntaxFactory.ParseTypeName("ICommand")));
+        BaseListSyntax newBaseList = baseList.AddTypes(
+            SyntaxFactory.SimpleBaseType(
+                SyntaxFactory.ParseTypeName("ICommand")
+            )
+        );
 
         return classDeclaration?.WithBaseList(newBaseList) is not ClassDeclarationSyntax newClassDeclaration
             ? document

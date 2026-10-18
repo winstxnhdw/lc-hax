@@ -23,10 +23,10 @@ sealed class PatchAnalyser : DiagnosticAnalyzer {
     public override void Initialize(AnalysisContext context) {
         context.ConfigureGeneratedCodeAnalysis(GeneratedCodeAnalysisFlags.None);
         context.EnableConcurrentExecution();
-        context.RegisterSyntaxNodeAction(AnalyseSyntaxNode, SyntaxKind.MethodDeclaration);
+        context.RegisterSyntaxNodeAction(this.AnalyseSyntaxNode, SyntaxKind.MethodDeclaration);
     }
 
-    static void AnalyseSyntaxNode(SyntaxNodeAnalysisContext context) {
+    void AnalyseSyntaxNode(SyntaxNodeAnalysisContext context) {
         if (context.Node is not MethodDeclarationSyntax methodDeclaration) return;
         if (context.SemanticModel.GetDeclaredSymbol(methodDeclaration, context.CancellationToken) is not IMethodSymbol methodSymbol) return;
         if (!methodSymbol.ContainingType.Name.EndsWith("Patch")) return;
