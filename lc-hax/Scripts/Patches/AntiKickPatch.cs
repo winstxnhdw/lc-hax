@@ -1,10 +1,31 @@
+using System.Threading.Tasks;
 using GameNetcodeStuff;
 using HarmonyLib;
 using Steamworks;
+using Steamworks.Data;
 
-[HarmonyPatch(typeof(PlayerControllerB))]
+[HarmonyPatch]
 sealed class AntiKickPatch {
-    [HarmonyPatch(nameof(PlayerControllerB.SendNewPlayerValuesServerRpc))]
+    static Task? PendingRejoin { get; set; }
+    static bool EventsSubscribed { get; set; }
+    static bool WatchingLobby { get; set; }
+    static bool Rejoining { get; set; }
+    static bool IsRejoining => AntiKickPatch.Rejoining && Globals.EnableAntiKick && !State.DisconnectedVoluntarily;
+
+    [HarmonyPrepare]
+    static bool Prepare() {
+        if (AntiKickPatch.EventsSubscribed) return true;
+
+        InputListener.OnBackslashPress += AntiKickPatch.ToggleAntiKick;
+        GameListener.OnGameStart += AntiKickPatch.OnGameStart;
+        ConnectionDependencyPatch.OnConnectionAttempt += AntiKickPatch.CancelRejoin;
+        AntiKickPatch.EventsSubscribed = true;
+
+        return true;
+    }
+
+    [HarmonyPrefix]
+    [HarmonyPatch(typeof(PlayerControllerB), nameof(PlayerControllerB.SendNewPlayerValuesServerRpc))]
     static bool Prefix(PlayerControllerB __instance) {
         if (!AntiKickPatch.IsLocalClient(__instance)) return true;
         if (Helper.GameNetworkManager?.currentLobby is not { } lobby) return true;
@@ -15,12 +36,78 @@ sealed class AntiKickPatch {
         return false;
     }
 
-    [HarmonyPatch(nameof(PlayerControllerB.SendNewPlayerValuesClientRpc))]
+    [HarmonyPostfix]
+    [HarmonyPatch(typeof(PlayerControllerB), nameof(PlayerControllerB.SendNewPlayerValuesClientRpc))]
     static void Postfix() {
         if (Helper.LocalPlayer is not { } localPlayer) return;
         if (!AntiKickPatch.IsLocalClient(localPlayer)) return;
 
         AntiKickPatch.SetIdentity(localPlayer, SteamClient.SteamId, SteamClient.Name);
+    }
+
+    [HarmonyPostfix]
+    [HarmonyPatch(typeof(StartOfRound), nameof(StartOfRound.LateUpdate))]
+    static async void RejoinWhenReady(StartOfRound __instance) {
+        if (!Globals.EnableAntiKick) return;
+        if (!AntiKickPatch.WatchingLobby) return;
+        if (AntiKickPatch.PendingRejoin is { IsCompleted: false }) return;
+        if (Helper.GameNetworkManager is not { isHostingGame: false, gameHasStarted: false, currentLobby: Lobby lobby } manager) return;
+        if (__instance is not { mostRecentlyJoinedClient: false, travellingToNewLevel: false }) return;
+        if (Helper.FindObject<StartMatchLever>() is not { leverHasBeenPulled: false }) return;
+
+        AntiKickPatch.WatchingLobby = false;
+        AntiKickPatch.Rejoining = true;
+        AntiKickPatch.PendingRejoin = AntiKickPatch.RejoinLobby(lobby, manager);
+        await AntiKickPatch.PendingRejoin;
+    }
+
+    static async Task RejoinLobby(Lobby lobby, GameNetworkManager manager) {
+        manager.Disconnect();
+        RoomEnter result = await lobby.Join();
+
+        if (result != RoomEnter.Success) {
+            AntiKickPatch.Rejoining = false;
+            return;
+        }
+
+        await Helper.WaitUntil(
+            () => !AntiKickPatch.IsRejoining || (Helper.FindObject<MenuManager>() is not null && !manager.currentLobby.HasValue)
+        );
+
+        if (!AntiKickPatch.IsRejoining) {
+            AntiKickPatch.Rejoining = false;
+            return;
+        }
+
+        AntiKickPatch.Rejoining = false;
+        string lobbyName = lobby.GetData("name");
+        SteamId host = lobby.Owner.Id;
+        manager.currentLobby = lobby;
+        manager.steamLobbyName = lobbyName;
+        manager.StartClient(host);
+    }
+
+    static void CancelRejoin() {
+        AntiKickPatch.WatchingLobby = false;
+        AntiKickPatch.Rejoining = false;
+    }
+
+    static void OnGameStart() {
+        AntiKickPatch.Rejoining = false;
+        AntiKickPatch.WatchingLobby = true;
+    }
+
+    static void ToggleAntiKick() {
+        if (Helper.LocalPlayer is not null) {
+            Chat.Print("You cannot toggle anti-kick while in-game!");
+            return;
+        }
+
+        Globals.EnableAntiKick = !Globals.EnableAntiKick;
+
+        if (!Globals.EnableAntiKick) {
+            AntiKickPatch.CancelRejoin();
+        }
     }
 
     static bool IsLocalClient(PlayerControllerB player) =>

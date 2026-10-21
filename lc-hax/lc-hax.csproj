@@ -21,7 +21,7 @@
 
   <ItemGroup>
 
-    <Compile Remove="Scripts/Modules/AntiKickMod.cs;Scripts/Patches/AntiKickPatch.cs" Condition="!$(AntiKick)" />
+    <Compile Remove="Scripts/Patches/AntiKickPatch.cs" Condition="!$(AntiKick)" />
     <Compile Remove="Scripts/Modules/AutoPlayMod.cs" Condition="!$(AutoPlay)" />
     <Compile Remove="Scripts/Modules/ChatMod.cs" Condition="!$(ChatHistory)" />
     <Compile Remove="Scripts/Modules/ClearVisionMod.cs" Condition="!$(ClearVision)" />
