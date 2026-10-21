@@ -21,17 +21,9 @@
 
   <ItemGroup>
 
-    <Compile Remove="Scripts/Patches/AntiKickPatch.cs" Condition="!$(AntiKick)" />
-    <Compile Remove="Scripts/Modules/AutoPlayMod.cs" Condition="!$(AutoPlay)" />
-    <Compile Remove="Scripts/Modules/ChatMod.cs" Condition="!$(ChatHistory)" />
-    <Compile Remove="Scripts/Modules/ClearVisionMod.cs" Condition="!$(ClearVision)" />
     <Compile Remove="Scripts/Modules/CrosshairMod.cs" Condition="!$(Crosshair)" />
-    <Compile Remove="Scripts/Modules/DisconnectMod.cs" Condition="!$(Disconnect)" />
     <Compile Remove="Scripts/Modules/ESPMod.cs" Condition="!$(ESP)" />
-    <Compile Remove="Scripts/Modules/InstantInteractMod.cs" Condition="!$(InstantInteract)" />
     <Compile Remove="Scripts/Modules/MinimalGUIMod.cs" Condition="!$(MinimalGUI)" />
-    <Compile Remove="Scripts/Modules/PhantomMod.cs;Scripts/Patches/PhantomPatch.cs" Condition="!$(Phantom)" />
-    <Compile Remove="Scripts/Commands/StunOnClickCommand.cs" Condition="!$(StunClick)" />
     <Compile Remove="Scripts/Modules/TriggerMod.cs" Condition="!$(Trigger)" />
 
     <Compile Remove="Scripts/Patches/StaminaPatch.cs" Condition="!$(InfiniteStamina)" />
@@ -42,6 +34,7 @@
     <Compile Remove="Scripts/Patches/TurnStatsPatch.cs" Condition="!$(ClearTurnStats)" />
     <Compile Remove="Scripts/Patches/LookDownPatch.cs" Condition="!$(LookDown)" />
 
+    <Compile Remove="Scripts/Patches/ClearVisionPatch.cs" Condition="!$(ClearVision)" />
     <Compile Remove="Scripts/Patches/VisorPatch.cs" Condition="!$(HideVisor)" />
     <Compile Remove="Scripts/Patches/GasOverlayPatch.cs" Condition="!$(HideGasOverlay)" />
     <Compile Remove="Scripts/Patches/SinkingOverlayPatch.cs" Condition="!$(HideSinkingOverlay)" />
@@ -63,12 +56,15 @@
     <Compile Remove="Scripts/Patches/ShotgunMisfirePatch.cs" Condition="!$(PreventShotgunMisfire)" />
     <Compile Remove="Scripts/Patches/ZapGunPatch.cs" Condition="!$(EasyZapGun)" />
     <Compile Remove="Scripts/Patches/OneHandedItemPatch.cs" Condition="!$(OneHandedItems)" />
+    <Compile Remove="Scripts/Patches/InstantInteractPatch.cs" Condition="!$(InstantInteract)" />
     <Compile Remove="Scripts/Patches/InfiniteGrabPatch.cs" Condition="!$(InfiniteGrab)" />
     <Compile Remove="Scripts/Patches/InteractThroughWallsPatch.cs" Condition="!$(InteractThroughWalls)" />
     <Compile Remove="Scripts/Patches/GrabInLobbyPatch.cs" Condition="!$(GrabInLobby)" />
     <Compile Remove="Scripts/Patches/ShipTeleportWithItemsPatch.cs" Condition="!$(ShipTeleportWithItems)" />
     <Compile Remove="Scripts/Patches/InverseTeleportWithItemsPatch.cs" Condition="!$(InverseTeleportWithItems)" />
 
+    <Compile Remove="Scripts/Patches/AntiKickPatch.cs" Condition="!$(AntiKick)" />
+    <Compile Remove="Scripts/Patches/DisconnectPatch.cs" Condition="!$(Disconnect)" />
     <Compile Remove="Scripts/Patches/LobbyRefreshPatch.cs" Condition="!$(RemoveLobbyRefreshCooldown)" />
     <Compile Remove="Scripts/Patches/LobbyCensorshipPatch.cs" Condition="!$(DisableLobbyCensorship)" />
     <Compile Remove="Scripts/Patches/LobbyLabelPatch.cs" Condition="!$(LabelCheatLobbies)" />

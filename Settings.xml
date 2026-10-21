@@ -3,17 +3,9 @@
   <PropertyGroup>
 
     <!-- Mods -->
-    <AntiKick>true</AntiKick>
-    <AutoPlay>true</AutoPlay>
-    <ChatHistory>true</ChatHistory>
-    <ClearVision>true</ClearVision>
     <Crosshair>true</Crosshair>
-    <Disconnect>true</Disconnect>
     <ESP>true</ESP>
-    <InstantInteract>true</InstantInteract>
     <MinimalGUI>true</MinimalGUI>
-    <Phantom>true</Phantom>
-    <StunClick>true</StunClick>
     <Trigger>true</Trigger>
 
     <!-- Player -->
@@ -26,6 +18,7 @@
     <LookDown>true</LookDown>
 
     <!-- Vision -->
+    <ClearVision>true</ClearVision>
     <HideVisor>true</HideVisor>
     <HideGasOverlay>true</HideGasOverlay>
     <HideSinkingOverlay>true</HideSinkingOverlay>
@@ -48,6 +41,7 @@
     <PreventShotgunMisfire>true</PreventShotgunMisfire>
     <EasyZapGun>true</EasyZapGun>
     <OneHandedItems>true</OneHandedItems>
+    <InstantInteract>true</InstantInteract>
     <InfiniteGrab>true</InfiniteGrab>
     <InteractThroughWalls>true</InteractThroughWalls>
     <GrabInLobby>true</GrabInLobby>
@@ -55,6 +49,8 @@
     <InverseTeleportWithItems>true</InverseTeleportWithItems>
 
     <!-- Lobby -->
+    <AntiKick>true</AntiKick>
+    <Disconnect>true</Disconnect>
     <RemoveLobbyRefreshCooldown>true</RemoveLobbyRefreshCooldown>
     <DisableLobbyCensorship>true</DisableLobbyCensorship>
     <LabelCheatLobbies>true</LabelCheatLobbies>
