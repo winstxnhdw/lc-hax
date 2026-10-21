@@ -138,7 +138,6 @@ The complete feature set includes the following.
 | Stun enemies                        | `/stun <duration>`                               |
 | Pull the ship's horn                | `/horn <duration>`                               |
 | Toggle stun on click                | `/stunclick`                                     |
-| Toggle kill enemy on click          | `/killclick`                                     |
 | End the game                        | `/end <player=-1>`                               |
 | Start the game                      | `/start`                                         |
 | List all players                    | `/players`                                       |

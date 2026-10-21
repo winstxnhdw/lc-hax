@@ -29,10 +29,9 @@
     <Compile Remove="Scripts/Modules/DisconnectMod.cs" Condition="!$(Disconnect)" />
     <Compile Remove="Scripts/Modules/ESPMod.cs" Condition="!$(ESP)" />
     <Compile Remove="Scripts/Modules/InstantInteractMod.cs" Condition="!$(InstantInteract)" />
-    <Compile Remove="Scripts/Modules/KillClickMod.cs;Scripts/Commands/KillClickCommand.cs" Condition="!$(KillClick)" />
     <Compile Remove="Scripts/Modules/MinimalGUIMod.cs" Condition="!$(MinimalGUI)" />
     <Compile Remove="Scripts/Modules/PhantomMod.cs;Scripts/Patches/PhantomPatch.cs" Condition="!$(Phantom)" />
-    <Compile Remove="Scripts/Modules/StunClickMod.cs;Scripts/Commands/StunOnClickCommand.cs" Condition="!$(StunClick)" />
+    <Compile Remove="Scripts/Commands/StunOnClickCommand.cs" Condition="!$(StunClick)" />
     <Compile Remove="Scripts/Modules/TriggerMod.cs" Condition="!$(Trigger)" />
 
     <Compile Remove="Scripts/Patches/StaminaPatch.cs" Condition="!$(InfiniteStamina)" />

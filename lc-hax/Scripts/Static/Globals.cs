@@ -3,8 +3,6 @@ static class Globals {
     internal static bool EnableBlockCredits { get; set; }
     internal static bool EnableBlockRadar { get; set; }
     internal static bool EnableUntargetable { get; set; }
-    internal static bool EnableStunOnLeftClick { get; set; }
-    internal static bool EnableKillOnLeftClick { get; set; }
     internal static bool EnableInvisible { get; set; }
     internal static bool EnableNoCooldown { get; set; }
     internal static bool EnableAntiKick { get; set; }
