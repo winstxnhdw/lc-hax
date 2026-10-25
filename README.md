@@ -20,14 +20,18 @@ A powerful, feature-rich and highly performant portable Windows CLI-only interna
 ## Requirements
 
 - Windows 10 or later
-- [Microsoft .NET 10.0 SDK](https://dotnet.microsoft.com/en-us/download/dotnet/10.0)
-- [Git](https://git-scm.com/download/win)
 
 ## Installation
 
-Clone the repository.
+Install the required dependenc(ies) with `winget`.
 
-```bash
+```powershell
+winget install Git.Git Microsoft.DotNet.SDK.10
+```
+
+Re-open the terminal and clone the repository using `git`.
+
+```powershell
 git clone --depth 50 https://github.com/winstxnhdw/lc-hax.git
 ```
 
