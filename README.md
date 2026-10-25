@@ -17,13 +17,12 @@ A powerful, feature-rich and highly performant portable Windows CLI-only interna
     />
 </div>
 
-## Requirements
-
-- Windows 10 or later
-
 ## Installation
 
-Install the required dependenc(ies) with `winget`.
+> [!IMPORTANT]\
+> Requires Windows 10 or later
+
+Using PowerShell, install the required dependenc(ies) with `winget`.
 
 ```powershell
 winget install Git.Git Microsoft.DotNet.SDK.10
