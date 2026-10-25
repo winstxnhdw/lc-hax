@@ -20,7 +20,7 @@ A powerful, feature-rich and highly performant portable Windows CLI-only interna
 ## Installation
 
 > [!IMPORTANT]\
-> Requires Windows 10 or later
+> Installation require **Windows 10 or later**.
 
 Using PowerShell, install the required dependenc(ies) with `winget`.
 
@@ -31,7 +31,7 @@ winget install Git.Git Microsoft.DotNet.SDK.10
 Re-open the terminal and clone the repository using `git`.
 
 ```powershell
-git clone --depth 50 https://github.com/winstxnhdw/lc-hax.git
+git clone --depth 10 https://github.com/winstxnhdw/lc-hax.git
 ```
 
 ## Usage
