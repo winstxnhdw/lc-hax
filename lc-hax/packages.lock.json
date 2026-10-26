@@ -32,9 +32,9 @@
       },
       "Nullable.Extended.Analyzer": {
         "type": "Direct",
-        "requested": "[1.18.0, )",
-        "resolved": "1.18.0",
-        "contentHash": "Dg0KJuczHPqCgVw1KsYb6sgwncbfQfq+QMRX14e0F7E3CexJP/uITIA6jiXIaiEM06c7vsK4JNVh+6mx2ZnZqA=="
+        "requested": "[1.18.2, )",
+        "resolved": "1.18.2",
+        "contentHash": "WvP/XIkZCXZXIu/oKphwaNWxydVxF8tzfTpfXjv4OhTmxmVwbAOG6dYPt+tVhVEORC4f2BbvRJy6vH534OPA+w=="
       },
       "Quickenshtein": {
         "type": "Direct",
