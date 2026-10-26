@@ -1,7 +1,7 @@
 @echo off
 
 :begin
-dotnet publish launcher\launcher.csproj -restoreProperty:RestoreLockedMode=true
+dotnet publish launcher -restoreProperty:RestoreLockedMode=true
 .\launcher.exe
 
 goto begin
