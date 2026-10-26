@@ -24,13 +24,13 @@ A powerful, feature-rich and highly performant portable Windows CLI-only interna
 
 Using PowerShell, install the required dependenc(ies) with `winget`.
 
-```powershell
+```bash
 winget install Git.Git Microsoft.DotNet.SDK.10
 ```
 
 Re-open the terminal and clone the repository using `git`.
 
-```powershell
+```bash
 git clone --depth 10 https://github.com/winstxnhdw/lc-hax.git
 ```
 
@@ -38,7 +38,7 @@ git clone --depth 10 https://github.com/winstxnhdw/lc-hax.git
 
 Run or double-click `launch.bat` before or after starting Lethal Company.
 
-```powershell
+```bash
 .\launch.bat
 ```
 

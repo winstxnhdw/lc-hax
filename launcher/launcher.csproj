@@ -32,12 +32,7 @@
 
     <PackageReference Include="Microsoft.NET.ILLink.Tasks" Version="10.0.14" PrivateAssets="all" />
 
-    <ProjectReference Include="..\lc-hax\lc-hax.csproj"
-      ReferenceOutputAssembly="false"
-      Private="false"
-      PrivateAssets="all"
-      ExcludeAssets="all"
-      GlobalPropertiesToRemove="SelfContained;PublishSingleFile;PublishDir" />
+    <ProjectReference Include="..\lc-hax\lc-hax.csproj" ReferenceOutputAssembly="false" Private="false" />
 
     <EmbeddedResource Include="..\bin\lc-hax.dll" LogicalName="Launcher.Payload.lc-hax.dll" WithCulture="false" />
 
