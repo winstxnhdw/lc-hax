@@ -7,6 +7,7 @@ on:
     paths:
       - .github/workflows/formatter.yml
       - .editorconfig
+      - global.json
       - lc-hax/Scripts/**/*.cs
       - analysers/**/*.cs
       - launcher/**/*.cs
@@ -35,7 +36,7 @@ jobs:
       - name: Setup .NET
         uses: actions/setup-dotnet@v6.0.0
         with:
-          dotnet-version: 10.0.402
+          global-json-file: global.json
           cache: true
           cache-dependency-path: |
             lc-hax/packages.lock.json
