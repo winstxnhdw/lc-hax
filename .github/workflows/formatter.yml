@@ -8,6 +8,8 @@ on:
       - .github/workflows/formatter.yml
       - .editorconfig
       - lc-hax/Scripts/**/*.cs
+      - analysers/**/*.cs
+      - launcher/**/*.cs
 
 concurrency: ${{ github.workflow }}-${{ github.ref }}
 permissions: {}
@@ -38,14 +40,16 @@ jobs:
           cache-dependency-path: |
             lc-hax/packages.lock.json
             analysers/packages.lock.json
+            launcher/packages.lock.json
 
       - name: Restore dependencies
-        run: dotnet restore lc-hax --locked-mode
+        run: dotnet restore launcher --locked-mode
 
       - name: Format scripts
         run: |
           dotnet format lc-hax --no-restore
           dotnet format analysers --no-restore
+          dotnet format launcher --no-restore
 
       - name: Upload format patch
         id: patch
