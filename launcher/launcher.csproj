@@ -25,8 +25,12 @@
   <ItemGroup>
 
     <PackageReference Include="Iced" Version="1.21.0" />
+
     <PackageReference Include="PeNet" Version="6.1.2" />
+
     <PackageReference Include="System.Security.Cryptography.Pkcs" Version="10.0.14" />
+
+    <PackageReference Include="Microsoft.NET.ILLink.Tasks" Version="10.0.14" PrivateAssets="all" />
 
     <ProjectReference Include="..\lc-hax\lc-hax.csproj"
       ReferenceOutputAssembly="false"
@@ -35,9 +39,7 @@
       ExcludeAssets="all"
       GlobalPropertiesToRemove="SelfContained;PublishSingleFile;PublishDir" />
 
-    <EmbeddedResource Include="..\bin\lc-hax.dll"
-      LogicalName="Launcher.Payload.lc-hax.dll"
-      WithCulture="false" />
+    <EmbeddedResource Include="..\bin\lc-hax.dll" LogicalName="Launcher.Payload.lc-hax.dll" WithCulture="false" />
 
   </ItemGroup>
 
