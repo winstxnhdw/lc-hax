@@ -39,6 +39,7 @@ sealed class Loader : MonoBehaviour {
         Loader.LoadHaxGameObjects();
     }
 
+    [Obsolete]
     static void LoadHarmonyPatches() {
         try {
             new Harmony(Loader.HarmonyID).PatchAll();
