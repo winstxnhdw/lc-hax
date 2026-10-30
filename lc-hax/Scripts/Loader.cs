@@ -26,6 +26,7 @@ sealed class Loader : MonoBehaviour {
         }
     }
 
+    [Obsolete]
     internal static void Load() {
         Loader.LoadLibraries();
 
