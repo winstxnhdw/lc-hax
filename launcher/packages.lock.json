@@ -4,9 +4,9 @@
     "net10.0-windows7.0": {
       "Iced": {
         "type": "Direct",
-        "requested": "[1.21.0, )",
-        "resolved": "1.21.0",
-        "contentHash": "dv5+81Q1TBQvVMSOOOmRcjJmvWcX3BZPZsIq31+RLc5cNft0IHAyNlkdb7ZarOWG913PyBoFDsDXoCIlKmLclg=="
+        "requested": "[1.22.0, )",
+        "resolved": "1.22.0",
+        "contentHash": "CeaiTnTfk+Ur9K4ulE6ugMRs/qL1FyhntJuBR0myBxYAUtptNjoMR1kZgMsSgfsWTXEPjUG7b2CJyGXMyuba4Q=="
       },
       "Microsoft.NET.ILLink.Tasks": {
         "type": "Direct",
