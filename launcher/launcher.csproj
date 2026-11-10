@@ -28,9 +28,9 @@
 
     <PackageReference Include="PeNet" Version="6.1.2" />
 
-    <PackageReference Include="System.Security.Cryptography.Pkcs" Version="10.0.14" />
+    <PackageReference Include="System.Security.Cryptography.Pkcs" Version="11.0.0" />
 
-    <PackageReference Include="Microsoft.NET.ILLink.Tasks" Version="10.0.14" PrivateAssets="all" />
+    <PackageReference Include="Microsoft.NET.ILLink.Tasks" Version="11.0.0" PrivateAssets="all" />
 
     <ProjectReference Include="..\lc-hax\lc-hax.csproj" ReferenceOutputAssembly="false" Private="false" />
 
