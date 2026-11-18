@@ -23,11 +23,11 @@
       },
       "Lib.Harmony": {
         "type": "Direct",
-        "requested": "[3.0.0-rc.6, )",
-        "resolved": "3.0.0-rc.6",
-        "contentHash": "N0IxzNefzp5ubJ/0Q8loEiz6aM2Z1jgr7aj1NrUYHGZF3p/zr7xoWiFWGOkgxZGDvFNfE/1Qczj0bdviK7I3KA==",
+        "requested": "[3.0.0-rc.7, )",
+        "resolved": "3.0.0-rc.7",
+        "contentHash": "XgNE/BlkcuNj8b7DCo24gSTcbWmwvWhPdvIt1htKgX6qXmCTmDOX6YoWCkekCMDIycYdtv/f0O5DCAHwSCRXeg==",
         "dependencies": {
-          "Lib.Harmony.Ref": "3.0.0-rc.6"
+          "Lib.Harmony.Ref": "3.0.0-rc.7"
         }
       },
       "Nullable.Extended.Analyzer": {
@@ -70,8 +70,8 @@
       },
       "Lib.Harmony.Ref": {
         "type": "Transitive",
-        "resolved": "3.0.0-rc.6",
-        "contentHash": "Teio9Ca6TFORAWv+KasYo8V9a2jXnMQ7vpi7ftrUd088zDQi/4FIlgE2aCVTqxHA33y9Ot01ZF/AGTbHe4r3mA==",
+        "resolved": "3.0.0-rc.7",
+        "contentHash": "kP0kouGVswTJ0dHWI+8LPXrSdjzsp5peAGDJ7d/dH9CjN26Nnq3bQ8YsFeeEd16VmH2x41elzcn2HQlsYKKHWw==",
         "dependencies": {
           "System.Reflection.Emit": "4.7.0"
         }
