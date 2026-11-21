@@ -1,5 +1,6 @@
 {
   "extends": ["github>winstxnhdw/renovate"],
+  "ignoreDeps": ["Lib.Harmony"],
   "packageRules": [
     {
       "matchPackageNames": ["LethalCompany.GameLibs.Steam"],
