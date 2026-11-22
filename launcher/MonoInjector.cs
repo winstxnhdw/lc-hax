@@ -17,8 +17,7 @@ static class MonoInjector {
             .Where(function => function.Name is not null)
             .ToDictionary(function => function.Name!, function => unchecked((ulong)mono.BaseAddress) + function.Address);
 
-        byte[] data = [.. new byte[40], .. "lc-hax.dll\0Hax\0Loader\0Load\0"u8, .. payload];
-        data[0] = 1;
+        byte[] data = [1, .. new byte[39], .. "lc-hax.dll\0Hax\0Loader\0Load\0"u8, .. payload];
         BitConverter.GetBytes(payload.Length).CopyTo(data, 32);
 
         using SafeProcessHandle process = NativeMethods.OpenProcess(0x043A, false, game.Id);
